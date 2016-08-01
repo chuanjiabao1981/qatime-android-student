@@ -10,7 +10,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
 import cn.qatime.player.R;
-
+/**
+ * 基础类 
+ */
 public class BaseActivity extends AppCompatActivity {
     protected RequestQueue Queue;
     @Override
