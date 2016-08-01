@@ -22,9 +22,6 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public <T> Request<T> addToRequestQueue(Request<T> request){
-        if (request==null){
-            Log.e("adddddddddddddddd","assssssssssssssssssssssssssssssss");
-        }
         return Queue.add(request);
     }
     public void cancelAll(final Object tag) {
