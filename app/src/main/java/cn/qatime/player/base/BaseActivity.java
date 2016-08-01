@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -20,6 +21,10 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Queue = Volley.newRequestQueue(this);
     }
+public void backClick(View v){
+    this.finish();
+}
+
 
     public <T> Request<T> addToRequestQueue(Request<T> request){
         return Queue.add(request);
