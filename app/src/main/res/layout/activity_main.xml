@@ -5,16 +5,9 @@
     android:layout_height="match_parent"
     tools:context=".activity.MainActivity">
 
-    <!--<android.support.v7.widget.Toolbar-->
-        <!--style="@style/AppTheme"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="50dp" />-->
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="辅导班列表" />
+    <cn.qatime.player.view.FragmentLayout
+        android:layout_width="match_parent"
+        android:id="@+id/fragmentlayout"
+        android:background="#f0f0f0"
+        android:layout_height="match_parent"/>
 </RelativeLayout>

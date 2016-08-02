@@ -11,4 +11,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <style name="downDialogstyle" parent="android:Animation">
+        <item name="@android:windowEnterAnimation">@anim/dialog_enter</item>
+        //进入时的动画
+        <item name="@android:windowExitAnimation">@anim/dialog_exit</item>
+        //退出时的动画
+        <!--<item name="android:windowNoTitle">true</item>-->
+    </style>
+
 </resources>

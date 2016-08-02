@@ -58,7 +58,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         login.setOnClickListener(this);
         register.setOnClickListener(this);
         loginerror.setOnClickListener(this);
-        reload.setOnClickListener(this);checkview.setOnClickListener(this);
+        reload.setOnClickListener(this);
+        checkview.setOnClickListener(this);
+
+        //TODO  測試賬號
+        username.setText("15617685965@163.com");
+        password.setText("123456");
     }
 
     @Override
@@ -104,7 +109,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         map.put("email", username.getText().toString());
         map.put("password", password.getText().toString());
         map.put("client_type", "app");
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.url_login, map), null,
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlLogin, map), null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
@@ -112,7 +117,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         Gson gson = new Gson();
                         Profile profile = gson.fromJson(jsonObject.toString(), Profile.class);
                         if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
-                            BaseApplication.profile = profile;
+                            BaseApplication.setProfile(profile);
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
@@ -133,7 +138,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 }
             }
         });
-        Queue.add(request);
+        addToRequestQueue(request);
     }
 
     /**

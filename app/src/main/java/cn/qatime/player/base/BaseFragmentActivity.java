@@ -1,20 +1,18 @@
 package cn.qatime.player.base;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-import cn.qatime.player.R;
 /**
- * 基础类 
+ * 基础fragment类
  */
-public class BaseActivity extends AppCompatActivity {
+public class BaseFragmentActivity extends FragmentActivity {
     private RequestQueue Queue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

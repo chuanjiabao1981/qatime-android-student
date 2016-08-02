@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginBottom="1dp"
+        android:background="#ffffff"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/time_sort"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="按时间" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/subject_sort"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/subject_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="科目" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/class_sort"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/class_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="年级" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/screen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:src="@mipmap/back_arrow" />
+    </LinearLayout>
+
+    <GridView
+        android:id="@+id/grid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#11000000"
+        android:cacheColorHint="@null"
+        android:horizontalSpacing="1dp"
+        android:listSelector="#00000000"
+        android:numColumns="2"
+        android:scrollbars="none"
+        android:verticalSpacing="2dp" />
+
+</LinearLayout>

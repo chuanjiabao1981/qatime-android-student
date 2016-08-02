@@ -10,7 +10,7 @@ public class LogUtils {
 
     public static void e(Object object) {
         if (LogUtils.isDebug) {
-            Log.e("", object.toString());
+            Log.e("dayitime", object.toString());
         }
     }
 }

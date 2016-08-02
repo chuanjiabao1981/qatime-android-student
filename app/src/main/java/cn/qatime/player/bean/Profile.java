@@ -19,6 +19,10 @@ public class Profile implements Serializable{
     public Data getData(){
         return this.data;
     }
+
+    public String getToken(){
+        return this.data!=null&&this.data.remember_token!=null?this.data.remember_token:"";
+    }
     public class Data implements Serializable{
         private String remember_token;
 
