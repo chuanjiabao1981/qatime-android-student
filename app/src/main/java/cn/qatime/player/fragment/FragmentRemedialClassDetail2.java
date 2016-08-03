@@ -21,11 +21,13 @@ public class FragmentRemedialClassDetail2 extends Fragment {
         initview(view);
         return view;
     }
+
     private void initview(View view) {
         text = (TextView) view.findViewById(R.id.text);
     }
+
     public void setData(RemedialClassDetailBean data) {
         RemedialClassDetailBean.Data bean = data.getData();
-        text.setText("名称："+bean.getName()+"\n科目类型："+bean.getSubject()+"\n授课老师："+bean.getTeacher().getName());
+        text.setText("名称：" + bean.getName() + "\n科目类型：" + bean.getSubject() + "\n授课老师：" + bean.getTeacher().getName());
     }
 }

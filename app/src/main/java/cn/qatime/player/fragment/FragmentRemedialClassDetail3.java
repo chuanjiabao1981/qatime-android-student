@@ -43,25 +43,28 @@ public class FragmentRemedialClassDetail3 extends Fragment {
             @Override
             public void convert(ViewHolder holder, RemedialClassDetailBean.Lessons item, int position) {
                 holder.setText(R.id.number, StringUtils.Int2String(position + 1));
-                try {
-                    holder.setText(R.id.time, format.format(parse.parse(item.getClass_date())+item.getLive_time()));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    holder.setText(R.id.time, format.format(parse.parse(item.getClass_date())+item.getLive_time()));
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
                 //TODO 待修改
                 holder.setText(R.id.status, "已结束");
                 holder.setText(R.id.name, item.getName());
 
             }
         };
-
+        listView.setAdapter(adapter);
+//            adapter.notifyDataSetChanged();
     }
 
     public void setData(RemedialClassDetailBean data) {
         if (data != null && data.getData() != null) {
             list.clear();
             list.addAll(data.getData().getLessons());
-            adapter.notifyDataSetChanged();
+           if (adapter!=null){
+               adapter.notifyDataSetChanged();
+           }
         }
     }
 }

@@ -3,7 +3,7 @@ package cn.qatime.player.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +17,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 
 import org.json.JSONObject;
 
@@ -38,53 +40,89 @@ import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VolleyErrorListener;
 
 public class Fragment11 extends BaseFragment {
-    private GridView grid;
+    private PullToRefreshGridView grid;
     private List<RemedialClassBean.Data> list = new ArrayList<>();
     private CommonAdapter<RemedialClassBean.Data> adapter;
+    private int page = 1;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment11, container, false);
         initview(view);
-        initData();
+        initData(1);
         return view;
     }
 
     private void initview(View view) {
-        grid = (GridView) view.findViewById(R.id.grid);
+        grid = (PullToRefreshGridView) view.findViewById(R.id.grid);
+        grid.setMode(PullToRefreshBase.Mode.BOTH);
+        grid.getLoadingLayoutProxy(true, false).setPullLabel("下拉刷新");
+        grid.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载");
+        grid.getLoadingLayoutProxy(true, false).setRefreshingLabel("正在刷新...");
+        grid.getLoadingLayoutProxy(false, true).setRefreshingLabel("正在加载...");
+        grid.getLoadingLayoutProxy(true, false).setReleaseLabel("松开刷新");
+        grid.getLoadingLayoutProxy(false, true).setReleaseLabel("松开加载");
+
+
         adapter = new CommonAdapter<RemedialClassBean.Data>(getActivity(), list, R.layout.item_fragment11) {
             @Override
             public void convert(ViewHolder helper, RemedialClassBean.Data item, int position) {
-                ((ImageView) helper.getView(R.id.image)).setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity())/2,ScreenUtils.getScreenWidth(getActivity())/2));
+                ((ImageView) helper.getView(R.id.image)).setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()) / 2, ScreenUtils.getScreenWidth(getActivity()) / 2));
 //                Glide.with(getActivity()).load(item.getPush_address()).into(((ImageView) helper.getView(R.id.image)));
-                helper.setText(R.id.name,item.getName());
-                helper.setText(R.id.subject,item.getSubject());
-                helper.setText(R.id.grade,item.getGrade());
+                helper.setText(R.id.name, item.getName());
+                helper.setText(R.id.subject, item.getSubject());
+                helper.setText(R.id.grade, item.getGrade());
 
             }
         };
         grid.setAdapter(adapter);
+
+        grid.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<GridView> refreshView) {
+                page = 1;
+                initData(1);
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<GridView> refreshView) {
+                page++;
+                initData(2);
+            }
+        });
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(),RemedialClassDetailActivity.class);
-                intent.putExtra("id",list.get(position).getId());
+                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                intent.putExtra("id", list.get(position).getId());
                 startActivity(intent);
             }
         });
     }
 
-    private void initData() {
+    /**
+     * @param type 1刷新
+     *             2加载更多
+     */
+    private void initData(final int type) {
         Map<String, String> map = new HashMap<>();
-        map.put("Remember-Token",BaseApplication.getProfile().getToken());
-//        map.put("password", password.getText().toString());
-//        map.put("client_type", "app");
+        map.put("Remember-Token", BaseApplication.getProfile().getToken());
+        map.put("page", String.valueOf(page));
+        map.put("per_page", "10");
         JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass, map), null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
                         LogUtils.e(jsonObject.toString());
+                        if (type == 1) {
+                            list.clear();
+                        }
+                        String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(),
+                                DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+                        grid.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
+                        grid.onRefreshComplete();
+
                         try {
                             Gson gson = new Gson();
                             RemedialClassBean data = gson.fromJson(jsonObject.toString(), RemedialClassBean.class);
@@ -93,13 +131,15 @@ public class Fragment11 extends BaseFragment {
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
                         }
+
                     }
                 }, new VolleyErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
+                grid.onRefreshComplete();
             }
         });
-       addToRequestQueue(request);
+        addToRequestQueue(request);
     }
 }

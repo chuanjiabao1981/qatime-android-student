@@ -17,11 +17,6 @@ public class UrlUtils {
     public static String urlRemedialClass = baseUrl + "api/v1/live_studio/courses";
 
 
-
-
-
-
-
     public static String getUrl(String function, Map<String, String> params) {
         String url;
         url = function + "?" + Map2String(params);
@@ -40,8 +35,12 @@ public class UrlUtils {
         StringBuilder sb = new StringBuilder();
         for (Iterator iterator = map.entrySet().iterator(); iterator.hasNext(); ) {
             entry = (Map.Entry) iterator.next();
-            sb.append(entry.getKey().toString()).append("=").append(null == entry.getValue() ? "" :
-                    entry.getValue().toString()).append(iterator.hasNext() ? "&" : "");
+            if (entry.getKey().equals("Remember-Token") && StringUtils.isNullOrBlanK(entry.getValue())) {
+                LogUtils.e("token ************************************is null");
+            }
+            if (!StringUtils.isNullOrBlanK(entry.getKey()) && !StringUtils.isNullOrBlanK(entry.getValue())) {
+                sb.append(entry.getKey().toString()).append("=").append(entry.getValue().toString()).append(iterator.hasNext() ? "&" : "");
+            }
         }
         return sb.toString();
     }

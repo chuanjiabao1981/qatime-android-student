@@ -1,5 +1,6 @@
 package cn.qatime.player.fragment;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -11,6 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,12 +28,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +49,7 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.RemedialClassBean;
 import cn.qatime.player.utils.LogUtils;
+import cn.qatime.player.utils.MDatePickerDialog;
 import cn.qatime.player.utils.ScreenUtils;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VolleyErrorListener;
@@ -55,19 +63,47 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
     LinearLayout classsort;
     TextView classtext;
     ImageView screen;
-    GridView grid;
+    PullToRefreshGridView grid;
     private CommonAdapter<RemedialClassBean.Data> adapter;
     private List<RemedialClassBean.Data> list = new ArrayList<>();
     private PopupWindow pop;
     //按时间排列方式
     private String timesorttype = "";
+    private View screenLayout;
+    private EditText priceLow;
+    private EditText priceHigh;
+    private EditText subjectLow;
+    private EditText subjectHigh;
+    private TextView beginClassYear;
+    private TextView beginClassMonth;
+    private TextView beginClassDay;
+    private TextView endcLassYear;
+    private TextView endcLassMonth;
+    private TextView endClassDay;
+    private Spinner spinner;
+    private Button cancel;
+    private Button submit;
+
+
+    //    //价格开始区间
+//    private String price_floor = "";
+//    //价格结束区间
+//    private String price_ceil = "";
+    //开课日期开始区间
+    private String class_date_floor = "";
+    //开课日期结束区间
+    private String class_date_ceil = "";
+    //辅导班状态
+    private String status = "";
+    private int page = 1;
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment12, container, false);
         initView(view);
-        initData();
+        initData(1);
         return view;
     }
 
@@ -79,11 +115,21 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
         classsort = (LinearLayout) view.findViewById(R.id.class_sort);
         classtext = (TextView) view.findViewById(R.id.class_text);
         screen = (ImageView) view.findViewById(R.id.screen);
+
         timesort.setOnClickListener(this);
         subjectsort.setOnClickListener(this);
         classsort.setOnClickListener(this);
         screen.setOnClickListener(this);
-        grid = (GridView) view.findViewById(R.id.grid);
+
+        grid = (PullToRefreshGridView) view.findViewById(R.id.grid);
+        grid.setMode(PullToRefreshBase.Mode.BOTH);
+        grid.getLoadingLayoutProxy(true, false).setPullLabel("下拉刷新");
+        grid.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载");
+        grid.getLoadingLayoutProxy(true, false).setRefreshingLabel("正在刷新...");
+        grid.getLoadingLayoutProxy(false, true).setRefreshingLabel("正在加载...");
+        grid.getLoadingLayoutProxy(true, false).setReleaseLabel("松开刷新");
+        grid.getLoadingLayoutProxy(false, true).setReleaseLabel("松开加载");
+
         adapter = new CommonAdapter<RemedialClassBean.Data>(getActivity(), list, R.layout.item_fragment12) {
             @Override
             public void convert(ViewHolder helper, RemedialClassBean.Data item, int position) {
@@ -94,6 +140,21 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 helper.setText(R.id.grade, item.getGrade());
             }
         };
+
+        grid.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<GridView> refreshView) {
+                page = 1;
+                initData(1);
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<GridView> refreshView) {
+                page++;
+                initData(2);
+            }
+        });
+
         grid.setAdapter(adapter);
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -103,14 +164,68 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 startActivity(intent);
             }
         });
+
+        //开课时间
+        View beginClassLayout = view.findViewById(R.id.begin_class_layout);
+        //筛选框
+        screenLayout = view.findViewById(R.id.screen_layout);
+        priceLow = (EditText) view.findViewById(R.id.price_low);
+        priceHigh = (EditText) view.findViewById(R.id.price_high);
+
+        subjectLow = (EditText) view.findViewById(R.id.subject_low);
+        subjectHigh = (EditText) view.findViewById(R.id.subject_high);
+
+        beginClassYear = (TextView) view.findViewById(R.id.begin_class_year);
+        beginClassMonth = (TextView) view.findViewById(R.id.begin_class_month);
+        beginClassDay = (TextView) view.findViewById(R.id.begin_class_day);
+        View endClassLayout = view.findViewById(R.id.end_class_layout);
+        endcLassYear = (TextView) view.findViewById(R.id.end_class_year);
+        endcLassMonth = (TextView) view.findViewById(R.id.end_class_month);
+        endClassDay = (TextView) view.findViewById(R.id.end_class_day);
+        spinner = (Spinner) view.findViewById(R.id.spinner);
+        cancel = (Button) view.findViewById(R.id.cancel);
+        submit = (Button) view.findViewById(R.id.submit);
+
+        beginClassLayout.setOnClickListener(this);
+        endClassLayout.setOnClickListener(this);
+        screenLayout.setOnClickListener(this);
+        submit.setOnClickListener(this);
+        cancel.setOnClickListener(this);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        status = "all";
+                        break;
+                    case 1:
+                        status = "preview";
+                        break;
+                    case 2:
+                        status = "teaching";
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     /**
      * 加载数据
+     * @param type
      */
-    private void initData() {
+    private void initData(int type) {
+        if (type==1){
+            page=1;
+        }
         Map<String, String> map = new HashMap<>();
         map.put("Remember-Token", BaseApplication.getProfile().getToken());
+        map.put("page",String.valueOf(page));
+        map.put("per_page","10");
         if (!TextUtils.isEmpty(timesorttype)) {
             map.put("sort_by", timesorttype);
         }
@@ -129,6 +244,12 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 e.printStackTrace();
             }
         }
+
+        map.put("price_floor", priceLow.getText().toString());
+        map.put("price_ceil", priceHigh.getText().toString());
+        map.put("class_date_floor", subjectLow.getText().toString());
+        map.put("class_date_ceil", subjectHigh.getText().toString());
+        map.put("status", status);
         JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass, map), null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -142,6 +263,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
                         }
+                        clearScreenData();
                     }
                 }, new VolleyErrorListener() {
             @Override
@@ -152,8 +274,23 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
         addToRequestQueue(request);
     }
 
-    public void showPop(View popView) {
+    /**
+     * 请求完数据后，清空弹框内的数据
+     */
+    private void clearScreenData() {
+        priceLow.setText("");
+        priceHigh.setText("");
+        subjectLow.setText("");
+        subjectHigh.setText("");
+        status = "";
+        class_date_floor = "";
+        class_date_ceil = "";
+    }
 
+    public void showPop(View popView) {
+        if (screenLayout.getVisibility() == View.VISIBLE) {
+            screenLayout.setVisibility(View.GONE);
+        }
         pop = new PopupWindow(popView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         pop.setBackgroundDrawable(new ColorDrawable());
         pop.setFocusable(true);
@@ -190,8 +327,9 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         //TODO 待定 排序规则
+                        timetext.setText(timeList.get(position));
                         timesorttype = "";
-                        initData();
+                        initData(1);
                         pop.dismiss();
                     }
                 });
@@ -221,7 +359,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         subjecttext.setText(subjectList.get(position));
-                        initData();
+                        initData(1);
                         pop.dismiss();
                     }
                 });
@@ -253,23 +391,57 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         classtext.setText(classList.get(position));
-                        initData();
+                        initData(1);
                         pop.dismiss();
                     }
                 });
                 showPop(popView);
                 break;
 
-            case R.id.screen:
-                popView = View.inflate(getActivity(), R.layout.pop_from_up_fragment12, null);
-                Spinner spinner = (Spinner) popView.findViewById(R.id.spinner);
-                spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            case R.id.screen://筛选
+                if (screenLayout.getVisibility() == View.VISIBLE) {
+                    screenLayout.setVisibility(View.GONE);
+                } else {
+                    screenLayout.setVisibility(View.VISIBLE);
+                }
 
-                    }
-                });
                 break;
+            case R.id.begin_class_layout://开课时间
+                MDatePickerDialog dataDialog = new MDatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+
+                        class_date_floor = (year + "-" + ((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1))) + "-" + ((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth))));
+                        beginClassYear.setText(String.valueOf(year));
+                        beginClassMonth.setText((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1)));
+                        beginClassDay.setText((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth)));
+                    }
+                }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+                dataDialog.show();
+                break;
+            case R.id.end_class_layout://开课时间end
+                dataDialog = new MDatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+
+                        class_date_ceil = (year + "-" + ((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1))) + "-" + ((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth))));
+                        endcLassYear.setText(String.valueOf(year));
+                        endcLassMonth.setText((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1)));
+                        endClassDay.setText((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth)));
+                    }
+                }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+                dataDialog.show();
+                break;
+            case R.id.screen_layout://筛选狂
+            case R.id.cancel://取消按钮
+                screenLayout.setVisibility(View.GONE);
+                break;
+            case R.id.submit://提交
+                initData(1);
+                screenLayout.setVisibility(View.GONE);
+                break;
+//            case R.id.class_text:
+//                break;
         }
     }
 }

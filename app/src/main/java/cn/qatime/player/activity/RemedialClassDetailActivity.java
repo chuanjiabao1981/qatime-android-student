@@ -1,8 +1,10 @@
 package cn.qatime.player.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,13 +33,15 @@ import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VolleyErrorListener;
 import cn.qatime.player.view.FragmentLayoutWithLine;
 
-public class RemedialClassDetailActivity extends BaseFragmentActivity {
+public class RemedialClassDetailActivity extends BaseFragmentActivity implements View.OnClickListener {
     ImageView image;
     FragmentLayoutWithLine fragmentlayout;
     private int id;
 
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3};
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
+    private Button audition;
+    private Button pay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +55,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity {
 
     private void initView() {
         image = (ImageView) findViewById(R.id.image);
-
+        audition = (Button) findViewById(R.id.audition);
+        pay = (Button) findViewById(R.id.pay);
 
         fragBaseFragments.add(new FragmentRemedialClassDetail1());
         fragBaseFragments.add(new FragmentRemedialClassDetail2());
@@ -71,6 +76,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity {
             }
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_remedial_class_detail, 0x0012);
+        audition.setOnClickListener(this);
     }
 
     private void initData() {
@@ -85,9 +91,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity {
                         LogUtils.e(jsonObject.toString());
                         Gson gson = new Gson();
                         RemedialClassDetailBean data = gson.fromJson(jsonObject.toString(), RemedialClassDetailBean.class);
-                        ((FragmentRemedialClassDetail1)fragBaseFragments.get(0)).setData(data);
-                        ((FragmentRemedialClassDetail2)fragBaseFragments.get(0)).setData(data);
-                        ((FragmentRemedialClassDetail3)fragBaseFragments.get(0)).setData(data);
+                        ((FragmentRemedialClassDetail1) fragBaseFragments.get(0)).setData(data);
+                        ((FragmentRemedialClassDetail2) fragBaseFragments.get(1)).setData(data);
+                        ((FragmentRemedialClassDetail3) fragBaseFragments.get(2)).setData(data);
                     }
                 }, new VolleyErrorListener() {
             @Override
@@ -96,5 +102,16 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity {
             }
         });
         addToRequestQueue(request);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.audition:
+                break;
+            case R.id.pay:
+//                Intent intent = new Intent(RemedialClassDetailActivity.this,)
+                break;
+        }
     }
 }

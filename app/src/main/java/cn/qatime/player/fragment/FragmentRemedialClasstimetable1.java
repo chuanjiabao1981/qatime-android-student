@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import cn.qatime.player.R;
-import cn.qatime.player.bean.RemedialClassDetailBean;
 
 public class FragmentRemedialClassTimeTable1 extends Fragment {
     private TextView text;
