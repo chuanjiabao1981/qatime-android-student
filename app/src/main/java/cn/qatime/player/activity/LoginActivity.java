@@ -24,6 +24,7 @@ import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.Profile;
 import cn.qatime.player.utils.CheckUtil;
+import cn.qatime.player.utils.LogUtils;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VolleyErrorListener;
 import cn.qatime.player.view.CheckView;
@@ -129,6 +130,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
+                LogUtils.e(volleyError.getMessage());
                 password.setText("");
                 //当密码错误5次以上，开始使用验证码
                 errornum++;

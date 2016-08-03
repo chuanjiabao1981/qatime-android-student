@@ -65,5 +65,5 @@ public class GuideActivity extends BaseActivity {
             }
         });
         viewPager.setAdapter(imageIds.length, 0);
-    }
-}
+    }}
+
