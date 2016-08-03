@@ -42,6 +42,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
     private Button audition;
     private Button pay;
+    private RemedialClassDetailBean data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +77,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
             }
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_remedial_class_detail, 0x0012);
+        fragmentlayout.getViewPager().setOffscreenPageLimit(2);
         audition.setOnClickListener(this);
+        pay.setOnClickListener(this);
     }
 
     private void initData() {
@@ -90,7 +93,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     public void onResponse(JSONObject jsonObject) {
                         LogUtils.e(jsonObject.toString());
                         Gson gson = new Gson();
-                        RemedialClassDetailBean data = gson.fromJson(jsonObject.toString(), RemedialClassDetailBean.class);
+                         data = gson.fromJson(jsonObject.toString(), RemedialClassDetailBean.class);
                         ((FragmentRemedialClassDetail1) fragBaseFragments.get(0)).setData(data);
                         ((FragmentRemedialClassDetail2) fragBaseFragments.get(1)).setData(data);
                         ((FragmentRemedialClassDetail3) fragBaseFragments.get(2)).setData(data);
@@ -110,7 +113,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
             case R.id.audition:
                 break;
             case R.id.pay:
-//                Intent intent = new Intent(RemedialClassDetailActivity.this,)
+                Intent intent = new Intent(RemedialClassDetailActivity.this,OrderConfirmActivity.class);
+                intent.putExtra("data",data);
+                startActivity(intent);
                 break;
         }
     }

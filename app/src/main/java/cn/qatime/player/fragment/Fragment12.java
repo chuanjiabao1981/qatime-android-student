@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +49,7 @@ import cn.qatime.player.adapter.ViewHolder;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.RemedialClassBean;
+import cn.qatime.player.utils.KeyBoardUtils;
 import cn.qatime.player.utils.LogUtils;
 import cn.qatime.player.utils.MDatePickerDialog;
 import cn.qatime.player.utils.ScreenUtils;
@@ -216,16 +218,17 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
 
     /**
      * 加载数据
+     *
      * @param type
      */
-    private void initData(int type) {
-        if (type==1){
-            page=1;
+    private void initData(final int type) {
+        if (type == 1) {
+            page = 1;
         }
         Map<String, String> map = new HashMap<>();
         map.put("Remember-Token", BaseApplication.getProfile().getToken());
-        map.put("page",String.valueOf(page));
-        map.put("per_page","10");
+        map.put("page", String.valueOf(page));
+        map.put("per_page", "10");
         if (!TextUtils.isEmpty(timesorttype)) {
             map.put("sort_by", timesorttype);
         }
@@ -255,6 +258,14 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
                         LogUtils.e(jsonObject.toString());
+                        if (type == 1) {
+                            list.clear();
+                        }
+                        String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(),
+                                DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+                        grid.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
+                        grid.onRefreshComplete();
+
                         try {
                             Gson gson = new Gson();
                             RemedialClassBean data = gson.fromJson(jsonObject.toString(), RemedialClassBean.class);
@@ -269,6 +280,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
+                grid.onRefreshComplete();
             }
         });
         addToRequestQueue(request);
@@ -439,6 +451,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
             case R.id.submit://提交
                 initData(1);
                 screenLayout.setVisibility(View.GONE);
+                KeyBoardUtils.closeKeybord(getActivity());
                 break;
 //            case R.id.class_text:
 //                break;

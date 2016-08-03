@@ -6,13 +6,19 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import cn.qatime.player.R;
-import cn.qatime.player.bean.RemedialClassDetailBean;
+import com.bumptech.glide.Glide;
 
-public class FragmentRemedialClassDetail2 extends Fragment {
+import cn.qatime.player.R;
+import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.bean.RemedialClassDetailBean;
+import cn.qatime.player.utils.LogUtils;
+
+public class FragmentRemedialClassDetail2 extends BaseFragment {
     private TextView text;
+    private ImageView image;
 
     @Nullable
     @Override
@@ -22,12 +28,14 @@ public class FragmentRemedialClassDetail2 extends Fragment {
         return view;
     }
 
+
     private void initview(View view) {
         text = (TextView) view.findViewById(R.id.text);
+        image = (ImageView) view.findViewById(R.id.image);
     }
 
     public void setData(RemedialClassDetailBean data) {
-        RemedialClassDetailBean.Data bean = data.getData();
-        text.setText("名称：" + bean.getName() + "\n科目类型：" + bean.getSubject() + "\n授课老师：" + bean.getTeacher().getName());
+        text.setText("老师姓名：" + data.getData().getTeacher().getName() + "\n昵称：" + data.getData().getTeacher().getNick_name());
+        Glide.with(this).load(data.getData().getTeacher().getSmall_avatar_url()).placeholder(R.mipmap.ic_launcher).crossFade().into(image);
     }
 }

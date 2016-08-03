@@ -9,9 +9,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import cn.qatime.player.R;
+import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.RemedialClassDetailBean;
+import cn.qatime.player.utils.LogUtils;
 
-public class FragmentRemedialClassDetail1 extends Fragment {
+public class FragmentRemedialClassDetail1 extends BaseFragment {
     private TextView text;
 
     @Nullable
@@ -21,6 +23,7 @@ public class FragmentRemedialClassDetail1 extends Fragment {
         initview(view);
         return view;
     }
+
 
     private void initview(View view) {
         text = (TextView) view.findViewById(R.id.text);

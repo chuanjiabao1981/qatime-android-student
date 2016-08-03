@@ -42,6 +42,10 @@ public class UrlUtils {
                 sb.append(entry.getKey().toString()).append("=").append(entry.getValue().toString()).append(iterator.hasNext() ? "&" : "");
             }
         }
-        return sb.toString();
+        String url = sb.toString();
+        if (url.endsWith("&") && url.length() > 1) {
+            url.substring(0, url.length() - 1);
+        }
+        return url;
     }
 }

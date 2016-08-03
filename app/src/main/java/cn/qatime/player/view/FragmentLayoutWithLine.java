@@ -277,4 +277,8 @@ public class FragmentLayoutWithLine extends LinearLayout implements ViewPager.On
             }
         }
     }
+
+    public ViewPager getViewPager() {
+        return viewPager;
+    }
 }
