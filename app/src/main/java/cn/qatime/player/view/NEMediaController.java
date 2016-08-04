@@ -4,15 +4,16 @@ package cn.qatime.player.view;
 import java.util.Locale;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -58,6 +59,7 @@ import cn.qatime.player.R;
  */
 public class NEMediaController extends FrameLayout {
     private static final String TAG = "NELivePlayer/NEMediaController";
+    private Context context;
 
     private MediaPlayerControl mPlayer;
     private Context mContext;
@@ -73,7 +75,7 @@ public class NEMediaController extends FrameLayout {
     private boolean mShowing;
     private boolean mDragging;
     private boolean mInstantSeeking = true;
-    private static final int sDefaultTimeout = 3000;//3000;
+    private static final int sDefaultTimeout = 5000;//3000;
     private static final int FADE_OUT = 1;
     private static final int SHOW_PROGRESS = 2;
     private boolean mFromXml = false;
@@ -86,7 +88,7 @@ public class NEMediaController extends FrameLayout {
     private boolean mPaused = false;
     private boolean mIsFullScreen = false;
     
-    private int mVideoScalingMode = VIDEO_SCALING_MODE_FIT;
+    private int mVideoScalingMode = VIDEO_SCALING_MODE_FILL;
     public static final int VIDEO_SCALING_MODE_NONE = 0;
     public static final int VIDEO_SCALING_MODE_FIT  = 1;
     public static final int VIDEO_SCALING_MODE_FILL = 2;
@@ -104,6 +106,7 @@ public class NEMediaController extends FrameLayout {
     //通过Context来创建MediaController对象
     public NEMediaController(Context context) {
         super(context);
+        this.context = context;
         if (!mFromXml && initController(context))
             initFloatingWindow();
     }
@@ -171,19 +174,19 @@ public class NEMediaController extends FrameLayout {
         mSetPlayerScaleButton = (ImageView) v.findViewById(R.id.video_player_scale);  //画面显示模式按钮
         if(mSetPlayerScaleButton != null) {
         	if (mPlayer.isHardware() && mPlayer.isInBackground()) {
-				switch(mVideoScalingMode)
-				{
-				case VIDEO_SCALING_MODE_FIT:
-					mVideoScalingMode = VIDEO_SCALING_MODE_FIT;
-					mSetPlayerScaleButton.setImageResource(R.mipmap.nemediacontroller_scale01);
-					break;
-				case VIDEO_SCALING_MODE_NONE:
-					mVideoScalingMode = VIDEO_SCALING_MODE_NONE;
-					mSetPlayerScaleButton.setImageResource(R.mipmap.nemediacontroller_scale02);
-					break;
-				default:
-					mVideoScalingMode = VIDEO_SCALING_MODE_NONE;
-				};
+//				switch(mVideoScalingMode)
+//				{
+//				case VIDEO_SCALING_MODE_FIT:
+//					mVideoScalingMode = VIDEO_SCALING_MODE_FIT;
+//					mSetPlayerScaleButton.setImageResource(R.mipmap.nemediacontroller_scale01);
+//					break;
+//				case VIDEO_SCALING_MODE_NONE:
+//					mVideoScalingMode = VIDEO_SCALING_MODE_NONE;
+//					mSetPlayerScaleButton.setImageResource(R.mipmap.nemediacontroller_scale02);
+//					break;
+//				default:
+//					mVideoScalingMode = VIDEO_SCALING_MODE_NONE;
+//				};
 	            mPlayer.setVideoScalingMode(mVideoScalingMode);
         	}
           
@@ -504,27 +507,32 @@ public class NEMediaController extends FrameLayout {
 			}
 		}
     };
-	
+    /**
+     * 全屏显示
+     */
 	private OnClickListener mSetPlayerScaleListener = new OnClickListener() {
 		
 		@Override
 		public void onClick(View v) {
-			if(mIsFullScreen) {
-				mVideoScalingMode = VIDEO_SCALING_MODE_NONE;
+			if(mIsFullScreen) {//横屏  变为竖屏
+//				mVideoScalingMode = VIDEO_SCALING_MODE_NONE;
 				mSetPlayerScaleButton.setImageResource(R.mipmap.nemediacontroller_scale01);
+                ((Activity) (context)).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 				mIsFullScreen = false;
+
 			}
 			else {
-				mVideoScalingMode = VIDEO_SCALING_MODE_FIT;
+//				mVideoScalingMode = VIDEO_SCALING_MODE_FIT;
 				mSetPlayerScaleButton.setImageResource(R.mipmap.nemediacontroller_scale02);
+                ((Activity) (context)).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 				mIsFullScreen = true;
 			}
 			
-            try {
-            	mPlayer.setVideoScalingMode(mVideoScalingMode);
-            } catch (NumberFormatException e) {
-                
-            }
+//            try {
+//            	mPlayer.setVideoScalingMode(mVideoScalingMode);
+//            } catch (NumberFormatException e) {
+//
+//            }
 		}
 	};
 

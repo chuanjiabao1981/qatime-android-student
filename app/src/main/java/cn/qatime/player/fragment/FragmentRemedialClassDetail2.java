@@ -35,7 +35,7 @@ public class FragmentRemedialClassDetail2 extends BaseFragment {
     }
 
     public void setData(RemedialClassDetailBean data) {
-        text.setText("老师姓名：" + data.getData().getTeacher().getName() + "\n昵称：" + data.getData().getTeacher().getNick_name());
-        Glide.with(this).load(data.getData().getTeacher().getSmall_avatar_url()).placeholder(R.mipmap.ic_launcher).crossFade().into(image);
+//        text.setText("老师姓名：" +  "\n昵称：" );
+//        Glide.with(this).load(data.getData().getTeacher().getSmall_avatar_url()).placeholder(R.mipmap.ic_launcher).crossFade().into(image);
     }
 }

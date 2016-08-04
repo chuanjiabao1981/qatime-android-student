@@ -31,6 +31,6 @@ public class FragmentRemedialClassDetail1 extends BaseFragment {
 
     public void setData(RemedialClassDetailBean data) {
         RemedialClassDetailBean.Data bean = data.getData();
-        text.setText("名称："+bean.getName()+"\n科目类型："+bean.getSubject()+"\n授课老师："+bean.getTeacher().getName());
+//        text.setText("名称："+bean.getName()+"\n科目类型："+bean.getSubject()+"\n授课老师：");
     }
 }

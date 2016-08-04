@@ -362,8 +362,7 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
     private void attachMediaController() {
         if (mMediaPlayer != null && mMediaController != null) {
             mMediaController.setMediaPlayer(this);
-            View anchorView = this.getParent() instanceof View ?
-                    (View) this.getParent() : this;
+            View anchorView = this.getParent() instanceof View ?                    (View) this.getParent() : this;
             mMediaController.setAnchorView(anchorView);
             mMediaController.setEnabled(mIsPrepared);
 
