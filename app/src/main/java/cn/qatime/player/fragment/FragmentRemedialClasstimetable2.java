@@ -6,10 +6,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import cn.qatime.player.R;
-import cn.qatime.player.bean.RemedialClassDetailBean;
 
 public class FragmentRemedialClassTimeTable2 extends Fragment {
 

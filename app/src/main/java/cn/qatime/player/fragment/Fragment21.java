@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import org.json.JSONObject;
 
@@ -41,7 +42,8 @@ import cn.qatime.player.utils.VolleyErrorListener;
 
 public class Fragment21 extends BaseFragment {
     private PullToRefreshListView list;
-    private List<RemedialClassBean.Data> list = new ArrayList<>();
+    private PullToRefreshGridView grid;
+    private List<RemedialClassBean.Data> list1 = new ArrayList<>();
     private CommonAdapter<RemedialClassBean.Data> adapter;
     private int page = 1;
 
@@ -66,7 +68,7 @@ public class Fragment21 extends BaseFragment {
         list.getLoadingLayoutProxy(false, true).setReleaseLabel("松开加载");
 
 
-        adapter = new CommonAdapter<RemedialClassBean.Data>(getActivity(), list, R.layout.item_fragment11) {
+        adapter = new CommonAdapter<RemedialClassBean.Data>(getActivity(), list1, R.layout.item_fragment11) {
             @Override
             public void convert(ViewHolder helper, RemedialClassBean.Data item, int position) {
                 ((ImageView) helper.getView(R.id.image)).setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()) / 2, ScreenUtils.getScreenWidth(getActivity()) / 2));
@@ -96,7 +98,7 @@ public class Fragment21 extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                intent.putExtra("id", list.get(position).getId());
+                intent.putExtra("id", list1.get(position).getId());
                 startActivity(intent);
             }
         });
@@ -117,7 +119,7 @@ public class Fragment21 extends BaseFragment {
                     public void onResponse(JSONObject jsonObject) {
                         LogUtils.e(jsonObject.toString());
                         if (type == 1) {
-                            list.clear();
+                            list1.clear();
                         }
                         String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(),
                                 DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
@@ -127,7 +129,7 @@ public class Fragment21 extends BaseFragment {
                         try {
                             Gson gson = new Gson();
                             RemedialClassBean data = gson.fromJson(jsonObject.toString(), RemedialClassBean.class);
-                            list.addAll(data.getData());
+                            list1.addAll(data.getData());
                             adapter.notifyDataSetChanged();
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
