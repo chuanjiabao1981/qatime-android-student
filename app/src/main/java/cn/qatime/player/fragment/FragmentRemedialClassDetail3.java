@@ -65,7 +65,7 @@ public class FragmentRemedialClassDetail3 extends BaseFragment {
     public void setData(RemedialClassDetailBean data) {
         if (data != null && data.getData() != null) {
             list.clear();
-            list.addAll(data.getData().getLessons());
+//            list.addAll(data.getData().getLessons());
            if (adapter!=null){
                adapter.notifyDataSetChanged();
            }

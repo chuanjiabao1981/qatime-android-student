@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
 
 import com.netease.neliveplayer.NELivePlayer;
 import com.netease.neliveplayer.NELivePlayer.OnBufferingUpdateListener;
@@ -46,7 +45,7 @@ import android.widget.Toast;
 
 import cn.qatime.player.utils.LogUtils;
 
-public class NEVideoView extends SurfaceView implements NEMediaController.MediaPlayerControl {
+public class NEVideoView extends SurfaceView {
     private static final String TAG = "NELivePlayerNEVideoView";
 
     private static final int IDLE = 0;
@@ -64,11 +63,11 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
     private int mCurrState = IDLE;
     private int mNextState = IDLE;
 
-    private int mVideoScalingMode = VIDEO_SCALING_MODE_FIT;
-    public static final int VIDEO_SCALING_MODE_NONE = 0;
-    public static final int VIDEO_SCALING_MODE_FIT = 1;
-    public static final int VIDEO_SCALING_MODE_FILL = 2;
-    public static final int VIDEO_SCALING_MODE_FULL = 3;
+//    private int mVideoScalingMode = VIDEO_SCALING_MODE_FIT;
+//    public static final int VIDEO_SCALING_MODE_NONE = 0;
+//    public static final int VIDEO_SCALING_MODE_FIT = 1;
+//    public static final int VIDEO_SCALING_MODE_FILL = 2;
+//    public static final int VIDEO_SCALING_MODE_FULL = 3;
 
 
     private Uri mUri;
@@ -76,14 +75,13 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
     private long mPlayableDuration = 0;
     private SurfaceHolder mSurfaceHolder = null;
     private NELivePlayer mMediaPlayer = null;
-    private boolean mIsPrepared;
+    private boolean mIsPrepared; //播放器是否准备完成
     private int mVideoWidth;
     private int mVideoHeight;
     private int mPixelSarNum;
     private int mPixelSarDen;
     private int mSurfaceWidth;
     private int mSurfaceHeight;
-    private NEMediaController mMediaController;
     private View mBuffer;
     private NELivePlayer.OnCompletionListener mOnCompletionListener;
     private NELivePlayer.OnPreparedListener mOnPreparedListener;
@@ -91,6 +89,7 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
     private NELivePlayer.OnSeekCompleteListener mOnSeekCompleteListener;
     private NELivePlayer.OnInfoListener mOnInfoListener;
     private NELivePlayer.OnBufferingUpdateListener mOnBufferingUpdateListener;
+    private OnVideoSizeChangedListener mOnVideoSizeChangeListener;
     private int mCurrentBufferPercentage;
     private long mSeekWhenPrepared;
     private int mBufferStrategy = 0; //直播低延时
@@ -100,10 +99,10 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
     public static String mVersion = null;
     private String mMediaType;
     private boolean mMute = false;
+
+
     private boolean isBackground;
     private boolean manualPause = false;
-
-
     private String mLogPath = null;
     private int mLogLevel = 0;
 
@@ -146,7 +145,7 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    public void setVideoScalingMode(int videoScalingMode) {
+    public void setVideoScalingMode(boolean orientation) {
         LayoutParams layPara = getLayoutParams();
         int winWidth = 0;
         int winHeight = 0;
@@ -187,46 +186,50 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
             mSurfaceHeight = mVideoHeight;
             mSurfaceWidth = mVideoWidth;
 
-            if (VIDEO_SCALING_MODE_NONE == videoScalingMode && mSurfaceWidth < winWidth && mSurfaceHeight < winHeight) {
-                layPara.width = (int) (mSurfaceHeight * aspectRatio);
-                layPara.height = mSurfaceHeight;
-            } else if (VIDEO_SCALING_MODE_FIT == videoScalingMode) { //拉伸
-                if (winRatio < aspectRatio) {
-                    layPara.width = winWidth;
-                    layPara.height = (int) (winWidth / aspectRatio);
-                } else {
-                    layPara.width = (int) (aspectRatio * winHeight);
-                    layPara.height = winHeight;
-                }
-            } else if (VIDEO_SCALING_MODE_FILL == videoScalingMode) { //满屏
+//            if (VIDEO_SCALING_MODE_NONE == videoScalingMode && mSurfaceWidth < winWidth && mSurfaceHeight < winHeight) {
+//                layPara.width = (int) (mSurfaceHeight * aspectRatio);
+//                layPara.height = mSurfaceHeight;
+//            } else if (VIDEO_SCALING_MODE_FIT == videoScalingMode) { //拉伸
+            if (winRatio < aspectRatio) {
                 layPara.width = winWidth;
-                layPara.height = winHeight;
-            } else if (VIDEO_SCALING_MODE_FULL == videoScalingMode) { //全屏
-                if (winRatio < aspectRatio) {
-                    layPara.width = (int) (winHeight * aspectRatio);
-                    layPara.height = winHeight;
-                } else {
-                    layPara.width = winWidth;
-                    layPara.height = (int) (winWidth / aspectRatio);
-                }
+                layPara.height = (int) (winWidth / aspectRatio);
             } else {
-                if (winRatio < aspectRatio) {
-                    layPara.width = (int) (aspectRatio * winHeight);
-                    layPara.height = winHeight;
-                } else {
-                    layPara.width = winWidth;
-                    layPara.height = (int) (winWidth / aspectRatio);
-                }
+                layPara.width = (int) (aspectRatio * winHeight);
+                layPara.height = winHeight;
+            }
+//            } else if (VIDEO_SCALING_MODE_FILL == videoScalingMode) { //满屏
+//                layPara.width = winWidth;
+//                layPara.height = winHeight;
+//            } else if (VIDEO_SCALING_MODE_FULL == videoScalingMode) { //全屏
+//                if (winRatio < aspectRatio) {
+//                    layPara.width = (int) (winHeight * aspectRatio);
+//                    layPara.height = winHeight;
+//                } else {
+//                    layPara.width = winWidth;
+//                    layPara.height = (int) (winWidth / aspectRatio);
+//                }
+//            } else {
+//                if (winRatio < aspectRatio) {
+//                    layPara.width = (int) (aspectRatio * winHeight);
+//                    layPara.height = winHeight;
+//                } else {
+//                    layPara.width = winWidth;
+//                    layPara.height = (int) (winWidth / aspectRatio);
+//                }
+//            }
+            if (orientation) {
+                layPara.height = winWidth;
+                layPara.width = winHeight + rect.top;
             }
             setLayoutParams(layPara);
             getHolder().setFixedSize(mSurfaceWidth, mSurfaceHeight);
-//            Log.d(TAG, "Video: width = " + mVideoWidth + ", height = " + mVideoHeight);
-//            Log.d(TAG, "Surface: width = " + mSurfaceWidth + ", height = " + mSurfaceHeight);
-//            Log.d(TAG, "Window:width = " + winWidth + ", height = " + winHeight);
-//            Log.d(TAG, "LayoutParams:width = " + layPara.width + ", height = " + layPara.height);
+            LogUtils.e(TAG, "Video: width = " + mVideoWidth + ", height = " + mVideoHeight);
+            LogUtils.e(TAG, "Surface: width = " + mSurfaceWidth + ", height = " + mSurfaceHeight);
+            LogUtils.e(TAG, "Window:width = " + winWidth + ", height = " + winHeight);
+            LogUtils.e(TAG, "LayoutParams:width = " + layPara.width + ", height = " + layPara.height);
         }
 
-        mVideoScalingMode = videoScalingMode;
+//        mVideoScalingMode = videoScalingMode;
     }
 
     private void initVideoView() {
@@ -290,8 +293,8 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
 //            	neMediaPlayer.setHardwareDecoder(mHardwareDecoder);
             }
             mMediaPlayer = neMediaPlayer;
-            getLogPath();
-            mMediaPlayer.setLogPath(mLogLevel, mLogPath);
+//            getLogPath();
+//            mMediaPlayer.setLogPath(mLogLevel, mLogPath);
             mMediaPlayer.setBufferStrategy(mBufferStrategy);//设置缓冲策略，0为直播低延时，1为点播抗抖动
             mMediaPlayer.setHardwareDecoder(mHardwareDecoder);//设置是否开启硬件解码，0为软解，1为硬解
             mMediaPlayer.setOnPreparedListener(mPreparedListener);
@@ -333,7 +336,7 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
             mMediaPlayer.setScreenOnWhilePlaying(true);
             mMediaPlayer.prepareAsync(mContext); //初始化视频文件
             mCurrState = PREPARING;
-            attachMediaController();
+//            attachMediaController();
         } catch (IOException ex) {
             LogUtils.e(TAG, "Unable to open content: " + mUri, ex);
             mErrorListener.onError(mMediaPlayer, -1, 0);
@@ -345,13 +348,13 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
         }
     }
 
-    public void setMediaController(NEMediaController controller) {
-        if (mMediaController != null) {
-            mMediaController.hide();
-        }
-        mMediaController = controller;
-        attachMediaController();
-    }
+//    public void setMediaController(NEMediaController controller) {
+//        if (mMediaController != null) {
+//            mMediaController.hide();
+//        }
+//        mMediaController = controller;
+////        attachMediaController();
+//    }
 
     public void setBufferPrompt(View buffer) {
         if (mBuffer != null)
@@ -359,32 +362,33 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
         mBuffer = buffer;
     }
 
-    private void attachMediaController() {
-        if (mMediaPlayer != null && mMediaController != null) {
-            mMediaController.setMediaPlayer(this);
-            View anchorView = this.getParent() instanceof View ?                    (View) this.getParent() : this;
-            mMediaController.setAnchorView(anchorView);
-            mMediaController.setEnabled(mIsPrepared);
-
-            if (mUri != null) {
-                List<String> paths = mUri.getPathSegments();
-                String name = paths == null || paths.isEmpty() ? "null" : paths
-                        .get(paths.size() - 1);
-                mMediaController.setFileName(name);
-            }
-        }
-    }
+//    private void attachMediaController() {
+//        if (mMediaPlayer != null && mMediaController != null) {
+//            mMediaController.setMediaPlayer(this);
+//            View anchorView = this.getParent() instanceof View ? (View) this.getParent() : this;
+//            mMediaController.setAnchorView(anchorView);
+//            mMediaController.setEnabled(mIsPrepared);
+//
+//            if (mUri != null) {
+//                List<String> paths = mUri.getPathSegments();
+//                String name = paths == null || paths.isEmpty() ? "null" : paths                       .get(paths.size() - 1);
+//                mMediaController.setFileName(name);
+//            }
+//        }
+//    }
 
     OnVideoSizeChangedListener mSizeChangedListener = new OnVideoSizeChangedListener() {
-        public void onVideoSizeChanged(NELivePlayer mp, int width, int height,
-                                       int sarNum, int sarDen) {
+        public void onVideoSizeChanged(NELivePlayer mp, int width, int height, int sarNum, int sarDen) {
             LogUtils.e(TAG, "onVideoSizeChanged: " + width + "x" + height);
             mVideoWidth = mp.getVideoWidth();
             mVideoHeight = mp.getVideoHeight();
+            if (mOnVideoSizeChangeListener != null) {
+                mOnVideoSizeChangeListener.onVideoSizeChanged(mp, width, height, sarNum, sarDen);
+            }
             mPixelSarNum = sarNum;
             mPixelSarDen = sarDen;
-            if (mVideoWidth != 0 && mVideoHeight != 0)
-                setVideoScalingMode(mVideoScalingMode);
+//            if (mVideoWidth != 0 && mVideoHeight != 0)
+//                setVideoScalingMode(false);
         }
     };
 
@@ -399,27 +403,28 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
             if (mOnPreparedListener != null) {
                 mOnPreparedListener.onPrepared(mMediaPlayer);
             }
-            if (mMediaController != null) {
-                mMediaController.setEnabled(true);
-            }
+//            if (mMediaController != null) {
+//                mMediaController.setEnabled(true);
+//            }
             mVideoWidth = mp.getVideoWidth();
             mVideoHeight = mp.getVideoHeight();
 
             if (mSeekWhenPrepared != 0)
                 seekTo(mSeekWhenPrepared);
             if (mVideoWidth != 0 && mVideoHeight != 0) {
-                setVideoScalingMode(mVideoScalingMode);
+                setVideoScalingMode(false);
                 if (mSurfaceWidth == mVideoWidth && mSurfaceHeight == mVideoHeight) {
                     if (mNextState == STARTED) {
                         if (!isPaused()) {
                             start();
                         }
-                        if (mMediaController != null)
-                            mMediaController.show();
-                    } else if (!isPlaying() && (mSeekWhenPrepared != 0 || getCurrentPosition() > 0)) {
-                        if (mMediaController != null)
-                            mMediaController.show(0);
+//                        if (mMediaController != null)
+//                            mMediaController.show();
                     }
+//                    else if (!isPlaying() && (mSeekWhenPrepared != 0 || getCurrentPosition() > 0)) {
+//                        if (mMediaController != null)
+//                            mMediaController.show(0);
+//                    }
                 }
             } else if (mNextState == STARTED) {
                 if (!isPaused()) {
@@ -435,8 +440,8 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
         public void onCompletion(NELivePlayer mp) {
             LogUtils.e(TAG, "onCompletion");
             mCurrState = PLAYBACKCOMPLETED;
-            if (mMediaController != null)
-                mMediaController.hide();
+//            if (mMediaController != null)
+//                mMediaController.hide();
             if (mOnCompletionListener != null)
                 mOnCompletionListener.onCompletion(mMediaPlayer);
 
@@ -447,7 +452,7 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
                         .setPositiveButton("OK",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int whichButton) {
-                                    	/* If we get here, there is no onError listener, so
+                                        /* If we get here, there is no onError listener, so
                                          * at least inform them that the video is over.
                                          */
                                         if (mOnCompletionListener != null)
@@ -462,11 +467,11 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
 
     private OnErrorListener mErrorListener = new OnErrorListener() {
         public boolean onError(NELivePlayer mp, int a, int b) {
-            Log.d(TAG, "Error: " + a + "," + b);
+            LogUtils.e(TAG, "Error: " + a + "," + b);
             mCurrState = ERROR;
-            if (mMediaController != null) {
-                mMediaController.hide();
-            }
+//            if (mMediaController != null) {
+//                mMediaController.hide();
+//            }
 
             /* If an error handler has been supplied, use it and finish. */
             if (mOnErrorListener != null) {
@@ -487,7 +492,7 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
                         .setPositiveButton("Ok",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int whichButton) {
-                                    	/* If we get here, there is no onError listener, so
+                                        /* If we get here, there is no onError listener, so
                                          * at least inform them that the video is over.
                                          */
                                         if (mOnCompletionListener != null)
@@ -512,26 +517,26 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
     private OnInfoListener mInfoListener = new OnInfoListener() {
         @Override
         public boolean onInfo(NELivePlayer mp, int what, int extra) {
-            Log.d(TAG, "onInfo: " + what + ", " + extra);
+            LogUtils.e(TAG, "onInfo: " + what + ", " + extra);
             if (mOnInfoListener != null) {
                 mOnInfoListener.onInfo(mp, what, extra);
             }
 
             if (mMediaPlayer != null) {
                 if (what == NELivePlayer.NELP_BUFFERING_START) {
-                    Log.d(TAG, "onInfo: NELP_BUFFERING_START");
+                    LogUtils.e(TAG, "onInfo: NELP_BUFFERING_START");
                     if (mBuffer != null)
                         mBuffer.setVisibility(View.VISIBLE);
                 } else if (what == NELivePlayer.NELP_BUFFERING_END) {
-                    Log.d(TAG, "onInfo: NELP_BUFFERING_END");
+                    LogUtils.e(TAG, "onInfo: NELP_BUFFERING_END");
                     if (mBuffer != null)
                         mBuffer.setVisibility(View.GONE);
                 } else if (what == NELivePlayer.NELP_FIRST_VIDEO_RENDERED) {
-                    Log.d(TAG, "onInfo: NELP_FIRST_VIDEO_RENDERED");
+                    LogUtils.e(TAG, "onInfo: NELP_FIRST_VIDEO_RENDERED");
                 } else if (what == NELivePlayer.NELP_FIRST_AUDIO_RENDERED) {
-                    Log.d(TAG, "onInfo: NELP_FIRST_AUDIO_RENDERED");
+                    LogUtils.e(TAG, "onInfo: NELP_FIRST_AUDIO_RENDERED");
                 } else if (what == NELivePlayer.NELP_RELEASE_SUCCESS) {
-                    Log.d(TAG, "onInfo: NELP_RELEASE_SUCCESS");
+                    LogUtils.e(TAG, "onInfo: NELP_RELEASE_SUCCESS");
                 }
             }
 
@@ -542,11 +547,15 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
     private OnSeekCompleteListener mSeekCompleteListener = new OnSeekCompleteListener() {
         @Override
         public void onSeekComplete(NELivePlayer mp) {
-            Log.d(TAG, "onSeekComplete");
+            LogUtils.e(TAG, "onSeekComplete");
             if (mOnSeekCompleteListener != null)
                 mOnSeekCompleteListener.onSeekComplete(mp);
         }
     };
+
+    public void setOnVideoSizeChangeListener(OnVideoSizeChangedListener l) {
+        this.mOnVideoSizeChangeListener = l;
+    }
 
     /**
      * Register a callback to be invoked when the media file
@@ -607,9 +616,9 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
                 if (!isPaused()) {
                     start();
                 }
-                if (mMediaController != null) {
-                    mMediaController.show();
-                }
+//                if (mMediaController != null) {
+//                    mMediaController.show();
+//                }
             }
         }
 
@@ -633,7 +642,7 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
 
         public void surfaceDestroyed(SurfaceHolder holder) {
             mSurfaceHolder = null;
-            if (mMediaController != null) mMediaController.hide();
+//            if (mMediaController != null) mMediaController.hide();
             if (mMediaPlayer != null) {
                 if (mHardwareDecoder) {
                     mSeekWhenPrepared = mMediaPlayer.getCurrentPosition();
@@ -661,15 +670,15 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        if (mIsPrepared && mMediaPlayer != null && mMediaController != null)
-            toggleMediaControlsVisiblity();
+//        if (mIsPrepared && mMediaPlayer != null && mMediaController != null)
+//            toggleMediaControlsVisiblity();
         return false;
     }
 
     @Override
     public boolean onTrackballEvent(MotionEvent ev) {
-        if (mIsPrepared && mMediaPlayer != null && mMediaController != null)
-            toggleMediaControlsVisiblity();
+//        if (mIsPrepared && mMediaPlayer != null && mMediaController != null)
+//            toggleMediaControlsVisiblity();
         return false;
     }
 
@@ -683,46 +692,38 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
                 && keyCode != KeyEvent.KEYCODE_MENU
                 && keyCode != KeyEvent.KEYCODE_CALL
                 && keyCode != KeyEvent.KEYCODE_ENDCALL
-                && mMediaPlayer != null
-                && mMediaController != null) {
+                && mMediaPlayer != null) {
             if (keyCode == KeyEvent.KEYCODE_HEADSETHOOK
                     || keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE
                     || keyCode == KeyEvent.KEYCODE_SPACE) {
                 if (mMediaPlayer.isPlaying()) {
                     pause();
-                    mMediaController.show();
+//                    mMediaController.show();
                 } else {
                     if (!isPaused()) {
                         start();
                     }
-                    mMediaController.hide();
+//                    mMediaController.hide();
                 }
                 return true;
-            } else {
-                toggleMediaControlsVisiblity();
             }
+//            else {
+//                toggleMediaControlsVisiblity();
+//            }
         }
 
         return super.onKeyDown(keyCode, event);
     }
 
-    private void toggleMediaControlsVisiblity() {
-        if (mMediaController.isShowing()) {
-            mMediaController.hide();
-        } else {
-            mMediaController.show();
-        }
-    }
-
-    public void MediaControlsVisibity(boolean showing) {
-        if (showing) {
-            mMediaController.show();
-        } else {
-            mMediaController.hide();
-        }
-    }
-
-    @Override
+    //    private void toggleMediaControlsVisiblity() {
+//        if (mMediaController.isShowing()) {
+//            mMediaController.hide();
+//        } else {
+//            mMediaController.show();
+//        }
+//    }
+//
+//
     public void start() {
         if (mMediaPlayer != null && mIsPrepared) {
             mMediaPlayer.start();
@@ -731,7 +732,6 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
         mNextState = STARTED;
     }
 
-    @Override
     public void pause() {
         if (mMediaPlayer != null && mIsPrepared) {
             if (mMediaPlayer.isPlaying()) {
@@ -742,7 +742,6 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
         mNextState = PAUSED;
     }
 
-    @Override
     public int getDuration() {
         if (mMediaPlayer != null && mIsPrepared) {
             if (mDuration > 0)
@@ -765,7 +764,6 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
         return -1;
     }
 
-    @Override
     public int getCurrentPosition() {
         if (mMediaPlayer != null && mIsPrepared) {
             return (int) mMediaPlayer.getCurrentPosition();
@@ -773,7 +771,6 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
         return 0;
     }
 
-    @Override
     public void seekTo(long msec) {
         if (mMediaPlayer != null && mIsPrepared) {
             mMediaPlayer.seekTo(msec);
@@ -793,7 +790,6 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
         invalidate();
     }
 
-    @Override
     public boolean isPlaying() {
         if (mMediaPlayer != null && mIsPrepared) {
             return mMediaPlayer.isPlaying();
@@ -810,7 +806,6 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
         return manualPause;
     }
 
-    @Override
     public int getBufferPercentage() {
         if (mMediaPlayer != null)
             return mCurrentBufferPercentage;
@@ -874,14 +869,14 @@ public class NEVideoView extends SurfaceView implements NEMediaController.MediaP
     @SuppressLint("SdCardPath")
     public void getSnapshot() {
         NEMediaInfo mediaInfo = mMediaPlayer.getMediaInfo();
-        Log.d(TAG, "VideoDecoderMode = " + mediaInfo.mVideoDecoderMode);
-        Log.d(TAG, "MediaPlayerName = " + mediaInfo.mMediaPlayerName);
-        Log.d(TAG, "VideoStreamType = " + mediaInfo.mVideoStreamType);
-        Log.d(TAG, "AudioDecoderMode = " + mediaInfo.mAudioDecoderMode);
-        Log.d(TAG, "AudioStreamType = " + mediaInfo.mAudioStreamType);
+        LogUtils.e(TAG, "VideoDecoderMode = " + mediaInfo.mVideoDecoderMode);
+        LogUtils.e(TAG, "MediaPlayerName = " + mediaInfo.mMediaPlayerName);
+        LogUtils.e(TAG, "VideoStreamType = " + mediaInfo.mVideoStreamType);
+        LogUtils.e(TAG, "AudioDecoderMode = " + mediaInfo.mAudioDecoderMode);
+        LogUtils.e(TAG, "AudioStreamType = " + mediaInfo.mAudioStreamType);
 
         if (mediaInfo.mVideoDecoderMode.equals("MediaCodec")) {
-            Log.d(TAG, "================= hardware unsupport snapshot ==============");
+            LogUtils.e(TAG, "================= hardware unsupport snapshot ==============");
         } else {
             Bitmap bitmap = Bitmap.createBitmap(mVideoWidth, mVideoHeight, Config.ARGB_8888);
             //Bitmap bitmap = null;

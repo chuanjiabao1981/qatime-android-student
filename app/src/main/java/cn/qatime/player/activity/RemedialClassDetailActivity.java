@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
@@ -48,6 +49,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remedial_class_detail);
+
         id = getIntent().getIntExtra("id", 0);
         initView();
         initData();
@@ -56,9 +58,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
     private void initView() {
         image = (ImageView) findViewById(R.id.image);
+        Glide.with(this).load(R.mipmap.photo).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
         audition = (Button) findViewById(R.id.audition);
         pay = (Button) findViewById(R.id.pay);
-
         fragBaseFragments.add(new FragmentRemedialClassDetail1());
         fragBaseFragments.add(new FragmentRemedialClassDetail2());
         fragBaseFragments.add(new FragmentRemedialClassDetail3());
@@ -96,7 +98,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                          data = gson.fromJson(jsonObject.toString(), RemedialClassDetailBean.class);
                         ((FragmentRemedialClassDetail1) fragBaseFragments.get(0)).setData(data);
                         ((FragmentRemedialClassDetail2) fragBaseFragments.get(1)).setData(data);
-                        ((FragmentRemedialClassDetail3) fragBaseFragments.get(2)).setData(data);
+                        //TODO
+//                        ((FragmentRemedialClassDetail3) fragBaseFragments.get(2)).setData(data);
                     }
                 }, new VolleyErrorListener() {
             @Override
