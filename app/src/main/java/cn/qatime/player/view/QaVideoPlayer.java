@@ -7,14 +7,20 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.netease.neliveplayer.NELivePlayer;
 
@@ -29,11 +35,11 @@ import cn.qatime.player.utils.LogUtils;
  * setVideoPath(url);
  * start();
  */
-public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferingUpdateListener, NELivePlayer.OnCompletionListener, NELivePlayer.OnPreparedListener, NELivePlayer.OnErrorListener, NELivePlayer.OnVideoSizeChangedListener, View.OnClickListener {
+public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferingUpdateListener, NELivePlayer.OnCompletionListener, NELivePlayer.OnPreparedListener, NELivePlayer.OnErrorListener, View.OnClickListener {
     private int flag;// 用户原始是否可旋转，退出是需将用户设置还原
     private NEVideoView videoView;
     private View mMediaController;
-    private ImageButton mPlayBack;//返回键
+    private ImageView mPlayBack;//返回键
     private View mBuffer;
 //    private NEMediaController mMediaController;
 
@@ -64,6 +70,20 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
     private Handler hd = new Handler();
     private ImageView play;
     private ImageView zoom;
+    private View toolbarLayout;
+    private TextView videoName;
+    private View definition;
+    private RadioGroup radiogroup;
+    private View commentLayout;
+    private View refresh;
+    private EditText comment;
+    private Button commit;
+    private TextView barrage;
+    private View barrageSetting;
+    private View zoomLayout;
+    private View playToolbar;
+    private View bottomLayout;
+    private TextView viewCount;
 
 
 //    NEMediaPlayer mMediaPlayer = new NEMediaPlayer();
@@ -86,27 +106,39 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
     private void init() {
         flag = Settings.System.getInt(((Activity) QaVideoPlayer.this.getContext()).getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0);
         videoView = new NEVideoView(getContext());
-//        videoView = new NEVideoView(this.getContext());
         ViewGroup.LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         videoView.setLayoutParams(params);
         this.addView(videoView);
         mMediaController = View.inflate(this.getContext(), R.layout.video_media_controller, null);
-        mPlayBack = (ImageButton) mMediaController.findViewById(R.id.player_exit);//退出播放
-        mPlayBack.getBackground().setAlpha(0);
+        //上部分
+        playToolbar = mMediaController.findViewById(R.id.play_toolbar);
+        mPlayBack = (ImageView) mMediaController.findViewById(R.id.player_exit);//退出播放
+        toolbarLayout = mMediaController.findViewById(R.id.toolbar_layout);
+        viewCount = (TextView) mMediaController.findViewById(R.id.view_count);
+        videoName = (TextView) mMediaController.findViewById(R.id.video_name);
+        definition = mMediaController.findViewById(R.id.definition);//清晰度点击按钮
+        radiogroup = (RadioGroup) mMediaController.findViewById(R.id.radiogroup);
 
+        //下部分
+        bottomLayout = mMediaController.findViewById(R.id.bottom_layout);
         play = (ImageView) mMediaController.findViewById(R.id.play);
         play.setOnClickListener(this);
+        zoomLayout = mMediaController.findViewById(R.id.zoom_layout);
         zoom = (ImageView) mMediaController.findViewById(R.id.zoom);
         zoom.setOnClickListener(this);
+        commentLayout = mMediaController.findViewById(R.id.comment_layout);//评论大布局
+        refresh = mMediaController.findViewById(R.id.refresh);//刷新
+        comment = (EditText) mMediaController.findViewById(R.id.comment);
+        commit = (Button) mMediaController.findViewById(R.id.commit);
+        barrage = (TextView) mMediaController.findViewById(R.id.barrage);//弹幕开关
+        barrageSetting = mMediaController.findViewById(R.id.barrage_setting);//弹幕设置
+
         this.addView(mMediaController);
 //        mBuffer = View.inflate(this.getContext(), R.layout.video_play_toolbar, null);
 //        this.addView(mBuffer);
-//        mMediaController = new NEMediaController(getContext());
 
         videoView.setBufferStrategy(0); //直播低延时
 
-
-//        videoView.setBufferPrompt();
         videoView.setBufferPrompt(mBuffer);
         videoView.setMediaType("livestream");//直播livestream  点播videoondemand
         videoView.setHardwareDecoder(false);//是否硬解码
@@ -123,9 +155,27 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
         videoView.setOnCompletionListener(this);
         videoView.setOnPreparedListener(this);
         videoView.setOnErrorListener(this);
-        videoView.setOnVideoSizeChangeListener(this);
+//        videoView.setOnVideoSizeChangeListener(this);
 
         hd.postDelayed(runnable, sDefaultTimeout);
+
+        comment.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            hd.removeCallbacks(runnable);
+                hd.postDelayed(runnable,sDefaultTimeout);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
 
@@ -135,8 +185,10 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
             if (mMediaController.getVisibility() == View.GONE) {
                 hd.removeCallbacks(runnable);
                 mMediaController.setVisibility(View.VISIBLE);
-                hd.postDelayed(runnable, 3000);
+                hd.postDelayed(runnable, sDefaultTimeout);
             } else {
+//                mMediaController.setVisibility(GONE);
+//                hd.removeCallbacks(runnable);
                 return super.dispatchTouchEvent(ev);
             }
         }
@@ -176,7 +228,9 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) { // 横屏
+            landscape();
             videoView.setVideoScalingMode(true);
+//            zoom.setImageResource(R.mipmap.nemediacontroller_scale02);
             // 全屏
             if (Build.VERSION.SDK_INT >= 11) {
                 try {
@@ -187,9 +241,32 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
             ((Activity) getContext()).getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         } else {
+            vertical();
+//            zoom.setImageResource(R.mipmap.nemediacontroller_scale01);
             videoView.setVideoScalingMode(false);
             exitFull();
         }
+    }
+
+    private void vertical() {
+        toolbarLayout.setVisibility(GONE);
+        viewCount.setVisibility(VISIBLE);
+        playToolbar.setBackgroundColor(0x00000000);
+
+        commentLayout.setVisibility(GONE);
+        zoomLayout.setVisibility(VISIBLE);
+        bottomLayout.setBackgroundColor(0x00000000);
+    }
+
+    private void landscape() {
+        toolbarLayout.setVisibility(VISIBLE);
+        viewCount.setVisibility(GONE);
+        playToolbar.setBackgroundColor(0xff999999);
+
+        commentLayout.setVisibility(VISIBLE);
+        zoomLayout.setVisibility(GONE);
+        bottomLayout.setBackgroundColor(0xff999999);
+
     }
 
     /**
@@ -197,9 +274,9 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
      */
     private void exitFull() {
 // 竖屏
-        if (!videoView.isPlaying()) {
-            Settings.System.putInt(((Activity) getContext()).getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, flag);
-        }
+//        if (!videoView.isPlaying()) {
+//            Settings.System.putInt(((Activity) getContext()).getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, flag);
+//        }
         // 显示导航栏和状态栏
         if (Build.VERSION.SDK_INT >= 11) {
             try {
@@ -274,12 +351,12 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
 
     }
 
-    @Override
-    public void onVideoSizeChanged(NELivePlayer neLivePlayer, int i, int i1, int i2, int i3) {
-        if (controlListener != null) {
-            controlListener.onVideoSizeChanged(neLivePlayer, i, i1, i2, i3);
-        }
-    }
+//    @Override
+//    public void onVideoSizeChanged(NELivePlayer neLivePlayer, int i, int i1, int i2, int i3) {
+//        if (controlListener != null) {
+//            controlListener.onVideoSizeChanged(neLivePlayer, i, i1, i2, i3);
+//        }
+//    }
 
     @Override
     public void onClick(View v) {
@@ -304,6 +381,13 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
                 }
 
                 break;
+//            case R.id.player_exit:
+//                if (((Activity) getContext()).getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {//
+////                    videoView.setVideoScalingMode(1, false);
+//                    ((Activity) getContext()).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//                } else {
+//                }
+//                break;
         }
     }
 
@@ -314,7 +398,7 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
 //    }
 
     public interface ControlListener {
-        void onVideoSizeChanged(NELivePlayer mp, int width, int height, int sarNum, int sarDen);
+//        void onVideoSizeChanged(NELivePlayer mp, int width, int height, int sarNum, int sarDen);
 
         void onBufferingUpdate(NELivePlayer neLivePlayer, int i);
 

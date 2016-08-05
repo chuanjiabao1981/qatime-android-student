@@ -8,25 +8,52 @@
         android:layout_width="match_parent"
         android:layout_height="40dip">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/player_exit"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="7dip"
+            android:onClick="backClick"
+            android:padding="8dp"
             android:src="@mipmap/ic_play_exit" />
 
+        <LinearLayout
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/player_exit"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/video_name"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="視頻名字視頻名字視頻名字視頻名字視頻名字視頻名字"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/definition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="高清" />
+        </LinearLayout>
+
         <TextView
-            android:id="@+id/file_name"
-            style="@style/MediaController_Text"
+            android:id="@+id/view_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:background="@drawable/shape_circle_bg"
-            android:ellipsize="marquee"
-            android:focusable="true"
             android:paddingBottom="3dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
@@ -36,13 +63,140 @@
             android:textColor="#fff" />
     </RelativeLayout>
 
+    <RadioGroup
+        android:id="@+id/radiogroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginTop="40dp"
+        android:background="#999"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:visibility="gone">
+
+        <RadioButton
+            android:id="@+id/radio1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="高清" />
+
+        <RadioButton
+            android:id="@+id/radio2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="普清" />
+    </RadioGroup>
 
     <LinearLayout
-        android:id="@+id/mediacontroller_bar"
+        android:id="@+id/barrage_setting_layout"
+        android:layout_width="wrap_content"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="45dp"
+        android:background="#999"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="观看模式" />
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="弹幕透明" />
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="弹幕透明" />
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="弹幕透明" />
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="弹幕位置" />
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="上方" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="下方" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="全屏" />
+            </RadioGroup>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom_layout"
         android:layout_width="fill_parent"
         android:layout_height="45dp"
         android:layout_gravity="bottom"
-        android:background="#00000000"
         android:orientation="horizontal">
 
         <ImageView
@@ -59,34 +213,77 @@
             android:layout_weight="1">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:id="@+id/comment_layout"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="horizontal"
                 android:visibility="gone">
 
+                <ImageView
+                    android:id="@+id/refresh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="5dp"
+                    android:src="@mipmap/refresh" />
+
                 <EditText
+                    android:id="@+id/comment"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
-                    android:background="@drawable/shape_input" />
+                    android:imeOptions="flagNoExtractUi"
+                    android:background="@drawable/shape_input"
+                    android:hint="评论内容" />
 
                 <Button
+                    android:id="@+id/commit"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/button_bg_selector_gray"
                     android:text="发送" />
+
+                <TextView
+                    android:id="@+id/barrage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center"
+                    android:text="打开弹幕" />
+
+                <ImageView
+                    android:id="@+id/barrage_setting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="5dp"
+                    android:src="@mipmap/setting" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/zoom_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:id="@+id/zoom"
+                    android:layout_width="45dp"
+                    android:layout_height="match_parent"
+                    android:clickable="true"
+                    android:padding="10dp"
+                    android:src="@mipmap/nemediacontroller_scale01" />
             </LinearLayout>
         </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/zoom"
-            android:layout_width="45dp"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:padding="10dp"
-            android:src="@mipmap/nemediacontroller_scale01" />
+
     </LinearLayout>
 
 </FrameLayout>

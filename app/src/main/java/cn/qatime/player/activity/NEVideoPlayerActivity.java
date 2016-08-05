@@ -3,20 +3,33 @@ package cn.qatime.player.activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.netease.neliveplayer.NELivePlayer;
 
+import java.util.ArrayList;
+
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.base.BaseFragmentActivity;
+import cn.qatime.player.fragment.FragmentNEVideoPlayer1;
+import cn.qatime.player.fragment.FragmentNEVideoPlayer2;
+import cn.qatime.player.fragment.FragmentNEVideoPlayer3;
+import cn.qatime.player.fragment.FragmentNEVideoPlayer4;
+import cn.qatime.player.fragment.FragmentRemedialClassDetail1;
+import cn.qatime.player.fragment.FragmentRemedialClassDetail2;
+import cn.qatime.player.fragment.FragmentRemedialClassDetail3;
 import cn.qatime.player.utils.LogUtils;
 import cn.qatime.player.utils.ScreenUtils;
+import cn.qatime.player.view.FragmentLayoutWithLine;
 import cn.qatime.player.view.QaVideoPlayer;
 
-public class NEVideoPlayerActivity extends BaseActivity implements QaVideoPlayer.ControlListener {
+public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVideoPlayer.ControlListener {
     public final static String TAG = "NEVideoPlayerActivity";
 //    public NEVideoView mVideoView;  //用于画面显示
 //    private View mBuffer; //用于指示缓冲状态
@@ -36,6 +49,11 @@ public class NEVideoPlayerActivity extends BaseActivity implements QaVideoPlayer
     private QaVideoPlayer videoPlayer;
     private View bottom;
 
+    private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3, R.id.tab_text4};
+    private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
+    private FragmentLayoutWithLine fragmentLayout;
+    private View inputLayout;
+
 //    int flag = Settings.System.getInt(getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0);
 
     @Override
@@ -45,10 +63,44 @@ public class NEVideoPlayerActivity extends BaseActivity implements QaVideoPlayer
         videoPlayer = (QaVideoPlayer) findViewById(R.id.video_player);
         ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenHeight(this) / 3);
         videoPlayer.setLayoutParams(params);
-        bottom = findViewById(R.id.bottom);
+
         videoPlayer.setVideoPath(url);
         videoPlayer.setOnControlListener(this);
         videoPlayer.start();
+        initView();
+
+    }
+
+    private void initView() {
+        bottom = findViewById(R.id.bottom);
+        inputLayout = findViewById(R.id.input_layout);
+        fragBaseFragments.add(new FragmentNEVideoPlayer1());
+        fragBaseFragments.add(new FragmentNEVideoPlayer2());
+        fragBaseFragments.add(new FragmentNEVideoPlayer3());
+        fragBaseFragments.add(new FragmentNEVideoPlayer4());
+
+        fragmentLayout = (FragmentLayoutWithLine) findViewById(R.id.fragmentlayout);
+
+        fragmentLayout.setScorllToNext(true);
+        fragmentLayout.setScorll(true);
+        fragmentLayout.setWhereTab(1);
+        fragmentLayout.setTabHeight(6, 0xff000000);
+        fragmentLayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
+            @Override
+            public void change(int lastPosition, int positon, View lastTabView, View currentTabView) {
+                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff858585);
+                ((TextView) currentTabView.findViewById(tab_text[positon])).setTextColor(0xff222222);
+                lastTabView.setBackgroundColor(0xffffffff);
+                currentTabView.setBackgroundColor(0xffeeeeee);
+                if (positon == 1) {
+                    inputLayout.setVisibility(View.VISIBLE);
+                } else {
+                    inputLayout.setVisibility(View.GONE);
+                }
+            }
+        });
+        fragmentLayout.setAdapter(fragBaseFragments, R.layout.tablayout_nevideo_player, 0x0102);
+        fragmentLayout.getViewPager().setOffscreenPageLimit(3);
     }
 
 
@@ -91,6 +143,7 @@ public class NEVideoPlayerActivity extends BaseActivity implements QaVideoPlayer
         super.onPause();
     }
 
+
     @Override
     protected void onDestroy() {
         LogUtils.e(TAG, "NEVideoPlayerActivity onDestroy");
@@ -121,10 +174,10 @@ public class NEVideoPlayerActivity extends BaseActivity implements QaVideoPlayer
         super.onBackPressed();
     }
 
-    @Override
-    public void onVideoSizeChanged(NELivePlayer mp, int width, int height, int sarNum, int sarDen) {
-//        videoPlayer.setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(NEVideoPlayerActivity.this), (ScreenUtils.getScreenWidth(NEVideoPlayerActivity.this)-ScreenUtils.getStatusHeight(NEVideoPlayerActivity.this)) * 3 / 5));
-    }
+//    @Override
+//    public void onVideoSizeChanged(NELivePlayer mp, int width, int height, int sarNum, int sarDen) {
+////        videoPlayer.setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(NEVideoPlayerActivity.this), (ScreenUtils.getScreenWidth(NEVideoPlayerActivity.this)-ScreenUtils.getStatusHeight(NEVideoPlayerActivity.this)) * 3 / 5));
+//    }
 
     @Override
     public void onBufferingUpdate(NELivePlayer neLivePlayer, int i) {

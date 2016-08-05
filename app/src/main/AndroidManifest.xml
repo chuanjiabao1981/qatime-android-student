@@ -73,8 +73,8 @@
         <activity
             android:name=".activity.NEVideoPlayerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustResize|stateHidden"
             android:screenOrientation="portrait" />
-        <activity android:name=".fragment.Fragment21"></activity>
     </application>
 
 </manifest>

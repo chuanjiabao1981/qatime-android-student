@@ -144,6 +144,10 @@ public class NEVideoView extends SurfaceView {
         setMeasuredDimension(width, height);
     }
 
+    /**
+     *
+     * @param orientation  true时表示横屏
+     */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     public void setVideoScalingMode(boolean orientation) {
         LayoutParams layPara = getLayoutParams();
@@ -167,7 +171,7 @@ public class NEVideoView extends SurfaceView {
             } catch (NoSuchMethodException e) {
                 DisplayMetrics dm = mContext.getResources().getDisplayMetrics();
                 winWidth = dm.widthPixels;
-                winHeight = dm.heightPixels - rect.top;
+                winHeight = dm.heightPixels;
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
@@ -218,8 +222,8 @@ public class NEVideoView extends SurfaceView {
 //                }
 //            }
             if (orientation) {
-                layPara.height = winWidth;
-                layPara.width = winHeight + rect.top;
+                layPara.height = winHeight + rect.top;
+                layPara.width = winWidth;
             }
             setLayoutParams(layPara);
             getHolder().setFixedSize(mSurfaceWidth, mSurfaceHeight);

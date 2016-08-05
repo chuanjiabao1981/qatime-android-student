@@ -70,9 +70,9 @@ public class Fragment11 extends BaseFragment {
             public void convert(ViewHolder helper, RemedialClassBean.Data item, int position) {
                 ((ImageView) helper.getView(R.id.image)).setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()) / 2, ScreenUtils.getScreenWidth(getActivity()) / 2));
 //                Glide.with(getActivity()).load(item.getPush_address()).into(((ImageView) helper.getView(R.id.image)));
-                helper.setText(R.id.name, item.getName());
-                helper.setText(R.id.subject, item.getSubject());
-                helper.setText(R.id.grade, item.getGrade());
+//                helper.setText(R.id.name, item.getName());
+//                helper.setText(R.id.subject, item.getSubject());
+//                helper.setText(R.id.grade, item.getGrade());
 
             }
         };
