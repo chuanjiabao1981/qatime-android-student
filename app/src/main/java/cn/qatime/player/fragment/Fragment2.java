@@ -53,7 +53,7 @@ initView(view);
                 ((TextView) currentTabView.findViewById(tab_text[positon])).setTextColor(0xff222222);
             }
         });
-        fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_remedial_class_timetable, 0x0011);
+        fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_remedial_class_timetable, 0x0911);
     }
 
 }
