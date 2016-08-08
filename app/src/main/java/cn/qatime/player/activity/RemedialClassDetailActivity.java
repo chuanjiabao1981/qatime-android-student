@@ -3,6 +3,8 @@ package cn.qatime.player.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -33,17 +35,22 @@ import cn.qatime.player.utils.LogUtils;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VolleyErrorListener;
 import cn.qatime.player.view.FragmentLayoutWithLine;
+import cn.qatime.player.view.SimpleViewPagerIndicator;
 
 public class RemedialClassDetailActivity extends BaseFragmentActivity implements View.OnClickListener {
     ImageView image;
-    FragmentLayoutWithLine fragmentlayout;
+    //    FragmentLayoutWithLine fragmentlayout;
     private int id;
 
-    private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3};
+    //    private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3};
+    private String[] mTitles = new String[]{"信息详情", "教师详情", "课堂列表"};
+    private SimpleViewPagerIndicator mIndicator;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
-    private Button audition;
-    private Button pay;
+//    private Button audition;
+//    private Button pay;
     private RemedialClassDetailBean data;
+    private ViewPager mViewPager;
+    private FragmentPagerAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,32 +64,74 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
 
     private void initView() {
-        image = (ImageView) findViewById(R.id.image);
+        image = (ImageView) findViewById(R.id.id_stickynavlayout_topview);
         Glide.with(this).load(R.mipmap.photo).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
-        audition = (Button) findViewById(R.id.audition);
-        pay = (Button) findViewById(R.id.pay);
         fragBaseFragments.add(new FragmentRemedialClassDetail1());
         fragBaseFragments.add(new FragmentRemedialClassDetail2());
         fragBaseFragments.add(new FragmentRemedialClassDetail3());
 
-        fragmentlayout = (FragmentLayoutWithLine) findViewById(R.id.fragmentlayout);
+//        audition = (Button) findViewById(R.id.audition);
+//        pay = (Button) findViewById(R.id.pay);
 
-        fragmentlayout.setScorllToNext(true);
-        fragmentlayout.setScorll(true);
-        fragmentlayout.setWhereTab(1);
-        fragmentlayout.setTabHeight(6, 0xff000000);
-        fragmentlayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
+        mIndicator = (SimpleViewPagerIndicator) findViewById(R.id.id_stickynavlayout_indicator);
+        mViewPager = (ViewPager) findViewById(R.id.id_stickynavlayout_viewpager);
+        mIndicator.setTitles(mTitles);
+        mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
-            public void change(int lastPosition, int positon, View lastTabView, View currentTabView) {
-                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff858585);
-                ((TextView) currentTabView.findViewById(tab_text[positon])).setTextColor(0xff222222);
+            public int getCount() {
+                return mTitles.length;
+            }
+
+            @Override
+            public Fragment getItem(int position) {
+                return fragBaseFragments.get(position);
+            }
+
+        };
+
+        mViewPager.setAdapter(mAdapter);
+        mViewPager.setCurrentItem(0);
+        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+            }
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                mIndicator.scroll(position, positionOffset);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
-        fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_remedial_class_detail, 0x0012);
-        fragmentlayout.getViewPager().setOffscreenPageLimit(2);
-        audition.setOnClickListener(this);
-        pay.setOnClickListener(this);
+        mIndicator.setOnItemClickListener(new SimpleViewPagerIndicator.OnItemClickListener() {
+            @Override
+            public void OnClick(int position) {
+                mViewPager.setCurrentItem(position);
+            }
+        });
+//        fragmentlayout = (FragmentLayoutWithLine) findViewById(R.id.fragmentlayout);
+//
+//        fragmentlayout.setScorllToNext(true);
+//        fragmentlayout.setScorll(true);
+//        fragmentlayout.setWhereTab(1);
+//        fragmentlayout.setTabHeight(6, 0xff000000);
+//        fragmentlayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
+//            @Override
+//            public void change(int lastPosition, int positon, View lastTabView, View currentTabView) {
+//                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff858585);
+//                ((TextView) currentTabView.findViewById(tab_text[positon])).setTextColor(0xff222222);
+//            }
+//        });
+//        fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_remedial_class_detail, 0x0012);
+//        fragmentlayout.getViewPager().setOffscreenPageLimit(2);
+//        audition.setOnClickListener(this);
+//        pay.setOnClickListener(this);
     }
+
 
     private void initData() {
         Map<String, String> map = new HashMap<>();
@@ -95,7 +144,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     public void onResponse(JSONObject jsonObject) {
                         LogUtils.e(jsonObject.toString());
                         Gson gson = new Gson();
-                         data = gson.fromJson(jsonObject.toString(), RemedialClassDetailBean.class);
+                        data = gson.fromJson(jsonObject.toString(), RemedialClassDetailBean.class);
                         ((FragmentRemedialClassDetail1) fragBaseFragments.get(0)).setData(data);
                         ((FragmentRemedialClassDetail2) fragBaseFragments.get(1)).setData(data);
                         //TODO
@@ -112,14 +161,14 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.audition:
-                break;
-            case R.id.pay:
-                Intent intent = new Intent(RemedialClassDetailActivity.this,OrderConfirmActivity.class);
-                intent.putExtra("data",data);
-                startActivity(intent);
-                break;
-        }
+//        switch (v.getId()) {
+//            case R.id.audition:
+//                break;
+//            case R.id.pay:
+//                Intent intent = new Intent(RemedialClassDetailActivity.this, OrderConfirmActivity.class);
+//                intent.putExtra("data", data);
+//                startActivity(intent);
+//                break;
+//        }
     }
 }

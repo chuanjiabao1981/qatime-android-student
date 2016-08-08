@@ -51,6 +51,7 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
+//            if (comment.is)
             mMediaController.setVisibility(View.GONE);
         }
     };
@@ -84,6 +85,7 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
     private View playToolbar;
     private View bottomLayout;
     private TextView viewCount;
+    private View barrageSettingLayout;
 
 
 //    NEMediaPlayer mMediaPlayer = new NEMediaPlayer();
@@ -132,6 +134,7 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
         commit = (Button) mMediaController.findViewById(R.id.commit);
         barrage = (TextView) mMediaController.findViewById(R.id.barrage);//弹幕开关
         barrageSetting = mMediaController.findViewById(R.id.barrage_setting);//弹幕设置
+        barrageSettingLayout = mMediaController.findViewById(R.id.barrage_setting_layout);//弹幕设置布局
 
         this.addView(mMediaController);
 //        mBuffer = View.inflate(this.getContext(), R.layout.video_play_toolbar, null);
@@ -155,24 +158,39 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
         videoView.setOnCompletionListener(this);
         videoView.setOnPreparedListener(this);
         videoView.setOnErrorListener(this);
-//        videoView.setOnVideoSizeChangeListener(this);
 
         hd.postDelayed(runnable, sDefaultTimeout);
 
-        comment.addTextChangedListener(new TextWatcher() {
+//        comment.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//                hd.removeCallbacks(runnable);
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//
+//            }
+//        });
+        comment.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    hd.removeCallbacks(runnable);
+                }
             }
-
+        });
+        mMediaController.setOnClickListener(this);
+        definition.setOnClickListener(this);
+        barrageSetting.setOnClickListener(this);
+        radiogroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            hd.removeCallbacks(runnable);
-                hd.postDelayed(runnable,sDefaultTimeout);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
 
             }
         });
@@ -186,6 +204,7 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
                 hd.removeCallbacks(runnable);
                 mMediaController.setVisibility(View.VISIBLE);
                 hd.postDelayed(runnable, sDefaultTimeout);
+                return false;
             } else {
 //                mMediaController.setVisibility(GONE);
 //                hd.removeCallbacks(runnable);
@@ -388,6 +407,25 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
 //                } else {
 //                }
 //                break;
+            case R.id.controller://控制大布局
+                mMediaController.setVisibility(GONE);
+                break;
+            case R.id.definition://清晰度
+                hd.removeCallbacks(runnable);
+                if (radiogroup.getVisibility() == VISIBLE) {
+                    radiogroup.setVisibility(GONE);
+                } else {
+                    radiogroup.setVisibility(VISIBLE);
+                }
+                break;
+            case R.id.barrage_setting://弹幕设置
+                hd.removeCallbacks(runnable);
+                if (barrageSettingLayout.getVisibility() == VISIBLE) {
+                    barrageSettingLayout.setVisibility(GONE);
+                } else {
+                    barrageSettingLayout.setVisibility(VISIBLE);
+                }
+                break;
         }
     }
 

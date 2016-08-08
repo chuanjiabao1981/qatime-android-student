@@ -6,16 +6,39 @@
 
     <include layout="@layout/layout_backbar" />
 
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="match_parent"
-        android:layout_height="200dp" />
+    <!--<ImageView-->
+        <!--android:id="@+id/image"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="200dp" />-->
 
-    <cn.qatime.player.view.FragmentLayoutWithLine
-        android:id="@+id/fragmentlayout"
+    <!--<cn.qatime.player.view.FragmentLayoutWithLine-->
+        <!--android:id="@+id/fragmentlayout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="1" />-->
+
+    <cn.qatime.player.view.StickyNavLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/id_stickynavlayout_topview"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
+        <cn.qatime.player.view.SimpleViewPagerIndicator
+            android:id="@+id/id_stickynavlayout_indicator"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#ffffff" />
+
+        <android.support.v4.view.ViewPager
+            android:id="@id/id_stickynavlayout_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </cn.qatime.player.view.StickyNavLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

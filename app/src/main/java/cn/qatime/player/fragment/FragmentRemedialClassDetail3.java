@@ -42,7 +42,7 @@ public class FragmentRemedialClassDetail3 extends BaseFragment {
 
 
     private void initview(View view) {
-        ListView listView = (ListView) view.findViewById(R.id.list);
+        ListView listView = (ListView) view.findViewById(R.id.id_stickynavlayout_innerscrollview);
         adapter = new CommonAdapter<RemedialClassDetailBean.Lessons>(getActivity(), list, R.layout.item_fragment_remedial_class_detail3) {
             @Override
             public void convert(ViewHolder holder, RemedialClassDetailBean.Lessons item, int position) {
