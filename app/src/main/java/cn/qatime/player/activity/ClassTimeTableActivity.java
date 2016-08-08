@@ -1,12 +1,10 @@
-package cn.qatime.player.fragment;
+package cn.qatime.player.activity;
+
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -25,33 +23,33 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
-import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.adapter.CommonAdapter;
 import cn.qatime.player.adapter.ViewHolder;
+import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
-import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.RemedialClassBean;
 import cn.qatime.player.utils.LogUtils;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VolleyErrorListener;
 
-public class FragmentRemedialClassTimeTable2 extends BaseFragment {
+public class ClassTimeTableActivity extends BaseActivity {
     private PullToRefreshListView List;
     private java.util.List<RemedialClassBean.Data> list = new ArrayList<>();
     private CommonAdapter<RemedialClassBean.Data> adapter;
     private int page = 1;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_remedial_class_timetable2, container, false);
-        initview(view);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_class_time_table);
+        initview();
         initData(1);
-        return view;
     }
 
-    private void initview(View view) {
-        List = (PullToRefreshListView) view.findViewById(R.id.list);
+
+
+    private void initview() {
+        List = (PullToRefreshListView) findViewById(R.id.list);
         List.setMode(PullToRefreshBase.Mode.BOTH);
         List.getLoadingLayoutProxy(true, false).setPullLabel("下拉刷新");
         List.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载");
@@ -61,7 +59,7 @@ public class FragmentRemedialClassTimeTable2 extends BaseFragment {
         List.getLoadingLayoutProxy(false, true).setReleaseLabel("松开加载");
 
 
-        adapter = new CommonAdapter<RemedialClassBean.Data>(getActivity(), list, R.layout.item_fragment_remedial_class_time_table2) {
+        adapter = new CommonAdapter<RemedialClassBean.Data>(this, list, R.layout.item_fragment_remedial_class_time_table1) {
             @Override
             public void convert(ViewHolder helper, RemedialClassBean.Data item, int position) {
 
@@ -106,7 +104,7 @@ public class FragmentRemedialClassTimeTable2 extends BaseFragment {
                         if (type == 1) {
                             list.clear();
                         }
-                        String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(),
+                        String label = DateUtils.formatDateTime(ClassTimeTableActivity.this, System.currentTimeMillis(),
                                 DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
                         List.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
                         List.onRefreshComplete();
@@ -115,7 +113,7 @@ public class FragmentRemedialClassTimeTable2 extends BaseFragment {
                             Gson gson = new Gson();
                             RemedialClassBean data = gson.fromJson(jsonObject.toString(), RemedialClassBean.class);
                             list.addAll(data.getData());
-//                            adapter.notifyDataSetChanged();
+                            adapter.notifyDataSetChanged();
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
                         }

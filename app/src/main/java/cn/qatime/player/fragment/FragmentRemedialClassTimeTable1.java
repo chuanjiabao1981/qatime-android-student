@@ -1,6 +1,5 @@
 package cn.qatime.player.fragment;
 
-        import android.content.Intent;
         import android.os.Bundle;
         import android.support.annotation.Nullable;
         import android.text.format.DateUtils;
@@ -35,7 +34,7 @@ package cn.qatime.player.fragment;
         import cn.qatime.player.utils.UrlUtils;
         import cn.qatime.player.utils.VolleyErrorListener;
 
-public class FragmentRemedialClassTimeTable1 extends BaseFragment {
+public class  FragmentRemedialClassTimeTable1 extends BaseFragment {
     private PullToRefreshListView List;
     private java.util.List<RemedialClassBean.Data> list = new ArrayList<>();
     private CommonAdapter<RemedialClassBean.Data> adapter;
@@ -85,9 +84,6 @@ public class FragmentRemedialClassTimeTable1 extends BaseFragment {
         List.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                intent.putExtra("id", list.get(position).getId());
-                startActivity(intent);
             }
         });
     }

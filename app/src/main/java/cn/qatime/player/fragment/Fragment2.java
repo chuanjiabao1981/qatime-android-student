@@ -1,6 +1,7 @@
 package cn.qatime.player.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.ClassTimeTableActivity;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.view.FragmentLayoutWithLine;
 
@@ -30,11 +32,21 @@ public class Fragment2 extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment2, container, false);
 
+
 initView(view);
+
     return view;}
 
     private void initView(View view) {
 
+        view.findViewById(R.id.calendar).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),ClassTimeTableActivity.class);
+                startActivity(intent);
+            }
+
+        });
 
         fragBaseFragments.add(new FragmentRemedialClassTimeTable1());
         fragBaseFragments.add(new FragmentRemedialClassTimeTable2());
