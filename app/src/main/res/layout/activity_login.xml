@@ -117,15 +117,6 @@
         android:layout_marginBottom="30dp"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/login"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/login_error"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:text="登陆" />
 
         <Button
             android:id="@+id/register"
@@ -134,9 +125,20 @@
             android:layout_alignEnd="@+id/passwdText"
             android:layout_alignRight="@+id/passwdText"
             android:layout_below="@+id/passwdText"
-            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:text="注册" />
+
+        <Button
+            android:id="@+id/login"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/login_error"
+
+            android:layout_marginRight="30dp"
+            android:layout_weight="1"
+            android:text="登陆" />
     </LinearLayout>
 
     <TextView

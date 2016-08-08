@@ -20,12 +20,14 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.netease.neliveplayer.NELivePlayer;
 
 import cn.qatime.player.R;
 import cn.qatime.player.utils.LogUtils;
+import cn.qatime.player.utils.ScreenUtils;
 
 
 /**
@@ -53,6 +55,13 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
         public void run() {
 //            if (comment.is)
             mMediaController.setVisibility(View.GONE);
+
+            if (barrageSettingLayout.getVisibility() == VISIBLE) {//大布局gone时，弹幕设置布局也要gone
+                barrageSettingLayout.setVisibility(GONE);
+            }
+            if (radiogroup.getVisibility() == VISIBLE) {
+                radiogroup.setVisibility(GONE);
+            }
         }
     };
 
@@ -86,6 +95,12 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
     private View bottomLayout;
     private TextView viewCount;
     private View barrageSettingLayout;
+    private SeekBar brightness;
+    private Context context;
+    private SeekBar barrageTransparent;
+    private SeekBar barrageSize;
+    private SeekBar barrageSpeed;
+    private BarrageView barrageView;
 
 
 //    NEMediaPlayer mMediaPlayer = new NEMediaPlayer();
@@ -97,6 +112,7 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
 
     public QaVideoPlayer(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
         init();
     }
 
@@ -136,6 +152,13 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
         barrageSetting = mMediaController.findViewById(R.id.barrage_setting);//弹幕设置
         barrageSettingLayout = mMediaController.findViewById(R.id.barrage_setting_layout);//弹幕设置布局
 
+        brightness = (SeekBar) mMediaController.findViewById(R.id.brightness);//屏幕亮度调节
+        barrageTransparent = (SeekBar) mMediaController.findViewById(R.id.barrage_transparent);
+        barrageSize = (SeekBar) mMediaController.findViewById(R.id.barrage_size);
+        barrageSpeed = (SeekBar) mMediaController.findViewById(R.id.barrage_speed);
+
+        brightness.setProgress(ScreenUtils.getScreenBrightness(context));
+        barrageView = new BarrageView(getContext());
         this.addView(mMediaController);
 //        mBuffer = View.inflate(this.getContext(), R.layout.video_play_toolbar, null);
 //        this.addView(mBuffer);
@@ -161,22 +184,6 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
 
         hd.postDelayed(runnable, sDefaultTimeout);
 
-//        comment.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//                hd.removeCallbacks(runnable);
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//
-//            }
-//        });
         comment.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -194,8 +201,28 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
 
             }
         });
+
+        brightness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                ScreenUtils.setScreenBrightness(context, progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                hd.removeCallbacks(runnable);
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                hd.postDelayed(runnable, sDefaultTimeout);
+            }
+        });
     }
 
+    public void setData(String data) {
+        barrageView.setData(data);
+    }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -275,6 +302,14 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
         commentLayout.setVisibility(GONE);
         zoomLayout.setVisibility(VISIBLE);
         bottomLayout.setBackgroundColor(0x00000000);
+
+        if (barrageSettingLayout.getVisibility() == VISIBLE) {//大布局gone时，弹幕设置布局也要gone
+            barrageSettingLayout.setVisibility(GONE);
+        }
+        if (radiogroup.getVisibility() == VISIBLE) {
+            radiogroup.setVisibility(GONE);
+        }
+
     }
 
     private void landscape() {
@@ -409,6 +444,13 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
 //                break;
             case R.id.controller://控制大布局
                 mMediaController.setVisibility(GONE);
+
+                if (barrageSettingLayout.getVisibility() == VISIBLE) {//大布局gone时，弹幕设置布局也要gone
+                    barrageSettingLayout.setVisibility(GONE);
+                }
+                if (radiogroup.getVisibility() == VISIBLE) {
+                    radiogroup.setVisibility(GONE);
+                }
                 break;
             case R.id.definition://清晰度
                 hd.removeCallbacks(runnable);

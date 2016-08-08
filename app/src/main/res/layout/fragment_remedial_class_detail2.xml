@@ -21,7 +21,14 @@
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="1.2sp"
                 android:padding="3dp"
-                android:text="老师姓名：" />
+                android:text="老师姓名：李沐阳" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="1.2sp"
+                android:padding="3dp"
+                android:text="最高学历：本科" />
 
             <TextView
 
@@ -29,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="1.2sp"
                 android:padding="3dp"
-                android:text="最高学历：" />
+                android:text="执教年数：8年" />
 
             <TextView
 
@@ -37,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="1.2sp"
                 android:padding="3dp"
-                android:text="执教年数：" />
+                android:text="所授科目：英语" />
 
             <TextView
 
@@ -45,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="1.2sp"
                 android:padding="3dp"
-                android:text="所授科目：" />
+                android:text="年级范围：高三" />
 
             <TextView
 
@@ -53,15 +60,7 @@
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="1.2sp"
                 android:padding="3dp"
-                android:text="年级范围：" />
-
-            <TextView
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:lineSpacingExtra="1.2sp"
-                android:padding="3dp"
-                android:text="所在学校：" />
+                android:text="所在学校：北京市第四小学" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -77,7 +76,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族" />
+                    android:text="瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族" />
 
             </LinearLayout>
         </LinearLayout>

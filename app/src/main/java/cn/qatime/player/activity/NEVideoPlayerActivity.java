@@ -3,6 +3,7 @@ package cn.qatime.player.activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,20 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     private FragmentLayoutWithLine fragmentLayout;
     private View inputLayout;
 
+    private Handler hd = new Handler();
+    private int i = 0;
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            hd.postDelayed(this, 200);
+            videoPlayer.setData(i + "彈幕");
+            i++;
+            if (i>20){
+                hd.removeCallbacks(this);
+            }
+            LogUtils.e(i);
+        }
+    };
 //    int flag = Settings.System.getInt(getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0);
 
     @Override
@@ -68,6 +83,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         videoPlayer.setOnControlListener(this);
         videoPlayer.start();
         initView();
+        hd.postDelayed(runnable, 200);
 
     }
 
@@ -151,6 +167,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
+        hd.removeCallbacks(runnable);
         super.onDestroy();
     }
 

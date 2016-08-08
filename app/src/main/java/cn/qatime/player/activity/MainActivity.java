@@ -56,7 +56,7 @@ public class MainActivity extends BaseFragmentActivity {
         fragBaseFragments.add(new Fragment4());
 
         fragmentlayout = (FragmentLayout) findViewById(R.id.fragmentlayout);
-        fragmentlayout.setScorllToNext(true);
+        fragmentlayout.setScorllToNext(false);
         fragmentlayout.setScorll(false);
         fragmentlayout.setWhereTab(0);
         fragmentlayout.setOnChangeFragmentListener(new FragmentLayout.ChangeFragmentListener() {

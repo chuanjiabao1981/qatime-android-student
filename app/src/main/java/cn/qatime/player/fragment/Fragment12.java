@@ -339,7 +339,14 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         //TODO 待定 排序规则
-                        timetext.setText(timeList.get(position));
+                        if (timeList.get(position).equals("按价格-低到高")) {
+                            timetext.setText("按价格↑");
+                        } else if (timeList.get(position).equals("按价格-高到低")) {
+                            timetext.setText("按价格↓");
+                        } else {
+                            timetext.setText(timeList.get(position));
+                        }
+
                         timesorttype = "";
                         initData(1);
                         pop.dismiss();

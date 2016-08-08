@@ -51,7 +51,7 @@ public class Fragment1 extends BaseFragment {
         root.setOnChangeFragmentListener(new FragmentLayout.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
-                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0x99000000);
+                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0x66000000);
                 ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff000000);
             }
         });

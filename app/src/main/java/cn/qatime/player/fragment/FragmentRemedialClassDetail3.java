@@ -36,6 +36,13 @@ public class FragmentRemedialClassDetail3 extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_remedial_class_detail3, container, false);
         initview(view);
+        RemedialClassDetailBean bean = new RemedialClassDetailBean();
+        RemedialClassDetailBean.Lessons data = bean.new Lessons();
+        list.add(data);
+        list.add(data);
+        list.add(data);
+        list.add(data);
+        list.add(data);
         return view;
     }
 
@@ -44,17 +51,18 @@ public class FragmentRemedialClassDetail3 extends BaseFragment {
     private void initview(View view) {
         ListView listView = (ListView) view.findViewById(R.id.id_stickynavlayout_innerscrollview);
         adapter = new CommonAdapter<RemedialClassDetailBean.Lessons>(getActivity(), list, R.layout.item_fragment_remedial_class_detail3) {
+
             @Override
             public void convert(ViewHolder holder, RemedialClassDetailBean.Lessons item, int position) {
                 holder.setText(R.id.number, StringUtils.Int2String(position + 1));
-                try {
-                    holder.setText(R.id.time, format.format(parse.parse(item.getClass_date()))+"  "+item.getLive_time());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                //TODO 待修改
-                holder.setText(R.id.status, "已结束");
-                holder.setText(R.id.name, item.getName());
+//                try {
+//                    holder.setText(R.id.time, format.format(parse.parse(item.getClass_date()))+"  "+item.getLive_time());
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//                //TODO 待修改
+//                holder.setText(R.id.status, "已结束");
+//                holder.setText(R.id.name, item.getName());
 
             }
         };

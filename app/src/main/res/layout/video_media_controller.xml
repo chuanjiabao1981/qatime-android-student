@@ -93,16 +93,18 @@
     <LinearLayout
         android:id="@+id/barrage_setting_layout"
         android:layout_width="wrap_content"
-        android:visibility="gone"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_marginBottom="45dp"
         android:background="#999"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="3dp"
             android:orientation="horizontal">
 
             <TextView
@@ -111,12 +113,18 @@
                 android:text="观看模式" />
 
             <SeekBar
+                android:id="@+id/brightness"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:max="255"
+                android:progress="0" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="2dp"
             android:orientation="horizontal">
 
             <TextView
@@ -125,6 +133,7 @@
                 android:text="弹幕透明" />
 
             <SeekBar
+                android:id="@+id/barrage_transparent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -132,14 +141,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="2dp"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="弹幕透明" />
+                android:text="弹幕大小" />
 
             <SeekBar
+                android:id="@+id/barrage_size"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -147,14 +159,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="2dp"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="弹幕透明" />
+                android:text="弹幕速度" />
 
             <SeekBar
+                android:id="@+id/barrage_speed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -206,7 +221,7 @@
             android:layout_height="match_parent"
             android:clickable="true"
             android:padding="12dp"
-            android:src="@mipmap/nemediacontroller_pause" />
+            android:src="@mipmap/nemediacontroller_play" />
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -233,9 +248,9 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="4"
-                    android:imeOptions="flagNoExtractUi"
                     android:background="@drawable/shape_input"
-                    android:hint="评论内容" />
+                    android:hint="评论内容"
+                    android:imeOptions="flagNoExtractUi" />
 
                 <Button
                     android:id="@+id/commit"

@@ -138,6 +138,8 @@ public class RemedialClassDetailBean implements Serializable {
     }
 
     public class Lessons implements Serializable {
+
+
         private int id;
 
         private String name;

@@ -46,8 +46,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     private String[] mTitles = new String[]{"信息详情", "教师详情", "课堂列表"};
     private SimpleViewPagerIndicator mIndicator;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
-//    private Button audition;
-//    private Button pay;
+    private Button audition;
+    private Button pay;
     private RemedialClassDetailBean data;
     private ViewPager mViewPager;
     private FragmentPagerAdapter mAdapter;
@@ -70,8 +70,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         fragBaseFragments.add(new FragmentRemedialClassDetail2());
         fragBaseFragments.add(new FragmentRemedialClassDetail3());
 
-//        audition = (Button) findViewById(R.id.audition);
-//        pay = (Button) findViewById(R.id.pay);
+        audition = (Button) findViewById(R.id.audition);
+        pay = (Button) findViewById(R.id.pay);
 
         mIndicator = (SimpleViewPagerIndicator) findViewById(R.id.id_stickynavlayout_indicator);
         mViewPager = (ViewPager) findViewById(R.id.id_stickynavlayout_viewpager);
@@ -161,14 +161,14 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
     @Override
     public void onClick(View v) {
-//        switch (v.getId()) {
-//            case R.id.audition:
-//                break;
-//            case R.id.pay:
-//                Intent intent = new Intent(RemedialClassDetailActivity.this, OrderConfirmActivity.class);
-//                intent.putExtra("data", data);
-//                startActivity(intent);
-//                break;
-//        }
+        switch (v.getId()) {
+            case R.id.audition:
+                break;
+            case R.id.pay:
+                Intent intent = new Intent(RemedialClassDetailActivity.this, OrderConfirmActivity.class);
+                intent.putExtra("data", data);
+                startActivity(intent);
+                break;
+        }
     }
 }
