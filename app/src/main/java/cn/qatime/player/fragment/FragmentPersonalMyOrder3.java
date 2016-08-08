@@ -51,7 +51,7 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
     private void initview(View view) {
         List = (PullToRefreshListView) view.findViewById(R.id.list);
 
-        adapter = new CommonAdapter<RemedialClassBean.Data>(getActivity(), list, R.layout.item_fragment_remedial_class_time_table1) {
+        adapter = new CommonAdapter<RemedialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_order3) {
             @Override
             public void convert(ViewHolder helper, RemedialClassBean.Data item, int position) {
 

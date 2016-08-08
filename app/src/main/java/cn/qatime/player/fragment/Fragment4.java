@@ -28,19 +28,17 @@ public class Fragment4 extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment4, container, false);
-
+        initview(view);
         return view;
     }
 
     private void initview(View view) {
-
+        button = (Button) view.findViewById(R.id.my_order);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(getActivity(), PersonalMyOrderActivity.class);
                 startActivity(intent);
-
             }
         });
 

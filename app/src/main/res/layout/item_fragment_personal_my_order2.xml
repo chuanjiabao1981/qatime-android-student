@@ -12,29 +12,6 @@
         android:orientation="vertical"
         android:weightSum="1">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#fdfdfd"
-            android:orientation="horizontal"
-            android:weightSum="1">
-
-            <TextView
-                android:id="@+id/coursename"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="编号20160722150433323222" />
-
-
-            <TextView
-                android:id="@+id/state"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:text="等待付款中"
-                android:textColor="#ff8222" />
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,8 +21,8 @@
 
             <ImageView
                 android:id="@+id/image"
-                android:layout_width="103dp"
-                android:layout_height="103dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:background="#dcdcdc"
                 android:src="@mipmap/photo" />
 
@@ -56,25 +33,57 @@
                 android:layout_weight="0.35"
                 android:background="#faf6f6"
                 android:orientation="vertical"
-                android:padding="10dp"
-                android:paddingLeft="10dp">
+                android:padding="2dp">
 
                 <TextView
                     android:id="@+id/textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="2"
-                    android:paddingBottom="5dp"
+
 
                     android:text="高考考前急速高考考前急速高高考考前急速高考考前急速高" />
 
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="2dp"
-                    android:text="高某某/数学/高一/共15课时"
-                    android:textSize="13sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:padding="2dp"
+                        android:text="高一数学"
+                        android:textSize="13sp" />
+                    <View
+                        android:layout_width="15dp"
+                        android:layout_height="match_parent"></View>
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:padding="2dp"
+                        android:text="司马光"
+                        android:textSize="13sp" />
+                    <View
+                        android:layout_width="15dp"
+                        android:layout_height="match_parent"></View>
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:padding="2dp"
+                        android:text="1/10"
+                        android:textSize="13sp" />
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"></View>
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/textView3"
@@ -98,7 +107,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="1440.00"
+
+                    android:text="交易完成"
+
+                    android:textColor="#ffa217"
                     android:textSize="16sp" />
 
             </RelativeLayout>
@@ -108,43 +120,39 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:orientation="horizontal"
-
-            android:weightSum="100">
+            android:layout_height="40dp"
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="96"
-                android:orientation="vertical">
+                android:layout_weight="3"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="创建2016-07-21 15:01:02" />
+                    android:text="实付金额" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="￥1440.00"
+                    android:textColor="#f9270c" />
             </LinearLayout>
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
 
-                android:layout_weight="2"
-                android:background="#ffffff"
-                android:text="取消订单"
-                android:textSize="16sp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/text_background"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="删除订单" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
 
-                android:layout_weight="2"
-                android:background="#ff6c16"
-                android:text="付款"
-                android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

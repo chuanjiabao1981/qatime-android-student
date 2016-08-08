@@ -59,7 +59,7 @@ public class ClassTimeTableActivity extends BaseActivity {
         List.getLoadingLayoutProxy(false, true).setReleaseLabel("松开加载");
 
 
-        adapter = new CommonAdapter<RemedialClassBean.Data>(this, list, R.layout.item_fragment_remedial_class_time_table1) {
+        adapter = new CommonAdapter<RemedialClassBean.Data>(this, list, R.layout.item_activity_class_time_table) {
             @Override
             public void convert(ViewHolder helper, RemedialClassBean.Data item, int position) {
 

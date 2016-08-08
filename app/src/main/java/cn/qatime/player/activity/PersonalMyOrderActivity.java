@@ -1,9 +1,6 @@
 package cn.qatime.player.activity;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -12,14 +9,11 @@ import java.util.ArrayList;
 
 import cn.qatime.player.R;
 import cn.qatime.player.adapter.CommonAdapter;
-import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.bean.RemedialClassBean;
 import cn.qatime.player.fragment.FragmentPersonalMyOrder1;
 import cn.qatime.player.fragment.FragmentPersonalMyOrder2;
 import cn.qatime.player.fragment.FragmentPersonalMyOrder3;
-import cn.qatime.player.fragment.FragmentRemedialClassTimeTable1;
-import cn.qatime.player.fragment.FragmentRemedialClassTimeTable2;
 import cn.qatime.player.view.FragmentLayoutWithLine;
 
 public class PersonalMyOrderActivity extends BaseFragmentActivity {
@@ -44,8 +38,7 @@ public class PersonalMyOrderActivity extends BaseFragmentActivity {
         fragBaseFragments.add(new FragmentPersonalMyOrder2());
         fragBaseFragments.add(new FragmentPersonalMyOrder3());
 
-        fragmentlayout = (FragmentLayoutWithLine)
-                findViewById(R.id.fragmentlayout);
+        fragmentlayout = (FragmentLayoutWithLine) findViewById(R.id.fragmentlayout);
 
         fragmentlayout.setScorllToNext(true);
         fragmentlayout.setScorll(true);
@@ -58,6 +51,7 @@ public class PersonalMyOrderActivity extends BaseFragmentActivity {
                 ((TextView) currentTabView.findViewById(tab_text[positon])).setTextColor(0xff222222);
             }
         });
-        fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_remedial_class_timetable, 0x0911);
+        fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_personal_my_order, 0x0311);
+        fragmentlayout.getViewPager().setOffscreenPageLimit(2);
     }
 }
