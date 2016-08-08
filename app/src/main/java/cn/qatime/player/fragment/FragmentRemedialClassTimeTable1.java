@@ -1,40 +1,41 @@
 package cn.qatime.player.fragment;
 
-        import android.os.Bundle;
-        import android.support.annotation.Nullable;
-        import android.text.format.DateUtils;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.widget.AdapterView;
-        import android.widget.ListView;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.text.format.DateUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
-        import com.android.volley.Response;
-        import com.android.volley.VolleyError;
-        import com.android.volley.toolbox.JsonObjectRequest;
-        import com.google.gson.Gson;
-        import com.google.gson.JsonSyntaxException;
-        import com.handmark.pulltorefresh.library.PullToRefreshBase;
-        import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
-        import org.json.JSONObject;
+import org.json.JSONObject;
 
-        import java.util.ArrayList;
-        import java.util.HashMap;
-        import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-        import cn.qatime.player.R;
-        import cn.qatime.player.activity.RemedialClassDetailActivity;
-        import cn.qatime.player.adapter.CommonAdapter;
-        import cn.qatime.player.adapter.ViewHolder;
-        import cn.qatime.player.base.BaseApplication;
-        import cn.qatime.player.base.BaseFragment;
-        import cn.qatime.player.bean.RemedialClassBean;
-        import cn.qatime.player.utils.LogUtils;
-        import cn.qatime.player.utils.UrlUtils;
-        import cn.qatime.player.utils.VolleyErrorListener;
+import cn.qatime.player.R;
+import cn.qatime.player.activity.RemedialClassDetailActivity;
+import cn.qatime.player.adapter.CommonAdapter;
+import cn.qatime.player.adapter.ViewHolder;
+import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.bean.RemedialClassBean;
+import cn.qatime.player.utils.LogUtils;
+import cn.qatime.player.utils.UrlUtils;
+import cn.qatime.player.utils.VolleyErrorListener;
 
-public class  FragmentRemedialClassTimeTable1 extends BaseFragment {
+public class FragmentRemedialClassTimeTable1 extends BaseFragment {
     private PullToRefreshListView List;
     private java.util.List<RemedialClassBean.Data> list = new ArrayList<>();
     private CommonAdapter<RemedialClassBean.Data> adapter;
@@ -63,6 +64,14 @@ public class  FragmentRemedialClassTimeTable1 extends BaseFragment {
         adapter = new CommonAdapter<RemedialClassBean.Data>(getActivity(), list, R.layout.item_fragment_remedial_class_time_table1) {
             @Override
             public void convert(ViewHolder helper, RemedialClassBean.Data item, int position) {
+                helper.getView(R.id.image).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                        intent.putExtra("pager", 2);
+                        startActivity(intent);
+                    }
+                });
 
             }
         };

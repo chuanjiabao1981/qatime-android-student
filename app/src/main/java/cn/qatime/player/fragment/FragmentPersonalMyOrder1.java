@@ -35,7 +35,7 @@ import cn.qatime.player.utils.LogUtils;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VolleyErrorListener;
 
-public class FragmentRemedialClassTimeTable2 extends BaseFragment {
+public class FragmentPersonalMyOrder1 extends BaseFragment {
     private PullToRefreshListView List;
     private java.util.List<RemedialClassBean.Data> list = new ArrayList<>();
     private CommonAdapter<RemedialClassBean.Data> adapter;
@@ -44,7 +44,7 @@ public class FragmentRemedialClassTimeTable2 extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_remedial_class_timetable2, container, false);
+        View view = inflater.inflate(R.layout.fragment_personal_my_order1, container, false);
         initview(view);
         initData(1);
         return view;
@@ -52,26 +52,11 @@ public class FragmentRemedialClassTimeTable2 extends BaseFragment {
 
     private void initview(View view) {
         List = (PullToRefreshListView) view.findViewById(R.id.list);
-        List.setMode(PullToRefreshBase.Mode.BOTH);
-        List.getLoadingLayoutProxy(true, false).setPullLabel("下拉刷新");
-        List.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载");
-        List.getLoadingLayoutProxy(true, false).setRefreshingLabel("正在刷新...");
-        List.getLoadingLayoutProxy(false, true).setRefreshingLabel("正在加载...");
-        List.getLoadingLayoutProxy(true, false).setReleaseLabel("松开刷新");
-        List.getLoadingLayoutProxy(false, true).setReleaseLabel("松开加载");
 
-
-        adapter = new CommonAdapter<RemedialClassBean.Data>(getActivity(), list, R.layout.item_fragment_remedial_class_time_table2) {
+        adapter = new CommonAdapter<RemedialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_order1) {
             @Override
             public void convert(ViewHolder helper, RemedialClassBean.Data item, int position) {
-helper.getView(R.id.image).setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        Intent intent=new Intent(getActivity(),RemedialClassDetailActivity.class);
-        intent.putExtra("pager",2);
-        startActivity(intent);
-    }
-});
+
             }
         };
         List.setAdapter(adapter);

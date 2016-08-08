@@ -38,6 +38,8 @@ public class Fragment2 extends BaseFragment {
         return view;
     }
 
+
+
     private void initView(View view) {
 
         view.findViewById(R.id.calendar).setOnClickListener(new View.OnClickListener() {

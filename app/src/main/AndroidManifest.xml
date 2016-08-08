@@ -73,10 +73,14 @@
         <activity
             android:name=".activity.NEVideoPlayerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".activity.ClassTimeTableActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PersonalMyOrderActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
     </application>

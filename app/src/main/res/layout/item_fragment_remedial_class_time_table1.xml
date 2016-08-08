@@ -5,102 +5,104 @@
     android:weightSum="1">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:weightSum="1">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="1"
-            android:background="#808080">
+            android:background="#c9c2c2"
+            android:orientation="horizontal"
+            android:weightSum="1">
 
             <TextView
+                android:id="@+id/coursename"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="课程名称"
-                android:paddingTop="5dp"
+                android:layout_weight="1"
                 android:paddingBottom="5dp"
                 android:paddingLeft="8dp"
-                android:layout_weight="1"
-                android:id="@+id/coursename" />
+                android:paddingTop="5dp"
+                android:text="课程名称:第三课 阻力、摩擦力、重力" />
 
             <TextView
+                android:id="@+id/state"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="状态"
-                android:paddingTop="5dp"
                 android:layout_gravity="center"
                 android:paddingRight="5dp"
-                android:id="@+id/state" />
+                android:paddingTop="5dp"
+                android:text="待上课" />
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:weightSum="1">
 
             <ImageView
+                android:id="@+id/image"
                 android:layout_width="103dp"
                 android:layout_height="103dp"
-                android:id="@+id/image"
-                android:src="@mipmap/photo"
-                android:background="#FFFFFF" />
+                android:background="#dcdcdc"
+                android:src="@mipmap/photo" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="#faf6f6"
+                    android:orientation="vertical"
                     android:padding="10dp"
-                    android:paddingLeft="10dp"
-                    android:background="#BFBFBF" >
+                    android:paddingLeft="10dp">
 
                     <TextView
+                        android:id="@+id/textView"
+                        android:paddingBottom="5dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="日期"
                         android:layout_gravity="center"
-                        android:id="@+id/textView" />
+                        android:text="2016年7月14日17：00-18:00" />
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="高考考前急速冲刺训练班训练班训练班" />
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="2dp"
+                        android:text="科目：物理" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="名称"
-                        android:id="@+id/textView2" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
-                        android:text="科目"
-                        android:id="@+id/textView3" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
-                        android:text="老师" />
+                        android:padding="2dp"
+                        android:text="老师：司马光" />
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/enter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="进入"
-                    android:textSize="16sp"
+                    android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:id="@+id/enter"
-                    android:paddingRight="6dp"
-                    android:paddingBottom="6dp"
-                    android:layout_marginRight="8dp"
                     android:layout_marginBottom="8dp"
-                    android:layout_alignParentBottom="true" />
+                    android:layout_marginRight="8dp"
+                    android:paddingBottom="6dp"
+                    android:paddingRight="6dp"
+                    android:text="进入"
+                    android:textSize="16sp" />
             </RelativeLayout>
 
         </LinearLayout>
