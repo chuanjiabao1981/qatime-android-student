@@ -33,16 +33,17 @@ public class Fragment2 extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment2, container, false);
 
 
-initView(view);
+        initView(view);
 
-    return view;}
+        return view;
+    }
 
     private void initView(View view) {
 
         view.findViewById(R.id.calendar).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(),ClassTimeTableActivity.class);
+                Intent intent = new Intent(getActivity(), ClassTimeTableActivity.class);
                 startActivity(intent);
             }
 
@@ -52,7 +53,7 @@ initView(view);
         fragBaseFragments.add(new FragmentRemedialClassTimeTable2());
 
 
-        fragmentlayout = (FragmentLayoutWithLine)view. findViewById(R.id.fragmentlayout);
+        fragmentlayout = (FragmentLayoutWithLine) view.findViewById(R.id.fragmentlayout);
 
         fragmentlayout.setScorllToNext(true);
         fragmentlayout.setScorll(true);
