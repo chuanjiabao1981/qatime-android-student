@@ -91,10 +91,10 @@
             android:padding="3dp"
             android:text="开课时间：2016年10月31日\n结课时间：2016年10月31日\n授课方式：在线直播\n已购人数：100" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
+
             android:layout_margin="3dp">
 
             <TextView
@@ -108,7 +108,7 @@
                 android:textColor="#FF0000"
                 android:gravity="center"
                 android:text="距开课15天" />
-        </LinearLayout>
+        </RelativeLayout>
 
 
         <LinearLayout
