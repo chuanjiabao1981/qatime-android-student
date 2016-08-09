@@ -42,6 +42,7 @@ public class ClassTimeTableActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class_time_table);
+        setTitle("全部课程");
         initview();
         initData(1);
     }

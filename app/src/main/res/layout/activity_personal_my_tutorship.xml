@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-        <include layout="@layout/layout_backbar"/>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+              android:orientation="vertical"
+                android:layout_height="match_parent">
 
-        <cn.qatime.player.view.FragmentLayoutWithLine
-            android:id="@+id/fragmentlayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </RelativeLayout>
+    <include layout="@layout/layout_backbar"/>
+
+    <cn.qatime.player.view.FragmentLayoutWithLine
+        android:id="@+id/fragmentlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>
 

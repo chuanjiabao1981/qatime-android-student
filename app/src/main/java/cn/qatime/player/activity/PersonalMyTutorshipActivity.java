@@ -7,8 +7,6 @@ import android.view.View;
 import android.widget.TextView;
 import java.util.ArrayList;
 import cn.qatime.player.R;
-import cn.qatime.player.adapter.CommonAdapter;
-import cn.qatime.player.bean.RemedialClassBean;
 import cn.qatime.player.fragment.FragmentPersonalMyTutorship1;
 import cn.qatime.player.fragment.FragmentPersonalMyTutorship2;
 import cn.qatime.player.fragment.FragmentPersonalMyTutorship3;
@@ -18,7 +16,6 @@ import cn.qatime.player.view.FragmentLayoutWithLine;
 
 public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3 ,R.id.tab_text4, R.id.tab_text5};
-    private CommonAdapter<RemedialClassBean.Data> adapter;
     FragmentLayoutWithLine fragmentlayout;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
     private int pager = 0;

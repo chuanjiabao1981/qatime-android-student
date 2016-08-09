@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:orientation="vertical"
-    android:background="#ffffff">
+              android:background="#ffffff"
+              android:orientation="vertical">
 
     <include layout="@layout/layout_backbar"/>
 
@@ -116,7 +116,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="*"
-                    android:textColor="#FFFFFF"/>
+                    android:visibility="invisible"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -124,15 +124,22 @@
                     android:paddingRight="10dp"
                     android:text="姓别"/>
 
-                <CheckBox
+                <RadioGroup
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="我是男神"/>
+                    android:orientation="horizontal">
 
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="我是男神"/>
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="我是男神"/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="我是女神"/>
+                </RadioGroup>
             </LinearLayout>
 
             <View
@@ -184,6 +191,7 @@
 
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1sp"
@@ -210,13 +218,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:maxLines="2"
+                    android:gravity="top"
                     android:background="@drawable/text_background"
-
-                    android:hint="一句话介绍自己"/>
+                    android:hint="一句话介绍自己"
+                    android:minLines="3"/>
 
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1sp"
@@ -225,13 +234,14 @@
         </LinearLayout>
 
     </ScrollView>
+
     <TextView
+        android:id="@+id/finish"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="完成"
-        android:id="@+id/finish"
+        android:layout_margin="5dp"
         android:background="@drawable/text_background"
         android:gravity="center"
-        android:layout_margin="5dp"
-        android:padding="10dp"/>
+        android:padding="10dp"
+        android:text="完成"/>
 </LinearLayout>

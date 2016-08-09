@@ -79,6 +79,7 @@
                 android:padding="10dp">
 
                 <LinearLayout
+                    android:id="@+id/paying"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -91,7 +92,7 @@
                         android:src="@drawable/head_sculpture"/>
 
                     <TextView
-                        android:id="@+id/paying"
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingBottom="5dp"
@@ -103,6 +104,7 @@
 
 
                 <LinearLayout
+                    android:id="@+id/paid"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -116,7 +118,7 @@
                         android:src="@drawable/head_sculpture"/>
 
                     <TextView
-                        android:id="@+id/paid"
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingBottom="5dp"
@@ -126,6 +128,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/canceled"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -139,7 +142,7 @@
                         android:src="@drawable/head_sculpture"/>
 
                     <TextView
-                        android:id="@+id/canceled"
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingBottom="5dp"
@@ -168,86 +171,61 @@
                 android:orientation="horizontal"
                 android:paddingBottom="5dp">
 
-                <LinearLayout
+
+                <TextView
+                    android:id="@+id/today"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:text="今日"
+                    android:textColor="#61c1dc"/>
+
+                <TextView
+                    android:id="@+id/waitting"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:text="待开课"
+                    android:textColor="#61c1dc"/>
 
-                    <TextView
-                        android:id="@+id/today"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:paddingBottom="5dp"
-                        android:paddingTop="5dp"
-                        android:text="今日"
-                        android:textColor="#61c1dc"/>
-                </LinearLayout>
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/calssed"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:text="已开课"
+                    android:textColor="#61c1dc"/>
 
-                    <TextView
-                        android:id="@+id/waitting"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="5dp"
-                        android:paddingTop="5dp"
-                        android:text="待开课"
-                        android:textColor="#61c1dc"/>
-                </LinearLayout>
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/overed"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:text="已结束"
+                    android:textColor="#61c1dc"/>
 
-                    <TextView
-                        android:id="@+id/calssed"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="5dp"
-
-                        android:paddingTop="5dp"
-                        android:text="已开课"
-                        android:textColor="#61c1dc"/>
-                </LinearLayout>
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/trying"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center">
-
-                    <TextView
-                        android:id="@+id/overed"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="5dp"
-                        android:paddingTop="5dp"
-                        android:text="已结束"
-                        android:textColor="#61c1dc"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center">
-
-                    <TextView
-                        android:id="@+id/trying"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="5dp"
-                        android:paddingTop="5dp"
-                        android:text="试听"
-                        android:textColor="#61c1dc"/>
-                </LinearLayout>
+                    android:gravity="center"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:text="试听"
+                    android:textColor="#61c1dc"/>
 
 
             </LinearLayout>
@@ -300,6 +278,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="新版本"
+                    android:layout_gravity="top"
                     android:textColor="#e20914"
                     android:textSize="10dp"/>
 

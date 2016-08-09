@@ -23,8 +23,7 @@ public class PersonalInformationChangeActivity extends BaseActivity {
         tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PersonalInformationChangeActivity.this, PersonalInformationActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
 
