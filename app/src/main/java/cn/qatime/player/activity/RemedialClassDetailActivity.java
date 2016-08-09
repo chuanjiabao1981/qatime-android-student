@@ -72,6 +72,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         audition = (Button) findViewById(R.id.audition);
         pay = (Button) findViewById(R.id.pay);
 
+        audition.setOnClickListener(this);
+        pay.setOnClickListener(this);
+
         mIndicator = (SimpleViewPagerIndicator) findViewById(R.id.id_stickynavlayout_indicator);
         mViewPager = (ViewPager) findViewById(R.id.id_stickynavlayout_viewpager);
         mIndicator.setTitles(mTitles);

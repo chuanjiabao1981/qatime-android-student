@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.NEVideoPlayerActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.adapter.CommonAdapter;
 import cn.qatime.player.adapter.ViewHolder;
@@ -36,7 +37,7 @@ import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VolleyErrorListener;
 
 public class FragmentRemedialClassTimeTable1 extends BaseFragment {
-    private PullToRefreshListView List;
+    private PullToRefreshListView listView;
     private java.util.List<RemedialClassBean.Data> list = new ArrayList<>();
     private CommonAdapter<RemedialClassBean.Data> adapter;
     private int page = 1;
@@ -51,27 +52,41 @@ public class FragmentRemedialClassTimeTable1 extends BaseFragment {
     }
 
     private void initview(View view) {
-        List = (PullToRefreshListView) view.findViewById(R.id.list);
-        List.setMode(PullToRefreshBase.Mode.BOTH);
-        List.getRefreshableView().setDividerHeight(1);
-        List.getLoadingLayoutProxy(true, false).setPullLabel("下拉刷新");
-        List.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载");
-        List.getLoadingLayoutProxy(true, false).setRefreshingLabel("正在刷新...");
-        List.getLoadingLayoutProxy(false, true).setRefreshingLabel("正在加载...");
-        List.getLoadingLayoutProxy(true, false).setReleaseLabel("松开刷新");
-        List.getLoadingLayoutProxy(false, true).setReleaseLabel("松开加载");
+        listView = (PullToRefreshListView) view.findViewById(R.id.list);
+        listView.setMode(PullToRefreshBase.Mode.BOTH);
+        listView.getRefreshableView().setDividerHeight(2);
+        listView.getLoadingLayoutProxy(true, false).setPullLabel("下拉刷新");
+        listView.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载");
+        listView.getLoadingLayoutProxy(true, false).setRefreshingLabel("正在刷新...");
+        listView.getLoadingLayoutProxy(false, true).setRefreshingLabel("正在加载...");
+        listView.getLoadingLayoutProxy(true, false).setReleaseLabel("松开刷新");
+        listView.getLoadingLayoutProxy(false, true).setReleaseLabel("松开加载");
 
 
         adapter = new CommonAdapter<RemedialClassBean.Data>(getActivity(), list, R.layout.item_fragment_remedial_class_time_table1) {
             @Override
             public void convert(ViewHolder helper, RemedialClassBean.Data item, int position) {
-
-
+               helper.getView(R.id.image).setOnClickListener(
+                        new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                        intent.putExtra("pager", 2);
+                        startActivity(intent);
+                    }
+                });
+                helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
+                        startActivity(intent);
+                    }
+                });
             }
         };
-        List.setAdapter(adapter);
+        listView.setAdapter(adapter);
 
-        List.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page = 1;
@@ -84,16 +99,10 @@ public class FragmentRemedialClassTimeTable1 extends BaseFragment {
 
             }
         });
-        List.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             }
         });
     }
-
-    /**
-     * @param type 1刷新
-     *             2加载更多
-     */
-
 }

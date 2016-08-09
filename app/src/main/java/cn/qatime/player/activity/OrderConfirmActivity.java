@@ -8,6 +8,7 @@ import android.widget.Button;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.bean.RemedialClassBean;
+import cn.qatime.player.bean.RemedialClassDetailBean;
 
 public class OrderConfirmActivity extends BaseActivity implements View.OnClickListener {
     private Button pay;
@@ -16,7 +17,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_confirm);
-        RemedialClassBean data = (RemedialClassBean) getIntent().getSerializableExtra("data");
+        RemedialClassDetailBean data = (RemedialClassDetailBean) getIntent().getSerializableExtra("data");
 
         pay = (Button) findViewById(R.id.pay);
         pay.setOnClickListener(this);

@@ -7,6 +7,7 @@
     <TextView
         android:id="@+id/top"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="A"
@@ -16,6 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:orientation="horizontal"
         android:paddingLeft="15dp"
         android:paddingRight="15dp">
@@ -40,6 +43,6 @@
             android:id="@+id/role"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="老师" />
+            android:text="学生" />
     </LinearLayout>
 </LinearLayout>

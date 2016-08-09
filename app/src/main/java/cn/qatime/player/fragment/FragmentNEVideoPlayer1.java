@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -23,25 +24,23 @@ import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.RemedialClassBean;
 import cn.qatime.player.bean.RemedialClassDetailBean;
 
-public class FragmentNEVideoPlayer1 extends BaseFragment{
+public class FragmentNEVideoPlayer1 extends BaseFragment {
     private int page = 0;
     private PullToRefreshListView listView;
-    private CommonAdapter<RemedialClassBean.Data> adapter;
-    private List<RemedialClassBean.Data> list = new ArrayList<>();
+    private CommonAdapter<String> adapter;
+    private List<String> list = new ArrayList<>();
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = View.inflate(getActivity(), R.layout.fragment_nevideo_player1,null);
+        View view = View.inflate(getActivity(), R.layout.fragment_nevideo_player1, null);
         initview(view);
         //测试数据
-        RemedialClassBean bean = new RemedialClassBean();
-        RemedialClassBean.Data data = bean.new Data();
-        list.add(data);
-        list.add(data);
-        list.add(data);
-        list.add(data);
-        list.add(data);
+        list.add("1");
+        list.add("1");
+        list.add("1");
+        list.add("1");
+        list.add("1");
         return view;
     }
 
@@ -56,10 +55,18 @@ public class FragmentNEVideoPlayer1 extends BaseFragment{
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel("松开加载");
 
 
-        adapter = new CommonAdapter<RemedialClassBean.Data>(getActivity(), list, R.layout.item_fragment_nevideo_player1) {
+        adapter = new CommonAdapter<String>(getActivity(), list, R.layout.item_fragment_nevideo_player1) {
             @Override
-            public void convert(ViewHolder helper, RemedialClassBean.Data item, int position) {
-
+            public void convert(ViewHolder helper, String item, int position) {
+                if (position == 0) {
+                    helper.getView(R.id.late).setVisibility(View.VISIBLE);
+                    ((TextView) helper.getView(R.id.time)).setTextColor(0xff151515);
+                    ((TextView) helper.getView(R.id.describe)).setTextColor(0xff151515);
+                } else {
+                    helper.getView(R.id.late).setVisibility(View.GONE);
+                    ((TextView) helper.getView(R.id.time)).setTextColor(0xff545454);
+                    ((TextView) helper.getView(R.id.describe)).setTextColor(0xff545454);
+                }
             }
         };
         listView.setAdapter(adapter);
