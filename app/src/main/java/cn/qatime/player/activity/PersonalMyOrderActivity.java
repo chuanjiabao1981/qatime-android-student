@@ -21,13 +21,16 @@ public class PersonalMyOrderActivity extends BaseFragmentActivity {
     private CommonAdapter<RemedialClassBean.Data> adapter;
     FragmentLayoutWithLine fragmentlayout;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
+    private int pager = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_my_order);
-        setTitle("");
-//        setRight(R.mipmap.back_arrow, new View.OnClickListener() {
+            setTitle("我的订单");
+
+        pager = getIntent().getIntExtra("pager",0);
+        //        setRight(R.mipmap.back_arrow, new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
 //
@@ -59,5 +62,6 @@ public class PersonalMyOrderActivity extends BaseFragmentActivity {
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_personal_my_order, 0x0311);
         fragmentlayout.getViewPager().setOffscreenPageLimit(2);
+        fragmentlayout.setCurrenItem(pager);
     }
 }

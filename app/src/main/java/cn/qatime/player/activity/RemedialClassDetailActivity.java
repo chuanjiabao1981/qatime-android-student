@@ -39,10 +39,7 @@ import cn.qatime.player.view.SimpleViewPagerIndicator;
 
 public class RemedialClassDetailActivity extends BaseFragmentActivity implements View.OnClickListener {
     ImageView image;
-    //    FragmentLayoutWithLine fragmentlayout;
     private int id;
-
-    //    private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3};
     private String[] mTitles = new String[]{"信息详情", "教师详情", "课堂列表"};
     private SimpleViewPagerIndicator mIndicator;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
@@ -51,13 +48,15 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     private RemedialClassDetailBean data;
     private ViewPager mViewPager;
     private FragmentPagerAdapter mAdapter;
+    private int pager = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remedial_class_detail);
 
-        id = getIntent().getIntExtra("id", 0);
+        id = getIntent().getIntExtra("id", 0);//联网id
+        pager = getIntent().getIntExtra("pager", 0);
         initView();
         initData();
     }
@@ -90,7 +89,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         };
 
         mViewPager.setAdapter(mAdapter);
-        mViewPager.setCurrentItem(0);
+        mViewPager.setCurrentItem(pager);
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -113,23 +112,6 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 mViewPager.setCurrentItem(position);
             }
         });
-//        fragmentlayout = (FragmentLayoutWithLine) findViewById(R.id.fragmentlayout);
-//
-//        fragmentlayout.setScorllToNext(true);
-//        fragmentlayout.setScorll(true);
-//        fragmentlayout.setWhereTab(1);
-//        fragmentlayout.setTabHeight(6, 0xff000000);
-//        fragmentlayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
-//            @Override
-//            public void change(int lastPosition, int positon, View lastTabView, View currentTabView) {
-//                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff858585);
-//                ((TextView) currentTabView.findViewById(tab_text[positon])).setTextColor(0xff222222);
-//            }
-//        });
-//        fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_remedial_class_detail, 0x0012);
-//        fragmentlayout.getViewPager().setOffscreenPageLimit(2);
-        audition.setOnClickListener(this);
-        pay.setOnClickListener(this);
     }
 
 

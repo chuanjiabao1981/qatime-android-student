@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <include layout="@layout/layout_backbar"/>
 
     <cn.qatime.player.view.FragmentLayoutWithLine
         android:id="@+id/fragmentlayout"
