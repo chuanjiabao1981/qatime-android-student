@@ -128,8 +128,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 //        });
 //        fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_remedial_class_detail, 0x0012);
 //        fragmentlayout.getViewPager().setOffscreenPageLimit(2);
-//        audition.setOnClickListener(this);
-//        pay.setOnClickListener(this);
+        audition.setOnClickListener(this);
+        pay.setOnClickListener(this);
     }
 
 

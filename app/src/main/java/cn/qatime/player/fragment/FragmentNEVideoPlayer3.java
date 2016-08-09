@@ -13,7 +13,7 @@ public class FragmentNEVideoPlayer3 extends BaseFragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = View.inflate(getActivity(), R.layout.activity_main,null);
+        View view = View.inflate(getActivity(), R.layout.fragment_nevideo_player3,null);
         
         return view;
     }

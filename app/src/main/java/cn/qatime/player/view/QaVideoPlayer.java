@@ -158,7 +158,8 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
         barrageSpeed = (SeekBar) mMediaController.findViewById(R.id.barrage_speed);
 
         brightness.setProgress(ScreenUtils.getScreenBrightness(context));
-        barrageView = new BarrageView(getContext());
+//        barrageView = new BarrageView(getContext());
+//        barrageView.setVisibility(GONE);
         this.addView(mMediaController);
 //        mBuffer = View.inflate(this.getContext(), R.layout.video_play_toolbar, null);
 //        this.addView(mBuffer);
@@ -221,7 +222,10 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
     }
 
     public void setData(String data) {
-        barrageView.setData(data);
+        if (barrageView.getVisibility() == GONE) {
+            return;
+        }
+        barrageView.addItem(data);
     }
 
     @Override
@@ -309,10 +313,11 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
         if (radiogroup.getVisibility() == VISIBLE) {
             radiogroup.setVisibility(GONE);
         }
-
+//        barrageView.setVisibility(GONE);
     }
 
     private void landscape() {
+
         toolbarLayout.setVisibility(VISIBLE);
         viewCount.setVisibility(GONE);
         playToolbar.setBackgroundColor(0xff999999);
@@ -321,6 +326,7 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
         zoomLayout.setVisibility(GONE);
         bottomLayout.setBackgroundColor(0xff999999);
 
+//        barrageView.setVisibility(VISIBLE);
     }
 
     /**

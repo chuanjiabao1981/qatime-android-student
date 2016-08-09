@@ -57,18 +57,18 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
 
     private Handler hd = new Handler();
     private int i = 0;
-    Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            hd.postDelayed(this, 200);
-            videoPlayer.setData(i + "彈幕");
-            i++;
-            if (i>20){
-                hd.removeCallbacks(this);
-            }
-            LogUtils.e(i);
-        }
-    };
+//    Runnable runnable = new Runnable() {
+//        @Override
+//        public void run() {
+//            hd.postDelayed(this, 50);
+//            videoPlayer.setData(i + "彈幕");
+//            i++;
+//            if (i>20){
+//                hd.removeCallbacks(this);
+//            }
+//            LogUtils.e(i);
+//        }
+//    };
 //    int flag = Settings.System.getInt(getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0);
 
     @Override
@@ -83,8 +83,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         videoPlayer.setOnControlListener(this);
         videoPlayer.start();
         initView();
-        hd.postDelayed(runnable, 200);
-
     }
 
     private void initView() {
@@ -133,6 +131,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) { // 横屏
+            //TODO 測試数据
+//            hd.postDelayed(runnable, 1000);
             bottom.setVisibility(View.GONE);
             ViewGroup.LayoutParams params = videoPlayer.getLayoutParams();
             params.width = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -167,7 +167,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
-        hd.removeCallbacks(runnable);
+//        hd.removeCallbacks(runnable);
         super.onDestroy();
     }
 

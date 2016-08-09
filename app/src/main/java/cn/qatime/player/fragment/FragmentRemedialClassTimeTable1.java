@@ -53,6 +53,7 @@ public class FragmentRemedialClassTimeTable1 extends BaseFragment {
     private void initview(View view) {
         List = (PullToRefreshListView) view.findViewById(R.id.list);
         List.setMode(PullToRefreshBase.Mode.BOTH);
+        List.getRefreshableView().setDividerHeight(1);
         List.getLoadingLayoutProxy(true, false).setPullLabel("下拉刷新");
         List.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载");
         List.getLoadingLayoutProxy(true, false).setRefreshingLabel("正在刷新...");
