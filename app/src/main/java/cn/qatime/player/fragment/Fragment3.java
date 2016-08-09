@@ -18,7 +18,6 @@ public class Fragment3 extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment3, container, false);
         initview(view);
-//        initData();
         return view;
     }
 

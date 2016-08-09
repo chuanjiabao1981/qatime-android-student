@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.NEVideoPlayerActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.adapter.CommonAdapter;
 import cn.qatime.player.adapter.ViewHolder;
@@ -53,7 +54,7 @@ public class FragmentRemedialClassTimeTable2 extends BaseFragment {
     private void initview(View view) {
         List = (PullToRefreshListView) view.findViewById(R.id.list);
         List.setMode(PullToRefreshBase.Mode.BOTH);
-        List.getRefreshableView().setDividerHeight(1);
+        List.getRefreshableView().setDividerHeight(2);
         List.getLoadingLayoutProxy(true, false).setPullLabel("下拉刷新");
         List.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载");
         List.getLoadingLayoutProxy(true, false).setRefreshingLabel("正在刷新...");
@@ -65,14 +66,15 @@ public class FragmentRemedialClassTimeTable2 extends BaseFragment {
         adapter = new CommonAdapter<RemedialClassBean.Data>(getActivity(), list, R.layout.item_fragment_remedial_class_time_table2) {
             @Override
             public void convert(ViewHolder helper, RemedialClassBean.Data item, int position) {
-helper.getView(R.id.image).setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        Intent intent=new Intent(getActivity(),RemedialClassDetailActivity.class);
-        intent.putExtra("pager",2);
-        startActivity(intent);
-    }
-});
+                helper.getView(R.id.image).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                        intent.putExtra("pager", 2);
+                        startActivity(intent);
+                    }
+                });
+
             }
         };
         List.setAdapter(adapter);
