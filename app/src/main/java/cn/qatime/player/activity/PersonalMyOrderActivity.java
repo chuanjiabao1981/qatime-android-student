@@ -26,7 +26,13 @@ public class PersonalMyOrderActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_my_order);
-
+        setTitle("");
+//        setRight(R.mipmap.back_arrow, new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
         initView();
     }
 
