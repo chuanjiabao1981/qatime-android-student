@@ -36,11 +36,11 @@
                 android:layout_height="200dp">
 
                 <LinearLayout
+                    android:id="@+id/information"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="#cecaca"
                     android:gravity="center"
-                    android:id="@+id/information"
                     android:orientation="vertical">
 
                     <ImageView
@@ -55,13 +55,13 @@
                 </LinearLayout>
 
                 <ImageView
+                    android:id="@+id/information1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="1dp"
                     android:paddingRight="2dp"
-                    android:id="@+id/information1"
                     android:src="@drawable/personal_enter"/>
             </RelativeLayout>
 
@@ -175,6 +175,7 @@
                     android:gravity="center">
 
                     <TextView
+                        android:id="@+id/today"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:paddingBottom="5dp"
@@ -190,6 +191,7 @@
                     android:gravity="center">
 
                     <TextView
+                        android:id="@+id/waitting"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingBottom="5dp"
@@ -205,11 +207,12 @@
                     android:gravity="center">
 
                     <TextView
+                        android:id="@+id/calssed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingBottom="5dp"
-                        android:paddingTop="5dp"
 
+                        android:paddingTop="5dp"
                         android:text="已开课"
                         android:textColor="#61c1dc"/>
                 </LinearLayout>
@@ -221,6 +224,7 @@
                     android:gravity="center">
 
                     <TextView
+                        android:id="@+id/overed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingBottom="5dp"
@@ -236,6 +240,7 @@
                     android:gravity="center">
 
                     <TextView
+                        android:id="@+id/trying"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingBottom="5dp"
