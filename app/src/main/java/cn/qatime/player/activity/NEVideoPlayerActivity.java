@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,15 +15,11 @@ import com.netease.neliveplayer.NELivePlayer;
 import java.util.ArrayList;
 
 import cn.qatime.player.R;
-import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.fragment.FragmentNEVideoPlayer1;
 import cn.qatime.player.fragment.FragmentNEVideoPlayer2;
 import cn.qatime.player.fragment.FragmentNEVideoPlayer3;
 import cn.qatime.player.fragment.FragmentNEVideoPlayer4;
-import cn.qatime.player.fragment.FragmentRemedialClassDetail1;
-import cn.qatime.player.fragment.FragmentRemedialClassDetail2;
-import cn.qatime.player.fragment.FragmentRemedialClassDetail3;
 import cn.qatime.player.utils.LogUtils;
 import cn.qatime.player.utils.ScreenUtils;
 import cn.qatime.player.view.FragmentLayoutWithLine;

@@ -1,6 +1,7 @@
 package cn.qatime.player.fragment;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
@@ -32,7 +33,7 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 
 public class FragmentPersonalMyTutorship1 extends BaseFragment {
-    private PullToRefreshListView List;
+    private PullToRefreshListView listView;
     private java.util.List<String> list = new ArrayList<>();
     private CommonAdapter<String> adapter;
     private int page = 1;
@@ -55,27 +56,37 @@ public class FragmentPersonalMyTutorship1 extends BaseFragment {
     }
 
     private void initview(View view) {
-        List = (PullToRefreshListView) view.findViewById(R.id.list);
+        listView = (PullToRefreshListView) view.findViewById(R.id.list);
+        listView.getRefreshableView().setDividerHeight(1);
+        listView.setMode(PullToRefreshBase.Mode.BOTH);
+        listView.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
+        listView.getLoadingLayoutProxy(false, true).setPullLabel(getResources().getString(R.string.pull_to_load));
+        listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResources().getString(R.string.refreshing));
+        listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
+        listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
+        listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
 
         adapter = new CommonAdapter<String>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship1) {
             @Override
             public void convert(ViewHolder helper, String item, int position) {
             }
         };
-        List.setAdapter(adapter);
+        listView.setAdapter(adapter);
 
-        List.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page = 1;
+                listView.onRefreshComplete();
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page++;
+                listView.onRefreshComplete();
             }
         });
-        List.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             }

@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:background="@drawable/text_background"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,7 +18,8 @@
                 android:layout_height="wrap_content"
                 android:padding="2dp"
                 android:text="开课时间：2017-9-23 15:00"
-                android:textSize="13sp"/>
+                android:textColor="#8e8e8e"
+                android:textSize="13sp" />
 
             <View
                 android:layout_width="0dp"
@@ -28,27 +27,25 @@
                 android:layout_weight="1"></View>
 
             <TextView
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:padding="2dp"
                 android:text="结课时间：2017-9-23 15:00"
-                android:textSize="13sp"/>
+                android:textColor="#8e8e8e"
+                android:textSize="13sp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/image"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:background="#dcdcdc"
-                android:src="@mipmap/photo"/>
+                android:src="@mipmap/photo" />
 
 
             <LinearLayout
@@ -65,43 +62,36 @@
                     android:layout_height="wrap_content"
                     android:maxLines="2"
                     android:paddingBottom="5dp"
-
-                    android:text="高考考前急速高考考前急速高高考考前急速高考考前急速高"/>
+                    android:text="高考考前急速高考考前急速高高考考前急速高考考前急速高" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
+                    android:orientation="horizontal">
 
                     <TextView
-
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
                         android:padding="2dp"
                         android:text="科目：地理"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
 
                     <View
                         android:layout_width="0dp"
                         android:layout_height="1dp"
-                        android:layout_weight="1"></View>
+                        android:layout_weight="1" />
 
                     <TextView
-
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
                         android:padding="2dp"
                         android:text="老师：高京燕"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
 
                     <View
                         android:layout_width="0dp"
                         android:layout_height="1dp"
-                        android:layout_weight="1"></View>
-
+                        android:layout_weight="1" />
 
                 </LinearLayout>
 
@@ -113,20 +103,22 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="5dp"
-                        android:text="12/99"/>
+                        android:text="12/99" />
 
                     <ProgressBar
+                        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
                         android:layout_width="120dp"
                         android:layout_height="5dp"
                         android:layout_gravity="center"
-                        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
-                        android:background="#bfbfbf"/>
+                        android:background="#bfbfbf"
+                        android:max="10"
+                        android:progress="5" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="5dp"
-                        android:text="87"/>
+                        android:text="87" />
                 </LinearLayout>
 
 
@@ -143,12 +135,12 @@
                         android:padding="2dp"
                         android:text="下一课2016-07-15  15:30"
                         android:textColor="#05effc"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
 
                     <View
                         android:layout_width="0dp"
                         android:layout_height="1dp"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1" />
 
                     <ImageView
                         android:id="@+id/enter"
@@ -157,7 +149,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
-                        android:src="@drawable/shopping32"/>
+                        android:src="@drawable/shopping32" />
 
                     <ImageView
 
@@ -166,14 +158,9 @@
                         android:layout_alignParentRight="true"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
-                        android:src="@mipmap/playing"/>
+                        android:src="@mipmap/playing" />
                 </LinearLayout>
-
-
             </LinearLayout>
-
-
         </LinearLayout>
-
     </LinearLayout>
 </LinearLayout>

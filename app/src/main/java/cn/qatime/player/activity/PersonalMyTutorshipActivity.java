@@ -2,6 +2,7 @@ package cn.qatime.player.activity;
 
 import cn.qatime.player.base.BaseFragmentActivity;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -35,12 +36,19 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
         setTitle("我的辅导");
 
         pager = getIntent().getIntExtra("pager", 0);
+        setRight(R.mipmap.audition_records, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PersonalMyTutorshipActivity.this,AuditionRecordsActivity.class);
+                startActivity(intent);
+            }
+        });
         initView();
     }
 
 
     private void initView() {
-
+        findViewById(R.id.right).setVisibility(View.GONE);
 
         fragBaseFragments.add(new FragmentPersonalMyTutorship1());
         fragBaseFragments.add(new FragmentPersonalMyTutorship2());
@@ -59,6 +67,12 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
             public void change(int lastPosition, int positon, View lastTabView, View currentTabView) {
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff858585);
                 ((TextView) currentTabView.findViewById(tab_text[positon])).setTextColor(0xff222222);
+
+                if (positon==4){
+                    findViewById(R.id.right).setVisibility(View.VISIBLE);
+                }else {
+                    findViewById(R.id.right).setVisibility(View.GONE);
+                }
             }
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tableout_personal_my_tutor, 0x0311);
