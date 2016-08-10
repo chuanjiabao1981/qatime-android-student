@@ -1,4 +1,56 @@
 <resources>
-    <string name="app_name">DaYiTime</string>//答疑时间
-    <string name="submit">submit</string>//
+    //refresh刷新
+    <string name="pull_to_refresh">Pull to Refresh</string>
+    <string name="pull_to_load">Pull to Load</string>
+    <string name="refreshing">Refreshing</string>
+    <string name="loading">Loading</string>
+    <string name="release_to_load">Release to Load</string>
+    <string name="release_to_refresh">Release to Refresh</string>
+    //fragment1
+    <string name="app_name">QuestionTime</string>//答疑时间
+    <string name="home_page">Home</string>//首页
+    <string name="time_table">Timetable</string>//课程表
+    <string name="message">Messages</string>//消息
+    <string name="individual">Me</string>//个人
+    <string name="latest">Latest</string>//最新
+    <string name="whole">Whole</string>//全部
+
+    <string name="by_time">By Time</string>//按时间
+    <string name="by_subject">Subject</string>//科目
+    <string name="by_grade">Grade</string>//年级
+    <string name="price">    Price:</string>//价格
+    <string name="yuan">YUAN</string>
+    <string name="Total_class_hours">Total Hours:</string>//课时总数
+    <string name="hours">Hours</string>课时
+    <string name="starting_dates">Starting Dates:</string>开始时间
+    <string name="to">To</string>
+    <string name="state">State：</string>//状态
+    <string name="cancel">Cancel</string>//取消
+    <string name="confirm">OK</string>//确定
+    <string name="alignprice">11111</string>//fragment12对齐
+    <string name="alignto">1111111</string>//fragment12对齐
+    //
+    //fragment2
+    <string name="course_to_be_done">Course To Be Done</string>//待上课
+    <string name="course_finished">Course Finished</string>//已上课
+    <string name="all_course">All</string>//全部课程
+
+    //fragment4
+    Personal Center
+    <string name="personal_center">Personal Center</string>//个人中心
+    <string name="my_order">My Orders</string>//我的订单
+    <string name="paying">Paying</string>//待付款
+    <string name="paid">Paid</string>//已付款
+    <string name="cancelled">Cancelled</string>//已取消
+    <string name="my_course">My Course</string>//我的辅导
+    <string name="today">Today</string>//今日
+    <string name="to_start">To Start</string>//待开课
+    <string name="started">Started</string>//已开课
+    <string name="done">Done</string>//已结束
+    <string name="audition">Audition</string>//试听
+    <string name="security_management">Security Management</string>//安全管理
+    <string name="setting">Setting</string>//系/统设置
+    <string name="new_edition">New Edition</string>//新版本
+
+
 </resources>

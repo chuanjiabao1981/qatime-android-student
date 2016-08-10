@@ -24,7 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
-                android:text="待上课"
+                android:text="@string/course_to_be_done"
                 android:textColor="#222222"
                 android:textSize="14.0sp" />
         </LinearLayout>
@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
-                android:text="已上课"
+                android:text="@string/course_finished"
                 android:textColor="#858585"
                 android:textSize="14.0sp" />
         </LinearLayout>

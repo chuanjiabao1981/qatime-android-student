@@ -57,12 +57,12 @@ public class Fragment11 extends BaseFragment {
     private void initview(View view) {
         grid = (PullToRefreshGridView) view.findViewById(R.id.grid);
         grid.setMode(PullToRefreshBase.Mode.BOTH);
-        grid.getLoadingLayoutProxy(true, false).setPullLabel("下拉刷新");
-        grid.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载");
-        grid.getLoadingLayoutProxy(true, false).setRefreshingLabel("正在刷新...");
-        grid.getLoadingLayoutProxy(false, true).setRefreshingLabel("正在加载...");
-        grid.getLoadingLayoutProxy(true, false).setReleaseLabel("松开刷新");
-        grid.getLoadingLayoutProxy(false, true).setReleaseLabel("松开加载");
+        grid.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
+        grid.getLoadingLayoutProxy(false, true).setPullLabel(getResources().getString(R.string.pull_to_load));
+        grid.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResources().getString(R.string.refreshing));
+        grid.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
+        grid.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
+        grid.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
 
 
         adapter = new CommonAdapter<RemedialClassBean.Data>(getActivity(), list, R.layout.item_fragment11) {

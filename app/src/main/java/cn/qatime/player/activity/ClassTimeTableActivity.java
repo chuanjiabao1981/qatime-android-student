@@ -42,7 +42,7 @@ public class ClassTimeTableActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class_time_table);
-        setTitle("全部课程");
+        setTitle(getResources().getString(R.string.all_course));
         initview();
         initData(1);
     }
@@ -52,12 +52,12 @@ public class ClassTimeTableActivity extends BaseActivity {
     private void initview() {
         List = (PullToRefreshListView) findViewById(R.id.list);
         List.setMode(PullToRefreshBase.Mode.BOTH);
-        List.getLoadingLayoutProxy(true, false).setPullLabel("下拉刷新");
-        List.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载");
-        List.getLoadingLayoutProxy(true, false).setRefreshingLabel("正在刷新...");
-        List.getLoadingLayoutProxy(false, true).setRefreshingLabel("正在加载...");
-        List.getLoadingLayoutProxy(true, false).setReleaseLabel("松开刷新");
-        List.getLoadingLayoutProxy(false, true).setReleaseLabel("松开加载");
+        List.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
+        List.getLoadingLayoutProxy(false, true).setPullLabel(getResources().getString(R.string.pull_to_load));
+        List.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResources().getString(R.string.refreshing));
+        List.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
+        List.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
+        List.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
 
 
         adapter = new CommonAdapter<RemedialClassBean.Data>(this, list, R.layout.item_activity_class_time_table) {

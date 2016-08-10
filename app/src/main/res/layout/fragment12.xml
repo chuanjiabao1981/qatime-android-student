@@ -25,7 +25,7 @@
                 android:id="@+id/time_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="按时间"
+                android:text="@string/by_time"
                 android:drawableRight="@drawable/triangle"/>
 
             <ImageView
@@ -47,7 +47,7 @@
                 android:id="@+id/subject_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="科目"
+                android:text="@string/by_subject"
                 android:drawableRight="@drawable/triangle"/>
 
             <ImageView
@@ -69,7 +69,7 @@
                 android:id="@+id/class_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="年级"
+                android:text="@string/by_grade"
                 android:drawableRight="@drawable/triangle"/>
 
             <ImageView
@@ -124,11 +124,16 @@
                     android:gravity="center_horizontal"
                     android:orientation="horizontal"
                     android:paddingTop="15dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="invisible"
+                        android:text="@string/alignprice" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="    价格：" />
+                        android:text="@string/price" />
 
                     <EditText
                         android:id="@+id/price_low"
@@ -169,7 +174,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="   元" />
+                        android:text="@string/yuan" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -182,7 +187,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="课时总数：" />
+                        android:text="@string/Total_class_hours" />
 
                     <EditText
                         android:id="@+id/subject_low"
@@ -222,7 +227,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="   课时" />
+                        android:text="@string/hours" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -238,7 +243,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="开课时间：" />
+                        android:text="@string/starting_dates" />
 
                     <TextView
                         android:id="@+id/begin_class_year"
@@ -272,13 +277,26 @@
                         android:background="@drawable/text_background"
                         android:text="00" />
                 </LinearLayout>
-
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="3dp"
-                    android:gravity="center"
-                    android:text="                  至" />
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="3dp"
+         android:visibility="invisible"
+                        android:text="@string/alignto" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_margin="3dp"
+
+                        android:text="@string/to" />
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:id="@+id/end_class_layout"
@@ -293,7 +311,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="开课时间："
+                        android:text="@string/starting_dates"
                         android:visibility="invisible" />
 
                     <TextView
@@ -338,7 +356,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="状态：" />
+                        android:text="@string/state" />
 
                     <Spinner
                         android:id="@+id/spinner"
@@ -359,7 +377,7 @@
                         android:layout_margin="4dp"
                         android:layout_weight="1"
                         android:background="@drawable/button_bg_selector_gray"
-                        android:text="取消"
+                        android:text="@string/cancel"
                         android:textColor="#fff" />
                     <Button
                         android:id="@+id/submit"
@@ -368,7 +386,7 @@
                         android:layout_margin="4dp"
                         android:layout_weight="1"
                         android:background="@drawable/button_bg_selector_gray"
-                        android:text="确定"
+                        android:text="@string/confirm"
                         android:textColor="#fff" />
                 </LinearLayout>
 

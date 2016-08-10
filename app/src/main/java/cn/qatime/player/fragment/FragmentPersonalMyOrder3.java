@@ -44,7 +44,6 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_personal_my_order3, container, false);
         initview(view);
-        initData(1);
         return view;
     }
 
@@ -63,13 +62,12 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page = 1;
-                initData(1);
+                List.onRefreshComplete();
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page++;
-                initData(2);
             }
         });
         List.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -79,45 +77,4 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
         });
     }
 
-    /**
-     * @param type 1刷新
-     *             2加载更多
-     */
-    private void initData(final int type) {
-        Map<String, String> map = new HashMap<>();
-        map.put("Remember-Token", BaseApplication.getProfile().getToken());
-        map.put("page", String.valueOf(page));
-        map.put("per_page", "10");
-        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass, map), null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject jsonObject) {
-                        LogUtils.e(jsonObject.toString());
-                        if (type == 1) {
-                            list.clear();
-                        }
-                        String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(),
-                                DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
-                        List.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
-                        List.onRefreshComplete();
-
-                        try {
-                            Gson gson = new Gson();
-                            RemedialClassBean data = gson.fromJson(jsonObject.toString(), RemedialClassBean.class);
-                            list.addAll(data.getData());
-//                            adapter.notifyDataSetChanged();
-                        } catch (JsonSyntaxException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }, new VolleyErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
-                List.onRefreshComplete();
-            }
-        });
-        addToRequestQueue(request);
-    }
 }
