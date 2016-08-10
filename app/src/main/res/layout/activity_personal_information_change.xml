@@ -40,7 +40,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
 
-                        android:text="头像" />
+                        android:text="@string/head" />
 
                 </LinearLayout>
 
@@ -65,14 +65,14 @@
                     android:gravity="right"
                     android:paddingBottom="5dp"
                     android:paddingTop="5dp"
-                    android:text="点击更换"
+                    android:text="@string/click_to_change"
                     android:textColor="#0962f1" />
 
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1sp"
+                android:layout_height="1px"
                 android:background="#dfdddd" />
 
             <LinearLayout
@@ -90,7 +90,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="10dp"
-                    android:text="姓名" />
+                    android:text="@string/name" />
 
                 <EditText
                     android:layout_width="0dp"
@@ -98,12 +98,12 @@
                     android:layout_weight="1"
                     android:background="@drawable/text_background"
 
-                    android:hint="输入真实姓名更方便老师联系你" />
+                    android:hint="@string/hint_name" />
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1sp"
+                android:layout_height="1px"
                 android:background="#dfdddd" />
 
             <LinearLayout
@@ -121,7 +121,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="10dp"
-                    android:text="姓别" />
+                    android:text="@string/sex" />
 
                 <RadioGroup
                     android:layout_width="wrap_content"
@@ -132,18 +132,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="true"
-                        android:text="我是男神" />
+                        android:text="@string/boy" />
 
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="我是女神" />
+                        android:text="@string/girl" />
                 </RadioGroup>
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1sp"
+                android:layout_height="1px"
                 android:background="#dfdddd" />
 
             <LinearLayout
@@ -161,14 +161,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="10dp"
-                    android:text="生日" />
+                    android:text="@string/birthday" />
 
 
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1sp"
+                android:layout_height="1px"
                 android:background="#dfdddd" />
 
             <LinearLayout
@@ -186,18 +186,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="10dp"
-                    android:text="年级" />
+                    android:text="@string/by_grade" />
 
                 <Spinner
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:entries="@array/" />
+                    android:entries="@array/grade" />
 
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1sp"
+                android:layout_height="1px"
                 android:background="#dfdddd" />
 
             <LinearLayout
@@ -215,7 +215,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="10dp"
-                    android:text="简介" />
+                    android:text="@string/profiles" />
 
                 <EditText
                     android:layout_width="0dp"
@@ -223,7 +223,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/text_background"
                     android:gravity="top"
-                    android:hint="一句话介绍自己"
+                    android:hint="@string/hint_profiles"
                     android:minLines="3" />
 
 
@@ -231,7 +231,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1sp"
+                android:layout_height="1px"
                 android:background="#dfdddd" />
 
         </LinearLayout>
@@ -246,5 +246,5 @@
         android:background="@drawable/text_background"
         android:gravity="center"
         android:padding="10dp"
-        android:text="完成" />
+        android:text="@string/finish" />
 </LinearLayout>

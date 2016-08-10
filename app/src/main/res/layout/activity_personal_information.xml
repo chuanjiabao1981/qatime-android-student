@@ -24,7 +24,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1sp"
+                android:layout_height="1px"
                 android:background="#dfdddd" />
 
             <LinearLayout
@@ -36,11 +36,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="姓名" />
+                    android:text="@string/name" />
 
                 <View
                     android:layout_width="0dp"
-                    android:layout_height="1sp"
+                    android:layout_height="1px"
                     android:layout_weight="1"></View>
 
                 <TextView
@@ -52,7 +52,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1sp"
+                android:layout_height="1px"
                 android:background="#dfdddd" />
 
             <LinearLayout
@@ -64,11 +64,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="姓别" />
+                    android:text="@string/sex" />
 
                 <View
                     android:layout_width="0dp"
-                    android:layout_height="1sp"
+                    android:layout_height="1px"
                     android:layout_weight="1"></View>
 
                 <TextView
@@ -80,7 +80,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1sp"
+                android:layout_height="1px"
                 android:background="#dfdddd" />
 
             <LinearLayout
@@ -93,11 +93,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="生日" />
+                    android:text="@string/birthday" />
 
                 <View
                     android:layout_width="0dp"
-                    android:layout_height="1sp"
+                    android:layout_height="1px"
                     android:layout_weight="1"></View>
 
                 <TextView
@@ -109,7 +109,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1sp"
+                android:layout_height="1px"
                 android:background="#dfdddd" />
 
             <LinearLayout
@@ -121,7 +121,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="年级" />
+                    android:text="@string/grade" />
 
                 <View
                     android:layout_width="0dp"
@@ -137,7 +137,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1sp"
+                android:layout_height="1px"
                 android:background="#dfdddd" />
 
             <LinearLayout
@@ -149,7 +149,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="地区" />
+                    android:text="@string/region" />
 
                 <View
                     android:layout_width="0dp"
@@ -165,7 +165,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1sp"
+                android:layout_height="1px"
                 android:background="#dfdddd" />
 
             <LinearLayout
@@ -177,7 +177,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="学校" />
+                    android:text="@string/school" />
 
                 <View
                     android:layout_width="0dp"
@@ -193,7 +193,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1sp"
+                android:layout_height="1px"
                 android:background="#dfdddd" />
 
             <LinearLayout
@@ -205,7 +205,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="简介" />
+                    android:text="@string/profiles" />
 
                 <View
                     android:layout_width="0dp"
@@ -221,7 +221,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1sp"
+                android:layout_height="1px"
                 android:background="#dfdddd" />
 
         </LinearLayout>

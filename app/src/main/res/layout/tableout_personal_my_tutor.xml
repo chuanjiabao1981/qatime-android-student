@@ -24,7 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
-                android:text="今日"
+                android:text="@string/today"
                 android:textColor="#222222"
                 android:textSize="14.0sp" />
         </LinearLayout>
@@ -42,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
-                android:text="待开课"
+                android:text="@string/to_start"
                 android:textColor="#858585"
                 android:textSize="14.0sp" />
         </LinearLayout>  <LinearLayout
@@ -59,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="18.0dip"
             android:gravity="center_vertical"
-            android:text="已开课"
+            android:text="@string/started"
             android:textColor="#858585"
             android:textSize="14.0sp" />
     </LinearLayout>
@@ -75,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
-                android:text="已结束"
+                android:text="@string/done"
                 android:textColor="#858585"
                 android:textSize="14.0sp" />
         </LinearLayout>
@@ -91,7 +91,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
-                android:text="试听"
+                android:text="@string/audition"
                 android:textColor="#858585"
                 android:textSize="14.0sp" />
         </LinearLayout>

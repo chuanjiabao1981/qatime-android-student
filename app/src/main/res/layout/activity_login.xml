@@ -27,7 +27,7 @@
                 android:layout_marginRight="15dp"
                 android:background="@drawable/shape_input"
                 android:drawablePadding="15dip"
-                android:hint="请输入账户"
+                android:hint="@string/account"
                 android:inputType="text"
                 android:paddingBottom="8dp"
                 android:paddingLeft="15dip"
@@ -48,7 +48,7 @@
                 android:layout_marginRight="15dp"
                 android:background="@drawable/shape_input"
                 android:drawablePadding="15dip"
-                android:hint="请输入密码"
+                android:hint="@string/password"
                 android:inputType="textPassword"
                 android:paddingBottom="8dp"
                 android:paddingLeft="15dip"
@@ -78,7 +78,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="3"
                         android:gravity="center"
-                        android:hint="输入验证码" />
+                        android:hint="@string/verification_code" />
 
                     <cn.qatime.player.view.CheckView
                         android:id="@+id/checkview"
@@ -103,7 +103,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:clickable="true"
-                        android:text="看不清，换一张" />
+                        android:text="@string/change_it" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -128,7 +128,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:text="注册" />
+            android:text="@string/register" />
 
         <Button
             android:id="@+id/login"
@@ -138,7 +138,7 @@
 
             android:layout_marginRight="30dp"
             android:layout_weight="1"
-            android:text="登陆" />
+            android:text="@string/login" />
     </LinearLayout>
 
     <TextView
@@ -149,7 +149,7 @@
         android:layout_marginBottom="10dp"
         android:clickable="true"
         android:padding="5dp"
-        android:text="忘记密码"
+        android:text="@string/forget_password"
         android:textColor="#0000ff"
         android:textSize="16sp" />
     <!--<ImageView-->

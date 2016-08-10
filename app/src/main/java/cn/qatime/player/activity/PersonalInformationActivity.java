@@ -11,7 +11,7 @@ public class PersonalInformationActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_information);
-        setTitle("个人信息");
+        setTitle(getResources().getString(R.string.personal_information));
         setRight(R.drawable.personal_change_information, new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -125,13 +125,12 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
 
         grid = (PullToRefreshGridView) view.findViewById(R.id.grid);
         grid.setMode(PullToRefreshBase.Mode.BOTH);
-        grid.getLoadingLayoutProxy(true, false).setPullLabel("下拉刷新");
-        grid.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载");
-        grid.getLoadingLayoutProxy(true, false).setRefreshingLabel("正在刷新...");
-        grid.getLoadingLayoutProxy(false, true).setRefreshingLabel("正在加载...");
-        grid.getLoadingLayoutProxy(true, false).setReleaseLabel("松开刷新");
-        grid.getLoadingLayoutProxy(false, true).setReleaseLabel("松开加载");
-
+        grid.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
+        grid.getLoadingLayoutProxy(false, true).setPullLabel(getResources().getString(R.string.pull_to_load));
+        grid.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResources().getString(R.string.refreshing));
+        grid.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
+        grid.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
+        grid.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
         adapter = new CommonAdapter<RemedialClassBean.Data>(getActivity(), list, R.layout.item_fragment12) {
             @Override
             public void convert(ViewHolder helper, RemedialClassBean.Data item, int position) {
@@ -339,10 +338,10 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         //TODO 待定 排序规则
-                        if (timeList.get(position).equals("按价格-低到高")) {
-                            timetext.setText("按价格↑");
-                        } else if (timeList.get(position).equals("按价格-高到低")) {
-                            timetext.setText("按价格↓");
+                        if (timeList.get(position).equals(getResources().getString(R.string.in_price_low_to_high))) {
+                            timetext.setText(getResources().getString(R.string.by_price_up));
+                        } else if (timeList.get(position).equals(getResources().getString(R.string.in_price_high_to_low))) {
+                            timetext.setText(getResources().getString(R.string.by_price_down));
                         } else {
                             timetext.setText(timeList.get(position));
                         }

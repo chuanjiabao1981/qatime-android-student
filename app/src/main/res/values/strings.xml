@@ -1,5 +1,5 @@
 <resources>
-    //refresh
+    //刷新
     <string name="pull_to_refresh">下拉刷新</string>
     <string name="pull_to_load">上拉加载</string>
     <string name="refreshing">正在刷新</string>
@@ -26,6 +26,9 @@
     <string name="state">状态：</string>
     <string name="cancel">取消</string>
     <string name="confirm">确定</string>//
+    <string name="by_price_up">按价格↑</string>
+    <string name="by_price_down">按价格↓</string>
+
     <string name="alignprice">111</string>//fragment12对齐
     <string name="alignto">1111111</string>//fragment12对齐
 
@@ -81,6 +84,52 @@
     <string name="security_management">安全管理</string>
     <string name="setting">系统设置</string>
     <string name="new_edition">新版本</string>
+    //个人信息
+    <string name="personal_information">个人信息</string>
+    <string name="name">姓名</string>
+    <string name="sex">性别</string>
+    <string name="birthday">生日</string>
+    <string name="grade">年级</string>
+    <string name="region">地区</string>
+    <string name="school">学校</string>
+    <string name="profiles">简介</string>
+    <string name="head">头像</string>
+    <string name="click_to_change">点击更换</string>
+    <string name="hint_name">输入真实姓名更方便老师联系你</string>
+    <string name="hint_profiles">一句话介绍自己</string>
+    <string name="boy">我是男神</string>
+    <string name="girl">我是女神</string>
+    <string name="finish">完成</string>
+
+//我的订单
+    <string name="detail_of_order">订单详情</string>
+    <string name="waiting_for_payment">等待付款中</string>
+    <string name="order_number">订单编号</string>
+    <string name="time_built">创建时间</string>
+    <string name="time_payment">支付时间</string>
+    <string name="method_payment">支付方式</string>
+    <string name="amount_payment">支付金额</string>
+    <string name="cancel_order">取消订单</string>
+    <string name="delete_order">删除订单</string>
+    <string name="reorder">重新下单</string>
+    <string name="pay">付款</string>
+    <string name="deal_down">交易完成</string>//
+    <string name="deal_closed">交易关闭</string>//
+    //详情
+    <string name="information_detail">信息详情</string>
+    <string name="teacher_detail">教师详情</string>
+    <string name="course_list">课程列表</string>
+    //课程详情
+    <string name="Join_the_audition">加入试听</string>
+    <string name="purchase_now">立即购买</string>
+//登录
+    <string name="account">请输入账号</string>
+    <string name="password">请输入密码</string>
+    <string name="register">注册</string>
+    <string name="login">登录</string>
+    <string name="forget_password">忘记密码</string>
+    <string name="verification_code">请输入验证码</string>
 
 
+    <string name="change_it">看不清，换一张？</string>
 </resources>

@@ -11,7 +11,7 @@ public class PersonalMyOrderDetailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_my_order_detail);
-        setTitle("订单详情");
+        setTitle(getResources().getString(R.string.detail_of_order));
     }
 }
 

@@ -27,7 +27,7 @@ public class PersonalMyOrderActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_my_order);
-        setTitle("我的订单");
+        setTitle(getResources().getString(R.string.my_order));
 
         pager = getIntent().getIntExtra("pager", 0);
         initView();

@@ -33,7 +33,7 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_my_tutorship);
-        setTitle("我的辅导");
+        setTitle(getResources().getString(R.string.my_course));
 
         pager = getIntent().getIntExtra("pager", 0);
         setRight(R.mipmap.audition_records, new View.OnClickListener() {

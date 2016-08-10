@@ -108,7 +108,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
 
-                    android:text="交易完成"
+                    android:text="@string/deal_down"
 
                     android:textColor="#ffa217"
                     android:textSize="16sp" />
@@ -133,7 +133,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="实付金额" />
+                    android:text="@string/amount_payment" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -150,7 +150,7 @@
                 android:background="@drawable/text_background"
                 android:gravity="center"
                 android:singleLine="true"
-                android:text="删除订单" />
+                android:text="@string/delete_order" />
 
 
         </LinearLayout>

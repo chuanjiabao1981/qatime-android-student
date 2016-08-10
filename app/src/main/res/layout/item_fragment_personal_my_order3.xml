@@ -114,7 +114,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
 
-                    android:text="交易关闭"
+                    android:text="@string/deal_closed"
 
                     android:textColor="#ffa217"
                     android:textSize="16sp" />
@@ -140,7 +140,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="实付金额" />
+                    android:text="@string/amount_payment" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -157,7 +157,7 @@
                 android:background="@drawable/text_background"
                 android:gravity="center"
                 android:singleLine="true"
-                android:text="删除订单" />
+                android:text="@string/delete_order" />
 
             <View
                 android:layout_width="3dp"
@@ -169,7 +169,7 @@
                 android:layout_weight="1"
                 android:background="#ffaa16"
                 android:gravity="center"
-                android:text="重新下单" />
+                android:text="@string/reorder" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
