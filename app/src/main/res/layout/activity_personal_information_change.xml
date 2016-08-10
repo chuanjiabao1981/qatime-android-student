@@ -52,20 +52,26 @@
                     android:gravity="center">
 
                     <ImageView
+                        android:id="@+id/head_sculpture"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/personal_information_head" />
                 </RelativeLayout>
 
                 <TextView
+                    android:id="@+id/replace"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
+<<<<<<< Updated upstream
                     android:gravity="right"
                     android:paddingBottom="5dp"
                     android:paddingTop="5dp"
                     android:text="@string/click_to_change"
+=======
+                    android:gravity="center"
+                    android:text="点击更换"
+>>>>>>> Stashed changes
                     android:textColor="#0962f1" />
 
             </LinearLayout>
@@ -78,7 +84,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp">
+                android:gravity="center_vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -93,12 +99,20 @@
                     android:text="@string/name" />
 
                 <EditText
+                    android:id="@+id/name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+<<<<<<< Updated upstream
                     android:background="@drawable/text_background"
 
                     android:hint="@string/hint_name" />
+=======
+                    android:background="@drawable/shape_input"
+                    android:hint="输入真实姓名更方便老师联系你"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp" />
+>>>>>>> Stashed changes
             </LinearLayout>
 
             <View
@@ -109,7 +123,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp">
+                android:gravity="center_vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -124,17 +138,19 @@
                     android:text="@string/sex" />
 
                 <RadioGroup
+                    android:id="@+id/radiogroup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <RadioButton
+                        android:id="@+id/men"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checked="true"
                         android:text="@string/boy" />
 
                     <RadioButton
+                        android:id="@+id/women"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/girl" />
@@ -189,6 +205,7 @@
                     android:text="@string/by_grade" />
 
                 <Spinner
+                    android:id="@+id/spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:entries="@array/grade" />
@@ -225,8 +242,6 @@
                     android:gravity="top"
                     android:hint="@string/hint_profiles"
                     android:minLines="3" />
-
-
             </LinearLayout>
 
             <View
@@ -239,7 +254,7 @@
     </ScrollView>
 
     <TextView
-        android:id="@+id/finish"
+        android:id="@+id/complete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"

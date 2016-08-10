@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.NEVideoPlayerActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.adapter.CommonAdapter;
 import cn.qatime.player.adapter.ViewHolder;
@@ -69,6 +70,13 @@ public class FragmentPersonalMyTutorship1 extends BaseFragment {
         adapter = new CommonAdapter<String>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship1) {
             @Override
             public void convert(ViewHolder helper, String item, int position) {
+                helper.getView(R.id.video).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
+                        startActivity(intent);
+                    }
+                });
             }
         };
         listView.setAdapter(adapter);

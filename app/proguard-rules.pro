@@ -24,6 +24,7 @@
 
 -dontwarn com.google.gson.**
 -keep class com.google.gson.**{*;}
+-keep class org.json.** {*;}
 
 -keepclassmembers class * implements java.io.Serializable {
     static final long serialVersionUID;

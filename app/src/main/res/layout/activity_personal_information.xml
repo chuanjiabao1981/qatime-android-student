@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/layout_backbar"/>
+    <include layout="@layout/layout_backbar" />
 
 
     <ScrollView
@@ -41,7 +41,7 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="1px"
-                    android:layout_weight="1"></View>
+                    android:layout_weight="1" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -69,7 +69,7 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="1px"
-                    android:layout_weight="1"></View>
+                    android:layout_weight="1"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -125,8 +125,8 @@
 
                 <View
                     android:layout_width="0dp"
-                    android:layout_height="1sp"
-                    android:layout_weight="1"></View>
+                    android:layout_height="1px"
+                    android:layout_weight="1" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -153,8 +153,8 @@
 
                 <View
                     android:layout_width="0dp"
-                    android:layout_height="1sp"
-                    android:layout_weight="1"></View>
+                    android:layout_height="1px"
+                    android:layout_weight="1" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -181,8 +181,8 @@
 
                 <View
                     android:layout_width="0dp"
-                    android:layout_height="1sp"
-                    android:layout_weight="1"></View>
+                    android:layout_height="1px"
+                    android:layout_weight="1" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -207,15 +207,11 @@
                     android:layout_height="wrap_content"
                     android:text="@string/profiles" />
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1sp"
-                    android:layout_weight="1"></View>
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森" />
+                    android:paddingLeft="3dp"
+                    android:text="李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿李灿森" />
 
             </LinearLayout>
 
