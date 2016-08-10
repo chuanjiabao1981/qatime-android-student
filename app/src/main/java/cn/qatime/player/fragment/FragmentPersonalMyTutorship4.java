@@ -44,7 +44,7 @@ public class FragmentPersonalMyTutorship4 extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_personal_my_tutorship1, container, false);
+        View view = inflater.inflate(R.layout.fragment_personal_my_tutorship4, container, false);
         initview(view);
         list.add("1");
         list.add("1");
@@ -61,7 +61,7 @@ public class FragmentPersonalMyTutorship4 extends BaseFragment {
     private void initview(View view) {
         List = (PullToRefreshListView) view.findViewById(R.id.list);
 
-        adapter = new CommonAdapter<String>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship1) {
+        adapter = new CommonAdapter<String>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship4) {
             @Override
             public void convert(ViewHolder helper, String item, int position) {
             }

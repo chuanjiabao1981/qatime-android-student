@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">答疑时间</string>
+    <string name="app_name">DaYiTime</string>//答疑时间
+    <string name="submit">submit</string>//
 </resources>

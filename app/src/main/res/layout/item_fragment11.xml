@@ -59,7 +59,7 @@
 
         <TextView
             android:id="@+id/renshu"
-            android:drawableLeft="@drawable/shopping_trolley"
+            android:drawableLeft="@drawable/shopping_trolley16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"

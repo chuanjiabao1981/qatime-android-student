@@ -14,6 +14,9 @@ import cn.qatime.player.fragment.FragmentPersonalMyTutorship4;
 import cn.qatime.player.fragment.FragmentPersonalMyTutorship5;
 import cn.qatime.player.view.FragmentLayoutWithLine;
 
+/**
+ * 我的辅导
+ */
 public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3 ,R.id.tab_text4, R.id.tab_text5};
     FragmentLayoutWithLine fragmentlayout;
