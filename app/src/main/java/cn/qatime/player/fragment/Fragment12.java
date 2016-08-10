@@ -233,14 +233,14 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
             map.put("sort_by", timesorttype);
         }
 
-        if (!subjecttext.getText().equals("科目")) {
+        if (!subjecttext.getText().equals(getResources().getString(R.string.by_subject))) {
             try {
                 map.put("subject", URLEncoder.encode(subjecttext.getText().toString(), "UTF-8"));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
         }
-        if (!classtext.getText().equals("年级")) {
+        if (!classtext.getText().equals(getResources().getString(R.string.by_grade))) {
             try {
                 map.put("grade", URLEncoder.encode(classtext.getText().toString(), "UTF-8"));
             } catch (UnsupportedEncodingException e) {

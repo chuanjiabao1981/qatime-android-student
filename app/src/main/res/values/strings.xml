@@ -6,8 +6,6 @@
     <string name="loading">正在加载</string>
     <string name="release_to_load">松开加载</string>
     <string name="release_to_refresh">松开刷新</string>
-    Refreshing
-
     //fragment1
     <string name="app_name">答疑时间</string>
     <string name="home_page">首页</string>//首页
@@ -19,17 +17,49 @@
     <string name="by_time">按时间</string>
     <string name="by_subject">科目</string>
     <string name="by_grade">年级</string>
-    <string name="price">    价格:</string>
+    <string name="price">价格:</string>
     <string name="yuan">元</string>
     <string name="Total_class_hours">课时总数：</string>
     <string name="hours">课时</string>
     <string name="starting_dates">开课时间：</string>
-    <string name="to">    至</string>
+    <string name="to">至</string>
     <string name="state">状态：</string>
     <string name="cancel">取消</string>
     <string name="confirm">确定</string>//
     <string name="alignprice">111</string>//fragment12对齐
     <string name="alignto">1111111</string>//fragment12对齐
+
+    //
+    //排序
+    <string name="comprehensive_sort">综合排序</string>
+    <string name="in_price_low_to_high">按价格-低到高</string>
+    <string name="in_price_high_to_low">按价格-高到低</string>
+    <string name="in_number">按购买人数</string>
+    <string name="recruiting">招生中</string>
+    //科目
+    <string name="chinese">语文</string>
+    <string name="math">数学</string>
+    <string name="english">英语</string>
+    <string name="physics">物理</string>
+    <string name="chemistry">化学</string>
+    <string name="geography">地理</string>
+    <string name="politics">政治</string>
+    <string name="history">历史</string>
+    <string name="science">科学</string>
+    <string name="biology">生物</string>
+    //grade
+    <string name="high3">高三</string>
+    <string name="high2">高二</string>
+    <string name="high1">高一</string>
+    <string name="middle3">初三</string>
+    <string name="middle2">初二</string>
+    <string name="middle1">初一</string>
+    <string name="primary6">六年级</string>
+    <string name="primary5">五年级</string>
+    <string name="primary4">四年级</string>
+    <string name="primary3">三年级</string>
+    <string name="primary2">二年级</string>
+    <string name="primary1">一年级</string>
     //
     //fragment2
     <string name="course_to_be_done">待上课</string>
@@ -37,7 +67,6 @@
     <string name="all_course">全部课程</string>
     //
     //fragment4
-    Personal Center
     <string name="personal_center">个人中心</string>
     <string name="my_order">我的订单</string>
     <string name="paying">待付款</string>
@@ -52,5 +81,6 @@
     <string name="security_management">安全管理</string>
     <string name="setting">系统设置</string>
     <string name="new_edition">新版本</string>
+
 
 </resources>

@@ -72,12 +72,10 @@ public class MainActivity extends BaseFragmentActivity {
                 ((ImageView) lastTabView.findViewById(tab_img[lastPosition])).setImageResource(tabImages[lastPosition][1]);
                 ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffeb6a4b);
                 ((ImageView) currentTabView.findViewById(tab_img[position])).setImageResource(tabImages[position][0]);
-//                fragBaseFragments.get(position).onShow(lastPosition);
             }
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout, 0x1000);
         fragmentlayout.getViewPager().setOffscreenPageLimit(3);
-//        ((BaseFragment) fragBaseFragments.get(0)).onShow(0);
     }
 
     @Override
