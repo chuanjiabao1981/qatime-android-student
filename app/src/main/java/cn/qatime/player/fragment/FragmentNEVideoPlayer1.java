@@ -75,11 +75,13 @@ public class FragmentNEVideoPlayer1 extends BaseFragment {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page = 1;
+                listView.onRefreshComplete();
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page++;
+                listView.onRefreshComplete();
             }
         });
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

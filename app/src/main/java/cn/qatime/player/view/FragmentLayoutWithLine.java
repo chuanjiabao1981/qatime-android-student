@@ -211,11 +211,7 @@ public class FragmentLayoutWithLine extends LinearLayout implements ViewPager.On
         }
         this.position = position;
         int width = ScreenUtils.getScreenWidth(getContext()) / tabLayout.getChildCount();
-//        LogUtils.e("tanwidth" + width);
-//        LogUtils.e(position);
-//        v.setX(position * width);
-//        v.setX(position * width);
-//        v.setTranslationX(position * width);
+        v.setX(position * width);
     }
 
     public boolean isScorllToNext() {

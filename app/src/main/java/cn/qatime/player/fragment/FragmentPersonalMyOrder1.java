@@ -36,9 +36,9 @@ import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VolleyErrorListener;
 
 public class FragmentPersonalMyOrder1 extends BaseFragment {
-    private PullToRefreshListView List;
-    private java.util.List<RemedialClassBean.Data> list = new ArrayList<>();
-    private CommonAdapter<RemedialClassBean.Data> adapter;
+    private PullToRefreshListView listView;
+    private java.util.List<String> list = new ArrayList<>();
+    private CommonAdapter<String> adapter;
     private int page = 1;
 
     @Nullable
@@ -46,80 +46,49 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_personal_my_order1, container, false);
         initview(view);
-        initData(1);
+        list.add("1");
+        list.add("1");
+        list.add("1");
+        list.add("1");
+        list.add("1");
+        list.add("1");
+        list.add("1");
+        list.add("1");
+        list.add("1");
+        list.add("1");
+        list.add("1");
         return view;
     }
 
     private void initview(View view) {
-        List = (PullToRefreshListView) view.findViewById(R.id.list);
+        listView = (PullToRefreshListView) view.findViewById(R.id.list);
 
-        adapter = new CommonAdapter<RemedialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_order1) {
+        adapter = new CommonAdapter<String>(getActivity(), list, R.layout.item_fragment_personal_my_order1) {
             @Override
-            public void convert(ViewHolder helper, RemedialClassBean.Data item, int position) {
+            public void convert(ViewHolder helper, String item, int position) {
 
             }
         };
-        List.setAdapter(adapter);
+        listView.setAdapter(adapter);
 
-        List.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page = 1;
-                initData(1);
+                listView.onRefreshComplete();
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page++;
-                initData(2);
+                listView.onRefreshComplete();
             }
         });
-        List.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             }
         });
     }
 
-    /**
-     * @param type 1刷新
-     *             2加载更多
-     */
-    private void initData(final int type) {
-        Map<String, String> map = new HashMap<>();
-        map.put("Remember-Token", BaseApplication.getProfile().getToken());
-        map.put("page", String.valueOf(page));
-        map.put("per_page", "10");
-        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass, map), null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject jsonObject) {
-                        LogUtils.e(jsonObject.toString());
-                        if (type == 1) {
-                            list.clear();
-                        }
-                        String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(),
-                                DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
-                        List.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
-                        List.onRefreshComplete();
-
-                        try {
-                            Gson gson = new Gson();
-                            RemedialClassBean data = gson.fromJson(jsonObject.toString(), RemedialClassBean.class);
-                            list.addAll(data.getData());
-//                            adapter.notifyDataSetChanged();
-                        } catch (JsonSyntaxException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }, new VolleyErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
-                List.onRefreshComplete();
-            }
-        });
-        addToRequestQueue(request);
-    }
 }

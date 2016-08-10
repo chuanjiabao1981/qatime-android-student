@@ -1,5 +1,6 @@
 package cn.qatime.player.activity;
 
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.View;
@@ -18,7 +19,6 @@ import cn.qatime.player.view.FragmentLayoutWithLine;
 
 public class PersonalMyOrderActivity extends BaseFragmentActivity {
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3};
-    private CommonAdapter<RemedialClassBean.Data> adapter;
     FragmentLayoutWithLine fragmentlayout;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
     private int pager = 0;
@@ -27,15 +27,9 @@ public class PersonalMyOrderActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_my_order);
-            setTitle("我的订单");
+        setTitle("我的订单");
 
-        pager = getIntent().getIntExtra("pager",0);
-        //        setRight(R.mipmap.back_arrow, new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
+        pager = getIntent().getIntExtra("pager", 0);
         initView();
     }
 
@@ -62,6 +56,12 @@ public class PersonalMyOrderActivity extends BaseFragmentActivity {
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_personal_my_order, 0x0311);
         fragmentlayout.getViewPager().setOffscreenPageLimit(2);
-        fragmentlayout.setCurrenItem(pager);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                fragmentlayout.setCurrenItem(pager);
+            }
+        }, 500);
+
     }
 }

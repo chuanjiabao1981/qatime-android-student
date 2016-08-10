@@ -1,11 +1,15 @@
 package cn.qatime.player.activity;
 
 import cn.qatime.player.base.BaseFragmentActivity;
+
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
 import java.util.ArrayList;
+
 import cn.qatime.player.R;
 import cn.qatime.player.fragment.FragmentPersonalMyTutorship1;
 import cn.qatime.player.fragment.FragmentPersonalMyTutorship2;
@@ -19,7 +23,7 @@ import cn.qatime.player.view.FragmentLayoutWithLine;
  * 我的辅导
  */
 public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
-    private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3 ,R.id.tab_text4, R.id.tab_text5};
+    private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3, R.id.tab_text4, R.id.tab_text5};
     FragmentLayoutWithLine fragmentlayout;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
     private int pager = 0;
@@ -31,12 +35,6 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
         setTitle("我的辅导");
 
         pager = getIntent().getIntExtra("pager", 0);
-        //        setRight(R.mipmap.back_arrow, new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
         initView();
     }
 
@@ -65,8 +63,11 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tableout_personal_my_tutor, 0x0311);
         fragmentlayout.getViewPager().setOffscreenPageLimit(4);
-//        fragmentlayout.setCurrenItem(pager);
-        fragmentlayout.getViewPager().setCurrentItem(pager);
-        LogUtils.e("初始化");
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                fragmentlayout.setCurrenItem(pager);
+            }
+        }, 500);
     }
 }

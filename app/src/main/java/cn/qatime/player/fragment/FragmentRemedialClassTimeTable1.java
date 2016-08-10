@@ -38,8 +38,8 @@ import cn.qatime.player.utils.VolleyErrorListener;
 
 public class FragmentRemedialClassTimeTable1 extends BaseFragment {
     private PullToRefreshListView listView;
-    private java.util.List<RemedialClassBean.Data> list = new ArrayList<>();
-    private CommonAdapter<RemedialClassBean.Data> adapter;
+    private java.util.List<String> list = new ArrayList<>();
+    private CommonAdapter<String> adapter;
     private int page = 1;
 
     @Nullable
@@ -47,7 +47,15 @@ public class FragmentRemedialClassTimeTable1 extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_remedial_class_timetable1, container, false);
         initview(view);
-
+        list.add("1");
+        list.add("1");
+        list.add("1");
+        list.add("1");
+        list.add("1");
+        list.add("1");
+        list.add("1");
+        list.add("1");
+        list.add("1");
         return view;
     }
 
@@ -63,18 +71,18 @@ public class FragmentRemedialClassTimeTable1 extends BaseFragment {
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel("松开加载");
 
 
-        adapter = new CommonAdapter<RemedialClassBean.Data>(getActivity(), list, R.layout.item_fragment_remedial_class_time_table1) {
+        adapter = new CommonAdapter<String>(getActivity(), list, R.layout.item_fragment_remedial_class_time_table1) {
             @Override
-            public void convert(ViewHolder helper, RemedialClassBean.Data item, int position) {
-               helper.getView(R.id.image).setOnClickListener(
+            public void convert(ViewHolder helper, String item, int position) {
+                helper.getView(R.id.image).setOnClickListener(
                         new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                        intent.putExtra("pager", 2);
-                        startActivity(intent);
-                    }
-                });
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                                intent.putExtra("pager", 2);
+                                startActivity(intent);
+                            }
+                        });
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -90,13 +98,13 @@ public class FragmentRemedialClassTimeTable1 extends BaseFragment {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page = 1;
-
+                listView.onRefreshComplete();
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page++;
-
+                listView.onRefreshComplete();
             }
         });
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
