@@ -25,6 +25,8 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.Profile;
 import cn.qatime.player.utils.CheckUtil;
 import cn.qatime.player.utils.LogUtils;
+import cn.qatime.player.utils.SPUtils;
+import cn.qatime.player.utils.StringUtils;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VolleyErrorListener;
 import cn.qatime.player.view.CheckView;
@@ -62,7 +64,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         reload.setOnClickListener(this);
         checkview.setOnClickListener(this);
 
-        //TODO  測試賬號
+        if (!StringUtils.isNullOrBlanK(SPUtils.get(LoginActivity.this, "username", ""))) {
+            username.setText(SPUtils.get(LoginActivity.this, "username", "").toString());
+            if (!StringUtils.isNullOrBlanK(SPUtils.get(LoginActivity.this, "password", ""))) {
+                password.setText(SPUtils.get(LoginActivity.this, "password", "").toString());
+            }
+        }
+        String sign = getIntent().getStringExtra("sign");//从系统设置退出登录页面跳转而来，清除用户登录信息
+        if (!StringUtils.isNullOrBlanK(sign) && sign.equals("exit_login")) {
+            username.setText("");
+            password.setText("");
+        }
+        //TODO 测试账号
         username.setText("15617685965@163.com");
         password.setText("123456");
     }
@@ -75,27 +88,27 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     if (CheckUtil.checkNum(checkcode.getText().toString(), checkNum)) {
                         login();
                     } else {
-                        Toast.makeText(this, "验证码不正确",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "验证码不正确", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                }else {
+                } else {
                     login();
                 }
 
                 break;
             case R.id.register://注册
-                Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
                 break;
             case R.id.login_error://忘记密码
-                 intent = new Intent(LoginActivity.this,ForgetPasswordActivity.class);
+                intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
                 startActivity(intent);
                 break;
             case R.id.reload://重新换验证码
-      initCheckNum();
+                initCheckNum();
                 break;
             case R.id.checkview://重新换验证码
-      initCheckNum();
+                initCheckNum();
                 break;
         }
     }
@@ -115,6 +128,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     @Override
                     public void onResponse(JSONObject jsonObject) {
 //                        Log.e("asdsd", jsonObject.toString());
+                        SPUtils.put(LoginActivity.this, "username", username.getText().toString());
+                        SPUtils.put(LoginActivity.this, "password", password.getText().toString());
                         Gson gson = new Gson();
                         Profile profile = gson.fromJson(jsonObject.toString(), Profile.class);
                         if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {

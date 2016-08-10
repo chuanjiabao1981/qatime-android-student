@@ -1,10 +1,14 @@
 package cn.qatime.player.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -14,6 +18,7 @@ import cn.qatime.player.fragment.Fragment1;
 import cn.qatime.player.fragment.Fragment2;
 import cn.qatime.player.fragment.Fragment3;
 import cn.qatime.player.fragment.Fragment4;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.view.FragmentLayout;
 
 public class MainActivity extends BaseFragmentActivity {
@@ -28,6 +33,7 @@ public class MainActivity extends BaseFragmentActivity {
             {R.mipmap.tab_moments_1, R.mipmap.tab_moments_2},
             {R.mipmap.tab_video_1, R.mipmap.tab_video_2},
             {R.mipmap.tab_find_1, R.mipmap.tab_find_2}};
+
     /**
      * 当前用户信息
      */
@@ -72,5 +78,33 @@ public class MainActivity extends BaseFragmentActivity {
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout, 0x1000);
         fragmentlayout.getViewPager().setOffscreenPageLimit(3);
 //        ((BaseFragment) fragBaseFragments.get(0)).onShow(0);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constant.REQUEST_EXIT_LOGIN && resultCode == Constant.RESPONSE_EXIT_LOGIN) {
+            finish();
+        }
+    }
+
+
+    boolean flag = false;
+
+    @Override
+    public void onBackPressed() {
+        if (!flag) {
+            Toast toast = Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+            flag = true;
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
+                    flag = false;
+                }
+            }, 2500);
+        } else {
+            this.finish();
+        }
     }
 }

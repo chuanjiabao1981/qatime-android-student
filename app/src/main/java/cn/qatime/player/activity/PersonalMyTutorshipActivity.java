@@ -12,6 +12,7 @@ import cn.qatime.player.fragment.FragmentPersonalMyTutorship2;
 import cn.qatime.player.fragment.FragmentPersonalMyTutorship3;
 import cn.qatime.player.fragment.FragmentPersonalMyTutorship4;
 import cn.qatime.player.fragment.FragmentPersonalMyTutorship5;
+import cn.qatime.player.utils.LogUtils;
 import cn.qatime.player.view.FragmentLayoutWithLine;
 
 /**
@@ -63,7 +64,9 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
             }
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tableout_personal_my_tutor, 0x0311);
-        fragmentlayout.getViewPager().setOffscreenPageLimit(2);
-        fragmentlayout.setCurrenItem(pager);
+        fragmentlayout.getViewPager().setOffscreenPageLimit(4);
+//        fragmentlayout.setCurrenItem(pager);
+        fragmentlayout.getViewPager().setCurrentItem(pager);
+        LogUtils.e("初始化");
     }
 }

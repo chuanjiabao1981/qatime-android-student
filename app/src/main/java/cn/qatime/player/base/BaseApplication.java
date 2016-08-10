@@ -17,10 +17,16 @@ public class BaseApplication extends Application {
     }
 
     public static Profile getProfile() {
-        return profile==null?new Profile():profile;
+        return profile == null ? new Profile() : profile;
     }
 
     public static void setProfile(Profile profile) {
         BaseApplication.profile = profile;
+    }
+
+    public static void clearToken() {
+        if (profile != null && profile.getData() != null) {
+            profile.getData().setRemember_token("");
+        }
     }
 }

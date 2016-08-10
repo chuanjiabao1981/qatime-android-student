@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,6 +22,8 @@ import android.widget.Toast;
 import java.util.List;
 
 import cn.qatime.player.R;
+import cn.qatime.player.utils.LogUtils;
+import cn.qatime.player.utils.ScreenUtils;
 
 /**
  * 带下划线的
@@ -45,7 +48,6 @@ public class FragmentLayoutWithLine extends LinearLayout implements ViewPager.On
 
     public interface ChangeFragmentListener {
         /**
-         * @param positon        切换到哪项
          * @param lastTabView    上一项的tab视图，用来改变没选中tab状态
          * @param currentTabView 当前想的tab视图,用来改变选中的tab样式
          */
@@ -73,11 +75,9 @@ public class FragmentLayoutWithLine extends LinearLayout implements ViewPager.On
      */
     public void setAdapter(List<Fragment> list, int tabLayoutId, int id) {
         this.setOrientation(LinearLayout.VERTICAL);
-        FrameLayout tabFrame = (FrameLayout) View.inflate(context, tabLayoutId,
-                null);
+        FrameLayout tabFrame = (FrameLayout) View.inflate(context, tabLayoutId, null);
         tabLayout = (LinearLayout) (tabFrame.findViewById(R.id.tabLayout));
-        tabLayout.setLayoutParams(new android.widget.FrameLayout.LayoutParams(
-                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        tabLayout.setLayoutParams(new android.widget.FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         this.list = list;
         fragmentAdapter = new Fragment_viewpager_Adapter(context.getSupportFragmentManager());
         viewPager = new MyViewPager(context);
@@ -101,8 +101,7 @@ public class FragmentLayoutWithLine extends LinearLayout implements ViewPager.On
         viewPager.setOnPageChangeListener(this);
         // 添加导航动画横线
         v = new View(context);
-        android.widget.FrameLayout.LayoutParams vParams = new android.widget.FrameLayout.LayoutParams(
-                180, tabHeight, Gravity.BOTTOM);
+        android.widget.FrameLayout.LayoutParams vParams = new android.widget.FrameLayout.LayoutParams(180, tabHeight, Gravity.BOTTOM);
         v.setLayoutParams(vParams);
         tabFrame.addView(v);
         setTabLine();
@@ -119,8 +118,7 @@ public class FragmentLayoutWithLine extends LinearLayout implements ViewPager.On
                     vto.removeOnPreDrawListener(this);
                 }
                 tabWidth = tabLayout.getChildAt(0).getWidth();
-                android.widget.FrameLayout.LayoutParams vParams = new android.widget.FrameLayout.LayoutParams(
-                        tabLayout.getChildAt(0).getWidth(), tabHeight,
+                android.widget.FrameLayout.LayoutParams vParams = new android.widget.FrameLayout.LayoutParams(tabLayout.getChildAt(0).getWidth(), tabHeight,
                         Gravity.BOTTOM);
                 v.setLayoutParams(vParams);
                 v.setBackgroundColor(tabColor);
@@ -141,7 +139,7 @@ public class FragmentLayoutWithLine extends LinearLayout implements ViewPager.On
         }
 
         @Override
-        public android.support.v4.app.Fragment getItem(int arg0) {
+        public Fragment getItem(int arg0) {
             return list.get(arg0);
         }
 
@@ -181,7 +179,6 @@ public class FragmentLayoutWithLine extends LinearLayout implements ViewPager.On
     @Override
     public void onPageScrolled(int arg0, float arg1, int arg2) {
         FragmentLayoutWithLine.this.v.setX(arg0 * tabWidth + tabWidth * arg1);
-
     }
 
     @Override
@@ -209,6 +206,16 @@ public class FragmentLayoutWithLine extends LinearLayout implements ViewPager.On
 
     public void setCurrenItem(int position) {
         viewPager.setCurrentItem(position, isScorll);
+        if (changeListener != null) {
+            changeListener.change(0, position, tabLayout.getChildAt(0), tabLayout.getChildAt(position));
+        }
+        this.position = position;
+        int width = ScreenUtils.getScreenWidth(getContext()) / tabLayout.getChildCount();
+//        LogUtils.e("tanwidth" + width);
+//        LogUtils.e(position);
+//        v.setX(position * width);
+//        v.setX(position * width);
+//        v.setTranslationX(position * width);
     }
 
     public boolean isScorllToNext() {
