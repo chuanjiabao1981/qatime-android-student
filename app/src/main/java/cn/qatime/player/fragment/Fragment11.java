@@ -12,9 +12,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.android.volley.Response;
+import com.android.volley.AuthFailureError;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -31,13 +30,13 @@ import cn.qatime.player.R;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.adapter.CommonAdapter;
 import cn.qatime.player.adapter.ViewHolder;
-import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.RemedialClassBean;
-import cn.qatime.player.utils.LogUtils;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.ScreenUtils;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VolleyErrorListener;
+import cn.qatime.player.utils.VolleyListener;
 
 public class Fragment11 extends BaseFragment {
     private PullToRefreshGridView grid;
@@ -106,15 +105,10 @@ public class Fragment11 extends BaseFragment {
      *             2加载更多
      */
     private void initData(final int type) {
-        Map<String, String> map = new HashMap<>();
-        map.put("Remember-Token", BaseApplication.getProfile().getToken());
-        map.put("page", String.valueOf(page));
-        map.put("per_page", "10");
-        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass, map), null,
-                new Response.Listener<JSONObject>() {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass, null,
+                new VolleyListener(getActivity()) {
                     @Override
-                    public void onResponse(JSONObject jsonObject) {
-                        LogUtils.e(jsonObject.toString());
+                    protected void onSuccess(JSONObject response) {
                         if (type == 1) {
                             list.clear();
                         }
@@ -125,12 +119,16 @@ public class Fragment11 extends BaseFragment {
 
                         try {
                             Gson gson = new Gson();
-                            RemedialClassBean data = gson.fromJson(jsonObject.toString(), RemedialClassBean.class);
+                            RemedialClassBean data = gson.fromJson(response.toString(), RemedialClassBean.class);
                             list.addAll(data.getData());
                             adapter.notifyDataSetChanged();
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
                         }
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
 
                     }
                 }, new VolleyErrorListener() {
@@ -139,7 +137,15 @@ public class Fragment11 extends BaseFragment {
                 super.onErrorResponse(volleyError);
                 grid.onRefreshComplete();
             }
-        });
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("page", String.valueOf(page));
+                map.put("per_page", "10");
+                return map;
+            }
+        };
         addToRequestQueue(request);
     }
 }

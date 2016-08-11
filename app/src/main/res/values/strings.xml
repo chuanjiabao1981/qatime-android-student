@@ -147,4 +147,7 @@
     //忘记密码
     <string name="hint_phone_number_forget">请输入手机号码</string>
     <string name="hint_password_forget">不能为空</string>
+
+
+    <string name="use">使用</string>
 </resources>

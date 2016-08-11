@@ -82,7 +82,7 @@ public class CropImageActivity extends BaseActivity {
             cropper.setCropMode(cropMode);
         }
 
-        setRightText("使用", new View.OnClickListener() {
+        setRightText(getResources().getString(R.string.use), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cropper.startCrop(Uri.fromFile(new File(Constant.CACHEPATH + "/" + UUID.randomUUID().toString().replace("-", "") + ".jpg")), null, new SaveCallback() {

@@ -75,9 +75,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             username.setText("");
             password.setText("");
         }
-        //TODO 测试账号
-        username.setText("15617685965@163.com");
-        password.setText("123456");
+//        username.setText("15617685965@163.com");
+//        password.setText("123456");
     }
 
     @Override
@@ -127,7 +126,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
-//                        Log.e("asdsd", jsonObject.toString());
+                        LogUtils.e("登录", jsonObject.toString());
                         SPUtils.put(LoginActivity.this, "username", username.getText().toString());
                         SPUtils.put(LoginActivity.this, "password", password.getText().toString());
                         Gson gson = new Gson();

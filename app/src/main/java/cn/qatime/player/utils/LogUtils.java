@@ -11,7 +11,12 @@ public class LogUtils {
 
     public static void e(Object object) {
         if (LogUtils.isDebug) {
-            Log.e("dayitime", object.toString());
+            if (!StringUtils.isNullOrBlanK(object)) {
+                Log.e("dayitime", object.toString());
+            } else {
+            LogUtils.e("参数为空");
+            }
+
         }
     }
 
@@ -20,13 +25,14 @@ public class LogUtils {
             Log.e("dayitime" + tag, object.toString());
         }
     }
+
     public static void e(String tag, Object object, Exception io) {
         if (LogUtils.isDebug) {
-            Log.e("dayitime" + tag, object.toString(),io);
+            Log.e("dayitime" + tag, object.toString(), io);
         }
     }
 
-    public static void w(String tag,  Object object) {
+    public static void w(String tag, Object object) {
         if (LogUtils.isDebug) {
             Log.w("dayitime" + tag, object.toString());
         }

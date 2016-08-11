@@ -146,5 +146,7 @@
     <string name="next">Continue</string>//下一步
     <string name="can_not_be_empty">It can not be empty!</string>//不能为空
     <string name="system_setting">System setting</string>//系统设置
+
+    <string name="use">use it</string>//使用
 </resources>
 

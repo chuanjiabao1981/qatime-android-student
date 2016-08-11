@@ -14,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.GsonBuilder;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
@@ -40,6 +41,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         initView();
         LogUtils.e(Constant.CACHEPATH);
         replace.setOnClickListener(this);
+        headsculpture.setImageURI(Uri.parse("/storage/emulated/0/KuwoMusic/welcome/20160808-ad.jpg"));
     }
 
     private void initView() {
