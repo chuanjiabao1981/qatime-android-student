@@ -49,7 +49,7 @@ public class ForgetPasswordActivity extends BaseActivity {
 
         @Override
         public void onFinish() {// 计时完毕
-            getcode.setText("获取验证码");
+            getcode.setText(getResources().getString(R.string.get_verification_code));
             getcode.setClickable(true);
         }
 

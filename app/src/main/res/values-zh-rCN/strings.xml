@@ -26,6 +26,9 @@
     <string name="state">状态：</string>
     <string name="cancel">取消</string>
     <string name="confirm">确定</string>//
+    <string name="by_price_up">按价格↑</string>
+    <string name="by_price_down">按价格↓</string>
+
     <string name="alignprice">111</string>//fragment12对齐
     <string name="alignto">1111111</string>//fragment12对齐
 
@@ -107,5 +110,36 @@
     <string name="method_payment">支付方式</string>
     <string name="amount_payment">支付金额</string>
     <string name="cancel_order">取消订单</string>
+    <string name="delete_order">删除订单</string>
+    <string name="reorder">重新下单</string>
     <string name="pay">付款</string>
+    <string name="deal_down">交易完成</string>//
+    <string name="deal_closed">交易关闭</string>//
+    //详情
+    <string name="information_detail">信息详情</string>
+    <string name="teacher_detail">教师详情</string>
+    <string name="course_list">课程列表</string>
+    //课程详情
+    <string name="Join_the_audition">加入试听</string>
+    <string name="purchase_now">立即购买</string>
+    //登录
+    <string name="account">请输入账号</string>
+    <string name="password">请输入密码</string>
+    <string name="register">注册</string>
+    <string name="login">登录</string>
+    <string name="forget_password">忘记密码</string>
+    <string name="verification_code">请输入验证码</string>
+    <string name="change_it">看不清，换一张？</string>
+    <string name="logout">退出登录</string>
+    //注册
+    <string name="set_for_login">注册</string>
+    <string name="get_verification_code">获取校验码</string>
+    <string name="hint_input_verification_code">输入校验码</string>
+    <string name="hint_phone_number">请输入大陆地区11位手机号码</string>
+    <string name="hint_input_password">输入登录密码</string>
+    <string name="hint_confirm_password">确认登录密码</string>
+    <string name="hint_qatime_register_code">请输入答疑时间注册码</string>
+    <string name="agree">同意</string>
+    <string name="next">下一步</string>
+    <string name="can_not_be_empty">不能为空</string>
 </resources>

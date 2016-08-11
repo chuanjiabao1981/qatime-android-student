@@ -22,7 +22,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_system_setting);
-        setTitle("系统设置");
+        setTitle(getResources().getString(R.string.system_setting));
         exit = (Button) findViewById(R.id.exit);
         exit.setOnClickListener(this);
     }

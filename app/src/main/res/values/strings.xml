@@ -101,7 +101,7 @@
     <string name="girl">我是女神</string>
     <string name="finish">完成</string>
 
-//我的订单
+    //我的订单
     <string name="detail_of_order">订单详情</string>
     <string name="waiting_for_payment">等待付款中</string>
     <string name="order_number">订单编号</string>
@@ -122,14 +122,29 @@
     //课程详情
     <string name="Join_the_audition">加入试听</string>
     <string name="purchase_now">立即购买</string>
-//登录
+    //登录
     <string name="account">请输入账号</string>
     <string name="password">请输入密码</string>
     <string name="register">注册</string>
     <string name="login">登录</string>
     <string name="forget_password">忘记密码</string>
     <string name="verification_code">请输入验证码</string>
-
-
     <string name="change_it">看不清，换一张？</string>
+    <string name="logout">退出登录</string>
+    <string name="press_another_exit">再按一次退出程序</string>
+    //注册
+    <string name="set_for_login">注册</string>
+    <string name="get_verification_code">获取校验码</string>
+    <string name="hint_input_verification_code">输入校验码</string>
+    <string name="hint_phone_number">请输入大陆地区11位手机号码</string>
+    <string name="hint_input_password">输入登录密码</string>
+    <string name="hint_confirm_password">确认登录密码</string>
+    <string name="hint_qatime_register_code">请输入答疑时间注册码</string>
+    <string name="agree">同意</string>
+    <string name="next">下一步</string>
+    <string name="can_not_be_empty">不能为空</string>
+    <string name="system_setting">系统设置</string>
+    //忘记密码
+    <string name="hint_phone_number_forget">请输入手机号码</string>
+    <string name="hint_password_forget">不能为空</string>
 </resources>

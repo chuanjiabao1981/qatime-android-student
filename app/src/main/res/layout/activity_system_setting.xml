@@ -21,5 +21,5 @@
         android:layout_marginLeft="10dp"
         android:textColor="#fff"
         android:layout_marginRight="10dp"
-        android:text="退出登录" />
+        android:text="@string/logout" />
 </RelativeLayout>

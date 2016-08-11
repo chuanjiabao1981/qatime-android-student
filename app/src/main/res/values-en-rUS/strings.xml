@@ -17,7 +17,7 @@
     <string name="by_time">By Time</string>//按时间
     <string name="by_subject">Subject</string>//科目
     <string name="by_grade">Grade</string>//年级
-    <string name="price">    Price:</string>//价格
+    <string name="price">Price:</string>//价格
     <string name="yuan">YUAN</string>//
     <string name="Total_class_hours">Total Hours:</string>//课时总数
     <string name="hours">Hours</string>//课时
@@ -115,7 +115,8 @@
     <string name="deal_closed">Deal closed</string>//交易关闭
     <string name="pay">Pay</string>//付款
     //详情
-    <string name="information_detail">Information detail</string> //信息详情
+    <string name="information_detail">Information detail</string>
+    //信息详情
     <string name="teacher_detail">Teacher detail</string>//教师详情
     <string name="course_list">Course list</string>//课程列表
     //课程详情
@@ -123,11 +124,27 @@
     <string name="Join_the_audition">Join the audition</string>//加入试听
     <string name="purchase_now">Purchase now</string>//立即购买
     //登录
-    <string name="account">Account</string>
+    <string name="account">Account</string>//请输入账户
     <string name="password">Password</string>
-    <string name="register">Create new account</string>
-    <string name="login">Sign in</string>
-    <string name="forget_password">Forget password</string>
-    <string name="verification_code">Verification Code</string>
-    <string name="change_it">Change it?</string>
+    <string name="register">Create new account</string>//注册
+    <string name="login">Sign in</string>//登陆
+    <string name="forget_password">Forget password</string>//忘记密码
+    <string name="verification_code">Verification Code</string>//验证码
+    <string name="change_it">Change it?</string>//看不清 换一张
+    <string name="logout">Logout</string>//退出登录
+    <string name="press_another_exit">press another to exit</string>//再按一次退出程序
+    //注册
+    <string name="set_for_login">Setting your account information</string>//设置登录
+    <string name="get_verification_code">Get verification code</string>//获取校验码
+    <string name="hint_input_verification_code">Please input verification code</string>//输入校验码
+    <string name="hint_phone_number">Please enter a 11 phone number in China</string>//输入手机号码
+    <string name="hint_input_password">Input password</string>//输入密码
+    <string name="hint_confirm_password">Confirm your password</string>//确认登录密码
+    <string name="hint_qatime_register_code">Please enter the qa-time register code</string>
+    //请输入答疑时间注册码
+    <string name="agree">Agree</string>//同意
+    <string name="next">Continue</string>//下一步
+    <string name="can_not_be_empty">It can not be empty!</string>//不能为空
+    <string name="system_setting">System setting</string>//系统设置
 </resources>
+
