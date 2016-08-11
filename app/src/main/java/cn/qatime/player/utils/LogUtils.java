@@ -14,7 +14,7 @@ public class LogUtils {
             if (!StringUtils.isNullOrBlanK(object)) {
                 Log.e("dayitime", object.toString());
             } else {
-            LogUtils.e("参数为空");
+            LogUtils.e("object 空");
             }
 
         }

@@ -22,7 +22,14 @@ public class UrlUtils {
     public static String getUrl(String function, Map<String, String> params) {
         String url;
         url = function + "?" + Map2String(params);
-        LogUtils.e("请求地址------    " + url);
+        url.trim();
+        if (url.endsWith("&")) {
+            url.trim().substring(0, url.length() - 1);
+        }
+        if (url.endsWith("&")) {
+            url.substring(0, url.length() - 1);
+        }
+//        LogUtils.e("请求地址------    " + url);
         return url;
     }
 
@@ -37,17 +44,10 @@ public class UrlUtils {
         StringBuilder sb = new StringBuilder();
         for (Iterator iterator = map.entrySet().iterator(); iterator.hasNext(); ) {
             entry = (Map.Entry) iterator.next();
-            if (entry.getKey().equals("Remember-Token") && StringUtils.isNullOrBlanK(entry.getValue())) {
-                LogUtils.e("token ************************************is null");
-            }
             if (!StringUtils.isNullOrBlanK(entry.getKey()) && !StringUtils.isNullOrBlanK(entry.getValue())) {
                 sb.append(entry.getKey().toString()).append("=").append(entry.getValue().toString()).append(iterator.hasNext() ? "&" : "");
             }
         }
-        String url = sb.toString();
-        if (url.endsWith("&") && url.length() > 1) {
-            url.substring(0, url.length() - 1);
-        }
-        return url;
+        return sb.toString();
     }
 }

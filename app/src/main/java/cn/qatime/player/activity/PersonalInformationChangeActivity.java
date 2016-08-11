@@ -12,9 +12,13 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.GsonBuilder;
+
+import java.io.File;
+import java.net.URI;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
@@ -39,9 +43,9 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_information_change);
         initView();
-        LogUtils.e(Constant.CACHEPATH);
+//        LogUtils.e(Constant.CACHEPATH);
         replace.setOnClickListener(this);
-        headsculpture.setImageURI(Uri.parse("/storage/emulated/0/KuwoMusic/welcome/20160808-ad.jpg"));
+//        headsculpture.setImageURI(Uri.parse("/storage/emulated/0/KuwoMusic/welcome/20160808-ad.jpg"));
     }
 
     private void initView() {
@@ -87,7 +91,13 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
             } else if (resultCode == Constant.RESPONSE_PICTURE_SELECT) {//选择照片返回的照片
                 if (data != null) {
                     ImageItem image = (ImageItem) data.getSerializableExtra("data");
-
+//                    LogUtils.e(image.imageId);
+//                    LogUtils.e(image.imagePath);
+//                    LogUtils.e(image.thumbnailPath);
+//                    if (!new File("file://" + image.imagePath).exists()) {
+//                        Toast.makeText(this, "您所选图片不可用", Toast.LENGTH_SHORT).show();
+//                        return;
+//                    }
                     if (image != null && !StringUtils.isNullOrBlanK(image.imageId)) {
                         Intent intent = new Intent(PersonalInformationChangeActivity.this, CropImageActivity.class);
                         intent.putExtra("id", "content://media/external/images/media/" + image.imageId);
@@ -100,8 +110,12 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
             LogUtils.e("裁剪", "回来");
             if (data != null) {
                 String imageUrl = data.getStringExtra("bitmap");
+                LogUtils.e(imageUrl);
+                if (new File(imageUrl).exists()){
+                    LogUtils.e("回来成功");
+                }
                 if (!StringUtils.isNullOrBlanK(imageUrl)) {
-                    Glide.with(this).load(imageUrl).crossFade().into(headsculpture);
+                    Glide.with(this).load(Uri.fromFile(new File(imageUrl))).crossFade().into(headsculpture);
                 }
             }
         }

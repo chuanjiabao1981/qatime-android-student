@@ -30,9 +30,12 @@ import cn.qatime.player.R;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.adapter.CommonAdapter;
 import cn.qatime.player.adapter.ViewHolder;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.RemedialClassBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.JsonUtils;
+import cn.qatime.player.utils.LogUtils;
 import cn.qatime.player.utils.ScreenUtils;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VolleyErrorListener;
@@ -105,7 +108,10 @@ public class Fragment11 extends BaseFragment {
      *             2加载更多
      */
     private void initData(final int type) {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass, null,
+        Map<String, String> map = new HashMap<>();
+        map.put("page", String.valueOf(page));
+        map.put("per_page", "10");
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass,map), null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -118,8 +124,7 @@ public class Fragment11 extends BaseFragment {
                         grid.onRefreshComplete();
 
                         try {
-                            Gson gson = new Gson();
-                            RemedialClassBean data = gson.fromJson(response.toString(), RemedialClassBean.class);
+                            RemedialClassBean data = JsonUtils.objectFromJson(response.toString(), RemedialClassBean.class);
                             list.addAll(data.getData());
                             adapter.notifyDataSetChanged();
                         } catch (JsonSyntaxException e) {
@@ -137,15 +142,7 @@ public class Fragment11 extends BaseFragment {
                 super.onErrorResponse(volleyError);
                 grid.onRefreshComplete();
             }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                map.put("page", String.valueOf(page));
-                map.put("per_page", "10");
-                return map;
-            }
-        };
+        });
         addToRequestQueue(request);
     }
 }

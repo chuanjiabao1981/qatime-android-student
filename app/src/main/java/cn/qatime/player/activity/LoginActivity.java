@@ -24,11 +24,13 @@ import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.Profile;
 import cn.qatime.player.utils.CheckUtil;
+import cn.qatime.player.utils.JsonUtils;
 import cn.qatime.player.utils.LogUtils;
 import cn.qatime.player.utils.SPUtils;
 import cn.qatime.player.utils.StringUtils;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VolleyErrorListener;
+import cn.qatime.player.utils.VolleyListener;
 import cn.qatime.player.view.CheckView;
 
 /**
@@ -42,6 +44,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private int[] checkNum = null;
     private View checklayout;
     private EditText checkcode;
+    private Button login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +56,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         checkcode = (EditText) findViewById(R.id.checkcode);
         username = (EditText) findViewById(R.id.name);
         password = (EditText) findViewById(R.id.pass);
-        Button login = (Button) findViewById(R.id.login);
+        login = (Button) findViewById(R.id.login);
         Button register = (Button) findViewById(R.id.register);
         View loginerror = findViewById(R.id.login_error);
         View reload = findViewById(R.id.reload);
@@ -83,10 +86,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.login://登陆
+                login.setClickable(false);
                 if (checklayout.getVisibility() == View.VISIBLE) {
                     if (CheckUtil.checkNum(checkcode.getText().toString(), checkNum)) {
                         login();
                     } else {
+                        login.setClickable(true);
                         Toast.makeText(this, "验证码不正确", Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -116,6 +121,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
         if (TextUtils.isEmpty(username.getText().toString()) || TextUtils.isEmpty(password.getText().toString())) {
             Toast.makeText(this, "不能为空", Toast.LENGTH_SHORT).show();
+            login.setClickable(true);
             return;
         }
         Map<String, String> map = new HashMap<>();
@@ -123,14 +129,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         map.put("password", password.getText().toString());
         map.put("client_type", "app");
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlLogin, map), null,
-                new Response.Listener<JSONObject>() {
+                new VolleyListener(LoginActivity.this) {
                     @Override
-                    public void onResponse(JSONObject jsonObject) {
-                        LogUtils.e("登录", jsonObject.toString());
+                    protected void onSuccess(JSONObject response) {
+                        login.setClickable(true);
+                        LogUtils.e("登录", response.toString());
                         SPUtils.put(LoginActivity.this, "username", username.getText().toString());
                         SPUtils.put(LoginActivity.this, "password", password.getText().toString());
-                        Gson gson = new Gson();
-                        Profile profile = gson.fromJson(jsonObject.toString(), Profile.class);
+                        Profile profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
                         if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
                             BaseApplication.setProfile(profile);
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -140,11 +146,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             //没有数据或token
                         }
                     }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+
+                    }
                 }, new VolleyErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
-                LogUtils.e(volleyError.getMessage());
+                login.setClickable(true);
                 password.setText("");
                 //当密码错误5次以上，开始使用验证码
                 errornum++;

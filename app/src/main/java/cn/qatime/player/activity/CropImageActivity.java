@@ -84,14 +84,17 @@ public class CropImageActivity extends BaseActivity {
 
         setRightText(getResources().getString(R.string.use), new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
+                v.setClickable(false);
                 cropper.startCrop(Uri.fromFile(new File(Constant.CACHEPATH + "/" + UUID.randomUUID().toString().replace("-", "") + ".jpg")), null, new SaveCallback() {
                     @Override
                     public void onSuccess(Uri outputUri) {
                         Intent intent = new Intent();
                         intent.putExtra("bitmap", outputUri.getPath());
                         setResult(Constant.PHOTO_CROP, intent);
+                        v.setClickable(true);
                         finish();
+
                     }
 
                     @Override

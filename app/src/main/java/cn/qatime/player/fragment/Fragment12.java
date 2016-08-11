@@ -49,6 +49,7 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.RemedialClassBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.JsonUtils;
 import cn.qatime.player.utils.KeyBoardUtils;
 import cn.qatime.player.utils.MDatePickerDialog;
 import cn.qatime.player.utils.ScreenUtils;
@@ -224,8 +225,34 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
         if (type == 1) {
             page = 1;
         }
+        Map<String, String> map = new HashMap<>();
+        map.put("page", String.valueOf(page));
+        map.put("per_page", "10");
+        if (!TextUtils.isEmpty(timesorttype)) {
+            map.put("sort_by", timesorttype);
+        }
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass, null,
+        if (!subjecttext.getText().equals(getResources().getString(R.string.by_subject))) {
+            try {
+                map.put("subject", URLEncoder.encode(subjecttext.getText().toString(), "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+        if (!classtext.getText().equals(getResources().getString(R.string.by_grade))) {
+            try {
+                map.put("grade", URLEncoder.encode(classtext.getText().toString(), "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+
+        map.put("price_floor", priceLow.getText().toString());
+        map.put("price_ceil", priceHigh.getText().toString());
+        map.put("class_date_floor", subjectLow.getText().toString());
+        map.put("class_date_ceil", subjectHigh.getText().toString());
+        map.put("status", status);
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass, map), null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -238,9 +265,8 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                         grid.onRefreshComplete();
 
                         try {
-                            Gson gson = new Gson();
-                            RemedialClassBean data = gson.fromJson(response.toString(), RemedialClassBean.class);
-//                            list.addAll(data.getData());
+                            RemedialClassBean data = JsonUtils.objectFromJson(response.toString(), RemedialClassBean.class);
+                            list.addAll(data.getData());
                             adapter.notifyDataSetChanged();
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
@@ -258,40 +284,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 super.onErrorResponse(volleyError);
                 grid.onRefreshComplete();
             }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                map.put("Remember-Token", BaseApplication.getProfile().getToken());
-                map.put("page", String.valueOf(page));
-                map.put("per_page", "10");
-                if (!TextUtils.isEmpty(timesorttype)) {
-                    map.put("sort_by", timesorttype);
-                }
-
-                if (!subjecttext.getText().equals(getResources().getString(R.string.by_subject))) {
-                    try {
-                        map.put("subject", URLEncoder.encode(subjecttext.getText().toString(), "UTF-8"));
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (!classtext.getText().equals(getResources().getString(R.string.by_grade))) {
-                    try {
-                        map.put("grade", URLEncoder.encode(classtext.getText().toString(), "UTF-8"));
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                map.put("price_floor", priceLow.getText().toString());
-                map.put("price_ceil", priceHigh.getText().toString());
-                map.put("class_date_floor", subjectLow.getText().toString());
-                map.put("class_date_ceil", subjectHigh.getText().toString());
-                map.put("status", status);
-                return map;
-            }
-        };
+        });
 
         addToRequestQueue(request);
     }
