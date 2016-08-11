@@ -19,10 +19,13 @@ import com.google.gson.GsonBuilder;
 
 import java.io.File;
 import java.net.URI;
+import java.text.ParseException;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.bean.ImageItem;
+import cn.qatime.player.bean.PersonalInformationBean;
+import cn.qatime.player.transformation.GlideCircleTransform;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.LogUtils;
 import cn.qatime.player.utils.StringUtils;
@@ -37,15 +40,42 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     Spinner spinner;
     TextView complete;
     private Uri captureUri;
+    private EditText describe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_information_change);
         initView();
-//        LogUtils.e(Constant.CACHEPATH);
         replace.setOnClickListener(this);
-//        headsculpture.setImageURI(Uri.parse("/storage/emulated/0/KuwoMusic/welcome/20160808-ad.jpg"));
+
+        PersonalInformationBean data = (PersonalInformationBean) getIntent().getSerializableExtra("data");
+        if (data != null && data.getData() != null) {
+            Glide.with(PersonalInformationChangeActivity.this).load(data.getData().getSmall_avatar_url()).placeholder(R.drawable.personal_information_head).transform(new GlideCircleTransform(PersonalInformationChangeActivity.this)).crossFade().into(headsculpture);
+            name.setText(data.getData().getName());
+            if (!StringUtils.isNullOrBlanK(data.getData().getGender())) {
+                if (data.getData().getGender().equals("male")) {
+                   men.setChecked(true);
+                    women.setChecked(false);
+                } else {
+                    men.setChecked(false);
+                    women.setChecked(true);
+                }
+            }
+//            try {
+//                birthday.setText(format.format(parse.parse(data.getData().getBirthday())));
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+            if (!StringUtils.isNullOrBlanK(data.getData().getGrade())) {
+//                grade.setText(data.getData().getGrade());
+            }
+//            if (!StringUtils.isNullOrBlanK(data.getData().getProvince()) && !StringUtils.isNullOrBlanK(data.getData().getCity())) {
+//                region.setText(data.getData().getProvince() + " " + data.getData().getCity());
+//            }
+//                            school
+            describe.setText(data.getData().getDesc());
+        }
     }
 
     private void initView() {
@@ -56,8 +86,8 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         women = (RadioButton) findViewById(R.id.women);
         radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
         spinner = (Spinner) findViewById(R.id.spinner);
+        describe = (EditText) findViewById(R.id.describe);
         complete = (TextView) findViewById(R.id.complete);
-        men.setChecked(true);
     }
 
     @Override
@@ -111,11 +141,11 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
             if (data != null) {
                 String imageUrl = data.getStringExtra("bitmap");
                 LogUtils.e(imageUrl);
-                if (new File(imageUrl).exists()){
+                if (new File(imageUrl).exists()) {
                     LogUtils.e("回来成功");
                 }
                 if (!StringUtils.isNullOrBlanK(imageUrl)) {
-                    Glide.with(this).load(Uri.fromFile(new File(imageUrl))).crossFade().into(headsculpture);
+                    Glide.with(this).load(Uri.fromFile(new File(imageUrl))).transform(new GlideCircleTransform(this)).crossFade().into(headsculpture);
                 }
             }
         }

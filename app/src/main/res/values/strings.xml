@@ -100,6 +100,8 @@
     <string name="boy">我是男神</string>
     <string name="girl">我是女神</string>
     <string name="finish">完成</string>
+    <string name="male">男</string>
+    <string name="female">女</string>
 
     //我的订单
     <string name="detail_of_order">订单详情</string>

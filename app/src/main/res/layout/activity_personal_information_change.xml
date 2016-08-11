@@ -170,8 +170,8 @@
                     android:text="@string/birthday" />
 
                 <!--<DatePicker-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="match_parent" />-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent" />-->
 
             </LinearLayout>
 
@@ -228,6 +228,7 @@
                     android:text="@string/profiles" />
 
                 <EditText
+                    android:id="@+id/describe"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

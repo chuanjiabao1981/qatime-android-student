@@ -6,17 +6,18 @@
 
     <include layout="@layout/layout_backbar" />
 
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="20dp">
 
             <ImageView
+                android:id="@+id/head_sculpture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -44,9 +45,10 @@
                     android:layout_weight="1" />
 
                 <TextView
+                    android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="李灿森" />
+                    android:text="@string/name" />
 
             </LinearLayout>
 
@@ -69,12 +71,13 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="1px"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
                 <TextView
+                    android:id="@+id/sex"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="男神" />
+                    android:text="@string/sex" />
 
             </LinearLayout>
 
@@ -87,7 +90,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-
                 android:padding="15dp">
 
                 <TextView
@@ -98,12 +100,13 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="1px"
-                    android:layout_weight="1"></View>
+                    android:layout_weight="1" />
 
                 <TextView
+                    android:id="@+id/birthday"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1988年12月31日" />
+                    android:text="0000年00月00日" />
 
             </LinearLayout>
 
@@ -129,6 +132,7 @@
                     android:layout_weight="1" />
 
                 <TextView
+                    android:id="@+id/grade"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="高一" />
@@ -157,6 +161,7 @@
                     android:layout_weight="1" />
 
                 <TextView
+                    android:id="@+id/region"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="北京市 宣武区" />
@@ -185,6 +190,7 @@
                     android:layout_weight="1" />
 
                 <TextView
+                    android:id="@+id/school"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="北京市第一中学" />
@@ -208,6 +214,7 @@
                     android:text="@string/profiles" />
 
                 <TextView
+                    android:id="@+id/describe"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="3dp"

@@ -13,7 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -49,21 +51,7 @@ public class MainActivity extends BaseFragmentActivity {
         setContentView(R.layout.activity_main);
         initView();
 
-
-        /**
-         * 刷新媒体库
-         */
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            File f = new File("file://" + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES));
-            Uri contentUri = Uri.fromFile(f);
-            mediaScanIntent.setData(contentUri);
-            this.sendBroadcast(mediaScanIntent);
-        } else {
-            sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory())));
-        }
-
-
+        refreshMedia();
         File file = new File(Constant.CACHEPATH);
         if (!file.mkdirs()) {
             try {
@@ -72,6 +60,8 @@ public class MainActivity extends BaseFragmentActivity {
                 e.printStackTrace();
             }
         }
+
+
     }
 
     /**
@@ -133,5 +123,36 @@ public class MainActivity extends BaseFragmentActivity {
         } else {
             this.finish();
         }
+    }
+
+    /**
+     * 刷新媒体库
+     */
+    public void refreshMedia() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            File f = new File("file://" + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES));
+            Uri contentUri = Uri.fromFile(f);
+            mediaScanIntent.setData(contentUri);
+            this.sendBroadcast(mediaScanIntent);
+        } else {
+            sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+        }
+
+    }
+
+    /**
+     *GET /api/v1/app_constant 获取基础信息
+     */
+    public void getBaseInformation(){
+
+
+
+       if (new File(getCacheDir()+"/baseinformation").exists()){
+           new File(getCacheDir()+"/baseinformation").delete();
+       }
+        File cache = new File(getCacheDir() + "/baseinformation.txt");
+//        writer=new BufferedWriter(new FileWriter(cache));
     }
 }

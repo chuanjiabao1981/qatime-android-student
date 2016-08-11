@@ -99,7 +99,8 @@
     <string name="boy">Boy</string>
     <string name="girl">Girl</string>
     <string name="finish">Finish</string>//完成
-
+    <string name="male">Boy</string>
+    <string name="female">Girl</string>
     //我的订单
     <string name="detail_of_order">Details of order</string>//订单详情
     <string name="waiting_for_payment">Waiting for payment</string>//等待付款中
