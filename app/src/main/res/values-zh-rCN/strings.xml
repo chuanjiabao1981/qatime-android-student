@@ -132,7 +132,7 @@
     <string name="change_it">看不清，换一张？</string>
     <string name="logout">退出登录</string>
     //注册
-    <string name="set_for_login">注册</string>
+    <string name="set_for_login">设置登录</string>
     <string name="get_verification_code">获取校验码</string>
     <string name="hint_input_verification_code">输入校验码</string>
     <string name="hint_phone_number">请输入大陆地区11位手机号码</string>

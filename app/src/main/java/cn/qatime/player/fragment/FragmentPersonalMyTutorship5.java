@@ -12,7 +12,6 @@ import android.widget.ListView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -32,9 +31,11 @@ import cn.qatime.player.adapter.ViewHolder;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.RemedialClassBean;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.LogUtils;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VolleyErrorListener;
+import cn.qatime.player.utils.VolleyListener;
 
 public class FragmentPersonalMyTutorship5 extends BaseFragment {
     private PullToRefreshListView listView;
@@ -122,18 +123,17 @@ public class FragmentPersonalMyTutorship5 extends BaseFragment {
      */
     private void initData(final int type) {
         Map<String, String> map = new HashMap<>();
-        map.put("Remember-Token", BaseApplication.getProfile().getToken());
         map.put("page", String.valueOf(page));
         map.put("per_page", "10");
         map.put("cate", "taste");
         map.put("student_id", String.valueOf(BaseApplication.getUserId()));
 
-        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass+BaseApplication.getUserId()+"/courses", map), null,
-                new Response.Listener<JSONObject>() {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/courses", map), null,
+                new VolleyListener(getActivity()) {
                     @Override
-                    public void onResponse(JSONObject jsonObject) {
+                    protected void onSuccess(JSONObject response) {
                         isLoad =true;
-                        LogUtils.e(jsonObject.toString());
+                        LogUtils.e(response.toString());
                         if (type == 1) {
                             list.clear();
                         }
@@ -149,6 +149,10 @@ public class FragmentPersonalMyTutorship5 extends BaseFragment {
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
                         }
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
 
                     }
                 }, new VolleyErrorListener() {
