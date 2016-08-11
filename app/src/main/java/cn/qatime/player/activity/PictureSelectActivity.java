@@ -1,26 +1,28 @@
 package cn.qatime.player.activity;
 
-import android.app.ProgressDialog;
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import cn.qatime.player.R;
-import cn.qatime.player.adapter.CommonAdapter;
-import cn.qatime.player.adapter.PictureSelectAdaper;
-import cn.qatime.player.adapter.ViewHolder;
+import cn.qatime.player.adapter.PictureSelectAdapter;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.bean.ImageBucket;
 import cn.qatime.player.bean.ImageItem;
@@ -36,6 +38,7 @@ import cn.qatime.player.utils.LogUtils;
 public class PictureSelectActivity extends BaseActivity {
 
     private List<ImageItem> detailList = new ArrayList<>();
+
     private Handler hd = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -44,23 +47,62 @@ public class PictureSelectActivity extends BaseActivity {
     };
     private AlbumHelper helper;
     private GridView gridView;
-    private PictureSelectAdaper adapter;
+    private PictureSelectAdapter adapter;
+    private int REQUEST_CODE_SOME_FEATURES_PERMISSIONS = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picture_select);
 
-        initView();
-        helper = AlbumHelper.getHelper();
-        helper.init(getApplicationContext());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-        getImages();
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+//
+//                } else {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_SOME_FEATURES_PERMISSIONS);
+//                }
+            } else {
+                getImages();
+            }
+        }
+        initView();
+
+
+        /**
+         * 刷新媒体库
+         */
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            File f = new File("file://" + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES));
+            Uri contentUri = Uri.fromFile(f);
+            mediaScanIntent.setData(contentUri);
+            this.sendBroadcast(mediaScanIntent);
+        } else {
+            sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+        }
+
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == REQUEST_CODE_SOME_FEATURES_PERMISSIONS) {
+            for (int i = 0; i < permissions.length; i++) {
+                if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getImages();
+                } else {//未给权限
+
+                }
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private void initView() {
         gridView = (GridView) findViewById(R.id.gridView);
-        adapter = new PictureSelectAdaper(this, detailList);
+        adapter = new PictureSelectAdapter(this, detailList);
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -68,9 +110,12 @@ public class PictureSelectActivity extends BaseActivity {
                 if (position == 0) {
                     // ##########拍照##########
                     Intent newIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(newIntent, Constant.REQUEST_CAMARE);
+                    startActivityForResult(newIntent, Constant.REQUEST_CAMERA);
                 } else {
-
+                    Intent data = new Intent();
+                    data.putExtra("data", detailList.get(position - 1));
+                    setResult(Constant.RESPONSE_PICTURE_SELECT, data);
+                    finish();
                 }
             }
         });
@@ -78,8 +123,8 @@ public class PictureSelectActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode==Constant.REQUEST_CAMARE){//拍照返回
-            setResult(Constant.RESPONSE_CAMERA,data);
+        if (requestCode == Constant.REQUEST_CAMERA) {//拍照返回
+            setResult(Constant.RESPONSE_CAMERA, data);
             finish();
         }
     }
@@ -88,6 +133,9 @@ public class PictureSelectActivity extends BaseActivity {
      * 利用ContentProvider扫描手机中的图片，此方法在运行在子线程中 完成图片的扫描，最终获得jpg最多的那个文件夹
      */
     private void getImages() {
+        helper = AlbumHelper.getHelper();
+        helper.init(getApplicationContext());
+
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             Toast.makeText(this, "暂无外部存储", Toast.LENGTH_SHORT).show();
             return;
@@ -98,16 +146,25 @@ public class PictureSelectActivity extends BaseActivity {
             @Override
             public void run() {
                 List<ImageBucket> list = helper.getImagesBucketList(false);
+                int remove = -1;
+                for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i).bucketName.equals("qatime")) {
+                        remove = i;
+                        break;
+                    }
+                }
+                if (remove != -1) {
+                    list.remove(remove);
+                }
                 detailList.clear();
                 for (int i = 0; i < list.size(); i++) {
                     for (int j = 0; j < list.get(i).imageList.size(); j++) {
                         detailList.add(list.get(i).imageList.get(j));
                     }
                 }
+                LogUtils.e(detailList.size()+"张图");
                 hd.sendEmptyMessage(1);
             }
         }).start();
-
-
     }
 }

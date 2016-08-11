@@ -25,4 +25,10 @@ public class LogUtils {
             Log.e("dayitime" + tag, object.toString(),io);
         }
     }
+
+    public static void w(String tag,  Object object) {
+        if (LogUtils.isDebug) {
+            Log.w("dayitime" + tag, object.toString());
+        }
+    }
 }

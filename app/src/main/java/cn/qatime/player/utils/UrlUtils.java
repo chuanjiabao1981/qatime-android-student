@@ -15,6 +15,8 @@ public class UrlUtils {
     public static String urlLogin = baseUrl + "api/v1/sessions";
     //辅导班
     public static String urlRemedialClass = baseUrl + "api/v1/live_studio/courses";
+    //我的辅导班列表
+    public static String urlMyRemedialClass = baseUrl + "api/v1/live_studio/students/";
 
 
     public static String getUrl(String function, Map<String, String> params) {

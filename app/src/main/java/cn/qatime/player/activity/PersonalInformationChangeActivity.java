@@ -13,8 +13,11 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.bean.ImageItem;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.LogUtils;
 import cn.qatime.player.utils.StringUtils;
@@ -28,7 +31,6 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     RadioGroup radiogroup;
     Spinner spinner;
     TextView complete;
-
     private Uri captureUri;
 
     @Override
@@ -36,7 +38,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_information_change);
         initView();
-
+        LogUtils.e(Constant.CACHEPATH);
         replace.setOnClickListener(this);
     }
 
@@ -56,35 +58,48 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.replace://去选择图片
-                Intent intent = new Intent(PersonalInformationChangeActivity.this,PictureSelectActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent(PersonalInformationChangeActivity.this, PictureSelectActivity.class);
+                startActivityForResult(intent, Constant.REQUEST_PICTURE_SELECT);
                 break;
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode== Constant.RESPONSE_CAMERA){//拍照返回的照片
-            if (data != null) {
-                Bundle bundle = data.getExtras();
-                Bitmap bitmap = (Bitmap) bundle.get("data");// 获取相机返回的数据，并转换为Bitmap图片格式
-                if (data.getData() != null) {
-                    captureUri = data.getData();
-                } else {
-                    captureUri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
+        if (requestCode == Constant.REQUEST_PICTURE_SELECT) {
+            if (resultCode == Constant.RESPONSE_CAMERA) {//拍照返回的照片
+                if (data != null) {
+                    Bundle bundle = data.getExtras();
+                    Bitmap bitmap = (Bitmap) bundle.get("data");// 获取相机返回的数据，并转换为Bitmap图片格式
+                    if (data.getData() != null) {
+                        captureUri = data.getData();
+                    } else {
+                        captureUri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
+                    }
+                    if (captureUri != null && !StringUtils.isNullOrBlanK(captureUri.toString())) {
+                        Intent intent = new Intent(PersonalInformationChangeActivity.this, CropImageActivity.class);
+                        intent.putExtra("id", captureUri.toString());
+                        startActivityForResult(intent, Constant.PHOTO_CROP);
+                    }
                 }
-                if (captureUri != null && !StringUtils.isNullOrBlanK(captureUri.toString())) {
-                    Intent intent = new Intent(PersonalInformationChangeActivity.this, CropImageActivity.class);
-                    intent.putExtra("id", captureUri.toString());
-                    startActivityForResult(intent, Constant.PHOTO_CROP);
+            } else if (resultCode == Constant.RESPONSE_PICTURE_SELECT) {//选择照片返回的照片
+                if (data != null) {
+                    ImageItem image = (ImageItem) data.getSerializableExtra("data");
+
+                    if (image != null && !StringUtils.isNullOrBlanK(image.imageId)) {
+                        Intent intent = new Intent(PersonalInformationChangeActivity.this, CropImageActivity.class);
+                        intent.putExtra("id", "content://media/external/images/media/" + image.imageId);
+                        startActivityForResult(intent, Constant.PHOTO_CROP);
+                    }
                 }
+
             }
-        }else if (true){
+        } else if (resultCode == Constant.PHOTO_CROP) {
             LogUtils.e("裁剪", "回来");
             if (data != null) {
                 String imageUrl = data.getStringExtra("bitmap");
                 if (!StringUtils.isNullOrBlanK(imageUrl)) {
-//                    postFile(imageUrl);
+                    Glide.with(this).load(imageUrl).crossFade().into(headsculpture);
                 }
             }
         }

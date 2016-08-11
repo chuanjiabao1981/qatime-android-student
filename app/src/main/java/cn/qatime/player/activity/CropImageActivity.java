@@ -1,12 +1,19 @@
 package cn.qatime.player.activity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+
+import java.io.File;
+import java.util.UUID;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.cropview.CropImageView;
 import cn.qatime.player.cropview.callback.LoadCallback;
+import cn.qatime.player.cropview.callback.SaveCallback;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.StringUtils;
 
 /**
@@ -74,6 +81,26 @@ public class CropImageActivity extends BaseActivity {
             }
             cropper.setCropMode(cropMode);
         }
+
+        setRightText("使用", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cropper.startCrop(Uri.fromFile(new File(Constant.CACHEPATH + "/" + UUID.randomUUID().toString().replace("-", "") + ".jpg")), null, new SaveCallback() {
+                    @Override
+                    public void onSuccess(Uri outputUri) {
+                        Intent intent = new Intent();
+                        intent.putExtra("bitmap", outputUri.getPath());
+                        setResult(Constant.PHOTO_CROP, intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+                });
+            }
+        });
 //        TextView more = (TextView) findViewById(R.id.more);
 //        more.setText("确定");
 //        more.setOnClickListener(new View.OnClickListener() {

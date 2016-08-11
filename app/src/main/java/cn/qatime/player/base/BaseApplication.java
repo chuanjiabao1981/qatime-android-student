@@ -20,6 +20,10 @@ public class BaseApplication extends Application {
         return profile == null ? new Profile() : profile;
     }
 
+    public static int getUserId() {
+        return profile != null && profile.getData() != null && profile.getData().getUser() != null ? profile.getData().getUser().getId() : 0;
+    }
+
     public static void setProfile(Profile profile) {
         BaseApplication.profile = profile;
     }

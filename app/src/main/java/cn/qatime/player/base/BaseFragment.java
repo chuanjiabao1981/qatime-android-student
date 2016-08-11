@@ -10,6 +10,7 @@ import com.android.volley.toolbox.Volley;
 
 public class BaseFragment extends Fragment {
     private RequestQueue Queue;
+    protected boolean isLoad = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -17,12 +18,17 @@ public class BaseFragment extends Fragment {
         Queue = Volley.newRequestQueue(getActivity());
     }
 
-    public <T> Request<T> addToRequestQueue(Request<T> request){
+    public void onShow() {
+    }
+
+    public <T> Request<T> addToRequestQueue(Request<T> request) {
         return Queue.add(request);
     }
+
     public void cancelAll(final Object tag) {
         Queue.cancelAll(tag);
     }
+
     public void cancelAll(final RequestQueue.RequestFilter filter) {
         Queue.cancelAll(filter);
     }

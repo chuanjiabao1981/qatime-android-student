@@ -1,5 +1,6 @@
 package cn.qatime.player.activity;
 
+import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.base.BaseFragmentActivity;
 
 import android.content.Intent;
@@ -17,7 +18,6 @@ import cn.qatime.player.fragment.FragmentPersonalMyTutorship2;
 import cn.qatime.player.fragment.FragmentPersonalMyTutorship3;
 import cn.qatime.player.fragment.FragmentPersonalMyTutorship4;
 import cn.qatime.player.fragment.FragmentPersonalMyTutorship5;
-import cn.qatime.player.utils.LogUtils;
 import cn.qatime.player.view.FragmentLayoutWithLine;
 
 /**
@@ -36,10 +36,10 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
         setTitle(getResources().getString(R.string.my_course));
 
         pager = getIntent().getIntExtra("pager", 0);
-        setRight(R.mipmap.audition_records, new View.OnClickListener() {
+        setRightImage(R.mipmap.audition_records, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PersonalMyTutorshipActivity.this,AuditionRecordsActivity.class);
+                Intent intent = new Intent(PersonalMyTutorshipActivity.this, AuditionRecordsActivity.class);
                 startActivity(intent);
             }
         });
@@ -68,11 +68,12 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff858585);
                 ((TextView) currentTabView.findViewById(tab_text[positon])).setTextColor(0xff222222);
 
-                if (positon==4){
+                if (positon == 4) {
                     findViewById(R.id.right).setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     findViewById(R.id.right).setVisibility(View.GONE);
                 }
+                ((BaseFragment) fragBaseFragments.get(positon)).onShow();
             }
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tableout_personal_my_tutor, 0x0311);

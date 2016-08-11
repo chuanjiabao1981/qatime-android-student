@@ -28,14 +28,25 @@ public class BaseFragmentActivity extends FragmentActivity {
 
     public void setTitle(String text) {
         if (StringUtils.isNullOrBlanK(text)) {
-            throw new IllegalStateException("text不能为空");
+            throw new IllegalArgumentException("text can not be a null object");
         }
         if (findViewById(R.id.title) != null) {
             ((TextView) findViewById(R.id.title)).setText(text);
         }
     }
 
-    public void setRight(int resource, View.OnClickListener listener) {
+    public void setRightText(String text, View.OnClickListener listener) {
+        if (StringUtils.isNullOrBlanK(text)){
+            throw new IllegalArgumentException("text can not be a null object");
+        }
+        if (findViewById(R.id.right_text) != null) {
+            ((TextView) findViewById(R.id.right_text)).setText(text);
+            findViewById(R.id.right_text).setOnClickListener(listener);
+        }
+
+    }
+
+    public void setRightImage(int resource, View.OnClickListener listener) {
         if (findViewById(R.id.right) != null) {
             ((ImageView) findViewById(R.id.right)).setImageResource(resource);
             findViewById(R.id.right).setOnClickListener(listener);

@@ -229,20 +229,17 @@ public class AlbumHelper {
 
         Iterator<Entry<String, ImageBucket>> itr = bucketList.entrySet().iterator();
         while (itr.hasNext()) {
-            Map.Entry<String, ImageBucket> entry = (Map.Entry<String, ImageBucket>) itr
-                    .next();
+            Map.Entry<String, ImageBucket> entry = (Map.Entry<String, ImageBucket>) itr.next();
             ImageBucket bucket = entry.getValue();
-            LogUtils.e(TAG, entry.getKey() + ", " + bucket.bucketName + ", "
-                    + bucket.count + " ---------- ");
+            LogUtils.e(TAG, entry.getKey() + ", " + bucket.bucketName + ", " + bucket.count + " ---------- ");
             for (int i = 0; i < bucket.imageList.size(); ++i) {
                 ImageItem image = bucket.imageList.get(i);
-                LogUtils.e(TAG, "----- " + image.imageId + ", " + image.imagePath
-                        + ", " + image.thumbnailPath);
+                LogUtils.e(TAG, "----- " + image.imageId + ", " + image.imagePath + ", " + image.thumbnailPath);
             }
         }
         hasBuildImagesBucketList = true;
         long endTime = System.currentTimeMillis();
-        LogUtils.e(TAG, "use time: " + (endTime - startTime) + " ms");
+        LogUtils.w(TAG, "use time: " + (endTime - startTime) + " ms");
     }
 
     /**

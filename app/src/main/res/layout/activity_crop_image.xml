@@ -5,9 +5,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/layout_backbar" />
+    <include layout="@layout/layout_backbar_with_text" />
 
-    <com.isseiaoki.simplecropview.CropImageView
+    <cn.qatime.player.cropview.CropImageView
         android:id="@+id/copper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

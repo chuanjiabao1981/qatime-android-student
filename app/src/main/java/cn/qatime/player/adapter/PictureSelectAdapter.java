@@ -5,24 +5,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 
+import java.io.File;
 import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.bean.ImageItem;
+import cn.qatime.player.utils.LogUtils;
+import cn.qatime.player.utils.ScreenUtils;
+import cn.qatime.player.utils.StringUtils;
 
 /**
  * @author luntify
  * @date 2016/8/10 21:03
  * @Description
  */
-public class PictureSelectAdaper extends BaseAdapter {
+public class PictureSelectAdapter extends BaseAdapter {
     private final List<ImageItem> list;
     private final Context context;
 
-    public PictureSelectAdaper(Context context, List<ImageItem> list) {
+    public PictureSelectAdapter(Context context, List<ImageItem> list) {
         this.context = context;
         this.list = list;
     }
@@ -52,10 +57,26 @@ public class PictureSelectAdaper extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
+
+        RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(ScreenUtils.getScreenWidth(context) / 3, ScreenUtils.getScreenWidth(context) / 3 - 10);
+        holder.image.setLayoutParams(param);
+
         if (position == 0) {
-            Glide.with(context).load("").placeholder(R.mipmap.camera).crossFade().into(holder.image);
+//            Glide.with(context).load("").placeholder(R.mipmap.camera).crossFade().into(holder.image);
+            holder.image.setImageResource(R.mipmap.camera);
         } else {
-            Glide.with(context).load("file://" + list.get(position - 1).thumbnailPath).placeholder(R.mipmap.default_image).crossFade().into(holder.image);
+//            LogUtils.e(list.get(0).imagePath);
+//            LogUtils.e(list.get(0).thumbnailPath);
+            ImageItem item = list.get(position - 1);
+            if (StringUtils.isNullOrBlanK(item.thumbnailPath)) {
+                item.thumbnailPath = item.imagePath;
+            } else {
+                File file = new File(item.thumbnailPath);
+                if (!file.exists()) {
+                    item.thumbnailPath = item.imagePath;
+                }
+            }
+            Glide.with(context).load("file://" + item.thumbnailPath).placeholder(R.mipmap.default_image).crossFade().centerCrop().into(holder.image);
         }
         return convertView;
     }

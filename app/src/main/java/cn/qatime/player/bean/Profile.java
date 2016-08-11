@@ -3,6 +3,7 @@ package cn.qatime.player.bean;
 import java.io.Serializable;
 
 public class Profile implements Serializable{
+
     private int status;
 
     private Data data;
@@ -23,6 +24,8 @@ public class Profile implements Serializable{
     public String getToken(){
         return this.data!=null&&this.data.remember_token!=null?this.data.remember_token:"";
     }
+
+
     public class Data implements Serializable{
         private String remember_token;
 
