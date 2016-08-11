@@ -26,6 +26,7 @@ import cn.qatime.player.fragment.FragmentRemedialClassDetail1;
 import cn.qatime.player.fragment.FragmentRemedialClassDetail2;
 import cn.qatime.player.fragment.FragmentRemedialClassDetail3;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.JsonUtils;
 import cn.qatime.player.utils.LogUtils;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VolleyErrorListener;
@@ -116,14 +117,12 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     private void initData() {
         Map<String, String> map = new HashMap<>();
         map.put("id", String.valueOf(id));
-//        map.put("password", password.getText().toString());
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass + "/" + id, map), null,
                 new VolleyListener(RemedialClassDetailActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
                         LogUtils.e(response.toString());
-                        Gson gson = new Gson();
-                        data = gson.fromJson(response.toString(), RemedialClassDetailBean.class);
+                        data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
                         ((FragmentRemedialClassDetail1) fragBaseFragments.get(0)).setData(data);
                         ((FragmentRemedialClassDetail2) fragBaseFragments.get(1)).setData(data);
                         //TODO
