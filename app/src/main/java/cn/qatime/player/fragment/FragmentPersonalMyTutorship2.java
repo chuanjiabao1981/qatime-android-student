@@ -95,5 +95,54 @@ public class FragmentPersonalMyTutorship2 extends BaseFragment {
             }
         });
     }
+    public void onShow() {
+        if (!isLoad){
+            initData(1);
+        }
+    }
 
+    /**
+     * @param type 1刷新
+     *             2加载更多
+     */
+    private void initData(final int type) {
+        Map<String, String> map = new HashMap<>();
+        map.put("Remember-Token", BaseApplication.getProfile().getToken());
+        map.put("page", String.valueOf(page));
+        map.put("per_page", "10");
+        map.put("status", "preview");
+        map.put("student_id", String.valueOf(BaseApplication.getUserId()));
+
+        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass+BaseApplication.getUserId()+"/courses", map), null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject jsonObject) {
+                        isLoad =true;
+                        LogUtils.e(jsonObject.toString());
+                        if (type == 1) {
+                            list.clear();
+                        }
+                        String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+                        listView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
+                        listView.onRefreshComplete();
+
+                        try {
+                            Gson gson = new Gson();
+//                            RemedialClassBean data = gson.fromJson(jsonObject.toString(), RemedialClassBean.class);
+//                            list.addAll(data.getData());
+                            adapter.notifyDataSetChanged();
+                        } catch (JsonSyntaxException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+                listView.onRefreshComplete();
+            }
+        });
+        addToRequestQueue(request);
+    }
 }
