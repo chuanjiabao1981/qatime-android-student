@@ -11,7 +11,6 @@ import android.widget.ImageView;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
 
 import org.json.JSONObject;
 

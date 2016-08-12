@@ -24,7 +24,7 @@ public abstract class VolleyListener implements Response.Listener<JSONObject> {
 
     @Override
     public void onResponse(JSONObject response) {
-        LogUtils.e(response.toString());
+        LogUtils.e("result-----    "+response.toString());
         try {
             if (response.getInt("status") == 0) {
                 onError(response);

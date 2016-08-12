@@ -13,26 +13,45 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.cache.DiskCache;
+
+import org.json.JSONObject;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
+import cn.qatime.player.bean.GradelistBean;
+import cn.qatime.player.bean.PersonalInformationBean;
 import cn.qatime.player.fragment.Fragment1;
 import cn.qatime.player.fragment.Fragment2;
 import cn.qatime.player.fragment.Fragment3;
 import cn.qatime.player.fragment.Fragment4;
+import cn.qatime.player.transformation.GlideCircleTransform;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.JsonUtils;
+import cn.qatime.player.utils.StringUtils;
+import cn.qatime.player.utils.UrlUtils;
+import cn.qatime.player.utils.VolleyErrorListener;
+import cn.qatime.player.utils.VolleyListener;
 import cn.qatime.player.view.FragmentLayout;
 
 public class MainActivity extends BaseFragmentActivity {
 
     FragmentLayout fragmentlayout;
     public ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
-
+    private PersonalInformationBean bean1;
     private int[] tab_img = {R.id.tab_img1, R.id.tab_img2, R.id.tab_img3, R.id.tab_img4};
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3, R.id.tab_text4};
     private int tabImages[][] = {
@@ -60,8 +79,11 @@ public class MainActivity extends BaseFragmentActivity {
                 e.printStackTrace();
             }
         }
-
-
+        getBaseInformation();
+        GetGradeslist();
+        GetProvinceslist();
+        GetCitieslist();
+        GetSchoolslist();
     }
 
     /**
@@ -143,16 +165,120 @@ public class MainActivity extends BaseFragmentActivity {
     }
 
     /**
-     *GET /api/v1/app_constant 获取基础信息
+     * GET /api/v1/app_constant 获取基础信息
      */
-    public void getBaseInformation(){
+    public void getBaseInformation() {
+
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation, null,
+                new VolleyListener(MainActivity.this) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
+    }
+
+    //年级列表
+    public void GetGradeslist() {
+
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "grades", null,
+                new VolleyListener(MainActivity.this) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
+    }
 
 
+    //省份列表
+    public void GetProvinceslist() {
 
-       if (new File(getCacheDir()+"/baseinformation").exists()){
-           new File(getCacheDir()+"/baseinformation").delete();
-       }
-        File cache = new File(getCacheDir() + "/baseinformation.txt");
-//        writer=new BufferedWriter(new FileWriter(cache));
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "provinces", null,
+                new VolleyListener(MainActivity.this) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
+    }
+
+    //城市列表
+    public void GetCitieslist() {
+
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "cities", null,
+                new VolleyListener(MainActivity.this) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
+    }
+
+    //学校列表
+    public void GetSchoolslist() {
+
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "schools", null,
+                new VolleyListener(MainActivity.this) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
     }
 }
