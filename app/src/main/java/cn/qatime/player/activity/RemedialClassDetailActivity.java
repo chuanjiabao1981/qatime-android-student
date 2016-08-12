@@ -133,6 +133,23 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                             ((FragmentRemedialClassDetail1) fragBaseFragments.get(0)).setData(data);
                             ((FragmentRemedialClassDetail2) fragBaseFragments.get(1)).setData(data);
                             ((FragmentRemedialClassDetail3) fragBaseFragments.get(2)).setData(data);
+                            if (data.getData() != null) {
+                                if (data.getData().getIs_tasting()) {
+                                    audition.setClickable(false);
+                                    audition.setText("已加入试听");
+                                } else {
+                                    audition.setClickable(true);
+                                    audition.setText("加入试听");
+                                }
+
+                                if (data.getData().getIs_bought()) {
+                                    pay.setClickable(false);
+                                    pay.setText("已购买");
+                                } else {
+                                    pay.setClickable(true);
+                                    pay.setText("立即购买");
+                                }
+                            }
                         }
                     }
 
@@ -155,6 +172,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.audition:
+                joinAudition();
                 break;
             case R.id.pay:
                 Intent intent = new Intent(RemedialClassDetailActivity.this, OrderConfirmActivity.class);
@@ -162,5 +180,32 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 startActivity(intent);
                 break;
         }
+    }
+
+    private void joinAudition() {
+        Map<String, String> map = new HashMap<>();
+        map.put("id", String.valueOf(id));
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass + "/" + id+"taste", map), null,
+                new VolleyListener(RemedialClassDetailActivity.this) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        //已加入试听
+                        audition.setClickable(false);
+                        audition.setText("已加入试听");
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+
+                    }
+                }
+
+                , new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
     }
 }

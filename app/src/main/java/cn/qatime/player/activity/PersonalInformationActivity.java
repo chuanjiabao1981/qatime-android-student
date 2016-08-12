@@ -49,7 +49,7 @@ public class PersonalInformationActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_information);
         setTitle(getResources().getString(R.string.personal_information));
-        setRightImage(R.drawable.personal_change_information, new View.OnClickListener() {
+        setRightImage(R.mipmap.personal_change_information, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(PersonalInformationActivity.this, PersonalInformationChangeActivity.class);
@@ -68,6 +68,9 @@ public class PersonalInformationActivity extends BaseActivity {
                 PersonalInformationBean sData = JsonUtils.objectFromJson(data.getStringExtra("data"), PersonalInformationBean.class);
                 if (sData != null && sData.getData() != null) {
                     setValue(sData);
+                    Intent intent = new Intent();
+                    intent.putExtra("url", sData.getData().getSmall_avatar_url());
+                    setResult(Constant.RESPONSE, intent);
                 }
             }
         }
@@ -101,7 +104,7 @@ public class PersonalInformationActivity extends BaseActivity {
     }
 
     private void setValue(PersonalInformationBean bean) {
-        Glide.with(PersonalInformationActivity.this).load(bean.getData().getSmall_avatar_url()).placeholder(R.drawable.personal_information_head).transform(new GlideCircleTransform(PersonalInformationActivity.this)).crossFade().into(headsculpture);
+        Glide.with(PersonalInformationActivity.this).load(bean.getData().getSmall_avatar_url()).placeholder(R.mipmap.personal_information_head).transform(new GlideCircleTransform(PersonalInformationActivity.this)).crossFade().into(headsculpture);
         name.setText(bean.getData().getName());
         if (!StringUtils.isNullOrBlanK(bean.getData().getGender())) {
             if (bean.getData().getGender().equals("male")) {
@@ -110,10 +113,12 @@ public class PersonalInformationActivity extends BaseActivity {
                 sex.setText(getResources().getString(R.string.female));
             }
         }
-        try {
-            birthday.setText(format.format(parse.parse(bean.getData().getBirthday())));
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if (!StringUtils.isNullOrBlanK(bean.getData().getBirthday())) {
+            try {
+                birthday.setText(format.format(parse.parse(bean.getData().getBirthday())));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         if (!StringUtils.isNullOrBlanK(bean.getData().getGrade())) {
             grade.setText(bean.getData().getGrade());

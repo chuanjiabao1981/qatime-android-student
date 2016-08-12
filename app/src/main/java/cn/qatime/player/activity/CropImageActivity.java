@@ -14,7 +14,9 @@ import cn.qatime.player.cropview.CropImageView;
 import cn.qatime.player.cropview.callback.LoadCallback;
 import cn.qatime.player.cropview.callback.SaveCallback;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.DialogUtils;
 import cn.qatime.player.utils.StringUtils;
+import cn.qatime.player.view.CustomProgressDialog;
 
 /**
  * 图片裁剪页面
@@ -22,6 +24,7 @@ import cn.qatime.player.utils.StringUtils;
 public class CropImageActivity extends BaseActivity {
     private CropImageView cropper;
     CropImageView.CropMode cropMode;
+    private CustomProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +89,9 @@ public class CropImageActivity extends BaseActivity {
             @Override
             public void onClick(final View v) {
                 v.setClickable(false);
+                progress = DialogUtils.startProgressDialog(progress, CropImageActivity.this);
+                progress.setCanceledOnTouchOutside(false);
+                progress.setCancelable(false);
                 cropper.startCrop(Uri.fromFile(new File(Constant.CACHEPATH + "/" + UUID.randomUUID().toString().replace("-", "") + ".jpg")), null, new SaveCallback() {
                     @Override
                     public void onSuccess(Uri outputUri) {
@@ -93,6 +99,7 @@ public class CropImageActivity extends BaseActivity {
                         intent.putExtra("bitmap", outputUri.getPath());
                         setResult(Constant.PHOTO_CROP, intent);
                         v.setClickable(true);
+                        DialogUtils.dismissDialog(progress);
                         finish();
 
                     }

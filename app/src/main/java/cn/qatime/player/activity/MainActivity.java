@@ -17,6 +17,7 @@ import com.android.volley.VolleyError;
 
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,6 +31,8 @@ import cn.qatime.player.fragment.Fragment3;
 import cn.qatime.player.fragment.Fragment4;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.FileUtil;
+import cn.qatime.player.utils.SPUtils;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VolleyErrorListener;
 import cn.qatime.player.utils.VolleyListener;
@@ -67,7 +70,6 @@ public class MainActivity extends BaseFragmentActivity {
                 e.printStackTrace();
             }
         }
-        getBaseInformation();
         GetGradeslist();
         GetProvinceslist();
         GetCitieslist();
@@ -152,30 +154,30 @@ public class MainActivity extends BaseFragmentActivity {
 
     }
 
-    /**
-     * GET /api/v1/app_constant 获取基础信息
-     */
-    public void getBaseInformation() {
-
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation, null,
-                new VolleyListener(MainActivity.this) {
-                    @Override
-                    protected void onSuccess(JSONObject response) {
-
-                    }
-
-                    @Override
-                    protected void onError(JSONObject response) {
-
-                    }
-                }, new VolleyErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
-            }
-        });
-        addToRequestQueue(request);
-    }
+//    /**
+//     * GET /api/v1/app_constant 获取基础信息
+//     */
+//    public void getBaseInformation() {
+//
+//        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation, null,
+//                new VolleyListener(MainActivity.this) {
+//                    @Override
+//                    protected void onSuccess(JSONObject response) {
+//
+//                    }
+//
+//                    @Override
+//                    protected void onError(JSONObject response) {
+//
+//                    }
+//                }, new VolleyErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError volleyError) {
+//                super.onErrorResponse(volleyError);
+//            }
+//        });
+//        addToRequestQueue(request);
+//    }
 
     //年级列表
     public void GetGradeslist() {
@@ -184,7 +186,8 @@ public class MainActivity extends BaseFragmentActivity {
                 new VolleyListener(MainActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-
+                        boolean value = FileUtil.writeFile(new ByteArrayInputStream(response.toString().getBytes()), getCacheDir().getAbsolutePath() + "/grade.txt", true);
+                        SPUtils.put(MainActivity.this, "grade", value);
                     }
 
                     @Override
@@ -208,7 +211,7 @@ public class MainActivity extends BaseFragmentActivity {
                 new VolleyListener(MainActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-
+                    //TODO
                     }
 
                     @Override
@@ -231,7 +234,8 @@ public class MainActivity extends BaseFragmentActivity {
                 new VolleyListener(MainActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-
+                        boolean value = FileUtil.writeFile(new ByteArrayInputStream(response.toString().getBytes()), getCacheDir().getAbsolutePath() + "/city.txt", true);
+                        SPUtils.put(MainActivity.this, "city", value);
                     }
 
                     @Override
@@ -254,7 +258,8 @@ public class MainActivity extends BaseFragmentActivity {
                 new VolleyListener(MainActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-
+                        boolean value = FileUtil.writeFile(new ByteArrayInputStream(response.toString().getBytes()), getCacheDir().getAbsolutePath() + "/school.txt", true);
+                        SPUtils.put(MainActivity.this, "school", value);
                     }
 
                     @Override

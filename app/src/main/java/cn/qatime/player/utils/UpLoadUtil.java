@@ -62,18 +62,26 @@ public abstract class UpLoadUtil extends AsyncTask<String, String, String> imple
 
             File file = new File(params[1]);
 
-            FileBody fileBody;
-            fileBody = new FileBody(file);
+
             CustomMultipartEntity mpEntity = new CustomMultipartEntity(this); // 文件传输
             contentLength = mpEntity.getContentLength();
 
             mpEntity.addPart("id", new StringBody(params[2], contentType));
             mpEntity.addPart("name", new StringBody(params[3], contentType));
             mpEntity.addPart("grade", new StringBody(params[4], contentType));
-            mpEntity.addPart("avatar", fileBody);
-            mpEntity.addPart("gender", new StringBody(params[5], contentType));
-            mpEntity.addPart("birthday", new StringBody(params[6], contentType));
-            mpEntity.addPart("desc", new StringBody(params[7], contentType));
+            if (file.exists()) {
+                FileBody fileBody = new FileBody(file);
+                mpEntity.addPart("avatar", fileBody);
+            }
+            if (!StringUtils.isNullOrBlanK(params[5])) {
+                mpEntity.addPart("gender", new StringBody(params[5], contentType));
+            }
+            if (!StringUtils.isNullOrBlanK(params[6])) {
+                mpEntity.addPart("birthday", new StringBody(params[6], contentType));
+            }
+            if (!StringUtils.isNullOrBlanK(params[7])) {
+                mpEntity.addPart("desc", new StringBody(params[7], contentType));
+            }
             httppost.setEntity(mpEntity);
 
             System.out.println("executing request " + httppost.getRequestLine());
@@ -131,6 +139,8 @@ public abstract class UpLoadUtil extends AsyncTask<String, String, String> imple
     @Override
     public void transferred(long num) {
         if (contentLength > 0) {
+            LogUtils.e("总大小" + contentLength);
+            LogUtils.e("已上传" + num);
             publishProgress(String.valueOf(num / contentLength * 100) + "%");
         }
     }

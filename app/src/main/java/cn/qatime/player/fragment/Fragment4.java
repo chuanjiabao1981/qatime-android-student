@@ -21,6 +21,7 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.transformation.GlideCircleTransform;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.LogUtils;
 
 public class Fragment4 extends BaseFragment implements View.OnClickListener {
     private LinearLayout information;
@@ -118,6 +119,15 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
                 intent = new Intent(getActivity(), SystemSettingActivity.class);
                 getActivity().startActivityForResult(intent, Constant.REQUEST_EXIT_LOGIN);
                 break;
+        }
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        LogUtils.e("图片返回");
+        if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
+            Glide.with(getActivity()).load(data.getStringExtra("url")).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
         }
     }
 

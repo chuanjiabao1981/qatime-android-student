@@ -49,9 +49,9 @@
 
                     <ImageView
                         android:id="@+id/head_sculpture"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/personal_information_head" />
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:src="@mipmap/personal_information_head" />
 
                     <TextView
                         android:id="@+id/name"
@@ -72,7 +72,7 @@
                     android:paddingLeft="5dp"
                     android:paddingRight="2dp"
                     android:paddingTop="10dp"
-                    android:src="@drawable/personal_enter" />
+                    android:src="@mipmap/personal_enter" />
             </RelativeLayout>
 
             <TextView
@@ -105,7 +105,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/head_sculpture" />
+                        android:src="@mipmap/head_sculpture" />
 
                     <TextView
 
@@ -133,7 +133,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/head_sculpture" />
+                        android:src="@mipmap/head_sculpture" />
 
                     <TextView
 
@@ -160,7 +160,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/head_sculpture" />
+                        android:src="@mipmap/head_sculpture" />
 
                     <TextView
 
@@ -276,7 +276,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/personal_enter" />
+                    android:src="@mipmap/personal_enter" />
             </LinearLayout>
 
             <View
@@ -316,7 +316,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
-                    android:src="@drawable/personal_enter" />
+                    android:src="@mipmap/personal_enter" />
             </LinearLayout>
 
             <View

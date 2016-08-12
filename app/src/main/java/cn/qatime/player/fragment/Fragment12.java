@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -136,10 +137,13 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
             @Override
             public void convert(ViewHolder helper, RemedialClassBean.Data item, int position) {
                 ((ImageView) helper.getView(R.id.image)).setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()) / 2, ScreenUtils.getScreenWidth(getActivity()) / 2));
-//                Glide.with(getActivity()).load(item.getPush_address()).into(((ImageView) helper.getView(R.id.image)));
-//                helper.setText(R.id.name, item.getName());
-//                helper.setText(R.id.subject, item.getSubject());
-//                helper.setText(R.id.grade, item.getGrade());
+               Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).crossFade().into(((ImageView) helper.getView(R.id.image)));
+                helper.setText(R.id.name, item.getName());
+                helper.setText(R.id.subject, item.getSubject());
+                helper.setText(R.id.grade, item.getGrade());
+                helper.setText(R.id.teacher, item.getTeacher_name());
+                helper.setText(R.id.price, "￥" + item.getPrice());
+                helper.setText(R.id.student_number, String.valueOf(item.getBuy_tickets_count()));
             }
         };
 

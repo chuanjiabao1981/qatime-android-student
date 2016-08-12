@@ -149,7 +149,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
-                        android:src="@drawable/shopping32" />
+                        android:src="@mipmap/shopping32" />
 
                     <ImageView
                         android:id="@+id/video"

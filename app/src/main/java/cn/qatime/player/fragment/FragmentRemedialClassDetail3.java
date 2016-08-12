@@ -47,15 +47,9 @@ public class FragmentRemedialClassDetail3 extends BaseFragment {
             @Override
             public void convert(ViewHolder holder, RemedialClassDetailBean.Lessons item, int position) {
                 holder.setText(R.id.number, StringUtils.Int2String(position + 1));
-//                try {
-//                    holder.setText(R.id.time, format.format(parse.parse(item.getClass_date()))+"  "+item.getLive_time());
-//                } catch (ParseException e) {
-//                    e.printStackTrace();
-//                }
-//                //TODO 待修改
-//                holder.setText(R.id.status, "已结束");
-//                holder.setText(R.id.name, item.getName());
-
+                holder.setText(R.id.name, item.getName());
+                holder.setText(R.id.status, item.getStatus());
+                holder.setText(R.id.name, item.getName());
             }
         };
         listView.setAdapter(adapter);

@@ -35,14 +35,29 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="MediaController_SeekBar" parent="android:Widget.SeekBar">
-        <item name="android:progressDrawable">@drawable/nemediacontroller_progressbar</item>
-        <item name="android:indeterminateDrawable">@drawable/nemediacontroller_progressbar</item>
-        <item name="android:minHeight">5dip</item>
-        <item name="android:maxHeight">5dip</item>
-        <item name="android:thumb">@drawable/nemediacontroller_progressbar_thumb</item>
-        <item name="android:thumbOffset">8dip</item>
-        <item name="android:paddingLeft">8dip</item>
-        <item name="android:paddingRight">8dip</item>
+
+    <style name="CustomProgressDialog" parent="@style/CustomDialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowNoTitle">true</item>
     </style>
+
+    <style name="CustomDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+    </style>
+
+    <!--<style name="MediaController_SeekBar" parent="android:Widget.SeekBar">-->
+        <!--<item name="android:progressDrawable">@drawable/nemediacontroller_progressbar</item>-->
+        <!--<item name="android:indeterminateDrawable">@drawable/nemediacontroller_progressbar</item>-->
+        <!--<item name="android:minHeight">5dip</item>-->
+        <!--<item name="android:maxHeight">5dip</item>-->
+        <!--<item name="android:thumb">@drawable/nemediacontroller_progressbar_thumb</item>-->
+        <!--<item name="android:thumbOffset">8dip</item>-->
+        <!--<item name="android:paddingLeft">8dip</item>-->
+        <!--<item name="android:paddingRight">8dip</item>-->
+    <!--</style>-->
 </resources>

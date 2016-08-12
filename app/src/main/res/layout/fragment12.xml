@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/by_time"
-                android:drawableRight="@drawable/triangle"/>
+                android:drawableRight="@mipmap/triangle"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/by_subject"
-                android:drawableRight="@drawable/triangle"/>
+                android:drawableRight="@mipmap/triangle"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -70,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/by_grade"
-                android:drawableRight="@drawable/triangle"/>
+                android:drawableRight="@mipmap/triangle"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -83,8 +83,7 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:padding="8dp"
-
-            android:src="@drawable/screen_funnel" />
+            android:src="@mipmap/screen_funnel" />
     </LinearLayout>
 
     <RelativeLayout
