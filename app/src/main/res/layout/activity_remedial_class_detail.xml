@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
-    <include layout="@layout/layout_backbar" />
+    <include layout="@layout/layout_backbar"/>
 
     <cn.qatime.player.view.StickyNavLayout
         android:layout_width="match_parent"
@@ -12,21 +12,51 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/id_stickynavlayout_topview"
-            android:layout_width="match_parent"
-            android:layout_height="200dp" />
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:id="@+id/id_stickynavlayout_topview">
+          <ImageView
+              android:id="@+id/image"
+              android:layout_width="match_parent"
+              android:layout_height="200dp"/>
+
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal"
+              android:padding="5dp">
+
+              <TextView
+                  android:id="@+id/price"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="￥00"/>
+
+              <View
+                  android:layout_width="0dp"
+                  android:layout_height="1dp"
+                  android:layout_weight="1"/>
+
+              <TextView
+                  android:id="@+id/student_number"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="学习人数"/>
+          </LinearLayout>
+      </LinearLayout>
 
         <cn.qatime.player.view.SimpleViewPagerIndicator
             android:id="@+id/id_stickynavlayout_indicator"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="#ffffff" />
+            android:background="#ffffff"/>
 
         <android.support.v4.view.ViewPager
             android:id="@id/id_stickynavlayout_viewpager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
     </cn.qatime.player.view.StickyNavLayout>
 
     <LinearLayout
@@ -37,7 +67,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#cccccc" />
+            android:background="#cccccc"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -52,7 +82,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/button_bg_selector_gray"
                 android:clickable="false"
-                android:text="已加入试听" />
+                android:text="已加入试听"/>
 
             <Button
                 android:id="@+id/pay"
@@ -62,7 +92,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/button_bg_selector_gray"
                 android:clickable="false"
-                android:text="已购买" />
+                android:text="已购买"/>
         </LinearLayout>
     </LinearLayout>
 

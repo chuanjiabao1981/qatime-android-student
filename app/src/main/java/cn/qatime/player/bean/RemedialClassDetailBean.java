@@ -324,7 +324,7 @@ public class RemedialClassDetailBean implements Serializable {
     public class Chat_team implements Serializable{
         private String announcement;
 
-        private List<String> team_announcements ;
+        private List<Team_announcements> team_announcements ;
 
         private List<Accounts> accounts ;
 
@@ -334,10 +334,10 @@ public class RemedialClassDetailBean implements Serializable {
         public String getAnnouncement(){
             return this.announcement;
         }
-        public void setTeam_announcements(List<String> team_announcements){
+        public void setTeam_announcements(List<Team_announcements> team_announcements){
             this.team_announcements = team_announcements;
         }
-        public List<String> getTeam_announcements(){
+        public List<Team_announcements> getTeam_announcements(){
             return this.team_announcements;
         }
         public void setAccounts(List<Accounts> accounts){
@@ -347,6 +347,24 @@ public class RemedialClassDetailBean implements Serializable {
             return this.accounts;
         }
 
+    }
+    public class Team_announcements implements Serializable{
+        private String announcement;
+
+        private String edit_at;
+
+        public void setAnnouncement(String announcement){
+            this.announcement = announcement;
+        }
+        public String getAnnouncement(){
+            return this.announcement;
+        }
+        public void setEdit_at(String edit_at){
+            this.edit_at = edit_at;
+        }
+        public String getEdit_at(){
+            return this.edit_at;
+        }
     }
     public class Accounts implements Serializable{
         private String accid;

@@ -21,22 +21,16 @@
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="1.2sp"
                 android:padding="3dp"
-                android:text="老师姓名：李沐阳" />
+                android:id="@+id/name"
+                android:text="老师姓名：" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="1.2sp"
                 android:padding="3dp"
-                android:text="最高学历：本科" />
-
-            <TextView
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:lineSpacingExtra="1.2sp"
-                android:padding="3dp"
-                android:text="执教年数：8年" />
+                android:id="@+id/degree"
+                android:text="最高学历：" />
 
             <TextView
 
@@ -44,7 +38,8 @@
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="1.2sp"
                 android:padding="3dp"
-                android:text="所授科目：英语" />
+                android:id="@+id/teaching_years"
+                android:text="执教年数：" />
 
             <TextView
 
@@ -52,7 +47,8 @@
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="1.2sp"
                 android:padding="3dp"
-                android:text="年级范围：高三" />
+                android:id="@+id/subject"
+                android:text="所授科目：" />
 
             <TextView
 
@@ -60,7 +56,17 @@
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="1.2sp"
                 android:padding="3dp"
-                android:text="所在学校：北京市第四小学" />
+                android:id="@+id/grade_range"
+                android:text="年级范围：" />
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="1.2sp"
+                android:padding="3dp"
+                android:id="@+id/school"
+                android:text="所在学校：" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -76,7 +82,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族瑞典皇族" />
+                    android:id="@+id/describe"
+                    android:text="" />
 
             </LinearLayout>
         </LinearLayout>

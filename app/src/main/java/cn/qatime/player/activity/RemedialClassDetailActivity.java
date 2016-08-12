@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -44,6 +45,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     private ViewPager mViewPager;
     private FragmentPagerAdapter mAdapter;
     private int pager = 0;
+    TextView price;
+    TextView studentnumber;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +62,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
 
     private void initView() {
-        image = (ImageView) findViewById(R.id.id_stickynavlayout_topview);
+        image = (ImageView) findViewById(R.id.image);
         Glide.with(this).load(R.mipmap.photo).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
         fragBaseFragments.add(new FragmentRemedialClassDetail1());
         fragBaseFragments.add(new FragmentRemedialClassDetail2());
@@ -66,7 +70,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
         audition = (Button) findViewById(R.id.audition);
         pay = (Button) findViewById(R.id.pay);
-
+        price = (TextView) findViewById(R.id.price);
+        studentnumber = (TextView) findViewById(R.id.student_number);
         audition.setOnClickListener(this);
         pay.setOnClickListener(this);
 
@@ -121,7 +126,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     @Override
                     protected void onSuccess(JSONObject response) {
                         data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
-
+                        // TODO: 2016/8/12
+//price.setText("￥"+data.getData().g);价格
+//                        studentnumber.setText("学习人数 "+);
                         if (data != null) {
                             ((FragmentRemedialClassDetail1) fragBaseFragments.get(0)).setData(data);
                             ((FragmentRemedialClassDetail2) fragBaseFragments.get(1)).setData(data);
