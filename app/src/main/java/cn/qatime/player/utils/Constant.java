@@ -12,7 +12,7 @@ public class Constant {
     public static final String CACHEPATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/qatime";
 
     public static int REQUEST = 0;
-    public static int RESPONSE = 0;
+    public static int RESPONSE = 1;
     public static int REQUEST_EXIT_LOGIN = 0x1001;
     public static int RESPONSE_EXIT_LOGIN = 0x1002;
     public static int REQUEST_CAMERA = 0x1003;

@@ -18,7 +18,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_confirm);
         RemedialClassDetailBean data = (RemedialClassDetailBean) getIntent().getSerializableExtra("data");
-
         pay = (Button) findViewById(R.id.pay);
         pay.setOnClickListener(this);
     }

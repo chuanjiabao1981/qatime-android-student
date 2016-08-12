@@ -36,16 +36,8 @@ public class FragmentRemedialClassDetail3 extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_remedial_class_detail3, container, false);
         initview(view);
-        RemedialClassDetailBean bean = new RemedialClassDetailBean();
-        RemedialClassDetailBean.Lessons data = bean.new Lessons();
-        list.add(data);
-        list.add(data);
-        list.add(data);
-        list.add(data);
-        list.add(data);
         return view;
     }
-
 
 
     private void initview(View view) {
@@ -67,16 +59,16 @@ public class FragmentRemedialClassDetail3 extends BaseFragment {
             }
         };
         listView.setAdapter(adapter);
-//            adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
     }
 
     public void setData(RemedialClassDetailBean data) {
         if (data != null && data.getData() != null) {
             list.clear();
-//            list.addAll(data.getData().getLessons());
-           if (adapter!=null){
-               adapter.notifyDataSetChanged();
-           }
+            list.addAll(data.getData().getLessons());
+            if (adapter != null) {
+                adapter.notifyDataSetChanged();
+            }
         }
     }
 }

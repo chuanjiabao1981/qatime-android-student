@@ -21,6 +21,7 @@ import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.PersonalInformationBean;
 import cn.qatime.player.transformation.GlideCircleTransform;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.JsonUtils;
 import cn.qatime.player.utils.StringUtils;
@@ -52,12 +53,24 @@ public class PersonalInformationActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(PersonalInformationActivity.this, PersonalInformationChangeActivity.class);
-                intent.putExtra("data",bean);
-                startActivity(intent);
+                intent.putExtra("data", bean);
+                startActivityForResult(intent, Constant.REQUEST);
             }
         });
         initView();
         initData();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
+            if (!StringUtils.isNullOrBlanK(data.getStringExtra("data"))) {
+                PersonalInformationBean sData = JsonUtils.objectFromJson(data.getStringExtra("data"), PersonalInformationBean.class);
+                if (sData != null && sData.getData() != null) {
+                    setValue(sData);
+                }
+            }
+        }
     }
 
     private void initData() {
@@ -68,31 +81,9 @@ public class PersonalInformationActivity extends BaseActivity {
                 new VolleyListener(PersonalInformationActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-                         bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
+                        bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
                         if (bean != null && bean.getData() != null) {
-                            Glide.with(PersonalInformationActivity.this).load(bean.getData().getSmall_avatar_url()).placeholder(R.drawable.personal_information_head).transform(new GlideCircleTransform(PersonalInformationActivity.this)).crossFade().into(headsculpture);
-                            name.setText(bean.getData().getName());
-                            if (!StringUtils.isNullOrBlanK(bean.getData().getGender())) {
-                                if (bean.getData().getGender().equals("male")) {
-                                    sex.setText(getResources().getString(R.string.male));
-                                } else {
-                                    sex.setText(getResources().getString(R.string.female));
-                                }
-                            }
-                            try {
-                                birthday.setText(format.format(parse.parse(bean.getData().getBirthday())));
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                            if (!StringUtils.isNullOrBlanK(bean.getData().getGrade())) {
-                                grade.setText(bean.getData().getGrade());
-                            }
-                            if (!StringUtils.isNullOrBlanK(bean.getData().getProvince()) && !StringUtils.isNullOrBlanK(bean.getData().getCity())) {
-                                region.setText(bean.getData().getProvince() + " " + bean.getData().getCity());
-                            }
-                            //TODO
-//                            school
-                            describe.setText(bean.getData().getDesc());
+                            setValue(bean);
                         }
                     }
 
@@ -107,6 +98,32 @@ public class PersonalInformationActivity extends BaseActivity {
             }
         });
         addToRequestQueue(request);
+    }
+
+    private void setValue(PersonalInformationBean bean) {
+        Glide.with(PersonalInformationActivity.this).load(bean.getData().getSmall_avatar_url()).placeholder(R.drawable.personal_information_head).transform(new GlideCircleTransform(PersonalInformationActivity.this)).crossFade().into(headsculpture);
+        name.setText(bean.getData().getName());
+        if (!StringUtils.isNullOrBlanK(bean.getData().getGender())) {
+            if (bean.getData().getGender().equals("male")) {
+                sex.setText(getResources().getString(R.string.male));
+            } else {
+                sex.setText(getResources().getString(R.string.female));
+            }
+        }
+        try {
+            birthday.setText(format.format(parse.parse(bean.getData().getBirthday())));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (!StringUtils.isNullOrBlanK(bean.getData().getGrade())) {
+            grade.setText(bean.getData().getGrade());
+        }
+        if (!StringUtils.isNullOrBlanK(bean.getData().getProvince()) && !StringUtils.isNullOrBlanK(bean.getData().getCity())) {
+            region.setText(bean.getData().getProvince() + " " + bean.getData().getCity());
+        }
+        //TODO
+//                            school
+        describe.setText(bean.getData().getDesc());
     }
 
     private void initView() {

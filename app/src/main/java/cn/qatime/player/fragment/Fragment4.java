@@ -10,12 +10,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import cn.qatime.player.R;
 import cn.qatime.player.activity.PersonalInformationActivity;
 import cn.qatime.player.activity.PersonalMyOrderActivity;
 import cn.qatime.player.activity.PersonalMyTutorshipActivity;
 import cn.qatime.player.activity.SystemSettingActivity;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.transformation.GlideCircleTransform;
 import cn.qatime.player.utils.Constant;
 
 public class Fragment4 extends BaseFragment implements View.OnClickListener {
@@ -34,6 +38,7 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
     private LinearLayout security;
     private LinearLayout setting;
     private TextView newVersion;
+    private TextView name;
 
 
     @Override
@@ -41,6 +46,8 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment4, container, false);
         assignViews(view);
 
+        Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getSmall_avatar_url()).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
+        name.setText(BaseApplication.getProfile().getData().getUser().getName());
         modify.setOnClickListener(this);
 
         paying.setOnClickListener(this);
@@ -53,6 +60,7 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
         overed.setOnClickListener(this);
         trying.setOnClickListener(this);
 
+        security.setOnClickListener(this);
         setting.setOnClickListener(this);
         return view;
     }
@@ -104,9 +112,11 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
                 intent.putExtra("pager", 4);
                 startActivity(intent);
                 break;
+            case R.id.security:// 安全管理
+                break;
             case R.id.setting:// 设置
                 intent = new Intent(getActivity(), SystemSettingActivity.class);
-                getActivity().startActivityForResult(intent,Constant.REQUEST_EXIT_LOGIN);
+                getActivity().startActivityForResult(intent, Constant.REQUEST_EXIT_LOGIN);
                 break;
         }
     }
@@ -115,6 +125,7 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
         information = (LinearLayout) view.findViewById(R.id.information);
         banner = (ImageView) view.findViewById(R.id.head_sculpture);
         headSculpture = (ImageView) view.findViewById(R.id.head_sculpture);
+        name = (TextView) view.findViewById(R.id.name);
         modify = (ImageView) view.findViewById(R.id.modify);
         paying = (LinearLayout) view.findViewById(R.id.paying);
         paid = (LinearLayout) view.findViewById(R.id.paid);

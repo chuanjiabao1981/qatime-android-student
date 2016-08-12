@@ -56,4 +56,5 @@
 -keep public class com.android.vending.licensing.ILicensingService
 
 
-
+-dontwarn org.apache.**
+-keep class org.apache.**{*;}

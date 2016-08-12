@@ -120,12 +120,13 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 new VolleyListener(RemedialClassDetailActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        LogUtils.e(response.toString());
                         data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
-                        ((FragmentRemedialClassDetail1) fragBaseFragments.get(0)).setData(data);
-                        ((FragmentRemedialClassDetail2) fragBaseFragments.get(1)).setData(data);
-                        //TODO
-//                        ((FragmentRemedialClassDetail3) fragBaseFragments.get(2)).setData(data);
+
+                        if (data != null) {
+                            ((FragmentRemedialClassDetail1) fragBaseFragments.get(0)).setData(data);
+                            ((FragmentRemedialClassDetail2) fragBaseFragments.get(1)).setData(data);
+                            ((FragmentRemedialClassDetail3) fragBaseFragments.get(2)).setData(data);
+                        }
                     }
 
                     @Override

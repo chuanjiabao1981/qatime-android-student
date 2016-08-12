@@ -29,6 +29,7 @@ import cn.qatime.player.transformation.GlideCircleTransform;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.LogUtils;
 import cn.qatime.player.utils.StringUtils;
+import cn.qatime.player.utils.UpLoadUtil;
 
 public class PersonalInformationChangeActivity extends BaseActivity implements View.OnClickListener {
     ImageView headsculpture;
@@ -48,33 +49,78 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         setContentView(R.layout.activity_personal_information_change);
         initView();
         replace.setOnClickListener(this);
-
+        complete.setOnClickListener(this);
         PersonalInformationBean data = (PersonalInformationBean) getIntent().getSerializableExtra("data");
         if (data != null && data.getData() != null) {
-            Glide.with(PersonalInformationChangeActivity.this).load(data.getData().getSmall_avatar_url()).placeholder(R.drawable.personal_information_head).transform(new GlideCircleTransform(PersonalInformationChangeActivity.this)).crossFade().into(headsculpture);
-            name.setText(data.getData().getName());
-            if (!StringUtils.isNullOrBlanK(data.getData().getGender())) {
-                if (data.getData().getGender().equals("male")) {
-                   men.setChecked(true);
-                    women.setChecked(false);
-                } else {
-                    men.setChecked(false);
-                    women.setChecked(true);
-                }
+            initData(data);
+        }
+    }
+
+    private void initData(PersonalInformationBean data) {
+        Glide.with(PersonalInformationChangeActivity.this).load(data.getData().getSmall_avatar_url()).placeholder(R.drawable.personal_information_head).transform(new GlideCircleTransform(PersonalInformationChangeActivity.this)).crossFade().into(headsculpture);
+        name.setText(data.getData().getName());
+        if (!StringUtils.isNullOrBlanK(data.getData().getGender())) {
+            if (data.getData().getGender().equals("male")) {
+                men.setChecked(true);
+                women.setChecked(false);
+            } else {
+                men.setChecked(false);
+                women.setChecked(true);
             }
+        }
 //            try {
 //                birthday.setText(format.format(parse.parse(data.getData().getBirthday())));
 //            } catch (ParseException e) {
 //                e.printStackTrace();
 //            }
-            if (!StringUtils.isNullOrBlanK(data.getData().getGrade())) {
+        if (!StringUtils.isNullOrBlanK(data.getData().getGrade())) {
 //                grade.setText(data.getData().getGrade());
-            }
+        }
 //            if (!StringUtils.isNullOrBlanK(data.getData().getProvince()) && !StringUtils.isNullOrBlanK(data.getData().getCity())) {
 //                region.setText(data.getData().getProvince() + " " + data.getData().getCity());
 //            }
 //                            school
-            describe.setText(data.getData().getDesc());
+        describe.setText(data.getData().getDesc());
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.replace://去选择图片
+                final Intent intent = new Intent(PersonalInformationChangeActivity.this, PictureSelectActivity.class);
+                startActivityForResult(intent, Constant.REQUEST_PICTURE_SELECT);
+                break;
+            case R.id.complete://完成
+                UpLoadUtil util = new UpLoadUtil(PersonalInformationChangeActivity.this) {
+                    @Override
+                    public void httpStart() {
+
+                    }
+
+                    @Override
+                    protected void httpSuccess(String result) {
+                        Intent data = new Intent();
+                        data.putExtra("data",result);
+                        setResult(Constant.RESPONSE,data);
+                        finish();
+                    }
+
+                    @Override
+                    protected void httpFailed(String result) {
+
+                    }
+                };
+                String url = null;
+                String filePath = null;
+                String id = null;
+                String sName = null;
+                String grade = null;
+                String gender = null;
+                String birthday = null;
+                String desc = null;
+                util.execute(url, filePath, id, sName, grade, gender, birthday, desc);
+                break;
         }
     }
 
@@ -88,16 +134,6 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         spinner = (Spinner) findViewById(R.id.spinner);
         describe = (EditText) findViewById(R.id.describe);
         complete = (TextView) findViewById(R.id.complete);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.replace://去选择图片
-                Intent intent = new Intent(PersonalInformationChangeActivity.this, PictureSelectActivity.class);
-                startActivityForResult(intent, Constant.REQUEST_PICTURE_SELECT);
-                break;
-        }
     }
 
     @Override
@@ -121,13 +157,6 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
             } else if (resultCode == Constant.RESPONSE_PICTURE_SELECT) {//选择照片返回的照片
                 if (data != null) {
                     ImageItem image = (ImageItem) data.getSerializableExtra("data");
-//                    LogUtils.e(image.imageId);
-//                    LogUtils.e(image.imagePath);
-//                    LogUtils.e(image.thumbnailPath);
-//                    if (!new File("file://" + image.imagePath).exists()) {
-//                        Toast.makeText(this, "您所选图片不可用", Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }
                     if (image != null && !StringUtils.isNullOrBlanK(image.imageId)) {
                         Intent intent = new Intent(PersonalInformationChangeActivity.this, CropImageActivity.class);
                         intent.putExtra("id", "content://media/external/images/media/" + image.imageId);
