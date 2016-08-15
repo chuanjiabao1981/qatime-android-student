@@ -51,11 +51,11 @@ public class FragmentRemedialClassDetail2 extends BaseFragment {
     public void setData(RemedialClassDetailBean data) {
         if(data.getData()!=null){
             name.setText("老师姓名：" + data.getData().getTeacher().getName());
-            degree.setText("最高学历" + "");
-            subject.setText("所授科目" + data.getData().getTeacher().getSubject());
-            teachingyears.setText("执教年龄" + "天");
-            school.setText("所在学校" + data.getData().getTeacher().getSchool());
-            graderange.setText("年级范围" + data.getData().getTeacher().getGrade_range());
+            degree.setText("最高学历：" + "");
+            subject.setText("所授科目：" + data.getData().getTeacher().getSubject());
+            teachingyears.setText("执教年龄：" + "天");
+            school.setText("所在学校：" + data.getData().getTeacher().getSchool());
+            graderange.setText("年级范围：" + data.getData().getTeacher().getGrade_range());
             describe.setText(data.getData().getTeacher().getDesc());
 
             Glide.with(this).load(data.getData().getTeacher().getSmall_avatar_url()).placeholder(R.mipmap.ic_launcher).crossFade().into(image);

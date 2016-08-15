@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import javax.security.auth.Subject;
 
 import cn.qatime.player.R;
@@ -27,6 +30,8 @@ public class FragmentRemedialClassDetail1 extends BaseFragment {
     TextView timetostart;
     TextView status;
     RemedialClassDetailBean data;
+    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
 
 
     @Nullable
@@ -49,13 +54,17 @@ public class FragmentRemedialClassDetail1 extends BaseFragment {
         describe = (TextView) view.findViewById(R.id.describe);
     }
 
-    public void setData(RemedialClassDetailBean data) {
+    public void setData(RemedialClassDetailBean data){
         RemedialClassDetailBean.Data bean = data.getData();
         if (bean != null) {
             name.setText("名称：" + bean.getName());
             subject.setText("科目类型：" + bean.getSubject() + "\n" + "授课老师：" + bean.getTeacher().getName() + "\n" + "课程进度：" + bean.getCompleted_lesson_count() + "/" + bean.getPreset_lesson_count());
-            classstarttime.setText("开课时间：" + bean.getLive_start_time() + "\n" + "结课时间" + bean.getLive_end_time() + "\n" + "授课方式");
-            grade.setText("年级类型：" + bean.getGrade() + "\n" + "课时总数：" + bean.getPreset_lesson_count() + "\n课时" + (bean.getPreset_lesson_count() - bean.getCompleted_lesson_count()) + "剩余课时");
+            try {
+                classstarttime.setText("开课时间：" + format.format(parse.parse(bean.getLive_start_time())) + "\n" + "结课时间：" + format.format(parse.parse(bean.getLive_end_time())) + "\n" + "授课方式:");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            grade.setText("年级类型：" + bean.getGrade() + "\n" + "课时总数：" + bean.getPreset_lesson_count() + "课时"+"\n" +"剩余课时："+ (bean.getPreset_lesson_count() - bean.getCompleted_lesson_count()));
             if (bean.getStatus().equals("preview")) {
                 status.setText("当前状态：招生中");
             } else if (bean.getStatus().equals("teaching")) {

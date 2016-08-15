@@ -72,7 +72,12 @@ public class FragmentPersonalMyTutorship1 extends BaseFragment {
                     }
                 });
 
-                helper.setText(R.id.name, "");
+           helper.setText(R.id.name,item.getName());
+                helper.setText(R.id.name, "辅导班名称："+item.getName());
+                helper.setText(R.id.subject, "科目："+item.getSubject());
+                helper.setText(R.id.teacher, "老师："+item.getTeacher_name());
+//                helper.setText(R.id.teacher, item.getIs_bought());
+//                helper.setText(R.id.progress, g);
 //                helper.get
             }
         };
@@ -113,7 +118,6 @@ public class FragmentPersonalMyTutorship1 extends BaseFragment {
         map.put("page", String.valueOf(page));
         map.put("per_page", "10");
         map.put("cate", "today");
-        map.put("student_id", String.valueOf(BaseApplication.getUserId()));
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/courses", map), null,
                 new VolleyListener(getActivity()) {

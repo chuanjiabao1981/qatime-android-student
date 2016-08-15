@@ -31,7 +31,9 @@ import cn.qatime.player.adapter.ViewHolder;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.RemedialClassBean;
+import cn.qatime.player.bean.TutorialClassBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.JsonUtils;
 import cn.qatime.player.utils.LogUtils;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VolleyErrorListener;
@@ -39,8 +41,8 @@ import cn.qatime.player.utils.VolleyListener;
 
 public class FragmentPersonalMyTutorship3 extends BaseFragment {
     private PullToRefreshListView listView;
-    private java.util.List<String> list = new ArrayList<>();
-    private CommonAdapter<String> adapter;
+    private java.util.List<TutorialClassBean.Data> list = new ArrayList<>();
+    private CommonAdapter<TutorialClassBean.Data> adapter;
     private int page = 1;
 
     @Nullable
@@ -48,15 +50,6 @@ public class FragmentPersonalMyTutorship3 extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_personal_my_tutorship3, container, false);
         initview(view);
-        list.add("1");
-        list.add("1");
-        list.add("1");
-        list.add("1");
-        list.add("1");
-        list.add("1");
-        list.add("1");
-        list.add("1");
-        list.add("1");
         return view;
     }
 
@@ -71,9 +64,9 @@ public class FragmentPersonalMyTutorship3 extends BaseFragment {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
 
-        adapter = new CommonAdapter<String>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship3) {
+        adapter = new CommonAdapter<TutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship3) {
             @Override
-            public void convert(ViewHolder helper, String item, int position) {
+            public void convert(ViewHolder helper, TutorialClassBean.Data item, int position) {
                 helper.getView(R.id.video).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -81,7 +74,13 @@ public class FragmentPersonalMyTutorship3 extends BaseFragment {
                         startActivity(intent);
                     }
                 });
+
+                helper.setText(R.id.name, "辅导班名称："+item.getName());
+                helper.setText(R.id.subject, "科目："+item.getSubject());
+                helper.setText(R.id.teacher, "老师："+item.getTeacher_name());
             }
+
+
         };
         listView.setAdapter(adapter);
 
@@ -89,13 +88,13 @@ public class FragmentPersonalMyTutorship3 extends BaseFragment {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page = 1;
-                listView.onRefreshComplete();
+
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page++;
-                listView.onRefreshComplete();
+
             }
         });
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -119,7 +118,6 @@ public class FragmentPersonalMyTutorship3 extends BaseFragment {
         map.put("page", String.valueOf(page));
         map.put("per_page", "10");
         map.put("status", "teaching");
-        map.put("student_id", String.valueOf(BaseApplication.getUserId()));
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/courses", map), null,
                 new VolleyListener(getActivity()) {
@@ -135,9 +133,10 @@ public class FragmentPersonalMyTutorship3 extends BaseFragment {
                         listView.onRefreshComplete();
 
                         try {
-                            Gson gson = new Gson();
-//                            RemedialClassBean data = gson.fromJson(jsonObject.toString(), RemedialClassBean.class);
-//                            list.addAll(data.getData());
+                            TutorialClassBean data = JsonUtils.objectFromJson(response.toString(), TutorialClassBean.class);
+                            if (data != null) {
+                                list.addAll(data.getData());
+                            }
                             adapter.notifyDataSetChanged();
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();

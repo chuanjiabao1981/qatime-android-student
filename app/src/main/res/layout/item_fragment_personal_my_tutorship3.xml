@@ -16,6 +16,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
+                android:id="@+id/class_start_time"
                 android:text="开课时间：2017-9-23 15:00"
                 android:textColor="#8e8e8e"
                 android:textSize="13sp" />
@@ -29,6 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
+                android:id="@+id/class_end_time"
                 android:text="结课时间：2017-9-23 15:00"
                 android:textColor="#8e8e8e"
                 android:textSize="13sp" />
@@ -56,7 +58,7 @@
                 android:padding="2dp">
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="2"
@@ -73,7 +75,7 @@
 
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
+android:id="@+id/subject"
                         android:padding="2dp"
                         android:text="科目：地理"
                         android:textSize="13sp" />
@@ -87,7 +89,7 @@
 
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
+android:id="@+id/teacher"
                         android:padding="2dp"
                         android:text="老师：高京燕"
                         android:textSize="13sp" />
@@ -108,12 +110,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="5dp"
+                        android:id="@+id/progress"
                         android:text="12/99" />
 
                     <ProgressBar
                         style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
                         android:layout_width="120dp"
                         android:layout_height="5dp"
+                        android:id="@+id/progress_image"
                         android:layout_gravity="center"
                         android:background="#bfbfbf" />
 
@@ -121,6 +125,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="5dp"
+                        android:id="@+id/total_class"
                         android:text="87" />
                 </LinearLayout>
 
@@ -137,6 +142,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:padding="2dp"
+                        android:id="@+id/next_class"
                         android:text="下一课2016-07-15  15:30"
                         android:textColor="#05effc"
                         android:textSize="13sp" />
