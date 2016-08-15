@@ -58,7 +58,7 @@ public class FragmentRemedialClassDetail2 extends BaseFragment {
             graderange.setText("年级范围：" + data.getData().getTeacher().getGrade_range());
             describe.setText(data.getData().getTeacher().getDesc());
 
-            Glide.with(this).load(data.getData().getTeacher().getSmall_avatar_url()).placeholder(R.mipmap.ic_launcher).crossFade().into(image);
+            Glide.with(this).load(data.getData().getTeacher().getAvatar_url()).placeholder(R.mipmap.ic_launcher).crossFade().into(image);
 
         }
 

@@ -58,7 +58,7 @@ public class RemedialClassDetailBean implements Serializable {
 
         private List<Lessons> lessons;
 
-        private String chat_team;
+        private Chat_team chat_team;
 
         private String pull_address;
 
@@ -196,11 +196,11 @@ public class RemedialClassDetailBean implements Serializable {
             return this.lessons;
         }
 
-        public void setChat_team(String chat_team) {
+        public void setChat_team(Chat_team chat_team) {
             this.chat_team = chat_team;
         }
 
-        public String getChat_team() {
+        public Chat_team getChat_team() {
             return this.chat_team;
         }
 
@@ -456,5 +456,59 @@ public class RemedialClassDetailBean implements Serializable {
             return this.icon;
         }
 
+    }
+
+    private class Chat_team implements Serializable {
+        private String announcement;
+
+        private List<Team_announcements> team_announcements;
+
+        private List<Accounts> accounts;
+
+        public void setAnnouncement(String announcement) {
+            this.announcement = announcement;
+        }
+
+        public String getAnnouncement() {
+            return this.announcement;
+        }
+
+        public void setTeam_announcements(List<Team_announcements> team_announcements) {
+            this.team_announcements = team_announcements;
+        }
+
+        public List<Team_announcements> getTeam_announcements() {
+            return this.team_announcements;
+        }
+
+        public void setAccounts(List<Accounts> accounts) {
+            this.accounts = accounts;
+        }
+
+        public List<Accounts> getAccounts() {
+            return this.accounts;
+        }
+    }
+
+    private class Team_announcements implements Serializable {
+        private String announcement;
+
+        private String edit_at;
+
+        public void setAnnouncement(String announcement) {
+            this.announcement = announcement;
+        }
+
+        public String getAnnouncement() {
+            return this.announcement;
+        }
+
+        public void setEdit_at(String edit_at) {
+            this.edit_at = edit_at;
+        }
+
+        public String getEdit_at() {
+            return this.edit_at;
+        }
     }
 }

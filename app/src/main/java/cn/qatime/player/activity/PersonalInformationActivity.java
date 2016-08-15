@@ -71,7 +71,7 @@ public class PersonalInformationActivity extends BaseActivity {
                 if (sData != null && sData.getData() != null) {
                     setValue(sData);
                     Intent intent = new Intent();
-                    intent.putExtra("url", sData.getData().getSmall_avatar_url());
+                    intent.putExtra("url", sData.getData().getAvatar_url());
                     setResult(Constant.RESPONSE, intent);
                 }
             }
@@ -104,7 +104,7 @@ public class PersonalInformationActivity extends BaseActivity {
     }
 
     private void setValue(PersonalInformationBean bean) {
-        Glide.with(PersonalInformationActivity.this).load(bean.getData().getSmall_avatar_url()).placeholder(R.mipmap.personal_information_head).transform(new GlideCircleTransform(PersonalInformationActivity.this)).crossFade().into(headsculpture);
+        Glide.with(PersonalInformationActivity.this).load(bean.getData().getAvatar_url()).placeholder(R.mipmap.personal_information_head).transform(new GlideCircleTransform(PersonalInformationActivity.this)).crossFade().into(headsculpture);
         name.setText(bean.getData().getName());
         if (!StringUtils.isNullOrBlanK(bean.getData().getGender())) {
             if (bean.getData().getGender().equals("male")) {
@@ -112,7 +112,7 @@ public class PersonalInformationActivity extends BaseActivity {
             } else {
                 sex.setText(getResources().getString(R.string.female));
             }
-        }else {
+        } else {
             sex.setText("");
         }
         if (!StringUtils.isNullOrBlanK(bean.getData().getBirthday())) {
@@ -128,10 +128,17 @@ public class PersonalInformationActivity extends BaseActivity {
         if (!StringUtils.isNullOrBlanK(bean.getData().getProvince()) && !StringUtils.isNullOrBlanK(bean.getData().getCity())) {
             region.setText(bean.getData().getProvince() + " " + bean.getData().getCity());
         }
-        //TODO
-//                            school
-//        SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getCacheDir() + "/school.txt").toString(), SchoolBean.class);
+        SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getCacheDir() + "/school.txt").toString(), SchoolBean.class);
+        if (schoolBean != null && schoolBean.getData() != null) {
 
+            for (int i = 0; i < schoolBean.getData().size(); i++) {
+                if (bean.getData().getSchool() == schoolBean.getData().get(i).getId()) {
+                    school.setText(schoolBean.getData().get(i).getName());
+                    break;
+                }
+
+            }
+        }
         describe.setText(bean.getData().getDesc());
     }
 

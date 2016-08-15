@@ -99,7 +99,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     }
 
     private void initData(PersonalInformationBean data) {
-        Glide.with(PersonalInformationChangeActivity.this).load(data.getData().getSmall_avatar_url()).placeholder(R.mipmap.personal_information_head).transform(new GlideCircleTransform(PersonalInformationChangeActivity.this)).crossFade().into(headsculpture);
+        Glide.with(PersonalInformationChangeActivity.this).load(data.getData().getAvatar_url()).placeholder(R.mipmap.personal_information_head).transform(new GlideCircleTransform(PersonalInformationChangeActivity.this)).crossFade().into(headsculpture);
         name.setText(data.getData().getName());
         Editable etext = name.getText();
         Selection.setSelection(etext, etext.length());

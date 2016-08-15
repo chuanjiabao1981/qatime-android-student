@@ -51,7 +51,7 @@ public class Profile implements Serializable{
 
         private String nick_name;
 
-        private String small_avatar_url;
+        private String avatar_url;
 
         public void setId(int id){
             this.id = id;
@@ -72,10 +72,10 @@ public class Profile implements Serializable{
             return this.nick_name;
         }
         public void setSmall_avatar_url(String small_avatar_url){
-            this.small_avatar_url = small_avatar_url;
+            this.avatar_url = small_avatar_url;
         }
         public String getSmall_avatar_url(){
-            return this.small_avatar_url;
+            return this.avatar_url;
         }
 
     }

@@ -1,27 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:layout_height="match_parent">
 
-    <ListView
-        android:id="@+id/listview"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="12"
-        android:cacheColorHint="#00000000"
-        android:divider="#00000000"
-        android:dividerHeight="0dp"
-        android:background="#fff"
-        android:scrollbars="none"
-        android:listSelector="#00000000" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <cn.qatime.player.view.SideBar
-        android:id="@+id/sidebar"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="2dp"
-        android:layout_weight="1" />
+        <ListView
+            android:id="@+id/listview"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="12"
+            android:background="#fff"
+            android:cacheColorHint="#00000000"
+            android:divider="#00000000"
+            android:dividerHeight="0dp"
+            android:listSelector="#00000000"
+            android:scrollbars="none" />
 
-</LinearLayout>
+        <cn.qatime.player.view.SideBar
+            android:id="@+id/sidebar"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="2dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#ededed"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:text="7/15" />
+
+</RelativeLayout>

@@ -9,6 +9,8 @@ import android.os.Environment;
  */
 public class Constant {
 
+    public static String APP_ID = "wxf2dfbeb5f641ce40";
+
     public static final String CACHEPATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/qatime";
 
     public static int REQUEST = 0;
@@ -20,6 +22,5 @@ public class Constant {
     public static int PHOTO_CROP = 0x1005;
     public static int REQUEST_PICTURE_SELECT = 0x1006;
     public static int RESPONSE_PICTURE_SELECT = 0x1007;
-    public static int REQUEST_CODE_SOME_FEATURES_PERMISSIONS = 1008;
-    public static String APP_ID = "wxf2dfbeb5f641ce40";
+    public static int RESPONSE_HEAD_SCULPTURE = 0x1008;
 }

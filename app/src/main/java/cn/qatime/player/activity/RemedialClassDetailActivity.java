@@ -133,18 +133,18 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                             ((FragmentRemedialClassDetail3) fragBaseFragments.get(2)).setData(data);
                             if (data.getData() != null) {
                                 if (data.getData().getIs_tasting()) {
-                                    audition.setClickable(false);
+                                    audition.setEnabled(false);
                                     audition.setText("已加入试听");
                                 } else {
-                                    audition.setClickable(true);
+                                    audition.setEnabled(true);
                                     audition.setText("加入试听");
                                 }
 
                                 if (data.getData().getIs_bought()) {
-                                    pay.setClickable(false);
+                                    pay.setEnabled(false);
                                     pay.setText("已购买");
                                 } else {
-                                    pay.setClickable(true);
+                                    pay.setEnabled(true);
                                     pay.setText("立即购买");
                                 }
                             }
@@ -189,7 +189,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     @Override
                     protected void onSuccess(JSONObject response) {
                         //已加入试听
-                        audition.setClickable(false);
+                        audition.setEnabled(false);
                         audition.setText("已加入试听");
                     }
 

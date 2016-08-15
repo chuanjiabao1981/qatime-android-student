@@ -71,7 +71,7 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.modify:
                 Intent intent = new Intent(getActivity(), PersonalInformationActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,Constant.REQUEST);
                 break;
             case R.id.paying:
                 intent = new Intent(getActivity(), PersonalMyOrderActivity.class);
