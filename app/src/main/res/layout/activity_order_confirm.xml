@@ -37,7 +37,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
 
-                    android:text="辅导班" />
+                    android:text="" />
             </LinearLayout>
 
             <LinearLayout
@@ -191,6 +191,7 @@
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="00"
+                android:textColor="#fc0202"
                 android:textSize="30dp" />
 
             <TextView

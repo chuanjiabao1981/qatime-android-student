@@ -121,25 +121,37 @@ public class PersonalInformationActivity extends BaseActivity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+        } else {
+            birthday.setText("");
         }
         if (!StringUtils.isNullOrBlanK(bean.getData().getGrade())) {
             grade.setText(bean.getData().getGrade());
+        } else {
+            grade.setText("");
         }
         if (!StringUtils.isNullOrBlanK(bean.getData().getProvince()) && !StringUtils.isNullOrBlanK(bean.getData().getCity())) {
             region.setText(bean.getData().getProvince() + " " + bean.getData().getCity());
-        }
-        SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getCacheDir() + "/school.txt").toString(), SchoolBean.class);
-        if (schoolBean != null && schoolBean.getData() != null) {
+        }else {
+            region.setText("");}
 
+
+        SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getCacheDir() + "/school.txt").toString(), SchoolBean.class);
+
+        if (schoolBean != null && schoolBean.getData() != null) {
             for (int i = 0; i < schoolBean.getData().size(); i++) {
                 if (bean.getData().getSchool() == schoolBean.getData().get(i).getId()) {
                     school.setText(schoolBean.getData().get(i).getName());
                     break;
                 }
-
             }
+        } else {
+            school.setText("");
         }
-        describe.setText(bean.getData().getDesc());
+        if (!StringUtils.isNullOrBlanK(bean.getData().getDesc())) {
+            describe.setText(bean.getData().getDesc());
+        } else {
+            describe.setText("");
+        }
     }
 
     private void initView() {

@@ -423,6 +423,7 @@ public class RemedialClassDetailBean implements Serializable {
             return this.desc;
         }
 
+
     }
 
     public class Accounts implements Serializable {

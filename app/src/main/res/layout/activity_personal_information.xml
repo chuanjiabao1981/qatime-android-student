@@ -76,7 +76,7 @@
                     android:id="@+id/sex"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/sex" />
+                    android:text="@string/male" />
 
             </LinearLayout>
 
@@ -105,7 +105,7 @@
                     android:id="@+id/birthday"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0000年00月00日" />
+                    android:text="" />
 
             </LinearLayout>
 
@@ -163,7 +163,7 @@
                     android:id="@+id/region"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="北京市 宣武区" />
+                    android:text="" />
 
             </LinearLayout>
 
@@ -192,7 +192,7 @@
                     android:id="@+id/school"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="北京市第一中学" />
+                    android:text="" />
 
             </LinearLayout>
 
@@ -217,7 +217,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="3dp"
-                    android:text="李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿森李灿李灿森" />
+                    android:text="" />
 
             </LinearLayout>
 

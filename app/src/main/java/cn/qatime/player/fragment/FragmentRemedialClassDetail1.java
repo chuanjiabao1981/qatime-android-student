@@ -57,6 +57,7 @@ public class FragmentRemedialClassDetail1 extends BaseFragment {
     public void setData(RemedialClassDetailBean data){
         RemedialClassDetailBean.Data bean = data.getData();
         if (bean != null) {
+
             name.setText("名称：" + bean.getName());
             subject.setText("科目类型：" + bean.getSubject() + "\n" + "授课老师：" + bean.getTeacher().getName() + "\n" + "课程进度：" + bean.getCompleted_lesson_count() + "/" + bean.getPreset_lesson_count());
             try {
@@ -73,6 +74,7 @@ public class FragmentRemedialClassDetail1 extends BaseFragment {
                 status.setText("当前状态：已结束");
             }
             timetostart.setText("距离开课还有" + "天");
+
             describe.setText(bean.getDescription());
         }
     }

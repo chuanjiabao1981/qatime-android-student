@@ -20,11 +20,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.bean.RemedialClassDetailBean;
 import cn.qatime.player.fragment.FragmentRemedialClassDetail1;
 import cn.qatime.player.fragment.FragmentRemedialClassDetail2;
 import cn.qatime.player.fragment.FragmentRemedialClassDetail3;
+import cn.qatime.player.transformation.GlideCircleTransform;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.JsonUtils;
 import cn.qatime.player.utils.LogUtils;
@@ -63,7 +65,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
     private void initView() {
         image = (ImageView) findViewById(R.id.image);
-        Glide.with(this).load(R.mipmap.photo).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
+
         fragBaseFragments.add(new FragmentRemedialClassDetail1());
         fragBaseFragments.add(new FragmentRemedialClassDetail2());
         fragBaseFragments.add(new FragmentRemedialClassDetail3());
@@ -124,9 +126,11 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     @Override
                     protected void onSuccess(JSONObject response) {
                         data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
-                        // TODO: 2016/8/12
-//price.setText("￥"+data.getData().g);价格
-//                        studentnumber.setText("学习人数 "+);
+                        Glide.with(RemedialClassDetailActivity.this).load(data.getData().getPublicize()).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
+
+                        if (data.getData()!=null){
+                        price.setText("￥" + data.getData().getPrice());
+                        studentnumber.setText("学习人数 " + data.getData().getBuy_tickets_count());}
                         if (data != null) {
                             ((FragmentRemedialClassDetail1) fragBaseFragments.get(0)).setData(data);
                             ((FragmentRemedialClassDetail2) fragBaseFragments.get(1)).setData(data);
@@ -174,7 +178,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 break;
             case R.id.pay:
                 Intent intent = new Intent(RemedialClassDetailActivity.this, OrderConfirmActivity.class);
-                intent.putExtra("id",id);
+                intent.putExtra("id", id);
                 intent.putExtra("data", data);
                 startActivity(intent);
                 break;
@@ -184,7 +188,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     private void joinAudition() {
         Map<String, String> map = new HashMap<>();
         map.put("id", String.valueOf(id));
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass + "/" + id+"/taste", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass + "/" + id + "/taste", map), null,
                 new VolleyListener(RemedialClassDetailActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {

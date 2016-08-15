@@ -1,5 +1,6 @@
 package cn.qatime.player.fragment;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,10 @@ import com.bumptech.glide.Glide;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.RemedialClassDetailBean;
+import cn.qatime.player.bean.SchoolBean;
+import cn.qatime.player.transformation.GlideCircleTransform;
+import cn.qatime.player.utils.FileUtil;
+import cn.qatime.player.utils.JsonUtils;
 import cn.qatime.player.utils.LogUtils;
 
 public class FragmentRemedialClassDetail2 extends BaseFragment {
@@ -41,22 +46,36 @@ public class FragmentRemedialClassDetail2 extends BaseFragment {
         name = (TextView) view.findViewById(R.id.name);
         image = (ImageView) view.findViewById(R.id.image);
         degree = (TextView) view.findViewById(R.id.degree);
-        graderange = (TextView) view.findViewById(R.id.grade_range);
+//        graderange = (TextView) view.findViewById(R.id.grade_range);
         subject = (TextView) view.findViewById(R.id.subject);
-        teachingyears=(TextView)view.findViewById(R.id.teaching_years);
+        teachingyears = (TextView) view.findViewById(R.id.teaching_years);
         school = (TextView) view.findViewById(R.id.school);
         describe = (TextView) view.findViewById(R.id.describe);
     }
 
     public void setData(RemedialClassDetailBean data) {
-        if(data.getData()!=null){
+        if (data.getData() != null) {
+
             name.setText("老师姓名：" + data.getData().getTeacher().getName());
-            degree.setText("最高学历：" + "");
+            degree.setText("最高学历：" + data.getData().getTeacher().getAvatar_url());
             subject.setText("所授科目：" + data.getData().getTeacher().getSubject());
-            teachingyears.setText("执教年龄：" + "天");
+            teachingyears.setText("执教年龄：" + data.getData().getTeacher().getTeaching_years());
             school.setText("所在学校：" + data.getData().getTeacher().getSchool());
-            graderange.setText("年级范围：" + data.getData().getTeacher().getGrade_range());
+//            graderange.setText("年级范围：" + data.getData().getTeacher().getGrade_range());
             describe.setText(data.getData().getTeacher().getDesc());
+//
+//            SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getCacheDir() + "/school.txt").toString(), SchoolBean.class);
+//
+//            if (schoolBean != null && schoolBean.getData() != null) {
+//                for (int i = 0; i < schoolBean.getData().size(); i++) {
+//                    if (data.getData().getTeacher().getSchool() == schoolBean.getData().get(i).getId()) {
+//                        school.setText(schoolBean.getData().get(i).getName());
+//                        break;
+//                    }
+//                }
+//            } else {
+//                school.setText("");
+//            }
 
             Glide.with(this).load(data.getData().getTeacher().getAvatar_url()).placeholder(R.mipmap.ic_launcher).crossFade().into(image);
 
@@ -64,4 +83,6 @@ public class FragmentRemedialClassDetail2 extends BaseFragment {
 
 
     }
+
+
 }

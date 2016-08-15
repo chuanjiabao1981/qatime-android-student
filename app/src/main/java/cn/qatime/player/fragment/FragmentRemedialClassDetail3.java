@@ -49,6 +49,15 @@ public class FragmentRemedialClassDetail3 extends BaseFragment {
                 holder.setText(R.id.number, StringUtils.Int2String(position + 1));
                 holder.setText(R.id.name, item.getName());
                 holder.setText(R.id.status, item.getStatus());
+                if (item.getStatus().equals("preview")) {
+                    holder.setText(R.id.status,"当前状态：招生中");
+                } else if (item.getStatus().equals("teaching")) {
+                    holder.setText(R.id.status,"当前状态：已开课");
+                } else {
+                    holder.setText(R.id.status,"当前状态：已结束");
+                }
+
+
                 holder.setText(R.id.name, item.getName());
             }
         };

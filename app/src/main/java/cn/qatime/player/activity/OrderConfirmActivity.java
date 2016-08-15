@@ -15,6 +15,8 @@ import com.android.volley.VolleyError;
 
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,6 +50,9 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     private RadioGroup radioGroup;
     private int id;
     private String payType;
+    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,12 +75,28 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         grade.setText("年级类型：" + data.getData().getGrade());
         classnumber.setText("课时总数：" + data.getData().getPreset_lesson_count());
         teacher.setText("授课教师:" + data.getData().getTeacher().getName());
-        classstarttime.setText("开课时间:" + data.getData().getLive_start_time());
-        classendtime.setText("结课时间:" + data.getData().getLive_end_time());
-        status.setText("当前状态" + data.getData().getStatus());
+        try {
+            classstarttime.setText("开课时间:" + format.format(parse.parse(data.getData().getLive_start_time())));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            classendtime.setText("结课时间:" + format.format(parse.parse(data.getData().getLive_end_time())));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (data.getData().getStatus().equals("preview")) {
+            status.setText("当前状态：招生中");
+        } else if (data.getData().getStatus().equals("teaching")) {
+            status.setText("当前状态：已开课");
+        } else {
+            status.setText("当前状态：已结束");
+        }
         // TODO: 2016/8/12  image teachway price
 //        teachway.setText("授课方式"+data.getData().);
-        price.setText("价格"+data.getData().getPrice());
+        price.setText("价格："+data.getData().getPrice());
+        payprice.setText(" "+data.getData().getPrice()+" ");
     }
 
     @Override

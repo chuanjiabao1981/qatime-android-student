@@ -32,7 +32,8 @@
                   android:id="@+id/price"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:text="￥00"/>
+                  android:textColor="#fa0000"
+                  android:text=""/>
 
               <View
                   android:layout_width="0dp"
@@ -42,8 +43,7 @@
               <TextView
                   android:id="@+id/student_number"
                   android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:text="学习人数"/>
+                  android:layout_height="wrap_content"/>
           </LinearLayout>
       </LinearLayout>
 
