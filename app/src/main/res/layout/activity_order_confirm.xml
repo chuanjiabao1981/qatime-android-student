@@ -15,6 +15,7 @@
         android:scrollbars="none">
 
         <LinearLayout
+            android:background="@drawable/text_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -29,7 +30,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="商品名称" />
+
+                    android:text="@string/commodity_name" />
 
                 <TextView
                     android:id="@+id/name"
@@ -41,17 +43,18 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layout_weight="1"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#dfdddd"
+                android:layout_height="0dp"
+
                 android:orientation="horizontal"
-                android:padding="15dp">
+                android:padding="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="商品详情" />
+                    android:text="@string/commodity_name" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -136,17 +139,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="0dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="1dp"
         android:background="#ffffff"
         android:orientation="vertical">
 
         <RelativeLayout
+
+            android:background="@drawable/text_background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal">
+          >
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+   android:padding="8dp"
 
+    android:text="@string/method_payment"/>
             <RadioGroup
                 android:id="@+id/radiogroup"
+                android:layout_centerHorizontal="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -182,7 +193,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:text="应付金额" />
+                android:text="@string/amount_payment" />
 
             <TextView
                 android:id="@+id/pay_price"
@@ -205,9 +216,9 @@
         <Button
             android:id="@+id/pay"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_gravity="center"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:background="#fa8f03"
             android:text="立即支付" />
 

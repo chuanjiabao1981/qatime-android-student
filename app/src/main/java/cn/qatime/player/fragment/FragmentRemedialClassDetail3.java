@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,17 +49,22 @@ public class FragmentRemedialClassDetail3 extends BaseFragment {
             public void convert(ViewHolder holder, RemedialClassDetailBean.Lessons item, int position) {
                 holder.setText(R.id.number, StringUtils.Int2String(position + 1));
                 holder.setText(R.id.name, item.getName());
-                holder.setText(R.id.status, item.getStatus());
-                if (item.getStatus().equals("preview")) {
-                    holder.setText(R.id.status,"当前状态：招生中");
-                } else if (item.getStatus().equals("teaching")) {
-                    holder.setText(R.id.status,"当前状态：已开课");
+                holder.setText(R.id.live_time,item.getLive_time());
+                if (item.getStatus().equals("finished")) {
+                    holder.setText(R.id.status, "当前状态：已结束");
+                } else if (item.getStatus().equals("ready")) {
+                    holder.setText(R.id.status, "当前状态：待直播");
                 } else {
-                    holder.setText(R.id.status,"当前状态：已结束");
+                    holder.setText(R.id.status, "当前状态：直播中");
                 }
 
 
-                holder.setText(R.id.name, item.getName());
+                try {
+                    holder.setText(R.id.class_date,format.format(parse.parse(item.getClass_date())));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
             }
         };
         listView.setAdapter(adapter);

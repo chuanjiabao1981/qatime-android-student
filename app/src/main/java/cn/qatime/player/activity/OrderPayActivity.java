@@ -44,6 +44,7 @@ public class OrderPayActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_pay);
+        setTitle(getResources().getString(R.string.pay_confirm));
         initView();
         api = WXAPIFactory.createWXAPI(this, null);
 

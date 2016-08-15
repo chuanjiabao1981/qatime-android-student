@@ -18,8 +18,10 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
         android:ellipsize="middle"
+        android:background="#e4e2e2"
+        android:minLines="2"
         android:maxLines="2"
-        android:text="高级辅导班辅导班北京高考详解高级辅导班北京高考详解"
+        android:text="名称"
         android:textSize="14sp" />
 
     <LinearLayout
@@ -31,11 +33,11 @@
             android:id="@+id/teacher"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
+
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
+
             android:drawableLeft="@mipmap/head_sculpture"
-            android:text="高英宇"
+            android:text="老师"
             android:textSize="13sp" />
 
         <View
@@ -47,9 +49,8 @@
             android:id="@+id/subject"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:text="数学"
+
+            android:text="科目"
             android:textSize="13sp" />
 
         <View
@@ -61,10 +62,10 @@
             android:id="@+id/grade"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
+
             android:layout_marginRight="10dp"
-            android:layout_marginTop="5dp"
-            android:text="高一"
+
+            android:text="年级"
             android:textSize="13sp" />
     </LinearLayout>
 
@@ -77,10 +78,10 @@
             android:id="@+id/price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:text="0"
+
+            android:layout_marginLeft="15dp"
+
+            android:text="价格"
             android:textColor="#ff0000"
             android:textSize="13sp" />
 
@@ -94,11 +95,11 @@
             android:id="@+id/student_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="5dp"
+
+            android:layout_marginRight="15dp"
+
             android:drawableLeft="@mipmap/shopping_trolley16"
-            android:text="102"
+            android:text="人数"
             android:textSize="13sp" />
     </LinearLayout>
 

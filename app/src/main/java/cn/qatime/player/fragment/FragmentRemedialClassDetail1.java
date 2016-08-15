@@ -61,7 +61,7 @@ public class FragmentRemedialClassDetail1 extends BaseFragment {
             name.setText("名称：" + bean.getName());
             subject.setText("科目类型：" + bean.getSubject() + "\n" + "授课老师：" + bean.getTeacher().getName() + "\n" + "课程进度：" + bean.getCompleted_lesson_count() + "/" + bean.getPreset_lesson_count());
             try {
-                classstarttime.setText("开课时间：" + format.format(parse.parse(bean.getLive_start_time())) + "\n" + "结课时间：" + format.format(parse.parse(bean.getLive_end_time())) + "\n" + "授课方式:");
+                classstarttime.setText("开课时间：" + format.format(parse.parse(bean.getLive_start_time())) + "\n" + "结课时间：" + format.format(parse.parse(bean.getLive_end_time())) + "\n" + "授课方式：");
             } catch (ParseException e) {
                 e.printStackTrace();
             }

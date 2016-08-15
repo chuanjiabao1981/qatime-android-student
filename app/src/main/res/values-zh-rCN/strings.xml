@@ -100,6 +100,10 @@
     <string name="boy">我是男神</string>
     <string name="girl">我是女神</string>
     <string name="finish">完成</string>
+    <string name="male">男</string>
+    <string name="female">女</string>
+    <string name="change_information">修改个人信息</string>
+    <string name="tutor_information">辅导班详情</string>
 
     //我的订单
     <string name="detail_of_order">订单详情</string>
@@ -108,13 +112,18 @@
     <string name="time_built">创建时间</string>
     <string name="time_payment">支付时间</string>
     <string name="method_payment">支付方式</string>
-    <string name="amount_payment">支付金额</string>
+    <string name="amount_payment">应付金额</string>
     <string name="cancel_order">取消订单</string>
     <string name="delete_order">删除订单</string>
     <string name="reorder">重新下单</string>
     <string name="pay">付款</string>
     <string name="deal_down">交易完成</string>//
     <string name="deal_closed">交易关闭</string>//
+    <string name="order_confirm">订单确认</string>
+    <string name="pay_confirm">支付确认</string>
+    <string name="commodity_name">商品名称</string>
+    <string name="commodity_detail">商品详情</string>
+    <string name="pay_remind">请您在24小时内完成支付，否则订单会自动取消。</string>
     //详情
     <string name="information_detail">信息详情</string>
     <string name="teacher_detail">教师详情</string>
@@ -131,8 +140,9 @@
     <string name="verification_code">请输入验证码</string>
     <string name="change_it">看不清，换一张？</string>
     <string name="logout">退出登录</string>
+    <string name="press_another_exit">再按一次退出程序</string>
     //注册
-    <string name="set_for_login">设置登录</string>
+    <string name="set_for_login">注册</string>
     <string name="get_verification_code">获取校验码</string>
     <string name="hint_input_verification_code">输入校验码</string>
     <string name="hint_phone_number">请输入大陆地区11位手机号码</string>
@@ -142,4 +152,11 @@
     <string name="agree">同意</string>
     <string name="next">下一步</string>
     <string name="can_not_be_empty">不能为空</string>
+    <string name="system_setting">系统设置</string>
+    //忘记密码
+    <string name="hint_phone_number_forget">请输入手机号码</string>
+    <string name="hint_password_forget">不能为空</string>
+
+
+    <string name="use">使用</string>
 </resources>

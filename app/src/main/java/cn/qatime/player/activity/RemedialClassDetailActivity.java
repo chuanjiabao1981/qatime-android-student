@@ -55,7 +55,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remedial_class_detail);
-
+        setTitle(getResources().getString(R.string.tutor_information));
         id = getIntent().getIntExtra("id", 0);//联网id
         pager = getIntent().getIntExtra("pager", 0);
         initView();

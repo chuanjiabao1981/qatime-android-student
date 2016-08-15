@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
 
 import org.json.JSONObject;
 
@@ -58,6 +59,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_confirm);
+        setTitle(getResources().getString(R.string.order_confirm));
         initView();
         RemedialClassDetailBean data = (RemedialClassDetailBean) getIntent().getSerializableExtra("data");
         id = getIntent().getIntExtra("id", 0);
@@ -70,19 +72,21 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 
 
     private void setValue(RemedialClassDetailBean data) {
+        Glide.with(OrderConfirmActivity.this).load(data.getData().getPublicize()).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
+
         name.setText(data.getData().getName());
         project.setText("科目类型：" + data.getData().getSubject());
         grade.setText("年级类型：" + data.getData().getGrade());
         classnumber.setText("课时总数：" + data.getData().getPreset_lesson_count());
-        teacher.setText("授课教师:" + data.getData().getTeacher().getName());
+        teacher.setText("授课教师：" + data.getData().getTeacher().getName());
         try {
-            classstarttime.setText("开课时间:" + format.format(parse.parse(data.getData().getLive_start_time())));
+            classstarttime.setText("开课时间：" + format.format(parse.parse(data.getData().getLive_start_time())));
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
         try {
-            classendtime.setText("结课时间:" + format.format(parse.parse(data.getData().getLive_end_time())));
+            classendtime.setText("结课时间：" + format.format(parse.parse(data.getData().getLive_end_time())));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -94,7 +98,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
             status.setText("当前状态：已结束");
         }
         // TODO: 2016/8/12  image teachway price
-//        teachway.setText("授课方式"+data.getData().);
+        teachway.setText("授课方式：");
         price.setText("价格："+data.getData().getPrice());
         payprice.setText(" "+data.getData().getPrice()+" ");
     }

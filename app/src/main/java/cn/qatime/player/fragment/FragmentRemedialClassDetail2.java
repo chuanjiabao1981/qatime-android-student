@@ -57,9 +57,13 @@ public class FragmentRemedialClassDetail2 extends BaseFragment {
         if (data.getData() != null) {
 
             name.setText("老师姓名：" + data.getData().getTeacher().getName());
-            degree.setText("最高学历：" + data.getData().getTeacher().getAvatar_url());
+            degree.setText("最高学历：");
             subject.setText("所授科目：" + data.getData().getTeacher().getSubject());
-            teachingyears.setText("执教年龄：" + data.getData().getTeacher().getTeaching_years());
+            if (data.getData().getTeacher().getTeaching_years().equals("within_three_years")) {
+                teachingyears.setText("执教年龄：三年以内");
+            } else {
+                teachingyears.setText("执教年龄：三年以上");
+            }
             school.setText("所在学校：" + data.getData().getTeacher().getSchool());
 //            graderange.setText("年级范围：" + data.getData().getTeacher().getGrade_range());
             describe.setText(data.getData().getTeacher().getDesc());

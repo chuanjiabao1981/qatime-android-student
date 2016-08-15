@@ -29,11 +29,13 @@
               android:padding="5dp">
 
               <TextView
+
                   android:id="@+id/price"
+                  android:paddingLeft="10dp"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:textColor="#fa0000"
-                  android:text=""/>
+                /> <!--价格-->
 
               <View
                   android:layout_width="0dp"
@@ -42,8 +44,10 @@
 
               <TextView
                   android:id="@+id/student_number"
+                  android:paddingRight="10dp"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"/>
+         <!--已报人数-->
           </LinearLayout>
       </LinearLayout>
 

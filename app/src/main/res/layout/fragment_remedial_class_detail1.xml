@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="6dp"
 
-                android:text="科目类型：\n授课老师：\n课程进度" />
+                android:text="科目类型：\n授课老师：\n课程进度：" />
 
             <View
                 android:layout_width="0dp"

@@ -12,9 +12,10 @@
         <include layout="@layout/layout_backbar" />
 
         <LinearLayout
+            android:background="@drawable/text_background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#fff"
+          android:layout_margin="5dp"
             android:orientation="vertical">
 
             <TextView
@@ -68,10 +69,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="5dp"
-            android:text="请您在24小时内完成支付，否则订单会自动取消。" />
+            android:text="@string/pay_remind" />
     </LinearLayout>
 
     <Button
