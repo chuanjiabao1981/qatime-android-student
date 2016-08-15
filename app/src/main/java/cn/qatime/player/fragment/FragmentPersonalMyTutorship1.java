@@ -28,7 +28,9 @@ import cn.qatime.player.adapter.CommonAdapter;
 import cn.qatime.player.adapter.ViewHolder;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.bean.TutorialClassBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.JsonUtils;
 import cn.qatime.player.utils.LogUtils;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VolleyErrorListener;
@@ -36,8 +38,8 @@ import cn.qatime.player.utils.VolleyListener;
 
 public class FragmentPersonalMyTutorship1 extends BaseFragment {
     private PullToRefreshListView listView;
-    private java.util.List<String> list = new ArrayList<>();
-    private CommonAdapter<String> adapter;
+    private java.util.List<TutorialClassBean.Data> list = new ArrayList<>();
+    private CommonAdapter<TutorialClassBean.Data> adapter;
     private int page = 1;
 
     @Nullable
@@ -59,9 +61,9 @@ public class FragmentPersonalMyTutorship1 extends BaseFragment {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
 
-        adapter = new CommonAdapter<String>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship1) {
+        adapter = new CommonAdapter<TutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship1) {
             @Override
-            public void convert(ViewHolder helper, String item, int position) {
+            public void convert(ViewHolder helper, TutorialClassBean.Data item, int position) {
                 helper.getView(R.id.video).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -69,6 +71,9 @@ public class FragmentPersonalMyTutorship1 extends BaseFragment {
                         startActivity(intent);
                     }
                 });
+
+                helper.setText(R.id.name, "");
+//                helper.get
             }
         };
         listView.setAdapter(adapter);
@@ -77,13 +82,12 @@ public class FragmentPersonalMyTutorship1 extends BaseFragment {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page = 1;
-                listView.onRefreshComplete();
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page++;
-                listView.onRefreshComplete();
+
             }
         });
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -95,7 +99,7 @@ public class FragmentPersonalMyTutorship1 extends BaseFragment {
 
     @Override
     public void onShow() {
-        if (!isLoad){
+        if (!isLoad) {
             initData(1);
         }
     }
@@ -115,7 +119,7 @@ public class FragmentPersonalMyTutorship1 extends BaseFragment {
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        isLoad =true;
+                        isLoad = true;
                         LogUtils.e(response.toString());
                         if (type == 1) {
                             list.clear();
@@ -125,10 +129,12 @@ public class FragmentPersonalMyTutorship1 extends BaseFragment {
                         listView.onRefreshComplete();
 
                         try {
-                            Gson gson = new Gson();
-//                            RemedialClassBean data = gson.fromJson(jsonObject.toString(), RemedialClassBean.class);
-//                            list.addAll(data.getData());
+                            TutorialClassBean data = JsonUtils.objectFromJson(response.toString(), TutorialClassBean.class);
+                            if (data != null) {
+                                list.addAll(data.getData());
+                            }
                             adapter.notifyDataSetChanged();
+                            listView.onRefreshComplete();
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
                         }

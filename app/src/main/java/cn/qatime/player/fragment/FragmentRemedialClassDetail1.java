@@ -55,8 +55,14 @@ public class FragmentRemedialClassDetail1 extends BaseFragment {
             name.setText("名称：" + bean.getName());
             subject.setText("科目类型：" + bean.getSubject() + "\n" + "授课老师：" + bean.getTeacher().getName() + "\n" + "课程进度：" + bean.getCompleted_lesson_count() + "/" + bean.getPreset_lesson_count());
             classstarttime.setText("开课时间：" + bean.getLive_start_time() + "\n" + "结课时间" + bean.getLive_end_time() + "\n" + "授课方式");
-            grade.setText("年级类型：" + bean.getGrade() + "\n" + "课时总数：" + bean.getPreset_lesson_count() + "课时" + "剩余课时");
-            status.setText("当前状态" + bean.getStatus());
+            grade.setText("年级类型：" + bean.getGrade() + "\n" + "课时总数：" + bean.getPreset_lesson_count() + "\n课时" + (bean.getPreset_lesson_count() - bean.getCompleted_lesson_count()) + "剩余课时");
+            if (bean.getStatus().equals("preview")) {
+                status.setText("当前状态：招生中");
+            } else if (bean.getStatus().equals("teaching")) {
+                status.setText("当前状态：已开课");
+            } else {
+                status.setText("当前状态：已结束");
+            }
             timetostart.setText("距离开课还有" + "天");
             describe.setText(bean.getDescription());
         }

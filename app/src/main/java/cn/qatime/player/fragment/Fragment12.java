@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,6 +53,7 @@ import cn.qatime.player.bean.RemedialClassBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.JsonUtils;
 import cn.qatime.player.utils.KeyBoardUtils;
+import cn.qatime.player.utils.LogUtils;
 import cn.qatime.player.utils.MDatePickerDialog;
 import cn.qatime.player.utils.ScreenUtils;
 import cn.qatime.player.utils.UrlUtils;
@@ -136,12 +138,18 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
         adapter = new CommonAdapter<RemedialClassBean.Data>(getActivity(), list, R.layout.item_fragment12) {
             @Override
             public void convert(ViewHolder helper, RemedialClassBean.Data item, int position) {
+                if (item == null) {
+                    LogUtils.e("item數據空");
+                    return;
+                }
                 ((ImageView) helper.getView(R.id.image)).setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()) / 2, ScreenUtils.getScreenWidth(getActivity()) / 2));
-               Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).crossFade().into(((ImageView) helper.getView(R.id.image)));
+                Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).crossFade().into(((ImageView) helper.getView(R.id.image)));
                 helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.grade, item.getGrade());
-                helper.setText(R.id.teacher, item.getTeacher_name());
+                if (item.getTeacher_name() != null) {
+                    helper.setText(R.id.teacher, item.getTeacher_name());
+                }
                 helper.setText(R.id.price, "￥" + item.getPrice());
                 helper.setText(R.id.student_number, String.valueOf(item.getBuy_tickets_count()));
             }
@@ -297,6 +305,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
      * 请求完数据后，清空弹框内的数据
      */
     private void clearScreenData() {
+//        timesorttype = "";
         priceLow.setText("");
         priceHigh.setText("");
         subjectLow.setText("");
@@ -345,7 +354,6 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        //TODO 待定 排序规则
                         if (timeList.get(position).equals(getResources().getString(R.string.in_price_low_to_high))) {
                             timetext.setText(getResources().getString(R.string.by_price_up));
                         } else if (timeList.get(position).equals(getResources().getString(R.string.in_price_high_to_low))) {
@@ -353,8 +361,15 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                         } else {
                             timetext.setText(timeList.get(position));
                         }
-
-                        timesorttype = "";
+                        if (position == 0) {
+                            timesorttype = "";
+                        } else if (position == 1) {
+                            timesorttype = "price.asc";
+                        } else if (position == 2) {
+                            timesorttype = "price.desc";
+                        } else {
+                            timesorttype = "buy_tickets_count.asc";
+                        }
                         initData(1);
                         pop.dismiss();
                     }
