@@ -194,8 +194,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 };
                 String url = UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/update";
                 String filePath = imageUrl;
-                String id = String.valueOf(BaseApplication.getUserId());
-                if (StringUtils.isNullOrBlanK(id)) {
+                if (StringUtils.isNullOrBlanK(BaseApplication.getUserId())) {
                     Toast.makeText(PersonalInformationChangeActivity.this, "id为空", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -212,7 +211,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 String gender = radiogroup.getCheckedRadioButtonId() == men.getId() ? "male" : "female";
                 String birthday = select.equals(parse.format(new Date())) ? "" : select;
                 String desc = describe.getText().toString();
-                util.execute(url, filePath, id, sName, grade, gender, birthday, desc);
+                util.execute(url, filePath, sName, grade, gender, birthday, desc);
                 break;
         }
     }

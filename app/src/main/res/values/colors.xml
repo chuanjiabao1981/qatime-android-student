@@ -15,4 +15,8 @@
     <color name="guideline">@color/white_translucent</color>
     <color name="corner">@android:color/white</color>
     <color name="surrounding_area">@color/black_translucent</color>
+
+    <color name="orange_bg">#fff39e2a</color>
+    <color name="orange_hint_bg">#42f39e2a</color>
+
 </resources>

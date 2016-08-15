@@ -66,21 +66,20 @@ public abstract class UpLoadUtil extends AsyncTask<String, String, String> imple
             CustomMultipartEntity mpEntity = new CustomMultipartEntity(this); // 文件传输
             contentLength = mpEntity.getContentLength();
 
-            mpEntity.addPart("id", new StringBody(params[2], contentType));
-            mpEntity.addPart("name", new StringBody(params[3], contentType));
-            mpEntity.addPart("grade", new StringBody(params[4], contentType));
+            mpEntity.addPart("name", new StringBody(params[2], contentType));
+            mpEntity.addPart("grade", new StringBody(params[3], contentType));
             if (file.exists()) {
                 FileBody fileBody = new FileBody(file);
                 mpEntity.addPart("avatar", fileBody);
             }
+            if (!StringUtils.isNullOrBlanK(params[4])) {
+                mpEntity.addPart("gender", new StringBody(params[4], contentType));
+            }
             if (!StringUtils.isNullOrBlanK(params[5])) {
-                mpEntity.addPart("gender", new StringBody(params[5], contentType));
+                mpEntity.addPart("birthday", new StringBody(params[5], contentType));
             }
             if (!StringUtils.isNullOrBlanK(params[6])) {
-                mpEntity.addPart("birthday", new StringBody(params[6], contentType));
-            }
-            if (!StringUtils.isNullOrBlanK(params[7])) {
-                mpEntity.addPart("desc", new StringBody(params[7], contentType));
+                mpEntity.addPart("desc", new StringBody(params[6], contentType));
             }
             httppost.setEntity(mpEntity);
 

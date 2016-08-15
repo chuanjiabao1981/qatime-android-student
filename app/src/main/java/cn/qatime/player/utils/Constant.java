@@ -21,4 +21,5 @@ public class Constant {
     public static int REQUEST_PICTURE_SELECT = 0x1006;
     public static int RESPONSE_PICTURE_SELECT = 0x1007;
     public static int REQUEST_CODE_SOME_FEATURES_PERMISSIONS = 1008;
+    public static String APP_ID = "wxf2dfbeb5f641ce40";
 }

@@ -20,9 +20,11 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.PersonalInformationBean;
+import cn.qatime.player.bean.SchoolBean;
 import cn.qatime.player.transformation.GlideCircleTransform;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.FileUtil;
 import cn.qatime.player.utils.JsonUtils;
 import cn.qatime.player.utils.StringUtils;
 import cn.qatime.player.utils.UrlUtils;
@@ -77,10 +79,8 @@ public class PersonalInformationActivity extends BaseActivity {
     }
 
     private void initData() {
-        Map<String, String> map = new HashMap<>();
-        map.put("id", String.valueOf(BaseApplication.getUserId()));
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null,
                 new VolleyListener(PersonalInformationActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -112,6 +112,8 @@ public class PersonalInformationActivity extends BaseActivity {
             } else {
                 sex.setText(getResources().getString(R.string.female));
             }
+        }else {
+            sex.setText("");
         }
         if (!StringUtils.isNullOrBlanK(bean.getData().getBirthday())) {
             try {
@@ -128,6 +130,8 @@ public class PersonalInformationActivity extends BaseActivity {
         }
         //TODO
 //                            school
+//        SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getCacheDir() + "/school.txt").toString(), SchoolBean.class);
+
         describe.setText(bean.getData().getDesc());
     }
 

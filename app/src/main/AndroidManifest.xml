@@ -26,7 +26,7 @@
     <!--允许程序从sd卡读取数据-->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!--允许程序向sd卡写-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <application
         android:name=".base.BaseApplication"
         android:allowBackup="true"
@@ -114,6 +114,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.CropImageActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".WXPayEntryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
     </application>

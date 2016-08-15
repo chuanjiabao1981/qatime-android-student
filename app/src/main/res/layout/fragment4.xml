@@ -288,12 +288,14 @@
                 android:id="@+id/setting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
                     android:gravity="center"
                     android:text="@string/setting" />
 
@@ -302,7 +304,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="top"
-                    android:paddingTop="5dp"
                     android:text="@string/new_edition"
                     android:textColor="#e20914"
                     android:textSize="10dp" />

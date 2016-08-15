@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <include layout="@layout/layout_backbar"/>
+    <include layout="@layout/layout_backbar" />
 
 
     <ScrollView
@@ -23,13 +23,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:padding="15dp">
+                android:padding="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="商品名称"/>
+                    android:text="商品名称" />
 
                 <TextView
                     android:id="@+id/name"
@@ -37,7 +37,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="6"
 
-                    android:text="辅导班"/>
+                    android:text="辅导班" />
             </LinearLayout>
 
             <LinearLayout
@@ -51,7 +51,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="商品详情"/>
+                    android:text="商品详情" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -63,70 +63,70 @@
                         android:id="@+id/image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@mipmap/photo"/>
+                        android:src="@mipmap/photo" />
 
                     <TextView
                         android:id="@+id/project"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="3dp"
-                        android:text="科目类型"/>
+                        android:text="科目类型" />
 
                     <TextView
                         android:id="@+id/grade"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="3dp"
-                        android:text="年级类型"/>
+                        android:text="年级类型" />
 
                     <TextView
                         android:id="@+id/teacher"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="3dp"
-                        android:text="授课老师"/>
+                        android:text="授课老师" />
 
                     <TextView
                         android:id="@+id/class_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="3dp"
-                        android:text="课时总数"/>
+                        android:text="课时总数" />
 
                     <TextView
                         android:id="@+id/class_start_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="3dp"
-                        android:text="开课时间"/>
+                        android:text="开课时间" />
 
                     <TextView
                         android:id="@+id/class_end_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="3dp"
-                        android:text="结课时间"/>
+                        android:text="结课时间" />
 
                     <TextView
                         android:id="@+id/status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="3dp"
-                        android:text="当前状态"/>
+                        android:text="当前状态" />
 
                     <TextView
                         android:id="@+id/teach_way"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="3dp"
-                        android:text="授课方式"/>
+                        android:text="授课方式" />
 
                     <TextView
                         android:id="@+id/price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="3dp"
-                        android:text="价格"/>
+                        android:text="价格" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -140,6 +140,36 @@
         android:background="#ffffff"
         android:orientation="vertical">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal">
+
+            <RadioGroup
+                android:id="@+id/radiogroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/wechat_pay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:checked="true"
+                    android:drawableLeft="@mipmap/wechat_pay"
+                    android:gravity="center_vertical"
+                    android:text="微信支付" />
+
+                <RadioButton
+                    android:id="@+id/alipay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/alipay"
+                    android:gravity="center_vertical"
+                    android:text="支付宝支付" />
+            </RadioGroup>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -152,7 +182,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:text="应付金额"/>
+                android:text="应付金额" />
 
             <TextView
                 android:id="@+id/pay_price"
@@ -161,13 +191,13 @@
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="00"
-                android:textSize="30dp"/>
+                android:textSize="30dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
-                android:text="元"/>
+                android:text="元" />
         </LinearLayout>
 
 
@@ -178,7 +208,7 @@
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:background="#fa8f03"
-            android:text="提交订单"/>
+            android:text="立即支付" />
 
     </LinearLayout>
 

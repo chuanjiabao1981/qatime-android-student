@@ -143,7 +143,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                     return;
                 }
                 ((ImageView) helper.getView(R.id.image)).setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()) / 2, ScreenUtils.getScreenWidth(getActivity()) / 2));
-                Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).crossFade().into(((ImageView) helper.getView(R.id.image)));
+                Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).crossFade().centerCrop().into(((ImageView) helper.getView(R.id.image)));
                 helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.grade, item.getGrade());

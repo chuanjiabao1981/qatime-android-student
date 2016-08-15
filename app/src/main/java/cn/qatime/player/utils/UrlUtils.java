@@ -21,6 +21,8 @@ public class UrlUtils {
     public static String urlPersonalInformation = baseUrl + "api/v1/students/";
     //基础信息
     public static String urlAppconstantInformation = baseUrl + "api/v1/app_constant";
+    //獲取支付
+    public static String urlPayPrepare = baseUrl + "api/v1/live_studio/courses/";
 
     public static String getUrl(String function, Map<String, String> params) {
         String url;

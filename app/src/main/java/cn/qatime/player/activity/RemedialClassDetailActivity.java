@@ -119,9 +119,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
 
     private void initData() {
-        Map<String, String> map = new HashMap<>();
-        map.put("id", String.valueOf(id));
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass + "/" + id, map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass + "/" + id, null,
                 new VolleyListener(RemedialClassDetailActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -176,6 +174,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 break;
             case R.id.pay:
                 Intent intent = new Intent(RemedialClassDetailActivity.this, OrderConfirmActivity.class);
+                intent.putExtra("id",id);
                 intent.putExtra("data", data);
                 startActivity(intent);
                 break;
@@ -185,7 +184,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     private void joinAudition() {
         Map<String, String> map = new HashMap<>();
         map.put("id", String.valueOf(id));
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass + "/" + id+"taste", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass + "/" + id+"/taste", map), null,
                 new VolleyListener(RemedialClassDetailActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
