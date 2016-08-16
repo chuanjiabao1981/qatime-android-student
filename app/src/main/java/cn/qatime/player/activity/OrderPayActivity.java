@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
@@ -11,13 +12,11 @@ import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
@@ -26,7 +25,6 @@ import cn.qatime.player.bean.OrderConfirmBean;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.JsonUtils;
-import cn.qatime.player.utils.SignUtil;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VolleyErrorListener;
 import cn.qatime.player.utils.VolleyListener;
@@ -39,6 +37,9 @@ public class OrderPayActivity extends BaseActivity {
     Button commit;
     private OrderConfirmBean data;
     private IWXAPI api;
+    private boolean canPay = false;
+
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +57,7 @@ public class OrderPayActivity extends BaseActivity {
         initData(id, payType);
     }
 
-    private void initData(int id, String payType) {
+    private void initData(int id, final String payType) {
         Map<String, String> map = new HashMap<>();
         map.put("pay_type", payType);
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlPayPrepare + id + "/orders", map), null,
@@ -64,11 +65,25 @@ public class OrderPayActivity extends BaseActivity {
                     @Override
                     protected void onSuccess(JSONObject response) {
                         data = JsonUtils.objectFromJson(response.toString(), OrderConfirmBean.class);
-                        commit.setClickable(true);
+
+                        if (data != null) {
+                            canPay = true;
+                            code.setText("订单编号：" + data.getData().getId());
+                            time.setText("创建时间：" + format.format(new Date()));
+                            if (payType.equals("1")) {
+                                type.setText("支付方式：微信支付");
+                            } else {
+                                type.setText("支付方式：支付宝支付");
+                            }
+                            //TODO
+                            price.setText("支付金额：" );
+//                        commit.setEnabled(true);
+                        }
                     }
 
                     @Override
                     protected void onError(JSONObject response) {
+                        canPay = false;
 
                     }
                 }, new VolleyErrorListener() {
@@ -86,34 +101,32 @@ public class OrderPayActivity extends BaseActivity {
         type = (TextView) findViewById(R.id.type);
         price = (TextView) findViewById(R.id.price);
         commit = (Button) findViewById(R.id.commit);
+        commit.setEnabled(false);
         commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                PayReq request = new PayReq();
+                if (canPay) {
+                    PayReq request = new PayReq();
 
-                request.appId = Constant.APP_ID;
+                    request.appId = Constant.APP_ID;
 
-                request.partnerId = "1900000109";
+                    request.partnerId = data.getData().getId();
 
-                request.prepayId = data.getData().getPrepayid();
+                    request.prepayId = data.getData().getPrepay_id();
 
-                request.packageValue = "Sign=WXPay";
+                    request.packageValue = "Sign=WXPay";
 
-                request.nonceStr = data.getData().getNoncestr();
+                    request.nonceStr = data.getData().getNonce_str();
 
-                request.timeStamp = "1398746574";
+                    request.timeStamp = data.getData().getGenerate_app_pay_params().getTimestamp();
 
-                List<NameValuePair> param = new ArrayList<NameValuePair>();
-                param.add(new BasicNameValuePair("appid", request.appId));
-                param.add(new BasicNameValuePair("partnerid", request.partnerId));
-                param.add(new BasicNameValuePair("prepayid", request.prepayId));
-                param.add(new BasicNameValuePair("package", request.packageValue));
-                param.add(new BasicNameValuePair("noncestr", request.nonceStr));
-                param.add(new BasicNameValuePair("timestamp", request.timeStamp));
-                request.sign = SignUtil.genAppSign(param);
+                    request.sign = data.getData().getGenerate_app_pay_params().getSign();
 
-                api.sendReq(request);
+                    api.sendReq(request);
+                } else {
+                    Toast.makeText(OrderPayActivity.this, "不能支付", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });

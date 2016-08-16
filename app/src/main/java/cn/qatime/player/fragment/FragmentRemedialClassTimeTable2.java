@@ -2,7 +2,9 @@ package cn.qatime.player.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,13 +78,39 @@ public class FragmentRemedialClassTimeTable2 extends BaseFragment {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page = 1;
-                listView.onRefreshComplete();
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        String label = DateUtils.formatDateTime(
+                                getActivity(),
+                                System.currentTimeMillis(),
+                                DateUtils.FORMAT_SHOW_TIME
+                                        | DateUtils.FORMAT_SHOW_DATE
+                                        | DateUtils.FORMAT_ABBREV_ALL);
+                        // Update the LastUpdatedLabel
+                        listView.getLoadingLayoutProxy(false, true)
+                                .setLastUpdatedLabel(label);
+                        listView.onRefreshComplete();
+                    }
+                }, 200);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page++;
-                listView.onRefreshComplete();
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        String label = DateUtils.formatDateTime(
+                                getActivity(),
+                                System.currentTimeMillis(),
+                                DateUtils.FORMAT_SHOW_TIME
+                                        | DateUtils.FORMAT_SHOW_DATE
+                                        | DateUtils.FORMAT_ABBREV_ALL);
+                        // Update the LastUpdatedLabel
+                        listView.getLoadingLayoutProxy(false, true)
+                                .setLastUpdatedLabel(label);
+                        listView.onRefreshComplete();
+                    }
+                }, 200);
             }
         });
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

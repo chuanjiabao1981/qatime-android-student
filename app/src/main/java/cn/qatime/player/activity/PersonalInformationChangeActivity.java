@@ -7,7 +7,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.Selection;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -221,11 +223,18 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         headsculpture = (ImageView) findViewById(R.id.head_sculpture);
         replace = (TextView) findViewById(R.id.replace);
         name = (EditText) findViewById(R.id.name);
+        name.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                return (event.getKeyCode()== KeyEvent.KEYCODE_ENTER);
+            }
+        });
         men = (RadioButton) findViewById(R.id.men);
         women = (RadioButton) findViewById(R.id.women);
         radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
         spinner = (Spinner) findViewById(R.id.spinner);
         describe = (EditText) findViewById(R.id.describe);
+        describe.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
         birthday = (TextView) findViewById(R.id.birthday);
         complete = (TextView) findViewById(R.id.complete);
     }

@@ -100,6 +100,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/shape_input"
                     android:hint="@string/hint_name"
+                    android:inputType="text"
                     android:paddingBottom="5dp"
                     android:paddingTop="5dp" />
             </LinearLayout>

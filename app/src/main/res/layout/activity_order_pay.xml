@@ -81,7 +81,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@drawable/button_bg_selector_orange"
-        android:clickable="false"
+        android:enabled="false"
         android:text="确认支付"
         android:textColor="#fff" />
 </RelativeLayout>

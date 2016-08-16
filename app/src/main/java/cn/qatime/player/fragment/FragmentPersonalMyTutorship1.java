@@ -2,6 +2,7 @@ package cn.qatime.player.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -72,10 +73,10 @@ public class FragmentPersonalMyTutorship1 extends BaseFragment {
                     }
                 });
 
-           helper.setText(R.id.name,item.getName());
-                helper.setText(R.id.name, "辅导班名称："+item.getName());
-                helper.setText(R.id.subject, "科目："+item.getSubject());
-                helper.setText(R.id.teacher, "老师："+item.getTeacher_name());
+                helper.setText(R.id.name, item.getName());
+                helper.setText(R.id.name, "辅导班名称：" + item.getName());
+                helper.setText(R.id.subject, "科目：" + item.getSubject());
+                helper.setText(R.id.teacher, "老师：" + item.getTeacher_name());
 //                helper.setText(R.id.teacher, item.getIs_bought());
 //                helper.setText(R.id.progress, g);
 //                helper.get
@@ -87,12 +88,41 @@ public class FragmentPersonalMyTutorship1 extends BaseFragment {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page = 1;
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        String label = DateUtils.formatDateTime(
+                                getActivity(),
+                                System.currentTimeMillis(),
+                                DateUtils.FORMAT_SHOW_TIME
+                                        | DateUtils.FORMAT_SHOW_DATE
+                                        | DateUtils.FORMAT_ABBREV_ALL);
+                        // Update the LastUpdatedLabel
+                        listView.getLoadingLayoutProxy(false, true)
+                                .setLastUpdatedLabel(label);
+                        listView.onRefreshComplete();
+                    }
+                }, 200);
+                initData(1);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page++;
-
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        String label = DateUtils.formatDateTime(
+                                getActivity(),
+                                System.currentTimeMillis(),
+                                DateUtils.FORMAT_SHOW_TIME
+                                        | DateUtils.FORMAT_SHOW_DATE
+                                        | DateUtils.FORMAT_ABBREV_ALL);
+                        // Update the LastUpdatedLabel
+                        listView.getLoadingLayoutProxy(false, true)
+                                .setLastUpdatedLabel(label);
+                        listView.onRefreshComplete();
+                    }
+                }, 200);
+                initData(2);
             }
         });
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -138,7 +168,6 @@ public class FragmentPersonalMyTutorship1 extends BaseFragment {
                                 list.addAll(data.getData());
                             }
                             adapter.notifyDataSetChanged();
-                            listView.onRefreshComplete();
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
                         }

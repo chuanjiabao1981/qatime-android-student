@@ -1,4 +1,4 @@
-package cn.qatime.player;
+package cn.qatime.player.wxapi;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,8 +9,10 @@ import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
+import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.LogUtils;
 
 /**
  * @author luntify
@@ -44,6 +46,8 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
 
     @Override
     public void onResp(BaseResp baseResp) {
+        LogUtils.e(baseResp.getType());
+        LogUtils.e(baseResp.errCode);
         if (baseResp.getType() == 1) {
 //            baseResp.e
         }

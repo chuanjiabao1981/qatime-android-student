@@ -17,11 +17,10 @@
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
-        android:ellipsize="middle"
         android:background="#e4e2e2"
+        android:ellipsize="middle"
         android:minLines="2"
-        android:maxLines="2"
-        android:text="名称"
+        android:text="高级辅导班辅导班北京高考详解高级辅导班北京高考详解"
         android:textSize="14sp" />
 
     <LinearLayout

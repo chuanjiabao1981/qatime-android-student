@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:scrollbars="none">
 
         <LinearLayout
@@ -64,71 +65,62 @@
 
                     <ImageView
                         android:id="@+id/image"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:src="@mipmap/photo" />
 
                     <TextView
                         android:id="@+id/project"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="3dp"
                         android:text="科目类型" />
 
                     <TextView
                         android:id="@+id/grade"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="3dp"
                         android:text="年级类型" />
 
                     <TextView
                         android:id="@+id/teacher"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="3dp"
                         android:text="授课老师" />
 
                     <TextView
                         android:id="@+id/class_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="3dp"
                         android:text="课时总数" />
 
                     <TextView
                         android:id="@+id/class_start_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="3dp"
                         android:text="开课时间" />
 
                     <TextView
                         android:id="@+id/class_end_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="3dp"
                         android:text="结课时间" />
 
                     <TextView
                         android:id="@+id/status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="3dp"
                         android:text="当前状态" />
 
                     <TextView
                         android:id="@+id/teach_way"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="3dp"
                         android:text="授课方式" />
 
                     <TextView
                         android:id="@+id/price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="3dp"
                         android:text="价格" />
                 </LinearLayout>
             </LinearLayout>

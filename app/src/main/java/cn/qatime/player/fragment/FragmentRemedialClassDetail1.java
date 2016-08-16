@@ -1,24 +1,19 @@
 package cn.qatime.player.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import javax.security.auth.Subject;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.RemedialClassDetailBean;
-import cn.qatime.player.utils.LogUtils;
 
 public class FragmentRemedialClassDetail1 extends BaseFragment {
 

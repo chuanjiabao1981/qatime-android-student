@@ -10,27 +10,14 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
-
-import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
-import cn.qatime.player.base.BaseApplication;
-import cn.qatime.player.bean.PersonalInformationBean;
 import cn.qatime.player.bean.RemedialClassDetailBean;
-import cn.qatime.player.utils.DaYiJsonObjectRequest;
-import cn.qatime.player.utils.JsonUtils;
-import cn.qatime.player.utils.UrlUtils;
-import cn.qatime.player.utils.VolleyErrorListener;
-import cn.qatime.player.utils.VolleyListener;
 
 public class OrderConfirmActivity extends BaseActivity implements View.OnClickListener {
     TextView name;
@@ -50,10 +37,9 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     private RadioButton aliPay;
     private RadioGroup radioGroup;
     private int id;
-    private String payType;
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
-
+    private String payType = "1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
