@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:orientation="vertical">
+              android:orientation="vertical"
+    android:background="#ffffff">
 
     <ImageView
         android:id="@+id/image"
@@ -13,7 +14,7 @@
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="0dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
         android:ellipsize="middle"
@@ -33,8 +34,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:drawableLeft="@mipmap/head_sculpture"
+            android:drawableLeft="@mipmap/head_32_8a8a8a"
             android:text="老师"
+            android:gravity="center"
             android:textSize="13sp"/>
 
         <View
@@ -88,8 +90,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
-            android:drawableLeft="@mipmap/shopping_trolley16"
+            android:drawableLeft="@mipmap/shopping_32_8a8a8a"
             android:text="100"
+            android:gravity="center"
             android:textSize="13sp"/>
     </LinearLayout>
 

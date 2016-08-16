@@ -15,7 +15,7 @@
         android:id="@+id/exit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#00ccff"
+        android:background="@drawable/button_bg_selector_orange"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="10dp"

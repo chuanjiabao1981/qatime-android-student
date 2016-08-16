@@ -130,7 +130,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
                         if (data.getData()!=null){
                         price.setText("￥" + data.getData().getPrice());
-                        studentnumber.setText("学习人数 " + data.getData().getBuy_tickets_count());}
+                        studentnumber.setText(getResources().getString(R.string.student_number) + data.getData().getBuy_tickets_count());}
                         if (data != null) {
                             ((FragmentRemedialClassDetail1) fragBaseFragments.get(0)).setData(data);
                             ((FragmentRemedialClassDetail2) fragBaseFragments.get(1)).setData(data);
@@ -138,18 +138,18 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                             if (data.getData() != null) {
                                 if (data.getData().getIs_tasting()) {
                                     audition.setEnabled(false);
-                                    audition.setText("已加入试听");
+                                    audition.setText(getResources().getString(R.string.Joined_the_audition));
                                 } else {
                                     audition.setEnabled(true);
-                                    audition.setText("加入试听");
+                                    audition.setText(getResources().getString(R.string.Join_the_audition));
                                 }
 
                                 if (data.getData().getIs_bought()) {
                                     pay.setEnabled(false);
-                                    pay.setText("已购买");
+                                    pay.setText(getResources().getString(R.string.purchased));
                                 } else {
                                     pay.setEnabled(true);
-                                    pay.setText("立即购买");
+                                    pay.setText(getResources().getString(R.string.purchase_now));
                                 }
                             }
                         }
@@ -194,7 +194,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     protected void onSuccess(JSONObject response) {
                         //已加入试听
                         audition.setEnabled(false);
-                        audition.setText("已加入试听");
+                        audition.setText(getResources().getString(R.string.Joined_the_audition));
                     }
 
                     @Override

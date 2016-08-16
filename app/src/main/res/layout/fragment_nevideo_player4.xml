@@ -36,6 +36,6 @@
         android:gravity="center"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
-        android:text="7/15" />
+        android:text="在线人数 7/15" />
 
 </RelativeLayout>

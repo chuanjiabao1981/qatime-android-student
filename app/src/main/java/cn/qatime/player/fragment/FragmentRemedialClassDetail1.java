@@ -65,26 +65,26 @@ public class FragmentRemedialClassDetail1 extends BaseFragment {
         RemedialClassDetailBean.Data bean = data.getData();
         if (bean != null) {
 
-            name.setText("名称：" + bean.getName());
-            subject.setText("科目类型：" + bean.getSubject());
-                teacher.setText("授课老师：" + bean.getTeacher().getName());
-            progress.setText("课程进度：" + bean.getCompleted_lesson_count() + "/" + bean.getPreset_lesson_count());
+            name.setText((getResources().getString(R.string.class_name))+ bean.getName());
+            subject.setText((getResources().getString(R.string.subject_type)) + bean.getSubject());
+                teacher.setText((getResources().getString(R.string.teacher)) + bean.getTeacher().getName());
+            progress.setText((getResources().getString(R.string.progress)) + bean.getCompleted_lesson_count() + "/" + bean.getPreset_lesson_count());
             try {
-                classstarttime.setText("开课时间：" + format.format(parse.parse(bean.getLive_start_time())));
-                classendtime.setText("结课时间：" + format.format(parse.parse(bean.getLive_end_time())));
+                classstarttime.setText((getResources().getString(R.string.starting_dates)) + format.format(parse.parse(bean.getLive_start_time())));
+                classendtime.setText(getResources().getString(R.string.class_end_time) + format.format(parse.parse(bean.getLive_end_time())));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            teachway.setText("授课方式：未知");
-            grade.setText("年级类型：" + bean.getGrade());
-            totalclass.setText("课时总数：" + bean.getPreset_lesson_count() + "课时");
-            remainclass.setText("剩余课时："+ (bean.getPreset_lesson_count() - bean.getCompleted_lesson_count()));
+            teachway.setText(getResources().getString(R.string.teach_way));
+            grade.setText(getResources().getString(R.string.grade_type) + bean.getGrade());
+            totalclass.setText(getResources().getString(R.string.Total_class_hours)+ bean.getPreset_lesson_count() + getResources().getString(R.string.hours));
+            remainclass.setText(getResources().getString(R.string.remain_class)+ (bean.getPreset_lesson_count() - bean.getCompleted_lesson_count()));
             if (bean.getStatus().equals("preview")) {
-                status.setText("当前状态：招生中");
+                status.setText(getResources().getString(R.string.status_preview));
             } else if (bean.getStatus().equals("teaching")) {
-                status.setText("当前状态：已开课");
+                status.setText(getResources().getString(R.string.status_teaching));
             } else {
-                status.setText("当前状态：已结束");
+                status.setText(getResources().getString(R.string.status_over));
             }
             timetostart.setText("距离开课还有   " + "天");
 

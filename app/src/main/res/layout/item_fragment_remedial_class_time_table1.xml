@@ -13,7 +13,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#fff"
+            android:background="#ffffff"
             android:orientation="horizontal"
             android:weightSum="1">
 
@@ -60,12 +60,13 @@
                     android:background="#e4e2e2"
                     android:orientation="vertical"
                     android:padding="10dp"
-                    android:paddingLeft="10dp">
+                    >
 
                     <TextView
                         android:id="@+id/textView"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
                         android:layout_gravity="center"
                         android:paddingBottom="5dp"
                         android:textColor="#00bfff"
@@ -74,21 +75,24 @@
                     <TextView
                         android:id="@+id/textView2"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
                         android:maxLines="1"
                         android:padding="2dp"
-                        android:text="高考考前急速冲刺训练班训练班训练班" />
+                        android:text="高考考前急速冲刺训练班训练班训惺惺相惜学校学校练班" />
 
                     <TextView
                         android:id="@+id/textView3"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
                         android:padding="2dp"
                         android:text="科目：物理" />
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
                         android:padding="2dp"
                         android:text="老师：司马光" />
                 </LinearLayout>

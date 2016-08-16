@@ -93,6 +93,7 @@
     <string name="region">地区</string>
     <string name="school">学校</string>
     <string name="profiles">简介</string>
+    <string name="profiles_class">简介：</string>
     <string name="head">头像</string>
     <string name="click_to_change">点击更换</string>
     <string name="hint_name">输入真实姓名更方便老师联系你</string>
@@ -129,8 +130,11 @@
     <string name="teacher_detail">教师详情</string>
     <string name="course_list">课程列表</string>
     //课程详情
+    <string name="student_number">学习人数</string>
     <string name="Join_the_audition">加入试听</string>
+    <string name="Joined_the_audition">已加入试听</string>
     <string name="purchase_now">立即购买</string>
+    <string name="purchased">已购买</string>
     //登录
     <string name="account">请输入账号</string>
     <string name="password">请输入密码</string>
@@ -157,6 +161,18 @@
     <string name="hint_phone_number_forget">请输入手机号码</string>
     <string name="hint_password_forget">不能为空</string>
 
+//课程详情
+    <string name="class_name">名称：</string>
+    <string name="subject_type">科目类型：</string>
+    <string name="teacher">授课教师：</string>
+    <string name="progress">课程进度：</string>
+    <string name="teach_way">授课方式：</string>
+    <string name="remain_class">剩余课时：</string>
+    <string name="class_end_time">结课时间：</string>
+    <string name="status_preview">当前状态：招生中</string>
+    <string name="status_teaching">当前状态：已开课</string>
+    <string name="status_over">当前状态：已结束</string>
+    <string name="grade_type">年级类型：</string>
 
     <string name="use">使用</string>
 </resources>

@@ -92,6 +92,7 @@
     <string name="region">Region</string>//地区
     <string name="school">School</string>
     <string name="profiles">Profiles</string>//简介
+    <string name="profiles_class">简介：</string>
     <string name="head">Head</string>
     <string name="click_to_change">Click to Change</string>
     <string name="hint_name">Enter your real name and the teacher contact you more convenient</string>
@@ -126,7 +127,9 @@
     <string name="teacher_detail">Teacher detail</string>//教师详情
     <string name="course_list">Course list</string>//课程列表
     //课程详情
-
+    <string name="student_number">Students</string>
+    <string name="Joined_the_audition">Joined</string>已加入试听
+    <string name="purchased">purchased</string>已购买
     <string name="Join_the_audition">Join the audition</string>//加入试听
     <string name="purchase_now">Purchase now</string>//立即购买
     //登录
@@ -152,6 +155,18 @@
     <string name="next">Continue</string>//下一步
     <string name="can_not_be_empty">It can not be empty!</string>//不能为空
     <string name="system_setting">System setting</string>//系统设置
+    //课程详情
+    <string name="class_name">Name:</string>//名称
+    <string name="subject_type">Subject:</string>//科目类型
+    <string name="teacher">Teacher:</string>//授课教师
+    <string name="progress">Progress:</string>//课程进度
+    <string name="teach_way">Teaching mode:</string>//授课方式
+    <string name="remain_class">Residual class:</string>//剩余课时
+    <string name="class_end_time">End time:</string>//结束时间
+    <string name="status_preview">Status:Preview</string>//当前状态:招生中
+    <string name="status_teaching">Status:Teaching</string>//当前状态：上课中
+    <string name="status_over">Status:Ended</string>//当前状态:已结束
+    <string name="grade_type">Grade:</string>//年级类型
 
     <string name="use">use it</string>//使用
 </resources>
