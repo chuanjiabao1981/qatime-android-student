@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/by_time"
-                android:drawableRight="@mipmap/triangle"/>
+                android:drawableRight="@mipmap/triangle_16"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/by_subject"
-                android:drawableRight="@mipmap/triangle"/>
+                android:drawableRight="@mipmap/triangle_16"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -70,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/by_grade"
-                android:drawableRight="@mipmap/triangle"/>
+                android:drawableRight="@mipmap/triangle_16"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -100,7 +100,7 @@
             android:listSelector="#00000000"
             android:numColumns="2"
             android:scrollbars="none"
-            android:verticalSpacing="2dp" />
+            android:verticalSpacing="1dp" />
 
         <RelativeLayout
             android:id="@+id/screen_layout"
@@ -140,7 +140,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_input"
                         android:inputType="number"
-                        android:maxLength="6"
+                        android:maxLength="5"
                         android:minEms="3"
                         android:paddingBottom="3dp"
                         android:paddingLeft="15dip"
@@ -162,6 +162,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_input"
                         android:inputType="number"
+                        android:maxLength="5"
                         android:minEms="3"
                         android:paddingBottom="3dp"
                         android:paddingLeft="15dip"
@@ -194,6 +195,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_input"
                         android:inputType="number"
+                        android:maxLength="3"
                         android:minEms="3"
                         android:paddingBottom="3dp"
                         android:paddingLeft="15dip"
@@ -216,6 +218,7 @@
                         android:background="@drawable/shape_input"
                         android:inputType="number"
                         android:minEms="3"
+                        android:maxLength="3"
                         android:paddingBottom="3dp"
                         android:paddingLeft="15dip"
                         android:paddingRight="15dip"
@@ -275,6 +278,13 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/text_background"
                         android:text="00" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+android:layout_marginLeft="10dp"
+                        android:layout_gravity="center"
+                        android:src="@mipmap/calendar_black_32"/>
+
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -292,7 +302,6 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:layout_margin="3dp"
-
                         android:text="@string/to" />
                 </LinearLayout>
 
@@ -343,6 +352,13 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/text_background"
                         android:text="00" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_gravity="center"
+                        android:src="@mipmap/calendar_black_32"/>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -375,18 +391,18 @@
                         android:layout_height="30dp"
                         android:layout_margin="4dp"
                         android:layout_weight="1"
-                        android:background="@drawable/button_bg_selector_gray"
+                        android:background="@drawable/text_background"
                         android:text="@string/cancel"
-                        android:textColor="#fff" />
+                        android:textColor="@color/gray_dark" />
                     <Button
                         android:id="@+id/submit"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
                         android:layout_margin="4dp"
                         android:layout_weight="1"
-                        android:background="@drawable/button_bg_selector_gray"
+                        android:background="@drawable/text_background"
                         android:text="@string/confirm"
-                        android:textColor="#fff" />
+                        android:textColor="@color/gray_dark" />
                 </LinearLayout>
 
                 <View

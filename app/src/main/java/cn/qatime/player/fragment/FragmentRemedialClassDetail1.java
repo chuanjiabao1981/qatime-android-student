@@ -24,6 +24,12 @@ public class FragmentRemedialClassDetail1 extends BaseFragment {
     TextView grade;
     TextView timetostart;
     TextView status;
+    TextView classendtime;
+    TextView teacher;
+    TextView totalclass;
+    TextView remainclass;
+    TextView teachway;
+    TextView progress;
     RemedialClassDetailBean data;
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
@@ -47,6 +53,12 @@ public class FragmentRemedialClassDetail1 extends BaseFragment {
         grade = (TextView) view.findViewById(R.id.grade);
         status = (TextView) view.findViewById(R.id.status);
         describe = (TextView) view.findViewById(R.id.describe);
+        classendtime = (TextView) view.findViewById(R.id.class_end_time);
+        teacher = (TextView) view.findViewById(R.id.teacher);
+        progress = (TextView) view.findViewById(R.id.progress);
+        teachway = (TextView) view.findViewById(R.id.teach_way);
+        totalclass = (TextView) view.findViewById(R.id.total_class);
+        remainclass = (TextView) view.findViewById(R.id.remain_class);
     }
 
     public void setData(RemedialClassDetailBean data){
@@ -54,13 +66,19 @@ public class FragmentRemedialClassDetail1 extends BaseFragment {
         if (bean != null) {
 
             name.setText("名称：" + bean.getName());
-            subject.setText("科目类型：" + bean.getSubject() + "\n" + "授课老师：" + bean.getTeacher().getName() + "\n" + "课程进度：" + bean.getCompleted_lesson_count() + "/" + bean.getPreset_lesson_count());
+            subject.setText("科目类型：" + bean.getSubject());
+                teacher.setText("授课老师：" + bean.getTeacher().getName());
+            progress.setText("课程进度：" + bean.getCompleted_lesson_count() + "/" + bean.getPreset_lesson_count());
             try {
-                classstarttime.setText("开课时间：" + format.format(parse.parse(bean.getLive_start_time())) + "\n" + "结课时间：" + format.format(parse.parse(bean.getLive_end_time())) + "\n" + "授课方式：");
+                classstarttime.setText("开课时间：" + format.format(parse.parse(bean.getLive_start_time())));
+                classendtime.setText("结课时间：" + format.format(parse.parse(bean.getLive_end_time())));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            grade.setText("年级类型：" + bean.getGrade() + "\n" + "课时总数：" + bean.getPreset_lesson_count() + "课时"+"\n" +"剩余课时："+ (bean.getPreset_lesson_count() - bean.getCompleted_lesson_count()));
+            teachway.setText("授课方式：未知");
+            grade.setText("年级类型：" + bean.getGrade());
+            totalclass.setText("课时总数：" + bean.getPreset_lesson_count() + "课时");
+            remainclass.setText("剩余课时："+ (bean.getPreset_lesson_count() - bean.getCompleted_lesson_count()));
             if (bean.getStatus().equals("preview")) {
                 status.setText("当前状态：招生中");
             } else if (bean.getStatus().equals("teaching")) {
@@ -68,7 +86,7 @@ public class FragmentRemedialClassDetail1 extends BaseFragment {
             } else {
                 status.setText("当前状态：已结束");
             }
-            timetostart.setText("距离开课还有" + "天");
+            timetostart.setText("距离开课还有   " + "天");
 
             describe.setText(bean.getDescription());
         }

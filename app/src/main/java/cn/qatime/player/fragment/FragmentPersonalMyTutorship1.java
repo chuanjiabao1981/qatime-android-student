@@ -25,6 +25,7 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.NEVideoPlayerActivity;
+import cn.qatime.player.activity.OrderConfirmActivity;
 import cn.qatime.player.adapter.CommonAdapter;
 import cn.qatime.player.adapter.ViewHolder;
 import cn.qatime.player.base.BaseApplication;
@@ -64,7 +65,7 @@ public class FragmentPersonalMyTutorship1 extends BaseFragment {
 
         adapter = new CommonAdapter<TutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship1) {
             @Override
-            public void convert(ViewHolder helper, TutorialClassBean.Data item, int position) {
+            public void convert(ViewHolder helper, final TutorialClassBean.Data item, int position) {
                 helper.getView(R.id.video).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -72,7 +73,15 @@ public class FragmentPersonalMyTutorship1 extends BaseFragment {
                         startActivity(intent);
                     }
                 });
-
+                helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), OrderConfirmActivity.class);
+                        //TODO
+                        intent.putExtra("id",item.getId());
+                        startActivity(intent);
+                    }
+                });
                 helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.name, "辅导班名称：" + item.getName());
                 helper.setText(R.id.subject, "科目：" + item.getSubject());

@@ -59,16 +59,16 @@ public class FragmentRemedialClassDetail2 extends BaseFragment {
             subject.setText("所授科目：" + data.getData().getTeacher().getSubject());
             if (!StringUtils.isNullOrBlanK(data.getData().getTeacher().getTeaching_years())) {
                 if (data.getData().getTeacher().getTeaching_years().equals("within_three_years")) {
-                    teachingyears.setText("执教年龄：3");
+                    teachingyears.setText("执教年龄：3年");
                 } else if (data.getData().getTeacher().getTeaching_years().equals("within_ten_years")) {
-                    teachingyears.setText("执教年龄：10");
+                    teachingyears.setText("执教年龄：10年");
                 } else if (data.getData().getTeacher().getTeaching_years().equals("within_twenty_years")) {
-                    teachingyears.setText("执教年龄：20");
+                    teachingyears.setText("执教年龄：20年");
                 } else {
-                    teachingyears.setText("执教年龄：21");
+                    teachingyears.setText("执教年龄：20年以上");
                 }
             }
-            school.setText("所在学校：" + data.getData().getTeacher().getSchool());
+
 //            graderange.setText("年级范围：" + data.getData().getTeacher().getGrade_range());
             describe.setText(data.getData().getTeacher().getDesc());
 
@@ -77,7 +77,7 @@ public class FragmentRemedialClassDetail2 extends BaseFragment {
             if (schoolBean != null && schoolBean.getData() != null) {
                 for (int i = 0; i < schoolBean.getData().size(); i++) {
                     if (data.getData().getTeacher().getSchool() == schoolBean.getData().get(i).getId()) {
-                        school.setText(schoolBean.getData().get(i).getName());
+                        school.setText("所在学校："+schoolBean.getData().get(i).getName());
                         break;
                     }
                 }

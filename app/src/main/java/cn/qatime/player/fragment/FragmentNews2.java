@@ -40,15 +40,6 @@ public class FragmentNews2 extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = View.inflate(getActivity(), R.layout.fragment_news2, null);
         initview(view);
-        list.add("1");
-        list.add("1");
-        list.add("1");
-        list.add("1");
-        list.add("1");
-        list.add("1");
-        list.add("1");
-        list.add("1");
-        list.add("1");
         return view;
     }
 
@@ -64,26 +55,13 @@ public class FragmentNews2 extends BaseFragment {
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
 
 
-        adapter = new CommonAdapter<String>(getActivity(), list, R.layout.item_fragment_remedial_class_time_table1) {
+        adapter = new CommonAdapter<String>(getActivity(), list, R.layout.item_fragment_news2) {
             @Override
             public void convert(ViewHolder helper, String item, int position) {
-                helper.getView(R.id.image).setOnClickListener(
-                        new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                                intent.putExtra("pager", 2);
-                                startActivity(intent);
-                            }
-                        });
-                helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
-                        startActivity(intent);
+
                     }
-                });
-            }
+
+
         };
         listView.setAdapter(adapter);
 

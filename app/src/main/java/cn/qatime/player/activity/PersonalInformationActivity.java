@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +38,6 @@ public class PersonalInformationActivity extends BaseActivity {
     TextView sex;
     TextView birthday;
     TextView grade;
-    TextView region;
     TextView school;
     TextView describe;
 
@@ -122,17 +122,17 @@ public class PersonalInformationActivity extends BaseActivity {
                 e.printStackTrace();
             }
         } else {
-            birthday.setText("");
+            birthday.setText(format.format(new Date()));
         }
         if (!StringUtils.isNullOrBlanK(bean.getData().getGrade())) {
             grade.setText(bean.getData().getGrade());
         } else {
             grade.setText("");
         }
-        if (!StringUtils.isNullOrBlanK(bean.getData().getProvince()) && !StringUtils.isNullOrBlanK(bean.getData().getCity())) {
-            region.setText(bean.getData().getProvince() + " " + bean.getData().getCity());
-        }else {
-            region.setText("");}
+//        if (!StringUtils.isNullOrBlanK(bean.getData().getProvince()) && !StringUtils.isNullOrBlanK(bean.getData().getCity())) {
+//            region.setText(bean.getData().getProvince() + " " + bean.getData().getCity());
+//        }else {
+//            region.setText("");}
 
 
         SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getCacheDir() + "/school.txt").toString(), SchoolBean.class);
@@ -160,7 +160,6 @@ public class PersonalInformationActivity extends BaseActivity {
         sex = (TextView) findViewById(R.id.sex);
         birthday = (TextView) findViewById(R.id.birthday);
         grade = (TextView) findViewById(R.id.grade);
-        region = (TextView) findViewById(R.id.region);
         school = (TextView) findViewById(R.id.school);
         describe = (TextView) findViewById(R.id.describe);
     }

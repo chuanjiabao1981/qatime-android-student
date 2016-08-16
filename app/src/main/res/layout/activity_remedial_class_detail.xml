@@ -12,44 +12,50 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-      <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="vertical"
-          android:id="@+id/id_stickynavlayout_topview">
-          <ImageView
-              android:id="@+id/image"
-              android:layout_width="match_parent"
-              android:layout_height="200dp"/>
+        <LinearLayout
+            android:id="@+id/id_stickynavlayout_topview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-          <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal"
-              android:padding="5dp">
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"/>
 
-              <TextView
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp">
 
-                  android:id="@+id/price"
-                  android:paddingLeft="10dp"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:textColor="#fa0000"
-                /> <!--价格-->
+                <TextView
 
-              <View
-                  android:layout_width="0dp"
-                  android:layout_height="1dp"
-                  android:layout_weight="1"/>
+                    android:id="@+id/price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:textColor="#fa0000"
+                    /> <!--价格-->
 
-              <TextView
-                  android:id="@+id/student_number"
-                  android:paddingRight="10dp"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"/>
-         <!--已报人数-->
-          </LinearLayout>
-      </LinearLayout>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/student_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="10dp"/>
+                <!--已报人数-->
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#ccdccd"/>
+        </LinearLayout>
 
         <cn.qatime.player.view.SimpleViewPagerIndicator
             android:id="@+id/id_stickynavlayout_indicator"

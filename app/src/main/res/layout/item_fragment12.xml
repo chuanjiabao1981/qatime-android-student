@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:background="#ffffff"
               android:orientation="vertical">
 
     <ImageView
@@ -17,12 +16,12 @@
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
-        android:background="#e4e2e2"
         android:ellipsize="middle"
         android:maxLines="2"
         android:minLines="2"
         android:text="名称"
-        android:textSize="14sp" />
+        android:textColor="#151515"
+        android:textSize="14sp"/>
 
     <LinearLayout
         android:layout_width="match_parent"

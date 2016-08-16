@@ -6,19 +6,20 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="45dp">
 
         <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#bfbfbf" />
+            android:background="@color/colorPrimary" />
 
         <ImageView
             android:id="@+id/calendar"
             android:layout_width="35dp"
+            android:padding="5dp"
+            android:layout_alignParentRight="true"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:padding="5dp"
             android:src="@mipmap/calendar" />
 
         <TextView
@@ -26,7 +27,8 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/time_table"
-            android:textSize="23sp" />
+            android:textColor="#fff"
+            android:textSize="16sp" />
 
     </RelativeLayout>
 

@@ -49,13 +49,16 @@ import cn.qatime.player.adapter.CommonAdapter;
 import cn.qatime.player.adapter.ViewHolder;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.bean.GradeBean;
 import cn.qatime.player.bean.RemedialClassBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.FileUtil;
 import cn.qatime.player.utils.JsonUtils;
 import cn.qatime.player.utils.KeyBoardUtils;
 import cn.qatime.player.utils.LogUtils;
 import cn.qatime.player.utils.MDatePickerDialog;
 import cn.qatime.player.utils.ScreenUtils;
+import cn.qatime.player.utils.StringUtils;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VolleyErrorListener;
 import cn.qatime.player.utils.VolleyListener;
@@ -410,18 +413,12 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 popView = View.inflate(getActivity(), R.layout.pop_fragment12, null);
                 listView = (ListView) popView.findViewById(R.id.list);
                 final List<String> classList = new ArrayList<>();
-                classList.add("高三");
-                classList.add("高二");
-                classList.add("高一");
-                classList.add("初三");
-                classList.add("初二");
-                classList.add("初一");
-                classList.add("六年级");
-                classList.add("五年级");
-                classList.add("四年级");
-                classList.add("三年级");
-                classList.add("二年级");
-                classList.add("一年级");
+                String gradeString = FileUtil.readFile(getActivity().getCacheDir() + "/grade.txt");
+                if (!StringUtils.isNullOrBlanK(gradeString)) {
+                    GradeBean gradeBean = JsonUtils.objectFromJson(gradeString, GradeBean.class);
+                    classList.addAll(gradeBean.getData().getGrades());
+                }
+
                 listView.setAdapter(new CommonAdapter<String>(getActivity(), classList, R.layout.item_pop_fragment12) {
                     @Override
                     public void convert(ViewHolder holder, String item, int position) {

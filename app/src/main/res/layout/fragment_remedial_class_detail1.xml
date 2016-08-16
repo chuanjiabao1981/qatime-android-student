@@ -22,37 +22,103 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="3dp">>
+           >
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:id="@+id/subject"
-                android:layout_height="wrap_content"
-                android:lineSpacingExtra="6dp"
 
-                android:text="科目类型：\n授课老师：\n课程进度：" />
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="wrap_content"
+        android:id="@+id/subject"
+        android:layout_height="wrap_content"
+        android:padding="3dp"
+
+        android:text="科目类型：" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:id="@+id/teacher"
+        android:layout_height="wrap_content"
+        android:padding="3dp"
+
+        android:text="授课老师：" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:id="@+id/progress"
+        android:layout_height="wrap_content"
+       android:padding="3dp"
+
+        android:text="课程进度：" />
+
+</LinearLayout>
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_weight="1" />
-
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:lineSpacingExtra="6dp"
-                android:id="@+id/grade"
-                android:text="年级类型：\n课时总数：\n剩余课时" />
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:id="@+id/grade"
+                    android:layout_height="wrap_content"
+              android:padding="3dp"
+
+                    android:text="年级类型：" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:id="@+id/total_class"
+                    android:layout_height="wrap_content"
+                android:padding="3dp"
+
+                    android:text="课时总数：" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:id="@+id/remain_class"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+
+                    android:text="剩余课时：" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
 
-        <TextView
-            android:id="@+id/class_start_time"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:lineSpacingExtra="6dp"
-            android:padding="3dp"
-            android:text="开课时间：\n结课时间：\n授课方式：" />
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/class_start_time"
+                android:layout_height="wrap_content"
+               android:padding="3dp"
+
+                android:text="开课时间：" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/class_end_time"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+
+                android:text="结课时间：" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/teach_way"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+
+                android:text="授课方式：" />
+
+        </LinearLayout>
+
 
         <RelativeLayout
             android:layout_width="match_parent"
