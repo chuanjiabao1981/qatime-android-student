@@ -8,7 +8,7 @@
     <ImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/name"
@@ -22,7 +22,7 @@
         android:minLines="2"
         android:text="名称"
         android:textColor="#151515"
-        android:textSize="14sp"/>
+        android:textSize="14sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,7 +42,7 @@
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/subject"
@@ -50,12 +50,12 @@
             android:layout_height="wrap_content"
 
             android:text="科目"
-            android:textSize="13sp"/>
+            android:textSize="13sp" />
 
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/grade"
@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:text="年级"
-            android:textSize="13sp"/>
+            android:textSize="13sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -78,12 +78,12 @@
             android:layout_marginLeft="15dp"
             android:text="价格"
             android:textColor="#ff0404"
-            android:textSize="13sp"/>
+            android:textSize="13sp" />
 
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/student_number"

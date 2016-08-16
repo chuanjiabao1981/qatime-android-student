@@ -79,10 +79,10 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         setTitle(getResources().getString(R.string.change_information));
         initView();
         //获取基本数据信息,对应id与学校 年级
-        String school = FileUtil.readFile(getCacheDir() + "/school.txt");
-        if (!StringUtils.isNullOrBlanK(school)) {
-            schoolBean = JsonUtils.objectFromJson(school, SchoolBean.class);
-        }
+//        String school = FileUtil.readFile(getCacheDir() + "/school.txt");
+//        if (!StringUtils.isNullOrBlanK(school)) {
+//            schoolBean = JsonUtils.objectFromJson(school, SchoolBean.class);
+//        }
         String gradeString = FileUtil.readFile(getCacheDir() + "/grade.txt");
 //        LogUtils.e("班级基础信息" + gradeString);
         if (!StringUtils.isNullOrBlanK(gradeString)) {

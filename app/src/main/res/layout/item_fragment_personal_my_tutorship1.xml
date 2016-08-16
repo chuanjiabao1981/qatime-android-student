@@ -13,26 +13,25 @@
             android:layout_height="wrap_content">
 
             <TextView
-
+                android:id="@+id/class_start_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/class_start_time"
                 android:padding="2dp"
-                android:text="开课时间：2017-9-23 15:00"
+                android:text="开课时间 2017-9-23 15:00"
                 android:textColor="#8e8e8e"
                 android:textSize="13sp" />
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
             <TextView
+                android:id="@+id/class_end_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
-                android:id="@+id/class_end_time"
-                android:text="结课时间：2017-9-23 15:00"
+                android:text="结课时间 2017-9-23 15:00"
                 android:textColor="#8e8e8e"
                 android:textSize="13sp" />
         </LinearLayout>
@@ -72,10 +71,10 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/subject"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="2dp"
-                        android:id="@+id/subject"
                         android:text="科目：地理"
                         android:textSize="13sp" />
 
@@ -85,10 +84,10 @@
                         android:layout_weight="1" />
 
                     <TextView
+                        android:id="@+id/teacher"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="2dp"
-                        android:id="@+id/teacher"
                         android:text="老师：高京燕"
                         android:textSize="13sp" />
 
@@ -104,26 +103,25 @@
                     android:layout_height="wrap_content">
 
                     <TextView
+                        android:id="@+id/progress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="5dp"
-                        android:id="@+id/progress"
                         android:text="12/99" />
 
                     <ProgressBar
+                        android:id="@+id/progressbar"
                         style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
                         android:layout_width="120dp"
-                        android:id="@+id/progress_image"
                         android:layout_height="5dp"
                         android:layout_gravity="center"
-                        android:progress="10"
-                        android:background="#bfbfbf"/>
+                        android:background="#bfbfbf" />
 
                     <TextView
+                        android:id="@+id/total_class"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="5dp"
-                        android:id="@+id/total_class"
                         android:text="87" />
                 </LinearLayout>
 
@@ -135,19 +133,16 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/teaching_time"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:padding="2dp"
-                        android:id="@+id/teaching_time"
-                        android:text="上课时间2016-07-15 15:30"
+                        android:maxLines="1"
+                        android:text="上课时间：2016-07-15 15:30"
                         android:textColor="#05effc"
                         android:textSize="13sp" />
 
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:layout_weight="1" />
 
                     <ImageView
                         android:id="@+id/enter"

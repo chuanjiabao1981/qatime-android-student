@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/id_stickynavlayout_innerscrollview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    android:id="@+id/id_stickynavlayout_innerscrollview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,14 +15,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="3dp"
-            android:text="名称："/>
+            android:text="名称：" />
 
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
 
 
             <LinearLayout
@@ -30,33 +29,35 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+
                 <TextView
                     android:id="@+id/subject"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="3dp"
-                    android:text="科目类型："/>
+
+                    android:text="科目类型：" />
 
                 <TextView
                     android:id="@+id/teacher"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="3dp"
-                    android:text="授课老师："/>
+                    android:text="授课老师：" />
 
                 <TextView
                     android:id="@+id/progress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="3dp"
-                    android:text="课程进度："/>
+                    android:text="课程进度：" />
 
             </LinearLayout>
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -68,21 +69,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="3dp"
-                    android:text="年级类型："/>
+                    android:text="年级类型：" />
 
                 <TextView
                     android:id="@+id/total_class"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="3dp"
-                    android:text="课时总数："/>
+                    android:text="课时总数：" />
 
                 <TextView
                     android:id="@+id/remain_class"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="3dp"
-                    android:text="剩余课时："/>
+                    android:text="剩余课时：" />
 
             </LinearLayout>
 
@@ -99,21 +100,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="3dp"
-                android:text="开课时间："/>
+
+                android:text="开课时间：" />
 
             <TextView
                 android:id="@+id/class_end_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="3dp"
-                android:text="结课时间："/>
+                android:text="结课时间：" />
 
             <TextView
                 android:id="@+id/teach_way"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="3dp"
-                android:text="授课方式："/>
+                android:text="授课方式：" />
 
         </LinearLayout>
 
@@ -127,7 +129,7 @@
                 android:id="@+id/status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="当前状态："/>
+                android:text="当前状态：" />
 
             <TextView
                 android:id="@+id/time_to_start"
@@ -135,7 +137,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="距开课"
-                android:textColor="#00ffea"/>
+                android:textColor="#00ffea" />
         </RelativeLayout>
 
 
@@ -149,13 +151,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingRight="20dp"
-                android:text="@string/profiles_class"/>
+                android:text="@string/profiles_class" />
 
             <TextView
                 android:id="@+id/describe"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
 

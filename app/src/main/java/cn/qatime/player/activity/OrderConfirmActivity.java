@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
-import cn.qatime.player.bean.RemedialClassDetailBean;
+import cn.qatime.player.bean.OrderPayBean;
 
 public class OrderConfirmActivity extends BaseActivity implements View.OnClickListener {
     TextView name;
@@ -40,6 +40,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
     private String payType = "1";
+    private int priceNumber = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,52 +48,54 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         setContentView(R.layout.activity_order_confirm);
         setTitle(getResources().getString(R.string.order_confirm));
         initView();
-        RemedialClassDetailBean data = (RemedialClassDetailBean) getIntent().getSerializableExtra("data");
+        OrderPayBean data = (OrderPayBean) getIntent().getSerializableExtra("data");
         id = getIntent().getIntExtra("id", 0);
         if (data != null) {
             setValue(data);
+            priceNumber = data.price;
 //            initData(data.getData().getId());
         }
         pay.setOnClickListener(this);
     }
 
 
-    private void setValue(RemedialClassDetailBean data) {
-        Glide.with(OrderConfirmActivity.this).load(data.getData().getPublicize()).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
+    private void setValue(OrderPayBean data) {
+        Glide.with(OrderConfirmActivity.this).load(data.image).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
 
-        name.setText(data.getData().getName());
-        project.setText("科目类型：" + data.getData().getSubject());
-        grade.setText("年级类型：" + data.getData().getGrade());
-        classnumber.setText("课时总数：" + data.getData().getPreset_lesson_count());
-        teacher.setText("授课教师：" + data.getData().getTeacher().getName());
+        name.setText(data.name);
+        project.setText("科目类型：" + data.subject);
+        grade.setText("年级类型：" + data.grade);
+        classnumber.setText("课时总数：" + data.classnumber);
+        teacher.setText("授课教师：" + data.teacher);
         try {
-            classstarttime.setText("开课时间：" + format.format(parse.parse(data.getData().getLive_start_time())));
+            classstarttime.setText("开课时间：" + format.format(parse.parse(data.classstarttime)));
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
         try {
-            classendtime.setText("结课时间：" + format.format(parse.parse(data.getData().getLive_end_time())));
+            classendtime.setText("结课时间：" + format.format(parse.parse(data.classendtime)));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        if (data.getData().getStatus().equals("preview")) {
+        if (data.status.equals("preview")) {
             status.setText("当前状态：招生中");
-        } else if (data.getData().getStatus().equals("teaching")) {
+        } else if (data.status.equals("teaching")) {
             status.setText("当前状态：已开课");
         } else {
             status.setText("当前状态：已结束");
         }
         // TODO: 2016/8/12  image teachway price
         teachway.setText("授课方式：");
-        price.setText("价格："+data.getData().getPrice());
-        payprice.setText(" "+data.getData().getPrice()+" ");
+        price.setText("价格：" + data.price);
+        payprice.setText(" " + data.price + " ");
     }
 
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
         intent.putExtra("id", id);
+        intent.putExtra("price", priceNumber);
         intent.putExtra("payType", payType);
         startActivity(intent);
     }

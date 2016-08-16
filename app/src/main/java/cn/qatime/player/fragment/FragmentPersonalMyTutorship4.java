@@ -9,10 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -20,11 +23,14 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.adapter.CommonAdapter;
 import cn.qatime.player.adapter.ViewHolder;
 import cn.qatime.player.base.BaseApplication;
@@ -43,6 +49,9 @@ public class FragmentPersonalMyTutorship4 extends BaseFragment {
     private java.util.List<TutorialClassBean.Data> list = new ArrayList<>();
     private CommonAdapter<TutorialClassBean.Data> adapter;
     private int page = 1;
+
+    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
 
     @Nullable
     @Override
@@ -66,10 +75,24 @@ public class FragmentPersonalMyTutorship4 extends BaseFragment {
         adapter = new CommonAdapter<TutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship4) {
             @Override
             public void convert(ViewHolder helper, TutorialClassBean.Data item, int position) {
-
-                helper.setText(R.id.name, "辅导班名称：" + item.getName());
+                try {
+                    helper.setText(R.id.class_start_time, "开课时间：" + format.format(parse.parse(item.getLive_start_time())));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    helper.setText(R.id.class_end_time, "结课时间：" + format.format(parse.parse(item.getLive_end_time())));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).crossFade().into((ImageView) helper.getView(R.id.image));
+                helper.setText(R.id.name,  item.getName());
                 helper.setText(R.id.subject, "科目：" + item.getSubject());
                 helper.setText(R.id.teacher, "老师：" + item.getTeacher_name());
+                helper.setText(R.id.progress, item.getCompleted_lesson_count() + "/" + item.getPreset_lesson_count());
+                ((ProgressBar)helper.getView(R.id.progressbar)).setProgress(item.getCompleted_lesson_count());
+                ((ProgressBar)helper.getView(R.id.progressbar)).setMax(item.getPreset_lesson_count());
+                helper.setText(R.id.total_class,String.valueOf(item.getPreset_lesson_count()));
             }
 
 
@@ -120,6 +143,9 @@ public class FragmentPersonalMyTutorship4 extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                intent.putExtra("id", list.get(position-1).getId());
+                startActivity(intent);
             }
         });
     }

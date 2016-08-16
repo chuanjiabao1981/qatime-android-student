@@ -52,6 +52,16 @@
 -keep class com.google.gson.**{*;}
 -keep class org.json.** {*;}
 
+-dontobfuscate
+-dontoptimize
+
+# Gson specific classes
+-keep class sun.misc.Unsafe { *; }
+#-keep class com.google.gson.stream.** { *; }
+
+-keep class com.google.gson.examples.android.model.** { *; }
+-keep class cn.qatime.player.bean.**{*;}
+
 -keepclassmembers class * implements java.io.Serializable {
     static final long serialVersionUID;
     private static final java.io.ObjectStreamField[] serialPersistentFields;

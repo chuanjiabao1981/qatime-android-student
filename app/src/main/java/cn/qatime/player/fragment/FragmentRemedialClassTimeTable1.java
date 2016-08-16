@@ -71,13 +71,14 @@ public class FragmentRemedialClassTimeTable1 extends BaseFragment {
                                 startActivity(intent);
                             }
                         });
-                helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
-                        startActivity(intent);
-                    }
-                });
+                //TODO
+//                helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
+//                        startActivity(intent);
+//                    }
+//                });
             }
         };
         listView.setAdapter(adapter);

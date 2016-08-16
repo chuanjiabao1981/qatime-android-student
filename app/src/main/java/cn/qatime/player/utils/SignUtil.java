@@ -21,9 +21,6 @@ public class SignUtil {
             sb.append('&');
         }
 
-        sb.append("key=");
-        sb.append("8hJno18aMonxkkHI14bLPBZfK3sZ6Fsf");
-
         LogUtils.e("拼接字符串 ----------------------------- ", sb.toString());
         String appSign = toMD5(sb.toString()).toUpperCase();
         LogUtils.e("签名  --------------- ", appSign);

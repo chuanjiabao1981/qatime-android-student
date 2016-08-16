@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.netease.neliveplayer.NELivePlayer;
 
@@ -22,6 +23,7 @@ import cn.qatime.player.fragment.FragmentNEVideoPlayer3;
 import cn.qatime.player.fragment.FragmentNEVideoPlayer4;
 import cn.qatime.player.utils.LogUtils;
 import cn.qatime.player.utils.ScreenUtils;
+import cn.qatime.player.utils.StringUtils;
 import cn.qatime.player.view.FragmentLayoutWithLine;
 import cn.qatime.player.view.QaVideoPlayer;
 
@@ -41,7 +43,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     public static final int NELP_LOG_FATAL = 7; //!< log输出模式：一些错误信息，如头文件找不到，非法参数使用
     public static final int NELP_LOG_SILENT = 8; //!< log输出模式：不输出
 
-    private String url = "rtmp://va0a19f55.live.126.net/live/dd47decf2e1a40108775d4318d61cc35";
     private QaVideoPlayer videoPlayer;
     private View bottom;
 
@@ -70,10 +71,16 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
+        String url = getIntent().getStringExtra("url");
+        LogUtils.e(url);
         videoPlayer = (QaVideoPlayer) findViewById(R.id.video_player);
         ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenHeight(this) / 3);
         videoPlayer.setLayoutParams(params);
 
+        if (StringUtils.isNullOrBlanK(url)) {
+            Toast.makeText(this, "推流地址不可用", Toast.LENGTH_SHORT).show();
+            return;
+        }
         videoPlayer.setVideoPath(url);
         videoPlayer.setOnControlListener(this);
         videoPlayer.start();

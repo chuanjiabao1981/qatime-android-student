@@ -54,6 +54,7 @@ public class PictureSelectActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picture_select);
+        setTitle("选择图片");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 

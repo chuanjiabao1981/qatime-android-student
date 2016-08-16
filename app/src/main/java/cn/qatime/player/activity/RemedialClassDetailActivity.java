@@ -22,6 +22,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
+import cn.qatime.player.bean.OrderPayBean;
 import cn.qatime.player.bean.RemedialClassDetailBean;
 import cn.qatime.player.fragment.FragmentRemedialClassDetail1;
 import cn.qatime.player.fragment.FragmentRemedialClassDetail2;
@@ -128,9 +129,10 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                         data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
                         Glide.with(RemedialClassDetailActivity.this).load(data.getData().getPublicize()).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
 
-                        if (data.getData()!=null){
-                        price.setText("￥" + data.getData().getPrice());
-                        studentnumber.setText(getResources().getString(R.string.student_number) + data.getData().getBuy_tickets_count());}
+                        if (data.getData() != null) {
+                            price.setText("￥" + data.getData().getPrice());
+                            studentnumber.setText("学习人数 " + data.getData().getBuy_tickets_count());
+                        }
                         if (data != null) {
                             ((FragmentRemedialClassDetail1) fragBaseFragments.get(0)).setData(data);
                             ((FragmentRemedialClassDetail2) fragBaseFragments.get(1)).setData(data);
@@ -146,7 +148,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
                                 if (data.getData().getIs_bought()) {
                                     pay.setEnabled(false);
-                                    pay.setText(getResources().getString(R.string.purchased));
+                                    pay.setText("已购买");
+                                    audition.setEnabled(false);
                                 } else {
                                     pay.setEnabled(true);
                                     pay.setText(getResources().getString(R.string.purchase_now));
@@ -179,7 +182,19 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
             case R.id.pay:
                 Intent intent = new Intent(RemedialClassDetailActivity.this, OrderConfirmActivity.class);
                 intent.putExtra("id", id);
-                intent.putExtra("data", data);
+                OrderPayBean bean = new OrderPayBean();
+                bean.image = data.getData().getPublicize();
+                bean.name = data.getData().getName();
+                bean.subject = data.getData().getSubject();
+                bean.grade = data.getData().getGrade();
+                bean.classnumber = data.getData().getPreset_lesson_count();
+                bean.teacher = data.getData().getTeacher().getName();
+                bean.classendtime = data.getData().getLive_end_time();
+                bean.status = data.getData().getStatus();
+                bean.classstarttime = data.getData().getLive_start_time();
+                bean.price = data.getData().getPrice();
+
+                intent.putExtra("data", bean);
                 startActivity(intent);
                 break;
         }

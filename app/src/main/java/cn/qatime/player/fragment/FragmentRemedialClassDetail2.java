@@ -68,7 +68,6 @@ public class FragmentRemedialClassDetail2 extends BaseFragment {
                     teachingyears.setText("执教年龄：20年以上");
                 }
             }
-
 //            graderange.setText("年级范围：" + data.getData().getTeacher().getGrade_range());
             describe.setText(data.getData().getTeacher().getDesc());
 

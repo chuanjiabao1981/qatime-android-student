@@ -8,3 +8,4 @@
 /captures
 .idea/
 library_pulltorefresh/build
+*.apk

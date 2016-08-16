@@ -237,7 +237,7 @@ public class StickyNavLayout extends LinearLayout {
             case MotionEvent.ACTION_MOVE:
                 float dy = y - mLastY;
 
-                Log.e("TAG", "dy = " + dy + " , y = " + y + " , mLastY = " + mLastY);
+//                Log.e("TAG", "dy = " + dy + " , y = " + y + " , mLastY = " + mLastY);
 
                 if (!mDragging && Math.abs(dy) > mTouchSlop) {
                     mDragging = true;

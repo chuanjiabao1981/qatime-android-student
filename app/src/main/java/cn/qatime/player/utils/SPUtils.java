@@ -12,6 +12,8 @@ public class SPUtils {
      * 保存在手机里面的文件名
      */
     public static final String FILE_NAME = "qatime";
+    private static String account;
+    private static Context context;
 
     /**
      * 保存数据的方法，我们需要拿到保存数据的具体类型，然后根据类型调用不同的保存方法
@@ -120,6 +122,7 @@ public class SPUtils {
         return sp.getAll();
     }
 
+
     /**
      * 创建一个解决SharedPreferencesCompat.apply方法的一个兼容类
      *
@@ -161,4 +164,26 @@ public class SPUtils {
         }
     }
 
+
+    /**
+     * 云信用
+     */
+
+    public static void setAccount(String account) {
+        SPUtils.account = account;
+    }
+
+
+    public static String getAccount() {
+        return account;
+    }
+
+
+    public static SharedPreferences getSharedPreferences(String account) {
+        return context.getSharedPreferences(account, Context.MODE_PRIVATE);
+    }
+
+    public static void setContext(Context context) {
+        SPUtils.context = context;
+    }
 }

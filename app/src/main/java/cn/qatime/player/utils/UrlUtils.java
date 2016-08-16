@@ -23,6 +23,8 @@ public class UrlUtils {
     public static String urlAppconstantInformation = baseUrl + "api/v1/app_constant";
     //獲取支付
     public static String urlPayPrepare = baseUrl + "api/v1/live_studio/courses/";
+    //獲取支付结果
+    public static String urlPayResult = baseUrl + "api/v1/payment/orders/";
 
     public static String getUrl(String function, Map<String, String> params) {
         String url;

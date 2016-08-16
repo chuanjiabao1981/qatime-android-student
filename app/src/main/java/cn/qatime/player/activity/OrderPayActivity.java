@@ -12,11 +12,15 @@ import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
@@ -25,6 +29,9 @@ import cn.qatime.player.bean.OrderConfirmBean;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.JsonUtils;
+import cn.qatime.player.utils.LogUtils;
+import cn.qatime.player.utils.SPUtils;
+import cn.qatime.player.utils.SignUtil;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VolleyErrorListener;
 import cn.qatime.player.utils.VolleyListener;
@@ -40,6 +47,7 @@ public class OrderPayActivity extends BaseActivity {
     private boolean canPay = false;
 
     private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
+    private int priceNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +62,7 @@ public class OrderPayActivity extends BaseActivity {
 
         int id = getIntent().getIntExtra("id", 0);
         String payType = getIntent().getStringExtra("payType");
+        priceNumber = getIntent().getIntExtra("price", 0);
         initData(id, payType);
     }
 
@@ -75,9 +84,8 @@ public class OrderPayActivity extends BaseActivity {
                             } else {
                                 type.setText("支付方式：支付宝支付");
                             }
-                            //TODO
-                            price.setText("支付金额：" );
-//                        commit.setEnabled(true);
+                            price.setText("支付金额：￥" + priceNumber);
+                            commit.setEnabled(true);
                         }
                     }
 
@@ -109,21 +117,22 @@ public class OrderPayActivity extends BaseActivity {
                 if (canPay) {
                     PayReq request = new PayReq();
 
-                    request.appId = Constant.APP_ID;
+                    request.appId = data.getData().getApp_pay_params().getAppid();
 
-                    request.partnerId = data.getData().getId();
+                    request.partnerId = data.getData().getApp_pay_params().getPartnerid();
 
-                    request.prepayId = data.getData().getPrepay_id();
+                    request.prepayId = data.getData().getApp_pay_params().getPrepayid();
 
-                    request.packageValue = "Sign=WXPay";
+                    request.packageValue = data.getData().getApp_pay_params().getPackage();
 
                     request.nonceStr = data.getData().getNonce_str();
 
-                    request.timeStamp = data.getData().getGenerate_app_pay_params().getTimestamp();
+                    request.timeStamp = data.getData().getApp_pay_params().getTimestamp();
 
-                    request.sign = data.getData().getGenerate_app_pay_params().getSign();
 
+                    request.sign = data.getData().getApp_pay_params().getSign();
                     api.sendReq(request);
+                    SPUtils.put(OrderPayActivity.this, "orderId", data.getData().getId());
                 } else {
                     Toast.makeText(OrderPayActivity.this, "不能支付", Toast.LENGTH_SHORT).show();
                 }

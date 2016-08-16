@@ -10,6 +10,8 @@ import java.io.Serializable;
  * @Description
  */
 public class OrderConfirmBean implements Serializable {
+
+
     private int status;
 
     private Data data;
@@ -39,7 +41,7 @@ public class OrderConfirmBean implements Serializable {
 
         private String nonce_str;
 
-        private Generate_app_pay_params generate_app_pay_params;
+        private App_pay_params app_pay_params;
 
         public void setId(String id) {
             this.id = id;
@@ -73,38 +75,28 @@ public class OrderConfirmBean implements Serializable {
             return this.nonce_str;
         }
 
-        public void setGenerate_app_pay_params(Generate_app_pay_params generate_app_pay_params) {
-            this.generate_app_pay_params = generate_app_pay_params;
+        public void setApp_pay_params(App_pay_params app_pay_params) {
+            this.app_pay_params = app_pay_params;
         }
 
-        public Generate_app_pay_params getGenerate_app_pay_params() {
-            return this.generate_app_pay_params;
+        public App_pay_params getApp_pay_params() {
+            return this.app_pay_params;
         }
 
     }
 
-    public class Generate_app_pay_params {
+    public class App_pay_params implements Serializable {
         private String appid;
 
         private String partnerid;
-        @SerializedName("packages")
+        @SerializedName("package")
         private String packages;
 
         private String timestamp;
 
-        private String body;
+        private String prepayid;
 
-        private String out_trade_no;
-
-        private int total_fee;
-
-        private String spbill_create_ip;
-
-        private String notify_url;
-
-        private String trade_type;
-
-        private String fee_type;
+        private String noncestr;
 
         private String sign;
 
@@ -140,60 +132,20 @@ public class OrderConfirmBean implements Serializable {
             return this.timestamp;
         }
 
-        public void setBody(String body) {
-            this.body = body;
+        public void setPrepayid(String prepayid) {
+            this.prepayid = prepayid;
         }
 
-        public String getBody() {
-            return this.body;
+        public String getPrepayid() {
+            return this.prepayid;
         }
 
-        public void setOut_trade_no(String out_trade_no) {
-            this.out_trade_no = out_trade_no;
+        public void setNoncestr(String noncestr) {
+            this.noncestr = noncestr;
         }
 
-        public String getOut_trade_no() {
-            return this.out_trade_no;
-        }
-
-        public void setTotal_fee(int total_fee) {
-            this.total_fee = total_fee;
-        }
-
-        public int getTotal_fee() {
-            return this.total_fee;
-        }
-
-        public void setSpbill_create_ip(String spbill_create_ip) {
-            this.spbill_create_ip = spbill_create_ip;
-        }
-
-        public String getSpbill_create_ip() {
-            return this.spbill_create_ip;
-        }
-
-        public void setNotify_url(String notify_url) {
-            this.notify_url = notify_url;
-        }
-
-        public String getNotify_url() {
-            return this.notify_url;
-        }
-
-        public void setTrade_type(String trade_type) {
-            this.trade_type = trade_type;
-        }
-
-        public String getTrade_type() {
-            return this.trade_type;
-        }
-
-        public void setFee_type(String fee_type) {
-            this.fee_type = fee_type;
-        }
-
-        public String getFee_type() {
-            return this.fee_type;
+        public String getNoncestr() {
+            return this.noncestr;
         }
 
         public void setSign(String sign) {

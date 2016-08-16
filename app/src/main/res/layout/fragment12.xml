@@ -25,8 +25,8 @@
                 android:id="@+id/time_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/by_time"
-                android:drawableRight="@mipmap/triangle_16"/>
+                android:drawableRight="@mipmap/triangle_16"
+                android:text="@string/by_time" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -47,8 +47,8 @@
                 android:id="@+id/subject_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/by_subject"
-                android:drawableRight="@mipmap/triangle_16"/>
+                android:drawableRight="@mipmap/triangle_16"
+                android:text="@string/by_subject" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -69,8 +69,8 @@
                 android:id="@+id/class_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/by_grade"
-                android:drawableRight="@mipmap/triangle_16"/>
+                android:drawableRight="@mipmap/triangle_16"
+                android:text="@string/by_grade" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -97,7 +97,6 @@
             android:background="#11000000"
             android:cacheColorHint="@null"
             android:horizontalSpacing="1dp"
-            android:listSelector="#00000000"
             android:numColumns="2"
             android:scrollbars="none"
             android:verticalSpacing="1dp" />
@@ -123,11 +122,12 @@
                     android:gravity="center_horizontal"
                     android:orientation="horizontal"
                     android:paddingTop="15dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="invisible"
-                        android:text="@string/alignprice" />
+                        android:text="@string/alignprice"
+                        android:visibility="invisible" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -217,8 +217,8 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_input"
                         android:inputType="number"
-                        android:minEms="3"
                         android:maxLength="3"
+                        android:minEms="3"
                         android:paddingBottom="3dp"
                         android:paddingLeft="15dip"
                         android:paddingRight="15dip"
@@ -278,30 +278,33 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/text_background"
                         android:text="00" />
+
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-android:layout_marginLeft="10dp"
                         android:layout_gravity="center"
-                        android:src="@mipmap/calendar_black_32"/>
+                        android:layout_marginLeft="10dp"
+                        android:src="@mipmap/calendar_black_32" />
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="3dp"
-         android:visibility="invisible"
-                        android:text="@string/alignto" />
+                        android:text="@string/alignto"
+                        android:visibility="invisible" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:layout_margin="3dp"
+                        android:gravity="center"
                         android:text="@string/to" />
                 </LinearLayout>
 
@@ -352,12 +355,13 @@ android:layout_marginLeft="10dp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/text_background"
                         android:text="00" />
+
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
                         android:layout_gravity="center"
-                        android:src="@mipmap/calendar_black_32"/>
+                        android:layout_marginLeft="10dp"
+                        android:src="@mipmap/calendar_black_32" />
 
                 </LinearLayout>
 
@@ -391,16 +395,17 @@ android:layout_marginLeft="10dp"
                         android:layout_height="30dp"
                         android:layout_margin="4dp"
                         android:layout_weight="1"
-                        android:background="@drawable/text_background"
+                        android:background="@drawable/button_bg_selector_gray"
                         android:text="@string/cancel"
                         android:textColor="@color/gray_dark" />
+
                     <Button
                         android:id="@+id/submit"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
                         android:layout_margin="4dp"
                         android:layout_weight="1"
-                        android:background="@drawable/text_background"
+                        android:background="@drawable/button_bg_selector_gray"
                         android:text="@string/confirm"
                         android:textColor="@color/gray_dark" />
                 </LinearLayout>

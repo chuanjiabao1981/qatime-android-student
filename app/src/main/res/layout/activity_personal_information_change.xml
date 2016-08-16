@@ -39,7 +39,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="@string/head" />
+                        android:text="@string/head"
+                        android:textColor="#666" />
 
                 </LinearLayout>
 
@@ -91,7 +92,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:text="@string/name" />
+                    android:text="@string/name"
+                    android:textColor="#666" />
 
                 <EditText
                     android:id="@+id/name"
@@ -102,7 +104,9 @@
                     android:hint="@string/hint_name"
                     android:inputType="text"
                     android:paddingBottom="5dp"
-                    android:paddingTop="5dp" />
+                    android:paddingTop="5dp"
+                    android:textColor="#1e1e1e"
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <View
@@ -126,7 +130,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:text="@string/sex" />
+                    android:text="@string/sex"
+                    android:textColor="#666" />
 
                 <RadioGroup
                     android:id="@+id/radiogroup"
@@ -138,13 +143,15 @@
                         android:id="@+id/men"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/boy" />
+                        android:text="@string/boy"
+                        android:textColor="#666" />
 
                     <RadioButton
                         android:id="@+id/women"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/girl" />
+                        android:text="@string/girl"
+                        android:textColor="#666" />
                 </RadioGroup>
             </LinearLayout>
 
@@ -241,7 +248,9 @@
                     android:background="@drawable/text_background"
                     android:gravity="top"
                     android:hint="@string/hint_profiles"
-                    android:minLines="3" />
+                    android:minLines="3"
+                    android:textColor="#1e1e1e"
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <View
@@ -258,8 +267,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:background="@drawable/text_background"
+        android:background="@drawable/button_bg_selector_orange"
         android:gravity="center"
         android:padding="10dp"
-        android:text="@string/finish" />
+        android:text="@string/finish"
+        android:textColor="#fff" />
 </LinearLayout>

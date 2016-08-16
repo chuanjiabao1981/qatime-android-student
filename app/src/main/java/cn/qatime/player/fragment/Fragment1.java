@@ -29,8 +29,10 @@ public class Fragment1 extends BaseFragment {
         initView(view);
         return view;
     }
+
     /**
      * 初始化布局
+     *
      * @param view
      */
     private void initView(View view) {
@@ -51,8 +53,10 @@ public class Fragment1 extends BaseFragment {
         root.setOnChangeFragmentListener(new FragmentLayout.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
-                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0x66000000);
-                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff000000);
+                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xffcccccc);
+                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextSize(16);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffffffff);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextSize(14);
             }
         });
         root.setAdapter(fragBaseFragments, R.layout.tablayout_fragment1, 0x1001);
