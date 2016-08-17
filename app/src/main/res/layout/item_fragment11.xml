@@ -18,7 +18,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
         android:ellipsize="middle"
-        android:minLines="2"
+
         android:text="高级辅导班辅导班北京高考详解高级辅导班北京高考详解"
         android:textColor="#151515"
         android:textSize="14sp" />
@@ -79,9 +79,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="10dp"
 
             android:text="价格"
+            android:textStyle="bold"
             android:textColor="#ff0000"
             android:textSize="13sp" />
 
@@ -96,7 +97,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_marginRight="15dp"
+            android:layout_marginRight="10dp"
 
             android:drawableLeft="@mipmap/shopping_32_8a8a8a"
             android:text="人数"

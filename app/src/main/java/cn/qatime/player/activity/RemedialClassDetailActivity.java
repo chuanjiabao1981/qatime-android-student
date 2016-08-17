@@ -138,8 +138,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     @Override
                     protected void onSuccess(JSONObject response) {
                         data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
-                        Glide.with(RemedialClassDetailActivity.this).load(R.mipmap.eight_five).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
-//                        Glide.with(RemedialClassDetailActivity.this).load(data.getData().getPublicize()).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
+//                        Glide.with(RemedialClassDetailActivity.this).load(R.mipmap.eight_five).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
+                        Glide.with(RemedialClassDetailActivity.this).load(data.getData().getPublicize()).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
 
                         if (data.getData() != null) {
                             price.setText("￥" + data.getData().getPrice());

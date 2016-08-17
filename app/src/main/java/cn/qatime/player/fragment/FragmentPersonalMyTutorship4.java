@@ -75,17 +75,12 @@ public class FragmentPersonalMyTutorship4 extends BaseFragment {
         adapter = new CommonAdapter<TutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship4) {
             @Override
             public void convert(ViewHolder helper, TutorialClassBean.Data item, int position) {
-                try {
-                    helper.setText(R.id.class_start_time, "开课时间：" + format.format(parse.parse(item.getLive_start_time())));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    helper.setText(R.id.class_end_time, "结课时间：" + format.format(parse.parse(item.getLive_end_time())));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).crossFade().into((ImageView) helper.getView(R.id.image));
+
+                helper.setText(R.id.class_start_time, "开课" + item.getLive_start_time());
+
+
+                helper.setText(R.id.class_end_time, "结课" + item.getLive_end_time());
+                Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name,  item.getName());
                 helper.setText(R.id.subject, "科目：" + item.getSubject());
                 helper.setText(R.id.teacher, "老师：" + item.getTeacher_name());
