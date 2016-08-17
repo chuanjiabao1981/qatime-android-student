@@ -82,8 +82,8 @@ public class Fragment11 extends BaseFragment {
                 helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.teacher, item.getTeacher_name());
                 String price = df.format(item.getPrice());
-                if (price.startsWith(".")){
-                    price = "0"+price;
+                if (price.startsWith(".")) {
+                    price = "0" + price;
                 }
                 helper.setText(R.id.price, "￥" + price);
                 helper.setText(R.id.student_number, String.valueOf(item.getBuy_tickets_count()));

@@ -118,18 +118,16 @@ public class FragmentPersonalMyTutorship3 extends BaseFragment {
                     }
                 });
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
-                helper.setText(R.id.name,  item.getName());
+                helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.subject, "科目：" + item.getSubject());
                 helper.setText(R.id.teacher, "老师：" + item.getTeacher_name());
                 helper.setText(R.id.progress, item.getCompleted_lesson_count() + "/" + item.getPreset_lesson_count());
-                ((ProgressBar)helper.getView(R.id.progressbar)).setProgress(item.getCompleted_lesson_count());
-                ((ProgressBar)helper.getView(R.id.progressbar)).setMax(item.getPreset_lesson_count());
-                helper.setText(R.id.total_class,String.valueOf(item.getPreset_lesson_count()));
-                try {
-                    helper.setText(R.id.teaching_time,"下一节课："+format.format(parse.parse(item.getPreview_time())));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                ((ProgressBar) helper.getView(R.id.progressbar)).setProgress(item.getCompleted_lesson_count());
+                ((ProgressBar) helper.getView(R.id.progressbar)).setMax(item.getPreset_lesson_count());
+                helper.setText(R.id.total_class, String.valueOf(item.getPreset_lesson_count()));
+
+                helper.setText(R.id.teaching_time, "下一课" + item.getPreview_time());
+
             }
 
 
@@ -181,13 +179,14 @@ public class FragmentPersonalMyTutorship3 extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                intent.putExtra("id", list.get(position-1).getId());
+                intent.putExtra("id", list.get(position - 1).getId());
                 startActivity(intent);
             }
         });
     }
+
     public void onShow() {
-        if (!isLoad){
+        if (!isLoad) {
             initData(1);
         }
     }
@@ -208,7 +207,7 @@ public class FragmentPersonalMyTutorship3 extends BaseFragment {
 
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        isLoad =true;
+                        isLoad = true;
                         LogUtils.e(response.toString());
                         if (type == 1) {
                             list.clear();
@@ -232,6 +231,7 @@ public class FragmentPersonalMyTutorship3 extends BaseFragment {
                     protected void onError(JSONObject response) {
 
                     }
+
                     @Override
                     protected void onTokenOut() {
                         tokenOut();

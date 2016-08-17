@@ -73,7 +73,6 @@ public class FragmentPersonalMyTutorship2 extends BaseFragment {
         listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
-
         adapter = new CommonAdapter<TutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship2) {
 
 
@@ -178,7 +177,7 @@ public class FragmentPersonalMyTutorship2 extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                intent.putExtra("id", list.get(position-1).getId());
+                intent.putExtra("id", list.get(position - 1).getId());
                 startActivity(intent);
             }
         });
@@ -231,6 +230,7 @@ public class FragmentPersonalMyTutorship2 extends BaseFragment {
                     protected void onError(JSONObject response) {
 
                     }
+
                     @Override
                     protected void onTokenOut() {
                         tokenOut();

@@ -79,10 +79,10 @@ public class FragmentPersonalMyTutorship1 extends BaseFragment {
             public void convert(ViewHolder helper, final TutorialClassBean.Data item, int position) {
 
 
-                    helper.setText(R.id.class_start_time, "开课" + item.getLive_start_time());
+                helper.setText(R.id.class_start_time, "开课" + item.getLive_start_time());
 
 
-                    helper.setText(R.id.class_end_time, "结课" + item.getLive_end_time());
+                helper.setText(R.id.class_end_time, "结课" + item.getLive_end_time());
 
                 helper.getView(R.id.video).setVisibility(StringUtils.isNullOrBlanK(item.getPull_address()) ? View.GONE : View.VISIBLE);
                 helper.getView(R.id.enter).setVisibility(item.getIs_bought() ? View.GONE : View.VISIBLE);
@@ -126,11 +126,8 @@ public class FragmentPersonalMyTutorship1 extends BaseFragment {
                 ((ProgressBar) helper.getView(R.id.progressbar)).setProgress(item.getCompleted_lesson_count());
                 ((ProgressBar) helper.getView(R.id.progressbar)).setMax(item.getPreset_lesson_count());
                 helper.setText(R.id.total_class, String.valueOf(item.getPreset_lesson_count()));
-                try {
-                    helper.setText(R.id.teaching_time, "上课时间：" + format.format(parse.parse(item.getPreview_time())));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                helper.setText(R.id.teaching_time, "时间" + item.getPreview_time());
+
             }
         };
         listView.setAdapter(adapter);
@@ -232,6 +229,7 @@ public class FragmentPersonalMyTutorship1 extends BaseFragment {
                     protected void onError(JSONObject response) {
 
                     }
+
                     @Override
                     protected void onTokenOut() {
                         tokenOut();
