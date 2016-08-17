@@ -93,9 +93,10 @@
     <string name="region">地区</string>
     <string name="school">学校</string>
     <string name="profiles">简介</string>
-    <string name="profiles_class">简介：</string>
+    <string name="profiles_class">课程简介：</string>
     <string name="head">头像</string>
     <string name="click_to_change">点击更换</string>
+    <string name="click_to_add">点击添加</string>
     <string name="hint_name">输入真实姓名更方便老师联系你</string>
     <string name="hint_profiles">一句话介绍自己</string>
     <string name="boy">我是男神</string>
@@ -149,20 +150,23 @@
     <string name="set_for_login">设置登录</string>
     <string name="get_verification_code">获取校验码</string>
     <string name="hint_input_verification_code">输入校验码</string>
+    <string name="hint_input_code">输入验证码</string>
     <string name="hint_phone_number">请输入大陆地区11位手机号码</string>
     <string name="hint_input_password">输入登录密码</string>
     <string name="hint_confirm_password">确认登录密码</string>
     <string name="hint_qatime_register_code">请输入答疑时间注册码</string>
     <string name="agree">同意</string>
     <string name="next">下一步</string>
+    <string name="information_perfect">完善信息</string>
     <string name="can_not_be_empty">不能为空</string>
     <string name="system_setting">系统设置</string>
     //忘记密码
-    <string name="hint_phone_number_forget">请输入手机号码</string>
-    <string name="hint_password_forget">不能为空</string>
+    <string name="hint_phone_number_forget">请输入绑定手机号码</string>
+    <string name="hint_password_forget">请输入新密码</string>
+    <string name="find_password">找回密码</string>
 
 //课程详情1
-    <string name="class_name">名称：</string>
+    <string name="class_name">课程名称：</string>
     <string name="subject_type">科目类型：</string>
     <string name="teacher">授课教师：</string>
     <string name="progress">课程进度：</string>

@@ -79,7 +79,7 @@ public class FragmentPersonalMyTutorship1 extends BaseFragment {
             public void convert(ViewHolder helper, final TutorialClassBean.Data item, int position) {
 
                 try {
-                    helper.setText(R.id.class_start_time, "开课时间" + format.format(parse.parse(item.getLive_start_time())));
+                    helper.setText(R.id.class_start_time, "开课" + format.format(parse.parse(item.getLive_start_time())));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

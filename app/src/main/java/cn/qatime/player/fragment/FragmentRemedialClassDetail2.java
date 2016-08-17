@@ -28,7 +28,7 @@ public class FragmentRemedialClassDetail2 extends BaseFragment {
 //    private TextView degree;
     private TextView teachingyears;
     private TextView subject;
-
+    private TextView gradetype;
     private TextView school;
     private TextView describe;
 
@@ -45,7 +45,7 @@ public class FragmentRemedialClassDetail2 extends BaseFragment {
         name = (TextView) view.findViewById(R.id.name);
         image = (ImageView) view.findViewById(R.id.image);
 //        degree = (TextView) view.findViewById(R.id.degree);
-//        graderange = (TextView) view.findViewById(R.id.grade_range);
+        gradetype = (TextView) view.findViewById(R.id.grade_type);
         subject = (TextView) view.findViewById(R.id.subject);
         teachingyears = (TextView) view.findViewById(R.id.teaching_years);
         school = (TextView) view.findViewById(R.id.school);
@@ -68,7 +68,7 @@ public class FragmentRemedialClassDetail2 extends BaseFragment {
                     teachingyears.setText(getResources().getString(R.string.teacher_years)+"21");
                 }
             }
-//            graderange.setText("年级范围：" + data.getData().getTeacher().getGrade_range());
+            gradetype.setText(getResources().getString(R.string.grade_type) +"高中");
             describe.setText(data.getData().getTeacher().getDesc());
 
             SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getCacheDir() + "/school.txt").toString(), SchoolBean.class);

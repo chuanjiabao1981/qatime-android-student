@@ -40,14 +40,14 @@
                 android:padding="3dp"
                 android:text="所授科目：" />
 
-            <!--<TextView-->
+            <TextView
 
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:lineSpacingExtra="1.2sp"-->
-            <!--android:padding="3dp"-->
-            <!--android:id="@+id/grade_range"-->
-            <!--android:text="年级范围：" />-->
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="1.2sp"
+            android:padding="3dp"
+            android:id="@+id/grade_type"
+            android:text="类        型：" />
 
             <TextView
 
@@ -63,17 +63,22 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:padding="3dp">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="自我介绍：" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="自我介绍：" />
+    <TextView
+        android:id="@+id/describe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+         />
+</LinearLayout>
 
-                <TextView
-                    android:id="@+id/describe"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="" />
 
             </LinearLayout>
         </LinearLayout>

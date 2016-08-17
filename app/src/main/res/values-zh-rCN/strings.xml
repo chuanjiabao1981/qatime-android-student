@@ -30,7 +30,7 @@
     <string name="by_price_down">按价格↓</string>
 
     <string name="alignprice">111</string>//fragment12对齐
-    <string name="alignto">1111111</string>//fragment12对齐
+    <string name="alignto">111111</string>//fragment12对齐
 
     //
     //排序
@@ -93,8 +93,10 @@
     <string name="region">地区</string>
     <string name="school">学校</string>
     <string name="profiles">简介</string>
+    <string name="profiles_class">课程简介：</string>
     <string name="head">头像</string>
     <string name="click_to_change">点击更换</string>
+    <string name="click_to_add">点击添加</string>
     <string name="hint_name">输入真实姓名更方便老师联系你</string>
     <string name="hint_profiles">一句话介绍自己</string>
     <string name="boy">我是男神</string>
@@ -129,8 +131,11 @@
     <string name="teacher_detail">教师详情</string>
     <string name="course_list">课程列表</string>
     //课程详情
+    <string name="student_number">学习人数</string>
     <string name="Join_the_audition">加入试听</string>
+    <string name="Joined_the_audition">已加入试听</string>
     <string name="purchase_now">立即购买</string>
+    <string name="purchased">已购买</string>
     //登录
     <string name="account">请输入账号</string>
     <string name="password">请输入密码</string>
@@ -142,23 +147,46 @@
     <string name="logout">退出登录</string>
     <string name="press_another_exit">再按一次退出程序</string>
     //注册
-    <string name="set_for_login">注册</string>
+    <string name="set_for_login">设置登录</string>
     <string name="get_verification_code">获取校验码</string>
     <string name="hint_input_verification_code">输入校验码</string>
+    <string name="hint_input_code">输入验证码</string>
     <string name="hint_phone_number">请输入大陆地区11位手机号码</string>
     <string name="hint_input_password">输入登录密码</string>
     <string name="hint_confirm_password">确认登录密码</string>
     <string name="hint_qatime_register_code">请输入答疑时间注册码</string>
     <string name="agree">同意</string>
     <string name="next">下一步</string>
+    <string name="information_perfect">完善信息</string>
     <string name="can_not_be_empty">不能为空</string>
     <string name="system_setting">系统设置</string>
     //忘记密码
-    <string name="hint_phone_number_forget">请输入手机号码</string>
-    <string name="hint_password_forget">不能为空</string>
+    <string name="hint_phone_number_forget">请输入绑定手机号码</string>
+    <string name="hint_password_forget">请输入新密码</string>
+    <string name="find_password">找回密码</string>
 
+    //课程详情1
+    <string name="class_name">课程名称：</string>
+    <string name="subject_type">科目类型：</string>
+    <string name="teacher">授课教师：</string>
+    <string name="progress">课程进度：</string>
+    <string name="teach_way">授课方式：</string>
+    <string name="remain_class">剩余课时：</string>
+    <string name="class_end_time">结课时间：</string>
+    <string name="status_preview">当前状态：招生中</string>
+    <string name="status_teaching">当前状态：已开课</string>
+    <string name="status_over">当前状态：已结束</string>
+    <string name="grade_type">年级类型：</string>
+    //课程详情2
+    <string name="teacher_name">老师姓名：</string>
+    <string name="teacher_years">执教年龄：</string>
+    <string name="teacher_subject">所授科目：</string>
+    <string name="teacher_school">所在学校：</string>
+    <string name="teacher_introduction">自我介绍：</string>
 
     <string name="use">使用</string>
+
+
 
     <!-- 云信SDK所需文案 -->
     <string name="nim_status_bar_multi_messages_incoming">%1$d位联系人有新消息</string>
@@ -172,5 +200,6 @@
     <string name="nim_status_bar_custom_message">%1$s: 自定义消息</string>
     <string name="nim_status_bar_unsupported_message">%1$s: 无法显示该内容</string>
     <string name="nim_status_bar_hidden_msg_content">你收到一条新消息</string>
+
 
 </resources>

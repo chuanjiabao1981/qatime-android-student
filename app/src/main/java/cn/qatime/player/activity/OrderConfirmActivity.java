@@ -87,7 +87,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         }
         // TODO: 2016/8/12  image teachway price
         teachway.setText("授课方式：");
-        price.setText("价格：" + data.price);
+        price.setText("价  格：" + data.price);
         payprice.setText(" " + data.price + " ");
     }
 
