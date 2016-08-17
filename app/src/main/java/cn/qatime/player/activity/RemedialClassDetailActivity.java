@@ -6,13 +6,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -31,6 +35,8 @@ import cn.qatime.player.transformation.GlideCircleTransform;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.JsonUtils;
 import cn.qatime.player.utils.LogUtils;
+import cn.qatime.player.utils.ScreenUtils;
+import cn.qatime.player.utils.StringUtils;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VolleyErrorListener;
 import cn.qatime.player.utils.VolleyListener;
@@ -61,11 +67,14 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         pager = getIntent().getIntExtra("pager", 0);
         initView();
         initData();
+
     }
 
 
-    private void initView() {
+    public void initView() {
+        EventBus.getDefault().register(this);
         image = (ImageView) findViewById(R.id.image);
+        image.setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenWidth(this) * 5 / 8));
 
         fragBaseFragments.add(new FragmentRemedialClassDetail1());
         fragBaseFragments.add(new FragmentRemedialClassDetail2());
@@ -129,7 +138,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     @Override
                     protected void onSuccess(JSONObject response) {
                         data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
-                        Glide.with(RemedialClassDetailActivity.this).load(data.getData().getPublicize()).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
+                        Glide.with(RemedialClassDetailActivity.this).load(data.getData().getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into(image);
 
                         if (data.getData() != null) {
                             price.setText("￥" + data.getData().getPrice());
@@ -164,6 +173,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     protected void onError(JSONObject response) {
 
                     }
+
                     @Override
                     protected void onTokenOut() {
                         tokenOut();
@@ -224,6 +234,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     protected void onError(JSONObject response) {
 
                     }
+
                     @Override
                     protected void onTokenOut() {
                         tokenOut();
@@ -238,5 +249,18 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
             }
         });
         addToRequestQueue(request);
+    }
+
+    @Subscribe
+    public void onEvent(String event) {
+        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
+            finish();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

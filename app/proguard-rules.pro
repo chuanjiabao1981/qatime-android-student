@@ -17,6 +17,13 @@
 #}
 
 
+#eventbus
+-keep class de.greenrobot.event.** {*;}
+-keepclassmembers class ** {
+    public void onEvent*(**);
+    void onEvent*(**);
+}
+
 #网易云信
 -dontwarn com.netease.**
 -dontwarn io.netty.**

@@ -67,9 +67,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
         if (!StringUtils.isNullOrBlanK(SPUtils.get(LoginActivity.this, "username", ""))) {
             username.setText(SPUtils.get(LoginActivity.this, "username", "").toString());
-            if (!StringUtils.isNullOrBlanK(SPUtils.get(LoginActivity.this, "password", ""))) {
-                password.setText(SPUtils.get(LoginActivity.this, "password", "").toString());
-            }
+//            if (!StringUtils.isNullOrBlanK(SPUtils.get(LoginActivity.this, "password", ""))) {
+//                password.setText(SPUtils.get(LoginActivity.this, "password", "").toString());
+//            }
         }
         String sign = getIntent().getStringExtra("sign");//从系统设置退出登录页面跳转而来，清除用户登录信息
         if (!StringUtils.isNullOrBlanK(sign) && sign.equals("exit_login")) {
@@ -130,6 +130,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 new VolleyListener(LoginActivity.this) {
                     @Override
                     protected void onTokenOut() {
+                        login.setClickable(true);
                         tokenOut();
                     }
 
@@ -138,9 +139,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         login.setClickable(true);
                         LogUtils.e("登录", response.toString());
                         SPUtils.put(LoginActivity.this, "username", username.getText().toString());
-                        SPUtils.put(LoginActivity.this, "password", password.getText().toString());
                         Profile profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
                         if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
+                            SPUtils.putObject(LoginActivity.this,"profile",profile);
                             BaseApplication.setProfile(profile);
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
@@ -152,7 +153,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                     @Override
                     protected void onError(JSONObject response) {
-
+                        login.setClickable(true);
                     }
                 }, new VolleyErrorListener() {
             @Override

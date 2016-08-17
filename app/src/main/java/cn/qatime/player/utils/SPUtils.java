@@ -2,7 +2,14 @@ package cn.qatime.player.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Base64;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -42,6 +49,75 @@ public class SPUtils {
         }
 
         SharedPreferencesCompat.apply(editor);
+    }
+
+    /**
+     * 将对象存储到sp
+     *
+     * @param context
+     * @param key
+     * @param object
+     */
+    public static void putObject(Context context, String key, Object object) {
+        SharedPreferences sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream out = null;
+        try {
+
+            out = new ObjectOutputStream(baos);
+            out.writeObject(object);
+            String objectVal = new String(Base64.encode(baos.toByteArray(), Base64.DEFAULT));
+            editor.putString(key, objectVal);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (baos != null) {
+                    baos.close();
+                }
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        SharedPreferencesCompat.apply(editor);
+    }
+
+    public static <T> T getObject(Context context,String key, Class<T> clazz) {
+        SharedPreferences sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        if (sp.contains(key)) {
+            String objectVal = sp.getString(key, null);
+            byte[] buffer = Base64.decode(objectVal, Base64.DEFAULT);
+            ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
+            ObjectInputStream ois = null;
+            try {
+                ois = new ObjectInputStream(bais);
+                T t = (T) ois.readObject();
+                return t;
+            } catch (StreamCorruptedException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (bais != null) {
+                        bais.close();
+                    }
+                    if (ois != null) {
+                        ois.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
     }
 
     /**

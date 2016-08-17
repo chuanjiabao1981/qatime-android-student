@@ -8,10 +8,5 @@
         android:color="#aaaaaa" />
     //边框宽度//边框颜色
 
-    <padding
-        android:bottom="4dp"
-        android:left="6dp"
-        android:right="6dp"
-        android:top="4dp" />
 
 </shape>

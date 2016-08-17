@@ -12,12 +12,16 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.bean.OrderPayBean;
+import cn.qatime.player.utils.StringUtils;
 
 public class OrderConfirmActivity extends BaseActivity implements View.OnClickListener {
     TextView name;
@@ -42,12 +46,16 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     private String payType = "1";
     private int priceNumber = 0;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_confirm);
         setTitle(getResources().getString(R.string.order_confirm));
         initView();
+
+        EventBus.getDefault().register(this);
+
         OrderPayBean data = (OrderPayBean) getIntent().getSerializableExtra("data");
         id = getIntent().getIntExtra("id", 0);
         if (data != null) {
@@ -99,8 +107,8 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         intent.putExtra("payType", payType);
         startActivity(intent);
     }
+    public void initView() {
 
-    private void initView() {
         name = (TextView) findViewById(R.id.name);
         image = (ImageView) findViewById(R.id.image);
         project = (TextView) findViewById(R.id.project);
@@ -137,5 +145,17 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                 }
             }
         });
+    }
+    @Subscribe
+    public void onEvent(String event) {
+        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
+            finish();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

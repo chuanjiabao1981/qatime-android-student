@@ -13,7 +13,11 @@ import android.support.v4.content.ContextCompat;
 import com.bumptech.glide.Glide;
 
 import cn.qatime.player.R;
+import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.bean.Profile;
 import cn.qatime.player.utils.LogUtils;
+import cn.qatime.player.utils.SPUtils;
+import cn.qatime.player.utils.StringUtils;
 
 /**
  * 起始页
@@ -34,8 +38,14 @@ public class StartActivity extends Activity {
 
                 } else {
                     LogUtils.e("no第一次登陆");
-                    StartActivity.this.startActivity(new Intent(StartActivity.this, LoginActivity.class));
-                    StartActivity.this.finish();
+                    BaseApplication.setProfile(SPUtils.getObject(StartActivity.this,"profile", Profile.class));
+                    if (!StringUtils.isNullOrBlanK(BaseApplication.getProfile().getToken())) {//token不空  直接自动登录到mianactivity
+                        StartActivity.this.startActivity(new Intent(StartActivity.this, MainActivity.class));
+                        StartActivity.this.finish();
+                    } else {
+                        StartActivity.this.startActivity(new Intent(StartActivity.this, LoginActivity.class));
+                        StartActivity.this.finish();
+                    }
                 }
             }
         }, 2000);

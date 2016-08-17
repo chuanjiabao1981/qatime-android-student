@@ -3,6 +3,12 @@ package cn.qatime.player.wxapi;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.tencent.mm.sdk.modelbase.BaseReq;
@@ -11,6 +17,7 @@ import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,18 +36,49 @@ import cn.qatime.player.utils.VolleyListener;
  * @date 2016/8/15 11:11
  * @Description
  */
-public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandler {
+public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandler, View.OnClickListener {
     private IWXAPI api;
     private boolean reLoad = false;
+    private ImageView image;
+    private TextView status;
+    private TextView orderId;
+    private TextView price;
+    private TextView viewOrder;//查看订单
+    private TextView myOrder;//我的订单
+    private Button complete;
+    private RelativeLayout loading;
+    private View successLayout;
+    private View faildLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pay_result);
+        setTitle("支付结果");
+        assignViews();
 
         api = WXAPIFactory.createWXAPI(this, Constant.APP_ID);
         api.handleIntent(getIntent(), this);
     }
+
+
+    private void assignViews() {
+        successLayout = findViewById(R.id.success_layout);
+        faildLayout = findViewById(R.id.faild_layout);
+        image = (ImageView) findViewById(R.id.image);
+        status = (TextView) findViewById(R.id.status);
+        orderId = (TextView) findViewById(R.id.orderId);
+        price = (TextView) findViewById(R.id.price);
+        viewOrder = (TextView) findViewById(R.id.view_order);
+        complete = (Button) findViewById(R.id.complete);
+        loading = (RelativeLayout) findViewById(R.id.loading);
+//        viewOrder.setOnClickListener(this);
+        complete.setOnClickListener(this);
+        orderId.setText((String) SPUtils.get(WXPayEntryActivity.this, "orderId", ""));
+        price.setText("￥" + String.valueOf(SPUtils.get(WXPayEntryActivity.this, "price", 0)));
+    }
+
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -58,9 +96,10 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
     @Override
     public void onResp(BaseResp baseResp) {
         if (baseResp.errCode == 0) {
+            EventBus.getDefault().post("pay_success");
             initData();
-        } else if (baseResp.errCode == 2) {//用户取消
-
+        } else if (baseResp.errCode == -2) {//用户取消
+            finish();
         }
 
     }
@@ -78,8 +117,6 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
         String id = (String) SPUtils.get(this, "orderId", "");
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPayResult + id + "/result", null,
                 new VolleyListener(this) {
-
-
                     @Override
                     protected void onSuccess(JSONObject response) {
                         try {
@@ -94,14 +131,30 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
                                                 initData();
                                             }
                                         }, 5000);
+                                    } else {
+                                        loading.setVisibility(View.GONE);
+                                        image.setImageResource(R.mipmap.pay_faild);
+                                        WXPayEntryActivity.this.status.setText("支付失败");
+                                        faildLayout.setVisibility(View.VISIBLE);
+                                        successLayout.setVisibility(View.GONE);
                                     }
                                     break;
                                 case "paid":
                                 case "shipped":
                                 case "completed":
-                                    //TODO  支付成功
+                                    //  支付成功
+                                    loading.setVisibility(View.GONE);
+                                    image.setImageResource(R.mipmap.pay_success);
+                                    WXPayEntryActivity.this.status.setText("支付成功");
+                                    faildLayout.setVisibility(View.GONE);
+                                    successLayout.setVisibility(View.VISIBLE);
                                     break;
                                 default:
+                                    loading.setVisibility(View.GONE);
+                                    image.setImageResource(R.mipmap.pay_faild);
+                                    WXPayEntryActivity.this.status.setText("支付失败");
+                                    faildLayout.setVisibility(View.VISIBLE);
+                                    successLayout.setVisibility(View.GONE);
                                     break;
                             }
                         } catch (JSONException e) {
@@ -111,8 +164,13 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
 
                     @Override
                     protected void onError(JSONObject response) {
-
+                        loading.setVisibility(View.GONE);
+                        image.setImageResource(R.mipmap.pay_faild);
+                        WXPayEntryActivity.this.status.setText("支付失败");
+                        faildLayout.setVisibility(View.VISIBLE);
+                        successLayout.setVisibility(View.GONE);
                     }
+
                     @Override
                     protected void onTokenOut() {
                         tokenOut();
@@ -121,8 +179,24 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
+                loading.setVisibility(View.GONE);
+                image.setImageResource(R.mipmap.pay_faild);
+                WXPayEntryActivity.this.status.setText("支付失败");
+                faildLayout.setVisibility(View.VISIBLE);
+                successLayout.setVisibility(View.GONE);
             }
         });
         addToRequestQueue(request);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+//            case R.id.view_order://查看订单
+//                break;
+            case R.id.complete://完成  关闭
+                finish();
+                break;
+        }
     }
 }

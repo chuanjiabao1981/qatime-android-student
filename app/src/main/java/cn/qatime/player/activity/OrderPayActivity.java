@@ -14,6 +14,8 @@ import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
@@ -32,6 +34,7 @@ import cn.qatime.player.utils.JsonUtils;
 import cn.qatime.player.utils.LogUtils;
 import cn.qatime.player.utils.SPUtils;
 import cn.qatime.player.utils.SignUtil;
+import cn.qatime.player.utils.StringUtils;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VolleyErrorListener;
 import cn.qatime.player.utils.VolleyListener;
@@ -49,6 +52,7 @@ public class OrderPayActivity extends BaseActivity {
     private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
     private int priceNumber;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +60,8 @@ public class OrderPayActivity extends BaseActivity {
         setTitle(getResources().getString(R.string.pay_confirm));
         initView();
         api = WXAPIFactory.createWXAPI(this, null);
+
+        EventBus.getDefault().register(this);
 
         // 将该app注册到微信
         api.registerApp(Constant.APP_ID);
@@ -96,6 +102,7 @@ public class OrderPayActivity extends BaseActivity {
                         canPay = false;
 
                     }
+
                     @Override
                     protected void onTokenOut() {
                         tokenOut();
@@ -109,7 +116,8 @@ public class OrderPayActivity extends BaseActivity {
         addToRequestQueue(request);
     }
 
-    private void initView() {
+    public void initView() {
+
         code = (TextView) findViewById(R.id.code);
         time = (TextView) findViewById(R.id.time);
         type = (TextView) findViewById(R.id.type);
@@ -139,11 +147,25 @@ public class OrderPayActivity extends BaseActivity {
                     request.sign = data.getData().getApp_pay_params().getSign();
                     api.sendReq(request);
                     SPUtils.put(OrderPayActivity.this, "orderId", data.getData().getId());
+                    SPUtils.put(OrderPayActivity.this, "price", priceNumber);
                 } else {
                     Toast.makeText(OrderPayActivity.this, "不能支付", Toast.LENGTH_SHORT).show();
                 }
 
             }
         });
+    }
+
+    @Subscribe
+    public void onEvent(String event) {
+        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
+            finish();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }
