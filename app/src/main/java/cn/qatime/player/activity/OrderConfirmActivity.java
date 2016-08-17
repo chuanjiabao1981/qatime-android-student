@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -46,6 +47,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     private String payType = "1";
     private int priceNumber = 0;
 
+    DecimalFormat df = new DecimalFormat("#.00");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,8 +97,12 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         }
         // TODO: 2016/8/12  image teachway price
         teachway.setText("授课方式：");
-        price.setText("价  格：" + data.price);
-        payprice.setText(" " + data.price + " ");
+        String price = df.format(data.price);
+        if (price.startsWith(".")) {
+            price = "0" + price;
+        }
+        OrderConfirmActivity.this.price.setText("价  格：" + price);
+        payprice.setText(" " + price + " ");
     }
 
     @Override

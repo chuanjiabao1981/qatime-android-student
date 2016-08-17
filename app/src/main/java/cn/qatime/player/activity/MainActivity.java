@@ -71,8 +71,8 @@ public class MainActivity extends BaseFragmentActivity {
             }
         }
         GetGradeslist();
-        GetProvinceslist();
-        GetCitieslist();
+//        GetProvinceslist();
+//        GetCitieslist();
         GetSchoolslist();
     }
 
@@ -268,7 +268,8 @@ public class MainActivity extends BaseFragmentActivity {
                 super.onErrorResponse(volleyError);
             }
         });
-        addToRequestQueue(request);
+        //TODO
+//        addToRequestQueue(request);
     }
 
     //学校列表

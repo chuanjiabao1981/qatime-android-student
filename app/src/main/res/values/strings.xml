@@ -17,13 +17,13 @@
     <string name="by_time">按时间</string>
     <string name="by_subject">科目</string>
     <string name="by_grade">年级</string>
-    <string name="price">价格:</string>
+    <string name="price">价格范围</string>
     <string name="yuan">元</string>
-    <string name="Total_class_hours">课时总数：</string>
+    <string name="Total_class_hours">课时范围</string>
     <string name="hours">课时</string>
-    <string name="starting_dates">开课时间：</string>
+    <string name="starting_dates">开课范围</string>
     <string name="to">至</string>
-    <string name="state">状态：</string>
+    <string name="state">当前状态</string>
     <string name="cancel">取消</string>
     <string name="confirm">确定</string>//
     <string name="by_price_up">按价格↑</string>

@@ -12,6 +12,7 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -117,8 +118,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     private void login() {
 
-        if (TextUtils.isEmpty(username.getText().toString()) || TextUtils.isEmpty(password.getText().toString())) {
-            Toast.makeText(this, "不能为空", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(username.getText().toString())) {
+            Toast.makeText(this, "账号不能为空", Toast.LENGTH_SHORT).show();
+            login.setClickable(true);
+            return;
+        }
+        if (TextUtils.isEmpty(password.getText().toString())) {
+            Toast.makeText(this, "密码不能为空", Toast.LENGTH_SHORT).show();
             login.setClickable(true);
             return;
         }
@@ -137,18 +143,33 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     @Override
                     protected void onSuccess(JSONObject response) {
                         login.setClickable(true);
-                        LogUtils.e("登录", response.toString());
-                        SPUtils.put(LoginActivity.this, "username", username.getText().toString());
-                        Profile profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
-                        if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
-                            SPUtils.putObject(LoginActivity.this,"profile",profile);
-                            BaseApplication.setProfile(profile);
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            //没有数据或token
+                        try {
+                            JSONObject data = response.getJSONObject("data");
+                            if (data.has("result")) {
+                                if (data.getString("result") != null && data.getString("result").equals("failed")) {
+                                    Toast.makeText(LoginActivity.this, "账号或密码错误", Toast.LENGTH_SHORT).show();
+                                }
+                            }else {
+                                LogUtils.e("登录", response.toString());
+                                SPUtils.put(LoginActivity.this, "username", username.getText().toString());
+                                Profile profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
+                                if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
+                                    SPUtils.putObject(LoginActivity.this, "profile", profile);
+                                    BaseApplication.setProfile(profile);
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    //没有数据或token
+                                }
+                            }
+                        } catch (JSONException e) {
+
+//                            e.printStackTrace();
+//                            LogUtils.e("error"+e.getMessage());
                         }
+
+
                     }
 
                     @Override

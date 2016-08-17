@@ -46,7 +46,7 @@ public class GuideActivity extends BaseActivity {
                 iv.setClickable(true);
                 iv.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
                 iv.setId(position);
-                iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
 //				iv.setImageResource(imageIds[position]);
                 iv.setImageBitmap(BitmapUtil.decodeBitmapFromResource(getResources(), imageIds[position], width, height));
                 container.addView(iv);

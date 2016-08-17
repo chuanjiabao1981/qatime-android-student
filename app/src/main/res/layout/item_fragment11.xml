@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:background="#fff"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#fff"
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/name"
@@ -21,7 +21,7 @@
         android:maxLines="1"
         android:text="高级辅导班辅导班北京高考详解高级辅导班北京高考详解"
         android:textColor="#151515"
-        android:textSize="14sp"/>
+        android:textSize="14sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,12 +38,12 @@
             android:drawableLeft="@mipmap/head_32_8a8a8a"
             android:gravity="center"
             android:text="老师"
-            android:textSize="13sp"/>
+            android:textSize="13sp" />
 
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/subject"
@@ -51,12 +51,12 @@
             android:layout_height="wrap_content"
 
             android:text="科目"
-            android:textSize="13sp"/>
+            android:textSize="13sp" />
 
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/grade"
@@ -66,7 +66,7 @@
             android:layout_marginRight="10dp"
 
             android:text="年级"
-            android:textSize="13sp"/>
+            android:textSize="13sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -84,12 +84,12 @@
             android:text="价格"
             android:textColor="#ff0000"
             android:textSize="13sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
 
         <TextView
@@ -102,7 +102,7 @@
             android:drawableLeft="@mipmap/shopping_32_8a8a8a"
             android:gravity="center"
             android:text="人数"
-            android:textSize="13sp"/>
+            android:textSize="13sp" />
     </LinearLayout>
 
 </LinearLayout>

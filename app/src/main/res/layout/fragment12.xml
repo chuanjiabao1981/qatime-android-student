@@ -115,274 +115,278 @@
                 android:background="#ffffff"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal"
-                    android:paddingTop="15dp">
+                    android:gravity="center">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/alignprice"
-                        android:visibility="invisible" />
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/price" />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="15dp"
+                            android:orientation="horizontal">
 
-                    <EditText
-                        android:id="@+id/price_low"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/shape_input"
-                        android:inputType="number"
-                        android:maxLength="5"
-                        android:minEms="3"
-                        android:paddingBottom="3dp"
-                        android:paddingLeft="15dip"
-                        android:paddingRight="15dip"
-                        android:paddingTop="3dp"
-                        android:singleLine="true"
-                        android:textColorHint="#ff999999" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/price" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:text="-" />
+                            <EditText
+                                android:id="@+id/price_low"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="30dp"
+                                android:background="@drawable/shape_input"
+                                android:inputType="number"
+                                android:maxLength="5"
+                                android:minEms="3"
+                                android:paddingBottom="3dp"
+                                android:paddingLeft="15dip"
+                                android:paddingRight="15dip"
+                                android:paddingTop="3dp"
+                                android:singleLine="true"
+                                android:textColorHint="#ff999999" />
 
-                    <EditText
-                        android:id="@+id/price_high"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/shape_input"
-                        android:inputType="number"
-                        android:maxLength="5"
-                        android:minEms="3"
-                        android:paddingBottom="3dp"
-                        android:paddingLeft="15dip"
-                        android:paddingRight="15dip"
-                        android:paddingTop="3dp"
-                        android:singleLine="true"
-                        android:textColorHint="#ff999999" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
+                                android:text="-" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/yuan" />
-                </LinearLayout>
+                            <EditText
+                                android:id="@+id/price_high"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/shape_input"
+                                android:inputType="number"
+                                android:maxLength="5"
+                                android:minEms="3"
+                                android:paddingBottom="3dp"
+                                android:paddingLeft="15dip"
+                                android:paddingRight="15dip"
+                                android:paddingTop="3dp"
+                                android:singleLine="true"
+                                android:textColorHint="#ff999999" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:text="@string/yuan" />
+                        </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/Total_class_hours" />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="15dp"
+                            android:orientation="horizontal">
 
-                    <EditText
-                        android:id="@+id/subject_low"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/shape_input"
-                        android:inputType="number"
-                        android:maxLength="3"
-                        android:minEms="3"
-                        android:paddingBottom="3dp"
-                        android:paddingLeft="15dip"
-                        android:paddingRight="15dip"
-                        android:paddingTop="3dp"
-                        android:singleLine="true"
-                        android:textColorHint="#ff999999" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/Total_class_hours" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:text="-" />
+                            <EditText
+                                android:id="@+id/subject_low"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="30dp"
+                                android:background="@drawable/shape_input"
+                                android:inputType="number"
+                                android:maxLength="3"
+                                android:minEms="3"
+                                android:paddingBottom="3dp"
+                                android:paddingLeft="15dip"
+                                android:paddingRight="15dip"
+                                android:paddingTop="3dp"
+                                android:singleLine="true"
+                                android:textColorHint="#ff999999" />
 
-                    <EditText
-                        android:id="@+id/subject_high"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/shape_input"
-                        android:inputType="number"
-                        android:maxLength="3"
-                        android:minEms="3"
-                        android:paddingBottom="3dp"
-                        android:paddingLeft="15dip"
-                        android:paddingRight="15dip"
-                        android:paddingTop="3dp"
-                        android:singleLine="true"
-                        android:textColorHint="#ff999999" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
+                                android:text="-" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/hours" />
-                </LinearLayout>
+                            <EditText
+                                android:id="@+id/subject_high"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/shape_input"
+                                android:inputType="number"
+                                android:maxLength="3"
+                                android:minEms="3"
+                                android:paddingBottom="3dp"
+                                android:paddingLeft="15dip"
+                                android:paddingRight="15dip"
+                                android:paddingTop="3dp"
+                                android:singleLine="true"
+                                android:textColorHint="#ff999999" />
 
-                <LinearLayout
-                    android:id="@+id/begin_class_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:text="@string/hours" />
+                        </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/starting_dates" />
+                        <LinearLayout
+                            android:id="@+id/begin_class_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:orientation="horizontal"
+                            android:paddingBottom="5dp"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="5dp">
 
-                    <TextView
-                        android:id="@+id/begin_class_year"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/text_background"
-                        android:text="2016" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/starting_dates" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="-" />
+                            <TextView
+                                android:id="@+id/begin_class_year"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="30dp"
+                                android:text="2016" />
 
-                    <TextView
-                        android:id="@+id/begin_class_month"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/text_background"
-                        android:text="00" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=" 年 " />
 
-                    <TextView
+                            <TextView
+                                android:id="@+id/begin_class_month"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="00" />
 
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="-" />
+                            <TextView
 
-                    <TextView
-                        android:id="@+id/begin_class_day"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/text_background"
-                        android:text="00" />
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=" 月 " />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="10dp"
-                        android:src="@mipmap/calendar_black_32" />
+                            <TextView
+                                android:id="@+id/begin_class_day"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="00" />
 
-                </LinearLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=" 日 " />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="10dp"
+                                android:src="@mipmap/calendar_black_32" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="3dp"
-                        android:text="@string/alignto"
-                        android:visibility="invisible" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="3dp"
-                        android:gravity="center"
-                        android:text="@string/to" />
-                </LinearLayout>
+                        </LinearLayout>
 
 
-                <LinearLayout
-                    android:id="@+id/end_class_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="3dp"
+                            android:gravity="center"
+                            android:text="@string/to"
+                            android:textColor="#cacaca" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/starting_dates"
-                        android:visibility="invisible" />
 
-                    <TextView
-                        android:id="@+id/end_class_year"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/text_background"
-                        android:text="2016" />
+                        <LinearLayout
+                            android:id="@+id/end_class_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:orientation="horizontal"
+                            android:paddingBottom="5dp"
+                            android:paddingLeft="10dp"
+                            android:paddingTop="5dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="-" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/starting_dates"
+                                android:visibility="invisible" />
 
-                    <TextView
-                        android:id="@+id/end_class_month"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/text_background"
-                        android:text="00" />
+                            <TextView
+                                android:id="@+id/end_class_year"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="30dp"
+                                android:text="2016" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="-" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=" 年 " />
 
-                    <TextView
-                        android:id="@+id/end_class_day"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/text_background"
-                        android:text="00" />
+                            <TextView
+                                android:id="@+id/end_class_month"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="00" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="10dp"
-                        android:src="@mipmap/calendar_black_32" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=" 月 " />
 
-                </LinearLayout>
+                            <TextView
+                                android:id="@+id/end_class_day"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="00" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=" 日 " />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/state" />
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="10dp"
+                                android:src="@mipmap/calendar_black_32" />
 
-                    <Spinner
-                        android:id="@+id/spinner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:entries="@array/spingarr" />
-                </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:orientation="horizontal"
+                            android:paddingLeft="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/state" />
+
+                            <Spinner
+                                android:id="@+id/spinner"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="30dp"
+                                android:entries="@array/spingarr" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"

@@ -124,7 +124,7 @@ public class FragmentPersonalMyTutorship5 extends BaseFragment {
                 ((ProgressBar) helper.getView(R.id.progressbar)).setProgress(item.getCompleted_lesson_count());
                 ((ProgressBar) helper.getView(R.id.progressbar)).setMax(item.getPreset_lesson_count());
                 helper.setText(R.id.total_class, String.valueOf(item.getPreset_lesson_count()));
-                helper.setText(R.id.teaching_time, "下一节课" + item.getPreview_time());
+                helper.setText(R.id.teaching_time, "下一课" + item.getPreview_time());
 
             }
         };

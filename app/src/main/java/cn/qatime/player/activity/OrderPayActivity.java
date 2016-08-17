@@ -18,6 +18,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,6 +53,7 @@ public class OrderPayActivity extends BaseActivity {
     private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
     private int priceNumber;
 
+    DecimalFormat df = new DecimalFormat("#.00");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +94,11 @@ public class OrderPayActivity extends BaseActivity {
                             } else {
                                 type.setText("支付方式：支付宝支付");
                             }
-                            price.setText("支付金额：￥" + priceNumber);
+                            String price = df.format(priceNumber);
+                            if (price.startsWith(".")) {
+                                price = "0" + price;
+                            }
+                            OrderPayActivity.this.price.setText("支付金额：￥" + price);
                             commit.setEnabled(true);
                         }
                     }

@@ -75,8 +75,8 @@ public class Fragment11 extends BaseFragment {
         adapter = new CommonAdapter<RemedialClassBean.Data>(getActivity(), list, R.layout.item_fragment11) {
             @Override
             public void convert(ViewHolder helper, RemedialClassBean.Data item, int position) {
-                ((ImageView) helper.getView(R.id.image)).setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()) / 2, ScreenUtils.getScreenWidth(getActivity()) / 2));
-                Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).crossFade().centerCrop().into(((ImageView) helper.getView(R.id.image)));
+                ((ImageView) helper.getView(R.id.image)).setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()) / 2, ScreenUtils.getScreenWidth(getActivity()) / 2 * 5 / 8));
+                Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.image)));
                 helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.grade, item.getGrade());

@@ -22,6 +22,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
+import java.text.DecimalFormat;
+
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.utils.Constant;
@@ -50,6 +52,7 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
     private View successLayout;
     private View faildLayout;
 
+    DecimalFormat df = new DecimalFormat("#.00");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +79,12 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
 //        viewOrder.setOnClickListener(this);
         complete.setOnClickListener(this);
         orderId.setText((String) SPUtils.get(WXPayEntryActivity.this, "orderId", ""));
-        price.setText("￥" + String.valueOf(SPUtils.get(WXPayEntryActivity.this, "price", 0)));
+        String price = df.format(SPUtils.get(WXPayEntryActivity.this, "price", 0));
+        if (price.startsWith(".")) {
+            price = "0" + price;
+        }
+
+        WXPayEntryActivity.this.price.setText("￥" + price);
     }
 
 
@@ -99,6 +107,8 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
             EventBus.getDefault().post("pay_success");
             initData();
         } else if (baseResp.errCode == -2) {//用户取消
+            finish();
+        } else {
             finish();
         }
 

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -108,6 +109,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
     private int page = 1;
 
     DecimalFormat df = new DecimalFormat("#.00");
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -146,8 +148,8 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                     LogUtils.e("item數據空");
                     return;
                 }
-                ((ImageView) helper.getView(R.id.image)).setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()) / 2, ScreenUtils.getScreenWidth(getActivity()) / 2));
-                Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).crossFade().centerCrop().into(((ImageView) helper.getView(R.id.image)));
+                ((ImageView) helper.getView(R.id.image)).setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()) / 2, ScreenUtils.getScreenWidth(getActivity()) / 2 * 5 / 8));
+                Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.image)));
                 helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.grade, item.getGrade());
@@ -155,8 +157,8 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                     helper.setText(R.id.teacher, item.getTeacher_name());
                 }
                 String price = df.format(item.getPrice());
-                if (price.startsWith(".")){
-                    price = "0"+price;
+                if (price.startsWith(".")) {
+                    price = "0" + price;
                 }
                 helper.setText(R.id.price, "￥" + price);
                 helper.setText(R.id.student_number, String.valueOf(item.getBuy_tickets_count()));
@@ -205,6 +207,11 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
         endcLassMonth = (TextView) view.findViewById(R.id.end_class_month);
         endClassDay = (TextView) view.findViewById(R.id.end_class_day);
         spinner = (Spinner) view.findViewById(R.id.spinner);
+        List<String> data =new ArrayList<>();
+        data.add(getResources().getString(R.string.whole));
+        data.add(getResources().getString(R.string.recruiting));
+        data.add(getResources().getString(R.string.started));
+        spinner.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.item_spinner, data));
         cancel = (Button) view.findViewById(R.id.cancel);
         submit = (Button) view.findViewById(R.id.submit);
 
@@ -303,6 +310,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                         grid.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
                         grid.onRefreshComplete();
                     }
+
                     @Override
                     protected void onTokenOut() {
                         tokenOut();

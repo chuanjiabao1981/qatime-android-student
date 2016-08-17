@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -19,6 +20,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -56,7 +58,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     private int pager = 0;
     TextView price;
     TextView studentnumber;
-
+    DecimalFormat df = new DecimalFormat("#.00");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,10 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         id = getIntent().getIntExtra("id", 0);//联网id
         pager = getIntent().getIntExtra("pager", 0);
         initView();
+        if (id == 0) {
+            Toast.makeText(this, "没有辅导班id", Toast.LENGTH_SHORT).show();
+            return;
+        }
         initData();
 
     }
@@ -142,7 +148,11 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                         Glide.with(RemedialClassDetailActivity.this).load(data.getData().getPublicize()).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
 
                         if (data.getData() != null) {
-                            price.setText("￥" + data.getData().getPrice());
+                            String price = df.format(data.getData().getPrice());
+                            if (price.startsWith(".")) {
+                                price = "0" + price;
+                            }
+                            RemedialClassDetailActivity.this.price.setText("￥" + price);
                             studentnumber.setText("学习人数 " + data.getData().getBuy_tickets_count());
                         }
                         if (data != null) {
