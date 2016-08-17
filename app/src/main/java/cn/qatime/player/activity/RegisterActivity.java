@@ -1,5 +1,6 @@
 package cn.qatime.player.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -48,6 +49,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 time.start();
                 break;
             case R.id.next:
+                Intent intent=new Intent(RegisterActivity.this,RegisterPerfectActivity.class);
+                startActivity(intent);
+
                 break;
         }
     }

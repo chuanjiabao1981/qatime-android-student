@@ -28,7 +28,7 @@ public class FragmentRemedialClassDetail1 extends BaseFragment {
     TextView teacher;
     TextView totalclass;
     TextView remainclass;
-    TextView teachway;
+//    TextView teachway;
     TextView progress;
     RemedialClassDetailBean data;
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -56,7 +56,7 @@ public class FragmentRemedialClassDetail1 extends BaseFragment {
         classendtime = (TextView) view.findViewById(R.id.class_end_time);
         teacher = (TextView) view.findViewById(R.id.teacher);
         progress = (TextView) view.findViewById(R.id.progress);
-        teachway = (TextView) view.findViewById(R.id.teach_way);
+//        teachway = (TextView) view.findViewById(R.id.teach_way);
         totalclass = (TextView) view.findViewById(R.id.total_class);
         remainclass = (TextView) view.findViewById(R.id.remain_class);
     }
@@ -75,7 +75,7 @@ public class FragmentRemedialClassDetail1 extends BaseFragment {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            teachway.setText(getResources().getString(R.string.teach_way));
+//            teachway.setText(getResources().getString(R.string.teach_way));
             grade.setText(getResources().getString(R.string.grade_type) + bean.getGrade());
             totalclass.setText(getResources().getString(R.string.Total_class_hours)+ bean.getPreset_lesson_count() + getResources().getString(R.string.hours));
             remainclass.setText(getResources().getString(R.string.remain_class)+ (bean.getPreset_lesson_count() - bean.getCompleted_lesson_count()));

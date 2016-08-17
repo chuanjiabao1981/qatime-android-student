@@ -37,6 +37,7 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -106,7 +107,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
     private String status = "";
     private int page = 1;
 
-
+    DecimalFormat df = new DecimalFormat("#.00");
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -153,7 +154,11 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 if (item.getTeacher_name() != null) {
                     helper.setText(R.id.teacher, item.getTeacher_name());
                 }
-                helper.setText(R.id.price, "￥" + item.getPrice());
+                String price = df.format(item.getPrice());
+                if (price.startsWith(".")){
+                    price = "0"+price;
+                }
+                helper.setText(R.id.price, "￥" + price);
                 helper.setText(R.id.student_number, String.valueOf(item.getBuy_tickets_count()));
             }
         };

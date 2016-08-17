@@ -10,53 +10,122 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="5dp">
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:text="基本信息"
+            android:text="信息详情"
             android:textColor="#31b1f5"
             android:textSize="15sp" />
 
         <TextView
+            android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="3dp"
-            android:text="名称：高考急速训练班考前冲刺" />
+            android:text="名称：" />
 
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="3dp">>
+            android:orientation="horizontal">
 
-            <TextView
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="科目类型：地理\n授课老师：李沐阳\n课程进度： 0/14" />
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/subject"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+
+                    android:text="科目类型：" />
+
+                <TextView
+                    android:id="@+id/teacher"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:text="授课老师：" />
+
+                <TextView
+                    android:id="@+id/progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:text="课程进度：" />
+
+            </LinearLayout>
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_weight="1" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="年级类型：高一\n课时总数：14课时\n剩余课时： 14" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/grade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:text="年级类型：" />
+
+                <TextView
+                    android:id="@+id/total_class"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                     />
+
+                <TextView
+                    android:id="@+id/remain_class"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="3dp"
+                    android:text="剩余课时：" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
 
-        <TextView
-            android:id="@+id/text"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:lineSpacingExtra="6dp"
-            android:padding="3dp"
-            android:text="开课时间：2016年10月31日\n结课时间：2016年10月31日" />
+            android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/class_start_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+
+                android:text="开课时间：" />
+
+            <TextView
+                android:id="@+id/class_end_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:text="结课时间：" />
+
+            <!--<TextView-->
+            <!--android:id="@+id/teach_way"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:padding="3dp"-->
+            <!--android:text="授课方式：" />-->
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -67,12 +136,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="简介:" />
+
+                android:text="@string/profiles_class" />
 
             <TextView
+                android:id="@+id/describe"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="最强大脑最强大脑最强大脑最强大脑最强大脑最强大脑最强大脑最强大脑最强大脑最强大脑最强大脑最强大脑最强大脑最强大脑最强大脑" />
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
 

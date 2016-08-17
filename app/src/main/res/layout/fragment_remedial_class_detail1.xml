@@ -110,12 +110,12 @@
                 android:padding="3dp"
                 android:text="结课时间：" />
 
-            <TextView
-                android:id="@+id/teach_way"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="3dp"
-                android:text="授课方式：" />
+            <!--<TextView-->
+                <!--android:id="@+id/teach_way"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:padding="3dp"-->
+                <!--android:text="授课方式：" />-->
 
         </LinearLayout>
 
@@ -150,13 +150,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingRight="20dp"
+
                 android:text="@string/profiles_class" />
 
             <TextView
                 android:id="@+id/describe"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
 

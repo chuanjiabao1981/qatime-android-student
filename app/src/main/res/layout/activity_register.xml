@@ -2,9 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+              android:background="@color/white_translucent"
     android:orientation="vertical">
 
     <include layout="@layout/layout_backbar" />
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+
+    android:layout_margin="10dp"
+    android:background="@drawable/text_background"
+    android:orientation="vertical">
 
 
     <EditText
@@ -13,6 +22,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/shape_input"
         android:hint="@string/hint_phone_number"
         android:inputType="phone"
@@ -24,6 +35,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal">
 
 
@@ -31,7 +44,7 @@
             android:id="@+id/code"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
+            android:layout_weight="2"
             android:background="@drawable/shape_input"
             android:ems="10"
             android:hint="@string/hint_input_verification_code"
@@ -42,7 +55,7 @@
         <Button
             android:id="@+id/get_code"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:textColor="#ffffff"
 
@@ -59,6 +72,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="5dp"
         android:background="@drawable/shape_input"
         android:hint="@string/hint_input_password"
         android:inputType="textPassword"
@@ -71,6 +86,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="30dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginRight="30dp"
         android:background="@drawable/shape_input"
         android:hint="@string/hint_confirm_password"
@@ -84,6 +101,8 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="5dp"
         android:background="@drawable/shape_input"
         android:hint="@string/hint_qatime_register_code"
         android:inputType="textPassword"
@@ -114,14 +133,20 @@
             android:layout_height="wrap_content"
             android:text="《答疑时间用户协议》"
 
-            android:padding="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingRight="10dp"
             android:textAppearance="?android:attr/textAppearanceSmall" />
     </LinearLayout>
+</LinearLayout>
 
     <Button
         android:id="@+id/next"
-        android:layout_width="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:background="@drawable/button_bg_selector_orange"
         android:text="下一步" />
+
 </LinearLayout>

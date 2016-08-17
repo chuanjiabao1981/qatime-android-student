@@ -23,6 +23,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +49,8 @@ public class Fragment11 extends BaseFragment {
     private List<RemedialClassBean.Data> list = new ArrayList<>();
     private CommonAdapter<RemedialClassBean.Data> adapter;
     private int page = 1;
+
+    DecimalFormat df = new DecimalFormat("#.00");
 
     @Nullable
     @Override
@@ -78,7 +81,11 @@ public class Fragment11 extends BaseFragment {
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.teacher, item.getTeacher_name());
-                helper.setText(R.id.price, "￥" + item.getPrice());
+                String price = df.format(item.getPrice());
+                if (price.startsWith(".")){
+                    price = "0"+price;
+                }
+                helper.setText(R.id.price, "￥" + price);
                 helper.setText(R.id.student_number, String.valueOf(item.getBuy_tickets_count()));
 
             }
@@ -146,6 +153,7 @@ public class Fragment11 extends BaseFragment {
                         grid.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
                         grid.onRefreshComplete();
                     }
+
                     @Override
                     protected void onTokenOut() {
                         tokenOut();
