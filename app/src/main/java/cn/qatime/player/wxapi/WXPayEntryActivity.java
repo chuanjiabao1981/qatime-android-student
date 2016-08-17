@@ -78,6 +78,8 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
         String id = (String) SPUtils.get(this, "orderId", "");
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPayResult + id + "/result", null,
                 new VolleyListener(this) {
+
+
                     @Override
                     protected void onSuccess(JSONObject response) {
                         try {
@@ -110,6 +112,10 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
                     @Override
                     protected void onError(JSONObject response) {
 
+                    }
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
                     }
                 }, new VolleyErrorListener() {
             @Override

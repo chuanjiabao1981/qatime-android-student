@@ -129,6 +129,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlLogin, map), null,
                 new VolleyListener(LoginActivity.this) {
                     @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+
+                    @Override
                     protected void onSuccess(JSONObject response) {
                         login.setClickable(true);
                         LogUtils.e("登录", response.toString());

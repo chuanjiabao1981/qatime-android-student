@@ -118,6 +118,8 @@ public class Fragment11 extends BaseFragment {
         map.put("per_page", "10");
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass, map), null,
                 new VolleyListener(getActivity()) {
+
+
                     @Override
                     protected void onSuccess(JSONObject response) {
                         if (type == 1) {
@@ -143,6 +145,10 @@ public class Fragment11 extends BaseFragment {
                                 DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
                         grid.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
                         grid.onRefreshComplete();
+                    }
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
                     }
                 }, new VolleyErrorListener() {
             @Override

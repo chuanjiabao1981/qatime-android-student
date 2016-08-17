@@ -146,7 +146,7 @@
     <string name="logout">退出登录</string>
     <string name="press_another_exit">再按一次退出程序</string>
     //注册
-    <string name="set_for_login">注册</string>
+    <string name="set_for_login">设置登录</string>
     <string name="get_verification_code">获取校验码</string>
     <string name="hint_input_verification_code">输入校验码</string>
     <string name="hint_phone_number">请输入大陆地区11位手机号码</string>
@@ -161,7 +161,7 @@
     <string name="hint_phone_number_forget">请输入手机号码</string>
     <string name="hint_password_forget">不能为空</string>
 
-//课程详情
+//课程详情1
     <string name="class_name">名称：</string>
     <string name="subject_type">科目类型：</string>
     <string name="teacher">授课教师：</string>
@@ -173,6 +173,12 @@
     <string name="status_teaching">当前状态：已开课</string>
     <string name="status_over">当前状态：已结束</string>
     <string name="grade_type">年级类型：</string>
+    //课程详情2
+    <string name="teacher_name">老师姓名：</string>
+    <string name="teacher_years">执教年龄：</string>
+    <string name="teacher_subject">所授科目：</string>
+    <string name="teacher_school">所在学校：</string>
+    <string name="teacher_introduction">自我介绍：</string>
 
     <string name="use">使用</string>
 

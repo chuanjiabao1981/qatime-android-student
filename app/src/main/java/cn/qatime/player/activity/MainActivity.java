@@ -194,9 +194,10 @@ public class MainActivity extends BaseFragmentActivity {
                     protected void onError(JSONObject response) {
 
                     }
+
                     @Override
                     protected void onTokenOut() {
-                    tokenOut();
+                        tokenOut();
                     }
                 }, new VolleyErrorListener() {
             @Override
@@ -214,6 +215,8 @@ public class MainActivity extends BaseFragmentActivity {
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/provinces", null,
                 new VolleyListener(MainActivity.this) {
                     @Override
+
+
                     protected void onSuccess(JSONObject response) {
 
                     }
@@ -221,6 +224,11 @@ public class MainActivity extends BaseFragmentActivity {
                     @Override
                     protected void onError(JSONObject response) {
 
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
                     }
                 }, new VolleyErrorListener() {
             @Override
@@ -237,6 +245,7 @@ public class MainActivity extends BaseFragmentActivity {
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,
                 new VolleyListener(MainActivity.this) {
+
                     @Override
                     protected void onSuccess(JSONObject response) {
                         boolean value = FileUtil.writeFile(new ByteArrayInputStream(response.toString().getBytes()), getCacheDir().getAbsolutePath() + "/city.txt", true);
@@ -247,6 +256,12 @@ public class MainActivity extends BaseFragmentActivity {
                     protected void onError(JSONObject response) {
 
                     }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+
                 }, new VolleyErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
@@ -261,6 +276,7 @@ public class MainActivity extends BaseFragmentActivity {
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/schools", null,
                 new VolleyListener(MainActivity.this) {
+
                     @Override
                     protected void onSuccess(JSONObject response) {
                         boolean value = FileUtil.writeFile(new ByteArrayInputStream(response.toString().getBytes()), getCacheDir().getAbsolutePath() + "/school.txt", true);
@@ -271,6 +287,11 @@ public class MainActivity extends BaseFragmentActivity {
                     protected void onError(JSONObject response) {
 
                     }
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+
                 }, new VolleyErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {

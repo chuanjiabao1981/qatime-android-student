@@ -71,6 +71,8 @@ public class OrderPayActivity extends BaseActivity {
         map.put("pay_type", payType);
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlPayPrepare + id + "/orders", map), null,
                 new VolleyListener(OrderPayActivity.this) {
+
+
                     @Override
                     protected void onSuccess(JSONObject response) {
                         data = JsonUtils.objectFromJson(response.toString(), OrderConfirmBean.class);
@@ -93,6 +95,10 @@ public class OrderPayActivity extends BaseActivity {
                     protected void onError(JSONObject response) {
                         canPay = false;
 
+                    }
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
                     }
                 }, new VolleyErrorListener() {
             @Override

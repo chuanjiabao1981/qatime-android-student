@@ -168,6 +168,8 @@ public class FragmentPersonalMyTutorship4 extends BaseFragment {
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/courses", map), null,
                 new VolleyListener(getActivity()) {
+
+
                     @Override
                     protected void onSuccess(JSONObject response) {
                         isLoad = true;
@@ -193,6 +195,10 @@ public class FragmentPersonalMyTutorship4 extends BaseFragment {
                     @Override
                     protected void onError(JSONObject response) {
 
+                    }
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
                     }
                 }, new VolleyErrorListener() {
             @Override

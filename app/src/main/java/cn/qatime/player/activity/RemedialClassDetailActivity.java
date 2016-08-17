@@ -124,6 +124,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     private void initData() {
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass + "/" + id, null,
                 new VolleyListener(RemedialClassDetailActivity.this) {
+
+
                     @Override
                     protected void onSuccess(JSONObject response) {
                         data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
@@ -161,6 +163,10 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     @Override
                     protected void onError(JSONObject response) {
 
+                    }
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
                     }
                 }
 
@@ -205,6 +211,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         map.put("id", String.valueOf(id));
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass + "/" + id + "/taste", map), null,
                 new VolleyListener(RemedialClassDetailActivity.this) {
+
+
                     @Override
                     protected void onSuccess(JSONObject response) {
                         //已加入试听
@@ -216,6 +224,11 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     protected void onError(JSONObject response) {
 
                     }
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+
                 }
 
                 , new VolleyErrorListener() {

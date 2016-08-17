@@ -55,17 +55,17 @@ public class FragmentRemedialClassDetail2 extends BaseFragment {
     public void setData(RemedialClassDetailBean data) {
         if (data.getData() != null) {
 
-            name.setText("老师姓名：" + data.getData().getTeacher().getName());
-            subject.setText("所授科目：" + data.getData().getTeacher().getSubject());
+            name.setText(getResources().getString(R.string.teacher_name) + data.getData().getTeacher().getName());
+            subject.setText(getResources().getString(R.string.teacher_subject) + data.getData().getTeacher().getSubject());
             if (!StringUtils.isNullOrBlanK(data.getData().getTeacher().getTeaching_years())) {
                 if (data.getData().getTeacher().getTeaching_years().equals("within_three_years")) {
-                    teachingyears.setText("执教年龄：3年");
+                    teachingyears.setText(getResources().getString(R.string.teacher_years)+"3");
                 } else if (data.getData().getTeacher().getTeaching_years().equals("within_ten_years")) {
-                    teachingyears.setText("执教年龄：10年");
+                    teachingyears.setText(getResources().getString(R.string.teacher_years)+"10");
                 } else if (data.getData().getTeacher().getTeaching_years().equals("within_twenty_years")) {
-                    teachingyears.setText("执教年龄：20年");
+                    teachingyears.setText(getResources().getString(R.string.teacher_years)+"20");
                 } else {
-                    teachingyears.setText("执教年龄：20年以上");
+                    teachingyears.setText(getResources().getString(R.string.teacher_years)+"21");
                 }
             }
 //            graderange.setText("年级范围：" + data.getData().getTeacher().getGrade_range());
@@ -76,7 +76,7 @@ public class FragmentRemedialClassDetail2 extends BaseFragment {
             if (schoolBean != null && schoolBean.getData() != null) {
                 for (int i = 0; i < schoolBean.getData().size(); i++) {
                     if (data.getData().getTeacher().getSchool() == schoolBean.getData().get(i).getId()) {
-                        school.setText("所在学校："+schoolBean.getData().get(i).getName());
+                        school.setText(getResources().getString(R.string.teacher_school)+schoolBean.getData().get(i).getName());
                         break;
                     }
                 }

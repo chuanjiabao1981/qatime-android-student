@@ -167,6 +167,13 @@
     <string name="status_teaching">Status:Teaching</string>//当前状态：上课中
     <string name="status_over">Status:Ended</string>//当前状态:已结束
     <string name="grade_type">Grade:</string>//年级类型
+    //课程详情2
+    <string name="teacher_name">Teacher：</string>
+    <string name="teacher_years">Coaching age：</string>
+    <string name="teacher_subject">Subject：</string>
+    <string name="teacher_school">School：</string>
+    <string name="teacher_introduction">Introduction：</string>
+
 
     <string name="use">use it</string>//使用
 

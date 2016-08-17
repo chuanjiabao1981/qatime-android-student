@@ -82,6 +82,8 @@ public class PersonalInformationActivity extends BaseActivity {
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null,
                 new VolleyListener(PersonalInformationActivity.this) {
+
+
                     @Override
                     protected void onSuccess(JSONObject response) {
                         bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
@@ -93,6 +95,10 @@ public class PersonalInformationActivity extends BaseActivity {
                     @Override
                     protected void onError(JSONObject response) {
 
+                    }
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
                     }
                 }, new VolleyErrorListener() {
             @Override

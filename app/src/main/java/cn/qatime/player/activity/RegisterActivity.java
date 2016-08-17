@@ -24,6 +24,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        setTitle(getResources().getString(R.string.set_for_login));
         initView();
         time = new TimeCount(60000, 1000);
     }
@@ -59,12 +60,12 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         @Override
         public void onFinish() {// 计时完毕
             getcode.setText("获取验证码");
-            getcode.setClickable(true);
+            getcode.setEnabled(true);
         }
 
         @Override
         public void onTick(long millisUntilFinished) {// 计时过程
-            getcode.setClickable(false);//防止重复点击
+            getcode.setEnabled(false);//防止重复点击
             getcode.setText(millisUntilFinished / 1000 + "s");
         }
     }

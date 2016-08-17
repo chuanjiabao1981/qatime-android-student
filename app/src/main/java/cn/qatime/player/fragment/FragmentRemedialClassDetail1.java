@@ -65,12 +65,12 @@ public class FragmentRemedialClassDetail1 extends BaseFragment {
         RemedialClassDetailBean.Data bean = data.getData();
         if (bean != null) {
 
-            name.setText((getResources().getString(R.string.class_name))+ bean.getName());
-            subject.setText((getResources().getString(R.string.subject_type)) + bean.getSubject());
-                teacher.setText((getResources().getString(R.string.teacher)) + bean.getTeacher().getName());
-            progress.setText((getResources().getString(R.string.progress)) + bean.getCompleted_lesson_count() + "/" + bean.getPreset_lesson_count());
+            name.setText(getResources().getString(R.string.class_name)+ bean.getName());
+            subject.setText(getResources().getString(R.string.subject_type) + bean.getSubject());
+                teacher.setText(getResources().getString(R.string.teacher) + bean.getTeacher().getName());
+            progress.setText(getResources().getString(R.string.progress) + bean.getCompleted_lesson_count() + "/" + bean.getPreset_lesson_count());
             try {
-                classstarttime.setText((getResources().getString(R.string.starting_dates)) + format.format(parse.parse(bean.getLive_start_time())));
+                classstarttime.setText(getResources().getString(R.string.starting_dates) + format.format(parse.parse(bean.getLive_start_time())));
                 classendtime.setText(getResources().getString(R.string.class_end_time) + format.format(parse.parse(bean.getLive_end_time())));
             } catch (ParseException e) {
                 e.printStackTrace();
