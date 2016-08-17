@@ -37,13 +37,14 @@ public class FragmentRemedialClassDetail3 extends BaseFragment {
 
     private void initview(View view) {
         ListView listView = (ListView) view.findViewById(R.id.id_stickynavlayout_innerscrollview);
+        listView.setDividerHeight(0);
         adapter = new CommonAdapter<RemedialClassDetailBean.Lessons>(getActivity(), list, R.layout.item_fragment_remedial_class_detail3) {
 
             @Override
             public void convert(ViewHolder holder, RemedialClassDetailBean.Lessons item, int position) {
                 holder.setText(R.id.number, StringUtils.Int2String(position + 1));
                 holder.setText(R.id.name, item.getName());
-                holder.setText(R.id.live_time,item.getLive_time());
+                holder.setText(R.id.live_time, item.getLive_time());
                 if (item.getStatus().equals("finished")) {
                     holder.setText(R.id.status, "当前状态：已结束");
                 } else if (item.getStatus().equals("ready")) {
@@ -54,7 +55,7 @@ public class FragmentRemedialClassDetail3 extends BaseFragment {
 
 
                 try {
-                    holder.setText(R.id.class_date,format.format(parse.parse(item.getClass_date())));
+                    holder.setText(R.id.class_date, format.format(parse.parse(item.getClass_date())));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

@@ -291,7 +291,10 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
 
                     @Override
                     protected void onError(JSONObject response) {
-
+                        String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(),
+                                DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+                        grid.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
+                        grid.onRefreshComplete();
                     }
                 }, new VolleyErrorListener() {
             @Override

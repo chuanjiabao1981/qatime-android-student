@@ -194,6 +194,10 @@ public class MainActivity extends BaseFragmentActivity {
                     protected void onError(JSONObject response) {
 
                     }
+                    @Override
+                    protected void onTokenOut() {
+                    tokenOut();
+                    }
                 }, new VolleyErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
@@ -211,7 +215,7 @@ public class MainActivity extends BaseFragmentActivity {
                 new VolleyListener(MainActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-                    //TODO
+
                     }
 
                     @Override
@@ -224,7 +228,8 @@ public class MainActivity extends BaseFragmentActivity {
                 super.onErrorResponse(volleyError);
             }
         });
-        addToRequestQueue(request);
+        //TODO
+//        addToRequestQueue(request);
     }
 
     //城市列表

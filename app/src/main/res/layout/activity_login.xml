@@ -3,20 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-              android:background="#ffffff"
+    android:background="#ffffff"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
+
         <ImageView
             android:layout_width="match_parent"
-            android:layout_marginTop="0dp"
-            android:layout_marginBottom="100dp"
             android:layout_height="wrap_content"
-
             android:layout_alignParentTop="true"
+            android:layout_marginBottom="100dp"
+            android:layout_marginTop="0dp"
             android:src="@mipmap/logo" />
 
 
@@ -36,9 +36,9 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:background="@drawable/shape_input"
+                android:drawableLeft="@mipmap/account_32"
                 android:drawablePadding="15dip"
                 android:hint="@string/account"
-                android:drawableLeft="@mipmap/account_32"
                 android:inputType="text"
                 android:paddingBottom="8dp"
                 android:paddingLeft="15dip"
@@ -58,8 +58,8 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:background="@drawable/shape_input"
-                android:drawablePadding="15dip"
                 android:drawableLeft="@mipmap/password_32"
+                android:drawablePadding="15dip"
                 android:hint="@string/password"
                 android:inputType="textPassword"
                 android:paddingBottom="8dp"

@@ -39,7 +39,7 @@ import cn.qatime.player.view.SimpleViewPagerIndicator;
 public class RemedialClassDetailActivity extends BaseFragmentActivity implements View.OnClickListener {
     ImageView image;
     private int id;
-    private String[] mTitles = new String[]{"信息详情", "教师详情", "课堂列表"};
+    private String[] mTitles = new String[]{"信息详情", "教师详情", "课程列表"};
     private SimpleViewPagerIndicator mIndicator;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
     private Button audition;

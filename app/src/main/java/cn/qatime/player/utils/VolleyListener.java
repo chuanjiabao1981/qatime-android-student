@@ -24,11 +24,20 @@ public abstract class VolleyListener implements Response.Listener<JSONObject> {
 
     @Override
     public void onResponse(JSONObject response) {
-        LogUtils.e("result-----    "+response.toString());
+        LogUtils.e("result-----    " + response.toString());
         try {
             if (response.getInt("status") == 0) {
-                onError(response);
-                LogUtils.e(response.getJSONObject("error").get("msg").toString());
+//                onError(response);
+                JSONObject error = response.getJSONObject("error");
+                if (error != null) {
+                    int code = error.getInt("code");
+                    if (code == 1001 || code == 1002 || code == 1003) {
+                        onTokenOut();
+                    }
+                }else {
+                    onError(response);
+                }
+//                LogUtils.e(response.getJSONObject("error").get("msg").toString());
             } else {
                 onSuccess(response);
             }
@@ -41,13 +50,20 @@ public abstract class VolleyListener implements Response.Listener<JSONObject> {
     }
 
     /**
+     * token过期
+     */
+    protected abstract void onTokenOut();
+
+    /**
      * 成功返回
+     *
      * @param response
      */
     protected abstract void onSuccess(JSONObject response);
 
     /**
      * 错误返回
+     *
      * @param response
      */
     protected abstract void onError(JSONObject response);

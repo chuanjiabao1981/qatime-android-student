@@ -1,5 +1,8 @@
 package cn.qatime.player.base;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +16,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.LoginActivity;
 import cn.qatime.player.utils.StringUtils;
 
 /**
@@ -43,8 +47,9 @@ public class BaseActivity extends AppCompatActivity {
         }
 
     }
+
     public void setRightText(String text, View.OnClickListener listener) {
-        if (StringUtils.isNullOrBlanK(text)){
+        if (StringUtils.isNullOrBlanK(text)) {
             throw new IllegalArgumentException("text can not be a null object");
         }
         if (findViewById(R.id.right_text) != null) {
@@ -53,10 +58,41 @@ public class BaseActivity extends AppCompatActivity {
         }
 
     }
+
     public void backClick(View v) {
         this.finish();
     }
 
+
+    /**
+     * 设备已在其他地方登陆
+     */
+    public void tokenOut() {
+
+        Dialog dialog = new Dialog(this, R.style.Transparent);
+        View view = View.inflate(this, R.layout.activity_out_alertdialog, null);
+        view.findViewById(R.id.alert_dialog_confirm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                out();
+            }
+        });
+        dialog.setContentView(view);
+
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                out();
+            }
+        });
+        dialog.show();
+    }
+
+    private void out() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        this.finish();
+    }
 
     public <T> Request<T> addToRequestQueue(Request<T> request) {
         return Queue.add(request);

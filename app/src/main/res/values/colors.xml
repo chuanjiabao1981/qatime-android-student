@@ -7,6 +7,7 @@
     <color name="gray_normal">#ff909090</color>
     <color name="gray_normal_light">#ffb1b1b1</color>
 
+    <color name="white_normal">#deffffff</color>
     <color name="white_translucent">#AAFFFFFF</color>
     <color name="black_translucent">#B0000000</color>
 
