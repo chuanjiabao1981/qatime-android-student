@@ -52,8 +52,6 @@ public class FragmentRemedialClassDetail3 extends BaseFragment {
                 } else {
                     holder.setText(R.id.status, "当前状态：直播中");
                 }
-
-
                 try {
                     holder.setText(R.id.class_date, format.format(parse.parse(item.getClass_date())));
                 } catch (ParseException e) {

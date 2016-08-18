@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,12 +13,12 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/class_start_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
-                android:text="开课时间：2017-9-23 15:00"
                 android:textColor="#8e8e8e"
-                android:textSize="13sp" />
+                android:textSize="13sp"/>
 
             <View
                 android:layout_width="0dp"
@@ -26,12 +26,12 @@
                 android:layout_weight="1"></View>
 
             <TextView
+                android:id="@+id/class_end_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
-                android:text="结课时间：2017-9-23 15:00"
                 android:textColor="#8e8e8e"
-                android:textSize="13sp" />
+                android:textSize="13sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -44,7 +44,7 @@
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:background="#dcdcdc"
-                android:src="@mipmap/photo" />
+                android:src="@mipmap/photo"/>
 
 
             <LinearLayout
@@ -56,13 +56,11 @@
                 android:padding="2dp">
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="2"
-                    android:paddingBottom="5dp"
-
-                    android:text="高考考前急速高考考前急速高高考考前急速高考考前急速高" />
+                    android:paddingBottom="5dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -71,12 +69,12 @@
 
                     <TextView
 
+                        android:id="@+id/subject"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
                         android:padding="2dp"
-                        android:text="科目：地理"
-                        android:textSize="13sp" />
+                        android:text="科目："
+                        android:textSize="13sp"/>
 
                     <View
                         android:layout_width="0dp"
@@ -85,12 +83,12 @@
 
                     <TextView
 
+                        android:id="@+id/teacher"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
                         android:padding="2dp"
-                        android:text="老师：高京燕"
-                        android:textSize="13sp" />
+                        android:text="老师："
+                        android:textSize="13sp"/>
 
                     <View
                         android:layout_width="0dp"
@@ -105,10 +103,11 @@
                     android:layout_height="wrap_content">
 
                     <TextView
+                        android:id="@+id/progress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="5dp"
-                        android:text="12/99" />
+                        android:text="12/99"/>
 
                     <ProgressBar
                         android:id="@+id/progressbar"
@@ -116,13 +115,14 @@
                         android:layout_width="120dp"
                         android:layout_height="5dp"
                         android:layout_gravity="center"
-                        android:background="#bfbfbf" />
+                        android:background="#bfbfbf"/>
 
                     <TextView
+                        android:id="@+id/remain_class"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="5dp"
-                        android:text="87" />
+                        android:text="87"/>
                 </LinearLayout>
 
 
@@ -140,7 +140,7 @@
                         android:padding="2dp"
                         android:text="全部课程已完成"
                         android:textColor="#05effc"
-                        android:textSize="13sp" />
+                        android:textSize="13sp"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

@@ -176,6 +176,24 @@
 
 
     <string name="use">use it</string>//使用
+    //我的辅导
+    <string name="item_teacher">Teacher:</string>///老师
+    <string name="item_class_start_date">Start</string>//开课
+    <string name="item_class_end_date">End</string>//结课
+    <string name="item_next_class">Next</string>//下一课
+    <string name="item_to_start">There are</string>
+    <string name="item_day">days before class start</string>//距开课还有**天
+    <string name="item_subject">Subject:</string>//科目
+    <string name="item_time">Date:</string>//时间
+    <string name="tutor_information">Course Details</string>
+    <string name="hint_password_forget">Please enter your new password</string>
+    <string name="hint_phone_number_forget">Please input the binding phone number</string>
+    <string name="hint_input_code">Input verification code</string>
+    <string name="find_password">Retrieve password</string>
+    <string name="click_to_add">Click to add</string>
+    <string name="change_information">Change personal information</string>
+    <string name="information_perfect">Perfect information</string>
+
 
 
     <!-- 云信SDK所需文案 -->
@@ -190,6 +208,7 @@
     <string name="nim_status_bar_unsupported_message">%1$s: unsupported message type</string>
     <string name="nim_status_bar_video_message">received a video message from %1$s</string>
     <string name="nim_status_bar_hidden_msg_content">you received a new message</string>
+
 
 </resources>
 

@@ -70,30 +70,30 @@ public class FragmentRemedialClassDetail1 extends BaseFragment {
                 teacher.setText(getResources().getString(R.string.teacher) + bean.getTeacher().getName());
             progress.setText(getResources().getString(R.string.progress) + bean.getCompleted_lesson_count() + "/" + bean.getPreset_lesson_count());
             try {
-                classstarttime.setText(getResources().getString(R.string.starting_dates) + format.format(parse.parse(bean.getLive_start_time())));
+                classstarttime.setText(getResources().getString(R.string.class_start_time) + format.format(parse.parse(bean.getLive_start_time())));
                 classendtime.setText(getResources().getString(R.string.class_end_time) + format.format(parse.parse(bean.getLive_end_time())));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
 //            teachway.setText(getResources().getString(R.string.teach_way));
             grade.setText(getResources().getString(R.string.grade_type) + bean.getGrade());
-            totalclass.setText(getResources().getString(R.string.Total_class_hours)+ bean.getPreset_lesson_count() + getResources().getString(R.string.hours));
+            totalclass.setText(getResources().getString(R.string.total_class_hours)+ bean.getPreset_lesson_count() + getResources().getString(R.string.hours));
             remainclass.setText(getResources().getString(R.string.remain_class)+ (bean.getPreset_lesson_count() - bean.getCompleted_lesson_count()));
             if (bean.getStatus().equals("preview")) {
-                status.setText("当前状态：招生中");
+                status.setText(getResources().getString(R.string.status_preview));
                 timetostart.setVisibility(View.VISIBLE);
             } else if (bean.getStatus().equals("teaching")) {
-                status.setText("当前状态：已开课");
+                status.setText(getResources().getString(R.string.status_teaching));
                 timetostart.setVisibility(View.GONE);
             } else {
-                status.setText("当前状态：已结束");
+                status.setText(getResources().getString(R.string.status_over));
                 timetostart.setVisibility(View.GONE);
             }
             try {
                 long time = System.currentTimeMillis() - parse.parse(bean.getLive_start_time()).getTime();
                 if (time > 0) {
 
-                    timetostart.setText("距离开课还有" + (int)(time/(1000*3600*24)) + "天");
+                    timetostart.setText(getResources().getString(R.string.item_to_start) + (int)(time/(1000*3600*24)) + getResources().getString(R.string.item_day));
                 }
             } catch (ParseException e) {
                 e.printStackTrace();

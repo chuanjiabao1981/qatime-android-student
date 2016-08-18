@@ -87,18 +87,21 @@ public class OrderPayActivity extends BaseActivity {
 
                         if (data != null) {
                             canPay = true;
-                            code.setText("订单编号：" + data.getData().getId());
-                            time.setText("创建时间：" + format.format(new Date()));
+                            code.setText(getResources().getString(R.string.order_number)+"：" + data.getData().getId());
+                            time.setText(getResources().getString(R.string.time_built)+"：" + format.format(new Date()));
                             if (payType.equals("1")) {
-                                type.setText("支付方式：微信支付");
+                                type.setText(getResources().getString(R.string.method_payment)+"：微信支付");
                             } else {
-                                type.setText("支付方式：支付宝支付");
+                                type.setText(getResources().getString(R.string.method_payment)+"：支付宝支付");
                             }
+
                             String price = df.format(priceNumber);
                             if (price.startsWith(".")) {
                                 price = "0" + price;
                             }
                             OrderPayActivity.this.price.setText("支付金额：￥" + price);
+
+
                             commit.setEnabled(true);
                         }
                     }
@@ -155,7 +158,7 @@ public class OrderPayActivity extends BaseActivity {
                     SPUtils.put(OrderPayActivity.this, "orderId", data.getData().getId());
                     SPUtils.put(OrderPayActivity.this, "price", priceNumber);
                 } else {
-                    Toast.makeText(OrderPayActivity.this, "不能支付", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OrderPayActivity.this, getResources().getString(R.string.fail_pay), Toast.LENGTH_SHORT).show();
                 }
 
             }

@@ -37,6 +37,7 @@
                     android:paddingLeft="10dp"
                     android:textStyle="bold"
                     android:textColor="#fa0000"
+
                     /> <!--价格-->
 
                 <View

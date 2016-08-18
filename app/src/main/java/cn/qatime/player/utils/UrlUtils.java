@@ -8,9 +8,9 @@ import java.util.Map;
  */
 public class UrlUtils {
     //测试地址
-//    public static String baseUrl = "http://testing.qatime.cn/";
+    public static String baseUrl = "http://testing.qatime.cn/";
     //正式地址
-    public static String baseUrl ="http://qatime.cn/";
+//    public static String baseUrl ="http://qatime.cn/";
     //登录
     public static String urlLogin = baseUrl + "api/v1/sessions";
     //辅导班

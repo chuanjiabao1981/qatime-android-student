@@ -34,7 +34,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     TextView classstarttime;
     TextView classendtime;
     TextView status;
-    TextView teachway;
     TextView price;
     TextView payprice;
     private Button pay;
@@ -73,36 +72,36 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         Glide.with(OrderConfirmActivity.this).load(data.image).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
 
         name.setText(data.name);
-        project.setText("科目类型：" + data.subject);
-        grade.setText("年级类型：" + data.grade);
-        classnumber.setText("课时总数：" + data.classnumber);
-        teacher.setText("授课教师：" + data.teacher);
+        project.setText(getResources().getString(R.string.subject_type) + data.subject);
+        grade.setText(getResources().getString(R.string.grade_type) + data.grade);
+        classnumber.setText(getResources().getString(R.string.total_class_hours) + data.classnumber);
+        teacher.setText(getResources().getString(R.string.teacher) + data.teacher);
         try {
-            classstarttime.setText("开课时间：" + format.format(parse.parse(data.classstarttime)));
+            classstarttime.setText(getResources().getString(R.string.class_start_time) + format.format(parse.parse(data.classstarttime)));
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
         try {
-            classendtime.setText("结课时间：" + format.format(parse.parse(data.classendtime)));
+            classendtime.setText(getResources().getString(R.string.class_end_time) + format.format(parse.parse(data.classendtime)));
         } catch (ParseException e) {
             e.printStackTrace();
         }
         if (data.status.equals("preview")) {
-            status.setText("当前状态：招生中");
+            status.setText(getResources().getString(R.string.status_preview));
         } else if (data.status.equals("teaching")) {
-            status.setText("当前状态：已开课");
+            status.setText(getResources().getString(R.string.status_teaching));
         } else {
-            status.setText("当前状态：已结束");
+            status.setText(getResources().getString(R.string.status_over));
         }
-        // TODO: 2016/8/12  image teachway price
-        teachway.setText("授课方式：");
+
         String price = df.format(data.price);
         if (price.startsWith(".")) {
             price = "0" + price;
         }
         OrderConfirmActivity.this.price.setText("价  格：" + price);
         payprice.setText(" " + price + " ");
+
     }
 
     @Override
@@ -113,6 +112,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         intent.putExtra("payType", payType);
         startActivity(intent);
     }
+
     public void initView() {
 
         name = (TextView) findViewById(R.id.name);
@@ -124,8 +124,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         classstarttime = (TextView) findViewById(R.id.class_start_time);
         classendtime = (TextView) findViewById(R.id.class_end_time);
         status = (TextView) findViewById(R.id.status);
-        teachway = (TextView) findViewById(R.id.teach_way);
-
         radioGroup = (RadioGroup) findViewById(R.id.radiogroup);
         wechatPay = (RadioButton) findViewById(R.id.wechat_pay);
         aliPay = (RadioButton) findViewById(R.id.alipay);
@@ -152,6 +150,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
             }
         });
     }
+
     @Subscribe
     public void onEvent(String event) {
         if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
