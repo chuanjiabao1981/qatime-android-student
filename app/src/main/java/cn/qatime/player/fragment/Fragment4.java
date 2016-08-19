@@ -16,11 +16,12 @@ import cn.qatime.player.R;
 import cn.qatime.player.activity.PersonalInformationActivity;
 import cn.qatime.player.activity.PersonalMyOrderActivity;
 import cn.qatime.player.activity.PersonalMyTutorshipActivity;
+import cn.qatime.player.activity.SecurityManagerActivity;
 import cn.qatime.player.activity.SystemSettingActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
-import libraryextra.transformation.GlideCircleTransform;
 import cn.qatime.player.utils.Constant;
+import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.LogUtils;
 
 public class Fragment4 extends BaseFragment implements View.OnClickListener {
@@ -116,6 +117,8 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.security:// 安全管理
+                intent = new Intent(getActivity(), SecurityManagerActivity.class);
+                startActivity(intent);
                 break;
             case R.id.setting:// 设置
                 intent = new Intent(getActivity(), SystemSettingActivity.class);

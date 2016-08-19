@@ -210,4 +210,33 @@
     <string name="nim_status_bar_unsupported_message">%1$s: 无法显示该内容</string>
     <string name="nim_status_bar_hidden_msg_content">你收到一条新消息</string>
 
+    //安全管理
+    <string name="bind_phone_number">绑定手机</string>
+    <string name="parent_phone_number">家长手机</string>
+    <string name="bind_email">绑定邮箱</string>
+    <string name="change_password">修改密码</string>
+    <string name="current_phone">当前手机号码</string>
+    <string name="new_email">输入新的邮箱</string>
+    <string name="confirm_email">确认新的邮箱</string>
+    <string name="current_parent_phone">当前家长手机</string>
+    <string name="new_parent_phone">家长新手机号</string>
+    <string name="over">完成</string>
+    <string name="input_current_password">输入当前密码</string>
+    <string name="input_new_password">输入新的密码</string>
+    <string name="confirm_new_password">确认新的密码</string>
+    <string name="forget_password_1">忘记密码？</string>
+    <string name="hint_input_new_phone">输入新手机号码（仅支持大陆地区11位）</string>
+    <string name="hint_input_email">请输入完整邮箱地址</string>
+    <string name="hint_input_again">再输入一次</string>
+    <string name="hint_input_current_password">请输入当前登录密码</string>
+    <string name="hint_6_16_password">6-16位字母或数字</string>
+
+    //系统设置
+    <string name="notify_setting">提醒设置</string>
+    <string name="check_update">检查更新</string>
+    <string name="clean_cache">清理缓存</string>
+    <string name="learning_process">学习流程</string>
+    <string name="feedback">意见反馈</string>
+    <string name="current_version">当前版本V</string>
+
 </resources>
