@@ -10,14 +10,12 @@ import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
-import com.bumptech.glide.Glide;
-
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
-import cn.qatime.player.bean.Profile;
-import cn.qatime.player.utils.LogUtils;
-import cn.qatime.player.utils.SPUtils;
-import cn.qatime.player.utils.StringUtils;
+import libraryextra.bean.Profile;
+import libraryextra.utils.SPUtils;
+import libraryextra.utils.LogUtils;
+import libraryextra.utils.StringUtils;
 
 /**
  * 起始页

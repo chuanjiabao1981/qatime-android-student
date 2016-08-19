@@ -24,19 +24,19 @@ import java.util.ArrayList;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragmentActivity;
-import cn.qatime.player.bean.PersonalInformationBean;
+import libraryextra.bean.PersonalInformationBean;
 import cn.qatime.player.fragment.Fragment1;
 import cn.qatime.player.fragment.Fragment2;
 import cn.qatime.player.fragment.Fragment3;
 import cn.qatime.player.fragment.Fragment4;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
-import cn.qatime.player.utils.FileUtil;
-import cn.qatime.player.utils.SPUtils;
+import libraryextra.utils.FileUtil;
+import libraryextra.utils.SPUtils;
 import cn.qatime.player.utils.UrlUtils;
-import cn.qatime.player.utils.VolleyErrorListener;
-import cn.qatime.player.utils.VolleyListener;
-import cn.qatime.player.view.FragmentLayout;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
+import libraryextra.view.FragmentLayout;
 
 public class MainActivity extends BaseFragmentActivity {
 

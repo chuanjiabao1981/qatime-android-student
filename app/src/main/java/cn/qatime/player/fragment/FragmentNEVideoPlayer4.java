@@ -15,9 +15,9 @@ import java.util.List;
 import cn.qatime.player.R;
 import cn.qatime.player.adapter.FragmentNEVideoPlayerAdapter4;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.bean.MemberBean;
-import cn.qatime.player.utils.StringUtils;
-import cn.qatime.player.view.SideBar;
+import libraryextra.bean.MemberBean;
+import libraryextra.utils.StringUtils;
+import libraryextra.view.SideBar;
 
 public class FragmentNEVideoPlayer4 extends BaseFragment {
     private ListView listView;

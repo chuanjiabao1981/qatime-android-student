@@ -11,10 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
-import cn.qatime.player.adapter.CommonAdapter;
-import cn.qatime.player.adapter.ViewHolder;
+import libraryextra.adapter.CommonAdapter;
+import libraryextra.adapter.ViewHolder;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.utils.StringUtils;
+import libraryextra.utils.StringUtils;
 import cn.qatime.player.view.VerticalListView;
 
 public class FragmentNEVideoPlayer33 extends BaseFragment {

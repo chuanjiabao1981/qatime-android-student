@@ -19,8 +19,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import cn.qatime.player.utils.LogUtils;
-import cn.qatime.player.utils.SPUtils;
+import libraryextra.utils.SPUtils;
+import libraryextra.utils.LogUtils;
 
 
 /**

@@ -7,7 +7,7 @@
 
     <include layout="@layout/layout_backbar"/>
 
-    <cn.qatime.player.view.FragmentLayoutWithLine
+    <libraryextra.view.FragmentLayoutWithLine
         android:id="@+id/fragmentlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

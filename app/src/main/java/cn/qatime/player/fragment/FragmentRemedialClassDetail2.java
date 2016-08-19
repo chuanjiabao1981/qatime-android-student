@@ -1,9 +1,7 @@
 package cn.qatime.player.fragment;
 
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,18 +12,16 @@ import com.bumptech.glide.Glide;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.bean.RemedialClassDetailBean;
-import cn.qatime.player.bean.SchoolBean;
-import cn.qatime.player.transformation.GlideCircleTransform;
-import cn.qatime.player.utils.FileUtil;
-import cn.qatime.player.utils.JsonUtils;
-import cn.qatime.player.utils.LogUtils;
-import cn.qatime.player.utils.StringUtils;
+import libraryextra.bean.RemedialClassDetailBean;
+import libraryextra.bean.SchoolBean;
+import libraryextra.utils.FileUtil;
+import libraryextra.utils.JsonUtils;
+import libraryextra.utils.StringUtils;
 
 public class FragmentRemedialClassDetail2 extends BaseFragment {
     private TextView name;
     private ImageView image;
-//    private TextView degree;
+    //    private TextView degree;
     private TextView teachingyears;
     private TextView subject;
     private TextView gradetype;
@@ -59,16 +55,16 @@ public class FragmentRemedialClassDetail2 extends BaseFragment {
             subject.setText(getResources().getString(R.string.teacher_subject) + data.getData().getTeacher().getSubject());
             if (!StringUtils.isNullOrBlanK(data.getData().getTeacher().getTeaching_years())) {
                 if (data.getData().getTeacher().getTeaching_years().equals("within_three_years")) {
-                    teachingyears.setText(getResources().getString(R.string.teacher_years)+"3");
+                    teachingyears.setText(getResources().getString(R.string.teacher_years) + "3年以内");
                 } else if (data.getData().getTeacher().getTeaching_years().equals("within_ten_years")) {
-                    teachingyears.setText(getResources().getString(R.string.teacher_years)+"10");
+                    teachingyears.setText(getResources().getString(R.string.teacher_years) + "3-10年");
                 } else if (data.getData().getTeacher().getTeaching_years().equals("within_twenty_years")) {
-                    teachingyears.setText(getResources().getString(R.string.teacher_years)+"20");
+                    teachingyears.setText(getResources().getString(R.string.teacher_years) + "10-20年");
                 } else {
-                    teachingyears.setText(getResources().getString(R.string.teacher_years)+"21");
+                    teachingyears.setText(getResources().getString(R.string.teacher_years) + "20年以上");
                 }
             }
-            gradetype.setText(getResources().getString(R.string.grade_type) +"高中");
+            gradetype.setText(getResources().getString(R.string.grade_type) + "高中");
             describe.setText(data.getData().getTeacher().getDesc());
 
             SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getCacheDir() + "/school.txt").toString(), SchoolBean.class);
@@ -76,7 +72,7 @@ public class FragmentRemedialClassDetail2 extends BaseFragment {
             if (schoolBean != null && schoolBean.getData() != null) {
                 for (int i = 0; i < schoolBean.getData().size(); i++) {
                     if (data.getData().getTeacher().getSchool() == schoolBean.getData().get(i).getId()) {
-                        school.setText(getResources().getString(R.string.teacher_school)+schoolBean.getData().get(i).getName());
+                        school.setText(getResources().getString(R.string.teacher_school) + schoolBean.getData().get(i).getName());
                         break;
                     }
                 }

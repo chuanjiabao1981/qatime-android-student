@@ -1,7 +1,6 @@
 package cn.qatime.player.adapter;
 
 import android.content.Context;
-import android.view.View;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -9,8 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
-import cn.qatime.player.bean.MemberBean;
-import cn.qatime.player.utils.StringUtils;
+import libraryextra.adapter.CommonAdapter;
+import libraryextra.adapter.ViewHolder;
+import libraryextra.bean.MemberBean;
+import libraryextra.utils.StringUtils;
 
 /**
  * @author luntify

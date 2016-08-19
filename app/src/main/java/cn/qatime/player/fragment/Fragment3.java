@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.view.FragmentLayoutWithLine;
+import libraryextra.view.FragmentLayoutWithLine;
 
 public class Fragment3 extends BaseFragment {
     FragmentLayoutWithLine fragmentlayout;

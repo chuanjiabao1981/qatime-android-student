@@ -21,11 +21,11 @@ import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
-import cn.qatime.player.bean.Profile;
+import libraryextra.bean.Profile;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.utils.AppUtils;
-import cn.qatime.player.utils.SPUtils;
-import cn.qatime.player.utils.StringUtils;
+import libraryextra.utils.SPUtils;
+import libraryextra.utils.StringUtils;
 import cn.qatime.player.utils.im.FriendDataCache;
 import cn.qatime.player.utils.im.TeamDataCache;
 import cn.qatime.player.utils.im.UserInfoCache;

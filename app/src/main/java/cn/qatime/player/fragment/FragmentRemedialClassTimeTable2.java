@@ -19,8 +19,8 @@ import java.util.ArrayList;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
-import cn.qatime.player.adapter.CommonAdapter;
-import cn.qatime.player.adapter.ViewHolder;
+import libraryextra.adapter.CommonAdapter;
+import libraryextra.adapter.ViewHolder;
 import cn.qatime.player.base.BaseFragment;
 
 public class FragmentRemedialClassTimeTable2 extends BaseFragment {

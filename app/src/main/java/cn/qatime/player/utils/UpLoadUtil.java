@@ -2,7 +2,6 @@ package cn.qatime.player.utils;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -22,8 +21,10 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 
-import cn.qatime.player.activity.PersonalInformationChangeActivity;
 import cn.qatime.player.base.BaseApplication;
+import libraryextra.utils.CustomMultipartEntity;
+import libraryextra.utils.LogUtils;
+import libraryextra.utils.StringUtils;
 
 /**
  * @author luntify

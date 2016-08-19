@@ -15,14 +15,12 @@ import android.widget.ProgressBar;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import org.json.JSONObject;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,19 +30,19 @@ import cn.qatime.player.R;
 import cn.qatime.player.activity.NEVideoPlayerActivity;
 import cn.qatime.player.activity.OrderConfirmActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
-import cn.qatime.player.adapter.CommonAdapter;
-import cn.qatime.player.adapter.ViewHolder;
+import libraryextra.adapter.CommonAdapter;
+import libraryextra.adapter.ViewHolder;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.bean.OrderPayBean;
-import cn.qatime.player.bean.TutorialClassBean;
+import libraryextra.bean.OrderPayBean;
+import libraryextra.bean.TutorialClassBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
-import cn.qatime.player.utils.JsonUtils;
-import cn.qatime.player.utils.LogUtils;
-import cn.qatime.player.utils.StringUtils;
+import libraryextra.utils.JsonUtils;
+import libraryextra.utils.LogUtils;
+import libraryextra.utils.StringUtils;
 import cn.qatime.player.utils.UrlUtils;
-import cn.qatime.player.utils.VolleyErrorListener;
-import cn.qatime.player.utils.VolleyListener;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 
 public class FragmentPersonalMyTutorship1 extends BaseFragment {
     private PullToRefreshListView listView;

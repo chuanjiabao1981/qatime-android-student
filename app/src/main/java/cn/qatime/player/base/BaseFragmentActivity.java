@@ -16,7 +16,7 @@ import com.android.volley.toolbox.Volley;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.LoginActivity;
-import cn.qatime.player.utils.StringUtils;
+import libraryextra.utils.StringUtils;
 
 /**
  * 基础fragment类

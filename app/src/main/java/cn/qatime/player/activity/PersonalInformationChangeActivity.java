@@ -18,38 +18,34 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.GsonBuilder;
 
 import java.io.File;
-import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
-import cn.qatime.player.bean.GradeBean;
-import cn.qatime.player.bean.ImageItem;
-import cn.qatime.player.bean.PersonalInformationBean;
-import cn.qatime.player.bean.SchoolBean;
-import cn.qatime.player.transformation.GlideCircleTransform;
+import libraryextra.bean.GradeBean;
+import libraryextra.bean.ImageItem;
+import libraryextra.bean.PersonalInformationBean;
+import libraryextra.bean.SchoolBean;
+import libraryextra.transformation.GlideCircleTransform;
 import cn.qatime.player.utils.Constant;
-import cn.qatime.player.utils.DialogUtils;
-import cn.qatime.player.utils.FileUtil;
-import cn.qatime.player.utils.JsonUtils;
-import cn.qatime.player.utils.LogUtils;
-import cn.qatime.player.utils.MDatePickerDialog;
-import cn.qatime.player.utils.StringUtils;
+import libraryextra.utils.DialogUtils;
+import libraryextra.utils.FileUtil;
+import libraryextra.utils.JsonUtils;
+import libraryextra.view.MDatePickerDialog;
+import libraryextra.utils.LogUtils;
+import libraryextra.utils.StringUtils;
 import cn.qatime.player.utils.UpLoadUtil;
 import cn.qatime.player.utils.UrlUtils;
-import cn.qatime.player.view.CustomProgressDialog;
+import libraryextra.view.CustomProgressDialog;
 
 public class PersonalInformationChangeActivity extends BaseActivity implements View.OnClickListener {
     ImageView headsculpture;

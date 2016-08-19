@@ -89,7 +89,7 @@
                         android:gravity="center"
                         android:hint="@string/verification_code" />
 
-                    <cn.qatime.player.view.CheckView
+                    <libraryextra.view.CheckView
                         android:id="@+id/checkview"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"

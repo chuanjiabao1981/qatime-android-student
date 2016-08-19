@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -28,10 +27,10 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
-import cn.qatime.player.utils.SPUtils;
+import libraryextra.utils.SPUtils;
 import cn.qatime.player.utils.UrlUtils;
-import cn.qatime.player.utils.VolleyErrorListener;
-import cn.qatime.player.utils.VolleyListener;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 
 /**
  * @author luntify

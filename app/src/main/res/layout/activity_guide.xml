@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <cn.qatime.player.view.TagViewPager
+    <libraryextra.view.TagViewPager
         android:id="@+id/tagViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

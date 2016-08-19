@@ -3,7 +3,6 @@ package cn.qatime.player.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,18 +16,17 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.adapter.PictureSelectAdapter;
 import cn.qatime.player.base.BaseActivity;
-import cn.qatime.player.bean.ImageBucket;
-import cn.qatime.player.bean.ImageItem;
+import libraryextra.bean.ImageBucket;
+import libraryextra.bean.ImageItem;
 import cn.qatime.player.utils.AlbumHelper;
 import cn.qatime.player.utils.Constant;
-import cn.qatime.player.utils.LogUtils;
+import libraryextra.utils.LogUtils;
 
 /**
  * @author luntify

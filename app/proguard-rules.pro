@@ -67,7 +67,7 @@
 #-keep class com.google.gson.stream.** { *; }
 
 -keep class com.google.gson.examples.android.model.** { *; }
--keep class cn.qatime.player.bean.**{*;}
+-keep class libraryextra.bean.**{*;}
 
 -keepclassmembers class * implements java.io.Serializable {
     static final long serialVersionUID;

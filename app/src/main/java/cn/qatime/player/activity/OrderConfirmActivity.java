@@ -21,8 +21,8 @@ import java.text.SimpleDateFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
-import cn.qatime.player.bean.OrderPayBean;
-import cn.qatime.player.utils.StringUtils;
+import libraryextra.bean.OrderPayBean;
+import libraryextra.utils.StringUtils;
 
 public class OrderConfirmActivity extends BaseActivity implements View.OnClickListener {
     TextView name;

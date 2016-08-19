@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".activity.MainActivity">
 
-    <cn.qatime.player.view.FragmentLayout
+    <libraryextra.view.FragmentLayout
         android:layout_width="match_parent"
         android:id="@+id/fragmentlayout"
         android:background="#f0f0f0"

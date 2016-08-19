@@ -9,13 +9,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import cn.qatime.player.R;
-import cn.qatime.player.adapter.CommonAdapter;
 import cn.qatime.player.base.BaseFragmentActivity;
-import cn.qatime.player.bean.RemedialClassBean;
 import cn.qatime.player.fragment.FragmentPersonalMyOrder1;
 import cn.qatime.player.fragment.FragmentPersonalMyOrder2;
 import cn.qatime.player.fragment.FragmentPersonalMyOrder3;
-import cn.qatime.player.view.FragmentLayoutWithLine;
+import libraryextra.view.FragmentLayoutWithLine;
 
 public class PersonalMyOrderActivity extends BaseFragmentActivity {
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3};

@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
-import cn.qatime.player.adapter.CommonAdapter;
-import cn.qatime.player.adapter.ViewHolder;
+import libraryextra.adapter.CommonAdapter;
+import libraryextra.adapter.ViewHolder;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.bean.RemedialClassDetailBean;
-import cn.qatime.player.utils.StringUtils;
+import libraryextra.bean.RemedialClassDetailBean;
+import libraryextra.utils.StringUtils;
 
 public class FragmentRemedialClassDetail3 extends BaseFragment {
     private CommonAdapter<RemedialClassDetailBean.Lessons> adapter;
