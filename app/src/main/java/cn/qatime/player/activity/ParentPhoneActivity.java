@@ -6,6 +6,7 @@ import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
@@ -14,7 +15,7 @@ import cn.qatime.player.base.BaseActivity;
  * Created by lenovo on 2016/8/17.
  */
 public class ParentPhoneActivity extends BaseActivity implements View.OnClickListener{
-    private Button getcode;
+    private TextView getcode;
     private Button button_over;
     private EditText new_parent_phone;
     private EditText code;
@@ -32,7 +33,7 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
 
     private void initView() {
         setTitle(getResources().getString(R.string.parent_phone_number));
-        getcode = (Button) findViewById(R.id.button_getcode);
+        getcode = (TextView) findViewById(R.id.text_getcode);
         button_over = (Button) findViewById(R.id.button_over);
         code = (EditText) findViewById(R.id.code);
         password = (EditText) findViewById(R.id.password);
@@ -47,7 +48,7 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button_getcode:
+            case R.id.text_getcode:
                 //TODO 发送验证短信
                 String phone = new_parent_phone.getText().toString().trim();
                 time.start();

@@ -17,7 +17,7 @@ import cn.qatime.player.base.BaseActivity;
  */
 public class UnbindPhoneActivity extends BaseActivity implements View.OnClickListener {
 
-    private Button getcode;
+    private TextView getcode;
     private Button button_next;
     private TextView current_phone;
     private EditText code;
@@ -32,7 +32,7 @@ public class UnbindPhoneActivity extends BaseActivity implements View.OnClickLis
 
     private void initView() {
         setTitle(getResources().getString(R.string.bind_phone_number));
-        getcode = (Button) findViewById(R.id.button_getcode);
+        getcode = (TextView) findViewById(R.id.text_getcode);
         button_next= (Button) findViewById(R.id.button_next);
         current_phone = (TextView) findViewById(R.id.current_phone);
         code = (EditText) findViewById(R.id.code);
@@ -47,7 +47,7 @@ public class UnbindPhoneActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button_getcode:
+            case R.id.text_getcode:
                 //TODO 发送验证短信
                 Toast.makeText(getApplicationContext(),"验证码已经发送至137****5678，请注意查收",Toast.LENGTH_LONG).show();
                 time.start();

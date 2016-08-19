@@ -6,13 +6,14 @@ import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 
 public class BindPhoneActivity extends BaseActivity implements View.OnClickListener {
 
-    private Button getcode;
+    private TextView getcode;
     private Button button_over;
     private EditText target_phone;
     private EditText code;
@@ -27,7 +28,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
     }
     private void initView() {
         setTitle(getResources().getString(R.string.bind_phone_number));
-        getcode = (Button) findViewById(R.id.button_getcode);
+        getcode = (TextView) findViewById(R.id.text_getcode);
         button_over = (Button) findViewById(R.id.button_over);
         code = (EditText) findViewById(R.id.code);
         target_phone = (EditText) findViewById(R.id.target_phone);
@@ -42,7 +43,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button_getcode:
+            case R.id.text_getcode:
                 //TODO 发送验证短信
                 String phone = target_phone.getText().toString().trim();
                 time.start();

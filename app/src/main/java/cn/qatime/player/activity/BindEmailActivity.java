@@ -6,6 +6,7 @@ import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
@@ -15,7 +16,7 @@ import cn.qatime.player.base.BaseActivity;
  */
 public class BindEmailActivity extends BaseActivity implements View.OnClickListener {
     private TimeCount time;
-    private Button getcode;
+    private TextView getcode;
     private Button button_over;
     private EditText new_email;
     private EditText confirm_email;
@@ -32,7 +33,7 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
 
     private void initView() {
         setTitle(getResources().getString(R.string.bind_email));
-        getcode = (Button) findViewById(R.id.button_getcode);
+        getcode = (TextView) findViewById(R.id.text_getcode);
         button_over = (Button) findViewById(R.id.button_over);
         code = (EditText) findViewById(R.id.code);
         new_email = (EditText) findViewById(R.id.input_new_email);
@@ -46,7 +47,7 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button_getcode:
+            case R.id.text_getcode:
                 //TODO 发送验证短信
                 time.start();
                 break;

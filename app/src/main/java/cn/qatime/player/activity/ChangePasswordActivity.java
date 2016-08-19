@@ -34,13 +34,13 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
 
     private void initView() {
         setTitle(getResources().getString(R.string.change_password));
-        forget_password= (TextView) findViewById(R.id.forget_password);
-        button_over= (Button) findViewById(R.id.button_over);
-        password= (EditText) findViewById(R.id.password);
-        new_password= (EditText) findViewById(R.id.new_password);
-        confirm_new_password= (EditText) findViewById(R.id.confirm_new_password);
-        match_pwd1= (ImageView) findViewById(R.id.match_pwd1);
-        match_pwd2= (ImageView) findViewById(R.id.match_pwd2);
+        forget_password = (TextView) findViewById(R.id.forget_password);
+        button_over = (Button) findViewById(R.id.button_over);
+        password = (EditText) findViewById(R.id.password);
+        new_password = (EditText) findViewById(R.id.new_password);
+        confirm_new_password = (EditText) findViewById(R.id.confirm_new_password);
+        match_pwd1 = (ImageView) findViewById(R.id.match_pwd1);
+        match_pwd2 = (ImageView) findViewById(R.id.match_pwd2);
         forget_password.setOnClickListener(this);
         button_over.setOnClickListener(this);
     }
@@ -50,10 +50,11 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
         switch (v.getId()) {
             case R.id.forget_password:
                 Intent intent = new Intent(this, ForgetPasswordActivity.class);
+                intent.putExtra("status_login", true);
                 startActivity(intent);
                 break;
             case R.id.button_over:
-                 intent=new Intent(this,SecurityManagerActivity.class);
+                intent = new Intent(this, SecurityManagerActivity.class);
                 startActivity(intent);
                 break;
         }
