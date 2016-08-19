@@ -4,7 +4,8 @@ import android.content.Context;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 
-import cn.qatime.player.interpolator.DecelerateAccelerateInterpolator;
+import libraryextra.interpolator.DecelerateAccelerateInterpolator;
+import libraryextra.utils.ScreenUtils;
 
 public class AnimationHelper {
     /**

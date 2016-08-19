@@ -12,33 +12,27 @@ import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
-import cn.qatime.player.bean.OrderConfirmBean;
+import libraryextra.bean.OrderConfirmBean;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
-import cn.qatime.player.utils.JsonUtils;
-import cn.qatime.player.utils.LogUtils;
-import cn.qatime.player.utils.SPUtils;
-import cn.qatime.player.utils.SignUtil;
-import cn.qatime.player.utils.StringUtils;
+import libraryextra.utils.JsonUtils;
+import libraryextra.utils.SPUtils;
+import libraryextra.utils.StringUtils;
 import cn.qatime.player.utils.UrlUtils;
-import cn.qatime.player.utils.VolleyErrorListener;
-import cn.qatime.player.utils.VolleyListener;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 
 public class OrderPayActivity extends BaseActivity {
     TextView code;

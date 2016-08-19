@@ -3,6 +3,8 @@ package cn.qatime.player.utils;
 import java.util.Iterator;
 import java.util.Map;
 
+import libraryextra.utils.StringUtils;
+
 /**
  * url类
  */

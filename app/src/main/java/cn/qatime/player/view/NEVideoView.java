@@ -43,7 +43,8 @@ import android.view.WindowManager;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Toast;
 
-import cn.qatime.player.utils.LogUtils;
+import libraryextra.utils.LogUtils;
+
 
 public class NEVideoView extends SurfaceView {
     private static final String TAG = "NELivePlayerNEVideoView";

@@ -19,9 +19,9 @@ import cn.qatime.player.activity.PersonalMyTutorshipActivity;
 import cn.qatime.player.activity.SystemSettingActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.transformation.GlideCircleTransform;
+import libraryextra.transformation.GlideCircleTransform;
 import cn.qatime.player.utils.Constant;
-import cn.qatime.player.utils.LogUtils;
+import libraryextra.utils.LogUtils;
 
 public class Fragment4 extends BaseFragment implements View.OnClickListener {
     private LinearLayout information;

@@ -13,10 +13,9 @@ import java.io.File;
 import java.util.List;
 
 import cn.qatime.player.R;
-import cn.qatime.player.bean.ImageItem;
-import cn.qatime.player.utils.LogUtils;
-import cn.qatime.player.utils.ScreenUtils;
-import cn.qatime.player.utils.StringUtils;
+import libraryextra.bean.ImageItem;
+import libraryextra.utils.ScreenUtils;
+import libraryextra.utils.StringUtils;
 
 /**
  * @author luntify

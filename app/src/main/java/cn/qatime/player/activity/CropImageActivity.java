@@ -10,13 +10,13 @@ import java.util.UUID;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
-import cn.qatime.player.cropview.CropImageView;
-import cn.qatime.player.cropview.callback.LoadCallback;
-import cn.qatime.player.cropview.callback.SaveCallback;
+import libraryextra.cropview.CropImageView;
+import libraryextra.cropview.callback.LoadCallback;
+import libraryextra.cropview.callback.SaveCallback;
 import cn.qatime.player.utils.Constant;
-import cn.qatime.player.utils.DialogUtils;
-import cn.qatime.player.utils.StringUtils;
-import cn.qatime.player.view.CustomProgressDialog;
+import libraryextra.utils.DialogUtils;
+import libraryextra.utils.StringUtils;
+import libraryextra.view.CustomProgressDialog;
 
 /**
  * 图片裁剪页面

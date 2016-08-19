@@ -21,16 +21,16 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
-import cn.qatime.player.bean.Profile;
-import cn.qatime.player.utils.CheckUtil;
-import cn.qatime.player.utils.JsonUtils;
-import cn.qatime.player.utils.LogUtils;
-import cn.qatime.player.utils.SPUtils;
-import cn.qatime.player.utils.StringUtils;
+import libraryextra.bean.Profile;
+import libraryextra.utils.CheckUtil;
+import libraryextra.utils.JsonUtils;
+import libraryextra.utils.SPUtils;
+import libraryextra.utils.LogUtils;
+import libraryextra.utils.StringUtils;
 import cn.qatime.player.utils.UrlUtils;
-import cn.qatime.player.utils.VolleyErrorListener;
-import cn.qatime.player.utils.VolleyListener;
-import cn.qatime.player.view.CheckView;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
+import libraryextra.view.CheckView;
 
 /**
  * 登陆页
@@ -129,7 +129,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             return;
         }
         Map<String, String> map = new HashMap<>();
-        map.put("email", username.getText().toString());
+        map.put("login_account", username.getText().toString());
         map.put("password", password.getText().toString());
         map.put("client_type", "app");
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlLogin, map), null,

@@ -2,28 +2,20 @@ package cn.qatime.player.view;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.os.Handler;
-import android.os.Message;
-import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Random;
 import java.util.Set;
 
-import cn.qatime.player.bean.BarrageItem;
 import cn.qatime.player.utils.AnimationHelper;
-import cn.qatime.player.utils.DensityUtils;
-import cn.qatime.player.utils.LogUtils;
-import cn.qatime.player.utils.ScreenUtils;
+import libraryextra.utils.DensityUtils;
+import libraryextra.utils.ScreenUtils;
+import libraryextra.utils.LogUtils;
 
 /**
  * 弹幕父view

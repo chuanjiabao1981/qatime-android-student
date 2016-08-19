@@ -2,7 +2,6 @@ package cn.qatime.player.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +10,8 @@ import android.widget.RelativeLayout;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
-import cn.qatime.player.utils.BitmapUtil;
-import cn.qatime.player.view.TagViewPager;
+import libraryextra.utils.BitmapUtil;
+import libraryextra.view.TagViewPager;
 
 /**
  * 引导页

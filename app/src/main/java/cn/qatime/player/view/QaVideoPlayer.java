@@ -7,8 +7,6 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,7 +15,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -26,8 +23,8 @@ import android.widget.TextView;
 import com.netease.neliveplayer.NELivePlayer;
 
 import cn.qatime.player.R;
-import cn.qatime.player.utils.LogUtils;
-import cn.qatime.player.utils.ScreenUtils;
+import libraryextra.utils.ScreenUtils;
+import libraryextra.utils.LogUtils;
 
 
 /**

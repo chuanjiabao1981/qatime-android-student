@@ -18,7 +18,7 @@ import cn.qatime.player.fragment.FragmentPersonalMyTutorship2;
 import cn.qatime.player.fragment.FragmentPersonalMyTutorship3;
 import cn.qatime.player.fragment.FragmentPersonalMyTutorship4;
 import cn.qatime.player.fragment.FragmentPersonalMyTutorship5;
-import cn.qatime.player.view.FragmentLayoutWithLine;
+import libraryextra.view.FragmentLayoutWithLine;
 
 /**
  * 我的辅导

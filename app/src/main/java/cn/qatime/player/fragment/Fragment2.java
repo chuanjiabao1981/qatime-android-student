@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.ClassTimeTableActivity;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.view.FragmentLayoutWithLine;
+import libraryextra.view.FragmentLayoutWithLine;
 
 public class Fragment2 extends BaseFragment {
 

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,10 +25,8 @@ import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
@@ -47,23 +44,22 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
-import cn.qatime.player.adapter.CommonAdapter;
-import cn.qatime.player.adapter.ViewHolder;
-import cn.qatime.player.base.BaseApplication;
+import libraryextra.adapter.CommonAdapter;
+import libraryextra.adapter.ViewHolder;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.bean.GradeBean;
-import cn.qatime.player.bean.RemedialClassBean;
+import libraryextra.bean.GradeBean;
+import libraryextra.bean.RemedialClassBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
-import cn.qatime.player.utils.FileUtil;
-import cn.qatime.player.utils.JsonUtils;
-import cn.qatime.player.utils.KeyBoardUtils;
-import cn.qatime.player.utils.LogUtils;
-import cn.qatime.player.utils.MDatePickerDialog;
-import cn.qatime.player.utils.ScreenUtils;
-import cn.qatime.player.utils.StringUtils;
+import libraryextra.utils.FileUtil;
+import libraryextra.utils.JsonUtils;
+import libraryextra.utils.KeyBoardUtils;
+import libraryextra.view.MDatePickerDialog;
+import libraryextra.utils.ScreenUtils;
+import libraryextra.utils.LogUtils;
+import libraryextra.utils.StringUtils;
 import cn.qatime.player.utils.UrlUtils;
-import cn.qatime.player.utils.VolleyErrorListener;
-import cn.qatime.player.utils.VolleyListener;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 
 public class Fragment12 extends BaseFragment implements View.OnClickListener {
 

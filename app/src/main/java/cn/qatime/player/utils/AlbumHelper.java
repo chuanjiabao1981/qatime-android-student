@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.provider.MediaStore.Audio.Albums;
 import android.provider.MediaStore.Images.Media;
 import android.provider.MediaStore.Images.Thumbnails;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,8 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import cn.qatime.player.bean.ImageBucket;
-import cn.qatime.player.bean.ImageItem;
+import libraryextra.bean.ImageBucket;
+import libraryextra.bean.ImageItem;
+import libraryextra.utils.LogUtils;
 
 /**
  * 专辑帮助类

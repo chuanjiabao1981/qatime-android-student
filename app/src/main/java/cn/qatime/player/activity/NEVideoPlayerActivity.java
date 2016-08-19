@@ -21,10 +21,10 @@ import cn.qatime.player.fragment.FragmentNEVideoPlayer1;
 import cn.qatime.player.fragment.FragmentNEVideoPlayer2;
 import cn.qatime.player.fragment.FragmentNEVideoPlayer3;
 import cn.qatime.player.fragment.FragmentNEVideoPlayer4;
-import cn.qatime.player.utils.LogUtils;
-import cn.qatime.player.utils.ScreenUtils;
-import cn.qatime.player.utils.StringUtils;
-import cn.qatime.player.view.FragmentLayoutWithLine;
+import libraryextra.utils.ScreenUtils;
+import libraryextra.utils.LogUtils;
+import libraryextra.utils.StringUtils;
+import libraryextra.view.FragmentLayoutWithLine;
 import cn.qatime.player.view.QaVideoPlayer;
 
 public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVideoPlayer.ControlListener {

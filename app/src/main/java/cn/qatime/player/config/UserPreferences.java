@@ -6,7 +6,7 @@ import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 
 import org.json.JSONObject;
 
-import cn.qatime.player.utils.SPUtils;
+import libraryextra.utils.SPUtils;
 
 /**
  * Created by hzxuwen on 2015/4/13.

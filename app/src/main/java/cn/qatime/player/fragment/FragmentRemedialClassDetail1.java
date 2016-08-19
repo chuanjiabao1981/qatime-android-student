@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.bean.RemedialClassDetailBean;
+import libraryextra.bean.RemedialClassDetailBean;
 
 public class FragmentRemedialClassDetail1 extends BaseFragment {
 
