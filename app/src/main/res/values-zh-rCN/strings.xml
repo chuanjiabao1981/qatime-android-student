@@ -1,0 +1,205 @@
+<resources>
+    //刷新
+    <string name="pull_to_refresh">下拉刷新</string>
+    <string name="pull_to_load">上拉加载</string>
+    <string name="refreshing">正在刷新</string>
+    <string name="loading">正在加载</string>
+    <string name="release_to_load">松开加载</string>
+    <string name="release_to_refresh">松开刷新</string>
+    //fragment1
+    <string name="app_name">答疑时间</string>
+    <string name="home_page">首页</string>//首页
+    <string name="time_table">课程表</string>//课程表
+    <string name="message">消息</string>//消息
+    <string name="individual">个人</string>//个人
+    <string name="latest">最新</string>//最新
+    <string name="whole">全部</string>//
+    <string name="by_time">按时间</string>
+    <string name="by_subject">科目</string>
+    <string name="by_grade">年级</string>
+    <string name="price">价格范围</string>
+    <string name="yuan">元</string>
+    <string name="Total_class_hours">课时范围</string>
+    <string name="hours">课时</string>
+    <string name="starting_dates">开课范围</string>
+    <string name="to">至</string>
+    <string name="state">当前状态</string>
+    <string name="cancel">取消</string>
+    <string name="confirm">确定</string>//
+    <string name="by_price_up">按价格↑</string>
+    <string name="by_price_down">按价格↓</string>
+
+    <string name="alignprice">111</string>//fragment12对齐
+    <string name="alignto">111111</string>//fragment12对齐
+
+    //
+    //排序
+    <string name="comprehensive_sort">综合排序</string>
+    <string name="in_price_low_to_high">按价格-低到高</string>
+    <string name="in_price_high_to_low">按价格-高到低</string>
+    <string name="in_number">按购买人数</string>
+    <string name="recruiting">招生中</string>
+    //科目
+    <string name="chinese">语文</string>
+    <string name="math">数学</string>
+    <string name="english">英语</string>
+    <string name="physics">物理</string>
+    <string name="chemistry">化学</string>
+    <string name="geography">地理</string>
+    <string name="politics">政治</string>
+    <string name="history">历史</string>
+    <string name="science">科学</string>
+    <string name="biology">生物</string>
+    //grade
+    <string name="high3">高三</string>
+    <string name="high2">高二</string>
+    <string name="high1">高一</string>
+    <string name="middle3">初三</string>
+    <string name="middle2">初二</string>
+    <string name="middle1">初一</string>
+    <string name="primary6">六年级</string>
+    <string name="primary5">五年级</string>
+    <string name="primary4">四年级</string>
+    <string name="primary3">三年级</string>
+    <string name="primary2">二年级</string>
+    <string name="primary1">一年级</string>
+    //
+    //fragment2
+    <string name="course_to_be_done">待上课</string>
+    <string name="course_finished">已上课</string>
+    <string name="all_course">全部课程</string>
+    //
+    //fragment4
+    <string name="personal_center">个人中心</string>
+    <string name="my_order">我的订单</string>
+    <string name="paying">待付款</string>
+    <string name="paid">已付款</string>
+    <string name="cancelled">已取消</string>
+    <string name="my_course">我的辅导</string>
+    <string name="today">今日</string>
+    <string name="to_start">待开课</string>
+    <string name="started">已开课</string>
+    <string name="done">已结束</string>
+    <string name="audition">试听</string>
+    <string name="security_management">安全管理</string>
+    <string name="setting">系统设置</string>
+    <string name="new_edition">新版本</string>
+    //个人信息
+    <string name="personal_information">个人信息</string>
+    <string name="name">姓名</string>
+    <string name="sex">性别</string>
+    <string name="birthday">生日</string>
+    <string name="grade">年级</string>
+    <string name="region">地区</string>
+    <string name="school">学校</string>
+    <string name="profiles">简介</string>
+    <string name="profiles_class">课程简介：</string>
+    <string name="head">头像</string>
+    <string name="click_to_change">点击更换</string>
+    <string name="click_to_add">点击添加</string>
+    <string name="hint_name">输入真实姓名更方便老师联系你</string>
+    <string name="hint_profiles">一句话介绍自己</string>
+    <string name="boy">我是男神</string>
+    <string name="girl">我是女神</string>
+    <string name="finish">完成</string>
+    <string name="male">男</string>
+    <string name="female">女</string>
+    <string name="change_information">修改个人信息</string>
+    <string name="tutor_information">辅导班详情</string>
+
+    //我的订单
+    <string name="detail_of_order">订单详情</string>
+    <string name="waiting_for_payment">等待付款中</string>
+    <string name="order_number">订单编号</string>
+    <string name="time_built">创建时间</string>
+    <string name="time_payment">支付时间</string>
+    <string name="method_payment">支付方式</string>
+    <string name="amount_payment">应付金额</string>
+    <string name="cancel_order">取消订单</string>
+    <string name="delete_order">删除订单</string>
+    <string name="reorder">重新下单</string>
+    <string name="pay">付款</string>
+    <string name="deal_down">交易完成</string>//
+    <string name="deal_closed">交易关闭</string>//
+    <string name="order_confirm">订单确认</string>
+    <string name="pay_confirm">支付确认</string>
+    <string name="commodity_name">商品名称</string>
+    <string name="commodity_detail">商品详情</string>
+    <string name="pay_remind">请您在24小时内完成支付，否则订单会自动取消。</string>
+    //详情
+    <string name="information_detail">信息详情</string>
+    <string name="teacher_detail">教师详情</string>
+    <string name="course_list">课程列表</string>
+    //课程详情
+    <string name="student_number">学习人数</string>
+    <string name="Join_the_audition">加入试听</string>
+    <string name="Joined_the_audition">已加入试听</string>
+    <string name="purchase_now">立即购买</string>
+    <string name="purchased">已购买</string>
+    //登录
+    <string name="account">请输入账号</string>
+    <string name="password">请输入密码</string>
+    <string name="register">注册</string>
+    <string name="login">登录</string>
+    <string name="forget_password">忘记密码</string>
+    <string name="verification_code">请输入验证码</string>
+    <string name="change_it">看不清，换一张？</string>
+    <string name="logout">退出登录</string>
+    <string name="press_another_exit">再按一次退出程序</string>
+    //注册
+    <string name="set_for_login">设置登录</string>
+    <string name="get_verification_code">获取校验码</string>
+    <string name="hint_input_verification_code">输入校验码</string>
+    <string name="hint_input_code">输入验证码</string>
+    <string name="hint_phone_number">请输入大陆地区11位手机号码</string>
+    <string name="hint_input_password">输入登录密码</string>
+    <string name="hint_confirm_password">确认登录密码</string>
+    <string name="hint_qatime_register_code">请输入答疑时间注册码</string>
+    <string name="agree">同意</string>
+    <string name="next">下一步</string>
+    <string name="information_perfect">完善信息</string>
+    <string name="can_not_be_empty">不能为空</string>
+    <string name="system_setting">系统设置</string>
+    //忘记密码
+    <string name="hint_phone_number_forget">请输入绑定手机号码</string>
+    <string name="hint_password_forget">请输入新密码</string>
+    <string name="find_password">找回密码</string>
+
+    //课程详情1
+    <string name="class_name">课程名称：</string>
+    <string name="subject_type">科目类型：</string>
+    <string name="teacher">授课教师：</string>
+    <string name="progress">课程进度：</string>
+    <string name="teach_way">授课方式：</string>
+    <string name="remain_class">剩余课时：</string>
+    <string name="class_end_time">结课时间：</string>
+    <string name="status_preview">当前状态：招生中</string>
+    <string name="status_teaching">当前状态：已开课</string>
+    <string name="status_over">当前状态：已结束</string>
+    <string name="grade_type">年级类型：</string>
+    //课程详情2
+    <string name="teacher_name">老师姓名：</string>
+    <string name="teacher_years">执教年龄：</string>
+    <string name="teacher_subject">所授科目：</string>
+    <string name="teacher_school">所在学校：</string>
+    <string name="teacher_introduction">自我介绍：</string>
+
+    <string name="use">使用</string>
+
+
+
+    <!-- 云信SDK所需文案 -->
+    <string name="nim_status_bar_multi_messages_incoming">%1$d位联系人有新消息</string>
+    <string name="nim_status_bar_ticker_text">%1$s有新消息</string>
+    <string name="nim_status_bar_image_message">%1$s发来一条图片消息</string>
+    <string name="nim_status_bar_audio_message">%1$s发来一条语音消息</string>
+    <string name="nim_status_bar_video_message">%1$s发来一条视频消息</string>
+    <string name="nim_status_bar_file_message">%1$s发来一条文件消息</string>
+    <string name="nim_status_bar_location_message">%1$s分享了一个地理位置</string>
+    <string name="nim_status_bar_notification_message">%1$s: 通知消息</string>
+    <string name="nim_status_bar_custom_message">%1$s: 自定义消息</string>
+    <string name="nim_status_bar_unsupported_message">%1$s: 无法显示该内容</string>
+    <string name="nim_status_bar_hidden_msg_content">你收到一条新消息</string>
+
+
+</resources>

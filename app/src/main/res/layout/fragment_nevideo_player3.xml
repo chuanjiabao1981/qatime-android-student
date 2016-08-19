@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <cn.qatime.player.view.VerticalSlide
+        android:id="@+id/dragLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/first"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <FrameLayout
+            android:id="@+id/second"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <FrameLayout
+            android:id="@+id/three"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </cn.qatime.player.view.VerticalSlide>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/point1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/point_select" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center_horizontal"
+            android:background="#9d9d9d" />
+
+        <ImageView
+            android:id="@+id/point2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/point_default" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center_horizontal"
+            android:background="#9d9d9d" />
+
+        <ImageView
+            android:id="@+id/point3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/point_default" />
+    </LinearLayout>
+</RelativeLayout>

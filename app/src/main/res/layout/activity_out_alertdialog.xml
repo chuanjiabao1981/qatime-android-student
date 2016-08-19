@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#a2000000"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/white_normal"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:showDividers="none">
+
+        <TextView
+            android:id="@+id/alert_dialog_title"
+            android:layout_width="280dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:text="登录已过期"
+            android:textColor="#ff191919"
+            android:textSize="16.0sp" />
+
+        <Button
+            android:id="@+id/alert_dialog_confirm"
+            android:layout_width="200dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="18dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/alert_dialog_button_bg_orange"
+            android:text="确定"
+            android:textColor="#fff"
+            android:textSize="14.0sp" />
+    </LinearLayout>
+
+</FrameLayout>

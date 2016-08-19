@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spingarr">
+        <item>@string/whole</item>
+        <item>@string/recruiting</item>
+        <item>@string/started</item>
+    </string-array>
+    <string-array name="sort">
+        <item>@string/comprehensive_sort</item>
+        <item>@string/in_price_low_to_high</item>
+        <item>@string/in_price_high_to_low</item>
+        <item>@string/in_number</item>
+    </string-array>
+    <string-array name="subject">
+        <item>@string/chinese</item>
+        <item>@string/math</item>
+        <item>@string/english</item>
+        <item>@string/chemistry</item>
+        <item>@string/science</item>
+        <item>@string/geography</item>
+        <item>@string/biology</item>
+        <item>@string/history</item>
+        <item>@string/politics</item>
+        <item>@string/physics</item>
+
+    </string-array>
+    <string-array name="grade">
+        <item>@string/high3</item>
+        <item>@string/high2</item>
+        <item>@string/high1</item>
+        <item>@string/middle3</item>
+        <item>@string/middle2</item>
+        <item>@string/middle1</item>
+        <item>@string/primary6</item>
+        <item>@string/primary5</item>
+        <item>@string/primary4</item>
+        <item>@string/primary3</item>
+        <item>@string/primary2</item>
+        <item>@string/primary1</item>
+    </string-array>
+</resources>

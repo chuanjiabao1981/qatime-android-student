@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_backbar_with_text" />
+
+    <libraryextra.cropview.CropImageView
+        android:id="@+id/copper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingBottom="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp"
+        custom:scv_background_color="#fff"
+        custom:scv_crop_mode="fit_image"
+        custom:scv_frame_color="@color/guideline"
+        custom:scv_frame_stroke_weight="1dp"
+        custom:scv_guide_color="@color/guideline"
+        custom:scv_guide_show_mode="show_always"
+        custom:scv_guide_stroke_weight="1dp"
+        custom:scv_handle_color="@color/guideline"
+        custom:scv_handle_show_mode="show_always"
+        custom:scv_handle_size="10dp"
+        custom:scv_min_frame_size="50dp"
+        custom:scv_overlay_color="@color/overlay"
+        custom:scv_touch_padding="8dp" />
+</LinearLayout>
