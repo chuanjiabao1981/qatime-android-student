@@ -2,6 +2,7 @@ package cn.qatime.player.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
     private TextView version;
     private TextView cache_size;
     private String totalCacheSize;
+    private AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,9 +90,19 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 break;
             case R.id.check_update:
                 //TODO 检查版本，进行更新
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                alertDialog = builder.create();
 
+                View view = View.inflate(this, R.layout.dialog_check_update, null);
+                Button down = (Button) view.findViewById(R.id.download);
+                down.setOnClickListener(this);
 
+                //TODO 获取更新信息
+                //根据手机设置dialog大小
 
+                alertDialog.setView(view);
+
+                alertDialog.show();
                 break;
             case R.id.clean_cache:
                 //TODO 弹出对话框提示
@@ -103,6 +115,11 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 break;
             case R.id.feedback:
 
+                break;
+
+            case R.id.download:
+                //TODO 更新版本
+                alertDialog.dismiss();
                 break;
         }
 
