@@ -48,8 +48,8 @@ public class MainActivity extends BaseFragmentActivity {
     private int tabImages[][] = {
             {R.mipmap.tab_home_1, R.mipmap.tab_home_2},
             {R.mipmap.tab_moments_1, R.mipmap.tab_moments_2},
-            {R.mipmap.tab_video_1, R.mipmap.tab_video_2},
-            {R.mipmap.tab_find_1, R.mipmap.tab_find_2}};
+            {R.mipmap.tab_message_1, R.mipmap.tab_message_2},
+            {R.mipmap.tab_person_1, R.mipmap.tab_person_2}};
 
     /**
      * 当前用户信息
