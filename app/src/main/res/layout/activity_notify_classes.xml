@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_backbar" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="5dp"
+        android:background="#dfdddd" />
+
+    <LinearLayout
+        android:id="@+id/voice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:text="课程范围" />
+        <View
+            android:layout_width="30dp"
+            android:layout_height="0dp"
+            android:background="#ffffff" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="5dp"
+            android:orientation="horizontal">
+            <CheckBox
+                android:id="@+id/cb_1"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="辅导班课程"
+                android:checked="true"
+                android:layout_height="wrap_content" />
+            <CheckBox
+                android:id="@+id/cb_2"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="公开课课程"
+                android:checked="true"
+                android:layout_height="wrap_content" />
+            </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dfdddd" />
+
+    <LinearLayout
+        android:id="@+id/shake"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:text="提醒方式" />
+        <View
+            android:layout_width="30dp"
+            android:layout_height="0dp"
+            android:background="#ffffff" />
+
+        <RadioGroup
+            android:id="@+id/rg"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:padding="5dp"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/sms"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="短信通知"
+                android:checked="true"
+                android:layout_height="wrap_content" />
+            <RadioButton
+                android:id="@+id/sys"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:text="系统通知"
+                android:layout_height="wrap_content" />
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dfdddd" />
+
+    <LinearLayout
+        android:id="@+id/sha1ke"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:text="设置时间" />
+        <View
+            android:layout_width="30dp"
+            android:layout_height="0dp"
+            android:background="#ffffff" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="提前"/>
+            <TextView
+                android:id="@+id/hours"
+                android:text="00小时"
+                android:padding="5dp"
+                android:textColor="#a00f"
+                android:drawableRight="@mipmap/triangle_16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/minute"
+                android:text="30分钟"
+                android:padding="5dp"
+                android:textColor="#a00f"
+                android:drawableRight="@mipmap/triangle_16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="提醒我"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dfdddd" />
+
+</LinearLayout>

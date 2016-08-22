@@ -238,5 +238,11 @@
     <string name="learning_process">学习流程</string>
     <string name="feedback">意见反馈</string>
     <string name="current_version">当前版本V</string>
+    <string name="notify_message">消息提醒</string>
+    <string name="notify_classes">课程提醒</string>
+    <string name="voice">声音</string>
+    <string name="shake">震动</string>
+    <string name="hint_opinion">请在此输入您的宝贵意见和建议，它能够帮助我们有效的改进产品，使其更满足您的需要。</string>
+    <string name="hint_contact">请留下联系方式（手机/QQ/微信），方便我们联系您</string>
 
 </resources>

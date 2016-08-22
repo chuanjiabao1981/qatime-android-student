@@ -88,6 +88,9 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 finish();
                 break;
             case R.id.notify_setting:
+
+                intent = new Intent(SystemSettingActivity.this, NotifySettingActivity.class);
+                startActivity(intent);
                 break;
             case R.id.check_update:
                 //TODO 检查版本，进行更新
@@ -110,10 +113,12 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 setCache();
                 break;
             case R.id.learning_process:
-
+                intent = new Intent(SystemSettingActivity.this, LearningProcess.class);
+                startActivity(intent);
                 break;
             case R.id.feedback:
-
+                intent = new Intent(SystemSettingActivity.this, FeedBackActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.download:
