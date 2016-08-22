@@ -52,7 +52,7 @@ public class PictureSelectActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picture_select);
-        setTitle("选择图片");
+        setTitle(getResources().getString(R.string.select_picture));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
@@ -117,7 +117,7 @@ public class PictureSelectActivity extends BaseActivity {
         helper.init(getApplicationContext());
 
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            Toast.makeText(this, "暂无外部存储", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.no_external_storage), Toast.LENGTH_SHORT).show();
             return;
         }
         // 显示进度条

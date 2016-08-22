@@ -1,19 +1,20 @@
 <resources>
-    //刷新
+    <!--//刷新-->
     <string name="pull_to_refresh">下拉刷新</string>
     <string name="pull_to_load">上拉加载</string>
     <string name="refreshing">正在刷新</string>
     <string name="loading">正在加载</string>
     <string name="release_to_load">松开加载</string>
     <string name="release_to_refresh">松开刷新</string>
-    //fragment1
+    <!--//fragment1-->
+    <string name="login_has_expired">登录已过期</string>
     <string name="app_name">答疑时间</string>
-    <string name="home_page">首页</string>//首页
-    <string name="time_table">课程表</string>//课程表
-    <string name="message">消息</string>//消息
-    <string name="individual">个人</string>//个人
-    <string name="latest">最新</string>//最新
-    <string name="whole">全部</string>//
+    <string name="home_page">首页</string>
+    <string name="time_table">课程表</string>
+    <string name="message">消息</string>
+    <string name="individual">个人</string>
+    <string name="latest">最新</string>
+    <string name="whole">全部</string>
     <string name="by_time">按时间</string>
     <string name="by_subject">科目</string>
     <string name="by_grade">年级</string>
@@ -30,15 +31,13 @@
     <string name="by_price_down">按价格↓</string>
     <string name="alignprice">111</string>//fragment12对齐
     <string name="alignto">111111</string>//fragment12对齐
-
-    //
-    //排序
+    <!--//排序-->
     <string name="comprehensive_sort">综合排序</string>
     <string name="in_price_low_to_high">按价格-低到高</string>
     <string name="in_price_high_to_low">按价格-高到低</string>
     <string name="in_number">按购买人数</string>
     <string name="recruiting">招生中</string>
-    //科目
+    <!--//科目-->
     <string name="chinese">语文</string>
     <string name="math">数学</string>
     <string name="english">英语</string>
@@ -49,7 +48,7 @@
     <string name="history">历史</string>
     <string name="science">科学</string>
     <string name="biology">生物</string>
-    //grade
+    <!--//grade-->
     <string name="high3">高三</string>
     <string name="high2">高二</string>
     <string name="high1">高一</string>
@@ -62,13 +61,11 @@
     <string name="primary3">三年级</string>
     <string name="primary2">二年级</string>
     <string name="primary1">一年级</string>
-    //
-    //fragment2
+    <!--//fragment2-->
     <string name="course_to_be_done">待上课</string>
     <string name="course_finished">已上课</string>
     <string name="all_course">全部课程</string>
-    //
-    //fragment4
+    <!--//fragment4-->
     <string name="personal_center">个人中心</string>
     <string name="my_order">我的订单</string>
     <string name="paying">待付款</string>
@@ -83,7 +80,8 @@
     <string name="security_management">安全管理</string>
     <string name="setting">系统设置</string>
     <string name="new_edition">新版本</string>
-    //个人信息
+    <!--//个人信息-->
+    <string name="clip_photo">裁剪照片</string>
     <string name="personal_information">个人信息</string>
     <string name="name">姓名</string>
     <string name="sex">性别</string>
@@ -103,10 +101,10 @@
     <string name="finish">完成</string>
     <string name="male">男</string>
     <string name="female">女</string>
-    <string name="change_information">修改个人信息</string>
+    <string name="change_information_successful">个人资料修改成功！</string>
+    <string name="id_is_empty">ID为空</string>
     <string name="tutor_information">辅导班详情</string>
-
-    //我的订单
+    <!--//我的订单-->
     <string name="detail_of_order">订单详情</string>
     <string name="waiting_for_payment">等待付款中</string>
     <string name="order_number">订单编号</string>
@@ -125,27 +123,29 @@
     <string name="commodity_name">商品名称</string>
     <string name="commodity_detail">商品详情</string>
     <string name="pay_remind">请您在24小时内完成支付，否则订单会自动取消。</string>
-    //详情
+    <!--//详情-->
     <string name="information_detail">信息详情</string>
     <string name="teacher_detail">教师详情</string>
     <string name="course_list">课程列表</string>
-    //课程详情
+    <!--//课程详情-->
     <string name="student_number">学习人数</string>
     <string name="Join_the_audition">加入试听</string>
     <string name="Joined_the_audition">已加入试听</string>
     <string name="purchase_now">立即购买</string>
     <string name="purchased">已购买</string>
-    //登录
+    <string name="no_tutorial_classes_ID">没有辅导班ID</string>
+    <!--//登录-->
     <string name="account">请输入账号</string>
     <string name="password">请输入密码</string>
     <string name="register">注册</string>
     <string name="login">登录</string>
     <string name="forget_password">忘记密码</string>
     <string name="verification_code">请输入验证码</string>
+    <string name="verification_code_is_incorrect">验证码不正确</string>
     <string name="change_it">看不清，换一张？</string>
     <string name="logout">退出登录</string>
     <string name="press_another_exit">再按一次退出程序</string>
-    //注册
+    <!--//注册-->
     <string name="set_for_login">设置登录</string>
     <string name="get_verification_code">获取校验码</string>
     <string name="hint_input_verification_code">输入校验码</string>
@@ -155,16 +155,24 @@
     <string name="hint_confirm_password">确认登录密码</string>
     <string name="hint_qatime_register_code">请输入答疑时间注册码</string>
     <string name="agree">同意</string>
+    <string name="agreement">《答疑时间用户协议》</string>
+    <string name="phone_number_is_incorrect">手机号码不正确</string>
+    <string name="can_not_be_empty">不能为空</string>
+    <string name="name_can_not_be_empty">姓名不能为空</string>
+    <string name="grade_can_not_be_empty">年级不能为空</string>
+    <string name="account_can_not_be_empty">账号不能为空</string>
+    <string name="password_can_not_be_empty">密码不能为空</string>
+    <string name="password_and_repassword_are_incongruous">前后密码不一致</string>
+    <string name="enter_the_verification_code">请输入验证码</string>
+    <string name="enter_the_register_code">请输入注册码</string>
     <string name="next">下一步</string>
     <string name="information_perfect">完善信息</string>
-    <string name="can_not_be_empty">不能为空</string>
-    <string name="system_setting">系统设置</string>
-    //忘记密码
+    <string name="press_again_to_exit">再按一次退出程序</string>
+    <!--//忘记密码-->
     <string name="hint_phone_number_forget">请输入绑定手机号码</string>
     <string name="hint_password_forget">请输入新密码</string>
     <string name="find_password">找回密码</string>
-
-//课程详情1
+    <!--//课程详情1-->
     <string name="class_name">课程名称：</string>
     <string name="subject_type">科目类型：</string>
     <string name="teacher">授课教师：</string>
@@ -178,17 +186,38 @@
     <string name="status_teaching">当前状态：已开课</string>
     <string name="status_over">当前状态：已结束</string>
     <string name="grade_type">年级类型：</string>
-    //课程详情2
+    <!--//课程详情2-->
     <string name="teacher_name">老师姓名：</string>
     <string name="teacher_years">执教年龄：</string>
+    <string name="within_three_years">3年以内</string>
+    <string name="within_ten_years">3-10年</string>
+    <string name="more_than_ten_years">20年以上</string>
+    <string name="within_twenty_years">10-20年</string>
     <string name="teacher_subject">所授科目：</string>
     <string name="teacher_school">所在学校：</string>
     <string name="teacher_introduction">自我介绍：</string>
+    <!--课程状态-->
+    <string name="class_teaching">直播中</string>
+    <string name="class_init">未开始</string>
+    <string name="class_ready">待上课</string>
+    <string name="class_paused_inner">暂停中</string>
+    <string name="class_over">已结束</string>
+    <!--//订单支付-->
     <string name="use">使用</string>
-    //订单支付
-
     <string name="fail_pay">不能支付</string>
-    //我的辅导
+    <string name="payment_result">支付结果</string>
+    <string name="pay_failure">支付失败</string>
+    <string name="pay_success">支付成功</string>
+    <string name="button_commit">提交</string>
+    <string name="wechat_payment">微信支付</string>
+    <string name="alipay_payment">支付宝支付</string>
+    <string name="pay_now">立即支付</string>
+    <string name="confirm_payment">确认支付</string>
+    <string name="payment_results_are_being_queried">正在查询支付结果</string>
+    <!--消息-->
+    <string name="remedial_class_message">辅导班消息</string>
+    <string name="system_message">系统消息</string>
+    <!--//我的辅导-->
     <string name="item_teacher">老师：</string>
     <string name="item_class_start_date">开课</string>
     <string name="item_class_end_date">结课</string>
@@ -209,5 +238,31 @@
     <string name="nim_status_bar_custom_message">%1$s: 自定义消息</string>
     <string name="nim_status_bar_unsupported_message">%1$s: 无法显示该内容</string>
     <string name="nim_status_bar_hidden_msg_content">你收到一条新消息</string>
+    <string name="account_or_password_error">账号或密码错误</string>
+    <string name="change_information">修改个人信息</string>
+    <string name="audition_records">试听记录</string>
+    <string name="select_picture">选择图片</string>
+    <string name="no_external_storage">暂无外部存储</string>
+    <!--直播-->
+    <string name="send">发送</string>
+    <string name="notice">公告</string>
+    <string name="chat">聊天</string>
+    <string name="live_details">直播详情</string>
+    <string name="member_list">成员列表</string>
+    <string name="buffering">缓冲中</string>
+    <string name="hd">高清</string>
+    <string name="pd">普清</string>
+    <string name="viewing_mode">观看模式</string>
+    <string name="barrage_transparent">弹幕透明</string>
+    <string name="barrage_size">弹幕大小</string>
+    <string name="barrage_speed">弹幕速度</string>
+    <string name="barrage_position">弹幕位置</string>
+    <string name="position_top">上方</string>
+    <string name="position_bottom">下方</string>
+    <string name="full_screen">全屏</string>
+    <string name="comment_content">评论内容</string>
+    <string name="barrage">打开弹幕</string>
+    <string name="system_setting">系统设置</string>
+
 
 </resources>

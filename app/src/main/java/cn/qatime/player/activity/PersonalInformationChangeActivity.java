@@ -20,21 +20,17 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
-
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import libraryextra.bean.GradeBean;
 import libraryextra.bean.ImageItem;
 import libraryextra.bean.PersonalInformationBean;
-import libraryextra.bean.SchoolBean;
 import libraryextra.transformation.GlideCircleTransform;
 import cn.qatime.player.utils.Constant;
 import libraryextra.utils.DialogUtils;
@@ -64,7 +60,6 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
     private String imageUrl = "";
     private String select = "";//生日所选日期
-    private SchoolBean schoolBean;
     private GradeBean gradeBean;
     private CustomProgressDialog progress;
 
@@ -130,10 +125,6 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 }
             }
         }
-//            if (!StringUtils.isNullOrBlanK(data.getData().getProvince()) && !StringUtils.isNullOrBlanK(data.getData().getCity())) {
-//                region.setText(data.getData().getProvince() + " " + data.getData().getCity());
-//            }
-//                            school
         describe.setText(data.getData().getDesc());
     }
 
@@ -182,7 +173,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                         data.putExtra("data", result);
                         setResult(Constant.RESPONSE, data);
                         DialogUtils.dismissDialog(progress);
-                        Toast.makeText(PersonalInformationChangeActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PersonalInformationChangeActivity.this, getResources().getString(R.string.change_information_successful), Toast.LENGTH_SHORT).show();
                         finish();
                     }
 
@@ -194,17 +185,17 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 String url = UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/update";
                 String filePath = imageUrl;
                 if (StringUtils.isNullOrBlanK(BaseApplication.getUserId())) {
-                    Toast.makeText(PersonalInformationChangeActivity.this, "id为空", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PersonalInformationChangeActivity.this, getResources().getString(R.string.id_is_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 String sName = name.getText().toString();
                 if (StringUtils.isNullOrBlanK(sName)) {
-                    Toast.makeText(this, "名字不能为空", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getResources().getString(R.string.name_can_not_be_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 String grade = gradeBean.getData().getGrades().get(spinner.getSelectedItemPosition());
                 if (StringUtils.isNullOrBlanK(grade)) {
-                    Toast.makeText(this, "年级不能为空", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getResources().getString(R.string.grade_can_not_be_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 String gender = radiogroup.getCheckedRadioButtonId() == men.getId() ? "male" : "female";
@@ -222,7 +213,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         name.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                return (event.getKeyCode()== KeyEvent.KEYCODE_ENTER);
+                return (event.getKeyCode() == KeyEvent.KEYCODE_ENTER);
             }
         });
         men = (RadioButton) findViewById(R.id.men);

@@ -93,7 +93,7 @@ public class OrderPayActivity extends BaseActivity {
                             if (price.startsWith(".")) {
                                 price = "0" + price;
                             }
-                            OrderPayActivity.this.price.setText("支付金额：￥" + price);
+                            OrderPayActivity.this.price.setText(getResources().getString(R.string.amount_payment)+"：￥" + price);
 
 
                             commit.setEnabled(true);

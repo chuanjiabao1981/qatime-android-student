@@ -42,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
-                android:text="聊天"
+                android:text="@string/chat"
                 android:textColor="#858585"
                 android:textSize="14.0sp" />
         </LinearLayout>
@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
-                android:text="直播详情"
+                android:text="@string/live_details"
                 android:textColor="#858585"
                 android:textSize="14.0sp" />
         </LinearLayout>
@@ -75,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
-                android:text="成员列表"
+                android:text="@string/member_list"
                 android:textColor="#858585"
                 android:textSize="14.0sp" />
         </LinearLayout>

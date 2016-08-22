@@ -43,12 +43,12 @@ public class FragmentNEVideoPlayer1 extends BaseFragment {
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
         listView.setMode(PullToRefreshBase.Mode.BOTH);
-        listView.getLoadingLayoutProxy(true, false).setPullLabel("下拉刷新");
-        listView.getLoadingLayoutProxy(false, true).setPullLabel("上拉加载");
-        listView.getLoadingLayoutProxy(true, false).setRefreshingLabel("正在刷新...");
-        listView.getLoadingLayoutProxy(false, true).setRefreshingLabel("正在加载...");
-        listView.getLoadingLayoutProxy(true, false).setReleaseLabel("松开刷新");
-        listView.getLoadingLayoutProxy(false, true).setReleaseLabel("松开加载");
+        listView.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
+        listView.getLoadingLayoutProxy(false, true).setPullLabel(getResources().getString(R.string.pull_to_load));
+        listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResources().getString(R.string.refreshing));
+        listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
+        listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
+        listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
 
 
         adapter = new CommonAdapter<String>(getActivity(), list, R.layout.item_fragment_nevideo_player1) {

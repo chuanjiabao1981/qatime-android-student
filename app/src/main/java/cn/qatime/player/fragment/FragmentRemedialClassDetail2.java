@@ -21,7 +21,6 @@ import libraryextra.utils.StringUtils;
 public class FragmentRemedialClassDetail2 extends BaseFragment {
     private TextView name;
     private ImageView image;
-    //    private TextView degree;
     private TextView teachingyears;
     private TextView subject;
     private TextView gradetype;
@@ -40,7 +39,6 @@ public class FragmentRemedialClassDetail2 extends BaseFragment {
     private void initview(View view) {
         name = (TextView) view.findViewById(R.id.name);
         image = (ImageView) view.findViewById(R.id.image);
-//        degree = (TextView) view.findViewById(R.id.degree);
         gradetype = (TextView) view.findViewById(R.id.grade_type);
         subject = (TextView) view.findViewById(R.id.subject);
         teachingyears = (TextView) view.findViewById(R.id.teaching_years);
@@ -55,13 +53,13 @@ public class FragmentRemedialClassDetail2 extends BaseFragment {
             subject.setText(getResources().getString(R.string.teacher_subject) + data.getData().getTeacher().getSubject());
             if (!StringUtils.isNullOrBlanK(data.getData().getTeacher().getTeaching_years())) {
                 if (data.getData().getTeacher().getTeaching_years().equals("within_three_years")) {
-                    teachingyears.setText(getResources().getString(R.string.teacher_years) + "3年以内");
+                    teachingyears.setText(getResources().getString(R.string.teacher_years) + getResources().getString(R.string.within_three_years));
                 } else if (data.getData().getTeacher().getTeaching_years().equals("within_ten_years")) {
-                    teachingyears.setText(getResources().getString(R.string.teacher_years) + "3-10年");
+                    teachingyears.setText(getResources().getString(R.string.teacher_years) + getResources().getString(R.string.within_ten_years));
                 } else if (data.getData().getTeacher().getTeaching_years().equals("within_twenty_years")) {
-                    teachingyears.setText(getResources().getString(R.string.teacher_years) + "10-20年");
+                    teachingyears.setText(getResources().getString(R.string.teacher_years) + getResources().getString(R.string.within_twenty_years));
                 } else {
-                    teachingyears.setText(getResources().getString(R.string.teacher_years) + "20年以上");
+                    teachingyears.setText(getResources().getString(R.string.teacher_years) +getResources().getString(R.string.more_than_ten_years));
                 }
             }
             gradetype.setText(getResources().getString(R.string.grade_type) + "高中");

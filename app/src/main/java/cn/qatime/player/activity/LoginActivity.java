@@ -91,7 +91,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         login();
                     } else {
                         login.setClickable(true);
-                        Toast.makeText(this, "验证码不正确", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getResources().getString(R.string.verification_code_is_incorrect), Toast.LENGTH_SHORT).show();
                         return;
                     }
                 } else {
@@ -119,12 +119,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private void login() {
 
         if (TextUtils.isEmpty(username.getText().toString())) {
-            Toast.makeText(this, "账号不能为空", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.account_can_not_be_empty), Toast.LENGTH_SHORT).show();
             login.setClickable(true);
             return;
         }
         if (TextUtils.isEmpty(password.getText().toString())) {
-            Toast.makeText(this, "密码不能为空", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.password_can_not_be_empty), Toast.LENGTH_SHORT).show();
             login.setClickable(true);
             return;
         }
@@ -147,7 +147,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             JSONObject data = response.getJSONObject("data");
                             if (data.has("result")) {
                                 if (data.getString("result") != null && data.getString("result").equals("failed")) {
-                                    Toast.makeText(LoginActivity.this, "账号或密码错误", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginActivity.this, getResources().getString(R.string.account_or_password_error), Toast.LENGTH_SHORT).show();
                                 }
                             }else {
                                 LogUtils.e("登录", response.toString());

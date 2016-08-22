@@ -102,6 +102,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="center"
                     android:orientation="horizontal"
                     android:paddingBottom="5dp"
                     android:paddingTop="5dp">
@@ -162,7 +163,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="right"
+                    android:gravity="center"
                     android:orientation="horizontal"
                     android:paddingBottom="5dp"
                     android:paddingRight="5dp"
@@ -302,6 +303,7 @@
 
                 <ImageView
                     android:layout_width="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_height="wrap_content"
                     android:src="@mipmap/personal_enter"/>
             </LinearLayout>
@@ -343,7 +345,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right"
+                    android:layout_gravity="center"
                     android:src="@mipmap/personal_enter"/>
             </LinearLayout>
 

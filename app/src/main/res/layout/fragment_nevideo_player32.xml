@@ -18,7 +18,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:text="教师详情"
+                android:text="@string/teacher_detail"
                 android:textColor="#31b1f5"
                 android:textSize="15sp" />
 
@@ -54,7 +54,7 @@
                 android:lineSpacingExtra="1.2sp"
                 android:padding="3dp"
                 android:id="@+id/grade_type"
-                android:text="类        型：" />
+                android:text="课程类型：" />
 
             <TextView
 
