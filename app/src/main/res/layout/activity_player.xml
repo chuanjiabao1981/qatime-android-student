@@ -16,32 +16,34 @@
 
 <!--</FrameLayout>-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <cn.qatime.player.view.QaVideoPlayer
         android:id="@+id/video_player"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#fff" />
+        android:background="#fff"/>
 
-    <LinearLayout android:id="@+id/bottom"
+    <LinearLayout
+        android:id="@+id/bottom"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <libraryextra.view.FragmentLayoutWithLine
-           android:id="@+id/fragmentlayout"
+            android:id="@+id/fragmentlayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_weight="1"/>
+
         <LinearLayout
-            android:layout_width="match_parent"
             android:id="@+id/input_layout"
-            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
             android:orientation="horizontal"
-            android:layout_height="45dp">
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -52,20 +54,22 @@
                 <EditText
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:background="@drawable/shape_input"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_input"/>
+
                 <ImageView
-                    android:paddingRight="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:paddingRight="10dp"
                     android:src="@mipmap/biaoqing"/>
+
                 <TextView
                     android:layout_width="60dp"
+                    android:layout_height="match_parent"
                     android:background="@drawable/button_bg_selector_gray"
-                    android:text="发送"
                     android:gravity="center"
-                    android:textColor="#fff"
-                    android:layout_height="match_parent" />
+                    android:text="发送"
+                    android:textColor="#fff"/>
             </LinearLayout>
 
         </LinearLayout>

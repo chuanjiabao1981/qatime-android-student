@@ -24,7 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
-                android:text="辅导班消息"
+                android:text="@string/remedial_class_message"
                 android:textColor="#222222"
                 android:textSize="14.0sp" />
         </LinearLayout>
@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
-                android:text="系统消息"
+                android:text="@string/system_message"
                 android:textColor="#858585"
                 android:textSize="14.0sp" />
         </LinearLayout>

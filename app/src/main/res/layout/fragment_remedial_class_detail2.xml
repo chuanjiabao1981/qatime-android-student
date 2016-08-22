@@ -47,7 +47,7 @@
             android:lineSpacingExtra="1.2sp"
             android:padding="3dp"
             android:id="@+id/grade_type"
-            android:text="类        型：" />
+            android:text="年级类型：" />
 
             <TextView
 

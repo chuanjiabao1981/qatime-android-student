@@ -134,7 +134,7 @@
                     android:id="@+id/grade"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="高一" />
+                    android:text="@string/high3" />
 
             </LinearLayout>
 
