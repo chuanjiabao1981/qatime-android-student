@@ -24,7 +24,7 @@ public class FragmentRemedialClassDetail3 extends BaseFragment {
     private List<RemedialClassDetailBean.Lessons> list = new ArrayList<>();
 
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy月MM月dd日");
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
     @Nullable
     @Override
@@ -45,12 +45,22 @@ public class FragmentRemedialClassDetail3 extends BaseFragment {
                 holder.setText(R.id.number, StringUtils.Int2String(position + 1));
                 holder.setText(R.id.name, item.getName());
                 holder.setText(R.id.live_time, item.getLive_time());
-                if (item.getStatus().equals("finished")) {
-                    holder.setText(R.id.status, "当前状态：已结束");
-                } else if (item.getStatus().equals("ready")) {
-                    holder.setText(R.id.status, "当前状态：待直播");
-                } else {
-                    holder.setText(R.id.status, "当前状态：直播中");
+                if (item.getStatus().equals("teaching")) {
+                    holder.setText(R.id.status, "直播中");
+                }else if (item.getStatus().equals("paused")) {
+                    holder.setText(R.id.status, "直播中");
+                }
+                else if (item.getStatus().equals("init")) {
+                    holder.setText(R.id.status, "未开始");
+                }else if (item.getStatus().equals("ready")) {
+                    holder.setText(R.id.status, "待上课");
+
+                }else if (item.getStatus().equals("paused_inner")) {
+                    holder.setText(R.id.status, "暂停中");
+
+                }
+                else {
+                    holder.setText(R.id.status, "已结束");
                 }
                 try {
                     holder.setText(R.id.class_date, format.format(parse.parse(item.getClass_date())));

@@ -18,7 +18,7 @@ import libraryextra.bean.RemedialClassDetailBean;
 public class FragmentRemedialClassDetail1 extends BaseFragment {
 
     TextView describe;
-    TextView name;
+//    TextView name;
     TextView classstarttime;
     TextView subject;
     TextView grade;
@@ -28,7 +28,7 @@ public class FragmentRemedialClassDetail1 extends BaseFragment {
     TextView teacher;
     TextView totalclass;
     TextView remainclass;
-//    TextView teachway;
+    //    TextView teachway;
     TextView progress;
     RemedialClassDetailBean data;
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -46,7 +46,7 @@ public class FragmentRemedialClassDetail1 extends BaseFragment {
 
 
     private void initview(View view) {
-        name = (TextView) view.findViewById(R.id.name);
+//        name = (TextView) view.findViewById(R.id.name);
         subject = (TextView) view.findViewById(R.id.subject);
         classstarttime = (TextView) view.findViewById(R.id.class_start_time);
         timetostart = (TextView) view.findViewById(R.id.time_to_start);
@@ -65,20 +65,17 @@ public class FragmentRemedialClassDetail1 extends BaseFragment {
         RemedialClassDetailBean.Data bean = data.getData();
         if (bean != null) {
 
-            name.setText(getResources().getString(R.string.class_name)+ bean.getName());
+//            name.setText(getResources().getString(R.string.class_name) + bean.getName());
             subject.setText(getResources().getString(R.string.subject_type) + bean.getSubject());
-                teacher.setText(getResources().getString(R.string.teacher) + bean.getTeacher().getName());
+            teacher.setText(getResources().getString(R.string.teacher) + bean.getTeacher().getName());
             progress.setText(getResources().getString(R.string.progress) + bean.getCompleted_lesson_count() + "/" + bean.getPreset_lesson_count());
-            try {
-                classstarttime.setText(getResources().getString(R.string.class_start_time) + format.format(parse.parse(bean.getLive_start_time())));
-                classendtime.setText(getResources().getString(R.string.class_end_time) + format.format(parse.parse(bean.getLive_end_time())));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            classstarttime.setText(getResources().getString(R.string.class_start_time) + bean.getLive_start_time());
+            classendtime.setText(getResources().getString(R.string.class_end_time) + bean.getLive_end_time());
+
 //            teachway.setText(getResources().getString(R.string.teach_way));
             grade.setText(getResources().getString(R.string.grade_type) + bean.getGrade());
-            totalclass.setText(getResources().getString(R.string.total_class_hours)+ bean.getPreset_lesson_count() + getResources().getString(R.string.hours));
-            remainclass.setText(getResources().getString(R.string.remain_class)+ (bean.getPreset_lesson_count() - bean.getCompleted_lesson_count()));
+            totalclass.setText(getResources().getString(R.string.total_class_hours) + bean.getPreset_lesson_count());
+            remainclass.setText(getResources().getString(R.string.remain_class) + (bean.getPreset_lesson_count() - bean.getCompleted_lesson_count()));
             if (bean.getStatus().equals("preview")) {
                 status.setText(getResources().getString(R.string.status_preview));
                 timetostart.setVisibility(View.VISIBLE);
@@ -93,7 +90,7 @@ public class FragmentRemedialClassDetail1 extends BaseFragment {
                 long time = System.currentTimeMillis() - parse.parse(bean.getLive_start_time()).getTime();
                 if (time > 0) {
 
-                    timetostart.setText(getResources().getString(R.string.item_to_start) + (int)(time/(1000*3600*24)) + getResources().getString(R.string.item_day));
+                    timetostart.setText(getResources().getString(R.string.item_to_start) + (int) (time / (1000 * 3600 * 24)) + getResources().getString(R.string.item_day));
                 }
             } catch (ParseException e) {
                 e.printStackTrace();

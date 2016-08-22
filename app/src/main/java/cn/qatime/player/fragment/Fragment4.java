@@ -32,7 +32,7 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
     private LinearLayout paying;
     private LinearLayout paid;
     private LinearLayout canceled;
-    private TextView today;
+    private LinearLayout today;
     private TextView waitting;
     private TextView calssed;
     private TextView overed;
@@ -145,7 +145,7 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
         paying = (LinearLayout) view.findViewById(R.id.paying);
         paid = (LinearLayout) view.findViewById(R.id.paid);
         canceled = (LinearLayout) view.findViewById(R.id.canceled);
-        today = (TextView) view.findViewById(R.id.today);
+        today = (LinearLayout) view.findViewById(R.id.today);
         waitting = (TextView) view.findViewById(R.id.waitting);
         calssed = (TextView) view.findViewById(R.id.calssed);
         overed = (TextView) view.findViewById(R.id.overed);

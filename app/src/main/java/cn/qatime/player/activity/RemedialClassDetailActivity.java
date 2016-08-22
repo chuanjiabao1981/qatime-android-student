@@ -48,6 +48,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
     private Button audition;
     private Button pay;
+    private TextView name;
+    private TextView title;
     private RemedialClassDetailBean data;
     private ViewPager mViewPager;
     private FragmentPagerAdapter mAdapter;
@@ -60,7 +62,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remedial_class_detail);
-        setTitle(getResources().getString(R.string.tutor_information));
+
         id = getIntent().getIntExtra("id", 0);//联网id
         pager = getIntent().getIntExtra("pager", 0);
         initView();
@@ -76,6 +78,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     public void initView() {
         EventBus.getDefault().register(this);
         image = (ImageView) findViewById(R.id.image);
+        name=(TextView)findViewById(R.id.name);
         image.setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenWidth(this) * 5 / 8));
 
         fragBaseFragments.add(new FragmentRemedialClassDetail1());
@@ -84,6 +87,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
         audition = (Button) findViewById(R.id.audition);
         pay = (Button) findViewById(R.id.pay);
+        title = (TextView) findViewById(R.id.title);
         price = (TextView) findViewById(R.id.price);
         studentnumber = (TextView) findViewById(R.id.student_number);
         audition.setOnClickListener(this);
@@ -148,8 +152,10 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                             if (price.startsWith(".")) {
                                 price = "0" + price;
                             }
+                            name.setText(data.getData().getName());
+                            title.setText(data.getData().getName());
                             RemedialClassDetailActivity.this.price.setText("￥" + price);
-                            studentnumber.setText("学习人数 " + data.getData().getBuy_tickets_count());
+                            studentnumber.setText("报名人数 " + data.getData().getBuy_tickets_count());
                         }
                         if (data != null) {
                             ((FragmentRemedialClassDetail1) fragBaseFragments.get(0)).setData(data);
