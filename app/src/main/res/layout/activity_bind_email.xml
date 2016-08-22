@@ -63,7 +63,6 @@
                 android:layout_weight="1"
                 android:background="@drawable/shape_input"
                 android:gravity="center_vertical"
-                android:hint="@string/hint_input_code"
                 android:paddingBottom="8dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"

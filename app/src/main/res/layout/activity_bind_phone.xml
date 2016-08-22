@@ -37,7 +37,6 @@
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 android:paddingTop="8dp"
-                android:hint="@string/hint_input_new_phone"
                 android:singleLine="true"
                 android:textColorHint="#ff999999" />
         </LinearLayout>
@@ -63,7 +62,6 @@
                 android:paddingRight="8dp"
                 android:paddingTop="8dp"
                 android:singleLine="true"
-                android:hint="@string/hint_input_code"
                 android:textColorHint="#ff999999" />
 
             <TextView

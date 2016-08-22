@@ -13,6 +13,7 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.AppUtils;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DataCleanUtils;
+import libraryextra.utils.DensityUtils;
 
 /**
  * @author luntify
@@ -91,18 +92,16 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
             case R.id.check_update:
                 //TODO 检查版本，进行更新
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                alertDialog = builder.create();
-
+                //TODO 获取更新信信息
                 View view = View.inflate(this, R.layout.dialog_check_update, null);
                 Button down = (Button) view.findViewById(R.id.download);
                 down.setOnClickListener(this);
-
-                //TODO 获取更新信息
-                //根据手机设置dialog大小
-
-                alertDialog.setView(view);
+                alertDialog = builder.create();
 
                 alertDialog.show();
+                alertDialog.setContentView(view);
+                alertDialog.getWindow().setLayout((int) DensityUtils.dp2px(this, 300),(int) DensityUtils.dp2px(this, 500));
+
                 break;
             case R.id.clean_cache:
                 //TODO 弹出对话框提示

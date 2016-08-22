@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import libraryextra.utils.StringUtils;
 
 /**
  * Created by lenovo on 2016/8/17.
@@ -39,6 +40,13 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
         password = (EditText) findViewById(R.id.password);
         new_password = (EditText) findViewById(R.id.new_password);
         confirm_new_password = (EditText) findViewById(R.id.confirm_new_password);
+//        android:hint="@string/hint_input_current_password"
+//        android:hint="@string/hint_6_16_password"
+//        android:hint="@string/hint_input_again"
+        password.setHint(StringUtils.getSpannedString(this,R.string.hint_input_current_password));
+        new_password.setHint(StringUtils.getSpannedString(this,R.string.hint_6_16_password));
+        confirm_new_password.setHint(StringUtils.getSpannedString(this,R.string.hint_input_again));
+
         match_pwd1 = (ImageView) findViewById(R.id.match_pwd1);
         match_pwd2 = (ImageView) findViewById(R.id.match_pwd2);
         forget_password.setOnClickListener(this);

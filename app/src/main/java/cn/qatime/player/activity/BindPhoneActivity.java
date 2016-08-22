@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import libraryextra.utils.StringUtils;
 
 public class BindPhoneActivity extends BaseActivity implements View.OnClickListener {
 
@@ -26,12 +27,15 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
         initView();
         time = new TimeCount(60000, 1000);
     }
+
     private void initView() {
         setTitle(getResources().getString(R.string.bind_phone_number));
         getcode = (TextView) findViewById(R.id.text_getcode);
         button_over = (Button) findViewById(R.id.button_over);
         code = (EditText) findViewById(R.id.code);
         target_phone = (EditText) findViewById(R.id.target_phone);
+        target_phone.setHint(StringUtils.getSpannedString(this,R.string.hint_input_new_phone));
+        code.setHint(StringUtils.getSpannedString(this,R.string.hint_input_code));
         //TODO 获取手机号 设置TextView
 
 
@@ -39,6 +43,8 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
         button_over.setOnClickListener(this);
 
     }
+
+
 
     @Override
     public void onClick(View v) {
@@ -50,7 +56,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.button_over:
                 //TODO 绑定手机
-                Intent intent=new Intent(this,SecurityManagerActivity.class);
+                Intent intent = new Intent(this, SecurityManagerActivity.class);
                 startActivity(intent);
                 break;
         }

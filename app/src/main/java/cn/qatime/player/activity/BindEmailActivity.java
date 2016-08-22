@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import libraryextra.utils.StringUtils;
 
 /**
  * Created by lenovo on 2016/8/17.
@@ -38,6 +39,9 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
         code = (EditText) findViewById(R.id.code);
         new_email = (EditText) findViewById(R.id.input_new_email);
         confirm_email = (EditText) findViewById(R.id.confirm_new_email);
+        new_email.setHint(StringUtils.getSpannedString(this,R.string.hint_input_email));
+        confirm_email.setHint(StringUtils.getSpannedString(this,R.string.hint_input_again));
+        code.setHint(StringUtils.getSpannedString(this,R.string.hint_input_code));
 
         //TODO 获取手机号 设置TextView
         getcode.setOnClickListener(this);
