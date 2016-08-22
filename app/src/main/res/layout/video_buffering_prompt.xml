@@ -12,7 +12,7 @@ android:visibility="gone" >
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:adjustViewBounds="true"
-    android:text="缓冲中"
+    android:text="@string/buffering"
     android:textColor="#FFFFFFFF"
     android:textSize="13dp" />
 

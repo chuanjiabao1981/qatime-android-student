@@ -255,14 +255,16 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
             map.put("sort_by", timesorttype);
         }
 
-        if (!subjecttext.getText().equals(getResources().getString(R.string.by_subject))) {
+        if (!subjecttext.getText().equals(getResources().getString(R.string.by_subject)) && !subjecttext.getText().equals("全部")) {
             try {
                 map.put("subject", URLEncoder.encode(subjecttext.getText().toString(), "UTF-8"));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
         }
-        if (!classtext.getText().equals(getResources().getString(R.string.by_grade))) {
+
+
+        if (!classtext.getText().equals(getResources().getString(R.string.by_grade))&&!classtext.getText().equals("全部")) {
             try {
                 map.put("grade", URLEncoder.encode(classtext.getText().toString(), "UTF-8"));
             } catch (UnsupportedEncodingException e) {
@@ -401,6 +403,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 popView = View.inflate(getActivity(), R.layout.pop_fragment12, null);
                 listView = (ListView) popView.findViewById(R.id.list);
                 final List<String> subjectList = new ArrayList<>();
+                subjectList.add("全部");
                 subjectList.add("语文");
                 subjectList.add("数学");
                 subjectList.add("英语");
@@ -434,6 +437,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 String gradeString = FileUtil.readFile(getActivity().getCacheDir() + "/grade.txt");
                 if (!StringUtils.isNullOrBlanK(gradeString)) {
                     GradeBean gradeBean = JsonUtils.objectFromJson(gradeString, GradeBean.class);
+                    classList.add("全部");
                     classList.addAll(gradeBean.getData().getGrades());
                 }
 
