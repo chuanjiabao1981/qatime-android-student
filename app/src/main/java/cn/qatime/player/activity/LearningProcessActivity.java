@@ -8,7 +8,7 @@ import cn.qatime.player.base.BaseActivity;
 /**
  * Created by lenovo on 2016/8/22.
  */
-public class LearningProcess extends BaseActivity{
+public class LearningProcessActivity extends BaseActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

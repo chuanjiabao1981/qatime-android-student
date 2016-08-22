@@ -81,7 +81,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="5dp"
-                    android:text="通过辅导列表进行查找和筛选辅导"
+                    android:text="通过辅导列表进行查找和筛选辅导。"
                     android:textColor="#8000" />
             </LinearLayout>
 
@@ -118,7 +118,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
-                    android:text="对已选择的辅导班进行试听和购买支付，可以在“个人中心-我的辅导”中对已试听和购买支付的辅导进行查看和操作"
+                    android:text="对已选择的辅导班进行试听和购买支付，可以在“个人中心-我的辅导”中对已试听和购买支付的辅导进行查看和操作。"
                     android:textColor="#8000" />
             </LinearLayout>
 
@@ -187,7 +187,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="5dp"
-                    android:text="查看“个人中心-我的辅导”可以选择辅导班快速进入直播间，与直播间内的老师进、同学进行互动和交流"
+                    android:text="查看“个人中心-我的辅导”可以选择辅导班快速进入直播间，与直播间内的老师进、同学进行互动和交流。"
                     android:textColor="#8000" />
             </LinearLayout>
 
@@ -282,7 +282,7 @@
                     android:layout_weight="2"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="学习中与老师交互"
+                    android:text="学习中与老师交互。"
                     android:textColor="#8000" />
             </LinearLayout>
 
@@ -319,7 +319,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="5dp"
-                    android:text="辅导班关闭直播，系统自动对辅导班进行结算"
+                    android:text="辅导班关闭直播，系统自动对辅导班进行结算。"
                     android:textColor="#8000" />
             </LinearLayout>
 

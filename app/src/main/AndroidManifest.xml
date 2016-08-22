@@ -249,7 +249,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.LearningProcess"
+            android:name=".activity.LearningProcessActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
             <!--<intent-filter>-->

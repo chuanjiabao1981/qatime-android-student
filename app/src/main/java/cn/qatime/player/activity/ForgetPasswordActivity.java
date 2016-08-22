@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import libraryextra.utils.StringUtils;
 
 public class ForgetPasswordActivity extends BaseActivity {
     EditText number;
@@ -38,6 +39,10 @@ public class ForgetPasswordActivity extends BaseActivity {
         newpass = (EditText) findViewById(R.id.new_pass);
         submit = (Button) findViewById(R.id.submit);
         current_phone = findViewById(R.id.current_phone);
+
+        number.setHint(StringUtils.getSpannedString(this,R.string.hint_phone_number_forget));
+        code.setHint(StringUtils.getSpannedString(this,R.string.hint_input_verification_code));
+        newpass.setHint(StringUtils.getSpannedString(this,R.string.hint_password_forget));
 
         getcode.setOnClickListener(new View.OnClickListener() {
             @Override

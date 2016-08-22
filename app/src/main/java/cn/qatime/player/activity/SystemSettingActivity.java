@@ -113,7 +113,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 setCache();
                 break;
             case R.id.learning_process:
-                intent = new Intent(SystemSettingActivity.this, LearningProcess.class);
+                intent = new Intent(SystemSettingActivity.this, LearningProcessActivity.class);
                 startActivity(intent);
                 break;
             case R.id.feedback:

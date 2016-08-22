@@ -32,11 +32,11 @@
             android:background="#ffffff" />
 
 
-        <ImageView
-            android:id="@+id/iv_voice"
+        <CheckBox
+            android:checked="true"
+            android:id="@+id/cb_voice"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/pay_success" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <View
@@ -65,8 +65,9 @@
             android:background="#ffffff" />
 
 
-        <ImageView
-            android:id="@+id/iv_shake"
+        <CheckBox
+            android:id="@+id/cb_shake"
+            android:checked="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/pay_success" />

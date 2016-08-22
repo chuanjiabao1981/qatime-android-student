@@ -2,7 +2,7 @@ package cn.qatime.player.activity;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.CheckBox;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
@@ -15,8 +15,8 @@ public class NotifyMessageActivity extends BaseActivity implements View.OnClickL
 
     private View voice;
     private View shake;
-    private ImageView iv_voice;
-    private ImageView iv_shake;
+    private CheckBox iv_voice;
+    private CheckBox iv_shake;
     private boolean voice_status;
     private boolean shake_status;
 
@@ -37,13 +37,12 @@ public class NotifyMessageActivity extends BaseActivity implements View.OnClickL
         setTitle("消息提醒");
         voice = findViewById(R.id.voice);
         shake = findViewById(R.id.shake);
-        iv_voice = (ImageView) findViewById(R.id.iv_voice);
-        iv_shake = (ImageView) findViewById(R.id.iv_shake);
+        iv_voice = (CheckBox) findViewById(R.id.cb_voice);
+        iv_shake = (CheckBox) findViewById(R.id.cb_shake);
 
         setVoiceStatus();
         setShakeStatus();
-        voice.setOnClickListener(this);
-        shake.setOnClickListener(this);
+
     }
 
     @Override
@@ -68,10 +67,8 @@ public class NotifyMessageActivity extends BaseActivity implements View.OnClickL
 
         if(shake_status){
              SPUtils.put(this, "shake_status", false);
-            iv_shake.setImageResource(R.mipmap.pay_success);
         }else{
             SPUtils.put(this, "shake_status", true);
-            iv_shake.setImageResource(R.mipmap.pay_faild);
         }
     }
 
@@ -79,10 +76,8 @@ public class NotifyMessageActivity extends BaseActivity implements View.OnClickL
         voice_status = (boolean) SPUtils.get(this, "voice_status", true);
         if(voice_status){
             SPUtils.put(this, "voice_status", false);
-            iv_voice.setImageResource(R.mipmap.pay_success);
         }else{
             SPUtils.put(this, "voice_status", true);
-            iv_voice.setImageResource(R.mipmap.pay_faild);
         }
     }
 }
