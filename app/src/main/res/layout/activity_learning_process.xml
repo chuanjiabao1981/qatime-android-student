@@ -187,7 +187,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="5dp"
-                    android:text="查看“个人中心-我的辅导”可以选择辅导班快速进入直播间，与直播间内的老师进、同学进行互动和交流。"
+                    android:text="查看“个人中心-我的辅导”可以选择辅导班快速进入直播间，与直播间内的老师、同学进行互动和交流。"
                     android:textColor="#8000" />
             </LinearLayout>
 
