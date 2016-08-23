@@ -38,7 +38,6 @@ public class UnbindPhoneActivity extends BaseActivity implements View.OnClickLis
         code = (EditText) findViewById(R.id.code);
         //TODO 获取手机号 设置TextView
 
-
         getcode.setOnClickListener(this);
         button_next.setOnClickListener(this);
 
