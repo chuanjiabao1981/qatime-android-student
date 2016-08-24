@@ -53,7 +53,7 @@
     <Button
         android:id="@+id/download"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:background="@drawable/button_bg_selector_orange"
         android:text="立即下载"/>
     <TextView

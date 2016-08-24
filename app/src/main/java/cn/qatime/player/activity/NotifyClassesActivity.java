@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
@@ -23,9 +22,8 @@ public class NotifyClassesActivity extends BaseActivity implements RadioGroup.On
 
     private CheckBox cb_1;
     private CheckBox cb_2;
-    private RadioGroup rg;
-    private RadioButton sms;
-    private RadioButton sys;
+    private CheckBox sms;
+    private CheckBox sys;
     private Spinner hours;
     private Spinner minute;
     private List<String> al_hours;
@@ -52,11 +50,13 @@ public class NotifyClassesActivity extends BaseActivity implements RadioGroup.On
             str += "小时";
             al_hours.add(str);
         }
-        for (int i = 0; i < 60; i++) {
+        al_minute.add("00分钟");
+        al_minute.add("02分钟");
+        al_minute.add("03分钟");
+        al_minute.add("04分钟");
+        al_minute.add("05分钟");
+        for (int i = 10; i <= 50; i += 5) {
             str = String.valueOf(i);
-            if (i <= 9) {
-                str = "0" + str;
-            }
             str += "分钟";
             al_minute.add(str);
         }
@@ -72,15 +72,15 @@ public class NotifyClassesActivity extends BaseActivity implements RadioGroup.On
         setTitle("课程提醒");
         cb_1 = (CheckBox) findViewById(R.id.cb_1);
         cb_2 = (CheckBox) findViewById(R.id.cb_2);
-        rg = (RadioGroup) findViewById(R.id.rg);
-        sms = (RadioButton) findViewById(R.id.sms);
-        sys = (RadioButton) findViewById(R.id.sys);
+        sms = (CheckBox) findViewById(R.id.sms);
+        sys = (CheckBox) findViewById(R.id.sys);
         hours = (Spinner) findViewById(R.id.spinner_hours);
         minute = (Spinner) findViewById(R.id.spinner_minute);
 
-        rg.setOnCheckedChangeListener(this);
         cb_1.setOnCheckedChangeListener(this);
         cb_2.setOnCheckedChangeListener(this);
+        sms.setOnCheckedChangeListener(this);
+        sys.setOnCheckedChangeListener(this);
 
     }
 
@@ -93,6 +93,24 @@ public class NotifyClassesActivity extends BaseActivity implements RadioGroup.On
                     LogUtils.e("cb_1 checked");
                 } else {
                     LogUtils.e("cb_1 unchecked");
+                }
+                break;
+            case R.id.sms:
+
+                LogUtils.e("sms click");
+                if (isChecked) {
+                    LogUtils.e("sms checked");
+                } else {
+                    LogUtils.e("sms unchecked");
+                }
+                break;
+            case R.id.sys:
+
+                LogUtils.e("sys click");
+                if (isChecked) {
+                    LogUtils.e("sys checked");
+                } else {
+                    LogUtils.e("sys unchecked");
                 }
                 break;
             case R.id.cb_2:
