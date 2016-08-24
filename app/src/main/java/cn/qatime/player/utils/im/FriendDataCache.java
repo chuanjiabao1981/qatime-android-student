@@ -11,6 +11,7 @@ import com.netease.nimlib.sdk.friend.model.Friend;
 import com.netease.nimlib.sdk.friend.model.FriendChangedNotify;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import libraryextra.utils.SPUtils;
-import libraryextra.utils.LogUtils;
 
 
 /**
@@ -75,7 +75,7 @@ public class FriendDataCache {
         // 确定缓存
         friendAccountSet.addAll(accounts);
 
-        LogUtils.e("build FriendDataCache completed, friends count = " + friendAccountSet.size());
+        Logger.e("build FriendDataCache completed, friends count = " + friendAccountSet.size());
     }
 
     private void clearFriendCache() {

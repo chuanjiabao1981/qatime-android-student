@@ -21,10 +21,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.netease.neliveplayer.NELivePlayer;
+import com.orhanobut.logger.Logger;
 
 import cn.qatime.player.R;
 import libraryextra.utils.ScreenUtils;
-import libraryextra.utils.LogUtils;
 
 
 /**
@@ -396,7 +396,7 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
      */
     @Override
     public boolean onError(NELivePlayer neLivePlayer, int i, int i1) {
-        LogUtils.e("播放。。。。。。。。。。。。。。。。。。错误");
+        Logger.e("播放。。。。。。。。。。。。。。。。。。错误");
         if (controlListener != null) {
             return controlListener.onError(neLivePlayer, i, i1);
         }

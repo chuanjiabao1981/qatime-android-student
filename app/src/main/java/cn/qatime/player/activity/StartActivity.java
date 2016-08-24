@@ -10,11 +10,12 @@ import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
+import com.orhanobut.logger.Logger;
+
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import libraryextra.bean.Profile;
 import libraryextra.utils.SPUtils;
-import libraryextra.utils.LogUtils;
 import libraryextra.utils.StringUtils;
 
 /**
@@ -30,12 +31,12 @@ public class StartActivity extends Activity {
             @Override
             public void run() {
                 if (getSharedPreferences("first", MODE_PRIVATE).getBoolean("firstlogin", true)) {
-                    LogUtils.e("第一次登陆");
+                    Logger.e("第一次登陆");
                     StartActivity.this.startActivity(new Intent(StartActivity.this, GuideActivity.class));
                     StartActivity.this.finish();
 
                 } else {
-                    LogUtils.e("no第一次登陆");
+                    Logger.e("no第一次登陆");
                     BaseApplication.setProfile(SPUtils.getObject(StartActivity.this,"profile", Profile.class));
                     if (!StringUtils.isNullOrBlanK(BaseApplication.getProfile().getToken())) {//token不空  直接自动登录到mianactivity
                         StartActivity.this.startActivity(new Intent(StartActivity.this, MainActivity.class));

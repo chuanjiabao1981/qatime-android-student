@@ -16,17 +16,18 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.orhanobut.logger.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.adapter.PictureSelectAdapter;
 import cn.qatime.player.base.BaseActivity;
-import libraryextra.bean.ImageBucket;
-import libraryextra.bean.ImageItem;
 import cn.qatime.player.utils.AlbumHelper;
 import cn.qatime.player.utils.Constant;
-import libraryextra.utils.LogUtils;
+import libraryextra.bean.ImageBucket;
+import libraryextra.bean.ImageItem;
 
 /**
  * @author luntify
@@ -142,7 +143,7 @@ public class PictureSelectActivity extends BaseActivity {
                         detailList.add(list.get(i).imageList.get(j));
                     }
                 }
-                LogUtils.e(detailList.size() + "张图");
+                Logger.e(detailList.size() + "张图");
                 hd.sendEmptyMessage(1);
             }
         }).start();

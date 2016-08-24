@@ -11,6 +11,7 @@ import com.netease.nimlib.sdk.team.TeamServiceObserver;
 import com.netease.nimlib.sdk.team.constant.TeamTypeEnum;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import libraryextra.utils.SPUtils;
-import libraryextra.utils.LogUtils;
 
 /**
  * 群信息/群成员数据监听&缓存
@@ -40,7 +40,7 @@ public class TeamDataCache {
         List<Team> teams = NIMClient.getService(TeamService.class).queryTeamListBlock();
         addOrUpdateTeam(teams);
 
-        LogUtils.e("build TeamDataCache completed, team count = " + teams.size());
+        Logger.e("build TeamDataCache completed, team count = " + teams.size());
     }
 
     public void clear() {

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.netease.neliveplayer.NELivePlayer;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 
@@ -21,11 +22,10 @@ import cn.qatime.player.fragment.FragmentNEVideoPlayer1;
 import cn.qatime.player.fragment.FragmentNEVideoPlayer2;
 import cn.qatime.player.fragment.FragmentNEVideoPlayer3;
 import cn.qatime.player.fragment.FragmentNEVideoPlayer4;
+import cn.qatime.player.view.QaVideoPlayer;
 import libraryextra.utils.ScreenUtils;
-import libraryextra.utils.LogUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.view.FragmentLayoutWithLine;
-import cn.qatime.player.view.QaVideoPlayer;
 
 public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVideoPlayer.ControlListener {
     public final static String TAG = "NEVideoPlayerActivity";
@@ -79,7 +79,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         }
         String url = getIntent().getStringExtra("url");
 
-        LogUtils.e(url);
+        Logger.e(url);
         videoPlayer = (QaVideoPlayer) findViewById(R.id.video_player);
         ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenHeight(this) / 3);
         videoPlayer.setLayoutParams(params);
@@ -130,7 +130,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
 
     @Override
     protected void onResume() {
-        LogUtils.e(TAG, "NEVideoPlayerActivity onResume");
+        Logger.e(TAG, "NEVideoPlayerActivity onResume");
         if (videoPlayer.isPauseInBackgroud() && !videoPlayer.isPaused()) {
             videoPlayer.start(); //锁屏打开后恢复播放
         }
@@ -162,7 +162,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
 
     @Override
     protected void onPause() {
-        LogUtils.e(TAG, "NEVideoPlayerActivity onPause");
+        Logger.e(TAG, "NEVideoPlayerActivity onPause");
 
 //        if (videoPlayer.isPauseInBackgroud())
         videoPlayer.pause(); //锁屏时暂停
@@ -172,7 +172,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
 
     @Override
     protected void onDestroy() {
-        LogUtils.e(TAG, "NEVideoPlayerActivity onDestroy");
+        Logger.e(TAG, "NEVideoPlayerActivity onDestroy");
         videoPlayer.release_resource();
         if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

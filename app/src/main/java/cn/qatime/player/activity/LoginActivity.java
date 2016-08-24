@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.orhanobut.logger.Logger;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,13 +22,12 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.Profile;
 import libraryextra.utils.CheckUtil;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.SPUtils;
-import libraryextra.utils.LogUtils;
 import libraryextra.utils.StringUtils;
-import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.CheckView;
@@ -150,7 +150,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                     Toast.makeText(LoginActivity.this, getResources().getString(R.string.account_or_password_error), Toast.LENGTH_SHORT).show();
                                 }
                             }else {
-                                LogUtils.e("登录", response.toString());
+                                Logger.e("登录", response.toString());
                                 SPUtils.put(LoginActivity.this, "username", username.getText().toString());
                                 Profile profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
                                 if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {

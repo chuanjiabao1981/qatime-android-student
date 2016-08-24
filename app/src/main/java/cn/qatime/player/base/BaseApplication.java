@@ -18,17 +18,19 @@ import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
+import com.orhanobut.logger.LogLevel;
+import com.orhanobut.logger.Logger;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
-import libraryextra.bean.Profile;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.utils.AppUtils;
-import libraryextra.utils.SPUtils;
-import libraryextra.utils.StringUtils;
 import cn.qatime.player.utils.im.FriendDataCache;
 import cn.qatime.player.utils.im.TeamDataCache;
 import cn.qatime.player.utils.im.UserInfoCache;
+import libraryextra.bean.Profile;
+import libraryextra.utils.SPUtils;
+import libraryextra.utils.StringUtils;
 
 public class BaseApplication extends Application {
     //    public static RequestQueue Queue= Volley.newRequestQueue(this);;
@@ -37,6 +39,12 @@ public class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        Logger
+                .init("QTA-TIME")               // default tag : PRETTYLOGGER or use just init()
+                .setMethodCount(3)            // default 2
+                .hideThreadInfo()             // default it is shown
+                .setLogLevel(LogLevel.FULL);  // default : LogLevel.FULL
 
         /** 云信集成start*/
         // SDK初始化（启动后台服务，若已经存在用户登录信息， SDK 将完成自动登录）

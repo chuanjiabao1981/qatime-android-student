@@ -1,23 +1,5 @@
 package cn.qatime.player.view;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import com.netease.neliveplayer.NELivePlayer;
-import com.netease.neliveplayer.NELivePlayer.OnBufferingUpdateListener;
-import com.netease.neliveplayer.NELivePlayer.OnCompletionListener;
-import com.netease.neliveplayer.NELivePlayer.OnErrorListener;
-import com.netease.neliveplayer.NELivePlayer.OnInfoListener;
-import com.netease.neliveplayer.NELivePlayer.OnPreparedListener;
-import com.netease.neliveplayer.NELivePlayer.OnSeekCompleteListener;
-import com.netease.neliveplayer.NELivePlayer.OnVideoSizeChangedListener;
-import com.netease.neliveplayer.NEMediaPlayer;
-import com.netease.neliveplayer.NEMediaInfo;
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
@@ -39,11 +21,28 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
 import android.widget.Toast;
 
-import libraryextra.utils.LogUtils;
+import com.netease.neliveplayer.NELivePlayer;
+import com.netease.neliveplayer.NELivePlayer.OnBufferingUpdateListener;
+import com.netease.neliveplayer.NELivePlayer.OnCompletionListener;
+import com.netease.neliveplayer.NELivePlayer.OnErrorListener;
+import com.netease.neliveplayer.NELivePlayer.OnInfoListener;
+import com.netease.neliveplayer.NELivePlayer.OnPreparedListener;
+import com.netease.neliveplayer.NELivePlayer.OnSeekCompleteListener;
+import com.netease.neliveplayer.NELivePlayer.OnVideoSizeChangedListener;
+import com.netease.neliveplayer.NEMediaInfo;
+import com.netease.neliveplayer.NEMediaPlayer;
+import com.orhanobut.logger.Logger;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 
 public class NEVideoView extends SurfaceView {
@@ -228,10 +227,10 @@ public class NEVideoView extends SurfaceView {
             }
             setLayoutParams(layPara);
             getHolder().setFixedSize(mSurfaceWidth, mSurfaceHeight);
-            LogUtils.e(TAG, "Video: width = " + mVideoWidth + ", height = " + mVideoHeight);
-            LogUtils.e(TAG, "Surface: width = " + mSurfaceWidth + ", height = " + mSurfaceHeight);
-            LogUtils.e(TAG, "Window:width = " + winWidth + ", height = " + winHeight);
-            LogUtils.e(TAG, "LayoutParams:width = " + layPara.width + ", height = " + layPara.height);
+            Logger.e(TAG, "Video: width = " + mVideoWidth + ", height = " + mVideoHeight);
+            Logger.e(TAG, "Surface: width = " + mSurfaceWidth + ", height = " + mSurfaceHeight);
+            Logger.e(TAG, "Window:width = " + winWidth + ", height = " + winHeight);
+            Logger.e(TAG, "LayoutParams:width = " + layPara.width + ", height = " + layPara.height);
         }
 
 //        mVideoScalingMode = videoScalingMode;
@@ -343,11 +342,11 @@ public class NEVideoView extends SurfaceView {
             mCurrState = PREPARING;
 //            attachMediaController();
         } catch (IOException ex) {
-            LogUtils.e(TAG, "Unable to open content: " + mUri, ex);
+            Logger.e(TAG, "Unable to open content: " + mUri, ex);
             mErrorListener.onError(mMediaPlayer, -1, 0);
             return;
         } catch (IllegalArgumentException ex) {
-            LogUtils.e(TAG, "Unable to open content: " + mUri, ex);
+            Logger.e(TAG, "Unable to open content: " + mUri, ex);
             mErrorListener.onError(mMediaPlayer, -1, 0);
             return;
         }
@@ -384,7 +383,7 @@ public class NEVideoView extends SurfaceView {
 
     OnVideoSizeChangedListener mSizeChangedListener = new OnVideoSizeChangedListener() {
         public void onVideoSizeChanged(NELivePlayer mp, int width, int height, int sarNum, int sarDen) {
-            LogUtils.e(TAG, "onVideoSizeChanged: " + width + "x" + height);
+            Logger.e(TAG, "onVideoSizeChanged: " + width + "x" + height);
             mVideoWidth = mp.getVideoWidth();
             mVideoHeight = mp.getVideoHeight();
             if (mOnVideoSizeChangeListener != null) {
@@ -399,7 +398,7 @@ public class NEVideoView extends SurfaceView {
 
     OnPreparedListener mPreparedListener = new OnPreparedListener() {
         public void onPrepared(NELivePlayer mp) {
-            LogUtils.e(TAG, "onPrepared");
+            Logger.e(TAG, "onPrepared");
             mCurrState = PREPARED;
             mNextState = STARTED;
             // briefly show the mediacontroller
@@ -443,7 +442,7 @@ public class NEVideoView extends SurfaceView {
 
     private OnCompletionListener mCompletionListener = new OnCompletionListener() {
         public void onCompletion(NELivePlayer mp) {
-            LogUtils.e(TAG, "onCompletion");
+            Logger.e(TAG, "onCompletion");
             mCurrState = PLAYBACKCOMPLETED;
 //            if (mMediaController != null)
 //                mMediaController.hide();
@@ -472,7 +471,7 @@ public class NEVideoView extends SurfaceView {
 
     private OnErrorListener mErrorListener = new OnErrorListener() {
         public boolean onError(NELivePlayer mp, int a, int b) {
-            LogUtils.e(TAG, "Error: " + a + "," + b);
+            Logger.e(TAG, "Error: " + a + "," + b);
             mCurrState = ERROR;
 //            if (mMediaController != null) {
 //                mMediaController.hide();
@@ -522,26 +521,26 @@ public class NEVideoView extends SurfaceView {
     private OnInfoListener mInfoListener = new OnInfoListener() {
         @Override
         public boolean onInfo(NELivePlayer mp, int what, int extra) {
-            LogUtils.e(TAG, "onInfo: " + what + ", " + extra);
+            Logger.e(TAG, "onInfo: " + what + ", " + extra);
             if (mOnInfoListener != null) {
                 mOnInfoListener.onInfo(mp, what, extra);
             }
 
             if (mMediaPlayer != null) {
                 if (what == NELivePlayer.NELP_BUFFERING_START) {
-                    LogUtils.e(TAG, "onInfo: NELP_BUFFERING_START");
+                    Logger.e(TAG, "onInfo: NELP_BUFFERING_START");
                     if (mBuffer != null)
                         mBuffer.setVisibility(View.VISIBLE);
                 } else if (what == NELivePlayer.NELP_BUFFERING_END) {
-                    LogUtils.e(TAG, "onInfo: NELP_BUFFERING_END");
+                    Logger.e(TAG, "onInfo: NELP_BUFFERING_END");
                     if (mBuffer != null)
                         mBuffer.setVisibility(View.GONE);
                 } else if (what == NELivePlayer.NELP_FIRST_VIDEO_RENDERED) {
-                    LogUtils.e(TAG, "onInfo: NELP_FIRST_VIDEO_RENDERED");
+                    Logger.e(TAG, "onInfo: NELP_FIRST_VIDEO_RENDERED");
                 } else if (what == NELivePlayer.NELP_FIRST_AUDIO_RENDERED) {
-                    LogUtils.e(TAG, "onInfo: NELP_FIRST_AUDIO_RENDERED");
+                    Logger.e(TAG, "onInfo: NELP_FIRST_AUDIO_RENDERED");
                 } else if (what == NELivePlayer.NELP_RELEASE_SUCCESS) {
-                    LogUtils.e(TAG, "onInfo: NELP_RELEASE_SUCCESS");
+                    Logger.e(TAG, "onInfo: NELP_RELEASE_SUCCESS");
                 }
             }
 
@@ -552,7 +551,7 @@ public class NEVideoView extends SurfaceView {
     private OnSeekCompleteListener mSeekCompleteListener = new OnSeekCompleteListener() {
         @Override
         public void onSeekComplete(NELivePlayer mp) {
-            LogUtils.e(TAG, "onSeekComplete");
+            Logger.e(TAG, "onSeekComplete");
             if (mOnSeekCompleteListener != null)
                 mOnSeekCompleteListener.onSeekComplete(mp);
         }
@@ -874,14 +873,14 @@ public class NEVideoView extends SurfaceView {
     @SuppressLint("SdCardPath")
     public void getSnapshot() {
         NEMediaInfo mediaInfo = mMediaPlayer.getMediaInfo();
-        LogUtils.e(TAG, "VideoDecoderMode = " + mediaInfo.mVideoDecoderMode);
-        LogUtils.e(TAG, "MediaPlayerName = " + mediaInfo.mMediaPlayerName);
-        LogUtils.e(TAG, "VideoStreamType = " + mediaInfo.mVideoStreamType);
-        LogUtils.e(TAG, "AudioDecoderMode = " + mediaInfo.mAudioDecoderMode);
-        LogUtils.e(TAG, "AudioStreamType = " + mediaInfo.mAudioStreamType);
+        Logger.e(TAG, "VideoDecoderMode = " + mediaInfo.mVideoDecoderMode);
+        Logger.e(TAG, "MediaPlayerName = " + mediaInfo.mMediaPlayerName);
+        Logger.e(TAG, "VideoStreamType = " + mediaInfo.mVideoStreamType);
+        Logger.e(TAG, "AudioDecoderMode = " + mediaInfo.mAudioDecoderMode);
+        Logger.e(TAG, "AudioStreamType = " + mediaInfo.mAudioStreamType);
 
         if (mediaInfo.mVideoDecoderMode.equals("MediaCodec")) {
-            LogUtils.e(TAG, "================= hardware unsupport snapshot ==============");
+            Logger.e(TAG, "================= hardware unsupport snapshot ==============");
         } else {
             Bitmap bitmap = Bitmap.createBitmap(mVideoWidth, mVideoHeight, Config.ARGB_8888);
             //Bitmap bitmap = null;

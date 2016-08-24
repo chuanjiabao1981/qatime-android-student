@@ -3,6 +3,8 @@ package cn.qatime.player.utils;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.orhanobut.logger.Logger;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
@@ -23,7 +25,6 @@ import java.io.IOException;
 
 import cn.qatime.player.base.BaseApplication;
 import libraryextra.utils.CustomMultipartEntity;
-import libraryextra.utils.LogUtils;
 import libraryextra.utils.StringUtils;
 
 /**
@@ -92,7 +93,7 @@ public abstract class UpLoadUtil extends AsyncTask<String, String, String> imple
             if (resEntity != null) {
                 json = EntityUtils.toString(resEntity, "utf-8");
             }
-            LogUtils.e("json", json + "****");
+            Logger.e("json", json + "****");
             httpclient.getConnectionManager().shutdown();
         } catch (IOException e) {
             e.printStackTrace();
@@ -139,8 +140,8 @@ public abstract class UpLoadUtil extends AsyncTask<String, String, String> imple
     @Override
     public void transferred(long num) {
         if (contentLength > 0) {
-            LogUtils.e("总大小" + contentLength);
-            LogUtils.e("已上传" + num);
+            Logger.e("总大小" + contentLength);
+            Logger.e("已上传" + num);
             publishProgress(String.valueOf(num / contentLength * 100) + "%");
         }
     }

@@ -30,6 +30,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
+import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
@@ -44,22 +45,21 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
+import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import cn.qatime.player.base.BaseFragment;
 import libraryextra.bean.GradeBean;
 import libraryextra.bean.RemedialClassBean;
-import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.KeyBoardUtils;
-import libraryextra.view.MDatePickerDialog;
 import libraryextra.utils.ScreenUtils;
-import libraryextra.utils.LogUtils;
 import libraryextra.utils.StringUtils;
-import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
+import libraryextra.view.MDatePickerDialog;
 
 public class Fragment12 extends BaseFragment implements View.OnClickListener {
 
@@ -141,7 +141,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
             @Override
             public void convert(ViewHolder helper, RemedialClassBean.Data item, int position) {
                 if (item == null) {
-                    LogUtils.e("item數據空");
+                    Logger.e("item數據空");
                     return;
                 }
                 ((ImageView) helper.getView(R.id.image)).setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()) / 2, ScreenUtils.getScreenWidth(getActivity()) / 2 * 5 / 8));

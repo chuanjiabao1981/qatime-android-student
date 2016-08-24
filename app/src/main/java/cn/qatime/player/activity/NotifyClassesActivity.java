@@ -9,12 +9,13 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
+import com.orhanobut.logger.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
-import libraryextra.utils.LogUtils;
 
 /**
  * Created by lenovo on 2016/8/22.
@@ -88,20 +89,20 @@ public class NotifyClassesActivity extends BaseActivity implements RadioGroup.On
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.cb_1:
-                LogUtils.e("cb_1 click");
+                Logger.e("cb_1 click");
                 if (isChecked) {
-                    LogUtils.e("cb_1 checked");
+                    Logger.e("cb_1 checked");
                 } else {
-                    LogUtils.e("cb_1 unchecked");
+                    Logger.e("cb_1 unchecked");
                 }
                 break;
             case R.id.cb_2:
 
-                LogUtils.e("cb_2 click");
+                Logger.e("cb_2 click");
                 if (isChecked) {
-                    LogUtils.e("cb_2 checked");
+                    Logger.e("cb_2 checked");
                 } else {
-                    LogUtils.e("cb_2 unchecked");
+                    Logger.e("cb_2 unchecked");
                 }
                 break;
         }
@@ -111,11 +112,11 @@ public class NotifyClassesActivity extends BaseActivity implements RadioGroup.On
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         switch (checkedId) {
             case R.id.sms:
-                LogUtils.e("sms checked");
+                Logger.e("sms checked");
 
                 break;
             case R.id.sys:
-                LogUtils.e("sys checked");
+                Logger.e("sys checked");
 
                 break;
         }

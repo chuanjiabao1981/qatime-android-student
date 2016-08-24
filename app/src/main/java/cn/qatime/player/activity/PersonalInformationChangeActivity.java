@@ -20,28 +20,31 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
+import com.orhanobut.logger.Logger;
+
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.UpLoadUtil;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.GradeBean;
 import libraryextra.bean.ImageItem;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.transformation.GlideCircleTransform;
-import cn.qatime.player.utils.Constant;
 import libraryextra.utils.DialogUtils;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
-import libraryextra.view.MDatePickerDialog;
-import libraryextra.utils.LogUtils;
 import libraryextra.utils.StringUtils;
-import cn.qatime.player.utils.UpLoadUtil;
-import cn.qatime.player.utils.UrlUtils;
 import libraryextra.view.CustomProgressDialog;
+import libraryextra.view.MDatePickerDialog;
 
 public class PersonalInformationChangeActivity extends BaseActivity implements View.OnClickListener {
     ImageView headsculpture;
@@ -256,12 +259,12 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
 
             }
         } else if (resultCode == Constant.PHOTO_CROP) {
-            LogUtils.e("裁剪", "回来");
+            Logger.e("裁剪", "回来");
             if (data != null) {
                 imageUrl = data.getStringExtra("bitmap");
-                LogUtils.e(imageUrl);
+                Logger.e(imageUrl);
                 if (new File(imageUrl).exists()) {
-                    LogUtils.e("回来成功");
+                    Logger.e("回来成功");
                 }
                 if (!StringUtils.isNullOrBlanK(imageUrl)) {
                     Glide.with(this).load(Uri.fromFile(new File(imageUrl))).transform(new GlideCircleTransform(this)).crossFade().into(headsculpture);

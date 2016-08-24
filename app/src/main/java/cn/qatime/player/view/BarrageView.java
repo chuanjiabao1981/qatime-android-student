@@ -8,6 +8,8 @@ import android.view.animation.Animation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
+
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
@@ -15,7 +17,6 @@ import java.util.Set;
 import cn.qatime.player.utils.AnimationHelper;
 import libraryextra.utils.DensityUtils;
 import libraryextra.utils.ScreenUtils;
-import libraryextra.utils.LogUtils;
 
 /**
  * 弹幕父view
@@ -77,7 +78,7 @@ public class BarrageView extends RelativeLayout {
         int leftMargin = getRight() - getLeft() - getPaddingLeft();
         //计算本条弹幕的topMargin(随机值，但是与屏幕中已有的不重复)
         int verticalMargin = getRandomTopMargin();
-        LogUtils.e("屏幕高"+verticalMargin);
+        Logger.e("屏幕高"+verticalMargin);
         textView.setTag(verticalMargin);
 
         LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
