@@ -71,7 +71,7 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
 
         @Override
         public void onFinish() {// 计时完毕
-            getcode.setText("获取验证码");
+            getcode.setText(getResources().getString(R.string.getcode));
             getcode.setEnabled(true);
         }
 

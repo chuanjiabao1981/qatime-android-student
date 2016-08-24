@@ -75,7 +75,7 @@
                 android:background="@drawable/button_bg_selector_orange"
                 android:gravity="center"
                 android:textColor="#fff"
-                android:text="获取验证码" />
+                android:text="@string/getcode" />
         </LinearLayout>
     </LinearLayout>
 

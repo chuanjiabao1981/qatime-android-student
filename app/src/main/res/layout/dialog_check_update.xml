@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="发现新版本"
+            android:text="@string/found_new_version"
             android:textColor="#f00"
             android:textSize="20sp" />
 
@@ -37,7 +37,7 @@
         android:paddingTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="更新内容：" />
+        android:text="@string/update_desc" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -55,17 +55,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/button_bg_selector_orange"
-        android:text="立即下载"/>
+        android:text="@string/down_now"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="建议wifi环境下操作"
+        android:text="@string/update_notify1"
         android:textColor="#5000"
         />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="土豪请无视！"
+        android:text="@string/update_notify2"
         android:textColor="#5000"
          />
 </LinearLayout>
