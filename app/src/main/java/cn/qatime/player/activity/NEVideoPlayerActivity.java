@@ -53,6 +53,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
 
     private Handler hd = new Handler();
     private int i = 0;
+    private int id;
 //    Runnable runnable = new Runnable() {
 //        @Override
 //        public void run() {
@@ -71,7 +72,13 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
+        id = getIntent().getIntExtra("id", 0);//从前一页进来的id 获取详情用
+        if (id == 0) {
+            Toast.makeText(this, "id不能为0", Toast.LENGTH_SHORT).show();
+            return;
+        }
         String url = getIntent().getStringExtra("url");
+
         LogUtils.e(url);
         videoPlayer = (QaVideoPlayer) findViewById(R.id.video_player);
         ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenHeight(this) / 3);
@@ -117,6 +124,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         });
         fragmentLayout.setAdapter(fragBaseFragments, R.layout.tablayout_nevideo_player, 0x0102);
         fragmentLayout.getViewPager().setOffscreenPageLimit(3);
+        ((FragmentNEVideoPlayer3)fragBaseFragments.get(2)).setId(id);
     }
 
 
@@ -156,8 +164,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     protected void onPause() {
         LogUtils.e(TAG, "NEVideoPlayerActivity onPause");
 
-        if (videoPlayer.isPauseInBackgroud())
-            videoPlayer.pause(); //锁屏时暂停
+//        if (videoPlayer.isPauseInBackgroud())
+        videoPlayer.pause(); //锁屏时暂停
         super.onPause();
     }
 

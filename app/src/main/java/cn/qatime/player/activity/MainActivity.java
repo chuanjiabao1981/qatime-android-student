@@ -42,7 +42,6 @@ public class MainActivity extends BaseFragmentActivity {
 
     FragmentLayout fragmentlayout;
     public ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
-    private PersonalInformationBean bean1;
     private int[] tab_img = {R.id.tab_img1, R.id.tab_img2, R.id.tab_img3, R.id.tab_img4};
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3, R.id.tab_text4};
     private int tabImages[][] = {

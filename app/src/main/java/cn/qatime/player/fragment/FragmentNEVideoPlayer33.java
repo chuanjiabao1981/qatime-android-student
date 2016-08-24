@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,71 +16,61 @@ import cn.qatime.player.R;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import cn.qatime.player.base.BaseFragment;
+import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.StringUtils;
 import cn.qatime.player.view.VerticalListView;
 
 public class FragmentNEVideoPlayer33 extends BaseFragment {
-    private List<String> lists = new ArrayList<>();
+    private CommonAdapter<RemedialClassDetailBean.Lessons> adapter;
+    private List<RemedialClassDetailBean.Lessons> lists = new ArrayList<>();
+    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = View.inflate(getActivity(), R.layout.fragment_nevideo_player33, null);
         VerticalListView list = (VerticalListView) view.findViewById(R.id.list);
-        lists.add("1");
-        lists.add("1");
-        lists.add("1");
-        lists.add("1");
-        lists.add("1");
-        lists.add("1");
-        lists.add("1");
-        lists.add("1");
-        lists.add("1");
-        lists.add("1");
-        lists.add("1");
-        lists.add("1");
-        lists.add("1");
-        lists.add("1");
-        list.setAdapter(new CommonAdapter<String>(getActivity(), lists, R.layout.item_fragment_nevideo_player33) {
+        adapter = new CommonAdapter<RemedialClassDetailBean.Lessons>(getActivity(), lists, R.layout.item_fragment_nevideo_player33) {
             @Override
-            public void convert(ViewHolder holder, String item, int position) {
-                View root = holder.getView(R.id.root);
-                TextView number = holder.getView(R.id.number);
-                TextView time = holder.getView(R.id.time);
-                TextView status = holder.getView(R.id.status);
-                TextView name = holder.getView(R.id.name);
-                number.setText(StringUtils.Int2String(position + 1));
-                if (position < 3) {
-                    number.setTextColor(0xff747474);
-                    time.setTextColor(0xff747474);
-                    status.setTextColor(0xff747474);
-                    name.setTextColor(0xff747474);
-                    status.setText("已结束");
-                    root.setBackgroundColor(0xffffffff);
-                } else if (position == 3) {
-                    number.setTextColor(0xff151515);
-                    time.setTextColor(0xff151515);
-                    status.setTextColor(0xffed0000);
-                    name.setTextColor(0xff151515);
-                    status.setText("直播中");
-                    root.setBackgroundColor(0xffececec);
-                } else if (position > 3 && position < 5) {
-                    number.setTextColor(0xff747474);
-                    time.setTextColor(0xff747474);
-                    status.setTextColor(0xff747474);
-                    name.setTextColor(0xff747474);
-                    status.setText("待上课");
-                    root.setBackgroundColor(0xffececec);
-                }else {
-                    number.setTextColor(0xff747474);
-                    time.setTextColor(0xff747474);
-                    status.setTextColor(0xff747474);
-                    name.setTextColor(0xff747474);
-                    status.setText("未开始");
-                    root.setBackgroundColor(0xffffffff);
+            public void convert(ViewHolder holder, RemedialClassDetailBean.Lessons item, int position) {
+                holder.setText(R.id.number, StringUtils.Int2String(position + 1));
+                holder.setText(R.id.name, item.getName());
+                holder.setText(R.id.live_time, item.getLive_time());
+                if (item.getStatus().equals("teaching")) {//直播中
+                    holder.setText(R.id.status, getResources().getString(R.string.class_teaching));
+                } else if (item.getStatus().equals("paused")) {
+                    holder.setText(R.id.status, getResources().getString(R.string.class_teaching));
+                } else if (item.getStatus().equals("init")) {//未开始
+                    holder.setText(R.id.status, getResources().getString(R.string.class_init));
+                } else if (item.getStatus().equals("ready")) {//待开课
+                    holder.setText(R.id.status, getResources().getString(R.string.class_ready));
+
+                } else if (item.getStatus().equals("paused_inner")) {//暂停中
+                    holder.setText(R.id.status, getResources().getString(R.string.class_paused_inner));
+
+                } else {
+                    holder.setText(R.id.status, getResources().getString(R.string.class_over));//已结束
                 }
+                try {
+                    holder.setText(R.id.class_date, format.format(parse.parse(item.getClass_date())));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
             }
-        });
+        };
+        list.setAdapter(adapter);
         return view;
+    }
+
+    public void setData(RemedialClassDetailBean data) {
+        if (data != null && data.getData() != null) {
+            lists.clear();
+            lists.addAll(data.getData().getLessons());
+            if (adapter != null) {
+                adapter.notifyDataSetChanged();
+            }
+        }
     }
 }
