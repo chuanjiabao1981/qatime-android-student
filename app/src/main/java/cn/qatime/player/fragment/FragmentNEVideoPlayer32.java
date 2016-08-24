@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
+import libraryextra.bean.RemedialClassDetailBean;
 
 public class FragmentNEVideoPlayer32 extends BaseFragment{
     @Nullable
@@ -16,5 +17,9 @@ public class FragmentNEVideoPlayer32 extends BaseFragment{
         View view = View.inflate(getActivity(), R.layout.fragment_nevideo_player32,null);
         
         return view;
+    }
+
+    public void setData(RemedialClassDetailBean data) {
+
     }
 }

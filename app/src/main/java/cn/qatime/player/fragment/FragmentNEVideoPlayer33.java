@@ -14,6 +14,7 @@ import cn.qatime.player.R;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import cn.qatime.player.base.BaseFragment;
+import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.StringUtils;
 import cn.qatime.player.view.VerticalListView;
 
@@ -80,5 +81,9 @@ public class FragmentNEVideoPlayer33 extends BaseFragment {
             }
         });
         return view;
+    }
+
+    public void setData(RemedialClassDetailBean data) {
+
     }
 }

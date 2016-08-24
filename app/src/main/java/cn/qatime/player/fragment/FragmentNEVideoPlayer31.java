@@ -8,13 +8,17 @@ import android.view.ViewGroup;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
+import libraryextra.bean.RemedialClassDetailBean;
 
 public class FragmentNEVideoPlayer31 extends BaseFragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = View.inflate(getActivity(), R.layout.fragment_nevideo_player31,null);
-        
         return view;
+    }
+
+    public void setData(RemedialClassDetailBean data) {
+
     }
 }
