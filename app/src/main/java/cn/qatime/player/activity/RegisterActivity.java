@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import libraryextra.utils.StringUtils;
 
 public class RegisterActivity extends BaseActivity implements View.OnClickListener {
     EditText phone;
@@ -54,7 +55,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.get_code:
-                if (phone.getText().toString().length() == 11) {
+                if (StringUtils.isPhone(phone.getText().toString())) {
                     time.start();
                 } else {
                     Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
@@ -87,48 +88,49 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     private void next() {
 
-        if (TextUtils.isEmpty(phone.getText().toString())) {
+        if (StringUtils.isNullOrBlanK(phone.getText().toString())) {//账号为空
             Toast.makeText(this, getResources().getString(R.string.account_can_not_be_empty), Toast.LENGTH_SHORT).show();
             next.setClickable(true);
             return;
-        } else {
-            if (phone.getText().toString().length() == 11) {
-                //密码
-                if (TextUtils.isEmpty(password.getText().toString())) {
-                    Toast.makeText(this, getResources().getString(R.string.password_can_not_be_empty), Toast.LENGTH_SHORT).show();
-                    next.setClickable(true);
-                    return;
-                } else {
-                    if (!password.getText().toString().equals(repassword.getText().toString())) {
-                        Toast.makeText(this, getResources().getString(R.string.password_and_repassword_are_incongruous), Toast.LENGTH_SHORT).show();
-                        next.setClickable(true);
-                        return;
-                    } else {
-                        //验证码
-                        if (TextUtils.isEmpty(code.getText().toString())) {
-                            Toast.makeText(this, getResources().getString(R.string.enter_the_verification_code), Toast.LENGTH_SHORT).show();
-                            next.setClickable(true);
-                            return;
-                        } else {
-
-                            //注册码
-                            if (TextUtils.isEmpty(registercode.getText().toString())) {
-                                Toast.makeText(this, getResources().getString(R.string.enter_the_register_code), Toast.LENGTH_SHORT).show();
-                                next.setClickable(true);
-                                return;
-                            } else {
-                                //下一步
-                                Intent intent = new Intent(RegisterActivity.this, RegisterPerfectActivity.class);
-                                startActivity(intent);
-                            }
-                        }
-                    }
-                }
-            } else {//手机号不为11位
-                Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
-                next.setClickable(true);
-                return;
-            }
         }
+        if (!StringUtils.isPhone(phone.getText().toString())) {//手机号不正确
+            Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
+            next.setClickable(true);
+            return;
+        }
+        if (StringUtils.isNullOrBlanK(password.getText().toString())) {  //密码为空
+            Toast.makeText(this, getResources().getString(R.string.password_can_not_be_empty), Toast.LENGTH_LONG).show();
+            next.setClickable(true);
+            return;
+        }
+        if (StringUtils.isNullOrBlanK(repassword.getText().toString())) {  //确认密码为空
+            Toast.makeText(this, getResources().getString(R.string.password_can_not_be_empty), Toast.LENGTH_LONG).show();
+            next.setClickable(true);
+            return;
+        }
+        if (!password.getText().toString().equals(repassword.getText().toString())) {//前后不一致
+            Toast.makeText(this, getResources().getString(R.string.password_and_repassword_are_incongruous), Toast.LENGTH_SHORT).show();
+            next.setClickable(true);
+            return;
+        }
+
+        if (StringUtils.isNullOrBlanK(code.getText().toString())) { //验证码
+            Toast.makeText(this, getResources().getString(R.string.enter_the_verification_code), Toast.LENGTH_SHORT).show();
+            next.setClickable(true);
+            return;
+        }
+
+        if (StringUtils.isNullOrBlanK(registercode.getText().toString())) {   //注册码
+            Toast.makeText(this, getResources().getString(R.string.enter_the_register_code), Toast.LENGTH_SHORT).show();
+            next.setClickable(true);
+            return;
+        }
+        //下一步
+        Intent intent = new Intent(RegisterActivity.this, RegisterPerfectActivity.class);
+        startActivity(intent);
     }
+
+
 }
+
+

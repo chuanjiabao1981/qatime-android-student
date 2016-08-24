@@ -78,6 +78,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
             return;
         }
         String url = getIntent().getStringExtra("url");
+
         LogUtils.e(url);
         videoPlayer = (QaVideoPlayer) findViewById(R.id.video_player);
         ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenHeight(this) / 3);
