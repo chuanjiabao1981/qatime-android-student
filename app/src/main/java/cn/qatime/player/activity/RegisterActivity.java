@@ -61,11 +61,11 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         next = (Button) findViewById(R.id.next);
         agreement = (TextView) findViewById(R.id.agreement);
 
-        phone.setHint(StringUtils.getSpannedString(this,getResources().getString(R.string.hint_phone_number)));
-        code.setHint(StringUtils.getSpannedString(this,getResources().getString(R.string.hint_input_verification_code)));
-        password.setHint(StringUtils.getSpannedString(this,getResources().getString(R.string.hint_input_password)));
-        repassword.setHint(StringUtils.getSpannedString(this,getResources().getString(R.string.hint_confirm_password)));
-        registercode.setHint(StringUtils.getSpannedString(this,getResources().getString(R.string.hint_qatime_register_code)));
+        phone.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_phone_number)));
+        code.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_input_verification_code)));
+        password.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_input_password)));
+        repassword.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_confirm_password)));
+        registercode.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_qatime_register_code)));
 
         getcode.setOnClickListener(this);
         next.setOnClickListener(this);
@@ -114,7 +114,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
                         }
                     });
-                    BaseApplication.queue.add(request);
+                    addToRequestQueue(request);
 
                 } else {
                     Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
@@ -210,18 +210,18 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             protected void onSuccess(JSONObject response) {
-                try {
-                    if (response.getInt("status") == 0) {
-                        String resault = "code:" + response.getJSONObject("error").getInt("code") + "    msg:" + response.getJSONObject("error").getString("msg");
-                        Logger.e("注册失败--" + resault);
-                    } else {
-                        //
-                        Logger.e("注册成功");
-                        //下一步跳转
-                        Intent intent = new Intent(RegisterActivity.this, RegisterPerfectActivity.class);
-                        startActivity(intent);
 
-                    }
+                try {
+                    String token = response.getJSONObject("data").getString("remember_token");
+                    int id = response.getJSONObject("data").getInt("id");
+
+                    BaseApplication.getProfile().getData().setRemember_token(token);
+                    BaseApplication.getProfile().getData().getUser().setId(id);
+
+                    Logger.e("注册成功" + response);
+                    //下一步跳转
+                    Intent intent = new Intent(RegisterActivity.this, RegisterPerfectActivity.class);
+                    startActivity(intent);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -231,6 +231,14 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             protected void onError(JSONObject response) {
+
+                String resault = null;
+                try {
+                    resault = "code:" + response.getJSONObject("error").getInt("code") + "    msg:" + response.getJSONObject("error").getString("msg");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Logger.e("注册失败--" + resault);
 
             }
 
@@ -242,7 +250,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             }
         });
 
-        BaseApplication.queue.add(request);
+        addToRequestQueue(request);
 //下一步跳转
 //        Intent intent = new Intent(RegisterActivity.this, RegisterPerfectActivity.class);
 //        startActivity(intent);

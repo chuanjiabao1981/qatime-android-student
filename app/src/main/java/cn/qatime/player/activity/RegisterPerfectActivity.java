@@ -133,7 +133,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                             } catch (ParseException e) {
                                 e.printStackTrace();
 
-                             }
+                            }
                         }
                     }, parse.parse(select).getYear() + 1900, parse.parse(select).getMonth() + 1, parse.parse(select).getDay());
                     dataDialog.show();
@@ -142,10 +142,9 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                 }
 
 
-
                 break;
             case R.id.complete://完成
-                String url = UrlUtils.urlPersonalInformation + BaseApplication.getUserId()+"/profile";
+                String url = UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/profile";
 
                 UpLoadUtil util = new UpLoadUtil(RegisterPerfectActivity.this, url) {
                     @Override
@@ -189,11 +188,12 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                 String gender = radiogroup.getCheckedRadioButtonId() == men.getId() ? "male" : "female";
                 String birthday = select.equals(parse.format(new Date())) ? "" : select;
                 Map<String, String> map = new HashMap<>();
-                map.put("name",sName);
-                map.put("grade",grade);
+
+                map.put("name", sName);
+                map.put("grade", grade);
                 map.put("avatar", filePath);
-                map.put("gender",gender);
-                map.put("birthday",birthday);
+                map.put("gender", gender);
+                map.put("birthday", birthday);
 
                 util.execute(map);
                 break;

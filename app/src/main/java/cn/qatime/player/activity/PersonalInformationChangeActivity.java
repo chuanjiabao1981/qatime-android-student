@@ -205,13 +205,15 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 String birthday = select.equals(parse.format(new Date())) ? "" : select;
                 String desc = describe.getText().toString();
                 Map<String, String> map = new HashMap<>();
-                map.put("name",sName);
-                map.put("grade",grade);
-                map.put("avatar", imageUrl);
-                map.put("gender",gender);
-                map.put("birthday",birthday);
-                map.put("desc",desc);
 
+                map.put("Remember-Token", BaseApplication.getProfile().getToken());
+                map.put("name", sName);
+                map.put("grade", grade);
+                map.put("avatar", imageUrl);
+                map.put("gender", gender);
+                map.put("birthday", birthday);
+                map.put("desc", desc);
+                Logger.e("--" + sName + "--" + grade + "--" + imageUrl + "--" + gender + "--" + birthday + "--" + desc + "--");
                 util.execute(map);
                 break;
         }
