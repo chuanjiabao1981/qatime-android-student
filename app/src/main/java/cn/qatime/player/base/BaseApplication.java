@@ -11,6 +11,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.NimStrings;
 import com.netease.nimlib.sdk.SDKOptions;
@@ -35,6 +37,7 @@ import libraryextra.utils.StringUtils;
 public class BaseApplication extends Application {
     //    public static RequestQueue Queue= Volley.newRequestQueue(this);;
     private static Profile profile;
+    public static RequestQueue Queue;
 
     @Override
     public void onCreate() {
@@ -45,6 +48,8 @@ public class BaseApplication extends Application {
                 .setMethodCount(3)            // default 2
                 .hideThreadInfo()             // default it is shown
                 .setLogLevel(LogLevel.FULL);  // default : LogLevel.FULL
+
+        Queue = Volley.newRequestQueue(this);
 
         /** 云信集成start*/
         // SDK初始化（启动后台服务，若已经存在用户登录信息， SDK 将完成自动登录）

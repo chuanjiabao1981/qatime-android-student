@@ -1,12 +1,12 @@
 package cn.qatime.player.activity;
 
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.provider.MediaStore;
 import android.text.Editable;
-import android.text.InputFilter;
 import android.text.Selection;
 import android.view.KeyEvent;
 import android.view.View;
@@ -21,7 +21,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.orhanobut.logger.Logger;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,6 +35,7 @@ import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.UpLoadUtil;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.GradeBean;
+import libraryextra.bean.ImageItem;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.DialogUtils;
@@ -59,6 +62,8 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
     private String select = "";//生日所选日期
     private GradeBean gradeBean;
     private CustomProgressDialog progress;
+    private View change_head_sculpture;
+    private Uri captureUri;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,6 +71,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
         setContentView(R.layout.activity_register_perfect);
         setTitle(getResources().getString(R.string.information_perfect));
         initView();
+
         String gradeString = FileUtil.readFile(getCacheDir() + "/grade.txt");
         if (!StringUtils.isNullOrBlanK(gradeString)) {
             gradeBean = JsonUtils.objectFromJson(gradeString, GradeBean.class);
@@ -73,7 +79,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
 
         spinner.setAdapter(new ArrayAdapter<String>(this, R.layout.item_spinner, gradeBean.getData().getGrades()));
 
-        sethead.setOnClickListener(this);
+        change_head_sculpture.setOnClickListener(this);
         birthday.setOnClickListener(this);
         complete.setOnClickListener(this);
         PersonalInformationBean data = (PersonalInformationBean) getIntent().getSerializableExtra("data");
@@ -92,11 +98,10 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
         select = parse.format(new Date());
 
 
-
-            for (int i = 0; i < gradeBean.getData().getGrades().size(); i++) {
-                if (data.getData().getGrade().equals(gradeBean.getData().getGrades().get(i))) {
-                    spinner.setSelection(i);
-                    break;
+        for (int i = 0; i < gradeBean.getData().getGrades().size(); i++) {
+            if (data.getData().getGrade().equals(gradeBean.getData().getGrades().get(i))) {
+                spinner.setSelection(i);
+                break;
 
             }
         }
@@ -106,9 +111,9 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.replace://去选择图片
-//                final Intent intent = new Intent(RegisterPerfectActivity.this, PictureSelectActivity.class);
-//                startActivityForResult(intent, Constant.REQUEST_PICTURE_SELECT);
+            case R.id.change_head_sculpture://去选择图片
+                final Intent intent = new Intent(RegisterPerfectActivity.this, PictureSelectActivity.class);
+                startActivityForResult(intent, Constant.REQUEST_PICTURE_SELECT);
                 break;
             case R.id.birthday://生日
 
@@ -180,8 +185,10 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
         }
     }
 
+
     private void initView() {
         headsculpture = (ImageView) findViewById(R.id.head_sculpture);
+        change_head_sculpture = findViewById(R.id.change_head_sculpture);
         sethead = (TextView) findViewById(R.id.set_head);
         name = (EditText) findViewById(R.id.name);
         name.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -198,4 +205,47 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
         complete = (TextView) findViewById(R.id.complete);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constant.REQUEST_PICTURE_SELECT) {
+            if (resultCode == Constant.RESPONSE_CAMERA) {//拍照返回的照片
+                if (data != null) {
+                    Bundle bundle = data.getExtras();
+                    Bitmap bitmap = (Bitmap) bundle.get("data");// 获取相机返回的数据，并转换为Bitmap图片格式
+                    if (data.getData() != null) {
+                        captureUri = data.getData();
+                    } else {
+                        captureUri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
+                    }
+                    if (captureUri != null && !StringUtils.isNullOrBlanK(captureUri.toString())) {
+                        Intent intent = new Intent(this, CropImageActivity.class);
+                        intent.putExtra("id", captureUri.toString());
+                        startActivityForResult(intent, Constant.PHOTO_CROP);
+                    }
+                }
+            } else if (resultCode == Constant.RESPONSE_PICTURE_SELECT) {//选择照片返回的照片
+                if (data != null) {
+                    ImageItem image = (ImageItem) data.getSerializableExtra("data");
+                    if (image != null && !StringUtils.isNullOrBlanK(image.imageId)) {
+                        Intent intent = new Intent(this, CropImageActivity.class);
+                        intent.putExtra("id", "content://media/external/images/media/" + image.imageId);
+                        startActivityForResult(intent, Constant.PHOTO_CROP);
+                    }
+                }
+
+            }
+        } else if (resultCode == Constant.PHOTO_CROP) {
+            Logger.e("裁剪", "回来");
+            if (data != null) {
+                imageUrl = data.getStringExtra("bitmap");
+                Logger.e(imageUrl);
+                if (new File(imageUrl).exists()) {
+                    Logger.e("回来成功");
+                }
+                if (!StringUtils.isNullOrBlanK(imageUrl)) {
+                    Glide.with(this).load(Uri.fromFile(new File(imageUrl))).transform(new GlideCircleTransform(this)).crossFade().into(headsculpture);
+                }
+            }
+        }
+    }
 }

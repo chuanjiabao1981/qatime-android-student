@@ -24,16 +24,15 @@ import java.util.ArrayList;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragmentActivity;
-import libraryextra.bean.PersonalInformationBean;
 import cn.qatime.player.fragment.Fragment1;
 import cn.qatime.player.fragment.Fragment2;
 import cn.qatime.player.fragment.Fragment3;
 import cn.qatime.player.fragment.Fragment4;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.SPUtils;
-import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.FragmentLayout;
@@ -69,7 +68,7 @@ public class MainActivity extends BaseFragmentActivity {
                 e.printStackTrace();
             }
         }
-        GetGradeslist();
+//        GetGradeslist();
 //        GetProvinceslist();
 //        GetCitieslist();
         GetSchoolslist();
@@ -178,34 +177,7 @@ public class MainActivity extends BaseFragmentActivity {
 //        addToRequestQueue(request);
 //    }
 
-    //年级列表
-    public void GetGradeslist() {
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/grades", null,
-                new VolleyListener(MainActivity.this) {
-                    @Override
-                    protected void onSuccess(JSONObject response) {
-                        boolean value = FileUtil.writeFile(new ByteArrayInputStream(response.toString().getBytes()), getCacheDir().getAbsolutePath() + "/grade.txt", true);
-                        SPUtils.put(MainActivity.this, "grade", value);
-                    }
-
-                    @Override
-                    protected void onError(JSONObject response) {
-
-                    }
-
-                    @Override
-                    protected void onTokenOut() {
-                        tokenOut();
-                    }
-                }, new VolleyErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
-            }
-        });
-        addToRequestQueue(request);
-    }
 
 
     //省份列表
