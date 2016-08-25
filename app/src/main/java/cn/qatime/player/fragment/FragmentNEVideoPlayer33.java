@@ -23,8 +23,6 @@ import cn.qatime.player.view.VerticalListView;
 public class FragmentNEVideoPlayer33 extends BaseFragment {
     private CommonAdapter<RemedialClassDetailBean.Lessons> adapter;
     private List<RemedialClassDetailBean.Lessons> lists = new ArrayList<>();
-    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
     @Nullable
     @Override
@@ -36,7 +34,7 @@ public class FragmentNEVideoPlayer33 extends BaseFragment {
             public void convert(ViewHolder holder, RemedialClassDetailBean.Lessons item, int position) {
                 holder.setText(R.id.number, StringUtils.Int2String(position + 1));
                 holder.setText(R.id.name, item.getName());
-                holder.setText(R.id.live_time, item.getLive_time());
+                holder.setText(R.id.time, item.getClass_date() + " " + item.getLive_time());
                 if (item.getStatus().equals("teaching")) {//直播中
                     holder.setText(R.id.status, getResources().getString(R.string.class_teaching));
                 } else if (item.getStatus().equals("paused")) {
@@ -50,12 +48,6 @@ public class FragmentNEVideoPlayer33 extends BaseFragment {
                 } else {
                     holder.setText(R.id.status, getResources().getString(R.string.class_over));//已结束
                 }
-                try {
-                    holder.setText(R.id.class_date, format.format(parse.parse(item.getClass_date())));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
             }
         };
         list.setAdapter(adapter);

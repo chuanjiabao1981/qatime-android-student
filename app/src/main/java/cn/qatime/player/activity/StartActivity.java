@@ -34,11 +34,11 @@ public class StartActivity extends Activity {
                     Logger.e("第一次登陆");
                     StartActivity.this.startActivity(new Intent(StartActivity.this, GuideActivity.class));
                     StartActivity.this.finish();
-
                 } else {
                     Logger.e("no第一次登陆");
                     BaseApplication.setProfile(SPUtils.getObject(StartActivity.this,"profile", Profile.class));
                     if (!StringUtils.isNullOrBlanK(BaseApplication.getProfile().getToken())) {//token不空  直接自动登录到mianactivity
+                        Logger.e("token----" + BaseApplication.getProfile().getToken());
                         StartActivity.this.startActivity(new Intent(StartActivity.this, MainActivity.class));
                         StartActivity.this.finish();
                     } else {

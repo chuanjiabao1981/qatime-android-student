@@ -94,7 +94,7 @@ public class FragmentPersonalMyTutorship2 extends BaseFragment {
                         bean.subject = item.getSubject();
                         bean.grade = item.getGrade();
                         bean.classnumber = item.getPreset_lesson_count();
-                        bean.teacher = item.getTeacher().getName();
+                        bean.teacher = item.getTeacher_name();
                         bean.classendtime = item.getLive_end_time();
                         bean.status = item.getStatus();
                         bean.classstarttime = item.getLive_start_time();

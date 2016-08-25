@@ -57,7 +57,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         password = (EditText) findViewById(R.id.pass);
         login = (Button) findViewById(R.id.login);
         Button register = (Button) findViewById(R.id.register);
-        View loginerror = findViewById(R.id.login_error);
+        View loginerror = findViewById(R.id.login_error);//忘记密码
         View reload = findViewById(R.id.reload);
 
         login.setOnClickListener(this);
@@ -149,7 +149,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                 if (data.getString("result") != null && data.getString("result").equals("failed")) {
                                     Toast.makeText(LoginActivity.this, getResources().getString(R.string.account_or_password_error), Toast.LENGTH_SHORT).show();
                                 }
-                            }else {
+                            } else {
                                 Logger.e("登录", response.toString());
                                 SPUtils.put(LoginActivity.this, "username", username.getText().toString());
                                 Profile profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
