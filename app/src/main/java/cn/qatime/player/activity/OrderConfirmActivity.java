@@ -76,17 +76,8 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         grade.setText(getResources().getString(R.string.grade_type) + data.grade);
         classnumber.setText(getResources().getString(R.string.total_class_hours) + data.classnumber);
         teacher.setText(getResources().getString(R.string.teacher) + data.teacher);
-        try {
-            classstarttime.setText(getResources().getString(R.string.class_start_time) + format.format(parse.parse(data.classstarttime)));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            classendtime.setText(getResources().getString(R.string.class_end_time) + format.format(parse.parse(data.classendtime)));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        classstarttime.setText(getResources().getString(R.string.class_start_time) +data.classstarttime);
+        classendtime.setText(getResources().getString(R.string.class_end_time) + data.classendtime);
         if (data.status.equals("preview")) {
             status.setText(getResources().getString(R.string.status_preview));
         } else if (data.status.equals("teaching")) {
@@ -99,7 +90,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         if (price.startsWith(".")) {
             price = "0" + price;
         }
-        OrderConfirmActivity.this.price.setText("价  格：" + price);
+        OrderConfirmActivity.this.price.setText("价    格：" + price);
         payprice.setText(" " + price + " ");
 
     }

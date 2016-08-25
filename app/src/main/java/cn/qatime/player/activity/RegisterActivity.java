@@ -11,6 +11,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import libraryextra.utils.StringUtils;
@@ -65,6 +68,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
                 next();
                 break;
+            case R.id.agreement:
+                //// TODO: 2016/8/24 点击协议查看
+                break;
         }
     }
 
@@ -104,7 +110,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             return;
         }
         if (StringUtils.isNullOrBlanK(repassword.getText().toString())) {  //确认密码为空
-            Toast.makeText(this, getResources().getString(R.string.password_can_not_be_empty), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getResources().getString(R.string.repassword_can_not_be_empty), Toast.LENGTH_LONG).show();
             next.setClickable(true);
             return;
         }
@@ -113,19 +119,39 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             next.setClickable(true);
             return;
         }
-
         if (StringUtils.isNullOrBlanK(code.getText().toString())) { //验证码
             Toast.makeText(this, getResources().getString(R.string.enter_the_verification_code), Toast.LENGTH_SHORT).show();
             next.setClickable(true);
             return;
         }
-
         if (StringUtils.isNullOrBlanK(registercode.getText().toString())) {   //注册码
             Toast.makeText(this, getResources().getString(R.string.enter_the_register_code), Toast.LENGTH_SHORT).show();
             next.setClickable(true);
             return;
         }
-        //下一步
+        if (!checkBox.isChecked()) {   //协议勾选
+            Toast.makeText(this, getResources().getString(R.string.agree_agreement), Toast.LENGTH_SHORT).show();
+            next.setClickable(true);
+            return;
+        }
+
+        Map<String, String> map = new HashMap<>();
+        map.put("login_mobile", phone.getText().toString());
+//        captcha_confirmation/
+//                password_confirmation
+//        register_code_value//注册码
+//                accept
+//        type
+        map.put("password", password.getText().toString());
+        map.put("password_confirmation", repassword.getText().toString());//确认密码
+        map.put("captcha_confirmation", code.getText().toString());//验证码
+        map.put("register_code_value", repassword.getText().toString());
+        map.put("password_confirmation", repassword.getText().toString());
+        map.put("client_type", "app");
+
+
+
+        //下一步跳转
         Intent intent = new Intent(RegisterActivity.this, RegisterPerfectActivity.class);
         startActivity(intent);
     }

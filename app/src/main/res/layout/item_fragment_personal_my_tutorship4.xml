@@ -50,7 +50,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="0.35"
                 android:background="#faf6f6"
                 android:orientation="vertical"
                 android:padding="2dp">
@@ -59,7 +58,8 @@
                     android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:paddingBottom="5dp"/>
 
                 <LinearLayout
@@ -135,8 +135,9 @@
                     <TextView
 
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="30dp"
                         android:layout_gravity="center"
+                        android:gravity="center"
                         android:padding="2dp"
                         android:text="全部课程已完成"
                         android:textColor="#05effc"

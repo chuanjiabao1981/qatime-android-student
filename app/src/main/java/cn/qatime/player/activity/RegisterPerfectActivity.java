@@ -84,36 +84,20 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
     }
 
     private void initData(PersonalInformationBean data) {
-        Glide.with(RegisterPerfectActivity.this).load(data.getData().getAvatar_url()).placeholder(R.mipmap.personal_information_head).transform(new GlideCircleTransform(RegisterPerfectActivity.this)).crossFade().into(headsculpture);
-        name.setText(data.getData().getName());
+
+
         Editable etext = name.getText();
         Selection.setSelection(etext, etext.length());
-        if (!StringUtils.isNullOrBlanK(data.getData().getGender())) {
-            if (data.getData().getGender().equals("male")) {
-                men.setChecked(true);
-                women.setChecked(false);
-            } else {
-                men.setChecked(false);
-                women.setChecked(true);
-            }
-        }
-        if (!StringUtils.isNullOrBlanK(data.getData().getBirthday())) {
-            try {
-                birthday.setText(format.format(parse.parse(data.getData().getBirthday())));
-                select = data.getData().getBirthday();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        } else {
-            birthday.setText(format.format(new Date()));
-            select = parse.format(new Date());
-        }
-        if (!StringUtils.isNullOrBlanK(data.getData().getGrade())) {
+        birthday.setText(format.format(new Date()));
+        select = parse.format(new Date());
+
+
+
             for (int i = 0; i < gradeBean.getData().getGrades().size(); i++) {
                 if (data.getData().getGrade().equals(gradeBean.getData().getGrades().get(i))) {
                     spinner.setSelection(i);
                     break;
-                }
+
             }
         }
 

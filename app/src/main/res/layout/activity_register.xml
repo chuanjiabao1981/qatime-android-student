@@ -136,7 +136,8 @@
                 android:paddingRight="10dp"
                 android:paddingTop="10dp"
                 android:text="@string/agreement"
-                android:textAppearance="?android:attr/textAppearanceSmall"/>
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#0000ff"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -146,8 +147,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="10dp"
-        android:textColor="#ffffff"
         android:background="@drawable/button_bg_selector_orange"
-        android:text="@string/next"/>
+        android:text="@string/next"
+        android:textColor="#ffffff"/>
 
 </LinearLayout>

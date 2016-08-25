@@ -130,7 +130,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
+                android:paddingLeft="8dp"
+                android:paddingTop="8dp"
                 android:text="@string/method_payment"/>
 
             <RadioGroup
@@ -188,6 +189,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
                 android:text="@string/yuan"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:text="一二三"/>
         </LinearLayout>
 
 

@@ -16,8 +16,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="1">
+            android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/image"
@@ -28,9 +27,9 @@
 
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.35"
+                android:layout_weight="8"
                 android:background="#faf6f6"
                 android:orientation="vertical"
                 android:padding="2dp">
@@ -97,19 +96,17 @@
             </LinearLayout>
 
             <RelativeLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="0.65"
+                android:gravity="center"
                 android:background="#faf6f6">
 
                 <TextView
 
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
-
                     android:text="@string/deal_down"
-
                     android:textColor="#ffa217"
                     android:textSize="16sp" />
 
@@ -120,13 +117,13 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="35dp"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="3"
+                android:layout_weight="4"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -148,7 +145,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/text_background"
+                android:background="@drawable/stroke_background"
                 android:gravity="center"
                 android:singleLine="true"
                 android:text="@string/delete_order" />

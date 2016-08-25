@@ -23,6 +23,8 @@ public class UrlUtils {
     public static String urlPersonalInformation = baseUrl + "api/v1/students/";
     //基础信息
     public static String urlAppconstantInformation = baseUrl + "api/v1/app_constant";
+    //注册
+    public static String urlRegister = baseUrl + "api/v1/user/register";
     //獲取支付
     public static String urlPayPrepare = baseUrl + "api/v1/live_studio/courses/";
     //獲取支付结果
