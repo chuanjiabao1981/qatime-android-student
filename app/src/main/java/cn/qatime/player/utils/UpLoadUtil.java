@@ -22,6 +22,8 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.Map;
 
 import cn.qatime.player.base.BaseApplication;
 import libraryextra.utils.CustomMultipartEntity;
@@ -32,12 +34,14 @@ import libraryextra.utils.StringUtils;
  * @date 2016/8/12 10:00
  * @Description
  */
-public abstract class UpLoadUtil extends AsyncTask<String, String, String> implements CustomMultipartEntity.ProgressListener {
+public abstract class UpLoadUtil extends AsyncTask<Map<String, String>, String, String> implements CustomMultipartEntity.ProgressListener {
     private final Context context;
+    private final String url;
     private long contentLength;
 
-    public UpLoadUtil(Context context) {
+    public UpLoadUtil(Context context, String url) {
         this.context = context;
+        this.url = url;
     }
 
     @Override
@@ -50,7 +54,7 @@ public abstract class UpLoadUtil extends AsyncTask<String, String, String> imple
 
 
     @Override
-    protected String doInBackground(String... params) {
+    protected String doInBackground(Map<String, String>... params) {
         String json = null;
         try {
             HttpClient httpclient = new DefaultHttpClient();
@@ -59,29 +63,28 @@ public abstract class UpLoadUtil extends AsyncTask<String, String, String> imple
             httpclient.getParams().setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, "utf-8");
             ContentType contentType = ContentType.create(HTTP.PLAIN_TEXT_TYPE, HTTP.UTF_8);
 
-            HttpPost httppost = new HttpPost(params[0]);
+            HttpPost httppost = new HttpPost(url);
             httppost.setHeader("Remember-Token", BaseApplication.getProfile().getToken());
 
-            File file = new File(params[1]);
-
+            Map<String, String> item = params[0];
+            Iterator<Map.Entry<String, String>> iterator = item.entrySet().iterator();
 
             CustomMultipartEntity mpEntity = new CustomMultipartEntity(this); // 文件传输
             contentLength = mpEntity.getContentLength();
 
-            mpEntity.addPart("name", new StringBody(params[2], contentType));
-            mpEntity.addPart("grade", new StringBody(params[3], contentType));
-            if (file.exists()) {
-                FileBody fileBody = new FileBody(file);
-                mpEntity.addPart("avatar", fileBody);
-            }
-            if (!StringUtils.isNullOrBlanK(params[4])) {
-                mpEntity.addPart("gender", new StringBody(params[4], contentType));
-            }
-            if (!StringUtils.isNullOrBlanK(params[5])) {
-                mpEntity.addPart("birthday", new StringBody(params[5], contentType));
-            }
-            if (!StringUtils.isNullOrBlanK(params[6])) {
-                mpEntity.addPart("desc", new StringBody(params[6], contentType));
+            while (iterator.hasNext()) {
+                Map.Entry entry = iterator.next();
+                if (!StringUtils.isNullOrBlanK(entry.getKey()) && !StringUtils.isNullOrBlanK(entry.getValue())) {
+                    if (entry.getKey().toString().equals("avatar")) {
+                        File file = new File(entry.getValue().toString());
+                        if (file.exists()) {
+                            FileBody fileBody = new FileBody(file);
+                            mpEntity.addPart("avatar", fileBody);
+                        }
+                    } else {
+                        mpEntity.addPart(entry.getKey().toString(), new StringBody(entry.getValue().toString(), contentType));
+                    }
+                }
             }
             httppost.setEntity(mpEntity);
 

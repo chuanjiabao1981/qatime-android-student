@@ -143,7 +143,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
 
                 break;
             case R.id.complete://完成
-                UpLoadUtil util = new UpLoadUtil(RegisterPerfectActivity.this) {
+                UpLoadUtil util = new UpLoadUtil(RegisterPerfectActivity.this, url) {
                     @Override
                     public void httpStart() {
                         progress = DialogUtils.startProgressDialog(progress, RegisterPerfectActivity.this);
