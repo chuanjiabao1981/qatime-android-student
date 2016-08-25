@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import com.orhanobut.logger.Logger;
@@ -19,7 +18,7 @@ import cn.qatime.player.base.BaseActivity;
 /**
  * Created by lenovo on 2016/8/22.
  */
-public class NotifyClassesActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, CompoundButton.OnCheckedChangeListener, View.OnClickListener {
+public class NotifyClassesActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
     private CheckBox cb_1;
     private CheckBox cb_2;
@@ -127,20 +126,7 @@ public class NotifyClassesActivity extends BaseActivity implements RadioGroup.On
         }
     }
 
-    @Override
-    public void onCheckedChanged(RadioGroup group, int checkedId) {
-        switch (checkedId) {
-            case R.id.sms:
-                Logger.e("sms checked");
 
-                break;
-            case R.id.sys:
-                Logger.e("sys checked");
-
-                break;
-        }
-
-    }
 
     @Override
     public void onClick(View v) {
