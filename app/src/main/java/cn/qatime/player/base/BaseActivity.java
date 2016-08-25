@@ -25,7 +25,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Queue = BaseApplication.Queue;
+        Queue = BaseApplication.queue;
     }
 
     public void setTitle(String text) {

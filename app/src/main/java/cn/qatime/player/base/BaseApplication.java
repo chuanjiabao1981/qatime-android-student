@@ -37,7 +37,7 @@ import libraryextra.utils.StringUtils;
 public class BaseApplication extends Application {
     //    public static RequestQueue Queue= Volley.newRequestQueue(this);;
     private static Profile profile;
-    public static RequestQueue Queue;
+    public static RequestQueue queue;
 
     @Override
     public void onCreate() {
@@ -49,7 +49,7 @@ public class BaseApplication extends Application {
                 .hideThreadInfo()             // default it is shown
                 .setLogLevel(LogLevel.FULL);  // default : LogLevel.FULL
 
-        Queue = Volley.newRequestQueue(this);
+        queue = Volley.newRequestQueue(this);
 
         /** 云信集成start*/
         // SDK初始化（启动后台服务，若已经存在用户登录信息， SDK 将完成自动登录）

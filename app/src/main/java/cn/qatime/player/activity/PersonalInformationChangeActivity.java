@@ -140,11 +140,9 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 startActivityForResult(intent, Constant.REQUEST_PICTURE_SELECT);
                 break;
             case R.id.birthday://生日
-
-                MDatePickerDialog dataDialog = null;
-
                 try {
-                    dataDialog = new MDatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+
+                    MDatePickerDialog dataDialog = new MDatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
@@ -156,10 +154,10 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                             }
                         }
                     }, parse.parse(select).getYear() + 1900, parse.parse(select).getMonth() + 1, parse.parse(select).getDay());
+                    dataDialog.show();
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                dataDialog.show();
                 break;
             case R.id.complete://完成
                 UpLoadUtil util = new UpLoadUtil(PersonalInformationChangeActivity.this) {

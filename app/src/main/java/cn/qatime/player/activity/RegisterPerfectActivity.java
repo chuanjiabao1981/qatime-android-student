@@ -59,6 +59,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
     private TextView birthday;
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
     private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
+
     private String select = "";//生日所选日期
     private GradeBean gradeBean;
     private CustomProgressDialog progress;
@@ -117,10 +118,10 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                 break;
             case R.id.birthday://生日
 
-                MDatePickerDialog dataDialog = null;
-
+                Logger.e("show MDatePickerDialog");
                 try {
-                    dataDialog = new MDatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+
+                    MDatePickerDialog dataDialog = new MDatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
@@ -132,10 +133,13 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                             }
                         }
                     }, parse.parse(select).getYear() + 1900, parse.parse(select).getMonth() + 1, parse.parse(select).getDay());
+                    dataDialog.show();
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-//                dataDialog.show();
+
+
+
                 break;
             case R.id.complete://完成
                 UpLoadUtil util = new UpLoadUtil(RegisterPerfectActivity.this) {
@@ -162,7 +166,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                     }
                 };
                 String url = UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/update";
-//                String filePath = imageUrl;
+                String filePath = imageUrl;
                 if (StringUtils.isNullOrBlanK(BaseApplication.getUserId())) {
                     Toast.makeText(RegisterPerfectActivity.this, getResources().getString(R.string.id_is_empty), Toast.LENGTH_SHORT).show();
                     return;
@@ -180,7 +184,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                 String gender = radiogroup.getCheckedRadioButtonId() == men.getId() ? "male" : "female";
                 String birthday = select.equals(parse.format(new Date())) ? "" : select;
 
-                util.execute(url, /*filePath,*/ sName, grade, gender, birthday);
+                util.execute(url, filePath, sName, grade, gender, birthday);
                 break;
         }
     }

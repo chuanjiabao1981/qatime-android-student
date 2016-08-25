@@ -10,12 +10,24 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.orhanobut.logger.Logger;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.StringUtils;
+import libraryextra.utils.VolleyListener;
 
 public class RegisterActivity extends BaseActivity implements View.OnClickListener {
     EditText phone;
@@ -60,7 +72,42 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 if (StringUtils.isPhone(phone.getText().toString())) {
                     time.start();
 //                    发送验证码
+                    Map<String, String> map = new HashMap<>();
 
+                    map.put("send_to", phone.getText().toString());
+                    map.put("key", "register_captcha");
+                    DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlGetCode, map), null, new VolleyListener(this) {
+                        @Override
+                        protected void onTokenOut() {
+
+                        }
+
+                        @Override
+                        protected void onSuccess(JSONObject response) {
+                            //TODO 已经注册过的呢？
+
+                            try {
+                                if (response.getInt("status") == 1) {
+                                    Logger.e("验证码发送成功" + phone.getText().toString() + "---" + response.toString());
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        protected void onError(JSONObject response) {
+
+                        }
+
+
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+
+                        }
+                    });
+                    BaseApplication.queue.add(request);
 
                 } else {
                     Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
@@ -140,11 +187,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
         Map<String, String> map = new HashMap<>();
         map.put("login_mobile", phone.getText().toString());
-//        captcha_confirmation/
-//                password_confirmation
-//        register_code_value//注册码
-//                accept
-//        type
+        map.put("captcha_confirmation", code.getText().toString());
         map.put("password", password.getText().toString());
         map.put("password_confirmation", repassword.getText().toString());//确认密码
         map.put("captcha_confirmation", code.getText().toString());//验证码
@@ -152,11 +195,50 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         map.put("password_confirmation", repassword.getText().toString());
         map.put("client_type", "app");
 
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlRegister, map), null, new VolleyListener(this) {
+            @Override
+            protected void onTokenOut() {
+
+            }
+
+            @Override
+            protected void onSuccess(JSONObject response) {
+                try {
+                    if (response.getInt("status") == 0) {
+                        String resault = "code:" + response.getJSONObject("error").getInt("code") + "    msg:" + response.getJSONObject("error").getString("msg");
+                        Logger.e("注册失败--" + resault);
+                    } else {
+                        //
+                        Logger.e("注册成功");
+                        //下一步跳转
+                        Intent intent = new Intent(RegisterActivity.this, RegisterPerfectActivity.class);
+                        startActivity(intent);
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
 
-        //下一步跳转
-        Intent intent = new Intent(RegisterActivity.this, RegisterPerfectActivity.class);
-        startActivity(intent);
+            }
+
+            @Override
+            protected void onError(JSONObject response) {
+
+            }
+
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+
+            }
+        });
+
+        BaseApplication.queue.add(request);
+//下一步跳转
+//        Intent intent = new Intent(RegisterActivity.this, RegisterPerfectActivity.class);
+//        startActivity(intent);
     }
 
 
