@@ -60,7 +60,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
     private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
 
-    private String select = "";//生日所选日期
+    private String select = "1990-01-01";//生日所选日期
     private GradeBean gradeBean;
     private CustomProgressDialog progress;
     private View change_head_sculpture;
@@ -130,7 +130,8 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                                 birthday.setText(format.format(parse.parse(select)));
                             } catch (ParseException e) {
                                 e.printStackTrace();
-                            }
+
+                             }
                         }
                     }, parse.parse(select).getYear() + 1900, parse.parse(select).getMonth() + 1, parse.parse(select).getDay());
                     dataDialog.show();
