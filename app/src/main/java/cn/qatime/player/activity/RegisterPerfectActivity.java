@@ -27,6 +27,8 @@ import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
@@ -143,6 +145,8 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
 
                 break;
             case R.id.complete://完成
+                String url = UrlUtils.urlPersonalInformation + BaseApplication.getUserId()+"/profile";
+
                 UpLoadUtil util = new UpLoadUtil(RegisterPerfectActivity.this, url) {
                     @Override
                     public void httpStart() {
@@ -166,7 +170,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
 
                     }
                 };
-                String url = UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/update";
+
                 String filePath = imageUrl;
                 if (StringUtils.isNullOrBlanK(BaseApplication.getUserId())) {
                     Toast.makeText(RegisterPerfectActivity.this, getResources().getString(R.string.id_is_empty), Toast.LENGTH_SHORT).show();
@@ -184,8 +188,14 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                 }
                 String gender = radiogroup.getCheckedRadioButtonId() == men.getId() ? "male" : "female";
                 String birthday = select.equals(parse.format(new Date())) ? "" : select;
+                Map<String, String> map = new HashMap<>();
+                map.put("name",sName);
+                map.put("grade",grade);
+                map.put("avatar", filePath);
+                map.put("gender",gender);
+                map.put("birthday",birthday);
 
-                util.execute(url, filePath, sName, grade, gender, birthday);
+                util.execute(map);
                 break;
         }
     }

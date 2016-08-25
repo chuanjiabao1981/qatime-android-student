@@ -162,7 +162,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 }
                 break;
             case R.id.complete://完成
-                String url = UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/update";
+                String url = UrlUtils.urlPersonalInformation + BaseApplication.getUserId();
                 UpLoadUtil util = new UpLoadUtil(PersonalInformationChangeActivity.this, url) {
                     @Override
                     public void httpStart() {

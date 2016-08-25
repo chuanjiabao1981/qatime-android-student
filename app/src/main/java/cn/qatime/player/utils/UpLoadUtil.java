@@ -64,6 +64,7 @@ public abstract class UpLoadUtil extends AsyncTask<Map<String, String>, String, 
             ContentType contentType = ContentType.create(HTTP.PLAIN_TEXT_TYPE, HTTP.UTF_8);
 
             HttpPost httppost = new HttpPost(url);
+
             httppost.setHeader("Remember-Token", BaseApplication.getProfile().getToken());
 
             Map<String, String> item = params[0];
