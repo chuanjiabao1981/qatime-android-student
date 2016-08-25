@@ -200,6 +200,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         map.put("captcha_confirmation", code.getText().toString());//验证码
         map.put("register_code_value", repassword.getText().toString());
         map.put("password_confirmation", repassword.getText().toString());
+        map.put("accept", "" + (checkBox.isChecked()?1:0));
+        map.put("type", "Student");
         map.put("client_type", "app");
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlRegister, map), null, new VolleyListener(this) {
@@ -212,8 +214,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             protected void onSuccess(JSONObject response) {
                 try {
                     if (response.getInt("status") == 0) {
-                        String resault = "code:" + response.getJSONObject("error").getInt("code") + "    msg:" + response.getJSONObject("error").getString("msg");
-                        Logger.e("注册失败--" + resault);
+                        String result = "code:" + response.getJSONObject("error").getInt("code") + "    msg:" + response.getJSONObject("error").getString("msg");
+                        Logger.e("注册失败--" + result);
                     } else {
                         //
                         Logger.e("注册成功");

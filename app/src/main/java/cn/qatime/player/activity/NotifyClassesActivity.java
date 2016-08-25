@@ -96,40 +96,23 @@ public class NotifyClassesActivity extends BaseActivity implements RadioGroup.On
                     Logger.e("cb_1 unchecked");
                 }
                 break;
+
             case R.id.sms:
 
-                LogUtils.e("sms click");
+                Logger.e("sms click");
                 if (isChecked) {
-                    LogUtils.e("sms checked");
+                    Logger.e("sms checked");
                 } else {
-                    LogUtils.e("sms unchecked");
+                    Logger.e("sms unchecked");
                 }
                 break;
             case R.id.sys:
 
-                LogUtils.e("sys click");
+                Logger.e("sys click");
                 if (isChecked) {
-                    LogUtils.e("sys checked");
+                    Logger.e("sys checked");
                 } else {
-                    LogUtils.e("sys unchecked");
-                }
-                break;
-            case R.id.sms:
-
-                LogUtils.e("sms click");
-                if (isChecked) {
-                    LogUtils.e("sms checked");
-                } else {
-                    LogUtils.e("sms unchecked");
-                }
-                break;
-            case R.id.sys:
-
-                LogUtils.e("sys click");
-                if (isChecked) {
-                    LogUtils.e("sys checked");
-                } else {
-                    LogUtils.e("sys unchecked");
+                    Logger.e("sys unchecked");
                 }
                 break;
             case R.id.cb_2:
