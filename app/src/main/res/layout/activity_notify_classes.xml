@@ -14,7 +14,6 @@
         android:background="#dfdddd" />
 
     <LinearLayout
-        android:id="@+id/voice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
@@ -62,7 +61,6 @@
         android:background="#dfdddd" />
 
     <LinearLayout
-        android:id="@+id/shake"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -109,7 +107,6 @@
         android:background="#dfdddd" />
 
     <LinearLayout
-        android:id="@+id/sha1ke"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.base.BaseApplication;
 import libraryextra.utils.StringUtils;
 
 public class ForgetPasswordActivity extends BaseActivity {
@@ -18,8 +19,9 @@ public class ForgetPasswordActivity extends BaseActivity {
     EditText newpass;
     Button submit;
     private TimeCount time;
-    private boolean status_login;
-    private View current_phone;
+    private boolean statusLogin;
+    private View currentPhoneView;
+    private TextView currentPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +40,12 @@ public class ForgetPasswordActivity extends BaseActivity {
         getcode = (TextView) findViewById(R.id.get_code);
         newpass = (EditText) findViewById(R.id.new_pass);
         submit = (Button) findViewById(R.id.submit);
-        current_phone = findViewById(R.id.current_phone);
+        currentPhoneView = findViewById(R.id.current_phone_view);
+        currentPhone = (TextView) findViewById(R.id.current_phone);
 
-        number.setHint(StringUtils.getSpannedString(this,R.string.hint_phone_number_forget));
-        code.setHint(StringUtils.getSpannedString(this,R.string.hint_input_verification_code));
-        newpass.setHint(StringUtils.getSpannedString(this,R.string.hint_password_forget));
+        number.setHint(StringUtils.getSpannedString(this, R.string.hint_phone_number_forget));
+        code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_verification_code));
+        newpass.setHint(StringUtils.getSpannedString(this, R.string.hint_password_forget));
 
         getcode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,14 +54,17 @@ public class ForgetPasswordActivity extends BaseActivity {
             }
         });
 
-        status_login = getIntent().getBooleanExtra("status_login", false);
-        if (status_login) {
-            current_phone.setVisibility(View.VISIBLE);
+        statusLogin = getIntent().getBooleanExtra("status_login", false);
+        if (statusLogin) {
+            currentPhoneView.setVisibility(View.VISIBLE);
             number.setVisibility(View.GONE);
-            //TODO 设置TextView
+
+            currentPhone.setText(BaseApplication.getProfile().getData().getUser().getLogin_mobile() + "");
+
+
         } else {
             number.setVisibility(View.VISIBLE);
-            current_phone.setVisibility(View.GONE);
+            currentPhoneView.setVisibility(View.GONE);
         }
     }
 

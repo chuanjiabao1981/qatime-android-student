@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.base.BaseApplication;
 import libraryextra.utils.StringUtils;
 
 /**
@@ -17,11 +18,22 @@ import libraryextra.utils.StringUtils;
  */
 public class BindEmailActivity extends BaseActivity implements View.OnClickListener {
     private TimeCount time;
-    private TextView getcode;
-    private Button button_over;
-    private EditText new_email;
-    private EditText confirm_email;
+    private TextView textGetcode;
+    private Button buttonOver;
+    private EditText inputNewEmail;
+    private EditText confirmNewEmail;
     private EditText code;
+    private TextView currentPhone;
+
+
+    private void assignViews() {
+        currentPhone = (TextView) findViewById(R.id.current_phone);
+        code = (EditText) findViewById(R.id.code);
+        textGetcode = (TextView) findViewById(R.id.text_getcode);
+        inputNewEmail = (EditText) findViewById(R.id.input_new_email);
+        confirmNewEmail = (EditText) findViewById(R.id.confirm_new_email);
+        buttonOver = (Button) findViewById(R.id.button_over);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,18 +46,16 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
 
     private void initView() {
         setTitle(getResources().getString(R.string.bind_email));
-        getcode = (TextView) findViewById(R.id.text_getcode);
-        button_over = (Button) findViewById(R.id.button_over);
-        code = (EditText) findViewById(R.id.code);
-        new_email = (EditText) findViewById(R.id.input_new_email);
-        confirm_email = (EditText) findViewById(R.id.confirm_new_email);
-        new_email.setHint(StringUtils.getSpannedString(this,R.string.hint_input_email));
-        confirm_email.setHint(StringUtils.getSpannedString(this,R.string.hint_input_again));
+        assignViews();
+
+        currentPhone.setText(BaseApplication.getProfile().getData().getUser().getLogin_mobile() + "");
+        inputNewEmail.setHint(StringUtils.getSpannedString(this,R.string.hint_input_email));
+        confirmNewEmail.setHint(StringUtils.getSpannedString(this,R.string.hint_input_again));
         code.setHint(StringUtils.getSpannedString(this,R.string.hint_input_code));
 
         //TODO 获取手机号 设置TextView
-        getcode.setOnClickListener(this);
-        button_over.setOnClickListener(this);
+        textGetcode.setOnClickListener(this);
+        buttonOver.setOnClickListener(this);
     }
 
     @Override
@@ -71,14 +81,14 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
 
         @Override
         public void onFinish() {// 计时完毕
-            getcode.setText(getResources().getString(R.string.getcode));
-            getcode.setEnabled(true);
+            textGetcode.setText(getResources().getString(R.string.getcode));
+            textGetcode.setEnabled(true);
         }
 
         @Override
         public void onTick(long millisUntilFinished) {// 计时过程
-            getcode.setEnabled(false);//防止重复点击
-            getcode.setText(millisUntilFinished / 1000 + "s后重新获取");
+            textGetcode.setEnabled(false);//防止重复点击
+            textGetcode.setText(millisUntilFinished / 1000 + "s后重新获取");
         }
     }
 }

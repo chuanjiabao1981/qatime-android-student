@@ -20,14 +20,25 @@ import cn.qatime.player.base.BaseActivity;
  */
 public class NotifyClassesActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
 
-    private CheckBox cb_1;
-    private CheckBox cb_2;
+    private CheckBox cb1;
+    private CheckBox cb2;
     private CheckBox sms;
     private CheckBox sys;
-    private Spinner hours;
-    private Spinner minute;
+    private Spinner spinnerHours;
+    private Spinner spinnerMinute;
     private List<String> al_hours;
     private List<String> al_minute;
+
+
+
+    private void assignViews() {
+        cb1 = (CheckBox) findViewById(R.id.cb_1);
+        cb2 = (CheckBox) findViewById(R.id.cb_2);
+        sms = (CheckBox) findViewById(R.id.sms);
+        sys = (CheckBox) findViewById(R.id.sys);
+        spinnerHours = (Spinner) findViewById(R.id.spinner_hours);
+        spinnerMinute = (Spinner) findViewById(R.id.spinner_minute);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +71,8 @@ public class NotifyClassesActivity extends BaseActivity implements CompoundButto
             str += "分钟";
             al_minute.add(str);
         }
-        hours.setAdapter(new ArrayAdapter<>(this, R.layout.item_spinner_time, al_hours));
-        minute.setAdapter(new ArrayAdapter<>(this, R.layout.item_spinner_time, al_minute));
+        spinnerHours.setAdapter(new ArrayAdapter<>(this, R.layout.item_spinner_time, al_hours));
+        spinnerMinute.setAdapter(new ArrayAdapter<>(this, R.layout.item_spinner_time, al_minute));
 
         //TODO 初始化并记录时间
 
@@ -70,15 +81,10 @@ public class NotifyClassesActivity extends BaseActivity implements CompoundButto
     private void initView() {
         setContentView(R.layout.activity_notify_classes);
         setTitle("课程提醒");
-        cb_1 = (CheckBox) findViewById(R.id.cb_1);
-        cb_2 = (CheckBox) findViewById(R.id.cb_2);
-        sms = (CheckBox) findViewById(R.id.sms);
-        sys = (CheckBox) findViewById(R.id.sys);
-        hours = (Spinner) findViewById(R.id.spinner_hours);
-        minute = (Spinner) findViewById(R.id.spinner_minute);
+        assignViews();
 
-        cb_1.setOnCheckedChangeListener(this);
-        cb_2.setOnCheckedChangeListener(this);
+        cb1.setOnCheckedChangeListener(this);
+        cb2.setOnCheckedChangeListener(this);
         sms.setOnCheckedChangeListener(this);
         sys.setOnCheckedChangeListener(this);
 

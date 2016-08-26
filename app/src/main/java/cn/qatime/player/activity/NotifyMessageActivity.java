@@ -15,10 +15,18 @@ public class NotifyMessageActivity extends BaseActivity implements View.OnClickL
 
     private View voice;
     private View shake;
-    private CheckBox iv_voice;
-    private CheckBox iv_shake;
-    private boolean voice_status;
-    private boolean shake_status;
+    private CheckBox cbVoice;
+    private CheckBox cbShake;
+    private boolean voiceStatus;
+    private boolean shakeStatus;
+
+
+    private void assignViews() {
+        voice = findViewById(R.id.voice);
+        cbVoice = (CheckBox) findViewById(R.id.cb_voice);
+        shake = findViewById(R.id.shake);
+        cbShake = (CheckBox) findViewById(R.id.cb_shake);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +43,7 @@ public class NotifyMessageActivity extends BaseActivity implements View.OnClickL
     private void initView() {
         setContentView(R.layout.activity_notify_message);
         setTitle("消息提醒");
-        voice = findViewById(R.id.voice);
-        shake = findViewById(R.id.shake);
-        iv_voice = (CheckBox) findViewById(R.id.cb_voice);
-        iv_shake = (CheckBox) findViewById(R.id.cb_shake);
+        assignViews();
 
         setVoiceStatus();
         setShakeStatus();
@@ -63,20 +68,20 @@ public class NotifyMessageActivity extends BaseActivity implements View.OnClickL
     }
 
     private void setShakeStatus() {
-        shake_status = (boolean) SPUtils.get(this, "shake_status", true);
+        shakeStatus = (boolean) SPUtils.get(this, "shake_status", true);
 
-        if(shake_status){
-             SPUtils.put(this, "shake_status", false);
-        }else{
+        if (shakeStatus) {
+            SPUtils.put(this, "shake_status", false);
+        } else {
             SPUtils.put(this, "shake_status", true);
         }
     }
 
     private void setVoiceStatus() {
-        voice_status = (boolean) SPUtils.get(this, "voice_status", true);
-        if(voice_status){
+        voiceStatus = (boolean) SPUtils.get(this, "voice_status", true);
+        if (voiceStatus) {
             SPUtils.put(this, "voice_status", false);
-        }else{
+        } else {
             SPUtils.put(this, "voice_status", true);
         }
     }

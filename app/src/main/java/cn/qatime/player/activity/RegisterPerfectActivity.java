@@ -63,7 +63,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
     private String select = "1990-01-01";//生日所选日期
     private GradeBean gradeBean;
     private CustomProgressDialog progress;
-    private View change_head_sculpture;
+    private View changeHeadSculpture;
     private Uri captureUri;
 
     @Override
@@ -80,7 +80,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
 
         spinner.setAdapter(new ArrayAdapter<String>(this, R.layout.item_spinner, gradeBean.getData().getGrades()));
 
-        change_head_sculpture.setOnClickListener(this);
+        changeHeadSculpture.setOnClickListener(this);
         birthday.setOnClickListener(this);
         complete.setOnClickListener(this);
         PersonalInformationBean data = (PersonalInformationBean) getIntent().getSerializableExtra("data");
@@ -193,7 +193,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
 
     private void initView() {
         headsculpture = (ImageView) findViewById(R.id.head_sculpture);
-        change_head_sculpture = findViewById(R.id.change_head_sculpture);
+        changeHeadSculpture = findViewById(R.id.change_head_sculpture);
         sethead = (TextView) findViewById(R.id.set_head);
         name = (EditText) findViewById(R.id.name);
         name.setOnEditorActionListener(new TextView.OnEditorActionListener() {

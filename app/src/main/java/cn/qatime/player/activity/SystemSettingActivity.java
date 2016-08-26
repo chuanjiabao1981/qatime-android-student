@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import cn.qatime.player.R;
@@ -22,15 +23,27 @@ import libraryextra.utils.DensityUtils;
  */
 public class SystemSettingActivity extends BaseActivity implements View.OnClickListener {
     private Button exit;
-    private View notify_setting;
-    private View check_update;
-    private View clean_cache;
-    private View learning_process;
+    private View notifySetting;
+    private View checkUpdate;
+    private View cleanCache;
+    private View learningProcess;
     private View feedback;
     private TextView version;
-    private TextView cache_size;
+    private TextView cacheSize;
     private String totalCacheSize;
     private AlertDialog alertDialog;
+
+
+    private void assignViews() {
+        notifySetting = (LinearLayout) findViewById(R.id.notify_setting);
+        checkUpdate = (LinearLayout) findViewById(R.id.check_update);
+        version = (TextView) findViewById(R.id.version);
+        cleanCache = (LinearLayout) findViewById(R.id.clean_cache);
+        cacheSize = (TextView) findViewById(R.id.cache_size);
+        learningProcess = (LinearLayout) findViewById(R.id.learning_process);
+        feedback = (LinearLayout) findViewById(R.id.feedback);
+        exit = (Button) findViewById(R.id.exit);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,22 +55,17 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
 
     private void initView() {
         setTitle(getResources().getString(R.string.system_setting));
-        exit = (Button) findViewById(R.id.exit);
-        notify_setting = findViewById(R.id.notify_setting);
-        check_update = findViewById(R.id.check_update);
-        clean_cache = findViewById(R.id.clean_cache);
-        learning_process = findViewById(R.id.learning_process);
-        feedback = findViewById(R.id.feedback);
+        assignViews();
 
         version = (TextView) findViewById(R.id.version);
-        cache_size = (TextView) findViewById(R.id.cache_size);
+        cacheSize = (TextView) findViewById(R.id.cache_size);
 
 
         exit.setOnClickListener(this);
-        notify_setting.setOnClickListener(this);
-        check_update.setOnClickListener(this);
-        clean_cache.setOnClickListener(this);
-        learning_process.setOnClickListener(this);
+        notifySetting.setOnClickListener(this);
+        checkUpdate.setOnClickListener(this);
+        cleanCache.setOnClickListener(this);
+        learningProcess.setOnClickListener(this);
         feedback.setOnClickListener(this);
 
     }
@@ -73,7 +81,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
         } catch (Exception e) {
             e.printStackTrace();
         }
-        cache_size.setText(totalCacheSize);
+        cacheSize.setText(totalCacheSize);
     }
 
     @Override
@@ -103,7 +111,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
 
                 alertDialog.show();
                 alertDialog.setContentView(view);
-                alertDialog.getWindow().setLayout((int) DensityUtils.dp2px(this, 300),(int) DensityUtils.dp2px(this, 500));
+                alertDialog.getWindow().setLayout((int) DensityUtils.dp2px(this, 300), (int) DensityUtils.dp2px(this, 500));
 
                 break;
             case R.id.clean_cache:
