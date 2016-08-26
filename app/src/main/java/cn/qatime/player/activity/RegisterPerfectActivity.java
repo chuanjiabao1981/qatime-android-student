@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.Selection;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -20,8 +21,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.orhanobut.logger.Logger;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.text.ParseException;
@@ -39,11 +46,15 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.GradeBean;
 import libraryextra.bean.ImageItem;
 import libraryextra.bean.PersonalInformationBean;
+import libraryextra.bean.Profile;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.DialogUtils;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 import libraryextra.view.CustomProgressDialog;
 import libraryextra.view.MDatePickerDialog;
 
@@ -157,16 +168,72 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                         setResult(Constant.RESPONSE, data);
                         DialogUtils.dismissDialog(progress);
                         Toast.makeText(RegisterPerfectActivity.this, getResources().getString(R.string.change_information_successful), Toast.LENGTH_SHORT).show();
-                        finish();
+                        Map<String, String> map = new HashMap<>();
+                        Intent intent = getIntent();
+                        final String username = intent.getStringExtra("username");
+                        String password = intent.getStringExtra("password");
+                        map.put("login_account", username);
+                        map.put("password", password);
+                        map.put("client_type", "app");
+                        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlLogin, map), null,
+                                new VolleyListener(RegisterPerfectActivity.this) {
+                                    @Override
+                                    protected void onTokenOut() {
+
+                                        tokenOut();
+                                    }
+
+                                    @Override
+                                    protected void onSuccess(JSONObject response) {
+                                        try {
+                                            JSONObject data = response.getJSONObject("data");
+                                            if (data.has("result")) {
+                                                if (data.getString("result") != null && data.getString("result").equals("failed")) {
+                                                    Toast.makeText(RegisterPerfectActivity.this, getResources().getString(R.string.account_or_password_error), Toast.LENGTH_SHORT).show();
+                                                }
+                                            } else {
+                                                Logger.e("登录", response.toString());
+                                                SPUtils.put(RegisterPerfectActivity.this, "username", username);
+                                                Profile profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
+                                                if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
+                                                    SPUtils.putObject(RegisterPerfectActivity.this, "profile", profile);
+                                                    BaseApplication.setProfile(profile);
+                                                    Intent intent = new Intent(RegisterPerfectActivity.this, MainActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
+                                                } else {
+                                                    //没有数据或token
+                                                }
+                                            }
+                                        } catch (JSONException e) {
+
+//                            e.printStackTrace();
+//                            LogUtils.e("error"+e.getMessage());
+                                        }
+
+
+                                    }
+
+                                    @Override
+                                    protected void onError(JSONObject response) {
+
+                                    }
+                                }, new VolleyErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError volleyError) {
+                                super.onErrorResponse(volleyError);
+                            }
+                        });
+                        addToRequestQueue(request);
                     }
 
                     @Override
                     protected void httpFailed(String result) {
-
+                        Toast.makeText(RegisterPerfectActivity.this, "服务器异常", Toast.LENGTH_SHORT).show();
+                        DialogUtils.dismissDialog(progress);
                     }
                 };
 
-                String filePath = imageUrl;
                 if (StringUtils.isNullOrBlanK(imageUrl) || (!StringUtils.isNullOrBlanK(imageUrl) && !new File(imageUrl).exists())) {
                     Toast.makeText(this, "请您选择头像", Toast.LENGTH_SHORT).show();
                     return;
@@ -175,7 +242,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                     Toast.makeText(RegisterPerfectActivity.this, getResources().getString(R.string.id_is_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                String sName = name.getText().toString();
+                String sName = name.getText().toString().trim();
                 if (StringUtils.isNullOrBlanK(sName)) {
                     Toast.makeText(this, getResources().getString(R.string.name_can_not_be_empty), Toast.LENGTH_SHORT).show();
                     return;
@@ -190,7 +257,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                 Map<String, String> map = new HashMap<>();
                 map.put("name", sName);
                 map.put("grade", grade);
-                map.put("avatar", filePath);
+                map.put("avatar", imageUrl);
                 map.put("gender", gender);
                 map.put("birthday", birthday);
 

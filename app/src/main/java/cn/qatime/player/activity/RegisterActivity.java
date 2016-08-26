@@ -76,12 +76,12 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.get_code:
-                if (StringUtils.isPhone(phone.getText().toString())) {
+                if (StringUtils.isPhone(phone.getText().toString().trim())) {
                     time.start();
 //                    发送验证码
                     Map<String, String> map = new HashMap<>();
 
-                    map.put("send_to", phone.getText().toString());
+                    map.put("send_to", phone.getText().toString().trim());
                     map.put("key", "register_captcha");
                     DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlGetCode, map), null, new VolleyListener(this) {
                         @Override
@@ -92,7 +92,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                         @Override
                         protected void onSuccess(JSONObject response) {
                             //TODO 已经注册过的呢？
-                            Logger.e("验证码发送成功" + phone.getText().toString() + "---" + response.toString());
+                            Logger.e("验证码发送成功" + phone.getText().toString().trim() + "---" + response.toString());
                         }
 
                         @Override
@@ -143,38 +143,43 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     private void next() {
 
-        if (StringUtils.isNullOrBlanK(phone.getText().toString())) {//账号为空
+        if (StringUtils.isNullOrBlanK(phone.getText().toString().trim())) {//账号为空
             Toast.makeText(this, getResources().getString(R.string.account_can_not_be_empty), Toast.LENGTH_SHORT).show();
             next.setClickable(true);
             return;
         }
 
-        if (!StringUtils.isPhone(phone.getText().toString())) {//手机号不正确
+        if (!StringUtils.isPhone(phone.getText().toString().trim())) {//手机号不正确
             Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
             next.setClickable(true);
             return;
         }
-        if (StringUtils.isNullOrBlanK(password.getText().toString())) {  //密码为空
+        if (password.getText().toString().trim().length() < 6 || password.getText().toString().trim().length() > 16) {
+            Toast.makeText(this, getResources().getString(R.string.password_6_16), Toast.LENGTH_LONG).show();
+            next.setClickable(true);
+            return;
+        }
+        if (StringUtils.isNullOrBlanK(password.getText().toString().trim())) {  //密码为空
             Toast.makeText(this, getResources().getString(R.string.password_can_not_be_empty), Toast.LENGTH_LONG).show();
             next.setClickable(true);
             return;
         }
-        if (StringUtils.isNullOrBlanK(repassword.getText().toString())) {  //确认密码为空
+        if (StringUtils.isNullOrBlanK(repassword.getText().toString().trim())) {  //确认密码为空
             Toast.makeText(this, getResources().getString(R.string.repassword_can_not_be_empty), Toast.LENGTH_LONG).show();
             next.setClickable(true);
             return;
         }
-        if (!password.getText().toString().equals(repassword.getText().toString())) {//前后不一致
+        if (!password.getText().toString().trim().equals(repassword.getText().toString().trim())) {//前后不一致
             Toast.makeText(this, getResources().getString(R.string.password_and_repassword_are_incongruous), Toast.LENGTH_SHORT).show();
             next.setClickable(true);
             return;
         }
-        if (StringUtils.isNullOrBlanK(code.getText().toString())) { //验证码
+        if (StringUtils.isNullOrBlanK(code.getText().toString().trim())) { //验证码
             Toast.makeText(this, getResources().getString(R.string.enter_the_verification_code), Toast.LENGTH_SHORT).show();
             next.setClickable(true);
             return;
         }
-        if (StringUtils.isNullOrBlanK(registercode.getText().toString())) {   //注册码
+        if (StringUtils.isNullOrBlanK(registercode.getText().toString().trim())) {   //注册码
             Toast.makeText(this, getResources().getString(R.string.enter_the_register_code), Toast.LENGTH_SHORT).show();
             next.setClickable(true);
             return;
@@ -186,14 +191,16 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         }
 
         Map<String, String> map = new HashMap<>();
-        map.put("login_mobile", phone.getText().toString());
-        map.put("captcha_confirmation", code.getText().toString());
-        map.put("password", password.getText().toString());
-        map.put("password_confirmation", repassword.getText().toString());//确认密码
-        map.put("captcha_confirmation", code.getText().toString());//验证码
-        map.put("register_code_value", repassword.getText().toString());
-        map.put("password_confirmation", repassword.getText().toString());
+        map.put("login_mobile", phone.getText().toString().trim());
+        map.put("captcha_confirmation", code.getText().toString().trim());
+        map.put("password", password.getText().toString().trim());
+        map.put("password_confirmation", repassword.getText().toString().trim());//确认密码
+        map.put("captcha_confirmation", code.getText().toString().trim());//验证码
+        map.put("register_code_value", repassword.getText().toString().trim());
+        map.put("password_confirmation", repassword.getText().toString().trim());
         map.put("client_type", "app");
+        map.put("type", "Student");
+        map.put("accept", "" + (checkBox.isChecked() ? 1 : 0));
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlRegister, map), null, new VolleyListener(this) {
             @Override
@@ -206,15 +213,18 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
                 try {
                     String token = response.getJSONObject("data").getString("remember_token");
-                    int id = response.getJSONObject("data").getInt("id");
+                    int id = response.getJSONObject("data").getJSONObject("user").getInt("id");
 
                     BaseApplication.getProfile().getData().setRemember_token(token);
                     BaseApplication.getProfile().getData().getUser().setId(id);
-
+                    Toast.makeText(RegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
                     Logger.e("注册成功" + response);
                     //下一步跳转
                     Intent intent = new Intent(RegisterActivity.this, RegisterPerfectActivity.class);
+                    intent.putExtra("username",phone.getText().toString().trim());
+                    intent.putExtra("password",password.getText().toString().trim());
                     startActivity(intent);
+                    finish();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

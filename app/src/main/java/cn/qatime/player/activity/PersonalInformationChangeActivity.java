@@ -183,7 +183,9 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
 
                     @Override
                     protected void httpFailed(String result) {
-
+                        // TODO: 2016/8/26 ERROR 处理
+                        Toast.makeText(PersonalInformationChangeActivity.this, "服务器异常", Toast.LENGTH_SHORT).show();
+                        DialogUtils.dismissDialog(progress);
                     }
                 };
 

@@ -1,6 +1,5 @@
 package cn.qatime.player.utils;
 
-import android.content.Context;
 import android.os.AsyncTask;
 
 import com.orhanobut.logger.Logger;
@@ -9,7 +8,6 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.content.FileBody;
@@ -114,6 +112,7 @@ public abstract class UpLoadUtil extends AsyncTask<Map<String, String>, String, 
         try {
             if (!StringUtils.isNullOrBlanK(result)) {
                 if (new JSONObject(result).getInt("status") == 0) {
+                    // TODO: 2016/8/26 int == 500  Internal Server Error?
                     httpFailed(result);
                 } else {
                     httpSuccess(result);
@@ -123,6 +122,7 @@ public abstract class UpLoadUtil extends AsyncTask<Map<String, String>, String, 
             }
         } catch (JSONException e) {
             e.printStackTrace();
+            httpFailed(result);
         }
     }
 
