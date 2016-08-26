@@ -110,6 +110,12 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.button_over:
                 // TODO: 2016/8/26  更改手机号
+
+                if (!StringUtils.isPhone(currentphone)) {//手机号不正确
+                    Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if (StringUtils.isNullOrBlanK(code.getText().toString())) { //验证码
                     Toast.makeText(this, getResources().getString(R.string.enter_the_verification_code), Toast.LENGTH_SHORT).show();
                     return;
