@@ -9,9 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
@@ -40,27 +42,25 @@ import libraryextra.utils.VolleyListener;
 
 public class FragmentRemedialClassTimeTable2 extends BaseFragment {
     private PullToRefreshListView listView;
-    private java.util.List<String> list = new ArrayList<>();
     private CommonAdapter<ClassTimeTableBean.DataEntity.LessonsEntity> adapter;
     private List<ClassTimeTableBean.DataEntity> totalList = new ArrayList<>();
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
     private String date = parse.format(new Date());
     private List<ClassTimeTableBean.DataEntity.LessonsEntity> itemList = new ArrayList<>();
-    private int page = 1;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_remedial_class_timetable2, container, false);
         initview(view);
-
+        initData();
         return view;
     }
 
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
         listView.getRefreshableView().setDividerHeight(2);
-        listView.setMode(PullToRefreshBase.Mode.BOTH);
+        listView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setPullLabel(getResources().getString(R.string.pull_to_load));
         listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResources().getString(R.string.refreshing));
@@ -71,20 +71,22 @@ public class FragmentRemedialClassTimeTable2 extends BaseFragment {
 
         adapter = new CommonAdapter<ClassTimeTableBean.DataEntity.LessonsEntity>(getActivity(), itemList, R.layout.item_fragment_remedial_class_time_table2) {
             @Override
-            public void convert(ViewHolder helper, ClassTimeTableBean.DataEntity.LessonsEntity item, int position) {
+            public void convert(ViewHolder helper, final ClassTimeTableBean.DataEntity.LessonsEntity item, int position) {
+                Glide.with(getActivity()).load(item.getCourse_publicize()).centerCrop().crossFade().dontAnimate().into((ImageView) helper.getView(R.id.image));
                 helper.getView(R.id.image).setOnClickListener(
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                                intent.putExtra("id", item.getId());
                                 intent.putExtra("pager", 2);
                                 startActivity(intent);
                             }
                         });
 //
                 helper.setText(R.id.coursename, item.getCourse_name());
-                helper.setText(R.id.name, item.getName());
-                helper.setText(R.id.status, item.getStatus());
+                helper.setText(R.id.classname, item.getName());
+                helper.setText(R.id.status, getStatus(item.getStatus()));
                 helper.setText(R.id.class_date, item.getClass_date());
                 helper.setText(R.id.live_time, item.getLive_time());
                 helper.setText(R.id.subject, item.getSubject());
@@ -93,10 +95,9 @@ public class FragmentRemedialClassTimeTable2 extends BaseFragment {
         };
         listView.setAdapter(adapter);
 
-        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                page = 1;
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
                 new Handler().postDelayed(new Runnable() {
                     public void run() {
                         String label = DateUtils.formatDateTime(
@@ -111,25 +112,7 @@ public class FragmentRemedialClassTimeTable2 extends BaseFragment {
                         listView.onRefreshComplete();
                     }
                 }, 200);
-            }
-
-            @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                page++;
-                new Handler().postDelayed(new Runnable() {
-                    public void run() {
-                        String label = DateUtils.formatDateTime(
-                                getActivity(),
-                                System.currentTimeMillis(),
-                                DateUtils.FORMAT_SHOW_TIME
-                                        | DateUtils.FORMAT_SHOW_DATE
-                                        | DateUtils.FORMAT_ABBREV_ALL);
-                        // Update the LastUpdatedLabel
-                        listView.getLoadingLayoutProxy(false, true)
-                                .setLastUpdatedLabel(label);
-                        listView.onRefreshComplete();
-                    }
-                }, 200);
+                initData();
             }
         });
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -138,26 +121,44 @@ public class FragmentRemedialClassTimeTable2 extends BaseFragment {
             }
         });
     }
+
+    private String getStatus(String status) {
+        if (status.equals("teaching")) {//直播中
+            return getResources().getString(R.string.class_teaching);
+        } else if (status.equals("paused")) {
+            return getResources().getString(R.string.class_teaching);
+        } else if (status.equals("init")) {//未开始
+            return getResources().getString(R.string.class_init);
+        } else if (status.equals("ready")) {//待开课
+            return getResources().getString(R.string.class_ready);
+        } else if (status.equals("paused_inner")) {//暂停中
+            return getResources().getString(R.string.class_paused_inner);
+        } else {
+            return getResources().getString(R.string.class_over);//已结束
+        }
+    }
+
     private void initData() {
         Map<String, String> map = new HashMap<>();
-
+        map.put("month", date);
+        map.put("state", "closed");
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/schedule", map), null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
                         totalList.clear();
                         try {
-                            FragmentRemedialClassTimeTable1 data = JsonUtils.objectFromJson(response.toString(), FragmentRemedialClassTimeTable1.class);
-
-//                            totalList.addAll(data.get());
-
+                            ClassTimeTableBean data = JsonUtils.objectFromJson(response.toString(), ClassTimeTableBean.class);
+                            totalList.addAll(data.getData());
                             filterList();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
+
                     protected void onError(JSONObject response) {
                     }
+
                     @Override
                     protected void onTokenOut() {
                         tokenOut();
@@ -170,13 +171,11 @@ public class FragmentRemedialClassTimeTable2 extends BaseFragment {
         });
         addToRequestQueue(request);
     }
+
     private void filterList() {
         itemList.clear();
         for (int i = 0; i < totalList.size(); i++) {
-            if (date.equals(totalList.get(i).getDate())) {
-                itemList.addAll(totalList.get(i).getLessons());
-                break;
-            }
+            itemList.addAll(totalList.get(i).getLessons());
         }
         adapter.notifyDataSetChanged();
     }

@@ -31,10 +31,7 @@ public class Fragment2 extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment2, container, false);
-
-
         initView(view);
-
         return view;
     }
 
