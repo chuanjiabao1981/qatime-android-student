@@ -163,7 +163,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 break;
             case R.id.complete://完成
                 String url = UrlUtils.urlPersonalInformation + BaseApplication.getUserId();
-                UpLoadUtil util = new UpLoadUtil(PersonalInformationChangeActivity.this, url) {
+                UpLoadUtil util = new UpLoadUtil(url) {
                     @Override
                     public void httpStart() {
                         progress = DialogUtils.startProgressDialog(progress, PersonalInformationChangeActivity.this);
@@ -206,7 +206,6 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 String desc = describe.getText().toString();
                 Map<String, String> map = new HashMap<>();
 
-                map.put("Remember-Token", BaseApplication.getProfile().getToken());
                 map.put("name", sName);
                 map.put("grade", grade);
                 map.put("avatar", imageUrl);

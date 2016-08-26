@@ -10,6 +10,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
@@ -35,12 +36,10 @@ import libraryextra.utils.StringUtils;
  * @Description
  */
 public abstract class UpLoadUtil extends AsyncTask<Map<String, String>, String, String> implements CustomMultipartEntity.ProgressListener {
-    private final Context context;
     private final String url;
     private long contentLength;
 
-    public UpLoadUtil(Context context, String url) {
-        this.context = context;
+    public UpLoadUtil(String url) {
         this.url = url;
     }
 
@@ -63,9 +62,9 @@ public abstract class UpLoadUtil extends AsyncTask<Map<String, String>, String, 
             httpclient.getParams().setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, "utf-8");
             ContentType contentType = ContentType.create(HTTP.PLAIN_TEXT_TYPE, HTTP.UTF_8);
 
-            HttpPost httppost = new HttpPost(url);
+            HttpPut httpPut = new HttpPut(url);
 
-            httppost.setHeader("Remember-Token", BaseApplication.getProfile().getToken());
+            httpPut.setHeader("Remember-Token", BaseApplication.getProfile().getToken());
 
             Map<String, String> item = params[0];
             Iterator<Map.Entry<String, String>> iterator = item.entrySet().iterator();
@@ -87,10 +86,10 @@ public abstract class UpLoadUtil extends AsyncTask<Map<String, String>, String, 
                     }
                 }
             }
-            httppost.setEntity(mpEntity);
+            httpPut.setEntity(mpEntity);
 
-            System.out.println("executing request " + httppost.getRequestLine());
-            HttpResponse response = httpclient.execute(httppost);
+            System.out.println("executing request " + httpPut.getRequestLine());
+            HttpResponse response = httpclient.execute(httpPut);
             HttpEntity resEntity = response.getEntity();
             System.out.println(response.getStatusLine());// 通信Ok
 
