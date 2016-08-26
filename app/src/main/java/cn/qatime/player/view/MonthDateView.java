@@ -280,7 +280,7 @@ public class MonthDateView extends View {
     public void setDaysHasThingList(List<Integer> daysHasThingList) {
         this.daysHasThingList.clear();
         this.daysHasThingList.addAll(daysHasThingList);
-        invalidate();
+        postInvalidate();
     }
 
 

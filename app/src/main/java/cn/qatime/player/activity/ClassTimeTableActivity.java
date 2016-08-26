@@ -13,15 +13,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.orhanobut.logger.Logger;
 
-
 import org.json.JSONObject;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -84,8 +81,7 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                             totalList.addAll(data.getData());
                             alertList.clear();
                             for (int i = 0; i < totalList.size(); i++) {
-                                alertList.add(parse.parse("2016-10-10").getDate());
-                                Logger.e(String.valueOf(parse.parse("2016-10-10").getDate()));
+                                alertList.add(parse.parse(totalList.get(i).getDate()).getDate());
                             }
                             monthDateView.setDaysHasThingList(alertList);
                             filterList();
@@ -113,11 +109,14 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
     private void filterList() {
         itemList.clear();
         for (int i = 0; i < totalList.size(); i++) {
+            Logger.e(date + "--------" + totalList.get(i).getDate());
+
             if (date.equals(totalList.get(i).getDate())) {
                 itemList.addAll(totalList.get(i).getLessons());
                 break;
             }
         }
+        Logger.e(itemList.size() + "******************");
         adapter.notifyDataSetChanged();
     }
 
@@ -152,11 +151,7 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                         listView.onRefreshComplete();
                     }
                 }, 300);
-            }
-        });
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                initData();
             }
         });
 
@@ -173,10 +168,15 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         monthDateView.setDateClick(new MonthDateView.DateClick() {
             @Override
             public void onClickOnDate() {
-                date = monthDateView.getmSelYear() + "-" + (monthDateView.getmSelMonth() + 1) + "-" + monthDateView.getmSelDay();
+                getDate();
                 filterList();
             }
         });
+    }
+
+    private void getDate() {
+        date = monthDateView.getmSelYear() + "-" + (monthDateView.getmSelMonth() + 1 < 10 ? "0" + (monthDateView.getmSelMonth() + 1) : monthDateView.getmSelMonth() + 1) + "-" +
+                (monthDateView.getmSelDay() < 10 ? "0" + monthDateView.getmSelDay() : monthDateView.getmSelDay());
     }
 
     @Override
@@ -184,14 +184,12 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         switch (v.getId()) {
             case R.id.iv_left:
                 monthDateView.onLeftClick();
-                date = monthDateView.getmSelYear() + "-" + (monthDateView.getmSelMonth() + 1) + "-" + monthDateView.getmSelDay();
-//                Logger.e(date);
+                getDate();
                 initData();
                 break;
             case R.id.iv_right:
                 monthDateView.onRightClick();
-                Logger.e(String.valueOf(monthDateView.getmSelMonth()));
-                date = monthDateView.getmSelYear() + "-" + (monthDateView.getmSelMonth() + 1) + "-" + monthDateView.getmSelDay();
+                getDate();
                 initData();
                 break;
             case R.id.tv_today:
