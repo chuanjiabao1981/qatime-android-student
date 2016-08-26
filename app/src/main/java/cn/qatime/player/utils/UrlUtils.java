@@ -29,10 +29,10 @@ public class UrlUtils {
     public static String urlPayPrepare = baseUrl + "api/v1/live_studio/courses/";
     //獲取支付结果
     public static String urlPayResult = baseUrl + "api/v1/payment/orders/";
-
     //获取验证码
     public static String urlGetCode = baseUrl + "api/v1/captcha";
-
+    //用户信息
+    public static String urlUser = baseUrl + "api/v1/users/";
 
     public static String getUrl(String function, Map<String, String> params) {
         String url;

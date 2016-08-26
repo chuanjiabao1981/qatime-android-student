@@ -103,6 +103,10 @@ public class UnbindPhoneActivity extends BaseActivity implements View.OnClickLis
                 time.start();
                 break;
             case R.id.button_next:
+                if (StringUtils.isNullOrBlanK(code.getText().toString())) { //验证码
+                    Toast.makeText(this, getResources().getString(R.string.enter_the_verification_code), Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 map = new HashMap<>();
                 map.put("send_to", currentPhone.getText().toString().trim());
                 map.put("captcha", code.getText().toString().trim());
