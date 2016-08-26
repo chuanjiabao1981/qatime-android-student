@@ -167,6 +167,10 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                 };
 
                 String filePath = imageUrl;
+                if (StringUtils.isNullOrBlanK(imageUrl) || (!StringUtils.isNullOrBlanK(imageUrl) && !new File(imageUrl).exists())) {
+                    Toast.makeText(this, "请您选择头像", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (StringUtils.isNullOrBlanK(BaseApplication.getUserId())) {
                     Toast.makeText(RegisterPerfectActivity.this, getResources().getString(R.string.id_is_empty), Toast.LENGTH_SHORT).show();
                     return;
