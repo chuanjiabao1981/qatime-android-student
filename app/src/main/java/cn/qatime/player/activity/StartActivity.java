@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
 import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
@@ -94,6 +95,6 @@ public class StartActivity extends Activity {
                 super.onErrorResponse(volleyError);
             }
         });
-        BaseApplication.queue.add(request);
+        Volley.newRequestQueue(this).add(request);
     }
 }

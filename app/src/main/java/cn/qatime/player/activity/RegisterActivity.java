@@ -23,7 +23,6 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
-import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.StringUtils;
@@ -114,7 +113,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
                         }
                     });
-                    BaseApplication.queue.add(request);
+                    addToRequestQueue(request);
 
                 } else {
                     Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
@@ -244,7 +243,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             }
         });
 
-        BaseApplication.queue.add(request);
+        addToRequestQueue(request);
 //下一步跳转
 //        Intent intent = new Intent(RegisterActivity.this, RegisterPerfectActivity.class);
 //        startActivity(intent);

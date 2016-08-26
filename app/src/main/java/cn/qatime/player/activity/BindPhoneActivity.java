@@ -1,5 +1,6 @@
 package cn.qatime.player.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -20,6 +22,7 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.StringUtils;
@@ -102,46 +105,46 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.button_over:
                 // TODO: 2016/8/26  更改手机号
-//                map = new HashMap<>();
-//                map.put("id", "" + BaseApplication.getUserId());
-//                map.put("send_to", currentphone);
-//                map.put("captcha_confirmation", code.getText().toString().trim());
-//
-//                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlGetCode + "/login_mobile", map), null, new VolleyListener(this) {
-//                    @Override
-//                    protected void onTokenOut() {
-//
-//                    }
-//
-//                    @Override
-//                    protected void onSuccess(JSONObject response) {
-//                        try {
-//
-//                            if (!response.isNull("data")) {
-//                                Logger.e("验证成功");
-//                                Intent intent = new Intent(BindPhoneActivity.this, SecurityManagerActivity.class);
-//                                startActivity(intent);
-//                            } else {
-//                                JSONObject error = response.getJSONObject("error");
-//                                Toast.makeText(BindPhoneActivity.this, error.getString("msg"), Toast.LENGTH_SHORT).show();
-//                            }
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//
-//                    }
-//
-//                    @Override
-//                    protected void onError(JSONObject response) {
-//
-//                    }
-//                }, new Response.ErrorListener() {
-//
-//                    @Override
-//                    public void onErrorResponse(VolleyError volleyError) {
-//
-//                    }
-//                }));
+                map = new HashMap<>();
+                map.put("id", "" + BaseApplication.getUserId());
+                map.put("send_to", currentphone);
+                map.put("captcha_confirmation", code.getText().toString().trim());
+
+                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.getUrl(UrlUtils.urlGetCode + "/login_mobile", map), null, new VolleyListener(this) {
+                    @Override
+                    protected void onTokenOut() {
+
+                    }
+
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        try {
+
+                            if (!response.isNull("data")) {
+                                Logger.e("验证成功");
+                                Intent intent = new Intent(BindPhoneActivity.this, SecurityManagerActivity.class);
+                                startActivity(intent);
+                            } else {
+                                JSONObject error = response.getJSONObject("error");
+                                Toast.makeText(BindPhoneActivity.this, error.getString("msg"), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+
+                    }
+                }));
 
 
                 break;
