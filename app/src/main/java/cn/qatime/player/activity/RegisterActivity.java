@@ -24,6 +24,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.StringUtils;
@@ -223,8 +224,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     Intent intent = new Intent(RegisterActivity.this, RegisterPerfectActivity.class);
                     intent.putExtra("username",phone.getText().toString().trim());
                     intent.putExtra("password",password.getText().toString().trim());
-                    startActivity(intent);
-                    finish();
+                    startActivityForResult(intent, Constant.REGIST);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -259,7 +260,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 //        startActivity(intent);
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode==Constant.REGIST){
+            setResult(resultCode);
+            finish();
+        }
+    }
 }
 
 

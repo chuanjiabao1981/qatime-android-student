@@ -23,4 +23,5 @@ public class Constant {
     public static int REQUEST_PICTURE_SELECT = 0x1006;
     public static int RESPONSE_PICTURE_SELECT = 0x1007;
     public static int RESPONSE_HEAD_SCULPTURE = 0x1008;
+    public static int REGIST = 0x1009;
 }
