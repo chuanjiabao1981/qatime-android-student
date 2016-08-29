@@ -17,6 +17,7 @@ public class UserPreferences {
     private final static String KEY_SB_NOTIFY_TOGGLE = "sb_notify_toggle";
     private final static String KEY_TEAM_ANNOUNCE_CLOSED = "team_announce_closed";
     private final static String KEY_STATUS_BAR_NOTIFICATION_CONFIG = "KEY_STATUS_BAR_NOTIFICATION_CONFIG";
+    private final static String KEY_VIBRATE_TOGGLE = "key_vibrate_toggle";
 
     // 测试过滤通知
     private final static String KEY_MSG_IGNORE = "KEY_MSG_IGNORE";
@@ -57,6 +58,14 @@ public class UserPreferences {
 
     public static boolean getLedToggle() {
         return getBoolean(KEY_LED_TOGGLE, true);
+    }
+
+    public static boolean getVibrateToggle() {
+        return getBoolean(KEY_VIBRATE_TOGGLE, false);
+    }
+
+    public static void setVibrateToggle(boolean on) {
+        saveBoolean(KEY_VIBRATE_TOGGLE, on);
     }
 
     public static boolean getNoticeContentToggle() {

@@ -98,6 +98,7 @@ public class BaseApplication extends Application {
         // 通知铃声的uri字符串
         config.notificationSound = "android.resource://cn.qatime.player/raw/msg";
         options.statusBarNotificationConfig = config;
+        config.vibrate = true;
 
         UserPreferences.setStatusConfig(config);
         // 配置保存图片，文件，log 等数据的目录
