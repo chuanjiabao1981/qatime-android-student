@@ -22,6 +22,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.Profile;
 import libraryextra.utils.CheckUtil;
@@ -101,7 +102,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 break;
             case R.id.register://注册
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, Constant.REGIST);
                 break;
             case R.id.login_error://忘记密码
                 intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
@@ -149,7 +150,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                 if (data.getString("result") != null && data.getString("result").equals("failed")) {
                                     Toast.makeText(LoginActivity.this, getResources().getString(R.string.account_or_password_error), Toast.LENGTH_SHORT).show();
                                 }
-                            }else {
+                            } else {
                                 Logger.e("登录", response.toString());
                                 SPUtils.put(LoginActivity.this, "username", username.getText().toString());
                                 Profile profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
@@ -200,5 +201,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         checkNum = CheckUtil.getCheckNum();
         checkview.setCheckNum(checkNum);
         checkview.invaliChenkNum();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Constant.REGIST) {
+            finish();
+        }
     }
 }

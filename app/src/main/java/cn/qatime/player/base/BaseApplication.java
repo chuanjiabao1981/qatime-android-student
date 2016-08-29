@@ -33,7 +33,6 @@ import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
 
 public class BaseApplication extends Application {
-    //    public static RequestQueue Queue= Volley.newRequestQueue(this);;
     private static Profile profile;
 
     @Override

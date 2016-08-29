@@ -132,8 +132,6 @@ public class NotifyClassesActivity extends BaseActivity implements CompoundButto
         }
     }
 
-
-
     @Override
     public void onClick(View v) {
 
