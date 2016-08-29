@@ -8,8 +8,6 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
@@ -25,13 +23,6 @@ import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyListener;
 
 public class SecurityManagerActivity extends BaseActivity implements View.OnClickListener {
-
-
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
 
     private LinearLayout bindPhoneNumber;
     private TextView phoneNumberM;
@@ -59,14 +50,10 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
 
         initView();
         initData();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     private void initData() {
 
-        // TODO: 2016/8/26 改为学生信息URL
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null, new VolleyListener(this) {
             @Override
             protected void onTokenOut() {

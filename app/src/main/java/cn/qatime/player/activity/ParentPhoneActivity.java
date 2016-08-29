@@ -128,8 +128,6 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
                     return;
                 }
 
-                // TODO: 2016/8/29 改为修改家长手机
-//
                 map = new HashMap<>();
                 map.put("id", "" + BaseApplication.getUserId());
                 map.put("parent_phone", phone);

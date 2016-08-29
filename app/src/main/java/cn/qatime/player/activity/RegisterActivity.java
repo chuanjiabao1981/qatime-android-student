@@ -92,7 +92,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
                         @Override
                         protected void onSuccess(JSONObject response) {
-                            //TODO 已经注册过的呢？
                             Logger.e("验证码发送成功" + phone.getText().toString().trim() + "---" + response.toString());
                         }
 

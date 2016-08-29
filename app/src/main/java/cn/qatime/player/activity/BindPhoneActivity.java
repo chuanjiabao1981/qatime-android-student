@@ -109,7 +109,6 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                 time.start();
                 break;
             case R.id.button_over:
-                // TODO: 2016/8/26  更改手机号
 
                 if (!StringUtils.isPhone(currentphone)) {//手机号不正确
                     Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();

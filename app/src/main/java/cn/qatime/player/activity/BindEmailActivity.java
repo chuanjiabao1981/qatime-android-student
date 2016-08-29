@@ -66,7 +66,6 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
         confirmNewEmail.setHint(StringUtils.getSpannedString(this, R.string.hint_input_again));
         code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_code));
 
-        //TODO 获取手机号 设置TextView
         textGetcode.setOnClickListener(this);
         buttonOver.setOnClickListener(this);
     }
