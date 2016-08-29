@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
+
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
@@ -23,28 +25,30 @@ import libraryextra.utils.SPUtils;
  * @Description
  */
 public class SystemSettingActivity extends BaseActivity implements View.OnClickListener {
-    private Button exit;
-    private View notifySetting;
-    private View checkUpdate;
-    private View cleanCache;
-    private View learningProcess;
-    private View feedback;
+    private LinearLayout learningProcess;
+    private LinearLayout notifySetting;
+    private LinearLayout checkUpdate;
     private TextView version;
+    private LinearLayout cleanCache;
     private TextView cacheSize;
+    private LinearLayout feedback;
+    private LinearLayout about;
+    private Button exit;
     private String totalCacheSize;
     private AlertDialog alertDialog;
 
-
     private void assignViews() {
+        learningProcess = (LinearLayout) findViewById(R.id.learning_process);
         notifySetting = (LinearLayout) findViewById(R.id.notify_setting);
         checkUpdate = (LinearLayout) findViewById(R.id.check_update);
         version = (TextView) findViewById(R.id.version);
         cleanCache = (LinearLayout) findViewById(R.id.clean_cache);
         cacheSize = (TextView) findViewById(R.id.cache_size);
-        learningProcess = (LinearLayout) findViewById(R.id.learning_process);
         feedback = (LinearLayout) findViewById(R.id.feedback);
+        about = (LinearLayout) findViewById(R.id.about);
         exit = (Button) findViewById(R.id.exit);
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +72,8 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
         cleanCache.setOnClickListener(this);
         learningProcess.setOnClickListener(this);
         feedback.setOnClickListener(this);
+        about.setOnClickListener(this);
+
 
     }
 
@@ -130,7 +136,11 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 intent = new Intent(SystemSettingActivity.this, FeedBackActivity.class);
                 startActivity(intent);
                 break;
-
+            case R.id.about:
+                Logger.e("about click");
+                intent = new Intent(SystemSettingActivity.this, AboutUsActivity.class);
+                startActivity(intent);
+                break;
             case R.id.download:
                 //TODO 更新版本
                 alertDialog.dismiss();

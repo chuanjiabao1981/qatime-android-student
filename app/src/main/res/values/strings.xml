@@ -336,5 +336,7 @@
     <string name="email_wrong">邮箱不正确</string>
     <string name="email_confirm_wrong">两次邮箱输入不一致</string>
     <string name="verify_phone_number">验证手机</string>
+    <string name="about_us">关于我们</string>
+    <string name="weixin">官方微信</string>
 
 </resources>
