@@ -119,6 +119,7 @@
         <activity android:name=".activity.GuideActivity" />
         <activity
             android:name=".activity.LoginActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity

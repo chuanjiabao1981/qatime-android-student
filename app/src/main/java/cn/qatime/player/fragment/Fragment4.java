@@ -118,7 +118,7 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.security:// 安全管理
                 intent = new Intent(getActivity(), SecurityManagerActivity.class);
-                startActivity(intent);
+                getActivity().startActivityForResult(intent, Constant.REQUEST_EXIT_LOGIN);
                 break;
             case R.id.setting:// 设置
                 intent = new Intent(getActivity(), SystemSettingActivity.class);

@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.PersonalInformationBean;
@@ -139,9 +140,16 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
                 break;
             case R.id.change_password://修改密码
                 intent = new Intent(this, ChangePasswordActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, Constant.REQUEST_EXIT_LOGIN);
                 break;
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constant.REQUEST_EXIT_LOGIN && resultCode == Constant.RESPONSE_EXIT_LOGIN) {
+            setResult(Constant.RESPONSE_EXIT_LOGIN);
+            finish();
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package cn.qatime.player.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -20,6 +22,7 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.StringUtils;
@@ -80,10 +83,7 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
             Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
             return;
         }
-        if (!StringUtils.isGoodPWD(password.getText().toString().trim())) {
-            Toast.makeText(this, getResources().getString(R.string.password_6_16), Toast.LENGTH_LONG).show();
-            return;
-        }
+
         switch (v.getId()) {
 
             case R.id.text_getcode:
@@ -118,6 +118,11 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
                 time.start();
                 break;
             case R.id.button_over:
+                if (!StringUtils.isGoodPWD(password.getText().toString().trim())) {
+                    Toast.makeText(this, getResources().getString(R.string.password_6_16), Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 if (StringUtils.isNullOrBlanK(code.getText().toString().trim())) { //验证码
                     Toast.makeText(this, getResources().getString(R.string.enter_the_verification_code), Toast.LENGTH_SHORT).show();
                     return;
@@ -125,48 +130,47 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
 
                 // TODO: 2016/8/29 改为修改家长手机
 //
-//                map = new HashMap<>();
-//                map.put("id", "" + BaseApplication.getUserId());
-//                map.put("login_mobile", phone);
-//                map.put("current_password", password.getText().toString().trim());
-//                map.put("captcha_confirmation", code.getText().toString().trim());
-//
-//                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getUserId() + "/login_mobile", map), null, new VolleyListener(this) {
-//                    @Override
-//                    protected void onTokenOut() {
-//
-//                    }
-//
-//                    @Override
-//                    protected void onSuccess(JSONObject response) {
-//                        try {
-//
-//                            if (!response.isNull("data")) {
-//                                Logger.e("验证成功");
-//                                Toast.makeText(ParentPhoneActivity.this, "家长手机修改成功", Toast.LENGTH_SHORT).show();
-//                                Intent intent = new Intent(ParentPhoneActivity.this, SecurityManagerActivity.class);
-//                                startActivity(intent);
-//                            } else {
-//                                JSONObject error = response.getJSONObject("error");
-//                                Toast.makeText(ParentPhoneActivity.this, error.getString("msg"), Toast.LENGTH_SHORT).show();
-//                            }
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//
-//                    }
-//
-//                    @Override
-//                    protected void onError(JSONObject response) {
-//
-//                    }
-//                }, new Response.ErrorListener() {
-//
-//                    @Override
-//                    public void onErrorResponse(VolleyError volleyError) {
-//
-//                    }
-//                }));
+                map = new HashMap<>();
+                map.put("id", "" + BaseApplication.getUserId());
+                map.put("parent_phone", phone);
+                map.put("current_password", password.getText().toString().trim());
+                map.put("captcha_confirmation", code.getText().toString().trim());
+
+                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.getUrl(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/parent_phone", map), null, new VolleyListener(this) {
+                    @Override
+                    protected void onTokenOut() {
+
+                    }
+
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+
+
+                        if (!response.isNull("data")) {
+                            Logger.e("验证成功");
+                            Toast.makeText(ParentPhoneActivity.this, "家长手机修改成功", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(ParentPhoneActivity.this, SecurityManagerActivity.class);
+                            startActivity(intent);
+                        }
+
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                        Logger.e(response.toString());
+                        try {
+                            Toast.makeText(ParentPhoneActivity.this, response.getJSONObject("error").getString("msg"), Toast.LENGTH_SHORT).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+
+                    }
+                }));
 
                 break;
         }
