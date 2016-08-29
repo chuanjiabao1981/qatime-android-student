@@ -89,23 +89,13 @@
                         android:paddingTop="2dp">
 
                         <TextView
-                            android:id="@+id/text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:maxLines="2"
-
-                            android:text="课程名称："/>
-
-                        <TextView
                             android:id="@+id/classname"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
                             android:maxLines="2"
-
-
-                            android:text="高考考前急速冲刺训练班训练班训惺惺相惜学校学校练班"/>
+                            android:text="高考考前急速冲刺训练班训练班训惺惺相惜学校学校练班"
+                            android:textSize="15sp"/>
                     </LinearLayout>
 
                     <TextView
