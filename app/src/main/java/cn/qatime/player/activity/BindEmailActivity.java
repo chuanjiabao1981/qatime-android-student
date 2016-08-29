@@ -38,11 +38,10 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
     private EditText inputNewEmail;
     private EditText confirmNewEmail;
     private EditText code;
-    private TextView currentPhone;
 
 
     private void assignViews() {
-        currentPhone = (TextView) findViewById(R.id.current_phone);
+
         code = (EditText) findViewById(R.id.code);
         textGetcode = (TextView) findViewById(R.id.text_getcode);
         inputNewEmail = (EditText) findViewById(R.id.input_new_email);
@@ -63,7 +62,6 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
         setTitle(getResources().getString(R.string.bind_email));
         assignViews();
 
-        currentPhone.setText(BaseApplication.getProfile().getData().getUser().getLogin_mobile() + "");
         inputNewEmail.setHint(StringUtils.getSpannedString(this, R.string.hint_input_email));
         confirmNewEmail.setHint(StringUtils.getSpannedString(this, R.string.hint_input_again));
         code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_code));
@@ -75,12 +73,22 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        final String phone = currentPhone.getText().toString().trim();
+        final String email1 = inputNewEmail.getText().toString().trim();
+        String email2 = confirmNewEmail.getText().toString().trim();
+
         switch (v.getId()) {
             case R.id.text_getcode:
+                if (!StringUtils.isEmail(email1)) { //邮箱
+                    Toast.makeText(this, getResources().getString(R.string.email_wrong), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!email1.equals(email2)) {
+                    Toast.makeText(this, getResources().getString(R.string.email_confirm_wrong), Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Map<String, String> map = new HashMap<>();
-                map.put("send_to", phone);
-                map.put("key", "send_captcha");
+                map.put("send_to", email1);
+                map.put("key", "change_email_captcha");
 
                 addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlGetCode, map), null, new VolleyListener(this) {
                     @Override
@@ -90,8 +98,8 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
 
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        Logger.e("验证码发送成功" + phone + "---" + response.toString());
-                        Toast.makeText(getApplicationContext(), "验证码已经发送至" + phone + "，请注意查收", Toast.LENGTH_LONG).show();
+                        Logger.e("验证码发送成功" + email1 + "---" + response.toString());
+                        Toast.makeText(getApplicationContext(), "验证码已经发送至" + email1 + "，请注意查收", Toast.LENGTH_LONG).show();
                     }
 
                     @Override
@@ -109,21 +117,22 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
                 time.start();
                 break;
             case R.id.button_over:
-                String email1 = inputNewEmail.getText().toString().trim();
-                String email2 = confirmNewEmail.getText().toString().trim();
-                String code = this.code.getText().toString().trim();
-                if (StringUtils.isEmail(email1)) { //邮箱
+
+                if (!StringUtils.isEmail(email1)) { //邮箱
                     Toast.makeText(this, getResources().getString(R.string.email_wrong), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (StringUtils.isNullOrBlanK(code)) { //验证码
-                    Toast.makeText(this, getResources().getString(R.string.enter_the_verification_code), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(!email1.equals(email2)){
+                if (!email1.equals(email2)) {
                     Toast.makeText(this, getResources().getString(R.string.email_confirm_wrong), Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (StringUtils.isNullOrBlanK(code.getText().toString())) { //验证码
+                    Toast.makeText(this, getResources().getString(R.string.enter_the_verification_code), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                String code = this.code.getText().toString().trim();
+
                 map = new HashMap<>();
                 map.put("id", "" + BaseApplication.getUserId());
                 map.put("email", email1);

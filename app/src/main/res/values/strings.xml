@@ -335,5 +335,6 @@
     <string name="password_6_16">密码长度必须为6-16位</string>
     <string name="email_wrong">邮箱不正确</string>
     <string name="email_confirm_wrong">两次邮箱输入不一致</string>
+    <string name="verify_phone_number">验证手机</string>
 
 </resources>

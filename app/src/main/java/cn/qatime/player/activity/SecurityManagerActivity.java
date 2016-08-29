@@ -112,11 +112,13 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bind_phone_number://绑定手机
-                Intent intent = new Intent(this, UnbindPhoneActivity.class);
+                Intent intent = new Intent(this, VerifyPhoneActivity.class);
+                intent.putExtra("next","phone");
                 startActivity(intent);
                 break;
             case R.id.bind_email://绑定邮箱
-                intent = new Intent(this, BindEmailActivity.class);
+                intent = new Intent(this, VerifyPhoneActivity.class);
+                intent.putExtra("next","email");
                 startActivity(intent);
                 break;
             case R.id.parent_phone_number://家长手机
