@@ -1,6 +1,7 @@
 package cn.qatime.player.activity;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.DateUtils;
@@ -13,6 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.orhanobut.logger.Logger;
@@ -133,7 +135,39 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
 
         adapter = new CommonAdapter<ClassTimeTableBean.DataEntity.LessonsEntity>(this, itemList, R.layout.item_activity_class_time_table) {
             @Override
-            public void convert(ViewHolder helper, ClassTimeTableBean.DataEntity.LessonsEntity item, int position) {
+            public void convert(ViewHolder helper, final ClassTimeTableBean.DataEntity.LessonsEntity item, int position) {
+
+
+                Glide.with(ClassTimeTableActivity.this).load(item.getCourse_publicize()).centerCrop().crossFade().dontAnimate().into((ImageView) helper.getView(R.id.image));
+                helper.getView(R.id.image).setOnClickListener(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(ClassTimeTableActivity.this, RemedialClassDetailActivity.class);
+                                intent.putExtra("id", item.getId());
+                                intent.putExtra("pager", 2);
+                                startActivity(intent);
+                            }
+                        });
+//
+                helper.setText(R.id.coursename, "课程名称：" + item.getCourse_name());
+                helper.setText(R.id.classname, item.getName());
+                helper.setText(R.id.status, getStatus(item.getStatus()));
+                helper.setText(R.id.class_date, item.getClass_date() + " ");
+                helper.setText(R.id.live_time, item.getLive_time());
+                helper.setText(R.id.subject, "科目：" + item.getSubject());
+                helper.setText(R.id.teacher, "老师：" + item.getTeacher_name());
+                helper.getView(R.id.enter).setVisibility(StringUtils.isNullOrBlanK(item.getPull_address()) ? View.GONE : View.VISIBLE);
+                helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(ClassTimeTableActivity.this, NEVideoPlayerActivity.class);
+                        intent.putExtra("id", item.getId());
+                        intent.putExtra("url", item.getPull_address());
+                        startActivity(intent);
+                    }
+                });
+
 
             }
         };
@@ -195,6 +229,22 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
             case R.id.tv_today:
                 monthDateView.setTodayToView();
                 break;
+        }
+    }
+
+    private String getStatus(String status) {
+        if (status.equals("teaching")) {//直播中
+            return getResources().getString(R.string.class_teaching);
+        } else if (status.equals("paused")) {
+            return getResources().getString(R.string.class_teaching);
+        } else if (status.equals("init")) {//未开始
+            return getResources().getString(R.string.class_init);
+        } else if (status.equals("ready")) {//待开课
+            return getResources().getString(R.string.class_ready);
+        } else if (status.equals("paused_inner")) {//暂停中
+            return getResources().getString(R.string.class_paused_inner);
+        } else {
+            return getResources().getString(R.string.class_over);//已结束
         }
     }
 }
