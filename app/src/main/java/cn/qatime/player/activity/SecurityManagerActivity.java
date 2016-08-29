@@ -76,7 +76,8 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
             protected void onSuccess(JSONObject response) {
                 Logger.e("学生信息：  " + response.toString());
                 PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
-
+                Logger.e(bean.toString());
+                setValue(bean);
             }
 
             @Override
@@ -94,7 +95,12 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
     }
 
     private void setValue(PersonalInformationBean bean) {
-// TODO: 2016/8/26 设置学生信息
+        String parentPhone = bean.getData().getParent_phone();
+        phoneNumberP.setText(parentPhone != null ? parentPhone : "无");
+        String email = bean.getData().getEmail();
+        this.email.setText(email != null ? email : "无");
+        String loginMobile = bean.getData().getLogin_mobile();
+        phoneNumberM.setText(loginMobile != null ? loginMobile : "无");
     }
 
 
@@ -109,20 +115,26 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        initData();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bind_phone_number://绑定手机
                 Intent intent = new Intent(this, VerifyPhoneActivity.class);
-                intent.putExtra("next","phone");
+                intent.putExtra("next", "phone");
                 startActivity(intent);
                 break;
             case R.id.bind_email://绑定邮箱
                 intent = new Intent(this, VerifyPhoneActivity.class);
-                intent.putExtra("next","email");
+                intent.putExtra("next", "email");
                 startActivity(intent);
                 break;
             case R.id.parent_phone_number://家长手机
                 intent = new Intent(this, ParentPhoneActivity.class);
+                intent.putExtra("phoneP", phoneNumberP.getText());
                 startActivity(intent);
                 break;
             case R.id.change_password://修改密码
