@@ -1,4 +1,4 @@
-package cn.qatime.player.utils.im;
+package cn.qatime.player.im;
 
 /**
  * 简单的回调接口

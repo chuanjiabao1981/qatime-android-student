@@ -1,14 +1,15 @@
-package cn.qatime.player.utils.im;
+package cn.qatime.player.im.cache;
 
 import android.text.TextUtils;
 
 import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.friend.model.Friend;
-import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.netease.nimlib.sdk.uinfo.UserService;
+import com.netease.nimlib.sdk.uinfo.UserServiceObserve;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
 import java.util.ArrayList;
@@ -164,6 +165,24 @@ public class UserInfoCache {
             return account;
         }
     }
+
+    /**
+     * 在Application的onCreate中向SDK注册用户资料变更观察者
+     */
+    public void registerObservers(boolean register) {
+        NIMClient.getService(UserServiceObserve.class).observeUserInfoUpdate(userInfoUpdateObserver, register);
+    }
+
+    private Observer<List<NimUserInfo>> userInfoUpdateObserver = new Observer<List<NimUserInfo>>() {
+        @Override
+        public void onEvent(List<NimUserInfo> users) {
+            if (users == null || users.isEmpty()) {
+                return;
+            }
+
+            addOrUpdateUsers(users, true);
+        }
+    };
 
     /**
      * ************************************ 单例 **********************************************

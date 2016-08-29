@@ -14,6 +14,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.SystemMessageObserver;
+import com.netease.nimlib.sdk.msg.SystemMessageService;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
@@ -28,6 +35,8 @@ import cn.qatime.player.fragment.Fragment1;
 import cn.qatime.player.fragment.Fragment2;
 import cn.qatime.player.fragment.Fragment3;
 import cn.qatime.player.fragment.Fragment4;
+import cn.qatime.player.im.manager.ReminderManager;
+import cn.qatime.player.im.model.ReminderItem;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -72,6 +81,12 @@ public class MainActivity extends BaseFragmentActivity {
 //        GetProvinceslist();
 //        GetCitieslist();
         GetSchoolslist();
+
+
+//        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
+//        registerMsgUnreadInfoObserver(true);
+//        registerSystemMessageObservers(true);
+//        requestSystemMessageUnreadCount();
     }
 
     /**
@@ -272,4 +287,60 @@ public class MainActivity extends BaseFragmentActivity {
         });
         addToRequestQueue(request);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        registerMsgUnreadInfoObserver(false);
+//        registerSystemMessageObservers(false);
+    }
+
+    /**********************************************云信*******************************************************/
+    /**
+     * 注册未读消息数量观察者
+     */
+//    private void registerMsgUnreadInfoObserver(boolean register) {
+//        if (register) {
+//            ReminderManager.getInstance().registerUnreadNumChangedCallback(this);
+//        } else {
+//            ReminderManager.getInstance().unregisterUnreadNumChangedCallback(this);
+//        }
+//    }
+
+    /**
+     * 注册/注销系统消息未读数变化
+     *
+     * @param register
+     */
+//    private void registerSystemMessageObservers(boolean register) {
+//        NIMClient.getService(SystemMessageObserver.class).observeUnreadCountChange(sysMsgUnreadCountChangedObserver, register);
+//    }
+//
+//    private Observer<Integer> sysMsgUnreadCountChangedObserver = new Observer<Integer>() {
+//        @Override
+//        public void onEvent(Integer unreadCount) {
+////            SystemMessageUnreadManager.getInstance().setSysMsgUnreadCount(unreadCount);
+//            ReminderManager.getInstance().updateContactUnreadNum(unreadCount);
+//        }
+//    };
+//
+//    /**
+//     * 查询系统消息未读数
+//     */
+//    private void requestSystemMessageUnreadCount() {
+//        int unread = NIMClient.getService(SystemMessageService.class).querySystemMessageUnreadCountBlock();
+////        SystemMessageUnreadManager.getInstance().setSysMsgUnreadCount(unread);
+//        ReminderManager.getInstance().updateContactUnreadNum(unread);
+//
+//    }
+//
+//    /**
+//     * 未读消息实现
+//     *
+//     * @param item
+//     */
+//    @Override
+//    public void onUnreadNumChanged(ReminderItem item) {
+//        Logger.e(item.getUnread() + "");
+//    }
 }

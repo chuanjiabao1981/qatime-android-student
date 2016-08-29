@@ -94,7 +94,6 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         if (data != null && data.getData() != null) {
             initData(data);
         }
-
     }
 
     private void initData(PersonalInformationBean data) {

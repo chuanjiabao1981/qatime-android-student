@@ -1,4 +1,4 @@
-package cn.qatime.player.utils.im;
+package cn.qatime.player.im.cache;
 
 import android.text.TextUtils;
 
@@ -18,7 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import libraryextra.utils.SPUtils;
+import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.im.SimpleCallback;
 
 /**
  * 群信息/群成员数据监听&缓存
@@ -374,7 +375,7 @@ public class TeamDataCache {
      * @return
      */
     public String getTeamMemberDisplayName(String tid, String account) {
-        if (account.equals(SPUtils.getAccount())) {
+        if (account.equals(BaseApplication.getAccount())) {
             return "我";
         }
 
@@ -389,7 +390,7 @@ public class TeamDataCache {
      * @return
      */
     public String getTeamMemberDisplayNameYou(String tid, String account) {
-        if (account.equals(SPUtils.getAccount())) {
+        if (account.equals(BaseApplication.getAccount())) {
             return "你";
         }
 
