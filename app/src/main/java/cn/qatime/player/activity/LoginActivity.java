@@ -22,6 +22,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.Profile;
 import libraryextra.utils.CheckUtil;
@@ -101,7 +102,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 break;
             case R.id.register://注册
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, Constant.REGIST);
                 break;
             case R.id.login_error://忘记密码
                 intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
@@ -200,5 +201,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         checkNum = CheckUtil.getCheckNum();
         checkview.setCheckNum(checkNum);
         checkview.invaliChenkNum();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Constant.REGIST) {
+            finish();
+        }
     }
 }

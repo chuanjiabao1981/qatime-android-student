@@ -3,6 +3,7 @@ package cn.qatime.player.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
@@ -12,8 +13,14 @@ import cn.qatime.player.base.BaseActivity;
  */
 public class NotifySettingActivity extends BaseActivity implements View.OnClickListener {
 
-    private View notify_message;
-    private View notify_classes;
+    private View notifyMessage;
+    private View notifyClasses;
+
+
+    private void assignViews() {
+        notifyMessage = (LinearLayout) findViewById(R.id.notify_message);
+        notifyClasses = (LinearLayout) findViewById(R.id.notify_classes);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +37,10 @@ public class NotifySettingActivity extends BaseActivity implements View.OnClickL
     private void initView() {
         setContentView(R.layout.activity_notify_setting);
         setTitle("提醒设置");
-        notify_message = findViewById(R.id.notify_message);
-        notify_classes = findViewById(R.id.notify_classes);
+        assignViews();
 
-        notify_classes.setOnClickListener(this);
-        notify_message.setOnClickListener(this);
+        notifyClasses.setOnClickListener(this);
+        notifyMessage.setOnClickListener(this);
     }
 
     @Override

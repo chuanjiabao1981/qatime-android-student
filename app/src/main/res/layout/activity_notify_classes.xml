@@ -14,7 +14,6 @@
         android:background="#dfdddd" />
 
     <LinearLayout
-        android:id="@+id/voice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
@@ -24,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="15dp"
-            android:text="课程范围" />
+            android:text="@string/class_range" />
 
         <View
             android:layout_width="30dp"
@@ -62,7 +61,6 @@
         android:background="#dfdddd" />
 
     <LinearLayout
-        android:id="@+id/shake"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -78,30 +76,29 @@
             android:layout_height="0dp"
             android:background="#ffffff" />
 
-        <RadioGroup
-            android:id="@+id/rg"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="5dp">
 
-            <RadioButton
+            <CheckBox
                 android:id="@+id/sms"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:checked="true"
-                android:text="短信通知" />
+                android:text="@string/sms_notify" />
 
-            <RadioButton
+            <CheckBox
                 android:id="@+id/sys"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="系统通知" />
-        </RadioGroup>
-
+                android:text="@string/sys_notify" />
+        </LinearLayout>
     </LinearLayout>
 
     <View
@@ -110,7 +107,6 @@
         android:background="#dfdddd" />
 
     <LinearLayout
-        android:id="@+id/sha1ke"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">

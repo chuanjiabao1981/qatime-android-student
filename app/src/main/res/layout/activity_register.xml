@@ -10,7 +10,6 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_margin="10dp"
         android:background="@drawable/text_background"
         android:orientation="vertical">
@@ -25,7 +24,6 @@
             android:layout_marginRight="30dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/shape_input"
-            android:hint="@string/hint_phone_number"
             android:inputType="phone"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"/>
@@ -47,7 +45,6 @@
                 android:layout_weight="2"
                 android:background="@drawable/shape_input"
                 android:ems="10"
-                android:hint="@string/hint_input_verification_code"
                 android:inputType="number"
                 android:paddingBottom="8dp"
                 android:paddingTop="8dp"/>
@@ -74,7 +71,6 @@
             android:layout_marginRight="30dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/shape_input"
-            android:hint="@string/hint_input_password"
             android:inputType="textPassword"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"/>
@@ -89,7 +85,6 @@
             android:layout_marginRight="30dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/shape_input"
-            android:hint="@string/hint_confirm_password"
             android:inputType="textPassword"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"/>
@@ -104,7 +99,6 @@
             android:layout_marginRight="30dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/shape_input"
-            android:hint="@string/hint_qatime_register_code"
             android:inputType="textPassword"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"/>
@@ -125,7 +119,6 @@
                 android:id="@+id/checkBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="true"
                 android:text="@string/agree"/>
 
             <TextView

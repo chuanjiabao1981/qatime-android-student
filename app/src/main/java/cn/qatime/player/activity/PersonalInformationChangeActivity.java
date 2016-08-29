@@ -28,6 +28,8 @@ import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
@@ -140,11 +142,9 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 startActivityForResult(intent, Constant.REQUEST_PICTURE_SELECT);
                 break;
             case R.id.birthday://生日
-
-                MDatePickerDialog dataDialog = null;
-
                 try {
-                    dataDialog = new MDatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+
+                    MDatePickerDialog dataDialog = new MDatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
@@ -156,13 +156,14 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                             }
                         }
                     }, parse.parse(select).getYear() + 1900, parse.parse(select).getMonth() + 1, parse.parse(select).getDay());
+                    dataDialog.show();
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                dataDialog.show();
                 break;
             case R.id.complete://完成
-                UpLoadUtil util = new UpLoadUtil(PersonalInformationChangeActivity.this) {
+                String url = UrlUtils.urlPersonalInformation + BaseApplication.getUserId();
+                UpLoadUtil util = new UpLoadUtil(url) {
                     @Override
                     public void httpStart() {
                         progress = DialogUtils.startProgressDialog(progress, PersonalInformationChangeActivity.this);
@@ -182,11 +183,12 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
 
                     @Override
                     protected void httpFailed(String result) {
-
+                        // TODO: 2016/8/26 ERROR 处理
+                        Toast.makeText(PersonalInformationChangeActivity.this, "服务器异常", Toast.LENGTH_SHORT).show();
+                        DialogUtils.dismissDialog(progress);
                     }
                 };
-                String url = UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/update";
-                String filePath = imageUrl;
+
                 if (StringUtils.isNullOrBlanK(BaseApplication.getUserId())) {
                     Toast.makeText(PersonalInformationChangeActivity.this, getResources().getString(R.string.id_is_empty), Toast.LENGTH_SHORT).show();
                     return;
@@ -204,7 +206,16 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 String gender = radiogroup.getCheckedRadioButtonId() == men.getId() ? "male" : "female";
                 String birthday = select.equals(parse.format(new Date())) ? "" : select;
                 String desc = describe.getText().toString();
-                util.execute(url, filePath, sName, grade, gender, birthday, desc);
+                Map<String, String> map = new HashMap<>();
+
+                map.put("name", sName);
+                map.put("grade", grade);
+                map.put("avatar", imageUrl);
+                map.put("gender", gender);
+                map.put("birthday", birthday);
+                map.put("desc", desc);
+                Logger.e("--" + sName + "--" + grade + "--" + imageUrl + "--" + gender + "--" + birthday + "--" + desc + "--");
+                util.execute(map);
                 break;
         }
     }

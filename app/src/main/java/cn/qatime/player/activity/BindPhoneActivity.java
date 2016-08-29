@@ -7,18 +7,43 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.orhanobut.logger.Logger;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.StringUtils;
+import libraryextra.utils.VolleyListener;
 
 public class BindPhoneActivity extends BaseActivity implements View.OnClickListener {
 
-    private TextView getcode;
-    private Button button_over;
-    private EditText target_phone;
+    private TextView textGetcode;
+    private Button buttonOver;
+    private EditText targetPhone;
     private EditText code;
     private TimeCount time;
+    private String currentphone;
+
+
+    private void assignViews() {
+        targetPhone = (EditText) findViewById(R.id.target_phone);
+        code = (EditText) findViewById(R.id.code);
+        textGetcode = (TextView) findViewById(R.id.text_getcode);
+        buttonOver = (Button) findViewById(R.id.button_over);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,34 +55,98 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 
     private void initView() {
         setTitle(getResources().getString(R.string.bind_phone_number));
-        getcode = (TextView) findViewById(R.id.text_getcode);
-        button_over = (Button) findViewById(R.id.button_over);
-        code = (EditText) findViewById(R.id.code);
-        target_phone = (EditText) findViewById(R.id.target_phone);
-        target_phone.setHint(StringUtils.getSpannedString(this,R.string.hint_input_new_phone));
-        code.setHint(StringUtils.getSpannedString(this,R.string.hint_input_code));
-        //TODO 获取手机号 设置TextView
+
+        assignViews();
+
+        targetPhone.setHint(StringUtils.getSpannedString(this, R.string.hint_input_new_phone));
+        code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_code));
 
 
-        getcode.setOnClickListener(this);
-        button_over.setOnClickListener(this);
+        textGetcode.setOnClickListener(this);
+        buttonOver.setOnClickListener(this);
 
     }
 
 
-
     @Override
     public void onClick(View v) {
+        currentphone = targetPhone.getText().toString().trim();
         switch (v.getId()) {
             case R.id.text_getcode:
-                //TODO 发送验证短信
-                String phone = target_phone.getText().toString().trim();
+                Map<String, String> map = new HashMap<>();
+                map.put("send_to", currentphone);
+                map.put("key", "send_captcha");
+
+                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlGetCode, map), null, new VolleyListener(this) {
+                    @Override
+                    protected void onTokenOut() {
+
+                    }
+
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        Logger.e("验证码发送成功" + currentphone + "---" + response.toString());
+                        Toast.makeText(getApplicationContext(), "验证码已经发送至" + currentphone + "，请注意查收", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+
+                    }
+                }));
+
                 time.start();
                 break;
             case R.id.button_over:
-                //TODO 绑定手机
-                Intent intent = new Intent(this, SecurityManagerActivity.class);
-                startActivity(intent);
+                // TODO: 2016/8/26  更改手机号
+                map = new HashMap<>();
+                map.put("id", "" + BaseApplication.getUserId());
+                map.put("send_to", currentphone);
+                map.put("captcha_confirmation", code.getText().toString().trim());
+
+                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.getUrl(UrlUtils.urlGetCode + "/login_mobile", map), null, new VolleyListener(this) {
+                    @Override
+                    protected void onTokenOut() {
+
+                    }
+
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        try {
+
+                            if (!response.isNull("data")) {
+                                Logger.e("验证成功");
+                                Intent intent = new Intent(BindPhoneActivity.this, SecurityManagerActivity.class);
+                                startActivity(intent);
+                            } else {
+                                JSONObject error = response.getJSONObject("error");
+                                Toast.makeText(BindPhoneActivity.this, error.getString("msg"), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+
+                    }
+                }));
+
+
                 break;
         }
     }
@@ -69,14 +158,14 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 
         @Override
         public void onFinish() {// 计时完毕
-            getcode.setText("获取验证码");
-            getcode.setEnabled(true);
+            textGetcode.setText("获取验证码");
+            textGetcode.setEnabled(true);
         }
 
         @Override
         public void onTick(long millisUntilFinished) {// 计时过程
-            getcode.setEnabled(false);//防止重复点击
-            getcode.setText(millisUntilFinished / 1000 + "s后重新获取");
+            textGetcode.setEnabled(false);//防止重复点击
+            textGetcode.setText(millisUntilFinished / 1000 + "s后重新获取");
         }
     }
 }

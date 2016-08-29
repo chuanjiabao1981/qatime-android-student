@@ -17,14 +17,24 @@ import libraryextra.utils.StringUtils;
  */
 public class ChangePasswordActivity extends BaseActivity implements View.OnClickListener {
 
-    private TextView forget_password;
+    private TextView forgetPassword;
     private EditText password;
-    private EditText new_password;
-    private EditText confirm_new_password;
-    private ImageView match_pwd1;
-    private ImageView match_pwd2;
-    private Button button_over;
+    private EditText newPassword;
+    private EditText confirmNewPassword;
+    private ImageView matchPwd1;
+    private ImageView matchPwd2;
+    private Button buttonOver;
 
+
+    private void assignViews() {
+        password = (EditText) findViewById(R.id.password);
+        forgetPassword = (TextView) findViewById(R.id.forget_password);
+        newPassword = (EditText) findViewById(R.id.new_password);
+        matchPwd1 = (ImageView) findViewById(R.id.match_pwd1);
+        confirmNewPassword = (EditText) findViewById(R.id.confirm_new_password);
+        matchPwd2 = (ImageView) findViewById(R.id.match_pwd2);
+        buttonOver = (Button) findViewById(R.id.button_over);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,22 +45,16 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
 
     private void initView() {
         setTitle(getResources().getString(R.string.change_password));
-        forget_password = (TextView) findViewById(R.id.forget_password);
-        button_over = (Button) findViewById(R.id.button_over);
-        password = (EditText) findViewById(R.id.password);
-        new_password = (EditText) findViewById(R.id.new_password);
-        confirm_new_password = (EditText) findViewById(R.id.confirm_new_password);
-//        android:hint="@string/hint_input_current_password"
-//        android:hint="@string/hint_6_16_password"
-//        android:hint="@string/hint_input_again"
-        password.setHint(StringUtils.getSpannedString(this,R.string.hint_input_current_password));
-        new_password.setHint(StringUtils.getSpannedString(this,R.string.hint_6_16_password));
-        confirm_new_password.setHint(StringUtils.getSpannedString(this,R.string.hint_input_again));
+        assignViews();
 
-        match_pwd1 = (ImageView) findViewById(R.id.match_pwd1);
-        match_pwd2 = (ImageView) findViewById(R.id.match_pwd2);
-        forget_password.setOnClickListener(this);
-        button_over.setOnClickListener(this);
+        password.setHint(StringUtils.getSpannedString(this, R.string.hint_input_current_password));
+        newPassword.setHint(StringUtils.getSpannedString(this, R.string.hint_6_16_password));
+        confirmNewPassword.setHint(StringUtils.getSpannedString(this, R.string.hint_input_again));
+
+        matchPwd1 = (ImageView) findViewById(R.id.match_pwd1);
+        matchPwd2 = (ImageView) findViewById(R.id.match_pwd2);
+        forgetPassword.setOnClickListener(this);
+        buttonOver.setOnClickListener(this);
     }
 
     @Override

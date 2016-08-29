@@ -30,6 +30,10 @@ public class UrlUtils {
     //獲取支付结果
     public static String urlPayResult = baseUrl + "api/v1/payment/orders/";
 
+    //获取验证码
+    public static String urlGetCode = baseUrl + "api/v1/captcha";
+
+
     public static String getUrl(String function, Map<String, String> params) {
         String url;
         url = function + "?" + Map2String(params);

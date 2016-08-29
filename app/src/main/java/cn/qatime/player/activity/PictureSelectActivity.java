@@ -62,6 +62,8 @@ public class PictureSelectActivity extends BaseActivity {
             } else {
                 getImages();
             }
+        }else {
+            getImages();
         }
         initView();
     }
