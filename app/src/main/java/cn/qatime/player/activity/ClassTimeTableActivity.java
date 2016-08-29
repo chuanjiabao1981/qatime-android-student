@@ -49,7 +49,6 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
     private List<ClassTimeTableBean.DataEntity> totalList = new ArrayList<>();
     private CommonAdapter<ClassTimeTableBean.DataEntity.LessonsEntity> adapter;
     private List<Integer> alertList = new ArrayList<>();
-    private int page = 1;
     private MonthDateView monthDateView;
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -228,6 +227,8 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                 break;
             case R.id.tv_today:
                 monthDateView.setTodayToView();
+                getDate();
+                initData();
                 break;
         }
     }
