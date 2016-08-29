@@ -98,18 +98,19 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
                     @Override
                     protected void onSuccess(JSONObject response) {
                         Logger.e("验证码发送成功" + email1 + "---" + response.toString());
-                        Toast.makeText(getApplicationContext(), "验证码已经发送至" + email1 + "，请注意查收", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "验证码已经发送至：" + email1 + "，请注意查收", Toast.LENGTH_LONG).show();
                     }
 
                     @Override
                     protected void onError(JSONObject response) {
+                        Toast.makeText(getApplicationContext(), "验证码发送失败：" + email1 + "，请注意查收", Toast.LENGTH_LONG).show();
 
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-
+                        Toast.makeText(getApplicationContext(), "服务器异常，请检查网络", Toast.LENGTH_LONG).show();
                     }
                 }));
 
@@ -145,32 +146,31 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
 
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        try {
 
-                            if (!response.isNull("data")) {
-                                Logger.e("验证成功");
-                                Toast.makeText(BindEmailActivity.this, "绑定邮箱修改成功", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(BindEmailActivity.this, SecurityManagerActivity.class);
-                                startActivity(intent);
-                            } else {
-                                JSONObject error = response.getJSONObject("error");
-                                Toast.makeText(BindEmailActivity.this, error.getString("msg"), Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+
+                        Logger.e("验证成功");
+                        Toast.makeText(BindEmailActivity.this, "绑定邮箱修改成功", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(BindEmailActivity.this, SecurityManagerActivity.class);
+                        startActivity(intent);
+
 
                     }
 
                     @Override
                     protected void onError(JSONObject response) {
+                        try {
+                            JSONObject error = response.getJSONObject("error");
+                            Toast.makeText(BindEmailActivity.this, error.getString("msg"), Toast.LENGTH_SHORT).show();
 
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-
+                        Toast.makeText(getApplicationContext(), "服务器异常，请检查网络", Toast.LENGTH_LONG).show();
                     }
                 }));
 

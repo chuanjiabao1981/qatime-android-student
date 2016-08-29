@@ -60,18 +60,23 @@ public class MainActivity extends BaseFragmentActivity {
         initView();
 
         refreshMedia();
+
         File file = new File(Constant.CACHEPATH);
-        if (!file.mkdirs()) {
+        if (!file.mkdirs())
+
+        {
             try {
                 file.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-//        GetGradeslist();
+
+        //        GetGradeslist();
 //        GetProvinceslist();
 //        GetCitieslist();
         GetSchoolslist();
+
     }
 
     /**

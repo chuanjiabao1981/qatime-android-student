@@ -62,6 +62,7 @@
                 android:paddingBottom="8dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
+                android:maxLength="11"
                 android:paddingTop="8dp"
                 android:singleLine="true"
                 android:textColorHint="#ff999999" />

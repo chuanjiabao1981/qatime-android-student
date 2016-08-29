@@ -6,6 +6,7 @@ import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,7 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.bean.Profile;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyListener;
 
@@ -71,6 +73,12 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         getcode.setOnClickListener(this);
         next.setOnClickListener(this);
         agreement.setOnClickListener(this);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                next.setEnabled(isChecked);
+            }
+        });
     }
 
     @Override
@@ -92,19 +100,20 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
                         @Override
                         protected void onSuccess(JSONObject response) {
+                            Toast.makeText(RegisterActivity.this, "验证码发送成功", Toast.LENGTH_SHORT).show();
                             Logger.e("验证码发送成功" + phone.getText().toString().trim() + "---" + response.toString());
                         }
 
                         @Override
                         protected void onError(JSONObject response) {
-
+                            Toast.makeText(RegisterActivity.this, "验证码发送失败", Toast.LENGTH_SHORT).show();
                         }
 
 
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
-
+                            Toast.makeText(getApplicationContext(), "服务器异常，请检查网络", Toast.LENGTH_LONG).show();
                         }
                     });
                     addToRequestQueue(request);
@@ -195,9 +204,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         map.put("captcha_confirmation", code.getText().toString().trim());
         map.put("password", password.getText().toString().trim());
         map.put("password_confirmation", repassword.getText().toString().trim());//确认密码
-        map.put("captcha_confirmation", code.getText().toString().trim());//验证码
-        map.put("register_code_value", repassword.getText().toString().trim());
-        map.put("password_confirmation", repassword.getText().toString().trim());
+        map.put("register_code_value", registercode.getText().toString().trim());//验证码
         map.put("client_type", "app");
         map.put("type", "Student");
         map.put("accept", "" + (checkBox.isChecked() ? 1 : 0));
@@ -215,14 +222,21 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     String token = response.getJSONObject("data").getString("remember_token");
                     int id = response.getJSONObject("data").getJSONObject("user").getInt("id");
 
-                    BaseApplication.getProfile().getData().setRemember_token(token);
-                    BaseApplication.getProfile().getData().getUser().setId(id);
+
                     Toast.makeText(RegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
                     Logger.e("注册成功" + response);
                     //下一步跳转
+                    Profile profile = new Profile();
+                    Profile.Data data = new Profile().new Data();
+                    data.setRemember_token(token);
+                    Profile.User user = new Profile().new User();
+                    user.setId(id);
+                    data.setUser(user);
+                    profile.setData(data);
+                    BaseApplication.setProfile(profile);
                     Intent intent = new Intent(RegisterActivity.this, RegisterPerfectActivity.class);
-                    intent.putExtra("username",phone.getText().toString().trim());
-                    intent.putExtra("password",password.getText().toString().trim());
+                    intent.putExtra("username", phone.getText().toString().trim());
+                    intent.putExtra("password", password.getText().toString().trim());
                     startActivityForResult(intent, Constant.REGIST);
 
                 } catch (JSONException e) {
@@ -235,13 +249,14 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             @Override
             protected void onError(JSONObject response) {
 
-                String resault = null;
+                String resault = "";
                 try {
-                    resault = "code:" + response.getJSONObject("error").getInt("code") + "    msg:" + response.getJSONObject("error").getString("msg");
+                    resault = response.getJSONObject("error").getString("msg");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 Logger.e("注册失败--" + resault);
+                Toast.makeText(RegisterActivity.this,resault, Toast.LENGTH_SHORT).show();
 
             }
 
@@ -249,7 +264,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                Toast.makeText(getApplicationContext(), "服务器异常，请检查网络", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -261,7 +276,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode==Constant.REGIST){
+        if (requestCode == Constant.REGIST) {
             setResult(resultCode);
             finish();
         }

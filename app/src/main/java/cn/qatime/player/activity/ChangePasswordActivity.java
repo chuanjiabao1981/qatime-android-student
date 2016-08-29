@@ -154,37 +154,35 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
 
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        try {
 
-                            if (!response.isNull("data")) {
-                                Logger.e("验证成功");
-                                Toast.makeText(ChangePasswordActivity.this, "密码修改成功，请用新密码重新登录", Toast.LENGTH_SHORT).show();
-                                BaseApplication.clearToken();
-                                setResult(Constant.RESPONSE_EXIT_LOGIN);
-                                SPUtils.put(ChangePasswordActivity.this,"profile",BaseApplication.getProfile());
-                                Intent intent = new Intent(ChangePasswordActivity.this, LoginActivity.class);
-                                intent.putExtra("sign", "exit_login");
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                JSONObject error = response.getJSONObject("error");
-                                Toast.makeText(ChangePasswordActivity.this, error.getString("msg"), Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+
+                        Logger.e("验证成功");
+                        Toast.makeText(ChangePasswordActivity.this, "密码修改成功，请用新密码重新登录", Toast.LENGTH_SHORT).show();
+                        BaseApplication.clearToken();
+                        setResult(Constant.RESPONSE_EXIT_LOGIN);
+                        SPUtils.put(ChangePasswordActivity.this, "profile", BaseApplication.getProfile());
+                        Intent intent = new Intent(ChangePasswordActivity.this, LoginActivity.class);
+                        intent.putExtra("sign", "exit_login");
+                        startActivity(intent);
+                        finish();
+
 
                     }
 
                     @Override
                     protected void onError(JSONObject response) {
-
+                        try {
+                            JSONObject error = response.getJSONObject("error");
+                            Toast.makeText(ChangePasswordActivity.this, error.getString("msg"), Toast.LENGTH_SHORT).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-
+                        Toast.makeText(getApplicationContext(), "服务器异常，请检查网络", Toast.LENGTH_LONG).show();
                     }
                 }));
                 break;

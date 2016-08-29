@@ -105,13 +105,13 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
 
                     @Override
                     protected void onError(JSONObject response) {
-
+                        Toast.makeText(getApplicationContext(), "验证码发送失败" + phone, Toast.LENGTH_LONG).show();
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-
+                        Toast.makeText(getApplicationContext(), "服务器异常，请检查网络", Toast.LENGTH_LONG).show();
                     }
                 }));
 
@@ -166,7 +166,7 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
 
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-
+                        Toast.makeText(getApplicationContext(), "服务器异常，请检查网络", Toast.LENGTH_LONG).show();
                     }
                 }));
 

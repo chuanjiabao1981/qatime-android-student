@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.orhanobut.logger.Logger;
@@ -23,7 +24,9 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
 import libraryextra.utils.CheckUtil;
 import libraryextra.utils.JsonUtils;
@@ -45,6 +48,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private View checklayout;
     private EditText checkcode;
     private Button login;
+    private Profile profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,18 +155,53 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                     Toast.makeText(LoginActivity.this, getResources().getString(R.string.account_or_password_error), Toast.LENGTH_SHORT).show();
                                 }
                             } else {
-                                Logger.e("登录", response.toString());
-                                SPUtils.put(LoginActivity.this, "username", username.getText().toString());
-                                Profile profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
-                                if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
-                                    SPUtils.putObject(LoginActivity.this, "profile", profile);
-                                    BaseApplication.setProfile(profile);
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    //没有数据或token
-                                }
+                                profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
+                                BaseApplication.setProfile(profile);
+                                DaYiJsonObjectRequest request1 = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null, new VolleyListener(LoginActivity.this) {
+                                    @Override
+                                    protected void onTokenOut() {
+
+                                    }
+
+                                    @Override
+                                    protected void onSuccess(JSONObject response) {
+                                        PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
+                                        Logger.e(bean.toString());
+                                        String name = bean.getData().getName();
+                                        String grade = bean.getData().getGrade();
+                                        if (StringUtils.isNullOrBlanK(name) || StringUtils.isNullOrBlanK(grade)) {
+                                            Intent intent = new Intent(LoginActivity.this, RegisterPerfectActivity.class);
+                                            Toast.makeText(LoginActivity.this, "请先完善个人信息", Toast.LENGTH_SHORT).show();
+                                            intent.putExtra("username", username.getText().toString().trim());
+                                            intent.putExtra("password", password.getText().toString().trim());
+                                            startActivityForResult(intent, Constant.REGIST);
+                                        } else {
+                                            Logger.e("登录", response.toString());
+                                            SPUtils.put(LoginActivity.this, "username", username.getText().toString());
+
+                                            if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
+                                                SPUtils.putObject(LoginActivity.this, "profile", profile);
+                                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                                startActivity(intent);
+                                                finish();
+                                            } else {
+                                                //没有数据或token
+                                            }
+                                        }
+
+                                    }
+
+                                    @Override
+                                    protected void onError(JSONObject response) {
+                                        Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+                                    }
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError volleyError) {
+
+                                    }
+                                });
+                                addToRequestQueue(request1);
                             }
                         } catch (JSONException e) {
 

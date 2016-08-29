@@ -70,6 +70,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
     TextView complete;
     private String imageUrl = "";
     private TextView birthday;
+    private View birthdayView;
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
     private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
 
@@ -95,6 +96,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
 
         changeHeadSculpture.setOnClickListener(this);
         birthday.setOnClickListener(this);
+        birthdayView.setOnClickListener(this);
         complete.setOnClickListener(this);
         PersonalInformationBean data = (PersonalInformationBean) getIntent().getSerializableExtra("data");
         if (data != null && data.getData() != null) {
@@ -130,6 +132,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                 startActivityForResult(intent, Constant.REQUEST_PICTURE_SELECT);
                 break;
             case R.id.birthday://生日
+            case R.id.birthday_view://生日
                 try {
                     MDatePickerDialog dataDialog = new MDatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                         @Override
@@ -162,7 +165,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                     }
 
                     @Override
-                    protected void httpSuccess(String result) {
+                    protected void httpSuccess(final String result) {
                         Intent data = new Intent();
                         data.putExtra("data", result);
                         setResult(Constant.RESPONSE, data);
@@ -208,7 +211,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                                             }
                                         } catch (JSONException e) {
 
-//                            e.printStackTrace();
+                                            e.printStackTrace();
 //                            LogUtils.e("error"+e.getMessage());
                                         }
 
@@ -217,7 +220,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
 
                                     @Override
                                     protected void onError(JSONObject response) {
-
+                                        Toast.makeText(RegisterPerfectActivity.this, "数据上传失败", Toast.LENGTH_SHORT).show();
                                     }
                                 }, new VolleyErrorListener() {
                             @Override
@@ -284,6 +287,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
         radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
         spinner = (Spinner) findViewById(R.id.spinner);
         birthday = (TextView) findViewById(R.id.birthday);
+        birthdayView = findViewById(R.id.birthday_view);
         complete = (TextView) findViewById(R.id.complete);
     }
 
