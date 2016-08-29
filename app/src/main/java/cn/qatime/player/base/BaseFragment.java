@@ -33,11 +33,12 @@ public class BaseFragment extends Fragment {
      */
     public void tokenOut() {
 
-        Dialog dialog = new Dialog(getActivity(), R.style.Transparent);
+        final Dialog dialog = new Dialog(getActivity(), R.style.Transparent);
         View view = View.inflate(getActivity(), R.layout.activity_out_alertdialog, null);
         view.findViewById(R.id.alert_dialog_confirm).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dialog.dismiss();
                 out();
             }
         });

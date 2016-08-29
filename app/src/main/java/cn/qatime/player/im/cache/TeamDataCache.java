@@ -11,7 +11,6 @@ import com.netease.nimlib.sdk.team.TeamServiceObserver;
 import com.netease.nimlib.sdk.team.constant.TeamTypeEnum;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
-import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +40,6 @@ public class TeamDataCache {
         List<Team> teams = NIMClient.getService(TeamService.class).queryTeamListBlock();
         addOrUpdateTeam(teams);
 
-        Logger.e("build TeamDataCache completed, team count = " + teams.size());
     }
 
     public void clear() {
