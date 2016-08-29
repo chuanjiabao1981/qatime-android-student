@@ -51,7 +51,7 @@ public class NotifySettingActivity extends BaseActivity implements View.OnClickL
                 startActivity(intent);
                 break;
             case R.id.notify_classes:
-                intent = new Intent(this, NotifyClassesActivity.class);
+                intent = new Intent(this, NotifyCourseActivity.class);
                 startActivity(intent);
                 break;
         }
