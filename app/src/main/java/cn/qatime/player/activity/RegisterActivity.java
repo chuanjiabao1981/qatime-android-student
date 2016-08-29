@@ -93,6 +93,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                         @Override
                         protected void onSuccess(JSONObject response) {
                             //TODO 已经注册过的呢？
+                            Toast.makeText(RegisterActivity.this, "验证码发送至" + phone.getText().toString().trim() + ",请注意查收", Toast.LENGTH_SHORT).show();
                             Logger.e("验证码发送成功" + phone.getText().toString().trim() + "---" + response.toString());
                         }
 
@@ -155,13 +156,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             next.setClickable(true);
             return;
         }
-        if (password.getText().toString().trim().length() < 6 || password.getText().toString().trim().length() > 16) {
+        if (!StringUtils.isGoodPWD(password.getText().toString().trim())) {
             Toast.makeText(this, getResources().getString(R.string.password_6_16), Toast.LENGTH_LONG).show();
-            next.setClickable(true);
-            return;
-        }
-        if (StringUtils.isNullOrBlanK(password.getText().toString().trim())) {  //密码为空
-            Toast.makeText(this, getResources().getString(R.string.password_can_not_be_empty), Toast.LENGTH_LONG).show();
             next.setClickable(true);
             return;
         }
@@ -196,12 +192,11 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         map.put("captcha_confirmation", code.getText().toString().trim());
         map.put("password", password.getText().toString().trim());
         map.put("password_confirmation", repassword.getText().toString().trim());//确认密码
-        map.put("captcha_confirmation", code.getText().toString().trim());//验证码
-        map.put("register_code_value", repassword.getText().toString().trim());
-        map.put("password_confirmation", repassword.getText().toString().trim());
-        map.put("client_type", "app");
-        map.put("type", "Student");
         map.put("accept", "" + (checkBox.isChecked() ? 1 : 0));
+        map.put("type", "Student");
+        map.put("client_type", "app");
+        map.put("register_code_value", registercode.getText().toString().trim());//注册码
+
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlRegister, map), null, new VolleyListener(this) {
             @Override
@@ -222,8 +217,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     Logger.e("注册成功" + response);
                     //下一步跳转
                     Intent intent = new Intent(RegisterActivity.this, RegisterPerfectActivity.class);
-                    intent.putExtra("username",phone.getText().toString().trim());
-                    intent.putExtra("password",password.getText().toString().trim());
+                    intent.putExtra("username", phone.getText().toString().trim());
+                    intent.putExtra("password", password.getText().toString().trim());
                     startActivityForResult(intent, Constant.REGIST);
 
                 } catch (JSONException e) {
@@ -235,14 +230,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             protected void onError(JSONObject response) {
-
-                String resault = null;
+                String resault = "";
                 try {
                     resault = "code:" + response.getJSONObject("error").getInt("code") + "    msg:" + response.getJSONObject("error").getString("msg");
+                    Toast.makeText(RegisterActivity.this, response.getJSONObject("error").getString("msg").replace("Captcha confirmation", "验证码"), Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Logger.e("注册失败--" + resault);
 
             }
 
@@ -262,7 +256,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode==Constant.REGIST){
+        if (requestCode == Constant.REGIST) {
             setResult(resultCode);
             finish();
         }
