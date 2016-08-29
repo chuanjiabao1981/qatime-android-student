@@ -133,13 +133,12 @@ public class FragmentRemedialClassTimeTable1 extends BaseFragment {
                             }
                         });
 //
-                helper.setText(R.id.coursename, "课程名称："+item.getCourse_name());
-                helper.setText(R.id.classname, item.getName());
+                helper.setText(R.id.classname,item.getName());
                 helper.setText(R.id.status, getStatus(item.getStatus()));
                 helper.setText(R.id.class_date, item.getClass_date()+" ");
                 helper.setText(R.id.live_time, item.getLive_time());
-                helper.setText(R.id.subject, "科目：" + item.getSubject());
-                helper.setText(R.id.teacher, "老师：" + item.getTeacher_name());
+                helper.setText(R.id.subject,  getResources().getString(R.string.item_subject) + item.getSubject());
+                helper.setText(R.id.teacher,  getResources().getString(R.string.item_teacher) + item.getTeacher_name());
                 helper.getView(R.id.enter).setVisibility(StringUtils.isNullOrBlanK(item.getPull_address()) ? View.GONE : View.VISIBLE);
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
