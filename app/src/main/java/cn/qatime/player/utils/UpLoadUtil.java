@@ -1,6 +1,5 @@
 package cn.qatime.player.utils;
 
-import android.content.Context;
 import android.os.AsyncTask;
 
 import com.orhanobut.logger.Logger;
@@ -9,7 +8,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
@@ -22,6 +21,8 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.Map;
 
 import cn.qatime.player.base.BaseApplication;
 import libraryextra.utils.CustomMultipartEntity;
@@ -32,12 +33,12 @@ import libraryextra.utils.StringUtils;
  * @date 2016/8/12 10:00
  * @Description
  */
-public abstract class UpLoadUtil extends AsyncTask<String, String, String> implements CustomMultipartEntity.ProgressListener {
-    private final Context context;
+public abstract class UpLoadUtil extends AsyncTask<Map<String, String>, String, String> implements CustomMultipartEntity.ProgressListener {
+    private final String url;
     private long contentLength;
 
-    public UpLoadUtil(Context context) {
-        this.context = context;
+    public UpLoadUtil(String url) {
+        this.url = url;
     }
 
     @Override
@@ -50,7 +51,7 @@ public abstract class UpLoadUtil extends AsyncTask<String, String, String> imple
 
 
     @Override
-    protected String doInBackground(String... params) {
+    protected String doInBackground(Map<String, String>... params) {
         String json = null;
         try {
             HttpClient httpclient = new DefaultHttpClient();
@@ -59,34 +60,34 @@ public abstract class UpLoadUtil extends AsyncTask<String, String, String> imple
             httpclient.getParams().setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, "utf-8");
             ContentType contentType = ContentType.create(HTTP.PLAIN_TEXT_TYPE, HTTP.UTF_8);
 
-            HttpPost httppost = new HttpPost(params[0]);
-            httppost.setHeader("Remember-Token", BaseApplication.getProfile().getToken());
+            HttpPut httpPut = new HttpPut(url);
 
-            File file = new File(params[1]);
+            httpPut.setHeader("Remember-Token", BaseApplication.getProfile().getToken());
 
+            Map<String, String> item = params[0];
+            Iterator<Map.Entry<String, String>> iterator = item.entrySet().iterator();
 
             CustomMultipartEntity mpEntity = new CustomMultipartEntity(this); // 文件传输
             contentLength = mpEntity.getContentLength();
 
-            mpEntity.addPart("name", new StringBody(params[2], contentType));
-            mpEntity.addPart("grade", new StringBody(params[3], contentType));
-            if (file.exists()) {
-                FileBody fileBody = new FileBody(file);
-                mpEntity.addPart("avatar", fileBody);
+            while (iterator.hasNext()) {
+                Map.Entry entry = iterator.next();
+                if (!StringUtils.isNullOrBlanK(entry.getKey()) && !StringUtils.isNullOrBlanK(entry.getValue())) {
+                    if (entry.getKey().toString().equals("avatar")) {
+                        File file = new File(entry.getValue().toString());
+                        if (file.exists()) {
+                            FileBody fileBody = new FileBody(file);
+                            mpEntity.addPart("avatar", fileBody);
+                        }
+                    } else {
+                        mpEntity.addPart(entry.getKey().toString(), new StringBody(entry.getValue().toString(), contentType));
+                    }
+                }
             }
-            if (!StringUtils.isNullOrBlanK(params[4])) {
-                mpEntity.addPart("gender", new StringBody(params[4], contentType));
-            }
-            if (!StringUtils.isNullOrBlanK(params[5])) {
-                mpEntity.addPart("birthday", new StringBody(params[5], contentType));
-            }
-            if (!StringUtils.isNullOrBlanK(params[6])) {
-                mpEntity.addPart("desc", new StringBody(params[6], contentType));
-            }
-            httppost.setEntity(mpEntity);
+            httpPut.setEntity(mpEntity);
 
-            System.out.println("executing request " + httppost.getRequestLine());
-            HttpResponse response = httpclient.execute(httppost);
+            System.out.println("executing request " + httpPut.getRequestLine());
+            HttpResponse response = httpclient.execute(httpPut);
             HttpEntity resEntity = response.getEntity();
             System.out.println(response.getStatusLine());// 通信Ok
 
@@ -111,6 +112,7 @@ public abstract class UpLoadUtil extends AsyncTask<String, String, String> imple
         try {
             if (!StringUtils.isNullOrBlanK(result)) {
                 if (new JSONObject(result).getInt("status") == 0) {
+                    // TODO: 2016/8/26 int == 500  Internal Server Error?
                     httpFailed(result);
                 } else {
                     httpSuccess(result);
@@ -120,6 +122,7 @@ public abstract class UpLoadUtil extends AsyncTask<String, String, String> imple
             }
         } catch (JSONException e) {
             e.printStackTrace();
+            httpFailed(result);
         }
     }
 

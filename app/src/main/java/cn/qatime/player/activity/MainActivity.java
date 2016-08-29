@@ -121,6 +121,7 @@ public class MainActivity extends BaseFragmentActivity {
     @Override
     public void onBackPressed() {
         if (!flag) {
+            setResult(Constant.REGIST);
             Toast toast = Toast.makeText(this, getResources().getString(R.string.press_again_to_exit), Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
@@ -176,8 +177,6 @@ public class MainActivity extends BaseFragmentActivity {
 //        });
 //        addToRequestQueue(request);
 //    }
-
-
 
 
     //省份列表
@@ -259,6 +258,7 @@ public class MainActivity extends BaseFragmentActivity {
                     protected void onError(JSONObject response) {
 
                     }
+
                     @Override
                     protected void onTokenOut() {
                         tokenOut();
