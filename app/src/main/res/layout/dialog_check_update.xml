@@ -1,22 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:background="@drawable/shape_input"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shape_update_dialog"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingBottom="8dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp">
+
+    <TextView
+        android:id="@+id/text_x"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:clickable="true"
+        android:text="x"
+        android:textSize="18sp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/found_new_version"
             android:textColor="#f00"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <View
             android:layout_width="0dp"
@@ -28,44 +42,49 @@
             android:id="@+id/new_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:text="V1.1.0"
             android:textColor="#f00"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
     </LinearLayout>
 
     <TextView
-        android:paddingTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="10dp"
         android:text="@string/update_desc" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:paddingLeft="10dp">
+        android:scrollbars="none">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="fasdffanfkndfhahdkfkjdhkjahsklnkjnckhzxdkjhasdlkanfdhakddadgtwgsdasdjhdjhkjfkahfdkjhakljdjkhihrahkjarndkvnjkhdidasfasdfasdfasdfasdffanfkndfhahdkfkjdhkjahsklnkjnckhzxdkjhasdlkanfdhakddadgtwgsdasdjhdjhkjfkahfdkjhakljdjkhihrahkjarndkvnjkhdidasfasdfasdfasdfasdffanfkndfhahdkfkjdhkjahsklnkjnckhzxdkjhasdlkanfdhakddadgtwgsdasdjhdjhkjfkahfdkjhakljdjkhihrahkjarndkvnjkhdidasfasdfasdfasdfasdffanfkndfhahdkfkjdhkjahsklnkjnckhzxdkjhasdlkanfdhakddadgtwgsdasdfasdfasdfasdffanfkndfhahdkfkjdhkjahsklnkjnckhzxdkjhasdlkanfdhakddadgtwgsdfasdffanfkndfhahdkfkjdhkjahsklnkjnckhzxdkjhasdlkanfdhakddadgtwgsdddadgtwgsdfhyertldjg" />
+            android:text="about_us_deabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_dabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descabout_us_descescabout_us_descabout_us_descabout_us_descsc" />
     </ScrollView>
+
     <Button
         android:id="@+id/download"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/button_bg_selector_orange"
-        android:text="@string/down_now"/>
+        android:text="@string/down_now" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/update_notify1"
         android:textColor="#5000"
-        />
+        android:textSize="10sp" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/update_notify2"
         android:textColor="#5000"
-         />
+        android:textSize="10sp" />
 </LinearLayout>

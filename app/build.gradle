@@ -47,5 +47,4 @@ dependencies {
 
     compile project(':library_pulltorefresh')
     compile project(':common')
-    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
 }

@@ -148,12 +148,13 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 AlertDialog.Builder builder = new AlertDialog.Builder(SystemSettingActivity.this);
                 View view = View.inflate(SystemSettingActivity.this, R.layout.dialog_check_update, null);
                 Button down = (Button) view.findViewById(R.id.download);
+                View x = view.findViewById(R.id.text_x);
+                x.setOnClickListener(SystemSettingActivity.this);
                 down.setOnClickListener(SystemSettingActivity.this);
                 alertDialog = builder.create();
-
                 alertDialog.show();
                 alertDialog.setContentView(view);
-                alertDialog.getWindow().setLayout(DensityUtils.dp2px(SystemSettingActivity.this, 300), DensityUtils.dp2px(SystemSettingActivity.this, 500));
+                alertDialog.getWindow().setLayout(DensityUtils.dp2px(SystemSettingActivity.this, 300),DensityUtils.dp2px(SystemSettingActivity.this, 500));
                 break;
             case R.id.clean_cache:
                 //TODO 弹出对话框提示
@@ -216,6 +217,9 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                     }
                 }.start();
 
+                alertDialog.dismiss();
+                break;
+            case R.id.text_x:
                 alertDialog.dismiss();
                 break;
         }
