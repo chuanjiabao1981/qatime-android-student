@@ -84,13 +84,11 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenHeight(this) / 3);
         videoPlayer.setLayoutParams(params);
 
-        if (StringUtils.isNullOrBlanK(url)) {
-            Toast.makeText(this, "推流地址不可用", Toast.LENGTH_SHORT).show();
-            return;
+        if (!StringUtils.isNullOrBlanK(url)) {
+            videoPlayer.setVideoPath(url);
+            videoPlayer.setOnControlListener(this);
+            videoPlayer.start();
         }
-        videoPlayer.setVideoPath(url);
-        videoPlayer.setOnControlListener(this);
-        videoPlayer.start();
         initView();
     }
 

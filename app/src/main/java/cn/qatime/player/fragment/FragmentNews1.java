@@ -1,5 +1,6 @@
 package cn.qatime.player.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -8,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -29,11 +32,13 @@ import java.util.Comparator;
 import java.util.List;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.MessageActivity;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.observer.UserInfoObservable;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
+import libraryextra.utils.ScreenUtils;
 
 /**
  * @author luntify
@@ -63,6 +68,7 @@ public class FragmentNews1 extends BaseFragment {
     private void initView(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
         listView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+        listView.getRefreshableView().setDividerHeight(1);
 
     }
 
@@ -84,7 +90,8 @@ public class FragmentNews1 extends BaseFragment {
             @Override
             public void convert(ViewHolder holder, RecentContact item, int position) {
                 if (item.getSessionType() == SessionTypeEnum.Team) {
-                    holder.setText(R.id.name, TeamDataCache.getInstance().getTeamName(item.getContactId()));
+                    ((TextView) holder.getView(R.id.name)).setMaxWidth((int) (ScreenUtils.getScreenWidth(getActivity()) * 0.8));
+                    holder.setText(R.id.name, TeamDataCache.getInstance().getTeamName(item.getContactId()).replace("讨论组", ""));
                 }
                 holder.getView(R.id.count).setVisibility(item.getUnreadCount() == 0 ? View.GONE : View.VISIBLE);
                 holder.setText(R.id.count, String.valueOf(item.getUnreadCount()));
@@ -96,12 +103,13 @@ public class FragmentNews1 extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                if (callback != null) {
-//                    RecentContact recent = (RecentContact) parent.getAdapter().getItem(position);
-//                    callback.onItemClick(recent);
-//                }
+                Intent intent = new Intent(getActivity(), MessageActivity.class);
+                intent.putExtra("sessionId", items.get(position).getContactId());
+                intent.putExtra("sessionType", items.get(position).getSessionType());
+                startActivity(intent);
             }
         });
+
         listView.getRefreshableView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             @Override
