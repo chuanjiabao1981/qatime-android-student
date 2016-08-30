@@ -31,7 +31,7 @@ import libraryextra.utils.VolleyListener;
 /**
  * Created by lenovo on 2016/8/17.
  */
-public class UnbindPhoneActivity extends BaseActivity implements View.OnClickListener {
+public class VerifyPhoneActivity extends BaseActivity implements View.OnClickListener {
 
     private TextView textGetcode;
     private Button buttonNext;
@@ -50,13 +50,13 @@ public class UnbindPhoneActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_unbind_phone);
+        setContentView(R.layout.activity_verify_bind_phone);
         initView();
         time = new TimeCount(60000, 1000);
     }
 
     private void initView() {
-        setTitle(getResources().getString(R.string.bind_phone_number));
+        setTitle(getResources().getString(R.string.verify_phone_number));
         assignViews();
 
         currentPhone.setText(BaseApplication.getProfile().getData().getUser().getLogin_mobile() + "");
@@ -103,6 +103,10 @@ public class UnbindPhoneActivity extends BaseActivity implements View.OnClickLis
                 time.start();
                 break;
             case R.id.button_next:
+                if (StringUtils.isNullOrBlanK(code.getText().toString())) { //验证码
+                    Toast.makeText(this, getResources().getString(R.string.enter_the_verification_code), Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 map = new HashMap<>();
                 map.put("send_to", currentPhone.getText().toString().trim());
                 map.put("captcha", code.getText().toString().trim());
@@ -119,11 +123,17 @@ public class UnbindPhoneActivity extends BaseActivity implements View.OnClickLis
 
                             if (response.isNull("data")) {
                                 Logger.e("验证成功");
-                                Intent intent = new Intent(UnbindPhoneActivity.this, BindPhoneActivity.class);
-                                startActivity(intent);
+                                String next = getIntent().getStringExtra("next");
+                                if ("phone".equals(next)) {
+                                    Intent intent = new Intent(VerifyPhoneActivity.this, BindPhoneActivity.class);
+                                    startActivity(intent);
+                                } else if ("email".equals(next)) {
+                                    Intent intent = new Intent(VerifyPhoneActivity.this, BindEmailActivity.class);
+                                    startActivity(intent);
+                                }
                             } else {
                                 JSONObject data = response.getJSONObject("data");
-                                Toast.makeText(UnbindPhoneActivity.this, data.getString("result") + ": 验证失败\n" + data.getString("error"), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(VerifyPhoneActivity.this, data.getString("result") + ": 验证失败\n" + data.getString("error"), Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

@@ -73,6 +73,11 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
         currentphone = targetPhone.getText().toString().trim();
         switch (v.getId()) {
             case R.id.text_getcode:
+                if (!StringUtils.isPhone(currentphone)) {//手机号不正确
+                    Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 Map<String, String> map = new HashMap<>();
                 map.put("send_to", currentphone);
                 map.put("key", "send_captcha");
@@ -104,13 +109,22 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                 time.start();
                 break;
             case R.id.button_over:
-                // TODO: 2016/8/26  更改手机号
+
+                if (!StringUtils.isPhone(currentphone)) {//手机号不正确
+                    Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (StringUtils.isNullOrBlanK(code.getText().toString())) { //验证码
+                    Toast.makeText(this, getResources().getString(R.string.enter_the_verification_code), Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 map = new HashMap<>();
                 map.put("id", "" + BaseApplication.getUserId());
-                map.put("send_to", currentphone);
+                map.put("login_mobile", currentphone);
                 map.put("captcha_confirmation", code.getText().toString().trim());
 
-                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.getUrl(UrlUtils.urlGetCode + "/login_mobile", map), null, new VolleyListener(this) {
+                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getUserId() + "/login_mobile", map), null, new VolleyListener(this) {
                     @Override
                     protected void onTokenOut() {
 
@@ -122,6 +136,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 
                             if (!response.isNull("data")) {
                                 Logger.e("验证成功");
+                                Toast.makeText(BindPhoneActivity.this, "绑定手机修改成功", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(BindPhoneActivity.this, SecurityManagerActivity.class);
                                 startActivity(intent);
                             } else {

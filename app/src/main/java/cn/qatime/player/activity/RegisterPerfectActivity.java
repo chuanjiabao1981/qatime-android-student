@@ -199,7 +199,9 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                                                     SPUtils.putObject(RegisterPerfectActivity.this, "profile", profile);
                                                     BaseApplication.setProfile(profile);
                                                     Intent intent = new Intent(RegisterPerfectActivity.this, MainActivity.class);
-                                                    startActivityForResult(intent, Constant.REGIST);
+                                                    startActivity(intent);
+                                                    setResult(Constant.REGIST);
+                                                    finish();
                                                 } else {
                                                     //没有数据或token
                                                 }
@@ -326,9 +328,6 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                     Glide.with(this).load(Uri.fromFile(new File(imageUrl))).transform(new GlideCircleTransform(this)).crossFade().into(headsculpture);
                 }
             }
-        } else if (resultCode == Constant.REGIST) {
-            setResult(resultCode);
-            finish();
         }
     }
 }

@@ -6,13 +6,27 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.orhanobut.logger.Logger;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.StringUtils;
+import libraryextra.utils.VolleyListener;
 
-public class ForgetPasswordActivity extends BaseActivity {
+public class ForgetPasswordActivity extends BaseActivity implements View.OnClickListener {
     EditText number;
     EditText code;
     TextView getcode;
@@ -22,6 +36,7 @@ public class ForgetPasswordActivity extends BaseActivity {
     private boolean statusLogin;
     private View currentPhoneView;
     private TextView currentPhone;
+    private String phone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,24 +62,63 @@ public class ForgetPasswordActivity extends BaseActivity {
         code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_verification_code));
         newpass.setHint(StringUtils.getSpannedString(this, R.string.hint_password_forget));
 
-        getcode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                time.start();
-            }
-        });
+        getcode.setOnClickListener(this);
 
         statusLogin = getIntent().getBooleanExtra("status_login", false);
         if (statusLogin) {
             currentPhoneView.setVisibility(View.VISIBLE);
             number.setVisibility(View.GONE);
-
-            currentPhone.setText(BaseApplication.getProfile().getData().getUser().getLogin_mobile() + "");
-
-
+            phone = BaseApplication.getProfile().getData().getUser().getLogin_mobile() + "";
+            currentPhone.setText(phone);
         } else {
             number.setVisibility(View.VISIBLE);
             currentPhoneView.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (!statusLogin) {
+            phone = number.getText().toString().trim();
+        }
+        switch (v.getId()) {
+            case R.id.get_code:
+                if (!StringUtils.isPhone(phone)) {
+                    Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Map<String, String> map = new HashMap<>();
+                map.put("send_to", phone);
+                map.put("key", "get_password_back");
+                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlGetCode, map), null, new VolleyListener(this) {
+                    @Override
+                    protected void onTokenOut() {
+
+                    }
+
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        Logger.e("验证码发送成功" + phone + "---" + response.toString());
+                        Toast.makeText(getApplicationContext(), "验证码已经发送至" + phone + "，请注意查收", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+
+                    }
+                }));
+                time.start();
+                break;
+            case R.id.submit:
+                // TODO: 2016/8/29 找回密码接口
+                break;
+
         }
     }
 

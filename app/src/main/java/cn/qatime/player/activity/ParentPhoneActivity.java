@@ -7,10 +7,26 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.orhanobut.logger.Logger;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.StringUtils;
+import libraryextra.utils.VolleyListener;
 
 /**
  * Created by lenovo on 2016/8/17.
@@ -23,6 +39,7 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
     private EditText password;
     private TimeCount time;
     private TextView currentParentPhone;
+    private String phone;
 
 
     private void assignViews() {
@@ -51,8 +68,8 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
         password.setHint(StringUtils.getSpannedString(this, R.string.hint_input_password));
         newParentPhone.setHint(StringUtils.getSpannedString(this, R.string.new_parent_phone));
         code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_code));
-        //TODO 获取家长手机号 设置TextView
 
+        currentParentPhone.setText(getIntent().getStringExtra("phoneP"));
 
         textGetcode.setOnClickListener(this);
         buttonOver.setOnClickListener(this);
@@ -61,16 +78,98 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
+        phone = newParentPhone.getText().toString().trim();
+        if (!StringUtils.isPhone(phone)) {//手机号不正确
+            Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         switch (v.getId()) {
+
             case R.id.text_getcode:
-                //TODO 发送验证短信
-                String phone = newParentPhone.getText().toString().trim();
+                Map<String, String> map = new HashMap<>();
+                map.put("send_to", phone);
+                map.put("key", "send_captcha");
+
+                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlGetCode, map), null, new VolleyListener(this) {
+                    @Override
+                    protected void onTokenOut() {
+
+                    }
+
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        Logger.e("验证码发送成功" + phone + "---" + response.toString());
+                        Toast.makeText(getApplicationContext(), "验证码已经发送至" + phone + "，请注意查收", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+
+                    }
+                }));
+
                 time.start();
                 break;
             case R.id.button_over:
-                //TODO 绑定手机
-                Intent intent = new Intent(this, SecurityManagerActivity.class);
-                startActivity(intent);
+                if (!StringUtils.isGoodPWD(password.getText().toString().trim())) {
+                    Toast.makeText(this, getResources().getString(R.string.password_6_16), Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                if (StringUtils.isNullOrBlanK(code.getText().toString().trim())) { //验证码
+                    Toast.makeText(this, getResources().getString(R.string.enter_the_verification_code), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                map = new HashMap<>();
+                map.put("id", "" + BaseApplication.getUserId());
+                map.put("parent_phone", phone);
+                map.put("current_password", password.getText().toString().trim());
+                map.put("captcha_confirmation", code.getText().toString().trim());
+
+                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.getUrl(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/parent_phone", map), null, new VolleyListener(this) {
+                    @Override
+                    protected void onTokenOut() {
+
+                    }
+
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+
+
+                        if (!response.isNull("data")) {
+                            Logger.e("验证成功");
+                            Toast.makeText(ParentPhoneActivity.this, "家长手机修改成功", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(ParentPhoneActivity.this, SecurityManagerActivity.class);
+                            startActivity(intent);
+                        }
+
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                        Logger.e(response.toString());
+                        try {
+                            Toast.makeText(ParentPhoneActivity.this, response.getJSONObject("error").getString("msg"), Toast.LENGTH_SHORT).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+
+                    }
+                }));
+
                 break;
         }
     }

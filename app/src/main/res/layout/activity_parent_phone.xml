@@ -76,6 +76,7 @@
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 android:paddingTop="8dp"
+                android:inputType="textPassword"
                 android:singleLine="true"
                 android:textColorHint="#ff999999"
                  />

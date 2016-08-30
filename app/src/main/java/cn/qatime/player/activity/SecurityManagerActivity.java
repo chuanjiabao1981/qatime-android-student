@@ -8,8 +8,6 @@ import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
@@ -17,6 +15,7 @@ import org.json.JSONObject;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.PersonalInformationBean;
@@ -24,13 +23,6 @@ import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyListener;
 
 public class SecurityManagerActivity extends BaseActivity implements View.OnClickListener {
-
-
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
 
     private LinearLayout bindPhoneNumber;
     private TextView phoneNumberM;
@@ -58,14 +50,10 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
 
         initView();
         initData();
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     private void initData() {
 
-        // TODO: 2016/8/26 改为学生信息URL
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null, new VolleyListener(this) {
             @Override
             protected void onTokenOut() {
@@ -76,7 +64,8 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
             protected void onSuccess(JSONObject response) {
                 Logger.e("学生信息：  " + response.toString());
                 PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
-
+                Logger.e(bean.toString());
+                setValue(bean);
             }
 
             @Override
@@ -94,7 +83,12 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
     }
 
     private void setValue(PersonalInformationBean bean) {
-// TODO: 2016/8/26 设置学生信息
+        String parentPhone = bean.getData().getParent_phone();
+        phoneNumberP.setText(parentPhone != null ? parentPhone : "无");
+        String email = bean.getData().getEmail();
+        this.email.setText(email != null ? email : "无");
+        String loginMobile = bean.getData().getLogin_mobile();
+        phoneNumberM.setText(loginMobile != null ? loginMobile : "无");
     }
 
 
@@ -109,25 +103,40 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        initData();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bind_phone_number://绑定手机
-                Intent intent = new Intent(this, UnbindPhoneActivity.class);
+                Intent intent = new Intent(this, VerifyPhoneActivity.class);
+                intent.putExtra("next", "phone");
                 startActivity(intent);
                 break;
             case R.id.bind_email://绑定邮箱
-                intent = new Intent(this, BindEmailActivity.class);
+                intent = new Intent(this, VerifyPhoneActivity.class);
+                intent.putExtra("next", "email");
                 startActivity(intent);
                 break;
             case R.id.parent_phone_number://家长手机
                 intent = new Intent(this, ParentPhoneActivity.class);
+                intent.putExtra("phoneP", phoneNumberP.getText());
                 startActivity(intent);
                 break;
             case R.id.change_password://修改密码
                 intent = new Intent(this, ChangePasswordActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, Constant.REQUEST_EXIT_LOGIN);
                 break;
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constant.REQUEST_EXIT_LOGIN && resultCode == Constant.RESPONSE_EXIT_LOGIN) {
+            setResult(Constant.RESPONSE_EXIT_LOGIN);
+            finish();
+        }
+    }
 }
