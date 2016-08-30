@@ -6,41 +6,50 @@
 
     <include layout="@layout/layout_backbar" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:layout_marginTop="10dp"
-            android:src="@mipmap/logo" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/image"
-            android:layout_marginTop="10dp"
-            android:textSize="12sp"
-            android:text="          北京维幄通达网络科技有限公司，成立于2012年初，主要从事教育科研产品的销售以及教育网络推广。公司实力优越，拥有一批科研技术专业能力强大的研发团队。目前，教育信息化改革的背景下，公司紧紧围绕互联网技术与教育产生信息化这一特点，重点着力于建立独具特色的现代信息化教育模式，公司的研发成果为优化教育资源，推进教育信息改革起到了很大的促进作用。现阶段公司正积极面向全国开展销售推广业务，具有强大的发展潜力和良好的发展前景。现诚邀有志之士加入我们，与我们携手共同实现理想。" />
-
-
-        <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_marginBottom="30dp"-->
-        <!--android:gravity="center"-->
-        <!--android:text="Copyright©2012-2016\n北京维幄通达网络科技有限公司" />-->
-        <!---->
-
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:scrollbars="none"
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/qq"
             android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:src="@mipmap/qat_time_logo" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/image"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/about_us_desc"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="120dp" />
+            <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_marginBottom="30dp"-->
+            <!--android:gravity="center"-->
+            <!--android:text="Copyright©2012-2016\n北京维幄通达网络科技有限公司" />-->
+            <!---->
+
+            <!--<view-->
+            <!--android:layout_width="ma"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1" />-->
 
             <View
                 android:layout_width="match_parent"
@@ -71,7 +80,7 @@
                     android:id="@+id/phone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="400-800-8888"
+                    android:text="0353-2135828"
                     android:textColor="#3399FF"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -80,20 +89,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="#dfdddd" />
-        </LinearLayout>
 
-
-        <LinearLayout
-            android:id="@+id/qq"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/bottom"
-            android:orientation="vertical">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#dfdddd" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -117,7 +113,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="345060094"
+                    android:text="2436219060"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -125,39 +121,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="#dfdddd" />
+
+
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginLeft="13dp"-->
+            <!--android:text="@string/weixin"-->
+            <!--android:textSize="16sp" />-->
+
+            <!--<ImageView-->
+            <!--android:id="@+id/weichat"-->
+            <!--android:layout_width="130dp"-->
+            <!--android:layout_height="130dp"-->
+            <!--android:layout_above="@+id/text"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:src="@mipmap/wechat_public" />-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/text"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_marginBottom="5dp"-->
+            <!--android:text="长按识别二维码关注" />-->
+
         </LinearLayout>
-
-        <RelativeLayout
-            android:id="@+id/bottom"
-            android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:padding="5dp"
-            android:layout_alignParentBottom="true">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="13dp"
-                android:text="@string/weixin"
-                android:textSize="16sp" />
-
-            <ImageView
-                android:id="@+id/weichat"
-                android:layout_width="130dp"
-                android:layout_height="130dp"
-                android:layout_above="@+id/text"
-                android:layout_centerHorizontal="true"
-                android:src="@mipmap/wechat_pay" />
-
-            <TextView
-                android:id="@+id/text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="5dp"
-                android:text="长按识别二维码关注" />
-        </RelativeLayout>
-    </RelativeLayout>
+    </ScrollView>
 </LinearLayout>

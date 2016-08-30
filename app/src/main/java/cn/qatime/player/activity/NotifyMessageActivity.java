@@ -26,6 +26,7 @@ public class NotifyMessageActivity extends BaseActivity implements View.OnClickL
         cbVoice = (CheckBox) findViewById(R.id.cb_voice);
         shake = findViewById(R.id.shake);
         cbShake = (CheckBox) findViewById(R.id.cb_shake);
+
     }
 
     @Override
@@ -44,10 +45,12 @@ public class NotifyMessageActivity extends BaseActivity implements View.OnClickL
         setContentView(R.layout.activity_notify_message);
         setTitle("消息提醒");
         assignViews();
-
-        setVoiceStatus();
-        setShakeStatus();
-
+        voice.setOnClickListener(this);
+        shake.setOnClickListener(this);
+        shakeStatus = (boolean) SPUtils.get(this, "shake_status", true);
+        cbShake.setChecked(shakeStatus);
+        voiceStatus = (boolean) SPUtils.get(this, "voice_status", true);
+        cbVoice.setChecked(voiceStatus);
     }
 
     @Override
@@ -69,11 +72,12 @@ public class NotifyMessageActivity extends BaseActivity implements View.OnClickL
 
     private void setShakeStatus() {
         shakeStatus = (boolean) SPUtils.get(this, "shake_status", true);
-
         if (shakeStatus) {
             SPUtils.put(this, "shake_status", false);
+            cbShake.setChecked(false);
         } else {
             SPUtils.put(this, "shake_status", true);
+            cbShake.setChecked(true);
         }
     }
 
@@ -81,8 +85,10 @@ public class NotifyMessageActivity extends BaseActivity implements View.OnClickL
         voiceStatus = (boolean) SPUtils.get(this, "voice_status", true);
         if (voiceStatus) {
             SPUtils.put(this, "voice_status", false);
+            cbVoice.setChecked(false);
         } else {
             SPUtils.put(this, "voice_status", true);
+            cbVoice.setChecked(true);
         }
     }
 }

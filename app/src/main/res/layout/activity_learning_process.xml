@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"
-        android:background="@drawable/text_background">
+        android:background="@drawable/text_background"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -72,16 +73,16 @@
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:padding="5dp"
                     android:text="@string/learn_1"
                     android:textColor="#000" />
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"
                     android:layout_height="match_parent"
+                    android:layout_weight="2"
                     android:padding="5dp"
                     android:text="@string/learn_desc_1"
                     android:textColor="#8000" />
@@ -111,16 +112,16 @@
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:padding="5dp"
                     android:text="@string/learn_2"
                     android:textColor="#000" />
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"
                     android:layout_height="wrap_content"
+                    android:layout_weight="2"
                     android:padding="5dp"
                     android:text="@string/learn_desc_2"
                     android:textColor="#8000" />
@@ -150,16 +151,16 @@
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:padding="5dp"
                     android:text="@string/learn_3"
                     android:textColor="#000" />
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"
                     android:layout_height="match_parent"
+                    android:layout_weight="2"
                     android:padding="5dp"
                     android:text="@string/learn_desc_3"
                     android:textColor="#8000" />
@@ -184,16 +185,16 @@
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:padding="5dp"
                     android:text="@string/learn_4"
                     android:textColor="#000" />
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"
                     android:layout_height="match_parent"
+                    android:layout_weight="2"
                     android:padding="5dp"
                     android:text="@string/learn_desc_4"
                     android:textColor="#8000" />
@@ -323,16 +324,16 @@
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:padding="5dp"
                     android:text="@string/learn_5"
                     android:textColor="#000" />
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"
                     android:layout_height="match_parent"
+                    android:layout_weight="2"
                     android:padding="5dp"
                     android:text="@string/learn_desc_5"
                     android:textColor="#8000" />

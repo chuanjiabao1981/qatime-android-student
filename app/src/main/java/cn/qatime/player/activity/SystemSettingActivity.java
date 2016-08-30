@@ -142,7 +142,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 startActivity(intent);
                 break;
             case R.id.download:
-                //TODO 更新版本
+                //TODO 更新版
                 alertDialog.dismiss();
                 break;
         }

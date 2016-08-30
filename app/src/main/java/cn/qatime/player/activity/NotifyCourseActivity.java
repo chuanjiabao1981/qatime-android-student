@@ -76,17 +76,29 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
         }
         spinnerHours.setAdapter(new ArrayAdapter<>(this, R.layout.item_spinner_time, al_hours));
         spinnerMinute.setAdapter(new ArrayAdapter<>(this, R.layout.item_spinner_time, al_minute));
-
-        spinnerHours.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        hour = al_hours.get((int) spinnerHours.getSelectedItemId()).replace("小时", "");
+        minute = al_minute.get((int) spinnerHours.getSelectedItemId()).replace("分钟", "");
+        spinnerHours.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                hour = al_hours.get(position).replace("小时", "");
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                hour = al_hours.get((int) spinnerHours.getSelectedItemId()).replace("小时", "");
+                Logger.e("hour=" + hour);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
-        spinnerHours.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        spinnerMinute.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                minute = al_minute.get(position).replace("分钟", "");
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                minute = al_minute.get((int) spinnerHours.getSelectedItemId()).replace("分钟", "");
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 
@@ -96,6 +108,10 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
         setContentView(R.layout.activity_notify_course);
         setTitle("课程提醒");
         assignViews();
+        cb1.setChecked((Boolean) SPUtils.get(this, "notify_course", true));
+        cb2.setChecked((Boolean) SPUtils.get(this, "notify_public", true));
+        sms.setChecked((Boolean) SPUtils.get(this, "notify_sms", true));
+        sys.setChecked((Boolean) SPUtils.get(this, "notify_sys", true));
 
         cb1.setOnCheckedChangeListener(this);
         cb2.setOnCheckedChangeListener(this);
