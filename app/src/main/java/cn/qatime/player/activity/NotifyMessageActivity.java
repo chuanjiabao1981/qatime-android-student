@@ -19,6 +19,7 @@ public class NotifyMessageActivity extends BaseActivity implements View.OnClickL
 
 
     private void assignViews() {
+        //TODO 待修改
         View voice = findViewById(R.id.voice);
         cbVoice = (CheckBox) findViewById(R.id.cb_voice);
         View shake = findViewById(R.id.shake);
@@ -60,12 +61,14 @@ public class NotifyMessageActivity extends BaseActivity implements View.OnClickL
     }
 
     private void setShakeStatus() {
-        cbShake.setChecked(!UserPreferences.getVibrateToggle());
-        UserPreferences.setVibrateToggle(!UserPreferences.getVibrateToggle());
+        boolean check = UserPreferences.getVibrateToggle();
+        cbShake.setChecked(!check);
+        UserPreferences.setVibrateToggle(!check);
     }
 
     private void setVoiceStatus() {
-       cbVoice.setChecked(!UserPreferences.getRingToggle());
-        UserPreferences.setRingToggle(!UserPreferences.getRingToggle());
+        boolean check = UserPreferences.getRingToggle();
+        cbVoice.setChecked(!check);
+        UserPreferences.setRingToggle(!check);
     }
 }

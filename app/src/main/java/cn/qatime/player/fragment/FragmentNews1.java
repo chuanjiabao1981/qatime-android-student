@@ -17,6 +17,7 @@ import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.netease.nimlib.sdk.team.model.Team;
@@ -82,7 +83,10 @@ public class FragmentNews1 extends BaseFragment {
         adapter = new CommonAdapter<RecentContact>(getActivity(), items, R.layout.item_fragment_news1) {
             @Override
             public void convert(ViewHolder holder, RecentContact item, int position) {
-                holder.setText(R.id.name, item.getContent());
+                if (item.getSessionType() == SessionTypeEnum.Team) {
+                    holder.setText(R.id.name, TeamDataCache.getInstance().getTeamName(item.getContactId()));
+                }
+                holder.getView(R.id.count).setVisibility(item.getUnreadCount() == 0 ? View.GONE : View.VISIBLE);
                 holder.setText(R.id.count, String.valueOf(item.getUnreadCount()));
 
             }
