@@ -240,6 +240,7 @@
             android:name=".activity.MessageActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize|stateHidden"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.LearningProcessActivity"

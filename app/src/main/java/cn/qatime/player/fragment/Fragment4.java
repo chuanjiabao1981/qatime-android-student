@@ -133,6 +133,7 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
         Logger.e("图片返回");
         if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
             Glide.with(getActivity()).load(data.getStringExtra("url")).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
+            name.setText(BaseApplication.getProfile().getData().getUser().getName());
         }
     }
 
