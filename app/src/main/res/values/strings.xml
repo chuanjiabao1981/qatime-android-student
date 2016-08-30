@@ -294,7 +294,7 @@
     <string name="clean_cache">清理缓存</string>
     <string name="learning_process">学习流程</string>
     <string name="feedback">意见反馈</string>
-    <string name="current_version">当前版本V</string>
+    <string name="current_version">V</string>
     <string name="notify_message">消息提醒</string>
     <string name="notify_classes">课程提醒</string>
     <string name="voice">声音</string>
