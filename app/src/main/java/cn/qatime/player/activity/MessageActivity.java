@@ -2,8 +2,14 @@ package cn.qatime.player.activity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewStructure;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.netease.nimlib.sdk.NIMClient;
@@ -18,6 +24,9 @@ import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.MessageReceipt;
 import com.netease.nimlib.sdk.msg.model.QueryDirectionEnum;
+import com.netease.nimlib.sdk.team.constant.TeamTypeEnum;
+import com.netease.nimlib.sdk.team.model.Team;
+import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.orhanobut.logger.Logger;
 
@@ -32,8 +41,14 @@ import java.util.List;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.im.SimpleCallback;
+import cn.qatime.player.im.cache.FriendDataCache;
+import cn.qatime.player.im.cache.TeamDataCache;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
+import libraryextra.transformation.GlideCircleTransform;
+import libraryextra.utils.ScreenUtils;
+import libraryextra.utils.StringUtils;
 
 /**
  * @author luntify
@@ -57,6 +72,9 @@ public class MessageActivity extends BaseActivity {
     private List<IMMessage> items = new ArrayList<>();
     private int LOAD_MESSAGE_COUNT = 20;//聊天加载条数
     private CommonAdapter<IMMessage> adapter;
+    private Team team;
+    private Button send;
+    private TextView tipText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,9 +84,11 @@ public class MessageActivity extends BaseActivity {
         sessionType = (SessionTypeEnum) getIntent().getSerializableExtra("sessionType");
         initView();
 
+        registerTeamUpdateObserver(true);
     }
 
     private void initView() {
+        tipText = (TextView) findViewById(R.id.tip);
         listView = (ListView) findViewById(R.id.list);
         adapter = new CommonAdapter<IMMessage>(this, items, R.layout.item_message) {
             @Override
@@ -77,20 +97,52 @@ public class MessageActivity extends BaseActivity {
                 if (item.getFromAccount().equals(BaseApplication.getAccount())) {
                     holder.getView(R.id.right).setVisibility(View.VISIBLE);
                     holder.getView(R.id.left).setVisibility(View.GONE);
-                    Glide.with(MessageActivity.this).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_32).crossFade().dontAnimate().into((ImageView) holder.getView(R.id.other_head));
+                    Glide.with(MessageActivity.this).load(BaseApplication.getProfile().getData().getUser().getChat_account().getIcon()).crossFade().dontAnimate().transform(new GlideCircleTransform(MessageActivity.this)).into((ImageView) holder.getView(R.id.my_head));
+                    holder.setText(R.id.my_time, getTime(item.getTime()));
+                    holder.setText(R.id.my_content, item.getContent());
                 } else {
                     holder.getView(R.id.right).setVisibility(View.GONE);
                     holder.getView(R.id.left).setVisibility(View.VISIBLE);
-                    Glide.with(MessageActivity.this).load(BaseApplication.getProfile().getData().getUser().getChat_account().getIcon()).crossFade().dontAnimate().into((ImageView) holder.getView(R.id.my_head));
+                    Glide.with(MessageActivity.this).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_32).crossFade().dontAnimate().transform(new GlideCircleTransform(MessageActivity.this)).into((ImageView) holder.getView(R.id.other_head));
+                    holder.setText(R.id.other_name, item.getFromNick());
+                    holder.setText(R.id.other_content, item.getContent());
+                    holder.setText(R.id.other_time, getTime(item.getTime()));
                 }
 
-                holder.setText(R.id.other_name, item.getFromNick());
-                holder.setText(R.id.other_content, item.getContent());
-                holder.setText(R.id.other_time, getTime(item.getTime()));
             }
         };
         listView.setAdapter(adapter);
+        final EditText content = (EditText) findViewById(R.id.content);
+        send = (Button) findViewById(R.id.send);
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isAllowSendMessage()) {
+                    Toast.makeText(MessageActivity.this, "您已不在该群,不能发送消息", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (StringUtils.isNullOrBlanK(content.getText().toString())) {
+                    Toast.makeText(MessageActivity.this, "消息不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                // 创建文本消息
+                IMMessage message = MessageBuilder.createTextMessage(
+                        sessionId, // 聊天对象的 ID，如果是单聊，为用户帐号，如果是群聊，为群组 ID
+                        sessionType, // 聊天类型，单聊或群组
+                        content.getText().toString() // 文本内容
+                );
+                // 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
+                NIMClient.getService(MsgService.class).sendMessage(message, true);
+
+                items.add(message);
+                adapter.notifyDataSetChanged();
+                listView.setSelection(items.size() - 1);
+                content.setText("");
+            }
+        });
+
         loadMessage(false);
+
     }
 
     /**
@@ -274,11 +326,138 @@ public class MessageActivity extends BaseActivity {
                 && message.getSessionId().equals(sessionId);
     }
 
+    /**
+     * 请求群基本信息
+     */
+
+    private void requestTeamInfo() {
+        Team team = TeamDataCache.getInstance().getTeamById(sessionId);
+        if (team != null) {
+            updateTeamInfo(team);
+        } else {
+            TeamDataCache.getInstance().fetchTeamById(sessionId, new SimpleCallback<Team>() {
+                @Override
+                public void onResult(boolean success, Team result) {
+                    if (success && result != null) {
+                        updateTeamInfo(result);
+                    } else {
+                        Toast.makeText(MessageActivity.this, "获取群组信息失败!", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * 更新群信息
+     */
+    private void updateTeamInfo(final Team d) {
+        if (d == null) {
+            return;
+        }
+        team = d;
+//        setTitle(team == null ? sessionId : team.getName() + "(" + team.getMemberCount() + "人)");
+//
+        tipText.setText(team.getType() == TeamTypeEnum.Normal ? "您已退出该群组" : "您已退出该群组");
+        tipText.setVisibility(team.isMyTeam() ? View.GONE : View.VISIBLE);
+    }
+
+    public boolean isAllowSendMessage() {
+        if (team == null || !team.isMyTeam()) {
+            Toast.makeText(MessageActivity.this, R.string.team_send_message_not_allow, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+
+    /**
+     * 注册群信息更新监听
+     *
+     * @param register
+     */
+    private void registerTeamUpdateObserver(boolean register) {
+        if (register) {
+            TeamDataCache.getInstance().registerTeamDataChangedObserver(teamDataChangedObserver);
+            TeamDataCache.getInstance().registerTeamMemberDataChangedObserver(teamMemberDataChangedObserver);
+        } else {
+            TeamDataCache.getInstance().unregisterTeamDataChangedObserver(teamDataChangedObserver);
+            TeamDataCache.getInstance().unregisterTeamMemberDataChangedObserver(teamMemberDataChangedObserver);
+        }
+        FriendDataCache.getInstance().registerFriendDataChangedObserver(friendDataChangedObserver, register);
+    }
+
+    /**
+     * 群资料变动通知和移除群的通知（包括自己退群和群被解散）
+     */
+    TeamDataCache.TeamDataChangedObserver teamDataChangedObserver = new TeamDataCache.TeamDataChangedObserver() {
+        @Override
+        public void onUpdateTeams(List<Team> teams) {
+            if (team == null) {
+                return;
+            }
+            for (Team t : teams) {
+                if (t.getId().equals(team.getId())) {
+                    updateTeamInfo(t);
+                    break;
+                }
+            }
+        }
+
+        @Override
+        public void onRemoveTeam(Team team) {
+            if (team == null) {
+                return;
+            }
+            if (team.getId().equals(MessageActivity.this.team.getId())) {
+                updateTeamInfo(team);
+            }
+        }
+    };
+
+    /**
+     * 群成员资料变动通知和移除群成员通知
+     */
+    TeamDataCache.TeamMemberDataChangedObserver teamMemberDataChangedObserver = new TeamDataCache.TeamMemberDataChangedObserver() {
+
+        @Override
+        public void onUpdateTeamMember(List<TeamMember> members) {
+            adapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onRemoveTeamMember(TeamMember member) {
+        }
+    };
+
+    FriendDataCache.FriendDataChangedObserver friendDataChangedObserver = new FriendDataCache.FriendDataChangedObserver() {
+        @Override
+        public void onAddedOrUpdatedFriends(List<String> accounts) {
+            adapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onDeletedFriends(List<String> accounts) {
+            adapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onAddUserToBlackList(List<String> account) {
+            adapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onRemoveUserFromBlackList(List<String> account) {
+            adapter.notifyDataSetChanged();
+        }
+    };
 
     @Override
     protected void onResume() {
         super.onResume();
         registerObservers(true);
+        requestTeamInfo();
         NIMClient.getService(MsgService.class).setChattingAccount(sessionId, sessionType);
     }
 
@@ -292,5 +471,6 @@ public class MessageActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         registerObservers(false);
+        registerTeamUpdateObserver(false);
     }
 }

@@ -334,4 +334,5 @@
     <string name="update_notify2">土豪请无视！</string>
     <string name="password_6_16">密码长度必须为6-16位</string>
 
+    <string name="team_send_message_not_allow">您已不在该群，不能发送消息</string>
 </resources>

@@ -6,16 +6,31 @@
 
     <include layout="@layout/layout_backbar" />
 
-    <ListView
-        android:id="@+id/list"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="1">
 
+        <TextView
+            android:id="@+id/tip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ff723f"
+            android:gravity="center"
+            android:padding="5dp"
+            android:visibility="gone" />
 
-        android:divider="#00000000"
-        android:dividerHeight="0dp"
-        android:scrollbars="none" />
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:cacheColorHint="#00000000"
+            android:divider="#00000000"
+            android:dividerHeight="0dp"
+            android:listSelector="#00000000"
+            android:scrollbars="none"
+            android:transcriptMode="normal" />
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,6 +39,7 @@
         android:padding="6dp">
 
         <EditText
+            android:id="@+id/content"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -36,7 +52,8 @@
             android:paddingRight="10dp"
             android:src="@mipmap/biaoqing" />
 
-        <TextView
+        <Button
+            android:id="@+id/send"
             android:layout_width="60dp"
             android:layout_height="match_parent"
             android:background="@drawable/button_bg_selector_orange"

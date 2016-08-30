@@ -74,7 +74,7 @@ public class FragmentNEVideoPlayer3 extends BaseFragment {
 
     private void initData() {
         if (id != 0) {
-            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass + "/" + id, null,
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass + "/" + id+"/play_info", null,
                     new VolleyListener(getActivity()) {
                         @Override
                         protected void onSuccess(JSONObject response) {

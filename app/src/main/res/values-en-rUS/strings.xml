@@ -272,6 +272,6 @@
     <string name="full_screen">Full screen</string>
     <string name="hd">HD</string>
 
-
+    <string name="team_send_message_not_allow">You are not in the group, can not send a message</string>
 </resources>
 

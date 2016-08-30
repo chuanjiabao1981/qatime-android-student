@@ -35,19 +35,7 @@ public class FragmentNEVideoPlayer33 extends BaseFragment {
                 holder.setText(R.id.number, StringUtils.Int2String(position + 1));
                 holder.setText(R.id.name, item.getName());
                 holder.setText(R.id.time, item.getClass_date() + " " + item.getLive_time());
-                if (item.getStatus().equals("teaching")) {//直播中
-                    holder.setText(R.id.status, getResources().getString(R.string.class_teaching));
-                } else if (item.getStatus().equals("paused")) {
-                    holder.setText(R.id.status, getResources().getString(R.string.class_teaching));
-                } else if (item.getStatus().equals("init")) {//未开始
-                    holder.setText(R.id.status, getResources().getString(R.string.class_init));
-                } else if (item.getStatus().equals("ready")) {//待开课
-                    holder.setText(R.id.status, getResources().getString(R.string.class_ready));
-                } else if (item.getStatus().equals("paused_inner")) {//暂停中
-                    holder.setText(R.id.status, getResources().getString(R.string.class_paused_inner));
-                } else {
-                    holder.setText(R.id.status, getResources().getString(R.string.class_over));//已结束
-                }
+                holder.setText(R.id.status, item.getStatus());
             }
         };
         list.setAdapter(adapter);
