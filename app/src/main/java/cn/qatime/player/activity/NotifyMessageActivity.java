@@ -6,6 +6,7 @@ import android.widget.CheckBox;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.config.UserPreferences;
 import libraryextra.utils.SPUtils;
 
 /**
@@ -13,32 +14,28 @@ import libraryextra.utils.SPUtils;
  */
 public class NotifyMessageActivity extends BaseActivity implements View.OnClickListener {
 
-    private View voice;
-    private View shake;
     private CheckBox cbVoice;
     private CheckBox cbShake;
-    private boolean voiceStatus;
-    private boolean shakeStatus;
 
 
     private void assignViews() {
-        voice = findViewById(R.id.voice);
+        //TODO 待修改
+        View voice = findViewById(R.id.voice);
         cbVoice = (CheckBox) findViewById(R.id.cb_voice);
-        shake = findViewById(R.id.shake);
+        View shake = findViewById(R.id.shake);
         cbShake = (CheckBox) findViewById(R.id.cb_shake);
+        cbVoice.setChecked(UserPreferences.getRingToggle());
+        cbShake.setChecked(UserPreferences.getVibrateToggle());
+        voice.setOnClickListener(this);
+        shake.setOnClickListener(this);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         initView();
-        initData();
     }
 
-    private void initData() {
-
-    }
 
     private void initView() {
         setContentView(R.layout.activity_notify_message);
@@ -54,13 +51,9 @@ public class NotifyMessageActivity extends BaseActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.voice:
-                //TODO 开关声音
                 setVoiceStatus();
-
                 break;
             case R.id.shake:
-                //TODO 开关震动
-
                 setShakeStatus();
 
                 break;
@@ -68,21 +61,14 @@ public class NotifyMessageActivity extends BaseActivity implements View.OnClickL
     }
 
     private void setShakeStatus() {
-        shakeStatus = (boolean) SPUtils.get(this, "shake_status", true);
-
-        if (shakeStatus) {
-            SPUtils.put(this, "shake_status", false);
-        } else {
-            SPUtils.put(this, "shake_status", true);
-        }
+        boolean check = UserPreferences.getVibrateToggle();
+        cbShake.setChecked(!check);
+        UserPreferences.setVibrateToggle(!check);
     }
 
     private void setVoiceStatus() {
-        voiceStatus = (boolean) SPUtils.get(this, "voice_status", true);
-        if (voiceStatus) {
-            SPUtils.put(this, "voice_status", false);
-        } else {
-            SPUtils.put(this, "voice_status", true);
-        }
+        boolean check = UserPreferences.getRingToggle();
+        cbVoice.setChecked(!check);
+        UserPreferences.setRingToggle(!check);
     }
 }

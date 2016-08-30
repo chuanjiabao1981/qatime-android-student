@@ -1,4 +1,4 @@
-package cn.qatime.player.utils.im;
+package cn.qatime.player.im.cache;
 
 import android.text.TextUtils;
 
@@ -20,7 +20,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import libraryextra.utils.SPUtils;
+import cn.qatime.player.base.BaseApplication;
 
 
 /**
@@ -70,7 +70,7 @@ public class FriendDataCache {
         accounts.removeAll(blacks);
 
         // 排除掉自己
-        accounts.remove(SPUtils.getAccount());
+        accounts.remove(BaseApplication.getAccount());
 
         // 确定缓存
         friendAccountSet.addAll(accounts);

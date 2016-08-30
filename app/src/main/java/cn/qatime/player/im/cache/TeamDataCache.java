@@ -1,4 +1,4 @@
-package cn.qatime.player.utils.im;
+package cn.qatime.player.im.cache;
 
 import android.text.TextUtils;
 
@@ -11,14 +11,14 @@ import com.netease.nimlib.sdk.team.TeamServiceObserver;
 import com.netease.nimlib.sdk.team.constant.TeamTypeEnum;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
-import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import libraryextra.utils.SPUtils;
+import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.im.SimpleCallback;
 
 /**
  * 群信息/群成员数据监听&缓存
@@ -40,7 +40,6 @@ public class TeamDataCache {
         List<Team> teams = NIMClient.getService(TeamService.class).queryTeamListBlock();
         addOrUpdateTeam(teams);
 
-        Logger.e("build TeamDataCache completed, team count = " + teams.size());
     }
 
     public void clear() {
@@ -374,7 +373,7 @@ public class TeamDataCache {
      * @return
      */
     public String getTeamMemberDisplayName(String tid, String account) {
-        if (account.equals(SPUtils.getAccount())) {
+        if (account.equals(BaseApplication.getAccount())) {
             return "我";
         }
 
@@ -389,7 +388,7 @@ public class TeamDataCache {
      * @return
      */
     public String getTeamMemberDisplayNameYou(String tid, String account) {
-        if (account.equals(SPUtils.getAccount())) {
+        if (account.equals(BaseApplication.getAccount())) {
             return "你";
         }
 

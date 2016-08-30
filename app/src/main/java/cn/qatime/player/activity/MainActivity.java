@@ -14,6 +14,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.SystemMessageObserver;
+import com.netease.nimlib.sdk.msg.SystemMessageService;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
@@ -28,6 +35,8 @@ import cn.qatime.player.fragment.Fragment1;
 import cn.qatime.player.fragment.Fragment2;
 import cn.qatime.player.fragment.Fragment3;
 import cn.qatime.player.fragment.Fragment4;
+import cn.qatime.player.im.manager.ReminderManager;
+import cn.qatime.player.im.model.ReminderItem;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -48,6 +57,7 @@ public class MainActivity extends BaseFragmentActivity {
             {R.mipmap.tab_moments_1, R.mipmap.tab_moments_2},
             {R.mipmap.tab_message_1, R.mipmap.tab_message_2},
             {R.mipmap.tab_person_1, R.mipmap.tab_person_2}};
+    private int currentPosition = 0;
 
     /**
      * 当前用户信息
@@ -77,6 +87,11 @@ public class MainActivity extends BaseFragmentActivity {
 //        GetCitieslist();
         GetSchoolslist();
 
+
+//        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
+//        registerMsgUnreadInfoObserver(true);
+//        registerSystemMessageObservers(true);
+//        requestSystemMessageUnreadCount();
     }
 
     /**
@@ -102,10 +117,12 @@ public class MainActivity extends BaseFragmentActivity {
         fragmentlayout.setOnChangeFragmentListener(new FragmentLayout.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
+                currentPosition = position;
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff858786);
                 ((ImageView) lastTabView.findViewById(tab_img[lastPosition])).setImageResource(tabImages[lastPosition][1]);
                 ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffeb6a4b);
                 ((ImageView) currentTabView.findViewById(tab_img[position])).setImageResource(tabImages[position][0]);
+                enableMsgNotification(false);
             }
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout, 0x1000);
@@ -277,4 +294,91 @@ public class MainActivity extends BaseFragmentActivity {
         });
         addToRequestQueue(request);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        enableMsgNotification(false);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        enableMsgNotification(true);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        registerMsgUnreadInfoObserver(false);
+//        registerSystemMessageObservers(false);
+    }
+
+    /**********************************************
+     * 云信
+     *******************************************************/
+
+    private void enableMsgNotification(boolean enable) {
+        boolean msg = (currentPosition != 2);
+        if (enable | msg) {
+            /**
+             * 设置最近联系人的消息为已读
+             *
+             * @param account,    聊天对象帐号，或者以下两个值：
+             *                    {@link #MSG_CHATTING_ACCOUNT_ALL} 目前没有与任何人对话，但能看到消息提醒（比如在消息列表界面），不需要在状态栏做消息通知
+             *                    {@link #MSG_CHATTING_ACCOUNT_NONE} 目前没有与任何人对话，需要状态栏消息通知
+             */
+            NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
+        } else {
+            NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
+        }
+    }
+
+    /**
+     * 注册未读消息数量观察者
+     */
+//    private void registerMsgUnreadInfoObserver(boolean register) {
+//        if (register) {
+//            ReminderManager.getInstance().registerUnreadNumChangedCallback(this);
+//        } else {
+//            ReminderManager.getInstance().unregisterUnreadNumChangedCallback(this);
+//        }
+//    }
+
+    /**
+     * 注册/注销系统消息未读数变化
+     *
+     * @param register
+     */
+//    private void registerSystemMessageObservers(boolean register) {
+//        NIMClient.getService(SystemMessageObserver.class).observeUnreadCountChange(sysMsgUnreadCountChangedObserver, register);
+//    }
+//
+//    private Observer<Integer> sysMsgUnreadCountChangedObserver = new Observer<Integer>() {
+//        @Override
+//        public void onEvent(Integer unreadCount) {
+////            SystemMessageUnreadManager.getInstance().setSysMsgUnreadCount(unreadCount);
+//            ReminderManager.getInstance().updateContactUnreadNum(unreadCount);
+//        }
+//    };
+//
+//    /**
+//     * 查询系统消息未读数
+//     */
+//    private void requestSystemMessageUnreadCount() {
+//        int unread = NIMClient.getService(SystemMessageService.class).querySystemMessageUnreadCountBlock();
+////        SystemMessageUnreadManager.getInstance().setSysMsgUnreadCount(unread);
+//        ReminderManager.getInstance().updateContactUnreadNum(unread);
+//
+//    }
+//
+//    /**
+//     * 未读消息实现
+//     *
+//     * @param item
+//     */
+//    @Override
+//    public void onUnreadNumChanged(ReminderItem item) {
+//        Logger.e(item.getUnread() + "");
+//    }
 }

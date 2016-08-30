@@ -66,9 +66,7 @@ public class BaseActivity extends AppCompatActivity {
      * 设备已在其他地方登陆
      */
     public void tokenOut() {
-        if (BaseApplication.getProfile() != null && BaseApplication.getProfile().getData() != null && BaseApplication.getProfile().getData() != null) {
-            BaseApplication.getProfile().getData().setRemember_token("");
-        }
+        BaseApplication.clearToken();
         Dialog dialog = new Dialog(this, R.style.Transparent);
         View view = View.inflate(this, R.layout.activity_out_alertdialog, null);
         view.findViewById(R.id.alert_dialog_confirm).setOnClickListener(new View.OnClickListener() {
