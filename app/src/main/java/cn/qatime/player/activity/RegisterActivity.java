@@ -6,6 +6,7 @@ import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,7 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.bean.Profile;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyListener;
 
@@ -71,6 +73,12 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         getcode.setOnClickListener(this);
         next.setOnClickListener(this);
         agreement.setOnClickListener(this);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                next.setEnabled(isChecked);
+            }
+        });
     }
 
     @Override
@@ -92,21 +100,20 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
                         @Override
                         protected void onSuccess(JSONObject response) {
-                            //TODO 已经注册过的呢？
-                            Toast.makeText(RegisterActivity.this, "验证码发送至" + phone.getText().toString().trim() + ",请注意查收", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, "验证码发送成功", Toast.LENGTH_SHORT).show();
                             Logger.e("验证码发送成功" + phone.getText().toString().trim() + "---" + response.toString());
                         }
 
                         @Override
                         protected void onError(JSONObject response) {
-
+                            Toast.makeText(RegisterActivity.this, "验证码发送失败", Toast.LENGTH_SHORT).show();
                         }
 
 
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
-
+                            Toast.makeText(getApplicationContext(), "服务器异常，请检查网络", Toast.LENGTH_LONG).show();
                         }
                     });
                     addToRequestQueue(request);
@@ -116,7 +123,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 }
                 break;
             case R.id.next:
-
                 next();
                 break;
             case R.id.agreement:
@@ -211,11 +217,18 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     String token = response.getJSONObject("data").getString("remember_token");
                     int id = response.getJSONObject("data").getJSONObject("user").getInt("id");
 
-                    BaseApplication.getProfile().getData().setRemember_token(token);
-                    BaseApplication.getProfile().getData().getUser().setId(id);
-                    Toast.makeText(RegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
+
+                    Toast.makeText(RegisterActivity.this, "请设置个人信息", Toast.LENGTH_SHORT).show();
                     Logger.e("注册成功" + response);
                     //下一步跳转
+                    Profile profile = new Profile();
+                    Profile.Data data = new Profile().new Data();
+                    data.setRemember_token(token);
+                    Profile.User user = new Profile().new User();
+                    user.setId(id);
+                    data.setUser(user);
+                    profile.setData(data);
+                    BaseApplication.setProfile(profile);
                     Intent intent = new Intent(RegisterActivity.this, RegisterPerfectActivity.class);
                     intent.putExtra("username", phone.getText().toString().trim());
                     intent.putExtra("password", password.getText().toString().trim());
@@ -230,21 +243,30 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             protected void onError(JSONObject response) {
-                String resault = "";
+
+                String result = "";
                 try {
-                    resault = "code:" + response.getJSONObject("error").getInt("code") + "    msg:" + response.getJSONObject("error").getString("msg");
-                    Toast.makeText(RegisterActivity.this, response.getJSONObject("error").getString("msg").replace("Captcha confirmation", "验证码"), Toast.LENGTH_SHORT).show();
+                    result = response.getJSONObject("error").getString("msg");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
+                Logger.e("注册失败--" + result);
+                if(result.contains("已经被使用")){
+                    Toast.makeText(RegisterActivity.this,"手机号已经被注册", Toast.LENGTH_SHORT).show();
+                }else if(result.contains("与确认值不匹配")){
+                    Toast.makeText(RegisterActivity.this,"验证码错误", Toast.LENGTH_SHORT).show();
+                }else if(result.contains("注册码")){
+                    Toast.makeText(RegisterActivity.this,"注册码不正确", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(RegisterActivity.this,"注册失败", Toast.LENGTH_SHORT).show();
+                }
             }
 
 
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                Toast.makeText(getApplicationContext(), "服务器异常，请检查网络", Toast.LENGTH_LONG).show();
             }
         });
 

@@ -34,6 +34,7 @@
                 android:background="@drawable/shape_input"
                 android:inputType="phone"
                 android:paddingBottom="8dp"
+                android:maxLength="11"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 android:paddingTop="8dp"

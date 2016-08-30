@@ -96,13 +96,14 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 
                     @Override
                     protected void onError(JSONObject response) {
+                        Toast.makeText(BindPhoneActivity.this, "验证码发送失败：" + currentphone, Toast.LENGTH_SHORT).show();
 
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-
+                        Toast.makeText(getApplicationContext(), "服务器异常，请检查网络", Toast.LENGTH_LONG).show();
                     }
                 }));
 
@@ -132,32 +133,31 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        try {
-
-                            if (!response.isNull("data")) {
-                                Logger.e("验证成功");
-                                Toast.makeText(BindPhoneActivity.this, "绑定手机修改成功", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(BindPhoneActivity.this, SecurityManagerActivity.class);
-                                startActivity(intent);
-                            } else {
-                                JSONObject error = response.getJSONObject("error");
-                                Toast.makeText(BindPhoneActivity.this, error.getString("msg"), Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        Logger.e("验证成功");
+                        Toast.makeText(BindPhoneActivity.this, "绑定手机修改成功", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(BindPhoneActivity.this, SecurityManagerActivity.class);
+                        startActivity(intent);
 
                     }
 
                     @Override
                     protected void onError(JSONObject response) {
-
+                        try {
+                            JSONObject error = response.getJSONObject("error");
+                            if (error.getString("msg").contains("与确认值不匹配")) {
+                                Toast.makeText(BindPhoneActivity.this, "验证码错误", Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(BindPhoneActivity.this, "手机已经被绑定", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-
+                        Toast.makeText(getApplicationContext(), "服务器异常，请检查网络", Toast.LENGTH_LONG).show();
                     }
                 }));
 
