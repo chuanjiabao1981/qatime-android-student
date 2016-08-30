@@ -1,6 +1,7 @@
 package cn.qatime.player.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -69,8 +70,13 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
         newParentPhone.setHint(StringUtils.getSpannedString(this, R.string.new_parent_phone));
         code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_code));
 
-        currentParentPhone.setText(getIntent().getStringExtra("phoneP"));
-
+        String phoneP = getIntent().getStringExtra("phoneP");
+        currentParentPhone.setText(phoneP);
+        if (!phoneP.equals("未绑定")) {
+            currentParentPhone.setTextColor(Color.BLACK);
+        } else {
+            currentParentPhone.setTextColor(Color.RED);
+        }
         textGetcode.setOnClickListener(this);
         buttonOver.setOnClickListener(this);
 
@@ -157,7 +163,14 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
                     protected void onError(JSONObject response) {
                         Logger.e(response.toString());
                         try {
-                            Toast.makeText(ParentPhoneActivity.this, response.getJSONObject("error").getString("msg"), Toast.LENGTH_SHORT).show();
+                            JSONObject error = response.getJSONObject("error");
+                            if (error.getString("msg").contains("是无效的")) {
+                                Toast.makeText(ParentPhoneActivity.this, "密码错误", Toast.LENGTH_SHORT).show();
+                            } else if (error.getString("msg").contains("与确认值不匹配")) {
+                                Toast.makeText(ParentPhoneActivity.this, "验证码错误", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(ParentPhoneActivity.this, "家长手机可能已被使用", Toast.LENGTH_SHORT).show();
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

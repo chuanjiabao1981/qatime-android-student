@@ -223,7 +223,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     int id = response.getJSONObject("data").getJSONObject("user").getInt("id");
 
 
-                    Toast.makeText(RegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "请设置个人信息", Toast.LENGTH_SHORT).show();
                     Logger.e("注册成功" + response);
                     //下一步跳转
                     Profile profile = new Profile();
@@ -249,15 +249,22 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             @Override
             protected void onError(JSONObject response) {
 
-                String resault = "";
+                String result = "";
                 try {
-                    resault = response.getJSONObject("error").getString("msg");
+                    result = response.getJSONObject("error").getString("msg");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Logger.e("注册失败--" + resault);
-                Toast.makeText(RegisterActivity.this,resault, Toast.LENGTH_SHORT).show();
-
+                Logger.e("注册失败--" + result);
+                if(result.contains("已经被使用")){
+                    Toast.makeText(RegisterActivity.this,"手机号已经被注册", Toast.LENGTH_SHORT).show();
+                }else if(result.contains("与确认值不匹配")){
+                    Toast.makeText(RegisterActivity.this,"验证码错误", Toast.LENGTH_SHORT).show();
+                }else if(result.contains("注册码")){
+                    Toast.makeText(RegisterActivity.this,"注册码不正确", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(RegisterActivity.this,"注册失败", Toast.LENGTH_SHORT).show();
+                }
             }
 
 

@@ -173,7 +173,8 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
                     protected void onError(JSONObject response) {
                         try {
                             JSONObject error = response.getJSONObject("error");
-                            Toast.makeText(ChangePasswordActivity.this, error.getString("msg"), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ChangePasswordActivity.this, "密码错误", Toast.LENGTH_SHORT).show();
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

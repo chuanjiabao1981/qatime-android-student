@@ -160,7 +160,11 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
                     protected void onError(JSONObject response) {
                         try {
                             JSONObject error = response.getJSONObject("error");
-                            Toast.makeText(BindEmailActivity.this, error.getString("msg"), Toast.LENGTH_SHORT).show();
+                            if (error.getString("msg").contains("与确认值不匹配")) {
+                                Toast.makeText(BindEmailActivity.this, "验证码错误", Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(BindEmailActivity.this, "邮箱已经被绑定", Toast.LENGTH_SHORT).show();
+                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();

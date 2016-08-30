@@ -14,7 +14,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -119,25 +118,21 @@ public class VerifyPhoneActivity extends BaseActivity implements View.OnClickLis
 
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        try {
 
-                            if (response.isNull("data")) {
-                                Logger.e("验证成功");
-                                String next = getIntent().getStringExtra("next");
-                                if ("phone".equals(next)) {
-                                    Intent intent = new Intent(VerifyPhoneActivity.this, BindPhoneActivity.class);
-                                    startActivity(intent);
-                                } else if ("email".equals(next)) {
-                                    Intent intent = new Intent(VerifyPhoneActivity.this, BindEmailActivity.class);
-                                    startActivity(intent);
-                                }
-                            } else {
-                                JSONObject data = response.getJSONObject("data");
-                                Toast.makeText(VerifyPhoneActivity.this, data.getString("result") + ": 验证失败\n" + data.getString("error"), Toast.LENGTH_SHORT).show();
+                        if (response.isNull("data")) {
+                            Logger.e("验证成功");
+                            String next = getIntent().getStringExtra("next");
+                            if ("phone".equals(next)) {
+                                Intent intent = new Intent(VerifyPhoneActivity.this, BindPhoneActivity.class);
+                                startActivity(intent);
+                            } else if ("email".equals(next)) {
+                                Intent intent = new Intent(VerifyPhoneActivity.this, BindEmailActivity.class);
+                                startActivity(intent);
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        } else {
+                            Toast.makeText(VerifyPhoneActivity.this, "验证码错误", Toast.LENGTH_SHORT).show();
                         }
+
 
                     }
 

@@ -96,7 +96,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 
                     @Override
                     protected void onError(JSONObject response) {
-                        Toast.makeText(BindPhoneActivity.this, "验证码发送失败："+currentphone, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BindPhoneActivity.this, "验证码发送失败：" + currentphone, Toast.LENGTH_SHORT).show();
 
                     }
                 }, new Response.ErrorListener() {
@@ -144,8 +144,11 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                     protected void onError(JSONObject response) {
                         try {
                             JSONObject error = response.getJSONObject("error");
-                            Toast.makeText(BindPhoneActivity.this, error.getString("msg"), Toast.LENGTH_SHORT).show();
-
+                            if (error.getString("msg").contains("与确认值不匹配")) {
+                                Toast.makeText(BindPhoneActivity.this, "验证码错误", Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(BindPhoneActivity.this, "手机已经被绑定", Toast.LENGTH_SHORT).show();
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

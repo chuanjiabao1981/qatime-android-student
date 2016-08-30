@@ -1,10 +1,12 @@
 package cn.qatime.player.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -64,13 +66,12 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
             protected void onSuccess(JSONObject response) {
                 Logger.e("学生信息：  " + response.toString());
                 PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
-                Logger.e(bean.toString());
                 setValue(bean);
             }
 
             @Override
             protected void onError(JSONObject response) {
-
+                Toast.makeText(SecurityManagerActivity.this, "网络异常", Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -84,11 +85,30 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
 
     private void setValue(PersonalInformationBean bean) {
         String parentPhone = bean.getData().getParent_phone();
-        phoneNumberP.setText(parentPhone != null ? parentPhone : "无");
+        if (parentPhone != null) {
+            phoneNumberP.setText("" + parentPhone);
+            phoneNumberP.setTextColor(Color.BLACK);
+        } else {
+            phoneNumberP.setText("未绑定");
+            phoneNumberP.setTextColor(Color.RED);
+        }
         String email = bean.getData().getEmail();
-        this.email.setText(email != null ? email : "无");
+        if (email != null) {
+            this.email.setText("" + email);
+            this.email.setTextColor(Color.BLACK);
+        } else {
+            this.email.setText("未绑定");
+            this.email.setTextColor(Color.RED);
+        }
+
         String loginMobile = bean.getData().getLogin_mobile();
-        phoneNumberM.setText(loginMobile != null ? loginMobile : "无");
+        if (loginMobile != null) {
+            phoneNumberM.setText("" + loginMobile);
+            phoneNumberM.setTextColor(Color.BLACK);
+        } else {
+            phoneNumberM.setText("未绑定");
+            phoneNumberM.setTextColor(Color.RED);
+        }
     }
 
 

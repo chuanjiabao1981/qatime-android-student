@@ -170,7 +170,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                         data.putExtra("data", result);
                         setResult(Constant.RESPONSE, data);
                         DialogUtils.dismissDialog(progress);
-                        Toast.makeText(RegisterPerfectActivity.this, getResources().getString(R.string.change_information_successful), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterPerfectActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
                         Map<String, String> map = new HashMap<>();
                         Intent intent = getIntent();
                         final String username = intent.getStringExtra("username");
@@ -220,7 +220,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
 
                                     @Override
                                     protected void onError(JSONObject response) {
-                                        Toast.makeText(RegisterPerfectActivity.this, "数据上传失败", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(RegisterPerfectActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
                                     }
                                 }, new VolleyErrorListener() {
                             @Override
