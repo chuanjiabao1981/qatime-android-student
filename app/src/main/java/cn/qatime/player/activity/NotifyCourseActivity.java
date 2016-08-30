@@ -56,7 +56,7 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
         al_minute = new ArrayList<>();
         int j = 0;
         String str;
-        for (int i = 0; i < 24; i++) {
+        for (int i = 0; i <= 24; i++) {
             str = String.valueOf(i);
             if (i <= 9) {
                 str = "0" + str;
@@ -65,6 +65,7 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
             al_hours.add(str);
         }
         al_minute.add("00分钟");
+        al_minute.add("01分钟");
         al_minute.add("02分钟");
         al_minute.add("03分钟");
         al_minute.add("04分钟");
