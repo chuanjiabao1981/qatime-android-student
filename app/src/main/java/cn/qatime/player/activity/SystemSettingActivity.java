@@ -15,10 +15,8 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.AppUtils;
-import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DataCleanUtils;
 import libraryextra.utils.DensityUtils;
-import libraryextra.utils.SPUtils;
 
 /**
  * @author luntify
@@ -109,8 +107,11 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 startActivity(intent);
                 break;
             case R.id.check_update:
-                //TODO 检查版本，进行更新
-//                addToRequestQueue(new DaYiJsonObjectRequest(0, "", null, new VolleyListener(this) {
+//                //TODO 检查版本，进行更新
+//                Map<String,String> map = new HashMap<>();
+//                map.put("category","student_android");
+//                map.put("level",AppUtils.getVersionName(this));
+//                addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlcheckUpdate,map), null, new VolleyListener(this) {
 //                    @Override
 //                    protected void onTokenOut() {
 //
