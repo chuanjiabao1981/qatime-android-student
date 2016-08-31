@@ -7,7 +7,6 @@ import android.widget.CheckBox;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.config.UserPreferences;
-import libraryextra.utils.SPUtils;
 
 /**
  * Created by lenovo on 2016/8/22.
@@ -45,9 +44,9 @@ public class NotifyMessageActivity extends BaseActivity implements View.OnClickL
         assignViews();
         voice.setOnClickListener(this);
         shake.setOnClickListener(this);
-        boolean shakeStatus = (boolean) SPUtils.get(this, "shake_status", true);
+        boolean shakeStatus =  UserPreferences.getVibrateToggle();
         cbShake.setChecked(shakeStatus);
-        boolean voiceStatus = (boolean) SPUtils.get(this, "voice_status", true);
+        boolean voiceStatus = UserPreferences.getRingToggle();
         cbVoice.setChecked(voiceStatus);
     }
 

@@ -146,6 +146,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                             }
                         }
                     }, parse.parse(select).getYear() + 1900, parse.parse(select).getMonth() + 1, parse.parse(select).getDay());
+                    dataDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
                     dataDialog.show();
                 } catch (ParseException e) {
                     e.printStackTrace();
