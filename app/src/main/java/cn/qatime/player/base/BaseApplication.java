@@ -36,11 +36,12 @@ import libraryextra.utils.StringUtils;
 public class BaseApplication extends Application {
     private static Profile profile;
     public static UserInfoProvider userInfoProvider;
+    private static BaseApplication context;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
+        context = this;
         Logger.init("QTA-TIME")               // default tag : PRETTYLOGGER or use just init()
                 .setMethodCount(3)            // default 2
                 .hideThreadInfo()             // default it is shown
@@ -117,7 +118,7 @@ public class BaseApplication extends Application {
 //        options.thumbnailSize = $ {            Screen.width        }/2;
 
         // 用户资料提供者, 目前主要用于提供用户资料，用于新消息通知栏中显示消息来源的头像和昵称
-        options.userInfoProvider =infoProvider;
+        options.userInfoProvider = infoProvider;
         this.userInfoProvider = infoProvider;
         return options;
     }
@@ -208,6 +209,7 @@ public class BaseApplication extends Application {
                 profile.getData().getUser().getChat_account().setAccid("");
                 profile.getData().getUser().getChat_account().setToken("");
             }
+            SPUtils.putObject(context, "profile", profile);
             LoginSyncDataStatusObserver.getInstance().reset();
         }
     }

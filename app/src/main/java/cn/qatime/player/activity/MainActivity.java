@@ -42,6 +42,7 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.SPUtils;
+import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.FragmentLayout;
@@ -81,7 +82,7 @@ public class MainActivity extends BaseFragmentActivity {
 //        GetGradeslist();
 //        GetProvinceslist();
 //        GetCitieslist();
-        GetSchoolslist();
+//        GetSchoolslist();
 
 
 //        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
@@ -152,6 +153,16 @@ public class MainActivity extends BaseFragmentActivity {
         } else {
             this.finish();
         }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        Intent start = new Intent(this, LoginActivity.class);
+        if (!StringUtils.isNullOrBlanK(intent.getStringExtra("sign"))) {
+            start.putExtra("sign", intent.getStringExtra("sign"));
+        }
+        startActivity(start);
+        finish();
     }
 
     /**

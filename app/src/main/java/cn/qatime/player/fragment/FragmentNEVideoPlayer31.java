@@ -55,8 +55,7 @@ public class FragmentNEVideoPlayer31 extends BaseFragment {
         remainclass = (TextView) view.findViewById(R.id.remain_class);
     }
 
-    public void setData(RemedialClassDetailBean data) {
-        RemedialClassDetailBean.Data bean = data.getData();
+    public void setData(RemedialClassDetailBean.Data bean) {
         if (bean != null) {
             name.setText(getResources().getString(R.string.class_name) + bean.getName());
             subject.setText(getResources().getString(R.string.subject_type) + bean.getSubject());

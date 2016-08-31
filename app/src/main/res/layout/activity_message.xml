@@ -18,6 +18,7 @@
             android:background="#ff723f"
             android:gravity="center"
             android:padding="5dp"
+            android:textColor="#fff"
             android:visibility="gone" />
 
         <ListView
