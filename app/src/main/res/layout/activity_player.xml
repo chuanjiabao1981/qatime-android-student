@@ -43,15 +43,16 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:orientation="horizontal"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:padding="6dp">
 
                 <EditText
+                    android:id="@+id/content"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -60,13 +61,15 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:src="@mipmap/biaoqing" />
 
-                <TextView
+                <Button
+                    android:id="@+id/send"
                     android:layout_width="60dp"
                     android:layout_height="match_parent"
-                    android:background="@drawable/button_bg_selector_gray"
+                    android:background="@drawable/button_bg_selector_orange"
                     android:gravity="center"
                     android:text="发送"
                     android:textColor="#fff" />

@@ -5,4 +5,62 @@
     android:orientation="vertical">
 
     <include layout="@layout/layout_backbar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/tip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#ff723f"
+            android:gravity="center"
+            android:padding="5dp"
+            android:textColor="#fff"
+            android:visibility="gone" />
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:cacheColorHint="#00000000"
+            android:divider="#00000000"
+            android:dividerHeight="0dp"
+            android:listSelector="#00000000"
+            android:scrollbars="none"
+            android:transcriptMode="normal" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:padding="6dp">
+
+        <EditText
+            android:id="@+id/content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/shape_input" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:src="@mipmap/biaoqing" />
+
+        <Button
+            android:id="@+id/send"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/button_bg_selector_orange"
+            android:gravity="center"
+            android:text="发送"
+            android:textColor="#fff" />
+    </LinearLayout>
+
 </LinearLayout>

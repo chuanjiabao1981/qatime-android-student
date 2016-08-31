@@ -48,7 +48,7 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment4, container, false);
         assignViews(view);
 
-        if (BaseApplication.getProfile().getData()!=null&&BaseApplication.getProfile().getData().getUser()!=null) {
+        if (BaseApplication.getProfile().getData() != null && BaseApplication.getProfile().getData().getUser() != null) {
             Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getSmall_avatar_url()).placeholder(R.mipmap.personal_information_head).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
         }
         name.setText(BaseApplication.getProfile().getData().getUser().getName());
@@ -74,7 +74,7 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.modify:
                 Intent intent = new Intent(getActivity(), PersonalInformationActivity.class);
-                startActivityForResult(intent,Constant.REQUEST);
+                startActivityForResult(intent, Constant.REQUEST);
                 break;
             case R.id.paying:
                 intent = new Intent(getActivity(), PersonalMyOrderActivity.class);
@@ -122,7 +122,7 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.setting:// 设置
                 intent = new Intent(getActivity(), SystemSettingActivity.class);
-                getActivity().startActivityForResult(intent, Constant.REQUEST_EXIT_LOGIN);
+                getActivity().startActivity(intent);
                 break;
         }
     }
@@ -133,6 +133,7 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
         Logger.e("图片返回");
         if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
             Glide.with(getActivity()).load(data.getStringExtra("url")).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
+            name.setText(BaseApplication.getProfile().getData().getUser().getName());
         }
     }
 

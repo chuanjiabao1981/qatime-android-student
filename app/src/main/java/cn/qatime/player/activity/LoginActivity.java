@@ -161,6 +161,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             if (data.has("result")) {
                                 if (data.getString("result") != null && data.getString("result").equals("failed")) {
                                     Toast.makeText(LoginActivity.this, getResources().getString(R.string.account_or_password_error), Toast.LENGTH_SHORT).show();
+                                    DialogUtils.dismissDialog(progress);
                                 }
                             } else {
                                 Logger.e("登录", response.toString());
@@ -217,6 +218,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                         @Override
                                         public void onException(Throwable throwable) {
                                             DialogUtils.dismissDialog(progress);
+                                            Logger.e(throwable.getMessage());
                                             BaseApplication.clearToken();
                                         }
                                     });

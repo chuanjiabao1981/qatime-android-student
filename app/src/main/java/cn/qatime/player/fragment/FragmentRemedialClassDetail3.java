@@ -53,10 +53,8 @@ public class FragmentRemedialClassDetail3 extends BaseFragment {
                     holder.setText(R.id.status, getResources().getString(R.string.class_init));
                 } else if (item.getStatus().equals("ready")) {//待开课
                     holder.setText(R.id.status, getResources().getString(R.string.class_ready));
-
                 } else if (item.getStatus().equals("paused_inner")) {//暂停中
-                    holder.setText(R.id.status, getResources().getString(R.string.class_paused_inner));
-
+                    holder.setText(R.id.status, getResources().getString(R.string.class_teaching));
                 } else {
                     holder.setText(R.id.status, getResources().getString(R.string.class_over));//已结束
                 }

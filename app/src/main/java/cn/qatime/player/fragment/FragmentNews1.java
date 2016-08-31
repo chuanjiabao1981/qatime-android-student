@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -104,8 +103,8 @@ public class FragmentNews1 extends BaseFragment {
 
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), MessageActivity.class);
-                intent.putExtra("sessionId", items.get(position).getContactId());
-                intent.putExtra("sessionType", items.get(position).getSessionType());
+                intent.putExtra("sessionId", items.get(position - 1).getContactId());
+                intent.putExtra("sessionType", items.get(position - 1).getSessionType());
                 startActivity(intent);
             }
         });
@@ -161,10 +160,6 @@ public class FragmentNews1 extends BaseFragment {
             loadedRecents = null;
         }
         refreshMessages(true);
-
-//        if (callback != null) {
-//            callback.onRecentContactsLoaded();
-//        }
     }
 
     private void refreshMessages(boolean unreadChanged) {
@@ -226,7 +221,6 @@ public class FragmentNews1 extends BaseFragment {
         service.observeRecentContactDeleted(deleteObserver, register);
         registerTeamUpdateObserver(register);
         registerTeamMemberUpdateObserver(register);
-//        FriendDataCache.getInstance().registerFriendDataChangedObserver(friendDataChangedObserver, register);
         if (register) {
             registerUserInfoObserver();
         } else {

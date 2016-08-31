@@ -14,6 +14,7 @@ import com.android.volley.toolbox.Volley;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.LoginActivity;
+import cn.qatime.player.activity.MainActivity;
 
 public class BaseFragment extends Fragment {
     private RequestQueue Queue;
@@ -32,7 +33,7 @@ public class BaseFragment extends Fragment {
      * 设备已在其他地方登陆
      */
     public void tokenOut() {
-
+        BaseApplication.clearToken();
         final Dialog dialog = new Dialog(getActivity(), R.style.Transparent);
         View view = View.inflate(getActivity(), R.layout.activity_out_alertdialog, null);
         view.findViewById(R.id.alert_dialog_confirm).setOnClickListener(new View.OnClickListener() {
@@ -54,9 +55,9 @@ public class BaseFragment extends Fragment {
     }
 
     public void out() {
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        Intent intent = new Intent(getActivity(), MainActivity.class);
         startActivity(intent);
-        getActivity().finish();
+//        getActivity().finish();
     }
 
     public <T> Request<T> addToRequestQueue(Request<T> request) {

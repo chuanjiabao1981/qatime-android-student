@@ -87,6 +87,8 @@ public class FragmentPersonalMyTutorship5 extends BaseFragment {
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
                         intent.putExtra("url", item.getPull_address());
+                        intent.putExtra("id",item.getId());
+                        intent.putExtra("sessionId",item.getChat_team_id());
                         startActivity(intent);
                     }
                 });

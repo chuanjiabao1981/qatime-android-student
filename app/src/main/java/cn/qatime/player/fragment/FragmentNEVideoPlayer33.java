@@ -54,10 +54,10 @@ public class FragmentNEVideoPlayer33 extends BaseFragment {
         return view;
     }
 
-    public void setData(RemedialClassDetailBean data) {
-        if (data != null && data.getData() != null) {
+    public void setData(RemedialClassDetailBean.Data data) {
+        if (data != null) {
             lists.clear();
-            lists.addAll(data.getData().getLessons());
+            lists.addAll(data.getLessons());
             if (adapter != null) {
                 adapter.notifyDataSetChanged();
             }

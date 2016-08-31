@@ -16,6 +16,7 @@ import com.android.volley.toolbox.Volley;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.LoginActivity;
+import cn.qatime.player.activity.MainActivity;
 import libraryextra.utils.StringUtils;
 
 /**
@@ -67,11 +68,12 @@ public class BaseFragmentActivity extends FragmentActivity {
      */
     public void tokenOut() {
         BaseApplication.clearToken();
-        Dialog dialog = new Dialog(this, R.style.Transparent);
+        final Dialog dialog = new Dialog(this, R.style.Transparent);
         View view = View.inflate(this, R.layout.activity_out_alertdialog, null);
         view.findViewById(R.id.alert_dialog_confirm).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dialog.dismiss();
                 out();
             }
         });
@@ -86,9 +88,8 @@ public class BaseFragmentActivity extends FragmentActivity {
         dialog.show();
     }
     private void out() {
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-        this.finish();
     }
 
     public <T> Request<T> addToRequestQueue(Request<T> request) {
