@@ -39,6 +39,7 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import cn.qatime.player.base.BaseFragment;
+import libraryextra.bean.OrderDetailBean;
 import libraryextra.bean.OrderPayBean;
 import libraryextra.bean.TutorialClassBean;
 import libraryextra.utils.JsonUtils;
@@ -165,8 +166,20 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), PersonalMyOrderDetailActivity.class);
-                // TODO: 2016/8/30
-//                intent.putExtra("id", list.get(position).getId());
+                Logger.e(list.get(position - 1).getId());
+
+                intent.putExtra("id", list.get(position - 1).getId());
+
+                OrderDetailBean bean = new OrderDetailBean();
+                bean.image = list.get(position - 1).getProduct().getPublicize();
+                bean.name = list.get(position - 1).getProduct().getName();
+                bean.subject = list.get(position - 1).getProduct().getSubject();
+                bean.grade = list.get(position - 1).getProduct().getGrade();
+                bean.teacher = list.get(position - 1).getProduct().getTeacher_name();
+                bean.Preset_lesson_count = list.get(position - 1).getProduct().getPreset_lesson_count();
+                bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
+                bean.price = list.get(position - 1).getProduct().getPrice();
+                intent.putExtra("data", bean);
                 startActivity(intent);
             }
         });
