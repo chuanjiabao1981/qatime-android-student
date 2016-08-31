@@ -74,14 +74,14 @@ public class NotifyMessageActivity extends BaseActivity implements View.OnClickL
         boolean check = UserPreferences.getRingToggle();
         cbVoice.setChecked(!check);
         UserPreferences.setRingToggle(!check);
-        boolean shakeStatus = (boolean) SPUtils.get(this, "shake_status", true);
-        if (shakeStatus) {
-            SPUtils.put(this, "shake_status", false);
-            cbShake.setChecked(false);
-        } else {
-            SPUtils.put(this, "shake_status", true);
-            cbShake.setChecked(true);
-        }
+//        boolean shakeStatus = (boolean) SPUtils.get(this, "shake_status", true);
+//        if (shakeStatus) {
+//            SPUtils.put(this, "shake_status", false);
+//            cbShake.setChecked(false);
+//        } else {
+//            SPUtils.put(this, "shake_status", true);
+//            cbShake.setChecked(true);
+//        }
     }
 
 }
