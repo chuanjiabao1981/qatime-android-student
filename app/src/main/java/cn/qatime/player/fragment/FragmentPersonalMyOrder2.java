@@ -136,17 +136,19 @@ public class FragmentPersonalMyOrder2 extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), PersonalMyOrderDetailActivity.class);
-                intent.putExtra("id",list.get(position - 1).getId());
+                intent.putExtra("id", list.get(position).getId());
                 startActivity(intent);
             }
         });
 
     }
+
     public void onShow() {
         if (!isLoad) {
             initData(1);
         }
     }
+
     /**
      * @param type 1刷新
      *             2加载更多

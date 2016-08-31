@@ -42,6 +42,7 @@ import cn.qatime.player.base.BaseFragment;
 import libraryextra.bean.OrderPayBean;
 import libraryextra.bean.TutorialClassBean;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -92,7 +93,7 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent(getActivity(), OrderConfirmActivity.class);
-                                intent.putExtra("id",  list.get(position).getProduct().getId());
+                                intent.putExtra("id", list.get(position).getProduct().getId());
                                 OrderPayBean bean = new OrderPayBean();
                                 bean.image = list.get(position).getProduct().getPublicize();
                                 bean.name = list.get(position).getProduct().getName();
@@ -102,7 +103,12 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
                                 bean.teacher = list.get(position).getProduct().getTeacher_name();
                                 bean.classendtime = list.get(position).getProduct().getLive_end_time();
                                 bean.classstarttime = list.get(position).getProduct().getLive_start_time();
-                                bean.status = list.get(position).getProduct().getStatus();
+                                if (StringUtils.isNullOrBlanK(list.get(position).getProduct().getStatus())) {
+                                    bean.status = " ";
+                                } else {
+                                    bean.status = list.get(position).getProduct().getStatus();
+                                }
+                                Logger.e(list.get(position).getProduct().getStatus());
                                 bean.price = list.get(position).getProduct().getPrice();
                                 intent.putExtra("data", bean);
 
@@ -160,7 +166,7 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), PersonalMyOrderDetailActivity.class);
                 // TODO: 2016/8/30
-                intent.putExtra("id", list.get(position).getProduct().getId());
+//                intent.putExtra("id", list.get(position).getId());
                 startActivity(intent);
             }
         });
