@@ -10,6 +10,7 @@
 
     <!-- 权限声明 -->
     <!-- 允许程序打开网络套接字 -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 允许程序使用PowerManager WakeLocks以防止处理器休眠或者屏幕锁屏 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -86,12 +87,12 @@
         <!-- 安卓保活配置 -->
         <service
             android:name="com.netease.cosine.core.CosineService"
-            android:process=":cosine"></service>
+            android:process=":cosine"/>
 
         <receiver
             android:name="com.netease.cosine.target.CosineReceiver"
             android:exported="true"
-            android:process=":cosine"></receiver>
+            android:process=":cosine"/>
 
         <meta-data
             android:name="com.netease.cosine.target"
@@ -222,7 +223,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.NotifyClassesActivity"
+            android:name=".activity.NotifyCourseActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
@@ -240,20 +241,16 @@
         <activity
             android:name=".activity.MessageActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".activity.LearningProcessActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" /><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-        <!--<intent-filter>-->
-        <!--<data android:scheme="wxf2dfbeb5f641ce40" />-->
-        <!--</intent-filter>-->
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AboutUsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
