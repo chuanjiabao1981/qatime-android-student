@@ -84,7 +84,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
         String sign = getIntent().getStringExtra("sign");//从系统设置退出登录页面跳转而来，清除用户登录信息
         if (!StringUtils.isNullOrBlanK(sign) && sign.equals("exit_login")) {
-            username.setText("");
+//            username.setText("");
             password.setText("");
         }
     }
@@ -141,8 +141,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         progress.setCanceledOnTouchOutside(false);
 
         Map<String, String> map = new HashMap<>();
-        map.put("login_account", username.getText().toString());
-        map.put("password", password.getText().toString());
+        map.put("login_account", username.getText().toString().trim());
+        map.put("password", password.getText().toString().trim());
         map.put("client_type", "app");
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlLogin, map), null,
                 new VolleyListener(LoginActivity.this) {
