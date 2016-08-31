@@ -434,8 +434,8 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 popView = View.inflate(getActivity(), R.layout.pop_fragment12, null);
                 listView = (ListView) popView.findViewById(R.id.list);
                 final List<String> classList = new ArrayList<>();
-                String gradeString = FileUtil.readFile(getActivity().getCacheDir() + "/grade.txt");
-                if (!StringUtils.isNullOrBlanK(gradeString)) {
+                String gradeString = FileUtil.readFile(getActivity().getFilesDir() + "/grade.txt");
+                    if (!StringUtils.isNullOrBlanK(gradeString)) {
                     GradeBean gradeBean = JsonUtils.objectFromJson(gradeString, GradeBean.class);
                     classList.add("全部");
                     classList.addAll(gradeBean.getData().getGrades());

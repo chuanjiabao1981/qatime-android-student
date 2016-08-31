@@ -22,7 +22,6 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
-import libraryextra.bean.Profile;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
@@ -75,7 +74,7 @@ public class StartActivity extends Activity {
                 new VolleyListener(this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        boolean value = FileUtil.writeFile(new ByteArrayInputStream(response.toString().getBytes()), getCacheDir().getAbsolutePath() + "/grade.txt", true);
+                        boolean value = FileUtil.writeFile(new ByteArrayInputStream(response.toString().getBytes()), getFilesDir().getAbsolutePath() + "/grade.txt", true);
                         SPUtils.put(StartActivity.this, "grade", value);
                     }
 
