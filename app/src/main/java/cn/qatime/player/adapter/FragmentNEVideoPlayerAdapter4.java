@@ -10,7 +10,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.MemberBean;
+import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.StringUtils;
 
 /**
@@ -18,10 +18,10 @@ import libraryextra.utils.StringUtils;
  * @date 2016/8/9 17:15
  * @Description 直播-成员列表
  */
-public class FragmentNEVideoPlayerAdapter4 extends CommonAdapter<MemberBean> {
+public class FragmentNEVideoPlayerAdapter4 extends CommonAdapter<RemedialClassDetailBean.Accounts> {
     private Map<String, Integer> letterMap = new HashMap<String, Integer>();
 
-    public FragmentNEVideoPlayerAdapter4(Context context, List<MemberBean> mDatas, int itemLayoutId) {
+    public FragmentNEVideoPlayerAdapter4(Context context, List<RemedialClassDetailBean.Accounts> mDatas, int itemLayoutId) {
         super(context, mDatas, itemLayoutId);
     }
 
@@ -30,7 +30,7 @@ public class FragmentNEVideoPlayerAdapter4 extends CommonAdapter<MemberBean> {
     }
 
     @Override
-    public void convert(ViewHolder holder, MemberBean item, int position) {
+    public void convert(ViewHolder holder, RemedialClassDetailBean.Accounts item, int position) {
         if (!letterMap.containsKey(item.getFirstLetter())) {
             letterMap.put(item.getFirstLetter(), position);
         }
@@ -40,13 +40,13 @@ public class FragmentNEVideoPlayerAdapter4 extends CommonAdapter<MemberBean> {
 //            holder.getView(R.id.top).setVisibility(View.GONE);
 //        }
 //        holder.setText(R.id.top, item.getFirstLetter());
-        if (position > 5) {
-            ((TextView)holder.getView(R.id.name)).setTextColor(0xff6c6c6c);
+//        if (position > 5) {
+//            ((TextView)holder.getView(R.id.name)).setTextColor(0xff6c6c6c);
 //            ((TextView)holder.getView(R.id.role)).setTextColor(0xff6c6c6c);
-        } else {
-            ((TextView)holder.getView(R.id.name)).setTextColor(0xffed0000);
+//        } else {
+//            ((TextView)holder.getView(R.id.name)).setTextColor(0xffed0000);
 //            ((TextView)holder.getView(R.id.role)).setTextColor(0xffed0000);
-        }
+//        }
         holder.setText(R.id.name, item.getName());
     }
 

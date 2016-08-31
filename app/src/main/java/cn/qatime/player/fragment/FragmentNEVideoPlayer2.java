@@ -321,8 +321,10 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                tipText.setText(team.getType() == TeamTypeEnum.Normal ? "您已退出该群组" : "您已退出该群组");
-                tipText.setVisibility(team.isMyTeam() ? View.GONE : View.VISIBLE);
+                if (tipText != null) {
+                    tipText.setText(team.getType() == TeamTypeEnum.Normal ? "您已退出该群组" : "您已退出该群组");
+                    tipText.setVisibility(team.isMyTeam() ? View.GONE : View.VISIBLE);
+                }
             }
         }, 1500);
     }

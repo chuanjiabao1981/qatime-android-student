@@ -187,6 +187,9 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
                             RemedialClassDetailBean data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
                             if (data != null) {
                                 ((FragmentNEVideoPlayer3) fragBaseFragments.get(2)).setData(data);
+                                if (data.getData() != null && data.getData().getChat_team() != null && data.getData().getChat_team().getAccounts() != null) {
+                                    ((FragmentNEVideoPlayer4) fragBaseFragments.get(3)).setData(data.getData().getChat_team().getAccounts());
+                                }
                             }
                         }
 
