@@ -273,5 +273,6 @@
     <string name="hd">HD</string>
 
     <string name="team_send_message_not_allow">You are not in the group, can not send a message</string>
+    <string name="team_not_exist">the group does not exist</string>
 </resources>
 

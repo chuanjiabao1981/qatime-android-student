@@ -449,23 +449,23 @@ public class NEVideoView extends SurfaceView {
             if (mOnCompletionListener != null)
                 mOnCompletionListener.onCompletion(mMediaPlayer);
 
-//            if (getWindowToken() != null && mMediaType.equals("livestream")) {
-//                new AlertDialog.Builder(mContext)
-//                        .setTitle("Completed!")
-//                        .setMessage("播放结束！")
-//                        .setPositiveButton("OK",
-//                                new DialogInterface.OnClickListener() {
-//                                    public void onClick(DialogInterface dialog, int whichButton) {
-//                                        /* If we get here, there is no onError listener, so
-//                                         * at least inform them that the video is over.
-//                                         */
-//                                        if (mOnCompletionListener != null)
-//                                            mOnCompletionListener.onCompletion(mMediaPlayer);
-//                                    }
-//                                })
-//                        .setCancelable(false)
-//                        .show();
-//            }
+            if (getWindowToken() != null && mMediaType.equals("livestream")) {
+                new AlertDialog.Builder(mContext)
+                        .setTitle("Completed!")
+                        .setMessage("播放结束！")
+                        .setPositiveButton("OK",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        /* If we get here, there is no onError listener, so
+                                         * at least inform them that the video is over.
+                                         */
+                                        if (mOnCompletionListener != null)
+                                            mOnCompletionListener.onCompletion(mMediaPlayer);
+                                    }
+                                })
+                        .setCancelable(false)
+                        .show();
+            }
         }
     };
 
@@ -489,23 +489,23 @@ public class NEVideoView extends SurfaceView {
              * if we're attached to a window. When we're going away and no
              * longer have a window, don't bother showing the user an error.
              */
-            if (getWindowToken() != null) {
-                new AlertDialog.Builder(mContext)
-                        .setTitle("Error")
-                        .setMessage("播放拉流失败")
-                        .setPositiveButton("Ok",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                        /* If we get here, there is no onError listener, so
-                                         * at least inform them that the video is over.
-                                         */
-                                        if (mOnCompletionListener != null)
-                                            mOnCompletionListener.onCompletion(mMediaPlayer);
-                                    }
-                                })
-                        .setCancelable(false)
-                        .show();
-            }
+//            if (getWindowToken() != null) {
+//                new AlertDialog.Builder(mContext)
+//                        .setTitle("Error")
+//                        .setMessage("播放拉流失败")
+//                        .setPositiveButton("Ok",
+//                                new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int whichButton) {
+//                                        /* If we get here, there is no onError listener, so
+//                                         * at least inform them that the video is over.
+//                                         */
+//                                        if (mOnCompletionListener != null)
+//                                            mOnCompletionListener.onCompletion(mMediaPlayer);
+//                                    }
+//                                })
+//                        .setCancelable(false)
+//                        .show();
+//            }
             return true;
         }
     };
