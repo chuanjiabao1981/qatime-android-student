@@ -161,15 +161,19 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
 
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        Logger.e("找回成功");
-                        Toast.makeText(ForgetPasswordActivity.this, "密码找回成功，请用新密码重新登录", Toast.LENGTH_SHORT).show();
-                        BaseApplication.clearToken();
-                        setResult(Constant.RESPONSE_EXIT_LOGIN);
-                        SPUtils.put(ForgetPasswordActivity.this, "profile", BaseApplication.getProfile());
-                        Intent intent = new Intent(ForgetPasswordActivity.this, LoginActivity.class);
-                        intent.putExtra("sign", "exit_login");
-                        startActivity(intent);
-                        finish();
+                        if (response.isNull("data")) {
+                            Toast.makeText(ForgetPasswordActivity.this, "绑定手机不存在", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Logger.e("找回成功");
+                            Toast.makeText(ForgetPasswordActivity.this, "密码找回成功，请用新密码重新登录", Toast.LENGTH_SHORT).show();
+                            BaseApplication.clearToken();
+                            setResult(Constant.RESPONSE_EXIT_LOGIN);
+                            SPUtils.put(ForgetPasswordActivity.this, "profile", BaseApplication.getProfile());
+                            Intent intent = new Intent(ForgetPasswordActivity.this, LoginActivity.class);
+                            intent.putExtra("sign", "exit_login");
+                            startActivity(intent);
+                            finish();
+                        }
                     }
 
                     @Override
