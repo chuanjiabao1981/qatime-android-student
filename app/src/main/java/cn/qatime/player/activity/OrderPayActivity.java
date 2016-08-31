@@ -1,5 +1,7 @@
 package cn.qatime.player.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -37,8 +39,9 @@ import libraryextra.utils.VolleyListener;
 public class OrderPayActivity extends BaseActivity {
     TextView code;
     TextView time;
-    TextView type;
     TextView price;
+    TextView type;
+    TextView phone;
     Button commit;
     private OrderConfirmBean data;
     private IWXAPI api;
@@ -81,19 +84,19 @@ public class OrderPayActivity extends BaseActivity {
 
                         if (data != null) {
                             canPay = true;
-                            code.setText(getResources().getString(R.string.order_number)+"：" + data.getData().getId());
-                            time.setText(getResources().getString(R.string.time_built)+"：" + format.format(new Date()));
+                            code.setText(getResources().getString(R.string.order_number) + "：" + data.getData().getId());
+                            time.setText(getResources().getString(R.string.time_built) + "：" + format.format(new Date()));
                             if (payType.equals("1")) {
-                                type.setText(getResources().getString(R.string.method_payment)+"：微信支付");
+                                type.setText(getResources().getString(R.string.method_payment) + "：微信支付");
                             } else {
-                                type.setText(getResources().getString(R.string.method_payment)+"：支付宝支付");
+                                type.setText(getResources().getString(R.string.method_payment) + "：支付宝支付");
                             }
 
                             String price = df.format(priceNumber);
                             if (price.startsWith(".")) {
                                 price = "0" + price;
                             }
-                            OrderPayActivity.this.price.setText(getResources().getString(R.string.amount_payment)+"：￥" + price);
+                            OrderPayActivity.this.price.setText(getResources().getString(R.string.amount_payment) + "：￥" + price);
 
 
                             commit.setEnabled(true);
@@ -124,9 +127,19 @@ public class OrderPayActivity extends BaseActivity {
         code = (TextView) findViewById(R.id.code);
         time = (TextView) findViewById(R.id.time);
         type = (TextView) findViewById(R.id.type);
+        phone = (TextView) findViewById(R.id.phone);
         price = (TextView) findViewById(R.id.price);
         commit = (Button) findViewById(R.id.commit);
         commit.setEnabled(false);
+        //拨打电话
+        phone.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
+                startActivity(intent);
+            }
+        });
         commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

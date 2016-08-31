@@ -63,7 +63,7 @@
     <string name="primary2">Second Grade</string>
     <string name="primary1">First Grade</string>
     //fragment2
-    <string name="course_to_be_done">Course To Be Done</string>//待上课
+    <string name="course_to_be_done">Course To Be Done</string>//未上课
     <string name="course_finished">Course Finished</string>//已上课
     <string name="all_course">Whole</string>//全部课程
 
