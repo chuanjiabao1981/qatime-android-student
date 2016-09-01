@@ -4,6 +4,7 @@ package cn.qatime.player.bean;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.io.StringReader;
 import java.util.List;
 
 public class MyOrderBean implements Serializable {
@@ -30,6 +31,10 @@ public class MyOrderBean implements Serializable {
     public class Data implements Serializable {
         private String id;
 
+        private String pay_type;
+
+        private String created_at;
+
         private String status;
 
         private String prepay_id;
@@ -39,6 +44,22 @@ public class MyOrderBean implements Serializable {
         private App_pay_params app_pay_params;
 
         private Product product;
+
+        public void setPay_type(String pay_type) {
+            this.pay_type = pay_type;
+        }
+
+        public String getPay_type() {
+            return this.pay_type;
+        }
+
+        public void setCreated_at(String created_at) {
+            this.created_at = created_at;
+        }
+
+        public String getCreated_at() {
+            return this.created_at;
+        }
 
         public void setId(String id) {
             this.id = id;

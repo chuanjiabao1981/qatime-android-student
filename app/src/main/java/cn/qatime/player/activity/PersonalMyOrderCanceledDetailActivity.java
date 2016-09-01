@@ -1,0 +1,148 @@
+package cn.qatime.player.activity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+
+import cn.qatime.player.R;
+import cn.qatime.player.base.BaseActivity;
+import libraryextra.bean.OrderDetailBean;
+import libraryextra.bean.OrderPayBean;
+import libraryextra.utils.StringUtils;
+
+
+public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
+
+    private TextView subject;
+    private TextView progress;
+    private TextView ordernumber;
+    private TextView buildtime;
+    private TextView paytype;
+    private TextView reorder;
+    private TextView name;
+    private ImageView image;
+    private TextView grade;
+    private TextView teacher;
+    private TextView payprice;
+    DecimalFormat df = new DecimalFormat("#.00");
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_personal_my_order_canceled_detail);
+        setTitle(getResources().getString(R.string.detail_of_order));
+        initView();
+
+
+        OrderDetailBean data = (OrderDetailBean) getIntent().getSerializableExtra("data");
+        OrderPayBean pay_data = (OrderPayBean) getIntent().getSerializableExtra("pay_data");
+
+
+        if (data != null) {
+            setValue(data);
+
+        }
+    }
+
+    private void setValue(OrderDetailBean data) {
+        Glide.with(PersonalMyOrderCanceledDetailActivity.this).load(data.image).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
+        if (StringUtils.isNullOrBlanK(data.name)) {
+            name.setText("    ");
+        } else {
+            name.setText(data.name);
+        }
+        if (StringUtils.isNullOrBlanK(data.grade)) {
+            grade.setText("    ");
+        } else {
+            grade.setText(data.grade);
+        }
+        if (StringUtils.isNullOrBlanK(data.subject)) {
+            subject.setText("    ");
+        } else {
+            subject.setText(data.subject);
+        }
+        if (StringUtils.isNullOrBlanK(data.teacher)) {
+            teacher.setText("    ");
+        } else {
+            teacher.setText(data.teacher);
+        }
+        ordernumber.setText(getIntent().getStringExtra("order_id"));
+        if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("created_at"))) {
+            buildtime.setText("为空");
+        }//创建时间
+        else {
+            buildtime.setText((getIntent().getStringExtra("created_at")));
+
+        }
+        if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("created_at"))) {
+            paytype.setText("不知道微信支付");
+
+        } else {
+            String payType = getIntent().getStringExtra("payType");//支付方式
+            if (payType.equals("1")) {
+                paytype.setText("微信支付");
+            } else {
+                paytype.setText("支付宝支付");
+            }
+        }
+        progress.setText(data.Completed_lesson_count + "/" + data.Preset_lesson_count);
+        String price = df.format(data.price);
+        if (price.startsWith(".")) {
+            price = "0" + price;
+        }
+        PersonalMyOrderCanceledDetailActivity.this.payprice.setText(price);
+        payprice.setText(" " + price + " ");
+    }
+
+    public void initView() {
+
+        name = (TextView) findViewById(R.id.name);
+        image = (ImageView) findViewById(R.id.image);
+        subject = (TextView) findViewById(R.id.subject);
+        grade = (TextView) findViewById(R.id.grade);
+        teacher = (TextView) findViewById(R.id.teacher);
+        progress = (TextView) findViewById(R.id.progress);//进度
+        ordernumber = (TextView) findViewById(R.id.order_number);//订单编号
+        buildtime = (TextView) findViewById(R.id.build_time);//创建时间
+        paytype = (TextView) findViewById(R.id.pay_type);//支付方式
+        payprice = (TextView) findViewById(R.id.pay_price);//支付价格
+        reorder = (TextView) findViewById(R.id.reorder);
+
+        reorder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PersonalMyOrderCanceledDetailActivity.this, OrderConfirmActivity.class);
+                intent.putExtra("id", getIntent().getStringExtra("id"));
+//                OrderPayBean payBean = new OrderPayBean();
+                OrderPayBean payBean = (OrderPayBean) getIntent().getSerializableExtra("pay_data");
+
+//                payBean.image = getIntent().getStringExtra("image");
+//                payBean.name =getIntent().getStringExtra("name");
+//                payBean.subject = getIntent().getStringExtra("subject");
+//                payBean.grade = getIntent().getStringExtra("grade");
+//                payBean.classnumber = getIntent().getIntExtra("classnumber",0);
+//                payBean.teacher = getIntent().getStringExtra("name");
+//                payBean.classendtime = getIntent().getStringExtra("classendtime");
+//                payBean.classstarttime = getIntent().getStringExtra("classstarttime");
+//                if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("status"))) {
+//                    payBean.status = " ";
+//                } else {
+//                    payBean.status = getIntent().getStringExtra("status");
+//                }
+//                payBean.price = getIntent().getIntExtra("price",0);
+                intent.putExtra("data", payBean);
+                startActivity(intent);
+            }
+        });
+    }
+
+}
+

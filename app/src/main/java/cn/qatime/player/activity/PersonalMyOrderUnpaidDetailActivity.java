@@ -1,30 +1,26 @@
 package cn.qatime.player.activity;
 
 import android.os.Bundle;
-import android.widget.Button;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import javax.security.auth.Subject;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import libraryextra.bean.OrderDetailBean;
-import libraryextra.bean.OrderPayBean;
 import libraryextra.utils.StringUtils;
 
 
-public class PersonalMyOrderDetailActivity extends BaseActivity {
+public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
 
     private TextView subject;
     private TextView progress;
@@ -33,7 +29,6 @@ public class PersonalMyOrderDetailActivity extends BaseActivity {
     private TextView buildtime;
     private TextView paytype;
     private TextView pay;
-    private TextView paytime;
     private TextView cancelorder;
     private TextView name;
     private ImageView image;
@@ -46,28 +41,25 @@ public class PersonalMyOrderDetailActivity extends BaseActivity {
     private TextView price;
     private TextView payprice;
     private int priceNumber = 0;
+    private int classid;
     DecimalFormat df = new DecimalFormat("#.00");
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_personal_my_order_detail);
+        setContentView(R.layout.activity_personal_my_order_unpaid_detail);
         setTitle(getResources().getString(R.string.detail_of_order));
         initView();
-
-        EventBus.getDefault().register(this);
-
         OrderDetailBean data = (OrderDetailBean) getIntent().getSerializableExtra("data");
-        id = getIntent().getIntExtra("id", 0);
         if (data != null) {
             setValue(data);
-            priceNumber = data.price;
         }
 //        pay.setOnClickListener(this);
     }
 
     private void setValue(OrderDetailBean data) {
-        Glide.with(PersonalMyOrderDetailActivity.this).load(data.image).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
+        Glide.with(PersonalMyOrderUnpaidDetailActivity.this).load(data.image).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
         if (StringUtils.isNullOrBlanK(data.name)) {
             name.setText("    ");
         } else {
@@ -88,14 +80,27 @@ public class PersonalMyOrderDetailActivity extends BaseActivity {
         } else {
             teacher.setText(data.teacher);
         }
+        ordernumber.setText(getIntent().getStringExtra("id"));
+        if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("created_at"))) {
+            buildtime.setText("为空");
+        }//创建时间
+        else {
+            buildtime.setText((getIntent().getStringExtra("created_at")));
+
+        }
+        String payType = getIntent().getStringExtra("payType");//支付方式
+        if (payType.equals("1")) {
+            paytype.setText("微信支付");
+        } else {
+            paytype.setText("支付宝支付");
+        }
         progress.setText(data.Completed_lesson_count + "/" + data.Preset_lesson_count);
         String price = df.format(data.price);
         if (price.startsWith(".")) {
             price = "0" + price;
         }
-        PersonalMyOrderDetailActivity.this.payprice.setText(price);
+        PersonalMyOrderUnpaidDetailActivity.this.payprice.setText(price);
         payprice.setText(" " + price + " ");
-
     }
 
     public void initView() {
@@ -106,28 +111,20 @@ public class PersonalMyOrderDetailActivity extends BaseActivity {
         grade = (TextView) findViewById(R.id.grade);
         teacher = (TextView) findViewById(R.id.teacher);
         progress = (TextView) findViewById(R.id.progress);//进度
-        time = (TextView) findViewById(R.id.time);//倒计时
         ordernumber = (TextView) findViewById(R.id.order_number);//订单编号
         buildtime = (TextView) findViewById(R.id.build_time);//创建时间
-        paytime = (TextView) findViewById(R.id.pay_time);//支付时间
+//        paytime = (TextView) findViewById(R.id.pay_time);//支付时间
         paytype = (TextView) findViewById(R.id.pay_type);//支付方式
         payprice = (TextView) findViewById(R.id.pay_price);//支付价格
         pay = (TextView) findViewById(R.id.pay);
         cancelorder = (TextView) findViewById(R.id.cancel_order);
-
+        pay.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: 2016/9/1 付款
+            }
+        });
     }
 
-    @Subscribe
-    public void onEvent(String event) {
-        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
-            finish();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
 }
 

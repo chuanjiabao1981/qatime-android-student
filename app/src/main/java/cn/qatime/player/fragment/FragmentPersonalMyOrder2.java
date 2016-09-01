@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
-import cn.qatime.player.activity.PersonalMyOrderDetailActivity;
+import cn.qatime.player.activity.PersonalMyOrderPaidDetailActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.MyOrderBean;
@@ -137,7 +137,7 @@ public class FragmentPersonalMyOrder2 extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), PersonalMyOrderDetailActivity.class);
+                Intent intent = new Intent(getActivity(), PersonalMyOrderPaidDetailActivity.class);
                 intent.putExtra("id", list.get(position - 1).getId());
                 OrderDetailBean bean = new OrderDetailBean();
                 bean.image = list.get(position - 1).getProduct().getPublicize();

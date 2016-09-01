@@ -21,9 +21,7 @@ import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.orhanobut.logger.Logger;
-
 import org.json.JSONObject;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +29,7 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.OrderPayActivity;
-import cn.qatime.player.activity.PersonalMyOrderDetailActivity;
+import cn.qatime.player.activity.PersonalMyOrderUnpaidDetailActivity;
 import cn.qatime.player.bean.MyOrderBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -50,7 +48,7 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
     private java.util.List<MyOrderBean.Data> list = new ArrayList<>();
     private CommonAdapter<MyOrderBean.Data> adapter;
     private int page = 1;
-    private int id;
+    private String id;
     DecimalFormat df = new DecimalFormat("#.00");
 
     @Nullable
@@ -106,13 +104,16 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
                             @Override
                             public void onClick(View v) {
                                 // TODO: 2016/8/30  取消订单
-                                dialog();
+                                id=list.get(position).getId();
+                                dialog(id);
+                                initData(1);
                             }
                         });
 
             }
 
         };
+        adapter.notifyDataSetChanged();
         listView.setAdapter(adapter);
 
         listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
@@ -159,9 +160,10 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), PersonalMyOrderDetailActivity.class);
+                Intent intent = new Intent(getActivity(), PersonalMyOrderUnpaidDetailActivity.class);
                 intent.putExtra("id", list.get(position - 1).getId());
                 OrderDetailBean bean = new OrderDetailBean();
+                bean.id = list.get(position - 1).getProduct().getId();
                 bean.image = list.get(position - 1).getProduct().getPublicize();
                 bean.name = list.get(position - 1).getProduct().getName();
                 bean.subject = list.get(position - 1).getProduct().getSubject();
@@ -171,6 +173,8 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
                 bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
                 bean.price = list.get(position - 1).getProduct().getPrice();
                 intent.putExtra("data", bean);
+                intent.putExtra("payType", list.get(position - 1).getPay_type());
+                intent.putExtra("created_at",  list.get(position - 1).getCreated_at());
                 startActivity(intent);
             }
         });
@@ -234,7 +238,7 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
         addToRequestQueue(request);
     }
 
-    protected void dialog() {
+    protected void dialog(final String  id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("确认取消订单吗？");
         builder.setTitle("提示");
@@ -242,8 +246,9 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
+               initData1(id);
+                // TODO: 2016/8/31
                 dialog.dismiss();
-//// TODO: 2016/8/30
             }
         });
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -254,5 +259,48 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
         });
         builder.create().show();
     }
+    private void initData1(String id){
+    Map<String, String> map = new HashMap<>();
+    map.put("id",id);
+    DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlPaylist+"/"+id+"/cancel", map), null,
+//            http://testing.qatime.cn/api/v1/payment/orders/201608311659310128/cancel
+
+            new VolleyListener(getActivity()) {
+                @Override
+                protected void onSuccess(JSONObject response) {
+                    isLoad = true;
+                    Logger.e(response.toString());
+                    String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+                    listView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
+                    listView.onRefreshComplete();
+
+                    try {
+                        MyOrderBean data = JsonUtils.objectFromJson(response.toString(), MyOrderBean.class);
+                        if (data != null) {
+                            list.clear();
+                        }
+                        adapter.notifyDataSetChanged();
+                    } catch (JsonSyntaxException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                protected void onError(JSONObject response) {
+                }
+
+                @Override
+                protected void onTokenOut() {
+                    tokenOut();
+                }
+            }, new VolleyErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError volleyError) {
+            super.onErrorResponse(volleyError);
+            listView.onRefreshComplete();
+        }
+    });
+    addToRequestQueue(request);}
+
 
 }

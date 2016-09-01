@@ -11,28 +11,20 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
-
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.orhanobut.logger.Logger;
-
 import org.json.JSONObject;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
 import cn.qatime.player.R;
 import cn.qatime.player.activity.OrderConfirmActivity;
-import cn.qatime.player.activity.OrderPayActivity;
-import cn.qatime.player.activity.PersonalMyOrderDetailActivity;
-import cn.qatime.player.activity.RemedialClassDetailActivity;
-import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.activity.PersonalMyOrderCanceledDetailActivity;
 import cn.qatime.player.bean.MyOrderBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -41,7 +33,6 @@ import libraryextra.adapter.ViewHolder;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.bean.OrderDetailBean;
 import libraryextra.bean.OrderPayBean;
-import libraryextra.bean.TutorialClassBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -165,10 +156,30 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), PersonalMyOrderDetailActivity.class);
+                Intent intent = new Intent(getActivity(), PersonalMyOrderCanceledDetailActivity.class);
                 Logger.e(list.get(position - 1).getId());
 
-                intent.putExtra("id", list.get(position - 1).getId());
+
+                intent.putExtra("id", list.get(position - 1).getProduct().getId());
+
+
+                intent.putExtra("order_id", list.get(position - 1).getId());
+                OrderPayBean payBean = new OrderPayBean();
+                payBean.image = list.get(position - 1).getProduct().getPublicize();
+                payBean.name = list.get(position - 1).getProduct().getName();
+                payBean.subject = list.get(position - 1).getProduct().getSubject();
+                payBean.grade = list.get(position - 1).getProduct().getGrade();
+                payBean.classnumber = list.get(position - 1).getProduct().getPreset_lesson_count();
+                payBean.teacher = list.get(position - 1).getProduct().getTeacher_name();
+                payBean.classendtime = list.get(position - 1).getProduct().getLive_end_time();
+                payBean.classstarttime = list.get(position - 1).getProduct().getLive_start_time();
+                if (StringUtils.isNullOrBlanK(list.get(position - 1).getProduct().getStatus())) {
+                    payBean.status = " ";
+                } else {
+                    payBean.status = list.get(position - 1).getProduct().getStatus();
+                }
+                payBean.price = list.get(position - 1).getProduct().getPrice();
+                intent.putExtra("pay_data", payBean);
 
                 OrderDetailBean bean = new OrderDetailBean();
                 bean.image = list.get(position - 1).getProduct().getPublicize();
