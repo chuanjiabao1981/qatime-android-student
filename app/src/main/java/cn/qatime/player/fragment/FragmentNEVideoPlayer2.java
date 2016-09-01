@@ -3,6 +3,7 @@ package cn.qatime.player.fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -47,7 +50,7 @@ import libraryextra.transformation.GlideCircleTransform;
 
 public class FragmentNEVideoPlayer2 extends BaseFragment {
     private TextView tipText;
-    public ListView listView;
+    public PullToRefreshListView listView;
     public CommonAdapter<IMMessage> adapter;
     public List<IMMessage> items = new ArrayList<>();
 
@@ -78,7 +81,16 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
 
     private void initView(View view) {
         tipText = (TextView) view.findViewById(R.id.tip);
-        listView = (ListView) view.findViewById(R.id.list);
+        listView = (PullToRefreshListView) view.findViewById(R.id.list);
+        listView.getRefreshableView().setDividerHeight(0);
+        listView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+        listView.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
+        listView.getLoadingLayoutProxy(false, true).setPullLabel(getResources().getString(R.string.pull_to_load));
+        listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResources().getString(R.string.refreshing));
+        listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
+        listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
+        listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
+
         adapter = new CommonAdapter<IMMessage>(getActivity(), items, R.layout.item_message) {
             @Override
             public void convert(ViewHolder holder, IMMessage item, int position) {
@@ -101,6 +113,21 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
             }
         };
         listView.setAdapter(adapter);
+
+        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+                        listView.getLoadingLayoutProxy(false, true).setLastUpdatedLabel(label);
+                        listView.onRefreshComplete();
+                    }
+                }, 200);
+                loadFromRemote();
+            }
+        });
         loadMessage(false);
     }
 
@@ -165,7 +192,6 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
     private void loadAnchorContext() {
         // query old
         this.direction = QueryDirectionEnum.QUERY_OLD;
-//        messageListView.onRefreshStart(AutoRefreshListView.Mode.START);
         NIMClient.getService(MsgService.class).queryMessageListEx(anchor(), direction, LOAD_MESSAGE_COUNT, true)
                 .setCallback(new RequestCallbackWrapper<List<IMMessage>>() {
                     @Override
@@ -177,7 +203,6 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
 
                         // query new
                         direction = QueryDirectionEnum.QUERY_NEW;
-//                        messageListView.onRefreshStart(AutoRefreshListView.Mode.END);
                         NIMClient.getService(MsgService.class).queryMessageListEx(anchor(), direction, LOAD_MESSAGE_COUNT, true)
                                 .setCallback(new RequestCallbackWrapper<List<IMMessage>>() {
                                     @Override
@@ -186,8 +211,6 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
                                             return;
                                         }
                                         onMessageLoaded(messages);
-                                        // scroll to position
-//                                        scrollToAnchor(anchor);
                                     }
                                 });
                     }
@@ -201,7 +224,6 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
      * @param messages
      */
     private void onMessageLoaded(List<IMMessage> messages) {
-        int count = messages.size();
 
         if (remote) {
             Collections.reverse(messages);
@@ -234,7 +256,7 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
         }
 
         adapter.notifyDataSetChanged();
-        listView.setSelection(items.size() - 1);
+        listView.getRefreshableView().setSelection(result.size());
 //        messageListView.onRefreshComplete(count, LOAD_MESSAGE_COUNT, true);
         firstLoad = false;
     }

@@ -47,20 +47,20 @@ public class FragmentNEVideoPlayer32 extends BaseFragment {
 
     public void setData(RemedialClassDetailBean.Data data) {
         if (data != null) {
-            name.setText(getResources().getString(R.string.teacher_name) + data.getTeacher().getName());
-            subject.setText(getResources().getString(R.string.teacher_subject) + data.getTeacher().getSubject());
+            name.setText(getActivity().getResources().getString(R.string.teacher_name) + data.getTeacher().getName());
+            subject.setText(getActivity().getResources().getString(R.string.teacher_subject) + data.getTeacher().getSubject());
             if (!StringUtils.isNullOrBlanK(data.getTeacher().getTeaching_years())) {
                 if (data.getTeacher().getTeaching_years().equals("within_three_years")) {
-                    teachingyears.setText(getResources().getString(R.string.teacher_years) + getResources().getString(R.string.within_three_years));
+                    teachingyears.setText(getActivity().getResources().getString(R.string.teacher_years) + getActivity().getResources().getString(R.string.within_three_years));
                 } else if (data.getTeacher().getTeaching_years().equals("within_ten_years")) {
-                    teachingyears.setText(getResources().getString(R.string.teacher_years) + getResources().getString(R.string.within_ten_years));
+                    teachingyears.setText(getActivity().getResources().getString(R.string.teacher_years) + getActivity().getResources().getString(R.string.within_ten_years));
                 } else if (data.getTeacher().getTeaching_years().equals("within_twenty_years")) {
-                    teachingyears.setText(getResources().getString(R.string.teacher_years) + getResources().getString(R.string.within_twenty_years));
+                    teachingyears.setText(getActivity().getResources().getString(R.string.teacher_years) + getActivity().getResources().getString(R.string.within_twenty_years));
                 } else {
-                    teachingyears.setText(getResources().getString(R.string.teacher_years) + getResources().getString(R.string.more_than_ten_years));
+                    teachingyears.setText(getActivity().getResources().getString(R.string.teacher_years) + getActivity().getResources().getString(R.string.more_than_ten_years));
                 }
             }
-            gradetype.setText(getResources().getString(R.string.grade_type) + "高中");
+            gradetype.setText(getActivity().getResources().getString(R.string.grade_type) + "高中");
             describe.setText(data.getTeacher().getDesc());
 
             SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getCacheDir() + "/school.txt").toString(), SchoolBean.class);
@@ -68,7 +68,7 @@ public class FragmentNEVideoPlayer32 extends BaseFragment {
             if (schoolBean != null && schoolBean.getData() != null) {
                 for (int i = 0; i < schoolBean.getData().size(); i++) {
                     if (data.getTeacher().getSchool() == schoolBean.getData().get(i).getId()) {
-                        school.setText(getResources().getString(R.string.teacher_school) + schoolBean.getData().get(i).getName());
+                        school.setText(getActivity().getResources().getString(R.string.teacher_school) + schoolBean.getData().get(i).getName());
                         break;
                     }
                 }

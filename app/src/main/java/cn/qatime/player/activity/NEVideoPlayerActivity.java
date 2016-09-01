@@ -172,7 +172,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
 
                 fragment2.items.add(message);
                 fragment2.adapter.notifyDataSetChanged();
-                fragment2.listView.setSelection(fragment2.items.size() - 1);
+                fragment2.listView.getRefreshableView().setSelection(fragment2.items.size() - 1);
                 content.setText("");
             }
         });

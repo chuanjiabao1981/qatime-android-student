@@ -57,14 +57,14 @@ public class FragmentNEVideoPlayer31 extends BaseFragment {
 
     public void setData(RemedialClassDetailBean.Data bean) {
         if (bean != null) {
-            name.setText(getResources().getString(R.string.class_name) + bean.getName());
-            subject.setText(getResources().getString(R.string.subject_type) + bean.getSubject());
-            teacher.setText(getResources().getString(R.string.teacher) + bean.getTeacher().getName());
-            progress.setText(getResources().getString(R.string.progress) + bean.getCompleted_lesson_count() + "/" + bean.getPreset_lesson_count());
-            classstarttime.setText(getResources().getString(R.string.class_start_time) + bean.getLive_start_time());
-            classendtime.setText(getResources().getString(R.string.class_end_time) + bean.getLive_end_time());
-            grade.setText(getResources().getString(R.string.grade_type) + bean.getGrade());
-            remainclass.setText(getResources().getString(R.string.remain_class) + (bean.getPreset_lesson_count() - bean.getCompleted_lesson_count()));
+            name.setText(getActivity().getResources().getString(R.string.class_name) + bean.getName());
+            subject.setText(getActivity().getResources().getString(R.string.subject_type) + bean.getSubject());
+            teacher.setText(getActivity().getResources().getString(R.string.teacher) + bean.getTeacher().getName());
+            progress.setText(getActivity().getResources().getString(R.string.progress) + bean.getCompleted_lesson_count() + "/" + bean.getPreset_lesson_count());
+            classstarttime.setText(getActivity().getResources().getString(R.string.class_start_time) + bean.getLive_start_time());
+            classendtime.setText(getActivity().getResources().getString(R.string.class_end_time) + bean.getLive_end_time());
+            grade.setText(getActivity().getResources().getString(R.string.grade_type) + bean.getGrade());
+            remainclass.setText(getActivity().getResources().getString(R.string.remain_class) + (bean.getPreset_lesson_count() - bean.getCompleted_lesson_count()));
             describe.setText(bean.getDescription());
         }
     }
