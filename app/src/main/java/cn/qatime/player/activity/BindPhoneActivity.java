@@ -23,6 +23,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.StringUtils;
@@ -134,9 +135,13 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                     @Override
                     protected void onSuccess(JSONObject response) {
                         Logger.e("验证成功");
-                        Toast.makeText(BindPhoneActivity.this, "绑定手机修改成功", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(BindPhoneActivity.this, SecurityManagerActivity.class);
+                        Toast.makeText(BindPhoneActivity.this, "绑定手机修改成功,请重新登陆", Toast.LENGTH_SHORT).show();
+                        BaseApplication.clearToken();
+                        setResult(Constant.RESPONSE_EXIT_LOGIN);
+                        Intent intent = new Intent(BindPhoneActivity.this, LoginActivity.class);
+                        intent.putExtra("sign", "exit_login");
                         startActivity(intent);
+                        finish();
 
                     }
 

@@ -22,6 +22,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.StringUtils;
@@ -124,7 +125,7 @@ public class VerifyPhoneActivity extends BaseActivity implements View.OnClickLis
                             String next = getIntent().getStringExtra("next");
                             if ("phone".equals(next)) {
                                 Intent intent = new Intent(VerifyPhoneActivity.this, BindPhoneActivity.class);
-                                startActivity(intent);
+                                startActivityForResult(intent, Constant.REQUEST_EXIT_LOGIN);
                             } else if ("email".equals(next)) {
                                 Intent intent = new Intent(VerifyPhoneActivity.this, BindEmailActivity.class);
                                 startActivity(intent);
@@ -167,6 +168,14 @@ public class VerifyPhoneActivity extends BaseActivity implements View.OnClickLis
         public void onTick(long millisUntilFinished) {// 计时过程
             textGetcode.setEnabled(false);//防止重复点击
             textGetcode.setText(millisUntilFinished / 1000 + "s后重新获取");
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constant.REQUEST_EXIT_LOGIN && resultCode == Constant.RESPONSE_EXIT_LOGIN) {
+            setResult(Constant.RESPONSE_EXIT_LOGIN);
+            finish();
         }
     }
 }

@@ -18,7 +18,6 @@ import cn.qatime.player.utils.AppUtils;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DataCleanUtils;
 import libraryextra.utils.DensityUtils;
-import libraryextra.utils.SPUtils;
 
 /**
  * @author luntify

@@ -9,7 +9,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.netease.nimlib.sdk.AbortableFuture;
@@ -29,11 +28,11 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.config.UserPreferences;
-import cn.qatime.player.utils.Constant;
-import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.im.cache.FriendDataCache;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
+import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.Profile;
 import libraryextra.utils.CheckUtil;
 import libraryextra.utils.DialogUtils;
@@ -85,7 +84,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
         String sign = getIntent().getStringExtra("sign");//从系统设置退出登录页面跳转而来，清除用户登录信息
         if (!StringUtils.isNullOrBlanK(sign) && sign.equals("exit_login")) {
-            username.setText("");
+//            username.setText("");
             password.setText("");
         }
     }
@@ -142,8 +141,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         progress.setCanceledOnTouchOutside(false);
 
         Map<String, String> map = new HashMap<>();
-        map.put("login_account", username.getText().toString());
-        map.put("password", password.getText().toString());
+        map.put("login_account", username.getText().toString().trim());
+        map.put("password", password.getText().toString().trim());
         map.put("client_type", "app");
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlLogin, map), null,
                 new VolleyListener(LoginActivity.this) {
@@ -159,6 +158,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         try {
                             JSONObject data = response.getJSONObject("data");
                             if (data.has("result")) {
+                                DialogUtils.dismissDialog(progress);
                                 if (data.getString("result") != null && data.getString("result").equals("failed")) {
                                     Toast.makeText(LoginActivity.this, getResources().getString(R.string.account_or_password_error), Toast.LENGTH_SHORT).show();
                                     DialogUtils.dismissDialog(progress);
@@ -179,7 +179,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                         @Override
                                         public void onSuccess(LoginInfo o) {
                                             DialogUtils.dismissDialog(progress);
-                                            Logger.e("云信登录成功"+o.getAccount());
+                                            Logger.e("云信登录成功" + o.getAccount());
                                             // 初始化消息提醒
                                             NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
 
@@ -207,7 +207,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                         public void onFailed(int code) {
                                             DialogUtils.dismissDialog(progress);
                                             BaseApplication.clearToken();
-                                            Logger.e(code+"code");
+                                            Logger.e(code + "code");
                                             if (code == 302 || code == 404) {
                                                 Toast.makeText(LoginActivity.this, R.string.account_or_password_error, Toast.LENGTH_SHORT).show();
                                             } else {
