@@ -15,7 +15,6 @@ import cn.qatime.player.utils.AppUtils;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DataCleanUtils;
 import libraryextra.utils.DensityUtils;
-import libraryextra.utils.SPUtils;
 
 /**
  * @author luntify
@@ -91,7 +90,6 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
             case R.id.exit:// 退出登录
                 setResult(Constant.RESPONSE_EXIT_LOGIN);
                 BaseApplication.clearToken();
-                SPUtils.put(SystemSettingActivity.this, "profile", BaseApplication.getProfile());
                 Intent intent = new Intent(SystemSettingActivity.this, LoginActivity.class);
                 intent.putExtra("sign", "exit_login");
                 startActivity(intent);
