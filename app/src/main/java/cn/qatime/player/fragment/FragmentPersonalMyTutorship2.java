@@ -48,7 +48,6 @@ public class FragmentPersonalMyTutorship2 extends BaseFragment {
     private java.util.List<TutorialClassBean.Data> list = new ArrayList<>();
     private CommonAdapter<TutorialClassBean.Data> adapter;
     private int page = 1;
-
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
 
@@ -77,15 +76,11 @@ public class FragmentPersonalMyTutorship2 extends BaseFragment {
             public void convert(ViewHolder helper, final TutorialClassBean.Data item, int position) {
 
                 helper.setText(R.id.class_start_time, getResources().getString(R.string.item_class_start_date) + item.getLive_start_time());
-
-
                 helper.setText(R.id.class_end_time, getResources().getString(R.string.item_class_end_date) + item.getLive_end_time());
-
                 helper.getView(R.id.enter).setVisibility(item.getIs_bought() ? View.GONE : View.VISIBLE);
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         Intent intent = new Intent(getActivity(), OrderConfirmActivity.class);
                         intent.putExtra("id", item.getId());
                         OrderPayBean bean = new OrderPayBean();
@@ -99,7 +94,6 @@ public class FragmentPersonalMyTutorship2 extends BaseFragment {
                         bean.status = item.getStatus();
                         bean.classstarttime = item.getLive_start_time();
                         bean.price = item.getPrice();
-
                         intent.putExtra("data", bean);
                         startActivity(intent);
                     }
@@ -107,25 +101,23 @@ public class FragmentPersonalMyTutorship2 extends BaseFragment {
 
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
-                helper.setText(R.id.subject, getResources().getString(R.string.item_subject)+ item.getSubject());
+                helper.setText(R.id.subject, getResources().getString(R.string.item_subject) + item.getSubject());
                 helper.setText(R.id.teacher, getResources().getString(R.string.item_teacher) + item.getTeacher_name());
                 helper.setText(R.id.progress, item.getCompleted_lesson_count() + "/" + item.getPreset_lesson_count());
                 ((ProgressBar) helper.getView(R.id.progressbar)).setProgress(item.getCompleted_lesson_count());
                 ((ProgressBar) helper.getView(R.id.progressbar)).setMax(item.getPreset_lesson_count());
-                helper.setText(R.id.remain_class, String.valueOf(item.getPreset_lesson_count()-item.getCompleted_lesson_count()));
+                helper.setText(R.id.remain_class, String.valueOf(item.getPreset_lesson_count() - item.getCompleted_lesson_count()));
                 try {
                     long time = System.currentTimeMillis() - parse.parse(item.getPreview_time()).getTime();
                     int value = 0;
                     if (time > 0) {
                         value = (int) (time / (1000 * 3600 * 24));
                     }
-
                     helper.setText(R.id.teaching_time, getResources().getString(R.string.item_to_start) + value + getResources().getString(R.string.item_day));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }
-
         };
         listView.setAdapter(adapter);
 
@@ -198,8 +190,6 @@ public class FragmentPersonalMyTutorship2 extends BaseFragment {
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/courses", map), null,
                 new VolleyListener(getActivity()) {
-
-
                     @Override
                     protected void onSuccess(JSONObject response) {
                         isLoad = true;
@@ -220,12 +210,10 @@ public class FragmentPersonalMyTutorship2 extends BaseFragment {
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
                         }
-
                     }
 
                     @Override
                     protected void onError(JSONObject response) {
-
                     }
 
                     @Override

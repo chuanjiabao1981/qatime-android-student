@@ -62,7 +62,7 @@
     <string name="primary2">二年级</string>
     <string name="primary1">一年级</string>
     <!--//fragment2-->
-    <string name="course_to_be_done">待上课</string>
+    <string name="course_to_be_done">未上课</string>
     <string name="course_finished">已上课</string>
     <string name="all_course">全部课程</string>
     <!--//fragment4-->
@@ -114,15 +114,16 @@
     <string name="amount_payment">应付金额</string>
     <string name="cancel_order">取消订单</string>
     <string name="delete_order">删除订单</string>
-    <string name="reorder">重新下单</string>
+    <string name="reorder">重新购买</string>
     <string name="pay">付款</string>
-    <string name="deal_down">交易完成</string>//
+    <string name="deal_done">交易完成</string>//
     <string name="deal_closed">交易关闭</string>//
     <string name="order_confirm">订单确认</string>
     <string name="pay_confirm">支付确认</string>
     <string name="commodity_name">商品名称</string>
     <string name="commodity_detail">商品详情</string>
     <string name="pay_remind">请您在24小时内完成支付，否则订单会自动取消。</string>
+    <string name="problem_phone">如遇支付问题，请拨打电话</string>
     <!--//详情-->
     <string name="information_detail">信息详情</string>
     <string name="teacher_detail">教师详情</string>

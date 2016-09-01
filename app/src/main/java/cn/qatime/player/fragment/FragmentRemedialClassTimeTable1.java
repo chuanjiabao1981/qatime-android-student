@@ -46,7 +46,6 @@ import libraryextra.utils.VolleyListener;
 public class FragmentRemedialClassTimeTable1 extends BaseFragment {
     private PullToRefreshListView listView;
     private CommonAdapter<ClassTimeTableBean.DataEntity.LessonsEntity> adapter;
-
     private List<ClassTimeTableBean.DataEntity> totalList = new ArrayList<>();
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
     private String date = parse.format(new Date());
@@ -127,18 +126,18 @@ public class FragmentRemedialClassTimeTable1 extends BaseFragment {
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                                intent.putExtra("id", item.getId());
+                                intent.putExtra("id", item.getCourse_id());
                                 intent.putExtra("pager", 2);
                                 startActivity(intent);
                             }
                         });
-//
-                helper.setText(R.id.classname,item.getName());
+                helper.setText(R.id.course, item.getCourse_name());
+                helper.setText(R.id.classname, item.getName());
                 helper.setText(R.id.status, getStatus(item.getStatus()));
-                helper.setText(R.id.class_date, item.getClass_date()+" ");
+                helper.setText(R.id.class_date, item.getClass_date() + " ");
                 helper.setText(R.id.live_time, item.getLive_time());
-                helper.setText(R.id.subject,  getResources().getString(R.string.item_subject) + item.getSubject());
-                helper.setText(R.id.teacher,  getResources().getString(R.string.item_teacher) + item.getTeacher_name());
+                helper.setText(R.id.subject, getResources().getString(R.string.item_subject) + item.getSubject());
+                helper.setText(R.id.teacher, getResources().getString(R.string.item_teacher) + item.getTeacher_name());
                 helper.getView(R.id.enter).setVisibility(StringUtils.isNullOrBlanK(item.getPull_address()) ? View.GONE : View.VISIBLE);
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override

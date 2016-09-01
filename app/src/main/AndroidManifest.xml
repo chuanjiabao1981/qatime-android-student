@@ -9,8 +9,9 @@
         android:targetSdkVersion="21" />
 
     <!-- 权限声明 -->
+    <!--拨打电话-->
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
     <!-- 允许程序打开网络套接字 -->
-    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 允许程序使用PowerManager WakeLocks以防止处理器休眠或者屏幕锁屏 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -232,6 +233,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.NotifySettingActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PersonalMyOrderDetailActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
