@@ -1,6 +1,5 @@
 package cn.qatime.player.fragment;
 
-import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,16 +31,15 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.OrderPayActivity;
 import cn.qatime.player.activity.PersonalMyOrderDetailActivity;
+import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.MyOrderBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import cn.qatime.player.base.BaseFragment;
+import libraryextra.bean.OrderConfirmBean;
 import libraryextra.bean.OrderDetailBean;
-import libraryextra.bean.OrderPayBean;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -95,9 +93,12 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent(getActivity(), OrderPayActivity.class);
-                                intent.putExtra("id", list.get(position).getProduct().getId());
+                                OrderConfirmBean.App_pay_params app_pay_params = item.getApp_pay_params();
+                                intent.putExtra("data", app_pay_params);
+                                intent.putExtra("id", item.getId());
+                                intent.putExtra("time", item.getCreated_at().substring(0,19).replace("T", " "));
                                 intent.putExtra("price", item.getProduct().getPrice());
-                                intent.putExtra("payType", "1");
+                                intent.putExtra("type", (item.getPay_type() + "").equals("1") ? getResources().getString(R.string.method_payment) + "：微信支付" : getResources().getString(R.string.method_payment) + "：支付宝支付");
                                 startActivity(intent);
                             }
                         });

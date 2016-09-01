@@ -1,7 +1,6 @@
 package cn.qatime.player.adapter;
 
 import android.content.Context;
-import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.List;

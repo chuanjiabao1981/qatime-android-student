@@ -1,15 +1,33 @@
 package cn.qatime.player.bean;
 
 
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
 import java.util.List;
+
+import libraryextra.bean.OrderConfirmBean;
 
 public class MyOrderBean implements Serializable {
     private int status;
 
     private List<Data> data;
+    private int pay_type;
+    private String created_at;
+
+    public int getPay_type() {
+        return pay_type;
+    }
+
+    public void setPay_type(int pay_type) {
+        this.pay_type = pay_type;
+    }
+
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
+    }
 
     public void setStatus(int status) {
         this.status = status;
@@ -36,9 +54,28 @@ public class MyOrderBean implements Serializable {
 
         private String nonce_str;
 
-        private App_pay_params app_pay_params;
+        private OrderConfirmBean.App_pay_params app_pay_params;
 
         private Product product;
+
+        private int pay_type;
+        private String created_at;
+
+        public int getPay_type() {
+            return pay_type;
+        }
+
+        public void setPay_type(int pay_type) {
+            this.pay_type = pay_type;
+        }
+
+        public String getCreated_at() {
+            return created_at;
+        }
+
+        public void setCreated_at(String created_at) {
+            this.created_at = created_at;
+        }
 
         public void setId(String id) {
             this.id = id;
@@ -72,11 +109,11 @@ public class MyOrderBean implements Serializable {
             return this.nonce_str;
         }
 
-        public void setApp_pay_params(App_pay_params app_pay_params) {
+        public void setApp_pay_params(OrderConfirmBean.App_pay_params app_pay_params) {
             this.app_pay_params = app_pay_params;
         }
 
-        public App_pay_params getApp_pay_params() {
+        public OrderConfirmBean.App_pay_params getApp_pay_params() {
             return this.app_pay_params;
         }
 
@@ -415,76 +452,4 @@ public class MyOrderBean implements Serializable {
 
     }
 
-    public class App_pay_params implements Serializable {
-        private String appid;
-
-        private String partnerid;
-        @SerializedName("package")
-        private String packages;
-
-        private String timestamp;
-
-        private String prepayid;
-
-        private String noncestr;
-
-        private String sign;
-
-        public void setAppid(String appid) {
-            this.appid = appid;
-        }
-
-        public String getAppid() {
-            return this.appid;
-        }
-
-        public void setPartnerid(String partnerid) {
-            this.partnerid = partnerid;
-        }
-
-        public String getPartnerid() {
-            return this.partnerid;
-        }
-
-        public void setPackage(String packages) {
-            this.packages = packages;
-        }
-
-        public String getPackage() {
-            return this.packages;
-        }
-
-        public void setTimestamp(String timestamp) {
-            this.timestamp = timestamp;
-        }
-
-        public String getTimestamp() {
-            return this.timestamp;
-        }
-
-        public void setPrepayid(String prepayid) {
-            this.prepayid = prepayid;
-        }
-
-        public String getPrepayid() {
-            return this.prepayid;
-        }
-
-        public void setNoncestr(String noncestr) {
-            this.noncestr = noncestr;
-        }
-
-        public String getNoncestr() {
-            return this.noncestr;
-        }
-
-        public void setSign(String sign) {
-            this.sign = sign;
-        }
-
-        public String getSign() {
-            return this.sign;
-        }
-
-    }
 }
