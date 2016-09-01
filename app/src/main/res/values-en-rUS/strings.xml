@@ -113,7 +113,7 @@
     <string name="cancel_order">Cancel order</string>//取消订单
     <string name="delete_order">Delete order</string>//删除订单
     <string name="reorder">Reorder</string>//重新下单
-    <string name="deal_down">Deal down</string>//交易完成
+    //交易完成
     <string name="deal_closed">Deal closed</string>//交易关闭
     <string name="pay">Pay</string>//付款
     <string name="order_confirm">Confirm order</string>//确认订单
@@ -271,6 +271,8 @@
     <string name="confirm_payment">Confirm payment</string>
     <string name="full_screen">Full screen</string>
     <string name="hd">HD</string>
+    <string name="deal_done">Deal done</string>
+    <string name="dealing">Dealing</string>
 
 
 </resources>

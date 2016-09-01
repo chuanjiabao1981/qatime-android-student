@@ -30,6 +30,8 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
     private ImageView image;
     private TextView grade;
     private TextView teacher;
+    private TextView status;
+
     private TextView payprice;
     DecimalFormat df = new DecimalFormat("#.00");
     private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
@@ -43,7 +45,6 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
 
 
         OrderDetailBean data = (OrderDetailBean) getIntent().getSerializableExtra("data");
-        OrderPayBean pay_data = (OrderPayBean) getIntent().getSerializableExtra("pay_data");
 
 
         if (data != null) {
@@ -74,16 +75,29 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
         } else {
             teacher.setText(data.teacher);
         }
+
+        if (data.status.equals("refunded")) {//交易关闭
+            status.setText(getResources().getString(R.string.deal_closed));
+        }
+        else if (data.status.equals("canceled")) {//交易关闭
+            status.setText(getResources().getString(R.string.deal_closed));
+        }
+        else if (data.status.equals("expired")) {//交易关闭
+            status.setText(getResources().getString(R.string.deal_closed));
+        }
+        else {//空
+            status.setText("        ");
+        }
         ordernumber.setText(getIntent().getStringExtra("order_id"));
         if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("created_at"))) {
-            buildtime.setText("为空");
+            buildtime.setText("        ");
         }//创建时间
         else {
             buildtime.setText((getIntent().getStringExtra("created_at")));
 
         }
         if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("created_at"))) {
-            paytype.setText("不知道微信支付");
+            paytype.setText("        ");
 
         } else {
             String payType = getIntent().getStringExtra("payType");//支付方式
@@ -109,6 +123,7 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
         subject = (TextView) findViewById(R.id.subject);
         grade = (TextView) findViewById(R.id.grade);
         teacher = (TextView) findViewById(R.id.teacher);
+       status = (TextView) findViewById(R.id.status);
         progress = (TextView) findViewById(R.id.progress);//进度
         ordernumber = (TextView) findViewById(R.id.order_number);//订单编号
         buildtime = (TextView) findViewById(R.id.build_time);//创建时间
@@ -121,23 +136,7 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(PersonalMyOrderCanceledDetailActivity.this, OrderConfirmActivity.class);
                 intent.putExtra("id", getIntent().getStringExtra("id"));
-//                OrderPayBean payBean = new OrderPayBean();
                 OrderPayBean payBean = (OrderPayBean) getIntent().getSerializableExtra("pay_data");
-
-//                payBean.image = getIntent().getStringExtra("image");
-//                payBean.name =getIntent().getStringExtra("name");
-//                payBean.subject = getIntent().getStringExtra("subject");
-//                payBean.grade = getIntent().getStringExtra("grade");
-//                payBean.classnumber = getIntent().getIntExtra("classnumber",0);
-//                payBean.teacher = getIntent().getStringExtra("name");
-//                payBean.classendtime = getIntent().getStringExtra("classendtime");
-//                payBean.classstarttime = getIntent().getStringExtra("classstarttime");
-//                if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("status"))) {
-//                    payBean.status = " ";
-//                } else {
-//                    payBean.status = getIntent().getStringExtra("status");
-//                }
-//                payBean.price = getIntent().getIntExtra("price",0);
                 intent.putExtra("data", payBean);
                 startActivity(intent);
             }

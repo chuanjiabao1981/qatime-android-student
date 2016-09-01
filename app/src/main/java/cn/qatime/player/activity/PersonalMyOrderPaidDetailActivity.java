@@ -86,6 +86,15 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
         } else {
             paytype.setText("支付宝支付");
         }
+        if (data.status.equals("paid")) {//正在交易
+            status.setText(getResources().getString(R.string.dealing));
+        }
+        else if (data.status.equals("shipped")) {//正在交易
+            status.setText(getResources().getString(R.string.dealing));
+        }
+        else {//交易完成
+            status.setText(getResources().getString(R.string.deal_done));
+        }
         progress.setText(data.Completed_lesson_count + "/" + data.Preset_lesson_count);
         String price = df.format(data.price);
         if (price.startsWith(".")) {
@@ -101,6 +110,7 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
         image = (ImageView) findViewById(R.id.image);
         subject = (TextView) findViewById(R.id.subject);
         grade = (TextView) findViewById(R.id.grade);
+        status = (TextView) findViewById(R.id.status);
         teacher = (TextView) findViewById(R.id.teacher);
         progress = (TextView) findViewById(R.id.progress);//进度
         ordernumber = (TextView) findViewById(R.id.order_number);//订单编号

@@ -24,49 +24,50 @@
                 android:layout_gravity="center"
                 android:padding="8dp"
                 android:text="@string/waiting_for_payment"
-                android:textColor="#ffbc04"/>
+                android:textColor="#ffbc04"
+                android:textSize="20sp"/>
 
             <!--<LinearLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:orientation="horizontal"-->
-                <!--android:padding="5dp">-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:padding="5dp">-->
 
-                <!--<View-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="1dp"-->
-                    <!--android:layout_weight="1"/>-->
+            <!--<View-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:layout_weight="1"/>-->
 
-                <!--&lt;!&ndash;<TextView&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_gravity="center"&ndash;&gt;-->
+            <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_gravity="center"&ndash;&gt;-->
 
-                    <!--&lt;!&ndash;android:text="订单将于"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:textColor="#ffffff"/>&ndash;&gt;-->
+            <!--&lt;!&ndash;android:text="订单将于"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:textColor="#ffffff"/>&ndash;&gt;-->
 
-                <!--&lt;!&ndash;<TextView&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:id="@+id/time"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_gravity="center"&ndash;&gt;-->
+            <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+            <!--&lt;!&ndash;android:id="@+id/time"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_gravity="center"&ndash;&gt;-->
 
-                    <!--&lt;!&ndash;android:text="xx:xx:xx:xx"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:textColor="#ffffff"/>&ndash;&gt;-->
+            <!--&lt;!&ndash;android:text="xx:xx:xx:xx"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:textColor="#ffffff"/>&ndash;&gt;-->
 
-                <!--&lt;!&ndash;<TextView&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_gravity="center"&ndash;&gt;-->
+            <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_gravity="center"&ndash;&gt;-->
 
-                    <!--&lt;!&ndash;android:text="后自动关闭"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:textColor="#ffffff"/>&ndash;&gt;-->
+            <!--&lt;!&ndash;android:text="后自动关闭"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:textColor="#ffffff"/>&ndash;&gt;-->
 
-                <!--<View-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="1dp"-->
-                    <!--android:layout_weight="1"/>-->
-                <!--"-->
+            <!--<View-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:layout_weight="1"/>-->
+            <!--"-->
 
 
             <!--</LinearLayout>-->
@@ -205,7 +206,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="40dp"
-                android:text="3232323232323"/>
+                android:text=""/>
         </LinearLayout>
 
         <LinearLayout
@@ -224,27 +225,27 @@
                 android:layout_height="wrap_content"
 
                 android:layout_marginLeft="40dp"
-                android:text="3232323232323"/>
+                android:text=""/>
         </LinearLayout>
 
         <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:padding="4dp"-->
-            <!--&gt;-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:padding="4dp"-->
+        <!--&gt;-->
 
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/time_payment"/>-->
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/time_payment"/>-->
 
-            <!--<TextView-->
-                <!--android:id="@+id/pay_time"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginLeft="40dp"-->
+        <!--<TextView-->
+        <!--android:id="@+id/pay_time"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="40dp"-->
 
-                <!--android:text="3232323232323"/>-->
+        <!--android:text="3232323232323"/>-->
         <!--</LinearLayout>-->
 
         <LinearLayout
@@ -263,7 +264,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="40dp"
-                android:text="3232323232323"/>
+                android:text=""/>
         </LinearLayout>
 
         <LinearLayout
@@ -275,7 +276,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:text="@string/amount_payment"/>
+                android:text="@string/amount_payment_order"/>
 
             <TextView
                 android:id="@+id/pay_price"
@@ -283,7 +284,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="40dp"
-                android:text="3232323232323"/>
+                android:text=""/>
         </LinearLayout>
 
     </LinearLayout>
@@ -305,7 +306,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
             android:layout_weight="1"
-            android:background="@drawable/text_background"
+            android:background="@drawable/button_background"
             android:gravity="center"
             android:padding="10dp"
             android:text="@string/cancel_order"/>

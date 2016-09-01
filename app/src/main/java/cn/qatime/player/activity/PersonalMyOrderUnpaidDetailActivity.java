@@ -4,9 +4,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 
+
+import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -16,8 +21,12 @@ import java.util.Date;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.OrderDetailBean;
 import libraryextra.utils.StringUtils;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 
 
 public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
@@ -60,6 +69,12 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
 
     private void setValue(OrderDetailBean data) {
         Glide.with(PersonalMyOrderUnpaidDetailActivity.this).load(data.image).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
+        if (data.status.equals("unpaid")) {//等待付款
+            status.setText(getResources().getString(R.string.waiting_for_payment));
+        }
+        else {//空
+            status.setText("        ");
+        }
         if (StringUtils.isNullOrBlanK(data.name)) {
             name.setText("    ");
         } else {
@@ -80,6 +95,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         } else {
             teacher.setText(data.teacher);
         }
+
         ordernumber.setText(getIntent().getStringExtra("id"));
         if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("created_at"))) {
             buildtime.setText("为空");
@@ -104,7 +120,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
     }
 
     public void initView() {
-
+        status = (TextView) findViewById(R.id.status);
         name = (TextView) findViewById(R.id.name);
         image = (ImageView) findViewById(R.id.image);
         subject = (TextView) findViewById(R.id.subject);
@@ -118,12 +134,48 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         payprice = (TextView) findViewById(R.id.pay_price);//支付价格
         pay = (TextView) findViewById(R.id.pay);
         cancelorder = (TextView) findViewById(R.id.cancel_order);
-        pay.setOnClickListener( new View.OnClickListener() {
+        pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO: 2016/9/1 付款
             }
         });
+        cancelorder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initDataCancelOrder(getIntent().getStringExtra("id"));
+            }
+        });
+
+    }
+
+    private void initDataCancelOrder(String id) {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PATCH, UrlUtils.urlPaylist + "/" + id + "/cancel", null,
+//            http://testing.qatime.cn/api/v1/payment/orders/201608311659310128/cancel
+
+                new VolleyListener(PersonalMyOrderUnpaidDetailActivity.this) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        Toast.makeText(PersonalMyOrderUnpaidDetailActivity.this, "订单取消成功", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                        Toast.makeText(PersonalMyOrderUnpaidDetailActivity.this, "取消订单失败，请稍后再试", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
     }
 
 }

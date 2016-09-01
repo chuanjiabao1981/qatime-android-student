@@ -57,22 +57,45 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
 
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
+        listView.getRefreshableView().setDividerHeight(1);
+        listView.setMode(PullToRefreshBase.Mode.BOTH);
+        listView.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
+        listView.getLoadingLayoutProxy(false, true).setPullLabel(getResources().getString(R.string.pull_to_load));
+        listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResources().getString(R.string.refreshing));
+        listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
+        listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
+        listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
 
         adapter = new CommonAdapter<MyOrderBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_order3) {
             @Override
             public void convert(ViewHolder helper, MyOrderBean.Data item, final int position) {
                 Glide.with(getActivity()).load(item.getProduct().getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.classname, item.getProduct().getName());
-                helper.setText(R.id.grade, item.getProduct().getGrade());
-                helper.setText(R.id.subject, item.getProduct().getSubject());
-                helper.setText(R.id.teacher, item.getProduct().getTeacher_name());
+                if (StringUtils.isNullOrBlanK(item.getProduct().getGrade())) {
+                    helper.setText(R.id.grade, "    ");
+                } else {
+                    helper.setText(R.id.grade, item.getProduct().getGrade());
+                }
+                if (StringUtils.isNullOrBlanK(item.getProduct().getGrade())) {
+                    helper.setText(R.id.subject, "    ");
+                } else {
+                    helper.setText(R.id.subject, item.getProduct().getSubject());
+                }
+                if (StringUtils.isNullOrBlanK(item.getProduct().getGrade())) {
+                    helper.setText(R.id.teacher, "    ");
+                } else {
+                    helper.setText(R.id.teacher, item.getProduct().getTeacher_name());
+                }
                 helper.setText(R.id.progress, item.getProduct().getCompleted_lesson_count() + "/" + item.getProduct().getPreset_lesson_count());//进度
-                if (item.getStatus().equals("unpaid")) {//待付款
-                    helper.setText(R.id.status, getResources().getString(R.string.paying));
-                } else if (item.getStatus().equals("paid")) {//已付款
-                    helper.setText(R.id.status, getResources().getString(R.string.paid));
-                } else {//已取消
-                    helper.setText(R.id.status, getResources().getString(R.string.cancelled));
+                if (item.getStatus().equals("refunded")) {//交易关闭
+                    helper.setText(R.id.status, getActivity().getResources().getString(R.string.deal_closed));
+                } else if (item.getStatus().equals("canceled")) {//交易关闭
+                    helper.setText(R.id.status, getActivity().getResources().getString(R.string.deal_closed));
+                }
+                else if (item.getStatus().equals("expired")) {//交易关闭
+                    helper.setText(R.id.status, getActivity().getResources().getString(R.string.deal_closed));
+                }else {//已取消
+                    helper.setText(R.id.status, "        ");
                 }
                 String price = df.format(item.getProduct().getPrice());
                 if (price.startsWith(".")) {
@@ -91,6 +114,7 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
                                 bean.name = list.get(position).getProduct().getName();
                                 bean.subject = list.get(position).getProduct().getSubject();
                                 bean.grade = list.get(position).getProduct().getGrade();
+                                bean.status = list.get(position).getStatus();
                                 bean.classnumber = list.get(position).getProduct().getPreset_lesson_count();
                                 bean.teacher = list.get(position).getProduct().getTeacher_name();
                                 bean.classendtime = list.get(position).getProduct().getLive_end_time();
@@ -158,13 +182,9 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), PersonalMyOrderCanceledDetailActivity.class);
                 Logger.e(list.get(position - 1).getId());
-
-
                 intent.putExtra("id", list.get(position - 1).getProduct().getId());
-
-
                 intent.putExtra("order_id", list.get(position - 1).getId());
-                OrderPayBean payBean = new OrderPayBean();
+                OrderPayBean payBean = new OrderPayBean();//重新下单数据
                 payBean.image = list.get(position - 1).getProduct().getPublicize();
                 payBean.name = list.get(position - 1).getProduct().getName();
                 payBean.subject = list.get(position - 1).getProduct().getSubject();
@@ -181,11 +201,12 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
                 payBean.price = list.get(position - 1).getProduct().getPrice();
                 intent.putExtra("pay_data", payBean);
 
-                OrderDetailBean bean = new OrderDetailBean();
+                OrderDetailBean bean = new OrderDetailBean();//订单详情数据
                 bean.image = list.get(position - 1).getProduct().getPublicize();
                 bean.name = list.get(position - 1).getProduct().getName();
                 bean.subject = list.get(position - 1).getProduct().getSubject();
                 bean.grade = list.get(position - 1).getProduct().getGrade();
+                bean.status = list.get(position - 1).getStatus();
                 bean.teacher = list.get(position - 1).getProduct().getTeacher_name();
                 bean.Preset_lesson_count = list.get(position - 1).getProduct().getPreset_lesson_count();
                 bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
@@ -202,7 +223,7 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
      */
     private void initData(final int type) {
         Map<String, String> map = new HashMap<>();
-        map.put("page", String.valueOf(page));
+        map.put("page", "1");
         map.put("per_page", "10");
         map.put("cate", "canceled");
 

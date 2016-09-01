@@ -106,7 +106,7 @@
     <string name="tutor_information">辅导班详情</string>
     <!--//我的订单-->
     <string name="detail_of_order">订单详情</string>
-    <string name="waiting_for_payment">等待付款中</string>
+    <string name="waiting_for_payment">等待付款</string>
     <string name="order_number">订单编号</string>
     <string name="time_built">创建时间</string>
     <string name="time_payment">支付时间</string>
@@ -116,7 +116,7 @@
     <string name="delete_order">删除订单</string>
     <string name="reorder">重新购买</string>
     <string name="pay">付款</string>
-    <string name="deal_down">交易完成</string>//
+    //
     <string name="deal_closed">交易关闭</string>//
     <string name="order_confirm">订单确认</string>
     <string name="pay_confirm">支付确认</string>
@@ -263,6 +263,8 @@
     <string name="comment_content">评论内容</string>
     <string name="barrage">打开弹幕</string>
     <string name="system_setting">系统设置</string>
+    <string name="deal_done">交易完成</string>
+    <string name="dealing">正在交易</string>
 
 
 </resources>

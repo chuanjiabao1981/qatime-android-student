@@ -24,6 +24,7 @@
                 android:layout_gravity="center"
                 android:padding="8dp"
                 android:text="@string/waiting_for_payment"
+                android:textSize="20sp"
                 android:textColor="#ffbc04"/>
 
         </LinearLayout>
@@ -230,7 +231,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:text="@string/amount_payment"/>
+                android:text="@string/amount_payment_order"/>
 
             <TextView
                 android:id="@+id/pay_price"
