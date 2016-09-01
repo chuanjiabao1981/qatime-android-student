@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -48,7 +49,6 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
     private java.util.List<MyOrderBean.Data> list = new ArrayList<>();
     private CommonAdapter<MyOrderBean.Data> adapter;
     private int page = 1;
-    private int id;
     DecimalFormat df = new DecimalFormat("#.00");
 
     @Nullable
@@ -96,7 +96,7 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
                                 OrderConfirmBean.App_pay_params app_pay_params = item.getApp_pay_params();
                                 intent.putExtra("data", app_pay_params);
                                 intent.putExtra("id", item.getId());
-                                intent.putExtra("time", item.getCreated_at().substring(0,19).replace("T", " "));
+                                intent.putExtra("time", item.getCreated_at().substring(0, 19).replace("T", " "));
                                 intent.putExtra("price", item.getProduct().getPrice());
                                 intent.putExtra("type", (item.getPay_type() + "").equals("1") ? getResources().getString(R.string.method_payment) + "：微信支付" : getResources().getString(R.string.method_payment) + "：支付宝支付");
                                 startActivity(intent);
@@ -219,6 +219,7 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
 
                     @Override
                     protected void onError(JSONObject response) {
+                        Toast.makeText(getActivity(), "订单信息获取失败", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -230,6 +231,7 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
                 listView.onRefreshComplete();
+                Toast.makeText(getActivity(), "请检查网络联接", Toast.LENGTH_SHORT).show();
             }
         });
         addToRequestQueue(request);

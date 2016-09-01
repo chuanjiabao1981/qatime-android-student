@@ -114,7 +114,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@drawable/button_bg_selector_orange"
-        android:enabled="false"
         android:text="@string/confirm_payment"
         android:textColor="#fff"/>
 </RelativeLayout>

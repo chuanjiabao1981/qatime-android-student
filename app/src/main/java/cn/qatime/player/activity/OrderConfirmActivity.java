@@ -19,7 +19,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,8 +54,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     private String payType = "1";
     private int priceNumber = 0;
     private OrderConfirmBean data;
-    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
     DecimalFormat df = new DecimalFormat("#.00");
 
     @Override
@@ -118,7 +115,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                         if (data != null) {
 //                            canPay = true;
                             Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
-//                            intent.putExtra("time", parse.format(new Date()));
                             intent.putExtra("price", priceNumber);
                             intent.putExtra("id", data.getData().getId());
                             intent.putExtra("time", data.getData().getCreated_at().substring(0, 19).replace("T", " "));
@@ -131,14 +127,14 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                             SPUtils.put(OrderConfirmActivity.this, "price", priceNumber);
                         } else {
                             //                            canPay = false;
-                            Toast.makeText(OrderConfirmActivity.this, "订单生成成失败", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(OrderConfirmActivity.this, "订单生成失败", Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     protected void onError(JSONObject response) {
                         //                            canPay = false;
-                        Toast.makeText(OrderConfirmActivity.this, "订单生成成失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OrderConfirmActivity.this, "订单生成失败", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override

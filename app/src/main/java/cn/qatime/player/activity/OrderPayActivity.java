@@ -15,7 +15,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
@@ -34,9 +33,6 @@ public class OrderPayActivity extends BaseActivity {
     private IWXAPI api;
 
 
-    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
-
 
     DecimalFormat df = new DecimalFormat("#.00");
     private OrderConfirmBean.App_pay_params data;
@@ -54,8 +50,6 @@ public class OrderPayActivity extends BaseActivity {
         // 将该app注册到微信
         api.registerApp(Constant.APP_ID);
 
-        int id = getIntent().getIntExtra("id", 0);
-        String payType = getIntent().getStringExtra("payType");
         initData();
     }
 
@@ -81,7 +75,6 @@ public class OrderPayActivity extends BaseActivity {
         phone = (TextView) findViewById(R.id.phone);
         price = (TextView) findViewById(R.id.price);
         commit = (Button) findViewById(R.id.commit);
-        commit.setEnabled(false);
         //拨打电话
         phone.setOnClickListener(new View.OnClickListener() {
 
