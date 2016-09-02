@@ -59,7 +59,7 @@ public class StartActivity extends Activity implements View.OnClickListener {
     private void checkUpdate() {
         //TODO 检查版本，进行更新
         Map<String, String> map = new HashMap<>();
-        map.put("title", "qatime");
+        map.put("category", "student_client");
         map.put("platform", "android");
         map.put("version", AppUtils.getVersionName(this));
         BaseApplication.getRequestQueue().add(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlcheckUpdate, map), null, new VolleyListener(this) {
@@ -87,7 +87,8 @@ public class StartActivity extends Activity implements View.OnClickListener {
 
             @Override
             protected void onError(JSONObject response) {
-
+                Toast.makeText(StartActivity.this, "检查更新失败", Toast.LENGTH_SHORT).show();
+                startApp();
             }
         }, new Response.ErrorListener() {
             @Override

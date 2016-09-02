@@ -160,7 +160,7 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
                         Toast.makeText(ChangePasswordActivity.this, "密码修改成功，请用新密码重新登录", Toast.LENGTH_SHORT).show();
                         BaseApplication.clearToken();
                         setResult(Constant.RESPONSE_EXIT_LOGIN);
-                        SPUtils.put(ChangePasswordActivity.this, "profile", BaseApplication.getProfile());
+                        SPUtils.putObject(ChangePasswordActivity.this, "profile", BaseApplication.getProfile());
                         Intent intent = new Intent(ChangePasswordActivity.this, LoginActivity.class);
                         intent.putExtra("sign", "exit_login");
                         startActivity(intent);
