@@ -128,8 +128,9 @@
     <string name="pay_remind">请您在24小时内完成支付，否则订单会自动取消。</string>
     <string name="problem_phone">如遇支付问题，请拨打电话</string>
     <!--//详情-->
-    <string name="information_detail">信息详情</string>
-    <string name="teacher_detail">教师详情</string>
+    <string name="information_detail">辅导概况</string>
+
+    <string name="teacher_detail">教师资料</string>
     <string name="course_list">课程列表</string>
     <!--//课程详情-->
     <string name="student_number">学习人数</string>
@@ -191,7 +192,7 @@
     <string name="status_preview">当前状态：招生中</string>
     <string name="status_teaching">当前状态：已开课</string>
     <string name="status_over">当前状态：已结束</string>
-    <string name="grade_type">年级类型：</string>
+    <string name="grade_type">授课类型：</string>
     <!--//课程详情2-->
     <string name="teacher_name">老师姓名：</string>
     <string name="teacher_years">执教年龄：</string>
@@ -199,7 +200,7 @@
     <string name="within_ten_years">3-10年</string>
     <string name="more_than_ten_years">20年以上</string>
     <string name="within_twenty_years">10-20年</string>
-    <string name="teacher_subject">所授科目：</string>
+    <string name="teacher_subject">授课科目：</string>
     <string name="teacher_school">所在学校：</string>
     <string name="teacher_introduction">自我介绍：</string>
     <!--课程状态-->

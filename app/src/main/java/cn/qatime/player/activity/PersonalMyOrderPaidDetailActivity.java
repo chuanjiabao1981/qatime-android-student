@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -79,7 +80,19 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
         }
         ordernumber.setText(getIntent().getStringExtra("id"));
         // TODO: 2016/9/1 支付时间
-        buildtime.setText(format.format(getIntent().getStringExtra("created_at")));//创建时间
+
+
+        if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("created_at"))) {
+            buildtime.setText("为空");
+        }//创建时间
+        else {
+            try {
+                buildtime.setText(format.parse((getIntent().getStringExtra("created_at"))).toString());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        //创建时间
         String payType = getIntent().getStringExtra("payType");//支付方式
         if (payType.equals("1")) {
             paytype.setText("微信支付");
@@ -88,11 +101,9 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
         }
         if (data.status.equals("paid")) {//正在交易
             status.setText(getResources().getString(R.string.dealing));
-        }
-        else if (data.status.equals("shipped")) {//正在交易
+        } else if (data.status.equals("shipped")) {//正在交易
             status.setText(getResources().getString(R.string.dealing));
-        }
-        else {//交易完成
+        } else {//交易完成
             status.setText(getResources().getString(R.string.deal_done));
         }
         progress.setText(data.Completed_lesson_count + "/" + data.Preset_lesson_count);
@@ -101,7 +112,7 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
             price = "0" + price;
         }
         PersonalMyOrderPaidDetailActivity.this.payprice.setText(price);
-        payprice.setText(" " + price + " ");
+        payprice.setText("￥" + price + " ");
     }
 
     public void initView() {

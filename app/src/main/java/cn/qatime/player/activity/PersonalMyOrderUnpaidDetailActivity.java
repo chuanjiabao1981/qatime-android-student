@@ -9,12 +9,14 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
+import com.orhanobut.logger.Logger;
 
 
 import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -52,8 +54,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
     private int priceNumber = 0;
     private int classid;
     DecimalFormat df = new DecimalFormat("#.00");
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
-
+    SimpleDateFormat format=new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒 E ");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +62,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         setTitle(getResources().getString(R.string.detail_of_order));
         initView();
         OrderDetailBean data = (OrderDetailBean) getIntent().getSerializableExtra("data");
+        Logger.e( data.toString());
         if (data != null) {
             setValue(data);
         }
@@ -81,17 +83,17 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
             name.setText(data.name);
         }
         if (StringUtils.isNullOrBlanK(data.grade)) {
-            grade.setText("    ");
+            grade.setText("年级");
         } else {
             grade.setText(data.grade);
         }
         if (StringUtils.isNullOrBlanK(data.subject)) {
-            subject.setText("    ");
+            subject.setText("科目");
         } else {
             subject.setText(data.subject);
         }
         if (StringUtils.isNullOrBlanK(data.teacher)) {
-            teacher.setText("    ");
+            teacher.setText("老师");
         } else {
             teacher.setText(data.teacher);
         }
@@ -101,7 +103,11 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
             buildtime.setText("为空");
         }//创建时间
         else {
-            buildtime.setText((getIntent().getStringExtra("created_at")));
+            try {
+                buildtime.setText(format.parse((getIntent().getStringExtra("created_at"))).toString());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
         }
         String payType = getIntent().getStringExtra("payType");//支付方式
@@ -116,7 +122,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
             price = "0" + price;
         }
         PersonalMyOrderUnpaidDetailActivity.this.payprice.setText(price);
-        payprice.setText(" " + price + " ");
+        payprice.setText("￥" + price + " ");
     }
 
     public void initView() {

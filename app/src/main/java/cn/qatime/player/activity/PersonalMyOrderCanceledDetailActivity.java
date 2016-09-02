@@ -113,7 +113,7 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
             price = "0" + price;
         }
         PersonalMyOrderCanceledDetailActivity.this.payprice.setText(price);
-        payprice.setText(" " + price + " ");
+        payprice.setText("￥" + price + " ");
     }
 
     public void initView() {

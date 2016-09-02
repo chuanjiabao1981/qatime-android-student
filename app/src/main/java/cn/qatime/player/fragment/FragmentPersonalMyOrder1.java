@@ -65,7 +65,7 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
 
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
-        listView.getRefreshableView().setDividerHeight(1);
+
         listView.setMode(PullToRefreshBase.Mode.BOTH);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setPullLabel(getResources().getString(R.string.pull_to_load));
@@ -76,24 +76,24 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
 
         adapter = new CommonAdapter<MyOrderBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_order1) {
             @Override
-            public void convert(ViewHolder helper, final MyOrderBean.Data item, final int position) {
+            public void convert(ViewHolder helper, MyOrderBean.Data item, final int position) {
                 Glide.with(getActivity()).load(item.getProduct().getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.classname, item.getProduct().getName());
                 if (StringUtils.isNullOrBlanK(item.getProduct().getGrade())) {
-                    helper.setText(R.id.grade, "    ");
+                    helper.setText(R.id.grade, "年级");
                 } else {
                     helper.setText(R.id.grade, item.getProduct().getGrade());
                 }
-                if (StringUtils.isNullOrBlanK(item.getProduct().getGrade())) {
-                    helper.setText(R.id.subject, "    ");
+
+                if (StringUtils.isNullOrBlanK(item.getProduct().getSubject())) {
+                    helper.setText(R.id.subject, "科目");
                 } else {
                     helper.setText(R.id.subject, item.getProduct().getSubject());
                 }
-                if (StringUtils.isNullOrBlanK(item.getProduct().getGrade())) {
-                    helper.setText(R.id.teacher, "    ");
-                } else {
-                    helper.setText(R.id.teacher, item.getProduct().getTeacher_name());
-                }
+                Logger.e(item.getProduct().getSubject());
+
+                helper.setText(R.id.teacher, item.getProduct().getTeacher_name());
+
                 helper.setText(R.id.progress, item.getProduct().getCompleted_lesson_count() + "/" + item.getProduct().getPreset_lesson_count());//进度
 
                 if (item.getStatus().equals("unpaid")) {//待付款
@@ -116,7 +116,7 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
                             public void onClick(View v) {
                                 Intent intent = new Intent(getActivity(), OrderPayActivity.class);
                                 intent.putExtra("id", list.get(position).getProduct().getId());
-                                intent.putExtra("price", item.getProduct().getPrice());
+                                intent.putExtra("price", list.get(position).getProduct().getPrice());
                                 intent.putExtra("payType", "1");
                                 startActivity(intent);
                             }
@@ -196,6 +196,7 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
                 intent.putExtra("data", bean);
                 intent.putExtra("payType", list.get(position - 1).getPay_type());
                 intent.putExtra("created_at", list.get(position - 1).getCreated_at());
+//               Logger.e(.toString());
                 startActivity(intent);
             }
         });
@@ -213,7 +214,7 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
      */
     private void initData(final int type) {
         Map<String, String> map = new HashMap<>();
-        map.put("page", "1");
+        map.put("page", String.valueOf(page));
         map.put("per_page", "10");
         map.put("cate", "unpaid");
 

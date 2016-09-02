@@ -63,7 +63,7 @@ public class FragmentPersonalMyOrder2 extends BaseFragment {
 
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
-        listView.getRefreshableView().setDividerHeight(1);
+
         listView.setMode(PullToRefreshBase.Mode.BOTH);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setPullLabel(getResources().getString(R.string.pull_to_load));
@@ -78,27 +78,29 @@ public class FragmentPersonalMyOrder2 extends BaseFragment {
                 Glide.with(getActivity()).load(item.getProduct().getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.classname, item.getProduct().getName());
                 if (StringUtils.isNullOrBlanK(item.getProduct().getGrade())) {
-                    helper.setText(R.id.grade, "    ");
+                    helper.setText(R.id.grade, "年级");
                 } else {
                     helper.setText(R.id.grade, item.getProduct().getGrade());
                 }
-                if (StringUtils.isNullOrBlanK(item.getProduct().getGrade())) {
-                    helper.setText(R.id.subject, "    ");
+                if (StringUtils.isNullOrBlanK(item.getProduct().getSubject())) {
+                    helper.setText(R.id.subject, "科目");
                 } else {
                     helper.setText(R.id.subject, item.getProduct().getSubject());
                 }
-                if (StringUtils.isNullOrBlanK(item.getProduct().getGrade())) {
-                    helper.setText(R.id.teacher, "    ");
+                if (StringUtils.isNullOrBlanK(item.getProduct().getTeacher_name())) {
+                    helper.setText(R.id.teacher, "老师");
                 } else {
                     helper.setText(R.id.teacher, item.getProduct().getTeacher_name());
                 }
                 helper.setText(R.id.progress, item.getProduct().getCompleted_lesson_count() + "/" + item.getProduct().getPreset_lesson_count());//进度
-                if (item.getStatus().equals("unpaid")) {//待付款
-                    helper.setText(R.id.status, getActivity().getResources().getString(R.string.waiting_for_payment));
-                } else if (item.getStatus().equals("paid")) {//已付款
+                if (item.getStatus().equals("shipped")) {//正在交易
+                    helper.setText(R.id.status, getActivity().getResources().getString(R.string.dealing));
+                } else if (item.getStatus().equals("paid")) {//正在交易
+                    helper.setText(R.id.status, getActivity().getResources().getString(R.string.dealing));
+                } else if (item.getStatus().equals("completed")) {//交易完成
                     helper.setText(R.id.status, getActivity().getResources().getString(R.string.deal_done));
-                } else {//已取消
-                    helper.setText(R.id.status, getActivity().getResources().getString(R.string.deal_closed));
+                } else {//
+                    helper.setText(R.id.status, "  ");
                 }
                 String price = df.format(item.getProduct().getPrice());
                 if (price.startsWith(".")) {
@@ -170,6 +172,8 @@ public class FragmentPersonalMyOrder2 extends BaseFragment {
                 bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
                 bean.price = list.get(position - 1).getProduct().getPrice();
                 intent.putExtra("data", bean);
+                intent.putExtra("payType", list.get(position - 1).getPay_type());
+                intent.putExtra("created_at", list.get(position - 1).getCreated_at());
                 startActivity(intent);
             }
         });
@@ -188,7 +192,7 @@ public class FragmentPersonalMyOrder2 extends BaseFragment {
      */
     private void initData(final int type) {
         Map<String, String> map = new HashMap<>();
-        map.put("page", "1");
+        map.put("page", String.valueOf(page));
         map.put("per_page", "10");
         map.put("cate", "paid");
 

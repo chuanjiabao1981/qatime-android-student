@@ -109,6 +109,19 @@ public class MyOrderBean implements Serializable {
             return this.product;
         }
 
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "id='" + id + '\'' +
+                    ", pay_type='" + pay_type + '\'' +
+                    ", created_at='" + created_at + '\'' +
+                    ", status='" + status + '\'' +
+                    ", prepay_id='" + prepay_id + '\'' +
+                    ", nonce_str='" + nonce_str + '\'' +
+                    ", app_pay_params=" + app_pay_params +
+                    ", product=" + product +
+                    '}';
+        }
     }
 
     public class Product implements Serializable {

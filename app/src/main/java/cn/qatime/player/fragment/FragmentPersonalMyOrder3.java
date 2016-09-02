@@ -57,7 +57,6 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
 
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
-        listView.getRefreshableView().setDividerHeight(1);
         listView.setMode(PullToRefreshBase.Mode.BOTH);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setPullLabel(getResources().getString(R.string.pull_to_load));
@@ -72,17 +71,17 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
                 Glide.with(getActivity()).load(item.getProduct().getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.classname, item.getProduct().getName());
                 if (StringUtils.isNullOrBlanK(item.getProduct().getGrade())) {
-                    helper.setText(R.id.grade, "    ");
+                    helper.setText(R.id.grade, "年级");
                 } else {
                     helper.setText(R.id.grade, item.getProduct().getGrade());
                 }
-                if (StringUtils.isNullOrBlanK(item.getProduct().getGrade())) {
-                    helper.setText(R.id.subject, "    ");
+                if (StringUtils.isNullOrBlanK(item.getProduct().getSubject())) {
+                    helper.setText(R.id.subject, "科目");
                 } else {
                     helper.setText(R.id.subject, item.getProduct().getSubject());
                 }
-                if (StringUtils.isNullOrBlanK(item.getProduct().getGrade())) {
-                    helper.setText(R.id.teacher, "    ");
+                if (StringUtils.isNullOrBlanK(item.getProduct().getTeacher_name())) {
+                    helper.setText(R.id.teacher, "老师");
                 } else {
                     helper.setText(R.id.teacher, item.getProduct().getTeacher_name());
                 }
@@ -223,7 +222,7 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
      */
     private void initData(final int type) {
         Map<String, String> map = new HashMap<>();
-        map.put("page", "1");
+        map.put("page", String.valueOf(page));
         map.put("per_page", "10");
         map.put("cate", "canceled");
 
