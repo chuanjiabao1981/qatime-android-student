@@ -1,8 +1,10 @@
 package cn.qatime.player.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -28,6 +30,7 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
     private TextView paytype;
     private TextView pay;
     private TextView paytime;
+    private LinearLayout listitem;
     private TextView cancelorder;
     private TextView name;
     private ImageView image;
@@ -57,7 +60,9 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
     }
 
     private void setValue(OrderDetailBean data) {
-        Glide.with(PersonalMyOrderPaidDetailActivity.this).load(data.image).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
+        classid = data.id;
+
+        Glide.with(PersonalMyOrderPaidDetailActivity.this).load(data.image).placeholder(R.mipmap.photo).centerCrop().crossFade().into(image);
         if (StringUtils.isNullOrBlanK(data.name)) {
             name.setText("    ");
         } else {
@@ -92,7 +97,20 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
                 e.printStackTrace();
             }
         }
-        //创建时间
+//        //创建时间
+//        if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("pay_at"))) {
+//            paytime.setText("为空");
+//        }//创建时间
+//        else {
+//            paytime.setText("t");
+////            try {
+//
+//// TODO: 2016/9/2
+//                paytime.setText(format.parse((getIntent().getStringExtra("pay_at"))).toString());
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//        }
         String payType = getIntent().getStringExtra("payType");//支付方式
         if (payType.equals("1")) {
             paytype.setText("微信支付");
@@ -128,7 +146,18 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
         buildtime = (TextView) findViewById(R.id.build_time);//创建时间
         paytime = (TextView) findViewById(R.id.pay_time);//支付时间
         paytype = (TextView) findViewById(R.id.pay_type);//支付方式
+        listitem = (LinearLayout) findViewById(R.id.list_item);//内详情点击
+
         payprice = (TextView) findViewById(R.id.pay_price);//支付价格
+        listitem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PersonalMyOrderPaidDetailActivity.this, RemedialClassDetailActivity.class);
+                intent.putExtra("id", classid);
+                intent.putExtra("page", 0);
+                startActivity(intent);
+            }
+        });
     }
 
 }

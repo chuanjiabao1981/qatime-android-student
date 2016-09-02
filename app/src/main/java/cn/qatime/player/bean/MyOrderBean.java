@@ -34,6 +34,7 @@ public class MyOrderBean implements Serializable {
         private String pay_type;
 
         private String created_at;
+        private String pay_at;
 
         private String status;
 
@@ -53,6 +54,13 @@ public class MyOrderBean implements Serializable {
             return this.pay_type;
         }
 
+        public void setPay_at(String pay_at) {
+            this.pay_at = pay_at;
+        }
+
+        public String getPay_at() {
+            return this.pay_at;
+        }
         public void setCreated_at(String created_at) {
             this.created_at = created_at;
         }
@@ -60,6 +68,7 @@ public class MyOrderBean implements Serializable {
         public String getCreated_at() {
             return this.created_at;
         }
+
 
         public void setId(String id) {
             this.id = id;

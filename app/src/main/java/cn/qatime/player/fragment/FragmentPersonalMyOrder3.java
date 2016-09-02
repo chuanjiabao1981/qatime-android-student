@@ -25,6 +25,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.OrderConfirmActivity;
 import cn.qatime.player.activity.PersonalMyOrderCanceledDetailActivity;
+import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.bean.MyOrderBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -67,7 +68,7 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
 
         adapter = new CommonAdapter<MyOrderBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_order3) {
             @Override
-            public void convert(ViewHolder helper, MyOrderBean.Data item, final int position) {
+            public void convert(ViewHolder helper, final MyOrderBean.Data item, final int position) {
                 Glide.with(getActivity()).load(item.getProduct().getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.classname, item.getProduct().getName());
                 if (StringUtils.isNullOrBlanK(item.getProduct().getGrade())) {
@@ -106,27 +107,31 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(getActivity(), OrderConfirmActivity.class);
-                                intent.putExtra("id", list.get(position).getProduct().getId());
-                                OrderPayBean bean = new OrderPayBean();
-                                bean.image = list.get(position).getProduct().getPublicize();
-                                bean.name = list.get(position).getProduct().getName();
-                                bean.subject = list.get(position).getProduct().getSubject();
-                                bean.grade = list.get(position).getProduct().getGrade();
-                                bean.status = list.get(position).getStatus();
-                                bean.classnumber = list.get(position).getProduct().getPreset_lesson_count();
-                                bean.teacher = list.get(position).getProduct().getTeacher_name();
-                                bean.classendtime = list.get(position).getProduct().getLive_end_time();
-                                bean.classstarttime = list.get(position).getProduct().getLive_start_time();
-                                if (StringUtils.isNullOrBlanK(list.get(position).getProduct().getStatus())) {
-                                    bean.status = " ";
-                                } else {
-                                    bean.status = list.get(position).getProduct().getStatus();
-                                }
-                                Logger.e(list.get(position).getProduct().getStatus());
-                                bean.price = list.get(position).getProduct().getPrice();
-                                intent.putExtra("data", bean);
-
+//                                Intent intent = new Intent(getActivity(), OrderConfirmActivity.class);
+//                                intent.putExtra("id", list.get(position).getProduct().getId());
+//                                OrderPayBean bean = new OrderPayBean();
+//                                bean.image = list.get(position).getProduct().getPublicize();
+//                                bean.name = list.get(position).getProduct().getName();
+//                                bean.subject = list.get(position).getProduct().getSubject();
+//                                bean.grade = list.get(position).getProduct().getGrade();
+//                                bean.status = list.get(position).getStatus();
+//                                bean.classnumber = list.get(position).getProduct().getPreset_lesson_count();
+//                                bean.teacher = list.get(position).getProduct().getTeacher_name();
+//                                bean.classendtime = list.get(position).getProduct().getLive_end_time();
+//                                bean.classstarttime = list.get(position).getProduct().getLive_start_time();
+//                                if (StringUtils.isNullOrBlanK(list.get(position).getProduct().getStatus())) {
+//                                    bean.status = " ";
+//                                } else {
+//                                    bean.status = list.get(position).getProduct().getStatus();
+//                                }
+//                                Logger.e(list.get(position).getProduct().getStatus());
+//                                bean.price = list.get(position).getProduct().getPrice();
+//                                intent.putExtra("data", bean);
+//
+//                                startActivity(intent);
+                                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                                intent.putExtra("id", item.getProduct().getId());
+                                intent.putExtra("page", 0);
                                 startActivity(intent);
                             }
                         });

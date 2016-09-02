@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -26,12 +27,13 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
     private TextView buildtime;
     private TextView paytype;
     private TextView reorder;
+    private LinearLayout listitem;
     private TextView name;
     private ImageView image;
     private TextView grade;
     private TextView teacher;
     private TextView status;
-
+    private int classid;
     private TextView payprice;
     DecimalFormat df = new DecimalFormat("#.00");
     private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
@@ -54,7 +56,9 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
     }
 
     private void setValue(OrderDetailBean data) {
-        Glide.with(PersonalMyOrderCanceledDetailActivity.this).load(data.image).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
+        classid = getIntent().getIntExtra("id",0);
+
+        Glide.with(PersonalMyOrderCanceledDetailActivity.this).load(data.image).placeholder(R.mipmap.photo).centerCrop().crossFade().into(image);
         if (StringUtils.isNullOrBlanK(data.name)) {
             name.setText("    ");
         } else {
@@ -78,14 +82,11 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
 
         if (data.status.equals("refunded")) {//交易关闭
             status.setText(getResources().getString(R.string.deal_closed));
-        }
-        else if (data.status.equals("canceled")) {//交易关闭
+        } else if (data.status.equals("canceled")) {//交易关闭
             status.setText(getResources().getString(R.string.deal_closed));
-        }
-        else if (data.status.equals("expired")) {//交易关闭
+        } else if (data.status.equals("expired")) {//交易关闭
             status.setText(getResources().getString(R.string.deal_closed));
-        }
-        else {//空
+        } else {//空
             status.setText("        ");
         }
         ordernumber.setText(getIntent().getStringExtra("order_id"));
@@ -123,21 +124,29 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
         subject = (TextView) findViewById(R.id.subject);
         grade = (TextView) findViewById(R.id.grade);
         teacher = (TextView) findViewById(R.id.teacher);
-       status = (TextView) findViewById(R.id.status);
+        status = (TextView) findViewById(R.id.status);
         progress = (TextView) findViewById(R.id.progress);//进度
         ordernumber = (TextView) findViewById(R.id.order_number);//订单编号
         buildtime = (TextView) findViewById(R.id.build_time);//创建时间
         paytype = (TextView) findViewById(R.id.pay_type);//支付方式
         payprice = (TextView) findViewById(R.id.pay_price);//支付价格
         reorder = (TextView) findViewById(R.id.reorder);
-
+        listitem = (LinearLayout) findViewById(R.id.list_item);//内详情点击
+        listitem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PersonalMyOrderCanceledDetailActivity.this, RemedialClassDetailActivity.class);
+                intent.putExtra("id", classid);
+                intent.putExtra("page", 0);
+                startActivity(intent);
+            }
+        });
         reorder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PersonalMyOrderCanceledDetailActivity.this, OrderConfirmActivity.class);
-                intent.putExtra("id", getIntent().getStringExtra("id"));
-                OrderPayBean payBean = (OrderPayBean) getIntent().getSerializableExtra("pay_data");
-                intent.putExtra("data", payBean);
+                Intent intent = new Intent(PersonalMyOrderCanceledDetailActivity.this, RemedialClassDetailActivity.class);
+                intent.putExtra("id", classid);
+                intent.putExtra("page", 0);
                 startActivity(intent);
             }
         });

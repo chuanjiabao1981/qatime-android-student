@@ -174,6 +174,7 @@ public class FragmentPersonalMyOrder2 extends BaseFragment {
                 intent.putExtra("data", bean);
                 intent.putExtra("payType", list.get(position - 1).getPay_type());
                 intent.putExtra("created_at", list.get(position - 1).getCreated_at());
+                intent.putExtra("pay_at", list.get(position - 1).getPay_at());
                 startActivity(intent);
             }
         });

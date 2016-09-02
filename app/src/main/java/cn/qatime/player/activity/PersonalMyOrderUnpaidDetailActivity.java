@@ -1,8 +1,10 @@
 package cn.qatime.player.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,7 +45,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
     private TextView cancelorder;
     private TextView name;
     private ImageView image;
-    private TextView project;
+    private LinearLayout listitem;
     private TextView grade;
     private TextView teacher;
     private TextView classnumber;
@@ -52,9 +54,11 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
     private TextView price;
     private TextView payprice;
     private int priceNumber = 0;
+//    yyyy-MM-dd'T'HH:mm:ss.SSSZ  yyyy年MM月dd日 HH时mm分ss秒 E
     private int classid;
     DecimalFormat df = new DecimalFormat("#.00");
-    SimpleDateFormat format=new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒 E ");
+    SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss.www+xx:oo");
+    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd THH:mm:ss-www-xx-oo");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +66,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         setTitle(getResources().getString(R.string.detail_of_order));
         initView();
         OrderDetailBean data = (OrderDetailBean) getIntent().getSerializableExtra("data");
-        Logger.e( data.toString());
+
         if (data != null) {
             setValue(data);
         }
@@ -70,7 +74,8 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
     }
 
     private void setValue(OrderDetailBean data) {
-        Glide.with(PersonalMyOrderUnpaidDetailActivity.this).load(data.image).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
+        classid = data.id;
+        Glide.with(PersonalMyOrderUnpaidDetailActivity.this).load(data.image).placeholder(R.mipmap.photo).centerCrop().crossFade().into(image);
         if (data.status.equals("unpaid")) {//等待付款
             status.setText(getResources().getString(R.string.waiting_for_payment));
         }
@@ -99,17 +104,18 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         }
 
         ordernumber.setText(getIntent().getStringExtra("id"));
-        if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("created_at"))) {
-            buildtime.setText("为空");
-        }//创建时间
-        else {
-            try {
-                buildtime.setText(format.parse((getIntent().getStringExtra("created_at"))).toString());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+//        if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("created_at"))) {
+//            buildtime.setText("为空");
+//        }//创建时间
+//        else {
+//            buildtime.setText("t");
+//            try {
+//                buildtime.setText(format.format(parse.parse(getIntent().getStringExtra("created_at"))).toString());
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
 
-        }
+//        }
         String payType = getIntent().getStringExtra("payType");//支付方式
         if (payType.equals("1")) {
             paytype.setText("微信支付");
@@ -139,7 +145,17 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         paytype = (TextView) findViewById(R.id.pay_type);//支付方式
         payprice = (TextView) findViewById(R.id.pay_price);//支付价格
         pay = (TextView) findViewById(R.id.pay);
+        listitem = (LinearLayout) findViewById(R.id.list_item);//内详情点击
         cancelorder = (TextView) findViewById(R.id.cancel_order);
+        listitem.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent intent=new Intent(PersonalMyOrderUnpaidDetailActivity.this,RemedialClassDetailActivity.class);
+                                            intent.putExtra("id",classid);
+                                            intent.putExtra("page",0);
+                                            startActivity(intent);
+                                        }
+                                    });
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,13 +165,13 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         cancelorder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initDataCancelOrder(getIntent().getStringExtra("id"));
+                CancelOrder(getIntent().getStringExtra("id"));
             }
         });
 
     }
 
-    private void initDataCancelOrder(String id) {
+    private void CancelOrder(String id) {
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PATCH, UrlUtils.urlPaylist + "/" + id + "/cancel", null,
 //            http://testing.qatime.cn/api/v1/payment/orders/201608311659310128/cancel
 

@@ -263,7 +263,6 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
     protected void dialog(final int position, final String id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("确认取消订单吗？");
-        builder.setTitle("提示");
         builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
 
             @Override
