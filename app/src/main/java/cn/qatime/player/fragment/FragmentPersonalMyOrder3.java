@@ -11,17 +11,22 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
+
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.orhanobut.logger.Logger;
+
 import org.json.JSONObject;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
 import cn.qatime.player.R;
 import cn.qatime.player.activity.OrderConfirmActivity;
 import cn.qatime.player.activity.PersonalMyOrderCanceledDetailActivity;
@@ -91,10 +96,9 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
                     helper.setText(R.id.status, getActivity().getResources().getString(R.string.deal_closed));
                 } else if (item.getStatus().equals("canceled")) {//交易关闭
                     helper.setText(R.id.status, getActivity().getResources().getString(R.string.deal_closed));
-                }
-                else if (item.getStatus().equals("expired")) {//交易关闭
+                } else if (item.getStatus().equals("expired")) {//交易关闭
                     helper.setText(R.id.status, getActivity().getResources().getString(R.string.deal_closed));
-                }else {//已取消
+                } else {//已取消
                     helper.setText(R.id.status, "        ");
                 }
                 String price = df.format(item.getProduct().getPrice());
@@ -248,7 +252,10 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
                             MyOrderBean data = JsonUtils.objectFromJson(response.toString(), MyOrderBean.class);
                             if (data != null) {
                                 list.addAll(data.getData());
-                            }
+                                if(StringUtils.isNullOrBlanK(data.getData())){
+
+                                    Toast.makeText(getActivity(), "没有找到符合条件的订单", Toast.LENGTH_SHORT).show();
+                                }                            }
                             adapter.notifyDataSetChanged();
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();

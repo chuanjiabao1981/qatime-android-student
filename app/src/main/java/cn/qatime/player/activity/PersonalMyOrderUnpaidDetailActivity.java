@@ -1,7 +1,9 @@
 package cn.qatime.player.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,6 +23,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 
 import cn.qatime.player.R;
@@ -54,11 +57,13 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
     private TextView price;
     private TextView payprice;
     private int priceNumber = 0;
-//    yyyy-MM-dd'T'HH:mm:ss.SSSZ  yyyy年MM月dd日 HH时mm分ss秒 E
+    //    yyyy-MM-dd'T'HH:mm:ss.SSSZ  yyyy年MM月dd日 HH时mm分ss秒 E
     private int classid;
     DecimalFormat df = new DecimalFormat("#.00");
-    SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss.www+xx:oo");
-    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd THH:mm:ss-www-xx-oo");
+
+//    SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS+xx:oo");
+//    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd THH:mm:ss-www-xx-oo");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,8 +83,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         Glide.with(PersonalMyOrderUnpaidDetailActivity.this).load(data.image).placeholder(R.mipmap.photo).centerCrop().crossFade().into(image);
         if (data.status.equals("unpaid")) {//等待付款
             status.setText(getResources().getString(R.string.waiting_for_payment));
-        }
-        else {//空
+        } else {//空
             status.setText("        ");
         }
         if (StringUtils.isNullOrBlanK(data.name)) {
@@ -104,18 +108,20 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         }
 
         ordernumber.setText(getIntent().getStringExtra("id"));
-//        if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("created_at"))) {
-//            buildtime.setText("为空");
-//        }//创建时间
-//        else {
-//            buildtime.setText("t");
-//            try {
-//                buildtime.setText(format.format(parse.parse(getIntent().getStringExtra("created_at"))).toString());
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
+        //创建时间
+        Logger.e(getIntent().getStringExtra("created_at"));
+        if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("created_at"))) {
+            buildtime.setText("为空");
+        } else {
+            try {
+                DateFormat format = new SimpleDateFormat("EEE MMM dd  yyyy HH:mm:ss z");
+                format.setTimeZone(TimeZone.getTimeZone("GMT"));
+                buildtime.setText(format.parse((getIntent().getStringExtra("created_at"))).toString());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
-//        }
+        }
         String payType = getIntent().getStringExtra("payType");//支付方式
         if (payType.equals("1")) {
             paytype.setText("微信支付");
@@ -148,14 +154,14 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         listitem = (LinearLayout) findViewById(R.id.list_item);//内详情点击
         cancelorder = (TextView) findViewById(R.id.cancel_order);
         listitem.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            Intent intent=new Intent(PersonalMyOrderUnpaidDetailActivity.this,RemedialClassDetailActivity.class);
-                                            intent.putExtra("id",classid);
-                                            intent.putExtra("page",0);
-                                            startActivity(intent);
-                                        }
-                                    });
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PersonalMyOrderUnpaidDetailActivity.this, RemedialClassDetailActivity.class);
+                intent.putExtra("id", classid);
+                intent.putExtra("page", 0);
+                startActivity(intent);
+            }
+        });
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -165,20 +171,38 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         cancelorder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CancelOrder(getIntent().getStringExtra("id"));
+                dialog(getIntent().getStringExtra("id"));
             }
         });
 
     }
+    protected void dialog( final String id) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(PersonalMyOrderUnpaidDetailActivity.this);
+        builder.setMessage("确认取消订单吗？");
+        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
 
-    private void CancelOrder(String id) {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PATCH, UrlUtils.urlPaylist + "/" + id + "/cancel", null,
-//            http://testing.qatime.cn/api/v1/payment/orders/201608311659310128/cancel
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
 
-                new VolleyListener(PersonalMyOrderUnpaidDetailActivity.this) {
+                dialog.dismiss();
+                CancelOrder(id);
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
+    }
+
+    private void CancelOrder( String id) {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.urlPaylist + "/" + id + "/cancel", null,
+                new VolleyListener(this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        Toast.makeText(PersonalMyOrderUnpaidDetailActivity.this, "订单取消成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PersonalMyOrderUnpaidDetailActivity.this, "订单已成功取消", Toast.LENGTH_SHORT).show();
                         finish();
                     }
 

@@ -60,22 +60,22 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
 
         Glide.with(PersonalMyOrderCanceledDetailActivity.this).load(data.image).placeholder(R.mipmap.photo).centerCrop().crossFade().into(image);
         if (StringUtils.isNullOrBlanK(data.name)) {
-            name.setText("    ");
+            name.setText("名称 ");
         } else {
             name.setText(data.name);
         }
         if (StringUtils.isNullOrBlanK(data.grade)) {
-            grade.setText("    ");
+            grade.setText("年级");
         } else {
             grade.setText(data.grade);
         }
         if (StringUtils.isNullOrBlanK(data.subject)) {
-            subject.setText("    ");
+            subject.setText("科目");
         } else {
             subject.setText(data.subject);
         }
         if (StringUtils.isNullOrBlanK(data.teacher)) {
-            teacher.setText("    ");
+            teacher.setText("老师");
         } else {
             teacher.setText(data.teacher);
         }

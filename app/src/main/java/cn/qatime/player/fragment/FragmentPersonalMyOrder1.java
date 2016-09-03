@@ -196,7 +196,6 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
                 intent.putExtra("data", bean);
                 intent.putExtra("payType", list.get(position - 1).getPay_type());
                 intent.putExtra("created_at", list.get(position - 1).getCreated_at());
-//               Logger.e(.toString());
                 startActivity(intent);
             }
         });
@@ -235,7 +234,10 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
                             MyOrderBean data = JsonUtils.objectFromJson(response.toString(), MyOrderBean.class);
                             if (data != null) {
                                 list.addAll(data.getData());
-                            }
+                                if(StringUtils.isNullOrBlanK(data.getData())){
+
+                                Toast.makeText(getActivity(), "没有找到符合条件的订单", Toast.LENGTH_SHORT).show();
+                            }}
                             adapter.notifyDataSetChanged();
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
@@ -267,7 +269,7 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                initDataCancelOrder(position, id);
+                CancelOrder(position, id);
                 dialog.dismiss();
             }
         });
@@ -280,9 +282,8 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
         builder.create().show();
     }
 
-    private void initDataCancelOrder(final int position, String id) {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PATCH, UrlUtils.urlPaylist + "/" + id + "/cancel", null,
-//            http://testing.qatime.cn/api/v1/payment/orders/201608311659310128/cancel
+    private void CancelOrder(final int position, String id) {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.urlPaylist + "/" + id + "/cancel", null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -304,6 +305,7 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
+                Logger.e(volleyError.getMessage());
             }
         });
         addToRequestQueue(request);
