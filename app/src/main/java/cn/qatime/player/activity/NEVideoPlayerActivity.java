@@ -2,9 +2,15 @@ package cn.qatime.player.activity;
 
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -207,13 +213,13 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
                     public void run() {
                         viewPager.setVisibility(viewPager.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
                     }
-                },100);
+                }, 100);
             }
         });
         content.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                KeyBoardUtils.openKeybord(content,NEVideoPlayerActivity.this);
+                KeyBoardUtils.openKeybord(content, NEVideoPlayerActivity.this);
                 content.requestFocus();
                 viewPager.setVisibility(View.GONE);
                 return false;
@@ -272,7 +278,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
                 gv.setAdapter(new CommonAdapter<Map<String, Integer>>(NEVideoPlayerActivity.this, listmap.get(position), R.layout.list_emoji_page) {
 
                     @Override
-                    public void convert(ViewHolder holder, final Map<String, Integer> item, int position) {
+                    public void convert(ViewHolder holder, final Map<String, Integer> item, final int position) {
                         ImageView view = holder.getView(R.id.emoji_image);
                         if (item.get("image") != null) {
                             int resId = item.get("image");
@@ -286,6 +292,14 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
                             public void onClick(View v) {
                                 // TODO: 2016/9/5 加入到eidttext
                                 Logger.e("click:    emoji " + item.get("image"));
+                                String text = content.getText().toString();
+                                if (position < 21) {
+                                    content.setText(getEmotionContent(item.get("image")));
+                                } else if (position == 27) {
+                                    content.setText(text.substring(0, text.length() - 1));
+                                } else if (viewPager.getCurrentItem() != 2) {
+                                    content.setText(getEmotionContent(item.get("image")));
+                                }
                             }
                         });
                     }
@@ -297,6 +311,17 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
             }
         });
         viewPager.setAdapter(3);
+    }
+
+    public SpannableString getEmotionContent(int resId) {
+        SpannableString spannableString = new SpannableString("" + resId);
+        Resources res = getResources();
+        int size = (int) content.getTextSize();
+        Bitmap bitmap = BitmapFactory.decodeResource(res, resId);
+        Bitmap scaleBitmap = Bitmap.createScaledBitmap(bitmap, size, size, true);
+        ImageSpan span = new ImageSpan(this, scaleBitmap);
+        spannableString.setSpan(span, 0, spannableString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return spannableString;
     }
 
     private void initData() {
