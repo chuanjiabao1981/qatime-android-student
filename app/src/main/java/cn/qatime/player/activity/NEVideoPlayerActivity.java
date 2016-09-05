@@ -82,7 +82,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         }
         sessionId = getIntent().getStringExtra("sessionId");
         String url = getIntent().getStringExtra("url");
-        url = "http://pullhlsa0a19f55.live.126.net/live/2de51729df6c43ba9ef7aff387e58321/playlist.m3u8";
 //        Logger.e(url);
         videoPlayer = (QaVideoPlayer) findViewById(R.id.video_player);
         ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenWidth(this) * 9 / 16);
