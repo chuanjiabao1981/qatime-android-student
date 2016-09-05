@@ -35,11 +35,13 @@ import libraryextra.utils.StringUtils;
 
 public class BaseApplication extends Application {
     private static Profile profile;
+    public static UserInfoProvider userInfoProvider;
+    private static BaseApplication context;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
+        context = this;
         Logger.init("QTA-TIME")               // default tag : PRETTYLOGGER or use just init()
                 .setMethodCount(3)            // default 2
                 .hideThreadInfo()             // default it is shown
@@ -116,62 +118,65 @@ public class BaseApplication extends Application {
 //        options.thumbnailSize = $ {            Screen.width        }/2;
 
         // 用户资料提供者, 目前主要用于提供用户资料，用于新消息通知栏中显示消息来源的头像和昵称
-        options.userInfoProvider = new UserInfoProvider() {
-            @Override
-            public UserInfo getUserInfo(String account) {
-                UserInfo user = UserInfoCache.getInstance().getUserInfo(account);
-                if (user == null) {
-                    UserInfoCache.getInstance().getUserInfoFromRemote(account, null);
-                }
-                return user;
-            }
-
-            @Override
-            public int getDefaultIconResId() {
-                return R.mipmap.head_sculpture;
-            }
-
-            @Override
-            public Bitmap getTeamIcon(String tid) {
-                Drawable drawable = getResources().getDrawable(R.mipmap.nim_avatar_group);
-                if (drawable instanceof BitmapDrawable) {
-                    return ((BitmapDrawable) drawable).getBitmap();
-                }
-                return null;
-            }
-
-            @Override
-            public Bitmap getAvatarForMessageNotifier(String account) {
-                /**
-                 * 注意：这里最好从缓存里拿，如果读取本地头像可能导致UI进程阻塞，导致通知栏提醒延时弹出。
-                 */
-                //TODO
-//                UserInfo user = getUserInfo(account);
-//                return (user != null) ? ImageLoaderKit.getNotificationBitmapFromCache(user) : null;
-                return null;
-            }
-
-            @Override
-            public String getDisplayNameForMessageNotifier(String account, String sessionId, SessionTypeEnum sessionType) {
-                String nick = null;
-                if (sessionType == SessionTypeEnum.P2P) {
-                    nick = UserInfoCache.getInstance().getAlias(account);
-                } else if (sessionType == SessionTypeEnum.Team) {
-                    nick = TeamDataCache.getInstance().getTeamNick(sessionId, account);
-                    if (TextUtils.isEmpty(nick)) {
-                        nick = UserInfoCache.getInstance().getAlias(account);
-                    }
-                }
-                // 返回null，交给sdk处理。如果对方有设置nick，sdk会显示nick
-                if (TextUtils.isEmpty(nick)) {
-                    return null;
-                }
-
-                return nick;
-            }
-        };
+        options.userInfoProvider = infoProvider;
+        this.userInfoProvider = infoProvider;
         return options;
     }
+
+    private UserInfoProvider infoProvider = new UserInfoProvider() {
+        @Override
+        public UserInfoProvider.UserInfo getUserInfo(String account) {
+            UserInfoProvider.UserInfo user = UserInfoCache.getInstance().getUserInfo(account);
+            if (user == null) {
+                UserInfoCache.getInstance().getUserInfoFromRemote(account, null);
+            }
+            return user;
+        }
+
+        @Override
+        public int getDefaultIconResId() {
+            return R.mipmap.head_sculpture;
+        }
+
+        @Override
+        public Bitmap getTeamIcon(String tid) {
+            Drawable drawable = getResources().getDrawable(R.mipmap.nim_avatar_group);
+            if (drawable instanceof BitmapDrawable) {
+                return ((BitmapDrawable) drawable).getBitmap();
+            }
+            return null;
+        }
+
+        @Override
+        public Bitmap getAvatarForMessageNotifier(String account) {
+            /**
+             * 注意：这里最好从缓存里拿，如果读取本地头像可能导致UI进程阻塞，导致通知栏提醒延时弹出。
+             */
+            //TODO
+//                UserInfo user = getUserInfo(account);
+//                return (user != null) ? ImageLoaderKit.getNotificationBitmapFromCache(user) : null;
+            return null;
+        }
+
+        @Override
+        public String getDisplayNameForMessageNotifier(String account, String sessionId, SessionTypeEnum sessionType) {
+            String nick = null;
+            if (sessionType == SessionTypeEnum.P2P) {
+                nick = UserInfoCache.getInstance().getAlias(account);
+            } else if (sessionType == SessionTypeEnum.Team) {
+                nick = TeamDataCache.getInstance().getTeamNick(sessionId, account);
+                if (TextUtils.isEmpty(nick)) {
+                    nick = UserInfoCache.getInstance().getAlias(account);
+                }
+            }
+            // 返回null，交给sdk处理。如果对方有设置nick，sdk会显示nick
+            if (TextUtils.isEmpty(nick)) {
+                return null;
+            }
+
+            return nick;
+        }
+    };
 
     // 如果已经存在用户登录信息，返回LoginInfo，否则返回null即可
     private LoginInfo loginInfo() {
@@ -204,6 +209,7 @@ public class BaseApplication extends Application {
                 profile.getData().getUser().getChat_account().setAccid("");
                 profile.getData().getUser().getChat_account().setToken("");
             }
+            SPUtils.putObject(context, "profile", profile);
             LoginSyncDataStatusObserver.getInstance().reset();
         }
     }
@@ -269,5 +275,9 @@ public class BaseApplication extends Application {
         } else {
             return "";
         }
+    }
+
+    public static UserInfoProvider getUserInfoProvide() {
+        return userInfoProvider;
     }
 }

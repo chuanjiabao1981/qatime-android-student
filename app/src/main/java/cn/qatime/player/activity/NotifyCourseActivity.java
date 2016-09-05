@@ -2,6 +2,7 @@ package cn.qatime.player.activity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -14,11 +15,12 @@ import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import libraryextra.utils.SPUtils;
 
 /**
  * Created by lenovo on 2016/8/22.
  */
-public class NotifyClassesActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
+public class NotifyCourseActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
 
     private CheckBox cb1;
     private CheckBox cb2;
@@ -28,7 +30,8 @@ public class NotifyClassesActivity extends BaseActivity implements CompoundButto
     private Spinner spinnerMinute;
     private List<String> al_hours;
     private List<String> al_minute;
-
+    private String hour;
+    private String minute;
 
 
     private void assignViews() {
@@ -53,7 +56,7 @@ public class NotifyClassesActivity extends BaseActivity implements CompoundButto
         al_minute = new ArrayList<>();
         int j = 0;
         String str;
-        for (int i = 0; i < 24; i++) {
+        for (int i = 0; i <= 24; i++) {
             str = String.valueOf(i);
             if (i <= 9) {
                 str = "0" + str;
@@ -62,6 +65,7 @@ public class NotifyClassesActivity extends BaseActivity implements CompoundButto
             al_hours.add(str);
         }
         al_minute.add("00分钟");
+        al_minute.add("01分钟");
         al_minute.add("02分钟");
         al_minute.add("03分钟");
         al_minute.add("04分钟");
@@ -73,15 +77,51 @@ public class NotifyClassesActivity extends BaseActivity implements CompoundButto
         }
         spinnerHours.setAdapter(new ArrayAdapter<>(this, R.layout.item_spinner_time, al_hours));
         spinnerMinute.setAdapter(new ArrayAdapter<>(this, R.layout.item_spinner_time, al_minute));
+        hour = al_hours.get((int) spinnerHours.getSelectedItemId()).replace("小时", "");
+        minute = al_minute.get((int) spinnerHours.getSelectedItemId()).replace("分钟", "");
+        spinnerHours.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                hour = al_hours.get((int) spinnerHours.getSelectedItemId()).replace("小时", "");
+                SPUtils.put(NotifyCourseActivity.this, "notify_hour", hour);
+                Logger.e("hour=" + hour);
+            }
 
-        //TODO 初始化并记录时间
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+        spinnerMinute.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                minute = al_minute.get((int) spinnerMinute.getSelectedItemId()).replace("分钟", "");
+                Logger.e("minute=" + minute);
+                SPUtils.put(NotifyCourseActivity.this, "notify_minute", minute);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        String notify_hour = (String) SPUtils.get(this, "notify_hour", "00");
+        String notify_minute = (String) SPUtils.get(this, "notify_minute", "00");
+
+        spinnerHours.setSelection(al_hours.indexOf(notify_hour + "小时"));
+        spinnerMinute.setSelection(al_minute.indexOf(notify_minute + "分钟"));
     }
 
     private void initView() {
-        setContentView(R.layout.activity_notify_classes);
+        setContentView(R.layout.activity_notify_course);
         setTitle("课程提醒");
         assignViews();
+        cb1.setChecked((Boolean) SPUtils.get(this, "notify_course", true));
+        cb2.setChecked((Boolean) SPUtils.get(this, "notify_public", true));
+        sms.setChecked((Boolean) SPUtils.get(this, "notify_sms", true));
+        sys.setChecked((Boolean) SPUtils.get(this, "notify_sys", true));
+
 
         cb1.setOnCheckedChangeListener(this);
         cb2.setOnCheckedChangeListener(this);
@@ -95,45 +135,32 @@ public class NotifyClassesActivity extends BaseActivity implements CompoundButto
         switch (buttonView.getId()) {
             case R.id.cb_1:
                 Logger.e("cb_1 click");
-                if (isChecked) {
-                    Logger.e("cb_1 checked");
-                } else {
-                    Logger.e("cb_1 unchecked");
-                }
+
+                SPUtils.put(this, "notify_course", isChecked);
                 break;
 
             case R.id.sms:
 
                 Logger.e("sms click");
-                if (isChecked) {
-                    Logger.e("sms checked");
-                } else {
-                    Logger.e("sms unchecked");
-                }
+
+                SPUtils.put(this, "notify_sms", isChecked);
                 break;
             case R.id.sys:
 
                 Logger.e("sys click");
-                if (isChecked) {
-                    Logger.e("sys checked");
-                } else {
-                    Logger.e("sys unchecked");
-                }
+
+                SPUtils.put(this, "notify_sys", isChecked);
                 break;
             case R.id.cb_2:
-
                 Logger.e("cb_2 click");
-                if (isChecked) {
-                    Logger.e("cb_2 checked");
-                } else {
-                    Logger.e("cb_2 unchecked");
-                }
+                SPUtils.put(this, "notify_public", isChecked);
                 break;
         }
     }
 
     @Override
-    public void onClick(View v) {
-
+    public void backClick(View v) {
+        SPUtils.put(this, "alarm", hour + ":" + minute);
+        super.backClick(v);
     }
 }

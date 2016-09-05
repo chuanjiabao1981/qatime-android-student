@@ -274,6 +274,6 @@
     <string name="deal_done">Deal done</string>
     <string name="dealing">Dealing</string>
 
-
+    <string name="team_send_message_not_allow">You are not in the group, can not send a message</string>
 </resources>
 

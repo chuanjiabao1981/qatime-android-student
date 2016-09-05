@@ -7,12 +7,22 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.netease.neliveplayer.NELivePlayer;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.msg.MessageBuilder;
+import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.orhanobut.logger.Logger;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -22,9 +32,16 @@ import cn.qatime.player.fragment.FragmentNEVideoPlayer1;
 import cn.qatime.player.fragment.FragmentNEVideoPlayer2;
 import cn.qatime.player.fragment.FragmentNEVideoPlayer3;
 import cn.qatime.player.fragment.FragmentNEVideoPlayer4;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.view.QaVideoPlayer;
+import libraryextra.bean.RemedialClassDetailBean;
+import libraryextra.utils.JsonUtils;
+import libraryextra.utils.KeyBoardUtils;
 import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.StringUtils;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 import libraryextra.view.FragmentLayoutWithLine;
 
 public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVideoPlayer.ControlListener {
@@ -54,6 +71,9 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     private Handler hd = new Handler();
     private int i = 0;
     private int id;
+    private FragmentNEVideoPlayer2 fragment2;
+    private String sessionId;
+    private SessionTypeEnum sessionType = SessionTypeEnum.Team;
 //    Runnable runnable = new Runnable() {
 //        @Override
 //        public void run() {
@@ -75,11 +95,11 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         id = getIntent().getIntExtra("id", 0);//从前一页进来的id 获取详情用
         if (id == 0) {
             Toast.makeText(this, "id不能为0", Toast.LENGTH_SHORT).show();
-            return;
         }
+        sessionId = getIntent().getStringExtra("sessionId");
         String url = getIntent().getStringExtra("url");
 
-        Logger.e(url);
+//        Logger.e(url);
         videoPlayer = (QaVideoPlayer) findViewById(R.id.video_player);
         ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenHeight(this) / 3);
         videoPlayer.setLayoutParams(params);
@@ -90,6 +110,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
             videoPlayer.start();
         }
         initView();
+        initData();
     }
 
     private void initView() {
@@ -116,15 +137,82 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
                 if (positon == 1) {
                     inputLayout.setVisibility(View.VISIBLE);
                 } else {
+                    KeyBoardUtils.closeKeybord(NEVideoPlayerActivity.this);
                     inputLayout.setVisibility(View.GONE);
                 }
             }
         });
         fragmentLayout.setAdapter(fragBaseFragments, R.layout.tablayout_nevideo_player, 0x0102);
         fragmentLayout.getViewPager().setOffscreenPageLimit(3);
-        ((FragmentNEVideoPlayer3)fragBaseFragments.get(2)).setId(id);
+        fragment2 = (FragmentNEVideoPlayer2) fragBaseFragments.get(1);
+        fragment2.setSessionId(sessionId);
+        fragment2.requestTeamInfo();
+
+        final EditText content = (EditText) findViewById(R.id.content);
+        Button send = (Button) findViewById(R.id.send);
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!fragment2.isAllowSendMessage()) {
+                    Toast.makeText(NEVideoPlayerActivity.this, "您已不在该群,不能发送消息", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (StringUtils.isNullOrBlanK(content.getText().toString())) {
+                    Toast.makeText(NEVideoPlayerActivity.this, "消息不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                // 创建文本消息
+                IMMessage message = MessageBuilder.createTextMessage(
+                        sessionId, // 聊天对象的 ID，如果是单聊，为用户帐号，如果是群聊，为群组 ID
+                        sessionType, // 聊天类型，单聊或群组
+                        content.getText().toString().trim() // 文本内容
+                );
+                // 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
+                NIMClient.getService(MsgService.class).sendMessage(message, true);
+
+                fragment2.items.add(message);
+                fragment2.adapter.notifyDataSetChanged();
+                fragment2.listView.getRefreshableView().setSelection(fragment2.items.size() - 1);
+                content.setText("");
+            }
+        });
     }
 
+    private void initData() {
+        if (id != 0) {
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass + "/" + id + "/play_info", null,
+                    new VolleyListener(NEVideoPlayerActivity.this) {
+                        @Override
+                        protected void onSuccess(JSONObject response) {
+                            RemedialClassDetailBean data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
+                            if (data != null) {
+                                ((FragmentNEVideoPlayer3) fragBaseFragments.get(2)).setData(data);
+                                if (data.getData() != null && data.getData().getChat_team() != null && data.getData().getChat_team().getAccounts() != null) {
+                                    ((FragmentNEVideoPlayer4) fragBaseFragments.get(3)).setData(data.getData().getChat_team().getAccounts());
+                                }
+                            }
+                        }
+
+                        @Override
+                        protected void onError(JSONObject response) {
+
+                        }
+
+                        @Override
+                        protected void onTokenOut() {
+                            tokenOut();
+                        }
+                    }
+
+                    , new VolleyErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    super.onErrorResponse(volleyError);
+                }
+            });
+            addToRequestQueue(request);
+        }
+    }
 
     @Override
     protected void onResume() {
@@ -133,6 +221,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
             videoPlayer.start(); //锁屏打开后恢复播放
         }
         super.onResume();
+
+        fragment2.registerObservers(true);
+//        fragment2.requestTeamInfo();
+        NIMClient.getService(MsgService.class).setChattingAccount(sessionId, sessionType);
     }
 
 
@@ -165,6 +257,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
 //        if (videoPlayer.isPauseInBackgroud())
         videoPlayer.pause(); //锁屏时暂停
         super.onPause();
+
+        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
     }
 
 
@@ -177,6 +271,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         }
 //        hd.removeCallbacks(runnable);
         super.onDestroy();
+        fragment2.registerObservers(false);
+        fragment2.registerTeamUpdateObserver(false);
     }
 
 

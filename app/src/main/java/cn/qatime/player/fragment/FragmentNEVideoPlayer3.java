@@ -68,46 +68,13 @@ public class FragmentNEVideoPlayer3 extends BaseFragment {
         transaction.replace(R.id.second, player2);
         transaction.replace(R.id.three, player3);
         transaction.commit();
-        initData();
         return view;
     }
 
-    private void initData() {
-        if (id != 0) {
-            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass + "/" + id, null,
-                    new VolleyListener(getActivity()) {
-                        @Override
-                        protected void onSuccess(JSONObject response) {
-                            RemedialClassDetailBean data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
-                            if (data != null) {
-                                player1.setData(data);
-                                player2.setData(data);
-                                player3.setData(data);
-                            }
-                        }
 
-                        @Override
-                        protected void onError(JSONObject response) {
-
-                        }
-
-                        @Override
-                        protected void onTokenOut() {
-                            tokenOut();
-                        }
-                    }
-
-                    , new VolleyErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError volleyError) {
-                    super.onErrorResponse(volleyError);
-                }
-            });
-            addToRequestQueue(request);
-        }
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public void setData(RemedialClassDetailBean data) {
+        player1.setData(data.getData());
+        player2.setData(data.getData());
+        player3.setData(data.getData());
     }
 }

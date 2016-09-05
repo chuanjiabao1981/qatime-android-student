@@ -1,6 +1,7 @@
 package cn.qatime.player.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,13 +17,13 @@ import cn.qatime.player.R;
 import cn.qatime.player.adapter.FragmentNEVideoPlayerAdapter4;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.bean.RemedialClassDetailBean;
+import libraryextra.utils.StringUtils;
 import libraryextra.view.SideBar;
 
 public class FragmentNEVideoPlayer4 extends BaseFragment {
     private ListView listView;
     private List<RemedialClassDetailBean.Accounts> list = new ArrayList<>();
     private FragmentNEVideoPlayerAdapter4 adapter;
-    private SideBar sidebar;
 
     @Nullable
     @Override
@@ -47,13 +48,8 @@ public class FragmentNEVideoPlayer4 extends BaseFragment {
 //        list.add(new MemberBean("潘盼盼", StringUtils.getPYIndexStr("潘盼盼".substring(0, 1))));
 //        list.add(new MemberBean("周周周", StringUtils.getPYIndexStr("周周周".substring(0, 1))));
 
-        Collections.sort(list, new Comparator<RemedialClassDetailBean.Accounts>() {
-            @Override
-            public int compare(RemedialClassDetailBean.Accounts lhs, RemedialClassDetailBean.Accounts rhs) {
-                return lhs.getFirstLetter().compareTo(rhs.getFirstLetter());
-            }
-        });
-        sidebar = (SideBar) view.findViewById(R.id.sidebar);
+
+        SideBar sidebar = (SideBar) view.findViewById(R.id.sidebar);
         listView = (ListView) view.findViewById(R.id.listview);
         adapter = new FragmentNEVideoPlayerAdapter4(getActivity(), list, R.layout.item_fragment_nevideo_player4);
         listView.setAdapter(adapter);
@@ -71,5 +67,33 @@ public class FragmentNEVideoPlayer4 extends BaseFragment {
             }
         });
         return view;
+    }
+
+    public void setData(List<RemedialClassDetailBean.Accounts> accounts) {
+        if (accounts != null) {
+            list.clear();
+            list.addAll(accounts);
+            for (RemedialClassDetailBean.Accounts item : list) {
+                if (StringUtils.isNullOrBlanK(item.getName())) {
+                    item.setFirstLetter("");
+                } else {
+                    item.setFirstLetter(StringUtils.getPYIndexStr(item.getName().substring(0, 1)));
+                }
+            }
+            Collections.sort(list, new Comparator<RemedialClassDetailBean.Accounts>() {
+                @Override
+                public int compare(RemedialClassDetailBean.Accounts lhs, RemedialClassDetailBean.Accounts rhs) {
+                    return lhs.getFirstLetter().compareTo(rhs.getFirstLetter());
+                }
+            });
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (adapter != null) {
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+            }, 1000);
+        }
     }
 }

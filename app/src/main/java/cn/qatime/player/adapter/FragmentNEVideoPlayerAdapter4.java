@@ -1,7 +1,6 @@
 package cn.qatime.player.adapter;
 
 import android.content.Context;
-import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.List;
@@ -40,13 +39,13 @@ public class FragmentNEVideoPlayerAdapter4 extends CommonAdapter<RemedialClassDe
 //            holder.getView(R.id.top).setVisibility(View.GONE);
 //        }
 //        holder.setText(R.id.top, item.getFirstLetter());
-        if (position > 5) {
-            ((TextView)holder.getView(R.id.name)).setTextColor(0xff6c6c6c);
+//        if (position > 5) {
+//            ((TextView)holder.getView(R.id.name)).setTextColor(0xff6c6c6c);
 //            ((TextView)holder.getView(R.id.role)).setTextColor(0xff6c6c6c);
-        } else {
-            ((TextView)holder.getView(R.id.name)).setTextColor(0xffed0000);
+//        } else {
+//            ((TextView)holder.getView(R.id.name)).setTextColor(0xffed0000);
 //            ((TextView)holder.getView(R.id.role)).setTextColor(0xffed0000);
-        }
+//        }
         holder.setText(R.id.name, item.getName());
     }
 

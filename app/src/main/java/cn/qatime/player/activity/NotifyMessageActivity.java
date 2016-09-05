@@ -16,13 +16,15 @@ public class NotifyMessageActivity extends BaseActivity implements View.OnClickL
 
     private CheckBox cbVoice;
     private CheckBox cbShake;
+    private View shake;
+    private View voice;
 
 
     private void assignViews() {
         //TODO 待修改
-        View voice = findViewById(R.id.voice);
+         voice = findViewById(R.id.voice);
         cbVoice = (CheckBox) findViewById(R.id.cb_voice);
-        View shake = findViewById(R.id.shake);
+         shake = findViewById(R.id.shake);
         cbShake = (CheckBox) findViewById(R.id.cb_shake);
         cbVoice.setChecked(UserPreferences.getRingToggle());
         cbShake.setChecked(UserPreferences.getVibrateToggle());
@@ -41,10 +43,12 @@ public class NotifyMessageActivity extends BaseActivity implements View.OnClickL
         setContentView(R.layout.activity_notify_message);
         setTitle("消息提醒");
         assignViews();
-
-        setVoiceStatus();
-        setShakeStatus();
-
+        voice.setOnClickListener(this);
+        shake.setOnClickListener(this);
+        boolean shakeStatus = (boolean) SPUtils.get(this, "shake_status", true);
+        cbShake.setChecked(shakeStatus);
+        boolean voiceStatus = (boolean) SPUtils.get(this, "voice_status", true);
+        cbVoice.setChecked(voiceStatus);
     }
 
     @Override
@@ -70,5 +74,14 @@ public class NotifyMessageActivity extends BaseActivity implements View.OnClickL
         boolean check = UserPreferences.getRingToggle();
         cbVoice.setChecked(!check);
         UserPreferences.setRingToggle(!check);
+//        boolean shakeStatus = (boolean) SPUtils.get(this, "shake_status", true);
+//        if (shakeStatus) {
+//            SPUtils.put(this, "shake_status", false);
+//            cbShake.setChecked(false);
+//        } else {
+//            SPUtils.put(this, "shake_status", true);
+//            cbShake.setChecked(true);
+//        }
     }
+
 }
