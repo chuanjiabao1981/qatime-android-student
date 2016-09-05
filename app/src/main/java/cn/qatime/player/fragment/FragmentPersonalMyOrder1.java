@@ -1,6 +1,5 @@
 package cn.qatime.player.fragment;
 
-import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,12 +33,13 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.OrderPayActivity;
 import cn.qatime.player.activity.PersonalMyOrderUnpaidDetailActivity;
+import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.MyOrderBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import cn.qatime.player.base.BaseFragment;
+import libraryextra.bean.OrderConfirmBean;
 import libraryextra.bean.OrderDetailBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
@@ -58,7 +58,6 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_personal_my_order1, container, false);
         initview(view);
-        initData(1);
         return view;
 
     }
@@ -76,7 +75,7 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
 
         adapter = new CommonAdapter<MyOrderBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_order1) {
             @Override
-            public void convert(ViewHolder helper, MyOrderBean.Data item, final int position) {
+            public void convert(ViewHolder helper, final MyOrderBean.Data item, final int position) {
                 Glide.with(getActivity()).load(item.getProduct().getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.classname, item.getProduct().getName());
                 if (StringUtils.isNullOrBlanK(item.getProduct().getGrade())) {
@@ -90,7 +89,6 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
                 } else {
                     helper.setText(R.id.subject, item.getProduct().getSubject());
                 }
-                Logger.e(item.getProduct().getSubject());
 
                 helper.setText(R.id.teacher, item.getProduct().getTeacher_name());
 
@@ -115,9 +113,12 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent(getActivity(), OrderPayActivity.class);
-                                intent.putExtra("id", list.get(position).getProduct().getId());
-                                intent.putExtra("price", list.get(position).getProduct().getPrice());
-                                intent.putExtra("payType", "1");
+                                OrderConfirmBean.App_pay_params app_pay_params = item.getApp_pay_params();
+                                intent.putExtra("data", app_pay_params);
+                                intent.putExtra("id", item.getId());
+                                intent.putExtra("time", item.getCreated_at());
+                                intent.putExtra("price", item.getProduct().getPrice());
+                                intent.putExtra("type", (item.getPay_type() + "").equals("1") ? getResources().getString(R.string.method_payment) + "：微信支付" : getResources().getString(R.string.method_payment) + "：支付宝支付");
                                 startActivity(intent);
                             }
                         });
@@ -133,7 +134,6 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
             }
 
         };
-        adapter.notifyDataSetChanged();
         listView.setAdapter(adapter);
 
         listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
@@ -243,6 +243,7 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
 
                     @Override
                     protected void onError(JSONObject response) {
+                        Toast.makeText(getActivity(), "订单信息获取失败", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -254,6 +255,7 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
                 listView.onRefreshComplete();
+                Toast.makeText(getActivity(), "请检查网络联接", Toast.LENGTH_SHORT).show();
             }
         });
         addToRequestQueue(request);
