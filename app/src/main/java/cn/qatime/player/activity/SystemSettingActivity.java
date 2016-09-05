@@ -2,22 +2,33 @@ package cn.qatime.player.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.AppUtils;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.DataCleanUtils;
 import cn.qatime.player.utils.DownFileUtil;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.DensityUtils;
+import libraryextra.utils.StringUtils;
+import libraryextra.utils.VolleyListener;
 
 /**
  * @author luntify
@@ -35,8 +46,9 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
     private LinearLayout about;
     private Button exit;
     private String totalCacheSize;
-    private AlertDialog alertDialog;
+    private android.app.AlertDialog alertDialog;
     private String apkUrl;
+    private String downLoadLinks;
 
     private void assignViews() {
         learningProcess = (LinearLayout) findViewById(R.id.learning_process);
@@ -108,57 +120,60 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 startActivity(intent);
                 break;
             case R.id.check_update:
-//                //TODO 检查版本，进行更新
-//                Map<String,String> map = new HashMap<>();
-//                map.put("title","qatime");
-//                map.put("platform","android");
-//                map.put("version",AppUtils.getVersionName(this));
-//                addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlcheckUpdate,map), null, new VolleyListener(this) {
-//                    @Override
-//                    protected void onTokenOut() {
-//
-//                    }
-//
-//                    @Override
-//                    protected void onSuccess(JSONObject response) {
-//                          if(response.JSONObject(data)==null){
-//                          }else{
-//                              TODO 获取更新信信息
-//                        AlertDialog.Builder builder = new AlertDialog.Builder(SystemSettingActivity.this);
-//                        View view = View.inflate(SystemSettingActivity.this, R.layout.dialog_check_update, null);
-//                        Button down = (Button) view.findViewById(R.id.download);
-//                        down.setOnClickListener(SystemSettingActivity.this);
-//                        alertDialog = builder.create();
-//
-//                        alertDialog.show();
-//                        alertDialog.setContentView(view);
-//                        alertDialog.getWindow().setLayout(DensityUtils.dp2px(SystemSettingActivity.this, 300), DensityUtils.dp2px(SystemSettingActivity.this, 500));
-//                          }
-//
-//                    }
-//
-//                    @Override
-//                    protected void onError(JSONObject response) {
-//
-//                    }
-//                }, new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError volleyError) {
-//
-//                    }
-//                }));
+                //TODO 检查版本，进行更新
+                Map<String, String> map = new HashMap<>();
+                map.put("category", "student_client");
+                map.put("platform", "android");
+                map.put("version", AppUtils.getVersionName(this));
+//                map.put("version", "0.0.1");
+                BaseApplication.getRequestQueue().add(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlcheckUpdate, map), null, new VolleyListener(this) {
+                    @Override
+                    protected void onTokenOut() {
 
-                //TODO 获取更新信信息
-                AlertDialog.Builder builder = new AlertDialog.Builder(SystemSettingActivity.this);
-                View view = View.inflate(SystemSettingActivity.this, R.layout.dialog_check_update, null);
-                Button down = (Button) view.findViewById(R.id.download);
-                View x = view.findViewById(R.id.text_x);
-                x.setOnClickListener(SystemSettingActivity.this);
-                down.setOnClickListener(SystemSettingActivity.this);
-                alertDialog = builder.create();
-                alertDialog.show();
-                alertDialog.setContentView(view);
-                alertDialog.getWindow().setLayout(DensityUtils.dp2px(SystemSettingActivity.this, 300), DensityUtils.dp2px(SystemSettingActivity.this, 500));
+                    }
+
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        if (response.isNull("data")) {
+                        } else {
+                            //TODO 获取更新信信息0
+                            Logger.e(response.toString());
+                            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(SystemSettingActivity.this);
+                            View view = View.inflate(SystemSettingActivity.this, R.layout.dialog_check_update, null);
+                            Button down = (Button) view.findViewById(R.id.download);
+                            View x = view.findViewById(R.id.text_x);
+                            TextView newVersion = (TextView) view.findViewById(R.id.new_version);
+                            TextView desc = (TextView) view.findViewById(R.id.desc);
+                            desc.setMaxHeight(DensityUtils.dp2px(SystemSettingActivity.this, 300));
+                            try {
+                                if (!response.getJSONObject("data").getBoolean("enforce")) {
+                                    x.setOnClickListener(SystemSettingActivity.this);
+                                }
+                                String descStr = response.getJSONObject("data").getString("desc");
+                                desc.setText(StringUtils.isNullOrBlanK(descStr) ? "性能优化" : descStr);
+                                downLoadLinks = response.getJSONObject("data").getString("download_links");
+                                newVersion.setText("V" + response.getJSONObject("data").getString("version"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            down.setOnClickListener(SystemSettingActivity.this);
+                            alertDialog = builder.create();
+                            alertDialog.show();
+                            alertDialog.setContentView(view);
+                            alertDialog.setCanceledOnTouchOutside(false);
+                        }
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                        Toast.makeText(SystemSettingActivity.this, "检查更新失败", Toast.LENGTH_SHORT).show();
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Toast.makeText(SystemSettingActivity.this, "检查更新失败,请检查网络连接", Toast.LENGTH_SHORT).show();
+                    }
+                }));
                 break;
             case R.id.clean_cache:
                 //TODO 弹出对话框提示
@@ -182,7 +197,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
             case R.id.download:
                 //TODO 更新版本
                 Toast.makeText(SystemSettingActivity.this, "开始下载", Toast.LENGTH_SHORT).show();
-                DownFileUtil downFileUtil = new DownFileUtil(this, "http://www.baidu.com", "111.html", "111", "111") {
+                DownFileUtil downFileUtil = new DownFileUtil(this, downLoadLinks, "qatime.apk", "", "答疑时间.apk") {
                     @Override
                     public void downOK() {
                         DownFileUtil.insertAPK("", getApplicationContext());

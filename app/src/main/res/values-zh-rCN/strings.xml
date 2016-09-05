@@ -283,7 +283,7 @@
     <string name="confirm_new_password">确认新的密码</string>
     <string name="current_parent_phone">当前家长手机</string>
     <string name="current_phone">当前手机号码</string>
-    <string name="current_version">当前版本V</string>
+    <string name="current_version">V</string>
     <string name="down_now">立即下载</string>
     <string name="email_confirm_wrong">两次邮箱输入不一致</string>
     <string name="email_wrong">邮箱不正确</string>

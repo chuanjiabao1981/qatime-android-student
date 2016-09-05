@@ -12,12 +12,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
@@ -30,7 +32,6 @@ import cn.qatime.player.utils.AppUtils;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.DownFileUtil;
 import cn.qatime.player.utils.UrlUtils;
-import libraryextra.utils.DensityUtils;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
@@ -41,6 +42,10 @@ import libraryextra.utils.VolleyListener;
  * 起始页
  */
 public class StartActivity extends Activity implements View.OnClickListener {
+    private AlertDialog alertDialog;
+    private String downLoadLinks;
+    private boolean newVersion = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +67,7 @@ public class StartActivity extends Activity implements View.OnClickListener {
         map.put("category", "student_client");
         map.put("platform", "android");
         map.put("version", AppUtils.getVersionName(this));
+//        map.put("version", "0.0.1");
         BaseApplication.getRequestQueue().add(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlcheckUpdate, map), null, new VolleyListener(this) {
             @Override
             protected void onTokenOut() {
@@ -73,16 +79,31 @@ public class StartActivity extends Activity implements View.OnClickListener {
                 if (response.isNull("data")) {
                     startApp();
                 } else {
-                    //                              TODO 获取更新信信息
+                    Logger.e(response.toString());
+                    newVersion = true;
                     AlertDialog.Builder builder = new AlertDialog.Builder(StartActivity.this);
                     View view = View.inflate(StartActivity.this, R.layout.dialog_check_update, null);
                     Button down = (Button) view.findViewById(R.id.download);
+                    View x = view.findViewById(R.id.text_x);
+                    TextView newVersion = (TextView) view.findViewById(R.id.new_version);
+                    TextView desc = (TextView) view.findViewById(R.id.desc);
+                    try {
+                        if (!response.getJSONObject("data").getBoolean("enforce")) {
+                            x.setOnClickListener(StartActivity.this);
+                        }
+                        String descStr = response.getJSONObject("data").getString("desc");
+                        desc.setText(StringUtils.isNullOrBlanK(descStr) ? "性能优化" : descStr);
+                        downLoadLinks = response.getJSONObject("data").getString("download_links");
+                        newVersion.setText("V" + response.getJSONObject("data").getString("version"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     down.setOnClickListener(StartActivity.this);
-                    AlertDialog alertDialog = builder.show();
+                    alertDialog = builder.create();
+                    alertDialog.show();
                     alertDialog.setContentView(view);
-                    alertDialog.getWindow().setLayout(DensityUtils.dp2px(StartActivity.this, 300), DensityUtils.dp2px(StartActivity.this, 500));
+                    alertDialog.setCancelable(false);
                 }
-
             }
 
             @Override
@@ -105,7 +126,7 @@ public class StartActivity extends Activity implements View.OnClickListener {
             case R.id.download:
                 //TODO 更新版本
                 Toast.makeText(StartActivity.this, "开始下载", Toast.LENGTH_SHORT).show();
-                DownFileUtil downFileUtil = new DownFileUtil(this, "http://www.baidu.com", "111.html", "111", "111") {
+                DownFileUtil downFileUtil = new DownFileUtil(this, downLoadLinks, "qatime.apk", "", "答疑时间.apk") {
                     @Override
                     public void downOK() {
                         DownFileUtil.insertAPK("", getApplicationContext());
@@ -117,9 +138,11 @@ public class StartActivity extends Activity implements View.OnClickListener {
                     }
                 };
                 downFileUtil.downFile();
-
+                alertDialog.dismiss();
+                startApp();
                 break;
             case R.id.text_x:
+                alertDialog.dismiss();
                 startApp();
                 break;
         }
@@ -137,7 +160,9 @@ public class StartActivity extends Activity implements View.OnClickListener {
                     Logger.e("no第一次登陆");
                     if (!StringUtils.isNullOrBlanK(BaseApplication.getProfile().getToken())) {//token不空  直接自动登录到mianactivity
                         Logger.e("token----" + BaseApplication.getProfile().getToken());
-                        StartActivity.this.startActivity(new Intent(StartActivity.this, MainActivity.class));
+                        Intent intent = new Intent(StartActivity.this, MainActivity.class);
+                        intent.putExtra("newVersion", newVersion);
+                        StartActivity.this.startActivity(intent);
                         StartActivity.this.finish();
                     } else {
                         StartActivity.this.startActivity(new Intent(StartActivity.this, LoginActivity.class));
