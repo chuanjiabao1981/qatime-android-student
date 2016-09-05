@@ -264,7 +264,8 @@
     <string name="position_bottom">下方</string>
     <string name="full_screen">全屏</string>
     <string name="comment_content">评论内容</string>
-    <string name="barrage">打开弹幕</string>
+    <string name="barrage_open">打开弹幕</string>
+    <string name="barrage_close">关闭弹幕</string>
     <string name="system_setting">系统设置</string>
 
 

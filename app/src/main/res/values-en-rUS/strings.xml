@@ -228,7 +228,8 @@
     <string name="password_can_not_be_empty">Password can not be empty</string>
     <string name="alipay_payment">Alipay payment</string>
     <string name="audition_records">Audition records</string>
-    <string name="barrage">Open barrage</string>
+    <string name="barrage_open">Open barrage</string>
+    <string name="barrage_close">Close barrage</string>
     <string name="barrage_position">Barrage position</string>
     <string name="barrage_size">Barrage size</string>
     <string name="barrage_speed">Barrage speed</string>

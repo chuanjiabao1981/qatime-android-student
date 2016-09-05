@@ -44,8 +44,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:textColor="#fff"
-                android:text="@string/hd" />
+                android:text="@string/hd"
+                android:textColor="#fff" />
         </LinearLayout>
 
         <TextView
@@ -235,9 +235,9 @@
                 android:id="@+id/comment_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
                 android:orientation="horizontal"
                 android:visibility="gone">
 
@@ -245,13 +245,16 @@
                     android:id="@+id/refresh"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:src="@mipmap/refresh" />
 
                 <EditText
                     android:id="@+id/comment"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp"
                     android:layout_weight="4"
                     android:background="@drawable/shape_input"
                     android:hint="@string/comment_content"
@@ -261,6 +264,7 @@
                     android:id="@+id/commit"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/button_bg_selector_gray"
                     android:text="@string/send" />
@@ -270,17 +274,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginRight="5dp"
                     android:gravity="center"
-                    android:textColor="#fff"
-                    android:text="@string/barrage" />
+                    android:text="@string/barrage_open"
+                    android:textColor="#fff" />
 
                 <ImageView
                     android:id="@+id/barrage_setting"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="5dp"
-                    android:src="@mipmap/setting" />
+                    android:src="@mipmap/setting"
+                    android:visibility="gone" />
 
             </LinearLayout>
 
@@ -304,8 +309,5 @@
                     android:src="@mipmap/nemediacontroller_scale01" />
             </LinearLayout>
         </RelativeLayout>
-
-
     </LinearLayout>
-
 </FrameLayout>

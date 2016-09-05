@@ -70,6 +70,7 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
 
     private SessionTypeEnum sessionType = SessionTypeEnum.Team;
     private String sessionId;
+    private Callback chatCallback;
 
     @Nullable
     @Override
@@ -249,6 +250,7 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
         for (IMMessage message : messages) {
             result.add(message);
         }
+
         if (direction == QueryDirectionEnum.QUERY_NEW) {
             items.addAll(result);
         } else {
@@ -284,8 +286,12 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
                     needRefresh = true;
                 }
             }
+            if (chatCallback != null) {
+                chatCallback.back(addedListItems);
+            }
             if (needRefresh) {
                 adapter.notifyDataSetChanged();
+                listView.getRefreshableView().setSelection(adapter.getCount() - 1);
             }
         }
     };
@@ -444,5 +450,13 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public void setChatCallBack(Callback c) {
+        this.chatCallback = c;
+    }
+
+    public interface Callback {
+        void back(List<IMMessage> result);
     }
 }
