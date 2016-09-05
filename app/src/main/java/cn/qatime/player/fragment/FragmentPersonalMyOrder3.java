@@ -250,12 +250,9 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
 
                         try {
                             MyOrderBean data = JsonUtils.objectFromJson(response.toString(), MyOrderBean.class);
-                            if (data != null) {
+                            if (data != null && data.getData() != null) {
                                 list.addAll(data.getData());
-                                if(StringUtils.isNullOrBlanK(data.getData())){
-
-                                    Toast.makeText(getActivity(), "没有找到符合条件的订单", Toast.LENGTH_SHORT).show();
-                                }                            }
+                            }
                             adapter.notifyDataSetChanged();
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
@@ -270,13 +267,20 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
                     protected void onTokenOut() {
                         tokenOut();
                     }
-                }, new VolleyErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
-                listView.onRefreshComplete();
-            }
-        });
+                }
+
+                , new
+
+                VolleyErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        super.onErrorResponse(volleyError);
+                        listView.onRefreshComplete();
+                    }
+                }
+
+        );
+
         addToRequestQueue(request);
     }
 }
