@@ -3,7 +3,6 @@ package cn.qatime.player.activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +24,7 @@ import com.orhanobut.logger.Logger;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragmentActivity;
@@ -45,7 +45,6 @@ import libraryextra.utils.VolleyListener;
 import libraryextra.view.FragmentLayoutWithLine;
 
 public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVideoPlayer.ControlListener {
-    public final static String TAG = "NEVideoPlayerActivity";
 //    public NEVideoView mVideoView;  //用于画面显示
 //    private View mBuffer; //用于指示缓冲状态
 //    private NEMediaController mMediaController; //用于控制播放
@@ -68,25 +67,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     private FragmentLayoutWithLine fragmentLayout;
     private View inputLayout;
 
-    private Handler hd = new Handler();
-    private int i = 0;
     private int id;
     private FragmentNEVideoPlayer2 fragment2;
     private String sessionId;
     private SessionTypeEnum sessionType = SessionTypeEnum.Team;
-//    Runnable runnable = new Runnable() {
-//        @Override
-//        public void run() {
-//            hd.postDelayed(this, 50);
-//            videoPlayer.setData(i + "彈幕");
-//            i++;
-//            if (i>20){
-//                hd.removeCallbacks(this);
-//            }
-//            LogUtils.e(i);
-//        }
-//    };
-//    int flag = Settings.System.getInt(getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,10 +82,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         }
         sessionId = getIntent().getStringExtra("sessionId");
         String url = getIntent().getStringExtra("url");
-
+        url = "http://pullhlsa0a19f55.live.126.net/live/2de51729df6c43ba9ef7aff387e58321/playlist.m3u8";
 //        Logger.e(url);
         videoPlayer = (QaVideoPlayer) findViewById(R.id.video_player);
-        ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenHeight(this) / 3);
+        ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenWidth(this) * 9 / 16);
         videoPlayer.setLayoutParams(params);
 
         if (!StringUtils.isNullOrBlanK(url)) {
@@ -109,6 +93,18 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
             videoPlayer.setOnControlListener(this);
             videoPlayer.start();
         }
+        final String finalUrl = url;
+        videoPlayer.setOnVideoRefreshListener(new QaVideoPlayer.VideoRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (!StringUtils.isNullOrBlanK(finalUrl)) {
+                    videoPlayer.release_resource();
+                    videoPlayer.setVideoPath(finalUrl);
+                    videoPlayer.setOnControlListener(NEVideoPlayerActivity.this);
+                    videoPlayer.start();
+                }
+            }
+        });
         initView();
         initData();
     }
@@ -147,35 +143,61 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         fragment2 = (FragmentNEVideoPlayer2) fragBaseFragments.get(1);
         fragment2.setSessionId(sessionId);
         fragment2.requestTeamInfo();
+        fragment2.setChatCallBack(new FragmentNEVideoPlayer2.Callback() {
+            @Override
+            public void back(List<IMMessage> result) {
+                videoPlayer.addDanmaku(result);
+            }
+        });
 
         final EditText content = (EditText) findViewById(R.id.content);
         Button send = (Button) findViewById(R.id.send);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!fragment2.isAllowSendMessage()) {
-                    Toast.makeText(NEVideoPlayerActivity.this, "您已不在该群,不能发送消息", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (StringUtils.isNullOrBlanK(content.getText().toString())) {
-                    Toast.makeText(NEVideoPlayerActivity.this, "消息不能为空", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                // 创建文本消息
-                IMMessage message = MessageBuilder.createTextMessage(
-                        sessionId, // 聊天对象的 ID，如果是单聊，为用户帐号，如果是群聊，为群组 ID
-                        sessionType, // 聊天类型，单聊或群组
-                        content.getText().toString().trim() // 文本内容
-                );
-                // 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
-                NIMClient.getService(MsgService.class).sendMessage(message, true);
-
-                fragment2.items.add(message);
-                fragment2.adapter.notifyDataSetChanged();
-                fragment2.listView.getRefreshableView().setSelection(fragment2.items.size() - 1);
+                sendMessage(content.getText().toString().trim(), false);
                 content.setText("");
             }
         });
+        videoPlayer.setChatCallback(new QaVideoPlayer.ChatCallback() {
+            @Override
+            public void back(String result) {
+                Logger.e(result + "result");
+                sendMessage(result, true);
+            }
+        });
+    }
+
+    /**
+     * 發送消息
+     *
+     * @param comment       聊天內容
+     * @param isSendToDanmu 是否将消息展示弹幕
+     */
+    private void sendMessage(String comment, boolean isSendToDanmu) {
+        if (!fragment2.isAllowSendMessage()) {
+            Toast.makeText(NEVideoPlayerActivity.this, "您已不在该群,不能发送消息", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (StringUtils.isNullOrBlanK(comment)) {
+            Toast.makeText(NEVideoPlayerActivity.this, "消息不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        // 创建文本消息
+        IMMessage message = MessageBuilder.createTextMessage(
+                sessionId, // 聊天对象的 ID，如果是单聊，为用户帐号，如果是群聊，为群组 ID
+                sessionType, // 聊天类型，单聊或群组
+                comment.trim() // 文本内容
+        );
+        // 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
+        NIMClient.getService(MsgService.class).sendMessage(message, true);
+        //横屏状态下,将发送的消息展示到弹幕去
+        if (isSendToDanmu) {
+            videoPlayer.addDanmaku(message, 0);
+        }
+        fragment2.items.add(message);
+        fragment2.adapter.notifyDataSetChanged();
+        fragment2.listView.getRefreshableView().setSelection(fragment2.items.size() - 1);
     }
 
     private void initData() {
@@ -221,7 +243,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
             videoPlayer.start(); //锁屏打开后恢复播放
         }
         super.onResume();
-
+        videoPlayer.BarrageResume();
         fragment2.registerObservers(true);
         NIMClient.getService(MsgService.class).setChattingAccount(sessionId, sessionType);
     }
@@ -230,8 +252,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) { // 横屏
-            //TODO 測試数据
-//            hd.postDelayed(runnable, 1000);
             bottom.setVisibility(View.GONE);
             ViewGroup.LayoutParams params = videoPlayer.getLayoutParams();
             params.width = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -241,7 +261,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
             bottom.setVisibility(View.VISIBLE);
             ViewGroup.LayoutParams params = videoPlayer.getLayoutParams();
             params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-            params.height = ScreenUtils.getScreenHeight(this) / 3;
+            params.height = ScreenUtils.getScreenWidth(this) * 9 / 16;
             videoPlayer.setLayoutParams(params);
         }
 //        videoPlayer.release_resource();
@@ -251,23 +271,20 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
 
     @Override
     protected void onPause() {
-        Logger.e(TAG, "NEVideoPlayerActivity onPause");
-
-//        if (videoPlayer.isPauseInBackgroud())
         videoPlayer.pause(); //锁屏时暂停
         super.onPause();
-
+        videoPlayer.BarragePause();
         NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
     }
 
 
     @Override
     protected void onDestroy() {
-        Logger.e(TAG, "NEVideoPlayerActivity onDestroy");
         videoPlayer.release_resource();
         if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
+        videoPlayer.BarrageDestory();
 //        hd.removeCallbacks(runnable);
         super.onDestroy();
         fragment2.registerObservers(false);
@@ -290,7 +307,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             return;
         }
-
         super.onBackPressed();
     }
 

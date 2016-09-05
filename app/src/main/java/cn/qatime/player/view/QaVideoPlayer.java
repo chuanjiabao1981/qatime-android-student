@@ -21,9 +21,14 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.netease.neliveplayer.NELivePlayer;
+import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.orhanobut.logger.Logger;
 
+import java.util.List;
+
 import cn.qatime.player.R;
+import cn.qatime.player.barrage.DanmakuView;
+import cn.qatime.player.barrage.DanmuControl;
 import libraryextra.utils.ScreenUtils;
 
 
@@ -40,6 +45,7 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
     private View mMediaController;
     private ImageView mPlayBack;//返回键
     private View mBuffer;
+    private boolean barrageToggle = true;
 //    private NEMediaController mMediaController;
 
     private static final int sDefaultTimeout = 5000;//默认隐藏时间
@@ -97,7 +103,11 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
     private SeekBar barrageTransparent;
     private SeekBar barrageSize;
     private SeekBar barrageSpeed;
-    private BarrageView barrageView;
+    private DanmuControl danMuController;
+    private DanmakuView danMuView;
+    private boolean canBarrage = false;
+    private ChatCallback callback;
+    private VideoRefreshListener videoRefreshListener;
 
 
 //    NEMediaPlayer mMediaPlayer = new NEMediaPlayer();
@@ -119,11 +129,19 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
     }
 
     private void init() {
+        danMuController = new DanmuControl(context);
         flag = Settings.System.getInt(((Activity) QaVideoPlayer.this.getContext()).getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0);
         videoView = new NEVideoView(getContext());
         ViewGroup.LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         videoView.setLayoutParams(params);
         this.addView(videoView);
+        //弹幕
+        danMuView = new DanmakuView(context);
+        danMuController.setDanmakuView(danMuView);
+        //默认hide
+        danMuView.hide();
+        this.addView(danMuView);
+
         mMediaController = View.inflate(this.getContext(), R.layout.video_media_controller, null);
         //上部分
         playToolbar = mMediaController.findViewById(R.id.play_toolbar);
@@ -143,9 +161,12 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
         zoom.setOnClickListener(this);
         commentLayout = mMediaController.findViewById(R.id.comment_layout);//评论大布局
         refresh = mMediaController.findViewById(R.id.refresh);//刷新
+        refresh.setOnClickListener(this);
         comment = (EditText) mMediaController.findViewById(R.id.comment);
         commit = (Button) mMediaController.findViewById(R.id.commit);
+        commit.setOnClickListener(this);
         barrage = (TextView) mMediaController.findViewById(R.id.barrage);//弹幕开关
+        barrage.setOnClickListener(this);
         barrageSetting = mMediaController.findViewById(R.id.barrage_setting);//弹幕设置
         barrageSettingLayout = mMediaController.findViewById(R.id.barrage_setting_layout);//弹幕设置布局
 
@@ -155,8 +176,6 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
         barrageSpeed = (SeekBar) mMediaController.findViewById(R.id.barrage_speed);
 
         brightness.setProgress(ScreenUtils.getScreenBrightness(context));
-//        barrageView = new BarrageView(getContext());
-//        barrageView.setVisibility(GONE);
         this.addView(mMediaController);
 //        mBuffer = View.inflate(this.getContext(), R.layout.video_play_toolbar, null);
 //        this.addView(mBuffer);
@@ -218,13 +237,6 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
         });
     }
 
-    public void setData(String data) {
-        if (barrageView.getVisibility() == GONE) {
-            return;
-        }
-        barrageView.addItem(data);
-    }
-
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
@@ -234,8 +246,6 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
                 hd.postDelayed(runnable, sDefaultTimeout);
                 return false;
             } else {
-//                mMediaController.setVisibility(GONE);
-//                hd.removeCallbacks(runnable);
                 return super.dispatchTouchEvent(ev);
             }
         }
@@ -296,6 +306,8 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
     }
 
     private void vertical() {
+        danMuController.hide();
+        canBarrage = false;
         toolbarLayout.setVisibility(GONE);
         viewCount.setVisibility(VISIBLE);
         playToolbar.setBackgroundColor(0x00000000);
@@ -314,7 +326,16 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
     }
 
     private void landscape() {
-
+        if (barrageToggle) {
+            Logger.e("打开");
+            danMuController.show();
+            barrage.setText("关闭弹幕");
+        } else {
+            Logger.e("关闭");
+            danMuController.hide();
+            barrage.setText("打开弹幕");
+        }
+        canBarrage = true;
         toolbarLayout.setVisibility(VISIBLE);
         viewCount.setVisibility(GONE);
         playToolbar.setBackgroundColor(0xff999999);
@@ -428,12 +449,9 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
                 }
                 break;
             case R.id.zoom://横竖屏
-
                 if (((Activity) getContext()).getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {//
-//                    videoView.setVideoScalingMode(1, false);
                     ((Activity) getContext()).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                 } else {
-//                    videoView.setVideoScalingMode(0, false);
                     ((Activity) getContext()).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 }
 
@@ -471,14 +489,71 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
                     barrageSettingLayout.setVisibility(VISIBLE);
                 }
                 break;
+            case R.id.commit://發送按鈕
+                if (callback != null) {
+                    callback.back(comment.getText().toString().trim());
+                    comment.setText("");
+                }
+                break;
+            case R.id.barrage://弹幕开关
+                if (barrage.getText().equals(getContext().getResources().getString(R.string.barrage_open))) {
+                    danMuController.show();
+                    barrage.setText(getContext().getResources().getString(R.string.barrage_close));
+                    barrageToggle = true;
+                } else {
+                    danMuController.hide();
+                    barrage.setText(getContext().getResources().getString(R.string.barrage_open));
+                    barrageToggle = false;
+                }
+                break;
+            case R.id.refresh://刷新视频
+                if (videoRefreshListener != null) {
+                    videoRefreshListener.onRefresh();
+                }
+                break;
         }
     }
 
-//    public void setLayoutParam(int width, int high) {
-//        setLayoutParams(new LinearLayout.LayoutParams(width, high));
-//        videoView.setLayoutParams(new FrameLayout.LayoutParams(width,high));
-//
-//    }
+    /**************************
+     * 弹幕方法
+     ****************************/
+    public void BarragePause() {
+        danMuController.pause();
+    }
+
+    public void BarrageResume() {
+        danMuController.resume();
+    }
+
+    public void BarrageDestory() {
+        danMuController.destroy();
+    }
+
+    public void BarrageShow() {
+        danMuController.show();
+    }
+
+    public void BarrageHide() {
+        danMuController.hide();
+    }
+
+    public void addDanmaku(List<IMMessage> list) {
+        if (canBarrage) {
+            danMuController.addDanmuList(list);
+        }
+    }
+
+    public void addDanmaku(IMMessage danmu, int i) {
+        if (canBarrage) {
+            danMuController.addDanmu(danmu, i);
+        }
+    }
+
+    public void setChatCallback(ChatCallback callback) {
+        this.callback = callback;
+    }
+
+    /******************************************************/
 
     public interface ControlListener {
 //        void onVideoSizeChanged(NELivePlayer mp, int width, int height, int sarNum, int sarDen);
@@ -490,5 +565,17 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
         void onPrepared(NELivePlayer neLivePlayer);
 
         boolean onError(NELivePlayer neLivePlayer, int i, int i1);
+    }
+
+    public interface ChatCallback {
+        void back(String result);
+    }
+
+    public void setOnVideoRefreshListener(VideoRefreshListener listener) {
+        this.videoRefreshListener = listener;
+    }
+
+    public interface VideoRefreshListener {
+        void onRefresh();
     }
 }

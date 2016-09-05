@@ -323,6 +323,7 @@ public class MessageActivity extends BaseActivity {
             }
             if (needRefresh) {
                 adapter.notifyDataSetChanged();
+                listView.getRefreshableView().setSelection(adapter.getCount() - 1);
             }
         }
     };
