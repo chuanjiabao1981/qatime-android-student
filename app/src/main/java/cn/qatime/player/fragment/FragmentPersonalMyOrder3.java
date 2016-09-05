@@ -224,6 +224,13 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
         });
     }
 
+    @Override
+    public void onShow() {
+        if (!isLoad) {
+            initData(1);
+        }
+    }
+
     /**
      * @param type 1刷新
      *             2加载更多

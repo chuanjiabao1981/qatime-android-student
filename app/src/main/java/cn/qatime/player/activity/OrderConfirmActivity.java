@@ -43,7 +43,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     TextView classnumber;
     TextView classstarttime;
     TextView classendtime;
-    TextView status;
+//    TextView status;
     TextView price;
     TextView payprice;
     private Button pay;
@@ -86,13 +86,13 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         teacher.setText(getResources().getString(R.string.teacher) + data.teacher);
         classstarttime.setText(getResources().getString(R.string.class_start_time) + data.classstarttime);
         classendtime.setText(getResources().getString(R.string.class_end_time) + data.classendtime);
-        if (data.status.equals("preview")) {
-            status.setText(getResources().getString(R.string.status_preview));
-        } else if (data.status.equals("teaching")) {
-            status.setText(getResources().getString(R.string.status_teaching));
-        } else {
-            status.setText(getResources().getString(R.string.status_over));
-        }
+//        if (data.status.equals("preview")) {
+//            status.setText(getResources().getString(R.string.status_preview));
+//        } else if (data.status.equals("teaching")) {
+//            status.setText(getResources().getString(R.string.status_teaching));
+//        } else {
+//            status.setText(getResources().getString(R.string.status_over));
+//        }
         String price = df.format(data.price);
         if (price.startsWith(".")) {
             price = "0" + price;
@@ -117,7 +117,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                             Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
                             intent.putExtra("price", priceNumber);
                             intent.putExtra("id", data.getData().getId());
-                            intent.putExtra("time", data.getData().getCreated_at().substring(0, 19).replace("T", " "));
+                            intent.putExtra("time", data.getData().getCreated_at());
                             intent.putExtra("type", (data.getData().getPay_type() + "").equals("1") ? getResources().getString(R.string.method_payment) + "：微信支付" : getResources().getString(R.string.method_payment) + "：支付宝支付");
                             OrderConfirmBean.App_pay_params app_pay_params = data.getData().getApp_pay_params();
                             intent.putExtra("data", app_pay_params);
@@ -164,7 +164,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         classnumber = (TextView) findViewById(R.id.class_number);
         classstarttime = (TextView) findViewById(R.id.class_start_time);
         classendtime = (TextView) findViewById(R.id.class_end_time);
-        status = (TextView) findViewById(R.id.status);
+//        status = (TextView) findViewById(R.id.status);
         radioGroup = (RadioGroup) findViewById(R.id.radiogroup);
         wechatPay = (RadioButton) findViewById(R.id.wechat_pay);
         aliPay = (RadioButton) findViewById(R.id.alipay);

@@ -122,8 +122,8 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
             }
 
         }
-        String payType = getIntent().getStringExtra("payType");//支付方式
-        if (payType.equals("1")) {
+        int payType = getIntent().getIntExtra("payType", 0);//支付方式
+        if (payType == 1) {
             paytype.setText("微信支付");
         } else {
             paytype.setText("支付宝支付");
@@ -176,7 +176,8 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         });
 
     }
-    protected void dialog( final String id) {
+
+    protected void dialog(final String id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(PersonalMyOrderUnpaidDetailActivity.this);
         builder.setMessage("确认取消订单吗？");
         builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
@@ -197,7 +198,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         builder.create().show();
     }
 
-    private void CancelOrder( String id) {
+    private void CancelOrder(String id) {
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.urlPaylist + "/" + id + "/cancel", null,
                 new VolleyListener(this) {
                     @Override

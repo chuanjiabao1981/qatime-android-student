@@ -79,27 +79,25 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
 //创建时间
         if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("created_at"))) {
             buildtime.setText("为空");
-        }
-        else {
+        } else {
             try {
                 buildtime.setText(format.parse((getIntent().getStringExtra("created_at"))).toString());
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
-      //支付时间
+        //支付时间
         if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("pay_at"))) {
             paytime.setText("为空");
-        }
-        else {
+        } else {
             try {
                 paytime.setText(format.parse((getIntent().getStringExtra("pay_at"))).toString());
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
-        String payType = getIntent().getStringExtra("payType");//支付方式
-        if (payType.equals("1")) {
+        int payType = getIntent().getIntExtra("payType", 0);//支付方式
+        if (payType == 1) {
             paytype.setText("微信支付");
         } else {
             paytype.setText("支付宝支付");

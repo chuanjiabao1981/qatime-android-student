@@ -181,6 +181,7 @@ public class FragmentPersonalMyOrder2 extends BaseFragment {
 
     }
 
+    @Override
     public void onShow() {
         if (!isLoad) {
             initData(1);

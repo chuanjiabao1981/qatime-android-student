@@ -56,7 +56,7 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
     }
 
     private void setValue(OrderDetailBean data) {
-        classid = getIntent().getIntExtra("id",0);
+        classid = getIntent().getIntExtra("id", 0);
 
         Glide.with(PersonalMyOrderCanceledDetailActivity.this).load(data.image).placeholder(R.mipmap.photo).centerCrop().crossFade().into(image);
         if (StringUtils.isNullOrBlanK(data.name)) {
@@ -101,8 +101,8 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
             paytype.setText("        ");
 
         } else {
-            String payType = getIntent().getStringExtra("payType");//支付方式
-            if (payType.equals("1")) {
+            int payType = getIntent().getIntExtra("payType", 0);//支付方式
+            if (payType == 1) {
                 paytype.setText("微信支付");
             } else {
                 paytype.setText("支付宝支付");
