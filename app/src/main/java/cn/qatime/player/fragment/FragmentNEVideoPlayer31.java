@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import cn.qatime.player.R;
@@ -31,6 +30,7 @@ public class FragmentNEVideoPlayer31 extends BaseFragment {
     TextView progress;
     RemedialClassDetailBean data;
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private RemedialClassDetailBean.Data bean;
 
     @Nullable
     @Override
@@ -53,10 +53,11 @@ public class FragmentNEVideoPlayer31 extends BaseFragment {
         progress = (TextView) view.findViewById(R.id.progress);
         totalclass = (TextView) view.findViewById(R.id.total_class);
         remainclass = (TextView) view.findViewById(R.id.remain_class);
+        setView();
     }
 
-    public void setData(RemedialClassDetailBean.Data bean) {
-        if (bean != null) {
+    private void setView() {
+        if (bean != null && name != null) {
             name.setText(getActivity().getResources().getString(R.string.class_name) + bean.getName());
             subject.setText(getActivity().getResources().getString(R.string.subject_type) + bean.getSubject());
             teacher.setText(getActivity().getResources().getString(R.string.teacher) + bean.getTeacher().getName());
@@ -67,5 +68,10 @@ public class FragmentNEVideoPlayer31 extends BaseFragment {
             remainclass.setText(getActivity().getResources().getString(R.string.remain_class) + (bean.getPreset_lesson_count() - bean.getCompleted_lesson_count()));
             describe.setText(bean.getDescription());
         }
+    }
+
+    public void setData(RemedialClassDetailBean.Data bean) {
+        this.bean = bean;
+        setView();
     }
 }

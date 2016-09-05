@@ -3,12 +3,14 @@ package cn.qatime.player.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.DateUtils;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewStructure;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,21 +28,19 @@ import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
-import com.netease.nimlib.sdk.msg.model.MessageReceipt;
 import com.netease.nimlib.sdk.msg.model.QueryDirectionEnum;
 import com.netease.nimlib.sdk.team.constant.TeamTypeEnum;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
-import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.orhanobut.logger.Logger;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.AbstractSequentialList;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
@@ -51,7 +51,9 @@ import cn.qatime.player.im.cache.TeamDataCache;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.transformation.GlideCircleTransform;
+import libraryextra.utils.KeyBoardUtils;
 import libraryextra.utils.StringUtils;
+import libraryextra.view.TagViewPager;
 
 /**
  * @author luntify
@@ -78,6 +80,10 @@ public class MessageActivity extends BaseActivity {
     private Team team;
     private Button send;
     private TextView tipText;
+    private ImageView emoji;
+    private TagViewPager viewPager;
+    private EditText content;
+    private Handler hd = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +99,7 @@ public class MessageActivity extends BaseActivity {
     private void initView() {
         tipText = (TextView) findViewById(R.id.tip);
         listView = (PullToRefreshListView) findViewById(R.id.list);
+
         listView.getRefreshableView().setDividerHeight(0);
         listView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
@@ -124,7 +131,7 @@ public class MessageActivity extends BaseActivity {
             }
         };
         listView.setAdapter(adapter);
-        final EditText content = (EditText) findViewById(R.id.content);
+        content = (EditText) findViewById(R.id.content);
         send = (Button) findViewById(R.id.send);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,6 +174,112 @@ public class MessageActivity extends BaseActivity {
             }
         });
         loadMessage(false);
+        initEmoji();
+    }
+
+    private void initEmoji() {
+        emoji = (ImageView) findViewById(R.id.emoji);
+        viewPager = (TagViewPager) findViewById(R.id.tagViewPager);
+        emoji.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                KeyBoardUtils.closeKeybord(MessageActivity.this);
+                content.requestFocus();
+                hd.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewPager.setVisibility(viewPager.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+                    }
+                },100);
+            }
+        });
+        content.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                KeyBoardUtils.openKeybord(content, MessageActivity.this);
+                content.requestFocus();
+                viewPager.setVisibility(View.GONE);
+                return false;
+            }
+        });
+        final List<Map<String, Integer>> listitems1 = new ArrayList<>();
+        final List<Map<String, Integer>> listitems2 = new ArrayList<>();
+        final List<Map<String, Integer>> listitems3 = new ArrayList<>();
+        try {
+            for (int i = 1; i <= 28; i++) {
+                Map<String, Integer> listitem1 = new HashMap<>();
+                if (i != 28) {
+                    listitem1.put("image",
+                            Integer.parseInt(R.mipmap.class.getDeclaredField("emoji" + i).get(null).toString()));
+                } else {
+                    listitem1.put("image", R.mipmap.left_arrow);
+                }
+                listitems1.add(listitem1);
+            }
+            for (int i = 28; i <= 55; i++) {
+                Map<String, Integer> listitem2 = new HashMap<>();
+                if (i != 55) {
+                    listitem2.put("image", Integer.parseInt(R.mipmap.class.getDeclaredField("emoji" + i).get(null).toString()));
+                } else {
+                    listitem2.put("image", R.mipmap.left_arrow);
+                }
+                listitems2.add(listitem2);
+            }
+            for (int i = 55; i <= 82; i++) {
+                Map<String, Integer> listitem3 = new HashMap<>();
+                if (i <= 75) {
+                    listitem3.put("image", Integer.parseInt(R.mipmap.class.getDeclaredField("emoji" + i).get(null).toString()));
+                } else if (i == 82) {
+                    listitem3.put("image", R.mipmap.left_arrow);
+                } else {
+                    listitem3.put("image", null);
+                }
+                listitems3.add(listitem3);
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        final List<List<Map<String, Integer>>> listmap = new ArrayList();
+        listmap.add(listitems1);
+        listmap.add(listitems2);
+        listmap.add(listitems3);
+        viewPager.init(R.drawable.shape_photo_tag_select, R.drawable.shape_photo_tag_nomal, 16, 8, 2, 40);
+        viewPager.setAutoNext(false, 0);
+        viewPager.setOnGetView(new TagViewPager.OnGetView() {
+            @Override
+            public View getView(ViewGroup container, int position) {
+                final GridView gv = new GridView(MessageActivity.this);
+                gv.setNumColumns(7);
+                gv.setAdapter(new CommonAdapter<Map<String, Integer>>(MessageActivity.this, listmap.get(position), R.layout.list_emoji_page) {
+
+                    @Override
+                    public void convert(ViewHolder holder, final Map<String, Integer> item, int position) {
+                        ImageView view = holder.getView(R.id.emoji_image);
+                        if (item.get("image") != null) {
+                            int resId = item.get("image");
+                            view.setImageResource(resId);
+                            view.setEnabled(true);
+                        } else {
+                            view.setEnabled(false);
+                        }
+                        view.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                // TODO: 2016/9/5 加入到eidttext
+                                Logger.e("click:    emoji " + item.get("image"));
+                            }
+                        });
+                    }
+                });
+                gv.setLayoutParams(new GridView.LayoutParams(GridView.LayoutParams.MATCH_PARENT, GridView.LayoutParams.WRAP_CONTENT));
+                gv.setGravity(Gravity.CENTER);
+                container.addView(gv);
+                return gv;
+            }
+        });
+        viewPager.setAdapter(3);
     }
 
     /**

@@ -5,10 +5,14 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +29,9 @@ import com.orhanobut.logger.Logger;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragmentActivity;
@@ -35,6 +42,8 @@ import cn.qatime.player.fragment.FragmentNEVideoPlayer4;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.view.QaVideoPlayer;
+import libraryextra.adapter.CommonAdapter;
+import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.KeyBoardUtils;
@@ -43,6 +52,7 @@ import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.FragmentLayoutWithLine;
+import libraryextra.view.TagViewPager;
 
 public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVideoPlayer.ControlListener {
     public final static String TAG = "NEVideoPlayerActivity";
@@ -74,7 +84,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     private FragmentNEVideoPlayer2 fragment2;
     private String sessionId;
     private SessionTypeEnum sessionType = SessionTypeEnum.Team;
-//    Runnable runnable = new Runnable() {
+    private ImageView emoji;
+    private TagViewPager viewPager;
+    private EditText content;
+    //    Runnable runnable = new Runnable() {
 //        @Override
 //        public void run() {
 //            hd.postDelayed(this, 50);
@@ -115,6 +128,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
 
     private void initView() {
         bottom = findViewById(R.id.bottom);
+
         inputLayout = findViewById(R.id.input_layout);
         fragBaseFragments.add(new FragmentNEVideoPlayer1());
         fragBaseFragments.add(new FragmentNEVideoPlayer2());
@@ -176,6 +190,113 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
                 content.setText("");
             }
         });
+        this.content = (EditText) findViewById(R.id.content);
+        initEmoji();
+    }
+
+    private void initEmoji() {
+        emoji = (ImageView) findViewById(R.id.emoji);
+        viewPager = (TagViewPager) findViewById(R.id.tagViewPager);
+        emoji.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                KeyBoardUtils.closeKeybord(NEVideoPlayerActivity.this);
+                content.requestFocus();
+                hd.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewPager.setVisibility(viewPager.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+                    }
+                },100);
+            }
+        });
+        content.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                KeyBoardUtils.openKeybord(content,NEVideoPlayerActivity.this);
+                content.requestFocus();
+                viewPager.setVisibility(View.GONE);
+                return false;
+            }
+        });
+        final List<Map<String, Integer>> listitems1 = new ArrayList<>();
+        final List<Map<String, Integer>> listitems2 = new ArrayList<>();
+        final List<Map<String, Integer>> listitems3 = new ArrayList<>();
+        try {
+            for (int i = 1; i <= 28; i++) {
+                Map<String, Integer> listitem1 = new HashMap<>();
+                if (i != 28) {
+                    listitem1.put("image",
+                            Integer.parseInt(R.mipmap.class.getDeclaredField("emoji" + i).get(null).toString()));
+                } else {
+                    listitem1.put("image", R.mipmap.left_arrow);
+                }
+                listitems1.add(listitem1);
+            }
+            for (int i = 28; i <= 55; i++) {
+                Map<String, Integer> listitem2 = new HashMap<>();
+                if (i != 55) {
+                    listitem2.put("image", Integer.parseInt(R.mipmap.class.getDeclaredField("emoji" + i).get(null).toString()));
+                } else {
+                    listitem2.put("image", R.mipmap.left_arrow);
+                }
+                listitems2.add(listitem2);
+            }
+            for (int i = 55; i <= 82; i++) {
+                Map<String, Integer> listitem3 = new HashMap<>();
+                if (i <= 75) {
+                    listitem3.put("image", Integer.parseInt(R.mipmap.class.getDeclaredField("emoji" + i).get(null).toString()));
+                } else if (i == 82) {
+                    listitem3.put("image", R.mipmap.left_arrow);
+                } else {
+                    listitem3.put("image", null);
+                }
+                listitems3.add(listitem3);
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        final List<List<Map<String, Integer>>> listmap = new ArrayList();
+        listmap.add(listitems1);
+        listmap.add(listitems2);
+        listmap.add(listitems3);
+        viewPager.init(R.drawable.shape_photo_tag_select, R.drawable.shape_photo_tag_nomal, 16, 8, 2, 40);
+        viewPager.setAutoNext(false, 0);
+        viewPager.setOnGetView(new TagViewPager.OnGetView() {
+            @Override
+            public View getView(ViewGroup container, int position) {
+                final GridView gv = new GridView(NEVideoPlayerActivity.this);
+                gv.setNumColumns(7);
+                gv.setAdapter(new CommonAdapter<Map<String, Integer>>(NEVideoPlayerActivity.this, listmap.get(position), R.layout.list_emoji_page) {
+
+                    @Override
+                    public void convert(ViewHolder holder, final Map<String, Integer> item, int position) {
+                        ImageView view = holder.getView(R.id.emoji_image);
+                        if (item.get("image") != null) {
+                            int resId = item.get("image");
+                            view.setImageResource(resId);
+                            view.setEnabled(true);
+                        } else {
+                            view.setEnabled(false);
+                        }
+                        view.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                // TODO: 2016/9/5 加入到eidttext
+                                Logger.e("click:    emoji " + item.get("image"));
+                            }
+                        });
+                    }
+                });
+                gv.setLayoutParams(new GridView.LayoutParams(GridView.LayoutParams.MATCH_PARENT, GridView.LayoutParams.WRAP_CONTENT));
+                gv.setGravity(Gravity.CENTER);
+                container.addView(gv);
+                return gv;
+            }
+        });
+        viewPager.setAdapter(3);
     }
 
     private void initData() {

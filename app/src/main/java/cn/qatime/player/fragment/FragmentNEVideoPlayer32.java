@@ -26,6 +26,7 @@ public class FragmentNEVideoPlayer32 extends BaseFragment {
     private TextView gradetype;
     private TextView school;
     private TextView describe;
+    private RemedialClassDetailBean.Data data;
 
     @Nullable
     @Override
@@ -43,10 +44,18 @@ public class FragmentNEVideoPlayer32 extends BaseFragment {
         teachingyears = (TextView) view.findViewById(R.id.teaching_years);
         school = (TextView) view.findViewById(R.id.school);
         describe = (TextView) view.findViewById(R.id.describe);
+        setView();
     }
 
     public void setData(RemedialClassDetailBean.Data data) {
-        if (data != null) {
+        this.data = data;
+        setView();
+
+
+    }
+
+    private void setView() {
+        if (data != null && name != null) {
             name.setText(getActivity().getResources().getString(R.string.teacher_name) + data.getTeacher().getName());
             subject.setText(getActivity().getResources().getString(R.string.teacher_subject) + data.getTeacher().getSubject());
             if (!StringUtils.isNullOrBlanK(data.getTeacher().getTeaching_years())) {
@@ -79,7 +88,5 @@ public class FragmentNEVideoPlayer32 extends BaseFragment {
             Glide.with(this).load(data.getTeacher().getAvatar_url()).placeholder(R.mipmap.ic_launcher).crossFade().into(image);
 
         }
-
-
     }
 }

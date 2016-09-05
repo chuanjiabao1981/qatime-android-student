@@ -5,24 +5,22 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
+import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.view.VerticalListView;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import cn.qatime.player.base.BaseFragment;
 import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.StringUtils;
-import cn.qatime.player.view.VerticalListView;
 
 public class FragmentNEVideoPlayer33 extends BaseFragment {
     private CommonAdapter<RemedialClassDetailBean.Lessons> adapter;
     private List<RemedialClassDetailBean.Lessons> lists = new ArrayList<>();
+    private RemedialClassDetailBean.Data data;
 
     @Nullable
     @Override
@@ -55,7 +53,12 @@ public class FragmentNEVideoPlayer33 extends BaseFragment {
     }
 
     public void setData(RemedialClassDetailBean.Data data) {
-        if (data != null) {
+        this.data = data;
+        setView();
+    }
+
+    private void setView() {
+        if (data != null && lists != null) {
             lists.clear();
             lists.addAll(data.getLessons());
             if (adapter != null) {
