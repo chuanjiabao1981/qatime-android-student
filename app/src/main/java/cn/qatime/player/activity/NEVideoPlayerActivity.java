@@ -12,6 +12,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -233,7 +234,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
                 Map<String, Integer> listitem1 = new HashMap<>();
                 if (i != 28) {
                     listitem1.put("image",
-                            Integer.parseInt(R.mipmap.class.getDeclaredField("emoji" + i).get(null).toString()));
+                            Integer.parseInt(R.mipmap.class.getDeclaredField("em_" + i).get(null).toString()));
                 } else {
                     listitem1.put("image", R.mipmap.left_arrow);
                 }
@@ -242,16 +243,17 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
             for (int i = 28; i <= 55; i++) {
                 Map<String, Integer> listitem2 = new HashMap<>();
                 if (i != 55) {
-                    listitem2.put("image", Integer.parseInt(R.mipmap.class.getDeclaredField("emoji" + i).get(null).toString()));
+                    listitem2.put("image", Integer.parseInt(R.mipmap.class.getDeclaredField("em_" + i).get(null).toString()));
                 } else {
                     listitem2.put("image", R.mipmap.left_arrow);
                 }
                 listitems2.add(listitem2);
             }
+
             for (int i = 55; i <= 82; i++) {
                 Map<String, Integer> listitem3 = new HashMap<>();
                 if (i <= 75) {
-                    listitem3.put("image", Integer.parseInt(R.mipmap.class.getDeclaredField("emoji" + i).get(null).toString()));
+                    listitem3.put("image", Integer.parseInt(R.mipmap.class.getDeclaredField("em_" + i).get(null).toString()));
                 } else if (i == 82) {
                     listitem3.put("image", R.mipmap.left_arrow);
                 } else {
@@ -294,11 +296,17 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
                                 Logger.e("click:    emoji " + item.get("image"));
                                 String text = content.getText().toString();
                                 if (position < 21) {
-                                    content.setText(getEmotionContent(item.get("image")));
+                                    content.append(getEmotionContent(item.get("image")));
                                 } else if (position == 27) {
-                                    content.setText(text.substring(0, text.length() - 1));
+                                    //动作按下
+                                    int action = KeyEvent.ACTION_DOWN;
+                                    //code:删除，其他code也可以，例如 code = 0
+                                    int code = KeyEvent.KEYCODE_DEL;
+                                    KeyEvent event = new KeyEvent(action, code);
+                                    content.setPressed(true);
+                                    content.onKeyDown(KeyEvent.KEYCODE_DEL, event); //抛给系统处理了
                                 } else if (viewPager.getCurrentItem() != 2) {
-                                    content.setText(getEmotionContent(item.get("image")));
+                                    content.append(getEmotionContent(item.get("image")));
                                 }
                             }
                         });
@@ -314,7 +322,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     }
 
     public SpannableString getEmotionContent(int resId) {
-        SpannableString spannableString = new SpannableString("" + resId);
+        String emoji = "[" + getResources().getResourceName(resId).replace("cn.qatime.player:mipmap/", "") + "]";
+        SpannableString spannableString = new SpannableString("" + emoji);
         Resources res = getResources();
         int size = (int) content.getTextSize();
         Bitmap bitmap = BitmapFactory.decodeResource(res, resId);
@@ -322,6 +331,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         ImageSpan span = new ImageSpan(this, scaleBitmap);
         spannableString.setSpan(span, 0, spannableString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spannableString;
+//        String regexEmotion = "\\[em_[1-9][0-9]?\\]";
     }
 
     private void initData() {
