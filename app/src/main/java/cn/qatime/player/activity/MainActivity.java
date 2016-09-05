@@ -161,12 +161,14 @@ public class MainActivity extends BaseFragmentActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
-        Intent start = new Intent(this, LoginActivity.class);
-        if (!StringUtils.isNullOrBlanK(intent.getStringExtra("sign"))) {
-            start.putExtra("sign", intent.getStringExtra("sign"));
+        if (!StringUtils.isNullOrBlanK(intent.getStringExtra("out")) || (!StringUtils.isNullOrBlanK(intent.getStringExtra("sign")))) {
+            Intent start = new Intent(this, LoginActivity.class);
+            if (!StringUtils.isNullOrBlanK(intent.getStringExtra("sign"))) {
+                start.putExtra("sign", intent.getStringExtra("sign"));
+            }
+            startActivity(start);
+            finish();
         }
-        startActivity(start);
-        finish();
     }
 
     /**
