@@ -3,6 +3,7 @@ package cn.qatime.player.utils;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
@@ -10,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.base.BaseApplication;
-import libraryextra.utils.LogUtils;
 
 /**
  * @author luntify
@@ -20,12 +20,12 @@ import libraryextra.utils.LogUtils;
 public class DaYiJsonObjectRequest extends JsonObjectRequest {
     public DaYiJsonObjectRequest(int method, String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         super(method, url, jsonRequest, listener, errorListener);
-        LogUtils.e(url);
+        Logger.e(url);
     }
 
     public DaYiJsonObjectRequest(String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         super(url, jsonRequest, listener, errorListener);
-        LogUtils.e(url);
+        Logger.e(url);
     }
 
     @Override

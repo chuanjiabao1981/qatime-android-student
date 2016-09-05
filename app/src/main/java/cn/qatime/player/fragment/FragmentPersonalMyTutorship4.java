@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
@@ -28,17 +29,16 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
-import libraryextra.adapter.CommonAdapter;
-import libraryextra.adapter.ViewHolder;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
-import libraryextra.bean.TutorialClassBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
-import libraryextra.utils.JsonUtils;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.adapter.CommonAdapter;
+import libraryextra.adapter.ViewHolder;
+import libraryextra.bean.TutorialClassBean;
+import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
-import libraryextra.utils.LogUtils;
 
 public class FragmentPersonalMyTutorship4 extends BaseFragment {
     private PullToRefreshListView listView;
@@ -164,7 +164,7 @@ public class FragmentPersonalMyTutorship4 extends BaseFragment {
                     @Override
                     protected void onSuccess(JSONObject response) {
                         isLoad = true;
-                        LogUtils.e(response.toString());
+                        Logger.e(response.toString());
                         if (type == 1) {
                             list.clear();
                         }

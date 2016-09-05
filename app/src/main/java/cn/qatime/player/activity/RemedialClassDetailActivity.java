@@ -1,5 +1,6 @@
 package cn.qatime.player.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -43,7 +44,7 @@ import libraryextra.view.SimpleViewPagerIndicator;
 public class RemedialClassDetailActivity extends BaseFragmentActivity implements View.OnClickListener {
     ImageView image;
     private int id;
-    private String[] mTitles = new String[]{"信息详情", "教师详情", "课程列表"};
+    private String[] mTitles = new String[]{"辅导概况", "教师资料", "课程列表"};
     private SimpleViewPagerIndicator mIndicator;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
     private Button audition;
@@ -67,7 +68,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         pager = getIntent().getIntExtra("pager", 0);
         initView();
         if (id == 0) {
-            Toast.makeText(this, "没有辅导班id", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.no_tutorial_classes_ID), Toast.LENGTH_SHORT).show();
             return;
         }
         initData();
@@ -144,9 +145,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     @Override
                     protected void onSuccess(JSONObject response) {
                         data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
-//                        Glide.with(RemedialClassDetailActivity.this).load(R.mipmap.eight_five).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
                         Glide.with(RemedialClassDetailActivity.this).load(data.getData().getPublicize()).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
-
                         if (data.getData() != null) {
                             String price = df.format(data.getData().getPrice());
                             if (price.startsWith(".")) {
@@ -155,7 +154,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                             name.setText(data.getData().getName());
                             title.setText(data.getData().getName());
                             RemedialClassDetailActivity.this.price.setText("￥" + price);
-                            studentnumber.setText("报名人数 " + data.getData().getBuy_tickets_count());
+                            studentnumber.setText("已购人数 " + data.getData().getBuy_tickets_count());
                         }
                         if (data != null) {
                             ((FragmentRemedialClassDetail1) fragBaseFragments.get(0)).setData(data);
@@ -172,7 +171,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
                                 if (data.getData().getIs_bought()) {
                                     pay.setEnabled(false);
-                                    pay.setText("已购买");
+                                    pay.setText(getResources().getString(R.string.purchased));
                                     audition.setEnabled(false);
                                 } else {
                                     pay.setEnabled(true);

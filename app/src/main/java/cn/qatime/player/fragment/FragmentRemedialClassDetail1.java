@@ -46,7 +46,6 @@ public class FragmentRemedialClassDetail1 extends BaseFragment {
 
 
     private void initview(View view) {
-//        name = (TextView) view.findViewById(R.id.name);
         subject = (TextView) view.findViewById(R.id.subject);
         classstarttime = (TextView) view.findViewById(R.id.class_start_time);
         timetostart = (TextView) view.findViewById(R.id.time_to_start);
@@ -56,7 +55,6 @@ public class FragmentRemedialClassDetail1 extends BaseFragment {
         classendtime = (TextView) view.findViewById(R.id.class_end_time);
         teacher = (TextView) view.findViewById(R.id.teacher);
         progress = (TextView) view.findViewById(R.id.progress);
-//        teachway = (TextView) view.findViewById(R.id.teach_way);
         totalclass = (TextView) view.findViewById(R.id.total_class);
         remainclass = (TextView) view.findViewById(R.id.remain_class);
     }
@@ -67,7 +65,7 @@ public class FragmentRemedialClassDetail1 extends BaseFragment {
 
 //            name.setText(getResources().getString(R.string.class_name) + bean.getName());
             subject.setText(getResources().getString(R.string.subject_type) + bean.getSubject());
-            teacher.setText(getResources().getString(R.string.teacher) + bean.getTeacher().getName());
+            teacher.setText(getActivity().getResources().getString(R.string.teacher) + bean.getTeacher().getName());
             progress.setText(getResources().getString(R.string.progress) + bean.getCompleted_lesson_count() + "/" + bean.getPreset_lesson_count());
             classstarttime.setText(getResources().getString(R.string.class_start_time) + bean.getLive_start_time());
             classendtime.setText(getResources().getString(R.string.class_end_time) + bean.getLive_end_time());

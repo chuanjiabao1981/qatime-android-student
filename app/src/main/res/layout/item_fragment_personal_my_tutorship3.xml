@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,12 +18,12 @@
                 android:layout_height="wrap_content"
                 android:padding="2dp"
                 android:textColor="#8e8e8e"
-                android:textSize="13sp" />
+                android:textSize="13sp"/>
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"/>
 
             <TextView
                 android:id="@+id/class_end_time"
@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:padding="2dp"
                 android:textColor="#8e8e8e"
-                android:textSize="13sp" />
+                android:textSize="13sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -44,13 +44,12 @@
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:background="#dcdcdc"
-                android:src="@mipmap/photo" />
+                android:src="@mipmap/photo"/>
 
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="0.35"
                 android:background="#faf6f6"
                 android:orientation="vertical"
                 android:padding="2dp">
@@ -59,7 +58,8 @@
                     android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:paddingBottom="5dp"/>
 
                 <LinearLayout
@@ -73,7 +73,7 @@
                         android:layout_height="wrap_content"
                         android:padding="2dp"
                         android:text="科目："
-                        android:textSize="13sp" />
+                        android:textSize="13sp"/>
 
                     <View
                         android:layout_width="0dp"
@@ -87,7 +87,7 @@
                         android:layout_height="wrap_content"
                         android:padding="2dp"
                         android:text="老师："
-                        android:textSize="13sp" />
+                        android:textSize="13sp"/>
 
                     <View
                         android:layout_width="0dp"
@@ -106,7 +106,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="5dp"
-                        android:text="12/99" />
+                        android:text="12/99"/>
 
                     <ProgressBar
                         android:id="@+id/progressbar"
@@ -114,14 +114,14 @@
                         android:layout_width="120dp"
                         android:layout_height="5dp"
                         android:layout_gravity="center"
-                        android:background="#bfbfbf" />
+                        android:background="#bfbfbf"/>
 
                     <TextView
                         android:id="@+id/remain_class"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="5dp"
-                        android:text="87" />
+                        android:text="87"/>
                 </LinearLayout>
 
 
@@ -142,7 +142,7 @@
                         android:padding="2dp"
                         android:text="下一课"
                         android:textColor="#05effc"
-                        android:textSize="13sp" />
+                        android:textSize="13sp"/>
 
 
                     <ImageView
@@ -152,7 +152,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
-                        android:src="@mipmap/shopping32" />
+                        android:src="@mipmap/shopping32"/>
 
                     <ImageView
                         android:id="@+id/video"
@@ -161,7 +161,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_gravity="center"
                         android:layout_margin="5dp"
-                        android:src="@mipmap/playing" />
+                        android:src="@mipmap/playing"/>
 
                 </LinearLayout>
             </LinearLayout>

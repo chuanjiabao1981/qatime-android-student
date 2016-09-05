@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="#ffffff"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical">
 
     <include layout="@layout/layout_backbar" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-     >
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/text_background"
             android:layout_margin="10dp"
-            android:padding="10dp"
-            android:orientation="vertical">
+            android:background="@drawable/text_background"
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <LinearLayout
+                android:id="@+id/change_head_sculpture"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="10dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1">
@@ -62,10 +62,9 @@
                 </RelativeLayout>
 
                 <TextView
-                    android:id="@+id/add"
-                    android:layout_width="0dp"
+                    android:id="@+id/set_head"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:gravity="center"
                     android:paddingBottom="5dp"
                     android:paddingTop="5dp"
@@ -103,13 +102,13 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textColorHint="#bfbfbf"
                     android:background="@drawable/shape_input"
                     android:hint="@string/hint_name"
                     android:inputType="text"
                     android:paddingBottom="5dp"
                     android:paddingTop="5dp"
                     android:textColor="#1e1e1e"
+                    android:textColorHint="#bfbfbf"
                     android:textSize="14sp" />
             </LinearLayout>
 
@@ -147,6 +146,7 @@
                         android:id="@+id/men"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:checked="true"
                         android:text="@string/boy"
                         android:textColor="#666" />
 
@@ -165,8 +165,10 @@
                 android:background="#dfdddd" />
 
             <LinearLayout
+                android:id="@+id/birthday_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:paddingLeft="10dp">
 
                 <TextView
@@ -183,12 +185,18 @@
 
                 <TextView
                     android:id="@+id/birthday"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="10dp"
                     android:paddingTop="10dp"
-                    android:text="0000年00月00日" />
+                    android:text="1990年01月01日" />
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:src="@mipmap/calendar_black_32" />
             </LinearLayout>
 
             <View
@@ -223,15 +231,15 @@
             </LinearLayout>
 
             <!--<View-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="1px"-->
-                <!--android:background="#dfdddd" />-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="1px"-->
+            <!--android:background="#dfdddd" />-->
 
 
             <!--<View-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="1px"-->
-                <!--android:background="#dfdddd" />-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="1px"-->
+            <!--android:background="#dfdddd" />-->
 
         </LinearLayout>
 

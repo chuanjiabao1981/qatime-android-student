@@ -30,6 +30,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
+import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
@@ -44,22 +45,21 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
+import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import cn.qatime.player.base.BaseFragment;
 import libraryextra.bean.GradeBean;
 import libraryextra.bean.RemedialClassBean;
-import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.KeyBoardUtils;
-import libraryextra.view.MDatePickerDialog;
 import libraryextra.utils.ScreenUtils;
-import libraryextra.utils.LogUtils;
 import libraryextra.utils.StringUtils;
-import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
+import libraryextra.view.MDatePickerDialog;
 
 public class Fragment12 extends BaseFragment implements View.OnClickListener {
 
@@ -141,7 +141,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
             @Override
             public void convert(ViewHolder helper, RemedialClassBean.Data item, int position) {
                 if (item == null) {
-                    LogUtils.e("item數據空");
+                    Logger.e("item數據空");
                     return;
                 }
                 ((ImageView) helper.getView(R.id.image)).setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()) / 2, ScreenUtils.getScreenWidth(getActivity()) / 2 * 5 / 8));
@@ -255,14 +255,16 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
             map.put("sort_by", timesorttype);
         }
 
-        if (!subjecttext.getText().equals(getResources().getString(R.string.by_subject))) {
+        if (!subjecttext.getText().equals(getResources().getString(R.string.by_subject)) && !subjecttext.getText().equals("全部")) {
             try {
                 map.put("subject", URLEncoder.encode(subjecttext.getText().toString(), "UTF-8"));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
         }
-        if (!classtext.getText().equals(getResources().getString(R.string.by_grade))) {
+
+
+        if (!classtext.getText().equals(getResources().getString(R.string.by_grade))&&!classtext.getText().equals("全部")) {
             try {
                 map.put("grade", URLEncoder.encode(classtext.getText().toString(), "UTF-8"));
             } catch (UnsupportedEncodingException e) {
@@ -272,8 +274,8 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
 
         map.put("price_floor", priceLow.getText().toString());
         map.put("price_ceil", priceHigh.getText().toString());
-        map.put("class_date_floor", subjectLow.getText().toString());
-        map.put("class_date_ceil", subjectHigh.getText().toString());
+        map.put("preset_lesson_count_floor", subjectLow.getText().toString());
+        map.put("preset_lesson_count_ceil", subjectHigh.getText().toString());
         map.put("status", status);
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass, map), null,
                 new VolleyListener(getActivity()) {
@@ -401,6 +403,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 popView = View.inflate(getActivity(), R.layout.pop_fragment12, null);
                 listView = (ListView) popView.findViewById(R.id.list);
                 final List<String> subjectList = new ArrayList<>();
+                subjectList.add("全部");
                 subjectList.add("语文");
                 subjectList.add("数学");
                 subjectList.add("英语");
@@ -434,6 +437,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 String gradeString = FileUtil.readFile(getActivity().getCacheDir() + "/grade.txt");
                 if (!StringUtils.isNullOrBlanK(gradeString)) {
                     GradeBean gradeBean = JsonUtils.objectFromJson(gradeString, GradeBean.class);
+                    classList.add("全部");
                     classList.addAll(gradeBean.getData().getGrades());
                 }
 

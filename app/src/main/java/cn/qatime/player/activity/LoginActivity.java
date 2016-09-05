@@ -11,6 +11,12 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.netease.nimlib.sdk.AbortableFuture;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.orhanobut.logger.Logger;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,16 +27,22 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.config.UserPreferences;
+import cn.qatime.player.im.cache.FriendDataCache;
+import cn.qatime.player.im.cache.TeamDataCache;
+import cn.qatime.player.im.cache.UserInfoCache;
+import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.Profile;
 import libraryextra.utils.CheckUtil;
+import libraryextra.utils.DialogUtils;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.SPUtils;
-import libraryextra.utils.LogUtils;
 import libraryextra.utils.StringUtils;
-import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.CheckView;
+import libraryextra.view.CustomProgressDialog;
 
 /**
  * 登陆页
@@ -44,6 +56,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private View checklayout;
     private EditText checkcode;
     private Button login;
+    private CustomProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +70,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         password = (EditText) findViewById(R.id.pass);
         login = (Button) findViewById(R.id.login);
         Button register = (Button) findViewById(R.id.register);
-        View loginerror = findViewById(R.id.login_error);
+        View loginerror = findViewById(R.id.login_error);//忘记密码
         View reload = findViewById(R.id.reload);
 
         login.setOnClickListener(this);
@@ -68,17 +81,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
         if (!StringUtils.isNullOrBlanK(SPUtils.get(LoginActivity.this, "username", ""))) {
             username.setText(SPUtils.get(LoginActivity.this, "username", "").toString());
-//            if (!StringUtils.isNullOrBlanK(SPUtils.get(LoginActivity.this, "password", ""))) {
-//                password.setText(SPUtils.get(LoginActivity.this, "password", "").toString());
-//            }
         }
         String sign = getIntent().getStringExtra("sign");//从系统设置退出登录页面跳转而来，清除用户登录信息
         if (!StringUtils.isNullOrBlanK(sign) && sign.equals("exit_login")) {
-            username.setText("");
+//            username.setText("");
             password.setText("");
         }
-//        username.setText("15617685965@163.com");
-//        password.setText("123456");
     }
 
     @Override
@@ -91,7 +99,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         login();
                     } else {
                         login.setClickable(true);
-                        Toast.makeText(this, "验证码不正确", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getResources().getString(R.string.verification_code_is_incorrect), Toast.LENGTH_SHORT).show();
                         return;
                     }
                 } else {
@@ -101,7 +109,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 break;
             case R.id.register://注册
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, Constant.REGIST);
                 break;
             case R.id.login_error://忘记密码
                 intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
@@ -119,18 +127,22 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private void login() {
 
         if (TextUtils.isEmpty(username.getText().toString())) {
-            Toast.makeText(this, "账号不能为空", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.account_can_not_be_empty), Toast.LENGTH_SHORT).show();
             login.setClickable(true);
             return;
         }
         if (TextUtils.isEmpty(password.getText().toString())) {
-            Toast.makeText(this, "密码不能为空", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.password_can_not_be_empty), Toast.LENGTH_SHORT).show();
             login.setClickable(true);
             return;
         }
+        progress = DialogUtils.startProgressDialog(progress, LoginActivity.this, "登录中...");
+        progress.setCancelable(false);
+        progress.setCanceledOnTouchOutside(false);
+
         Map<String, String> map = new HashMap<>();
-        map.put("login_account", username.getText().toString());
-        map.put("password", password.getText().toString());
+        map.put("login_account", username.getText().toString().trim());
+        map.put("password", password.getText().toString().trim());
         map.put("client_type", "app");
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlLogin, map), null,
                 new VolleyListener(LoginActivity.this) {
@@ -146,27 +158,77 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         try {
                             JSONObject data = response.getJSONObject("data");
                             if (data.has("result")) {
+                                DialogUtils.dismissDialog(progress);
                                 if (data.getString("result") != null && data.getString("result").equals("failed")) {
-                                    Toast.makeText(LoginActivity.this, "账号或密码错误", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginActivity.this, getResources().getString(R.string.account_or_password_error), Toast.LENGTH_SHORT).show();
+                                    DialogUtils.dismissDialog(progress);
                                 }
-                            }else {
-                                LogUtils.e("登录", response.toString());
+                            } else {
+                                Logger.e("登录", response.toString());
                                 SPUtils.put(LoginActivity.this, "username", username.getText().toString());
                                 Profile profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
                                 if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
                                     SPUtils.putObject(LoginActivity.this, "profile", profile);
                                     BaseApplication.setProfile(profile);
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
+
+                                    String account = BaseApplication.getAccount();
+                                    String token = BaseApplication.getAccountToken();
+
+                                    AbortableFuture<LoginInfo> loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, token));
+                                    loginRequest.setCallback(new RequestCallback<LoginInfo>() {
+                                        @Override
+                                        public void onSuccess(LoginInfo o) {
+                                            DialogUtils.dismissDialog(progress);
+                                            Logger.e("云信登录成功" + o.getAccount());
+                                            // 初始化消息提醒
+                                            NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
+
+                                            NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
+                                            //缓存
+                                            UserInfoCache.getInstance().clear();
+                                            TeamDataCache.getInstance().clear();
+                                            //                FriendDataCache.getInstance().clear();
+
+                                            UserInfoCache.getInstance().buildCache();
+                                            TeamDataCache.getInstance().buildCache();
+                                            //好友维护,目前不需要
+                                            //                FriendDataCache.getInstance().buildCache();
+
+                                            UserInfoCache.getInstance().registerObservers(true);
+                                            TeamDataCache.getInstance().registerObservers(true);
+                                            FriendDataCache.getInstance().registerObservers(true);
+
+                                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+
+                                        @Override
+                                        public void onFailed(int code) {
+                                            DialogUtils.dismissDialog(progress);
+                                            BaseApplication.clearToken();
+                                            Logger.e(code + "code");
+                                            if (code == 302 || code == 404) {
+                                                Toast.makeText(LoginActivity.this, R.string.account_or_password_error, Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(LoginActivity.this, "登录失败: " + code, Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onException(Throwable throwable) {
+                                            DialogUtils.dismissDialog(progress);
+                                            Logger.e(throwable.getMessage());
+                                            BaseApplication.clearToken();
+                                        }
+                                    });
                                 } else {
                                     //没有数据或token
                                 }
                             }
                         } catch (JSONException e) {
-
-//                            e.printStackTrace();
-//                            LogUtils.e("error"+e.getMessage());
+                            DialogUtils.dismissDialog(progress);
+                            BaseApplication.clearToken();
                         }
 
 
@@ -174,11 +236,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                     @Override
                     protected void onError(JSONObject response) {
+                        DialogUtils.dismissDialog(progress);
+                        BaseApplication.clearToken();
                         login.setClickable(true);
                     }
                 }, new VolleyErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                DialogUtils.dismissDialog(progress);
+                BaseApplication.clearToken();
+                Toast.makeText(LoginActivity.this, "请检查您的网络或稍后再试", Toast.LENGTH_SHORT).show();
                 super.onErrorResponse(volleyError);
                 login.setClickable(true);
                 password.setText("");
@@ -200,5 +267,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         checkNum = CheckUtil.getCheckNum();
         checkview.setCheckNum(checkNum);
         checkview.invaliChenkNum();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Constant.REGIST) {
+            finish();
+        }
     }
 }

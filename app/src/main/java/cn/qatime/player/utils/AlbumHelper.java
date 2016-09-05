@@ -7,6 +7,8 @@ import android.provider.MediaStore.Audio.Albums;
 import android.provider.MediaStore.Images.Media;
 import android.provider.MediaStore.Images.Thumbnails;
 
+import com.orhanobut.logger.Logger;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,7 +18,6 @@ import java.util.Map.Entry;
 
 import libraryextra.bean.ImageBucket;
 import libraryextra.bean.ImageItem;
-import libraryextra.utils.LogUtils;
 
 /**
  * 专辑帮助类
@@ -233,7 +234,7 @@ public class AlbumHelper {
         }
         hasBuildImagesBucketList = true;
         long endTime = System.currentTimeMillis();
-        LogUtils.e("use time: " + (endTime - startTime) + " ms");
+        Logger.e("use time: " + (endTime - startTime) + " ms");
     }
 
     /**

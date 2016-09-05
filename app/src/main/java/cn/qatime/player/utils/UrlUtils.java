@@ -9,10 +9,10 @@ import libraryextra.utils.StringUtils;
  * url类
  */
 public class UrlUtils {
-    //测试地址
-    public static String baseUrl = "http://testing.qatime.cn/";
-    //正式地址
-//    public static String baseUrl ="http://qatime.cn/";
+    private static boolean isDebug = true;
+    public static String baseUrl = isDebug ? "http://testing.qatime.cn/" : "http://qatime.cn/";
+    //云信key
+    public static String appKey = isDebug ? "95055b08a6ec75ca3b1a0b6b77c6b2ff" : "";
     //登录
     public static String urlLogin = baseUrl + "api/v1/sessions";
     //辅导班
@@ -23,10 +23,20 @@ public class UrlUtils {
     public static String urlPersonalInformation = baseUrl + "api/v1/students/";
     //基础信息
     public static String urlAppconstantInformation = baseUrl + "api/v1/app_constant";
+    //注册
+    public static String urlRegister = baseUrl + "api/v1/user/register";
     //獲取支付
     public static String urlPayPrepare = baseUrl + "api/v1/live_studio/courses/";
     //獲取支付结果
     public static String urlPayResult = baseUrl + "api/v1/payment/orders/";
+    //订单列表
+    public static String urlPaylist = baseUrl + "api/v1/payment/orders";
+    //获取验证码
+    public static String urlGetCode = baseUrl + "api/v1/captcha";
+    //用户信息
+    public static String urlUser = baseUrl + "api/v1/users/";
+    //用户信息
+    public static String urlfindPassword = baseUrl + "api/v1/password";
 
     public static String getUrl(String function, Map<String, String> params) {
         String url;

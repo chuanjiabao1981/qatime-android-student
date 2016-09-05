@@ -45,22 +45,18 @@ public class FragmentRemedialClassDetail3 extends BaseFragment {
                 holder.setText(R.id.number, StringUtils.Int2String(position + 1));
                 holder.setText(R.id.name, item.getName());
                 holder.setText(R.id.live_time, item.getLive_time());
-                if (item.getStatus().equals("teaching")) {
-                    holder.setText(R.id.status, "直播中");
-                }else if (item.getStatus().equals("paused")) {
-                    holder.setText(R.id.status, "直播中");
-                }
-                else if (item.getStatus().equals("init")) {
-                    holder.setText(R.id.status, "未开始");
-                }else if (item.getStatus().equals("ready")) {
-                    holder.setText(R.id.status, "待上课");
-
-                }else if (item.getStatus().equals("paused_inner")) {
-                    holder.setText(R.id.status, "暂停中");
-
-                }
-                else {
-                    holder.setText(R.id.status, "已结束");
+                if (item.getStatus().equals("teaching")) {//直播中
+                    holder.setText(R.id.status, getResources().getString(R.string.class_teaching));
+                } else if (item.getStatus().equals("paused")) {
+                    holder.setText(R.id.status, getResources().getString(R.string.class_teaching));
+                } else if (item.getStatus().equals("init")) {//未开始
+                    holder.setText(R.id.status, getResources().getString(R.string.class_init));
+                } else if (item.getStatus().equals("ready")) {//待开课
+                    holder.setText(R.id.status, getResources().getString(R.string.class_ready));
+                } else if (item.getStatus().equals("paused_inner")) {//暂停中
+                    holder.setText(R.id.status, getResources().getString(R.string.class_teaching));
+                } else {
+                    holder.setText(R.id.status, getResources().getString(R.string.class_over));//已结束
                 }
                 try {
                     holder.setText(R.id.class_date, format.format(parse.parse(item.getClass_date())));

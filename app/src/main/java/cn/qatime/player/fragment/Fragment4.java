@@ -11,17 +11,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.orhanobut.logger.Logger;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.PersonalInformationActivity;
 import cn.qatime.player.activity.PersonalMyOrderActivity;
 import cn.qatime.player.activity.PersonalMyTutorshipActivity;
+import cn.qatime.player.activity.SecurityManagerActivity;
 import cn.qatime.player.activity.SystemSettingActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
-import libraryextra.transformation.GlideCircleTransform;
 import cn.qatime.player.utils.Constant;
-import libraryextra.utils.LogUtils;
+import libraryextra.transformation.GlideCircleTransform;
 
 public class Fragment4 extends BaseFragment implements View.OnClickListener {
     private LinearLayout information;
@@ -47,7 +48,7 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment4, container, false);
         assignViews(view);
 
-        if (BaseApplication.getProfile().getData()!=null&&BaseApplication.getProfile().getData().getUser()!=null) {
+        if (BaseApplication.getProfile().getData() != null && BaseApplication.getProfile().getData().getUser() != null) {
             Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getSmall_avatar_url()).placeholder(R.mipmap.personal_information_head).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
         }
         name.setText(BaseApplication.getProfile().getData().getUser().getName());
@@ -73,7 +74,7 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.modify:
                 Intent intent = new Intent(getActivity(), PersonalInformationActivity.class);
-                startActivityForResult(intent,Constant.REQUEST);
+                startActivityForResult(intent, Constant.REQUEST);
                 break;
             case R.id.paying:
                 intent = new Intent(getActivity(), PersonalMyOrderActivity.class);
@@ -116,10 +117,12 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.security:// 安全管理
+                intent = new Intent(getActivity(), SecurityManagerActivity.class);
+                getActivity().startActivityForResult(intent, Constant.REQUEST_EXIT_LOGIN);
                 break;
             case R.id.setting:// 设置
                 intent = new Intent(getActivity(), SystemSettingActivity.class);
-                getActivity().startActivityForResult(intent, Constant.REQUEST_EXIT_LOGIN);
+                getActivity().startActivity(intent);
                 break;
         }
     }
@@ -127,9 +130,10 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        LogUtils.e("图片返回");
+        Logger.e("图片返回");
         if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
             Glide.with(getActivity()).load(data.getStringExtra("url")).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
+            name.setText(BaseApplication.getProfile().getData().getUser().getName());
         }
     }
 

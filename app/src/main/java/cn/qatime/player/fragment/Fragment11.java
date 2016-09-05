@@ -58,6 +58,8 @@ public class Fragment11 extends BaseFragment {
 
     private void initview(View view) {
         grid = (PullToRefreshGridView) view.findViewById(R.id.grid);
+//        View empty = LayoutInflater.from(getActivity()).inflate(R.layout.empty_view, null);
+//        grid.getRefreshableView().setEmptyView(empty);
         grid.setMode(PullToRefreshBase.Mode.BOTH);
         grid.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
         grid.getLoadingLayoutProxy(false, true).setPullLabel(getResources().getString(R.string.pull_to_load));

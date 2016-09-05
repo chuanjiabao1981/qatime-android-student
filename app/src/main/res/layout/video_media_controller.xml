@@ -44,8 +44,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:textColor="#fff"
-                android:text="高清" />
+                android:text="@string/hd"
+                android:textColor="#fff" />
         </LinearLayout>
 
         <TextView
@@ -83,13 +83,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="高清" />
+            android:text="@string/hd" />
 
         <RadioButton
             android:id="@+id/radio2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="普清" />
+            android:text="@string/pd" />
+        <!--普清（PDTV）、标清（SDTV）、高清（HDTV）-->
     </RadioGroup>
 
     <LinearLayout
@@ -112,7 +113,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="观看模式" />
+                android:text="@string/viewing_mode" />
 
             <SeekBar
                 android:id="@+id/brightness"
@@ -132,7 +133,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="弹幕透明" />
+                android:text="@string/barrage_transparent" />
 
             <SeekBar
                 android:id="@+id/barrage_transparent"
@@ -150,7 +151,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="弹幕大小" />
+                android:text="@string/barrage_size" />
 
             <SeekBar
                 android:id="@+id/barrage_size"
@@ -168,7 +169,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="弹幕速度" />
+                android:text="@string/barrage_speed" />
 
             <SeekBar
                 android:id="@+id/barrage_speed"
@@ -185,7 +186,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="弹幕位置" />
+                android:text="@string/barrage_position" />
 
             <RadioGroup
                 android:layout_width="wrap_content"
@@ -195,17 +196,17 @@
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="上方" />
+                    android:text="@string/position_top" />
 
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="下方" />
+                    android:text="@string/position_bottom" />
 
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="全屏" />
+                    android:text="@string/full_screen" />
             </RadioGroup>
         </LinearLayout>
     </LinearLayout>
@@ -234,9 +235,9 @@
                 android:id="@+id/comment_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
                 android:orientation="horizontal"
                 android:visibility="gone">
 
@@ -244,42 +245,47 @@
                     android:id="@+id/refresh"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:src="@mipmap/refresh" />
 
                 <EditText
                     android:id="@+id/comment"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp"
                     android:layout_weight="4"
                     android:background="@drawable/shape_input"
-                    android:hint="评论内容"
+                    android:hint="@string/comment_content"
                     android:imeOptions="flagNoExtractUi" />
 
                 <Button
                     android:id="@+id/commit"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/button_bg_selector_gray"
-                    android:text="发送" />
+                    android:text="@string/send" />
 
                 <TextView
                     android:id="@+id/barrage"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginRight="5dp"
                     android:gravity="center"
-                    android:textColor="#fff"
-                    android:text="打开弹幕" />
+                    android:text="@string/barrage_open"
+                    android:textColor="#fff" />
 
                 <ImageView
                     android:id="@+id/barrage_setting"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="5dp"
-                    android:src="@mipmap/setting" />
+                    android:src="@mipmap/setting"
+                    android:visibility="gone" />
 
             </LinearLayout>
 
@@ -303,8 +309,5 @@
                     android:src="@mipmap/nemediacontroller_scale01" />
             </LinearLayout>
         </RelativeLayout>
-
-
     </LinearLayout>
-
 </FrameLayout>

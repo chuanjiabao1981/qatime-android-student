@@ -9,6 +9,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import cn.qatime.player.R;
+import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.fragment.FragmentPersonalMyOrder1;
 import cn.qatime.player.fragment.FragmentPersonalMyOrder2;
@@ -50,6 +51,7 @@ public class PersonalMyOrderActivity extends BaseFragmentActivity {
             public void change(int lastPosition, int positon, View lastTabView, View currentTabView) {
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff858585);
                 ((TextView) currentTabView.findViewById(tab_text[positon])).setTextColor(0xff222222);
+                ((BaseFragment) fragBaseFragments.get(positon)).onShow();
             }
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_personal_my_order, 0x0311);

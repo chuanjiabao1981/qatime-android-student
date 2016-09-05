@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
@@ -30,17 +31,16 @@ import cn.qatime.player.R;
 import cn.qatime.player.activity.NEVideoPlayerActivity;
 import cn.qatime.player.activity.OrderConfirmActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
-import libraryextra.adapter.CommonAdapter;
-import libraryextra.adapter.ViewHolder;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
+import libraryextra.adapter.CommonAdapter;
+import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.OrderPayBean;
 import libraryextra.bean.TutorialClassBean;
-import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.LogUtils;
 import libraryextra.utils.StringUtils;
-import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -87,6 +87,8 @@ public class FragmentPersonalMyTutorship3 extends BaseFragment {
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
                         intent.putExtra("url", item.getPull_address());
+                        intent.putExtra("id",item.getId());
+                        intent.putExtra("sessionId",item.getChat_team_id());
                         startActivity(intent);
                     }
                 });
@@ -103,7 +105,7 @@ public class FragmentPersonalMyTutorship3 extends BaseFragment {
                         bean.subject = item.getSubject();
                         bean.grade = item.getGrade();
                         bean.classnumber = item.getPreset_lesson_count();
-                        bean.teacher = item.getTeacher().getName();
+                        bean.teacher = item.getTeacher_name();
                         bean.classendtime = item.getLive_end_time();
                         bean.status = item.getStatus();
                         bean.classstarttime = item.getLive_start_time();
@@ -204,7 +206,7 @@ public class FragmentPersonalMyTutorship3 extends BaseFragment {
                     @Override
                     protected void onSuccess(JSONObject response) {
                         isLoad = true;
-                        LogUtils.e(response.toString());
+                        Logger.e(response.toString());
                         if (type == 1) {
                             list.clear();
                         }

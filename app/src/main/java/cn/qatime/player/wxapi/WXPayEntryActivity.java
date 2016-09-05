@@ -57,7 +57,7 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pay_result);
-        setTitle("支付结果");
+        setTitle(getResources().getString(R.string.payment_result));
         assignViews();
 
         api = WXAPIFactory.createWXAPI(this, Constant.APP_ID);
@@ -143,7 +143,7 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
                                     } else {
                                         loading.setVisibility(View.GONE);
                                         image.setImageResource(R.mipmap.pay_faild);
-                                        WXPayEntryActivity.this.status.setText("支付失败");
+                                        WXPayEntryActivity.this.status.setText(getResources().getString(R.string.pay_failure));
                                         faildLayout.setVisibility(View.VISIBLE);
                                         successLayout.setVisibility(View.GONE);
                                     }
@@ -154,14 +154,14 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
                                     //  支付成功
                                     loading.setVisibility(View.GONE);
                                     image.setImageResource(R.mipmap.pay_success);
-                                    WXPayEntryActivity.this.status.setText("支付成功");
+                                    WXPayEntryActivity.this.status.setText(getResources().getString(R.string.pay_success));
                                     faildLayout.setVisibility(View.GONE);
                                     successLayout.setVisibility(View.VISIBLE);
                                     break;
                                 default:
                                     loading.setVisibility(View.GONE);
                                     image.setImageResource(R.mipmap.pay_faild);
-                                    WXPayEntryActivity.this.status.setText("支付失败");
+                                    WXPayEntryActivity.this.status.setText(getResources().getString(R.string.pay_failure));
                                     faildLayout.setVisibility(View.VISIBLE);
                                     successLayout.setVisibility(View.GONE);
                                     break;
@@ -175,7 +175,7 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
                     protected void onError(JSONObject response) {
                         loading.setVisibility(View.GONE);
                         image.setImageResource(R.mipmap.pay_faild);
-                        WXPayEntryActivity.this.status.setText("支付失败");
+                        WXPayEntryActivity.this.status.setText(getResources().getString(R.string.pay_failure));
                         faildLayout.setVisibility(View.VISIBLE);
                         successLayout.setVisibility(View.GONE);
                     }
@@ -190,7 +190,7 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
                 super.onErrorResponse(volleyError);
                 loading.setVisibility(View.GONE);
                 image.setImageResource(R.mipmap.pay_faild);
-                WXPayEntryActivity.this.status.setText("支付失败");
+                WXPayEntryActivity.this.status.setText(getResources().getString(R.string.pay_failure));
                 faildLayout.setVisibility(View.VISIBLE);
                 successLayout.setVisibility(View.GONE);
             }

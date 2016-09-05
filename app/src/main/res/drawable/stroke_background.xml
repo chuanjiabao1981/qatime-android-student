@@ -4,9 +4,14 @@
     //背景色
 
     <stroke
-        android:width="1dp"
+        android:width="1px"
         android:color="#aaaaaa" />
     //边框宽度//边框颜色
+    <padding
+        android:bottom="1dp"
+        android:left="1dp"
+        android:right="1dp"
+        android:top="1dp" />
 
 
 </shape>

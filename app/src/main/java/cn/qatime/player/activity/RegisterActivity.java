@@ -6,18 +6,41 @@ import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.orhanobut.logger.Logger;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
+import libraryextra.bean.Profile;
+import libraryextra.utils.StringUtils;
+import libraryextra.utils.VolleyListener;
 
 public class RegisterActivity extends BaseActivity implements View.OnClickListener {
     EditText phone;
     EditText code;
+    EditText registercode;
     Button getcode;
     EditText password;
     EditText repassword;
     CheckBox checkBox;
+    TextView agreement;
     Button next;
     private TimeCount time;
 
@@ -36,22 +59,74 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         getcode = (Button) findViewById(R.id.get_code);
         password = (EditText) findViewById(R.id.password);
         repassword = (EditText) findViewById(R.id.repassword);
+        registercode = (EditText) findViewById(R.id.register_code);
         checkBox = (CheckBox) findViewById(R.id.checkBox);
         next = (Button) findViewById(R.id.next);
+        agreement = (TextView) findViewById(R.id.agreement);
+
+        phone.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_phone_number)));
+        code.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_input_verification_code)));
+        password.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_input_password)));
+        repassword.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_confirm_password)));
+        registercode.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_qatime_register_code)));
+
         getcode.setOnClickListener(this);
         next.setOnClickListener(this);
+        agreement.setOnClickListener(this);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                next.setEnabled(isChecked);
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.get_code:
-                time.start();
+                if (StringUtils.isPhone(phone.getText().toString().trim())) {
+                    time.start();
+//                    发送验证码
+                    Map<String, String> map = new HashMap<>();
+
+                    map.put("send_to", phone.getText().toString().trim());
+                    map.put("key", "register_captcha");
+                    DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlGetCode, map), null, new VolleyListener(this) {
+                        @Override
+                        protected void onTokenOut() {
+
+                        }
+
+                        @Override
+                        protected void onSuccess(JSONObject response) {
+                            Toast.makeText(RegisterActivity.this, "验证码发送成功", Toast.LENGTH_SHORT).show();
+                            Logger.e("验证码发送成功" + phone.getText().toString().trim() + "---" + response.toString());
+                        }
+
+                        @Override
+                        protected void onError(JSONObject response) {
+                            Toast.makeText(RegisterActivity.this, "验证码发送失败", Toast.LENGTH_SHORT).show();
+                        }
+
+
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+                            Toast.makeText(getApplicationContext(), "服务器异常，请检查网络", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    addToRequestQueue(request);
+
+                } else {
+                    Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.next:
-                Intent intent=new Intent(RegisterActivity.this,RegisterPerfectActivity.class);
-                startActivity(intent);
-
+                next();
+                break;
+            case R.id.agreement:
+                //// TODO: 2016/8/24 点击协议查看
                 break;
         }
     }
@@ -63,7 +138,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
         @Override
         public void onFinish() {// 计时完毕
-            getcode.setText("获取验证码");
+            getcode.setText(getResources().getString(R.string.get_verification_code));
             getcode.setEnabled(true);
         }
 
@@ -73,4 +148,141 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             getcode.setText(millisUntilFinished / 1000 + "s");
         }
     }
+
+    private void next() {
+
+        if (StringUtils.isNullOrBlanK(phone.getText().toString().trim())) {//账号为空
+            Toast.makeText(this, getResources().getString(R.string.account_can_not_be_empty), Toast.LENGTH_SHORT).show();
+            next.setClickable(true);
+            return;
+        }
+
+        if (!StringUtils.isPhone(phone.getText().toString().trim())) {//手机号不正确
+            Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
+            next.setClickable(true);
+            return;
+        }
+        if (!StringUtils.isGoodPWD(password.getText().toString().trim())) {
+            Toast.makeText(this, getResources().getString(R.string.password_6_16), Toast.LENGTH_LONG).show();
+            next.setClickable(true);
+            return;
+        }
+        if (StringUtils.isNullOrBlanK(repassword.getText().toString().trim())) {  //确认密码为空
+            Toast.makeText(this, getResources().getString(R.string.repassword_can_not_be_empty), Toast.LENGTH_LONG).show();
+            next.setClickable(true);
+            return;
+        }
+        if (!password.getText().toString().trim().equals(repassword.getText().toString().trim())) {//前后不一致
+            Toast.makeText(this, getResources().getString(R.string.password_and_repassword_are_incongruous), Toast.LENGTH_SHORT).show();
+            next.setClickable(true);
+            return;
+        }
+        if (StringUtils.isNullOrBlanK(code.getText().toString().trim())) { //验证码
+            Toast.makeText(this, getResources().getString(R.string.enter_the_verification_code), Toast.LENGTH_SHORT).show();
+            next.setClickable(true);
+            return;
+        }
+        if (StringUtils.isNullOrBlanK(registercode.getText().toString().trim())) {   //注册码
+            Toast.makeText(this, getResources().getString(R.string.enter_the_register_code), Toast.LENGTH_SHORT).show();
+            next.setClickable(true);
+            return;
+        }
+        if (!checkBox.isChecked()) {   //协议勾选
+            Toast.makeText(this, getResources().getString(R.string.agree_agreement), Toast.LENGTH_SHORT).show();
+            next.setClickable(true);
+            return;
+        }
+
+        Map<String, String> map = new HashMap<>();
+        map.put("login_mobile", phone.getText().toString().trim());
+        map.put("captcha_confirmation", code.getText().toString().trim());
+        map.put("password", password.getText().toString().trim());
+        map.put("password_confirmation", repassword.getText().toString().trim());//确认密码
+        map.put("accept", "" + (checkBox.isChecked() ? 1 : 0));
+        map.put("type", "Student");
+        map.put("client_type", "app");
+        map.put("register_code_value", registercode.getText().toString().trim());//注册码
+
+
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlRegister, map), null, new VolleyListener(this) {
+            @Override
+            protected void onTokenOut() {
+
+            }
+
+            @Override
+            protected void onSuccess(JSONObject response) {
+
+                try {
+                    String token = response.getJSONObject("data").getString("remember_token");
+                    int id = response.getJSONObject("data").getJSONObject("user").getInt("id");
+
+
+                    Toast.makeText(RegisterActivity.this, "请设置个人信息", Toast.LENGTH_SHORT).show();
+                    Logger.e("注册成功" + response);
+                    //下一步跳转
+                    Profile profile = new Profile();
+                    Profile.Data data = new Profile().new Data();
+                    data.setRemember_token(token);
+                    Profile.User user = new Profile().new User();
+                    user.setId(id);
+                    data.setUser(user);
+                    profile.setData(data);
+                    BaseApplication.setProfile(profile);
+                    Intent intent = new Intent(RegisterActivity.this, RegisterPerfectActivity.class);
+                    intent.putExtra("username", phone.getText().toString().trim());
+                    intent.putExtra("password", password.getText().toString().trim());
+                    startActivityForResult(intent, Constant.REGIST);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            protected void onError(JSONObject response) {
+
+                String result = "";
+                try {
+                    result = response.getJSONObject("error").getString("msg");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Logger.e("注册失败--" + result);
+                if(result.contains("已经被使用")){
+                    Toast.makeText(RegisterActivity.this,"手机号已经被注册", Toast.LENGTH_SHORT).show();
+                }else if(result.contains("与确认值不匹配")){
+                    Toast.makeText(RegisterActivity.this,"验证码错误", Toast.LENGTH_SHORT).show();
+                }else if(result.contains("注册码")){
+                    Toast.makeText(RegisterActivity.this,"注册码不正确", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(RegisterActivity.this,"注册失败", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Toast.makeText(getApplicationContext(), "服务器异常，请检查网络", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        addToRequestQueue(request);
+//下一步跳转
+//        Intent intent = new Intent(RegisterActivity.this, RegisterPerfectActivity.class);
+//        startActivity(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constant.REGIST) {
+            setResult(resultCode);
+            finish();
+        }
+    }
 }
+
+

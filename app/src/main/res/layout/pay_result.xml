@@ -197,7 +197,7 @@
                 android:layout_below="@id/load"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="15dp"
-                android:text="正在查询支付结果"
+                android:text="@string/payment_results_are_being_queried"
                 android:textColor="@color/orange_bg" />
         </RelativeLayout>
     </RelativeLayout>

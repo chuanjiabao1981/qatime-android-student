@@ -22,30 +22,31 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.orhanobut.logger.Logger;
 
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.UpLoadUtil;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.GradeBean;
 import libraryextra.bean.ImageItem;
 import libraryextra.bean.PersonalInformationBean;
-import libraryextra.bean.SchoolBean;
 import libraryextra.transformation.GlideCircleTransform;
-import cn.qatime.player.utils.Constant;
 import libraryextra.utils.DialogUtils;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
-import libraryextra.view.MDatePickerDialog;
-import libraryextra.utils.LogUtils;
 import libraryextra.utils.StringUtils;
-import cn.qatime.player.utils.UpLoadUtil;
-import cn.qatime.player.utils.UrlUtils;
 import libraryextra.view.CustomProgressDialog;
+import libraryextra.view.MDatePickerDialog;
 
 public class PersonalInformationChangeActivity extends BaseActivity implements View.OnClickListener {
     ImageView headsculpture;
@@ -64,7 +65,6 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
     private String imageUrl = "";
     private String select = "";//生日所选日期
-    private SchoolBean schoolBean;
     private GradeBean gradeBean;
     private CustomProgressDialog progress;
 
@@ -94,7 +94,6 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         if (data != null && data.getData() != null) {
             initData(data);
         }
-
     }
 
     private void initData(PersonalInformationBean data) {
@@ -130,10 +129,6 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 }
             }
         }
-//            if (!StringUtils.isNullOrBlanK(data.getData().getProvince()) && !StringUtils.isNullOrBlanK(data.getData().getCity())) {
-//                region.setText(data.getData().getProvince() + " " + data.getData().getCity());
-//            }
-//                            school
         describe.setText(data.getData().getDesc());
     }
 
@@ -146,11 +141,9 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 startActivityForResult(intent, Constant.REQUEST_PICTURE_SELECT);
                 break;
             case R.id.birthday://生日
-
-                MDatePickerDialog dataDialog = null;
-
                 try {
-                    dataDialog = new MDatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+
+                    MDatePickerDialog dataDialog = new MDatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
@@ -162,13 +155,14 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                             }
                         }
                     }, parse.parse(select).getYear() + 1900, parse.parse(select).getMonth() + 1, parse.parse(select).getDay());
+                    dataDialog.show();
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                dataDialog.show();
                 break;
             case R.id.complete://完成
-                UpLoadUtil util = new UpLoadUtil(PersonalInformationChangeActivity.this) {
+                String url = UrlUtils.urlPersonalInformation + BaseApplication.getUserId();
+                UpLoadUtil util = new UpLoadUtil(url) {
                     @Override
                     public void httpStart() {
                         progress = DialogUtils.startProgressDialog(progress, PersonalInformationChangeActivity.this);
@@ -182,35 +176,45 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                         data.putExtra("data", result);
                         setResult(Constant.RESPONSE, data);
                         DialogUtils.dismissDialog(progress);
-                        Toast.makeText(PersonalInformationChangeActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PersonalInformationChangeActivity.this, getResources().getString(R.string.change_information_successful), Toast.LENGTH_SHORT).show();
                         finish();
                     }
 
                     @Override
                     protected void httpFailed(String result) {
-
+                        // TODO: 2016/8/26 ERROR 处理
+                        Toast.makeText(PersonalInformationChangeActivity.this, "服务器异常", Toast.LENGTH_SHORT).show();
+                        DialogUtils.dismissDialog(progress);
                     }
                 };
-                String url = UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/update";
-                String filePath = imageUrl;
+
                 if (StringUtils.isNullOrBlanK(BaseApplication.getUserId())) {
-                    Toast.makeText(PersonalInformationChangeActivity.this, "id为空", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PersonalInformationChangeActivity.this, getResources().getString(R.string.id_is_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 String sName = name.getText().toString();
                 if (StringUtils.isNullOrBlanK(sName)) {
-                    Toast.makeText(this, "名字不能为空", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getResources().getString(R.string.name_can_not_be_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 String grade = gradeBean.getData().getGrades().get(spinner.getSelectedItemPosition());
                 if (StringUtils.isNullOrBlanK(grade)) {
-                    Toast.makeText(this, "年级不能为空", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getResources().getString(R.string.grade_can_not_be_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 String gender = radiogroup.getCheckedRadioButtonId() == men.getId() ? "male" : "female";
                 String birthday = select.equals(parse.format(new Date())) ? "" : select;
                 String desc = describe.getText().toString();
-                util.execute(url, filePath, sName, grade, gender, birthday, desc);
+                Map<String, String> map = new HashMap<>();
+
+                map.put("name", sName);
+                map.put("grade", grade);
+                map.put("avatar", imageUrl);
+                map.put("gender", gender);
+                map.put("birthday", birthday);
+                map.put("desc", desc);
+                Logger.e("--" + sName + "--" + grade + "--" + imageUrl + "--" + gender + "--" + birthday + "--" + desc + "--");
+                util.execute(map);
                 break;
         }
     }
@@ -222,7 +226,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         name.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                return (event.getKeyCode()== KeyEvent.KEYCODE_ENTER);
+                return (event.getKeyCode() == KeyEvent.KEYCODE_ENTER);
             }
         });
         men = (RadioButton) findViewById(R.id.men);
@@ -265,12 +269,12 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
 
             }
         } else if (resultCode == Constant.PHOTO_CROP) {
-            LogUtils.e("裁剪", "回来");
+            Logger.e("裁剪", "回来");
             if (data != null) {
                 imageUrl = data.getStringExtra("bitmap");
-                LogUtils.e(imageUrl);
+                Logger.e(imageUrl);
                 if (new File(imageUrl).exists()) {
-                    LogUtils.e("回来成功");
+                    Logger.e("回来成功");
                 }
                 if (!StringUtils.isNullOrBlanK(imageUrl)) {
                     Glide.with(this).load(Uri.fromFile(new File(imageUrl))).transform(new GlideCircleTransform(this)).crossFade().into(headsculpture);

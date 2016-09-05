@@ -15,6 +15,7 @@ import com.android.volley.toolbox.Volley;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.LoginActivity;
+import cn.qatime.player.activity.MainActivity;
 import libraryextra.utils.StringUtils;
 
 /**
@@ -66,14 +67,13 @@ public class BaseActivity extends AppCompatActivity {
      * 设备已在其他地方登陆
      */
     public void tokenOut() {
-        if (BaseApplication.getProfile() != null && BaseApplication.getProfile().getData() != null && BaseApplication.getProfile().getData() != null) {
-            BaseApplication.getProfile().getData().setRemember_token("");
-        }
-        Dialog dialog = new Dialog(this, R.style.Transparent);
+        BaseApplication.clearToken();
+        final Dialog dialog = new Dialog(this, R.style.Transparent);
         View view = View.inflate(this, R.layout.activity_out_alertdialog, null);
         view.findViewById(R.id.alert_dialog_confirm).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dialog.dismiss();
                 out();
             }
         });
@@ -89,9 +89,9 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void out() {
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-        this.finish();
+//        this.finish();
     }
 
     public <T> Request<T> addToRequestQueue(Request<T> request) {
