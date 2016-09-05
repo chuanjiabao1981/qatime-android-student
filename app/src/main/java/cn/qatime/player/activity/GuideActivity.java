@@ -21,7 +21,7 @@ public class GuideActivity extends BaseActivity {
     private TagViewPager viewPager;
     private int width;
     private int height;
-    private int imageIds[] = {R.mipmap.index1, R.mipmap.index2};
+    private int imageIds[] = {R.mipmap.index1, R.mipmap.index2,R.mipmap.index3};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -44,7 +44,7 @@ import libraryextra.view.SimpleViewPagerIndicator;
 public class RemedialClassDetailActivity extends BaseFragmentActivity implements View.OnClickListener {
     ImageView image;
     private int id;
-    private String[] mTitles = new String[]{"信息详情", "教师详情", "课程列表"};
+    private String[] mTitles = new String[]{"辅导概况", "教师资料", "课程列表"};
     private SimpleViewPagerIndicator mIndicator;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
     private Button audition;
@@ -154,7 +154,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                             name.setText(data.getData().getName());
                             title.setText(data.getData().getName());
                             RemedialClassDetailActivity.this.price.setText("￥" + price);
-                            studentnumber.setText("报名人数 " + data.getData().getBuy_tickets_count());
+                            studentnumber.setText("已购人数 " + data.getData().getBuy_tickets_count());
                         }
                         if (data != null) {
                             ((FragmentRemedialClassDetail1) fragBaseFragments.get(0)).setData(data);
