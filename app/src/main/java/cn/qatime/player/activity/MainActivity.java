@@ -86,7 +86,7 @@ public class MainActivity extends BaseFragmentActivity {
         //        GetGradeslist();
 //        GetProvinceslist();
 //        GetCitieslist();
-//        GetSchoolslist();
+        GetSchoolslist();
 
 
 //        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);

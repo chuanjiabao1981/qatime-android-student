@@ -266,4 +266,5 @@
     <string name="dealing">正在交易</string>
 
     <string name="team_send_message_not_allow">您已不在该群，不能发送消息</string>
+    <string name="team_not_exist">该群不存在</string>
 </resources>

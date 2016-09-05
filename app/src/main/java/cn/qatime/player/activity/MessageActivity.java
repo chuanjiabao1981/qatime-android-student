@@ -24,6 +24,7 @@ import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.MessageReceipt;
@@ -261,7 +262,6 @@ public class MessageActivity extends BaseActivity {
      * @param messages
      */
     private void onMessageLoaded(List<IMMessage> messages) {
-
         if (remote) {
             Collections.reverse(messages);
         }
@@ -283,7 +283,9 @@ public class MessageActivity extends BaseActivity {
 
         List<IMMessage> result = new ArrayList<>();
         for (IMMessage message : messages) {
-            result.add(message);
+            if (message.getMsgType() == MsgTypeEnum.text) {
+                result.add(message);
+            }
         }
         if (direction == QueryDirectionEnum.QUERY_NEW) {
             items.addAll(result);
@@ -313,7 +315,7 @@ public class MessageActivity extends BaseActivity {
             boolean needRefresh = false;
             List<IMMessage> addedListItems = new ArrayList<>(messages.size());
             for (IMMessage message : messages) {
-                if (isMyMessage(message)) {
+                if (isMyMessage(message) && message.getMsgType() == MsgTypeEnum.text) {
                     items.add(message);
                     addedListItems.add(message);
                     needRefresh = true;

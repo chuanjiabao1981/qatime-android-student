@@ -190,6 +190,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
                                 if (data.getData() != null && data.getData().getChat_team() != null && data.getData().getChat_team().getAccounts() != null) {
                                     ((FragmentNEVideoPlayer4) fragBaseFragments.get(3)).setData(data.getData().getChat_team().getAccounts());
                                 }
+                                ((FragmentNEVideoPlayer1)fragBaseFragments.get(0)).setTeamId(data.getData().getChat_team_id());
                             }
                         }
 
@@ -216,14 +217,12 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
 
     @Override
     protected void onResume() {
-        Logger.e(TAG, "NEVideoPlayerActivity onResume");
         if (videoPlayer.isPauseInBackgroud() && !videoPlayer.isPaused()) {
             videoPlayer.start(); //锁屏打开后恢复播放
         }
         super.onResume();
 
         fragment2.registerObservers(true);
-//        fragment2.requestTeamInfo();
         NIMClient.getService(MsgService.class).setChattingAccount(sessionId, sessionType);
     }
 

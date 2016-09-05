@@ -24,6 +24,23 @@ public class FragmentNEVideoPlayer4 extends BaseFragment {
     private ListView listView;
     private List<RemedialClassDetailBean.Accounts> list = new ArrayList<>();
     private FragmentNEVideoPlayerAdapter4 adapter;
+    private Handler hd = new Handler();
+    private boolean hasLoad = false;
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            if (hasLoad) {
+                if (adapter != null) {
+                    adapter.notifyDataSetChanged();
+                    hd.removeCallbacks(this);
+                } else {
+                    hd.postDelayed(this, 200);
+                }
+            } else {
+                hd.postDelayed(this, 200);
+            }
+        }
+    };
 
     @Nullable
     @Override
@@ -66,6 +83,7 @@ public class FragmentNEVideoPlayer4 extends BaseFragment {
                 }
             }
         });
+        hasLoad = true;
         return view;
     }
 
@@ -86,14 +104,7 @@ public class FragmentNEVideoPlayer4 extends BaseFragment {
                     return lhs.getFirstLetter().compareTo(rhs.getFirstLetter());
                 }
             });
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (adapter != null) {
-                        adapter.notifyDataSetChanged();
-                    }
-                }
-            }, 1000);
+            hd.postDelayed(runnable, 200);
         }
     }
 }
