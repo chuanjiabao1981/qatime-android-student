@@ -232,9 +232,9 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
 
                         try {
                             MyOrderBean data = JsonUtils.objectFromJson(response.toString(), MyOrderBean.class);
-                            if (data != null) {
+                            if (data != null & data.getData() != null) {
                                 list.addAll(data.getData());
-                                }
+                            }
                             adapter.notifyDataSetChanged();
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
