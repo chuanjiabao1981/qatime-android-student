@@ -4,11 +4,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.DateUtils;
 import android.view.View;
-import android.view.ViewStructure;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,20 +25,17 @@ import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
-import com.netease.nimlib.sdk.msg.model.MessageReceipt;
 import com.netease.nimlib.sdk.msg.model.QueryDirectionEnum;
 import com.netease.nimlib.sdk.team.constant.TeamTypeEnum;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
-import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.orhanobut.logger.Logger;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.AbstractSequentialList;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.List;
 
 import cn.qatime.player.R;
@@ -49,6 +44,9 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.FriendDataCache;
 import cn.qatime.player.im.cache.TeamDataCache;
+import cn.qatime.player.utils.ExpressionUtil;
+import cn.qatime.player.view.BiaoQingView;
+import cn.qatime.player.view.GifDrawable;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.transformation.GlideCircleTransform;
@@ -79,6 +77,9 @@ public class MessageActivity extends BaseActivity {
     private Team team;
     private Button send;
     private TextView tipText;
+    private ImageView emoji;
+    private EditText content;
+    Hashtable<Integer, GifDrawable> cache = new Hashtable<Integer, GifDrawable>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +95,7 @@ public class MessageActivity extends BaseActivity {
     private void initView() {
         tipText = (TextView) findViewById(R.id.tip);
         listView = (PullToRefreshListView) findViewById(R.id.list);
+
         listView.getRefreshableView().setDividerHeight(0);
         listView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
@@ -105,27 +107,43 @@ public class MessageActivity extends BaseActivity {
 
         adapter = new CommonAdapter<IMMessage>(this, items, R.layout.item_message) {
             @Override
-            public void convert(ViewHolder holder, IMMessage item, int position) {
+            public void convert(final ViewHolder holder, IMMessage item, int position) {
 
                 if (item.getFromAccount().equals(BaseApplication.getAccount())) {
                     holder.getView(R.id.right).setVisibility(View.VISIBLE);
                     holder.getView(R.id.left).setVisibility(View.GONE);
                     Glide.with(MessageActivity.this).load(BaseApplication.getProfile().getData().getUser().getChat_account().getIcon()).crossFade().dontAnimate().transform(new GlideCircleTransform(MessageActivity.this)).into((ImageView) holder.getView(R.id.my_head));
                     holder.setText(R.id.my_time, getTime(item.getTime()));
-                    holder.setText(R.id.my_content, item.getContent());
+                    ((TextView) holder.getView(R.id.my_content)).setText(ExpressionUtil.getExpressionString(
+                            MessageActivity.this, item.getContent(), ExpressionUtil.emoji, cache, new GifDrawable.UpdateListener() {
+                                @Override
+                                public void update() {
+                                    ((TextView) holder.getView(R.id.my_content)).postInvalidate();
+                                }
+                            }));
+//                    ((TextView) holder.getView(R.id.my_content)).setText(ExpressionUtil.getExpressionString(MessageActivity.this,
+//                            item.getContent(), ExpressionUtil.emoji));
                 } else {
                     holder.getView(R.id.right).setVisibility(View.GONE);
                     holder.getView(R.id.left).setVisibility(View.VISIBLE);
                     Glide.with(MessageActivity.this).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_32).crossFade().dontAnimate().transform(new GlideCircleTransform(MessageActivity.this)).into((ImageView) holder.getView(R.id.other_head));
                     holder.setText(R.id.other_name, item.getFromNick());
-                    holder.setText(R.id.other_content, item.getContent());
+                    ((TextView) holder.getView(R.id.other_content)).setText(ExpressionUtil.getExpressionString(
+                            MessageActivity.this, item.getContent(), ExpressionUtil.emoji, cache, new GifDrawable.UpdateListener() {
+                                @Override
+                                public void update() {
+                                    ((TextView) holder.getView(R.id.other_content)).postInvalidate();
+                                }
+                            }));
                     holder.setText(R.id.other_time, getTime(item.getTime()));
                 }
 
             }
         };
         listView.setAdapter(adapter);
-        final EditText content = (EditText) findViewById(R.id.content);
+        content = (EditText) findViewById(R.id.content);
+        emoji = (ImageView) findViewById(R.id.emoji);
+
         send = (Button) findViewById(R.id.send);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,7 +186,10 @@ public class MessageActivity extends BaseActivity {
             }
         });
         loadMessage(false);
+        BiaoQingView bq = (BiaoQingView) findViewById(R.id.biaoQingView);
+        bq.init(content, emoji);
     }
+
 
     /**
      * 将long值转换为时间

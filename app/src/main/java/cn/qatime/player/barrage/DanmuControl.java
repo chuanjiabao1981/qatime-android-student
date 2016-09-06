@@ -23,6 +23,7 @@ import cn.qatime.player.barrage.model.Danmakus;
 import cn.qatime.player.barrage.model.IDisplayer;
 import cn.qatime.player.barrage.model.SpannedCacheStuffer;
 import cn.qatime.player.barrage.parser.BaseDanmakuParser;
+import cn.qatime.player.utils.ExpressionUtil;
 import libraryextra.utils.DensityUtils;
 
 public class DanmuControl {
@@ -31,6 +32,7 @@ public class DanmuControl {
     private static final long ADD_DANMU_TIME = 2000;
 
     private static final int ORANGE_COLOR = 0xffff815a;
+    private final Context context;
 
     private int   BITMAP_HEIGHT   = 18;
     private float DANMU_TEXT_SIZE = 10f;//弹幕字体的大小
@@ -44,6 +46,7 @@ public class DanmuControl {
     private DanmakuContext mDanmakuContext;
 
     public DanmuControl(Context context) {
+        this.context = context;
         setSize(context);
         initDanmuConfig();
     }
@@ -223,7 +226,7 @@ public class DanmuControl {
     public void addDanmu(IMMessage danmu, int i) {
         BaseDanmaku danmaku = mDanmakuContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
 
-        danmaku.text = danmu.getContent();
+        danmaku.text = ExpressionUtil.getExpressionString(context,danmu.getContent(),ExpressionUtil.emoji);
 
         danmaku.padding = DANMU_PADDING;
         danmaku.priority = 0;  // 1:一定会显示, 一般用于本机发送的弹幕,但会导致行数的限制失效

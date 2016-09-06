@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +36,7 @@ import cn.qatime.player.fragment.FragmentNEVideoPlayer3;
 import cn.qatime.player.fragment.FragmentNEVideoPlayer4;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
+import cn.qatime.player.view.BiaoQingView;
 import cn.qatime.player.view.QaVideoPlayer;
 import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.JsonUtils;
@@ -72,6 +74,21 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     private FragmentNEVideoPlayer2 fragment2;
     private String sessionId;
     private SessionTypeEnum sessionType = SessionTypeEnum.Team;
+    private ImageView emoji;
+    private EditText content;
+    //    Runnable runnable = new Runnable() {
+//        @Override
+//        public void run() {
+//            hd.postDelayed(this, 50);
+//            videoPlayer.setData(i + "彈幕");
+//            i++;
+//            if (i>20){
+//                hd.removeCallbacks(this);
+//            }
+//            LogUtils.e(i);
+//        }
+//    };
+//    int flag = Settings.System.getInt(getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,6 +170,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
 
     private void initView() {
         bottom = findViewById(R.id.bottom);
+
         inputLayout = findViewById(R.id.input_layout);
         fragBaseFragments.add(new FragmentNEVideoPlayer1());
         fragBaseFragments.add(new FragmentNEVideoPlayer2());
@@ -192,7 +210,9 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
             }
         });
 
-        final EditText content = (EditText) findViewById(R.id.content);
+        content = (EditText) findViewById(R.id.content);
+        emoji = (ImageView) findViewById(R.id.emoji);
+
         Button send = (Button) findViewById(R.id.send);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,6 +221,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
                 content.setText("");
             }
         });
+        BiaoQingView bq = (BiaoQingView) findViewById(R.id.biaoQingView);
+        bq.init(content,emoji);
         videoPlayer.setChatCallback(new QaVideoPlayer.ChatCallback() {
             @Override
             public void back(String result) {

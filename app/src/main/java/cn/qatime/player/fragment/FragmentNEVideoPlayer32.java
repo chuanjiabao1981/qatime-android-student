@@ -92,7 +92,5 @@ public class FragmentNEVideoPlayer32 extends BaseFragment {
             this.data = data;
             hd.postDelayed(runnable, 1000);
         }
-
-
     }
 }

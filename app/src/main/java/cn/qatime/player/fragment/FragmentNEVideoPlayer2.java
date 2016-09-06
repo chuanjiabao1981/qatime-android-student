@@ -36,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.List;
 
 import cn.qatime.player.R;
@@ -44,6 +45,8 @@ import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.FriendDataCache;
 import cn.qatime.player.im.cache.TeamDataCache;
+import cn.qatime.player.utils.ExpressionUtil;
+import cn.qatime.player.view.GifDrawable;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.Profile;
@@ -115,20 +118,32 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
 
         adapter = new CommonAdapter<IMMessage>(getActivity(), items, R.layout.item_message) {
             @Override
-            public void convert(ViewHolder holder, IMMessage item, int position) {
+            public void convert(final ViewHolder holder, IMMessage item, int position) {
 
                 if (item.getFromAccount().equals(BaseApplication.getAccount())) {
                     holder.getView(R.id.right).setVisibility(View.VISIBLE);
                     holder.getView(R.id.left).setVisibility(View.GONE);
                     Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getChat_account().getIcon()).crossFade().dontAnimate().transform(new GlideCircleTransform(getContext())).into((ImageView) holder.getView(R.id.my_head));
                     holder.setText(R.id.my_time, getTime(item.getTime()));
-                    holder.setText(R.id.my_content, item.getContent());
+                    ((TextView) holder.getView(R.id.my_content)).setText(ExpressionUtil.getExpressionString(
+                            getActivity(), item.getContent(), ExpressionUtil.emoji, new Hashtable<Integer, GifDrawable>(), new GifDrawable.UpdateListener() {
+                                @Override
+                                public void update() {
+                                    ((TextView) holder.getView(R.id.my_content)).postInvalidate();
+                                }
+                            }));
                 } else {
                     holder.getView(R.id.right).setVisibility(View.GONE);
                     holder.getView(R.id.left).setVisibility(View.VISIBLE);
                     Glide.with(getActivity()).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_32).crossFade().dontAnimate().transform(new GlideCircleTransform(getContext())).into((ImageView) holder.getView(R.id.other_head));
                     holder.setText(R.id.other_name, item.getFromNick());
-                    holder.setText(R.id.other_content, item.getContent());
+                    ((TextView) holder.getView(R.id.other_content)).setText(ExpressionUtil.getExpressionString(
+                            getActivity(), item.getContent(), ExpressionUtil.emoji, new Hashtable<Integer, GifDrawable>(), new GifDrawable.UpdateListener() {
+                                @Override
+                                public void update() {
+                                    ((TextView) holder.getView(R.id.other_content)).postInvalidate();
+                                }
+                            }));
                     holder.setText(R.id.other_time, getTime(item.getTime()));
                 }
 
