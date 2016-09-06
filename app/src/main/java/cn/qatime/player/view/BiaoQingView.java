@@ -21,8 +21,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.orhanobut.logger.Logger;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +37,6 @@ public class BiaoQingView extends RelativeLayout {
     private TagViewPager viewPager;
 
 
-    private String[][] biaoqingTags = new String[4][21];
     private Handler hd = new Handler();
     private ImageView emoji;
 
@@ -68,7 +65,14 @@ public class BiaoQingView extends RelativeLayout {
                 hd.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        viewPager.setVisibility(viewPager.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+                        if (viewPager.getVisibility() == GONE) {
+                            viewPager.setVisibility(View.VISIBLE);
+                            emoji.setImageResource(R.mipmap.keybord);
+                        } else {
+                            viewPager.setVisibility(View.GONE);
+                            emoji.setImageResource(R.mipmap.biaoqing);
+                        }
+
                     }
                 }, 100);
             }
@@ -78,6 +82,7 @@ public class BiaoQingView extends RelativeLayout {
             public boolean onTouch(View v, MotionEvent event) {
                 openInput();
                 content.requestFocus();
+                emoji.setImageResource(R.mipmap.biaoqing);
                 viewPager.setVisibility(View.GONE);
                 return false;
             }
@@ -110,8 +115,6 @@ public class BiaoQingView extends RelativeLayout {
                             @Override
                             public void onClick(View v) {
                                 // TODO: 2016/9/5 加入到eidttext
-                                Logger.e("click:    emoji " + item.get("image"));
-                                String text = content.getText().toString();
                                 if (position < 21) {
                                     content.append(getEmotionContent(item.get("image")));
                                 } else if (position == 27) {
