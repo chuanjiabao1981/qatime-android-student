@@ -126,7 +126,7 @@ public class FragmentRemedialClassTimeTable1 extends BaseFragment {
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                                intent.putExtra("id", item.getCourse_id());
+                                intent.putExtra("id",  Integer.valueOf(item.getCourse_id()));
                                 intent.putExtra("pager", 2);
                                 startActivity(intent);
                             }

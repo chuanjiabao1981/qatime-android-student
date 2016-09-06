@@ -89,6 +89,7 @@ public class BaseFragmentActivity extends FragmentActivity {
     }
     private void out() {
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("out", "out");
         startActivity(intent);
     }
 

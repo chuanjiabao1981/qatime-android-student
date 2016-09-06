@@ -1,6 +1,7 @@
 package cn.qatime.player.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,46 @@ public class FragmentNEVideoPlayer32 extends BaseFragment {
     private TextView gradetype;
     private TextView school;
     private TextView describe;
+
+    private Handler hd = new Handler();
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            if (getActivity() != null && getActivity().getResources() != null) {
+                name.setText(getActivity().getResources().getString(R.string.teacher_name) + data.getTeacher().getName());
+                subject.setText(getActivity().getResources().getString(R.string.teacher_subject) + data.getTeacher().getSubject());
+                if (!StringUtils.isNullOrBlanK(data.getTeacher().getTeaching_years())) {
+                    if (data.getTeacher().getTeaching_years().equals("within_three_years")) {
+                        teachingyears.setText(getActivity().getResources().getString(R.string.teacher_years) + getActivity().getResources().getString(R.string.within_three_years));
+                    } else if (data.getTeacher().getTeaching_years().equals("within_ten_years")) {
+                        teachingyears.setText(getActivity().getResources().getString(R.string.teacher_years) + getActivity().getResources().getString(R.string.within_ten_years));
+                    } else if (data.getTeacher().getTeaching_years().equals("within_twenty_years")) {
+                        teachingyears.setText(getActivity().getResources().getString(R.string.teacher_years) + getActivity().getResources().getString(R.string.within_twenty_years));
+                    } else {
+                        teachingyears.setText(getActivity().getResources().getString(R.string.teacher_years) + getActivity().getResources().getString(R.string.more_than_ten_years));
+                    }
+                }
+                gradetype.setText(getActivity().getResources().getString(R.string.grade_type) + "高中");
+                describe.setText(data.getTeacher().getDesc());
+
+                SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getCacheDir() + "/school.txt").toString(), SchoolBean.class);
+
+                if (schoolBean != null && schoolBean.getData() != null) {
+                    for (int i = 0; i < schoolBean.getData().size(); i++) {
+                        if (data.getTeacher().getSchool() == schoolBean.getData().get(i).getId()) {
+                            school.setText(getActivity().getResources().getString(R.string.teacher_school) + schoolBean.getData().get(i).getName());
+                            break;
+                        }
+                    }
+                } else {
+                    school.setText("");
+                }
+
+                Glide.with(getActivity()).load(data.getTeacher().getAvatar_url()).placeholder(R.mipmap.ic_launcher).crossFade().into(image);
+
+            }
+        }
+    };
     private RemedialClassDetailBean.Data data;
 
     @Nullable
@@ -44,49 +85,12 @@ public class FragmentNEVideoPlayer32 extends BaseFragment {
         teachingyears = (TextView) view.findViewById(R.id.teaching_years);
         school = (TextView) view.findViewById(R.id.school);
         describe = (TextView) view.findViewById(R.id.describe);
-        setView();
     }
 
     public void setData(RemedialClassDetailBean.Data data) {
-        this.data = data;
-        setView();
-
-
-    }
-
-    private void setView() {
-        if (data != null && name != null) {
-            name.setText(getActivity().getResources().getString(R.string.teacher_name) + data.getTeacher().getName());
-            subject.setText(getActivity().getResources().getString(R.string.teacher_subject) + data.getTeacher().getSubject());
-            if (!StringUtils.isNullOrBlanK(data.getTeacher().getTeaching_years())) {
-                if (data.getTeacher().getTeaching_years().equals("within_three_years")) {
-                    teachingyears.setText(getActivity().getResources().getString(R.string.teacher_years) + getActivity().getResources().getString(R.string.within_three_years));
-                } else if (data.getTeacher().getTeaching_years().equals("within_ten_years")) {
-                    teachingyears.setText(getActivity().getResources().getString(R.string.teacher_years) + getActivity().getResources().getString(R.string.within_ten_years));
-                } else if (data.getTeacher().getTeaching_years().equals("within_twenty_years")) {
-                    teachingyears.setText(getActivity().getResources().getString(R.string.teacher_years) + getActivity().getResources().getString(R.string.within_twenty_years));
-                } else {
-                    teachingyears.setText(getActivity().getResources().getString(R.string.teacher_years) + getActivity().getResources().getString(R.string.more_than_ten_years));
-                }
-            }
-            gradetype.setText(getActivity().getResources().getString(R.string.grade_type) + "高中");
-            describe.setText(data.getTeacher().getDesc());
-
-            SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getCacheDir() + "/school.txt").toString(), SchoolBean.class);
-
-            if (schoolBean != null && schoolBean.getData() != null) {
-                for (int i = 0; i < schoolBean.getData().size(); i++) {
-                    if (data.getTeacher().getSchool() == schoolBean.getData().get(i).getId()) {
-                        school.setText(getActivity().getResources().getString(R.string.teacher_school) + schoolBean.getData().get(i).getName());
-                        break;
-                    }
-                }
-            } else {
-                school.setText("");
-            }
-
-            Glide.with(this).load(data.getTeacher().getAvatar_url()).placeholder(R.mipmap.ic_launcher).crossFade().into(image);
-
+        if (data != null) {
+            this.data = data;
+            hd.postDelayed(runnable, 1000);
         }
     }
 }

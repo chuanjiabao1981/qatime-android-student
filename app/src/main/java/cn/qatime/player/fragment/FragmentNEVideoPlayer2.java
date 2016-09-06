@@ -23,6 +23,7 @@ import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.QueryDirectionEnum;
@@ -73,12 +74,33 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
 
     private SessionTypeEnum sessionType = SessionTypeEnum.Team;
     private String sessionId;
+    private Callback chatCallback;
+
+    private Handler hd = new Handler();
+    private boolean hasLoad = false;
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            if (hasLoad) {
+                if (tipText != null) {
+                    tipText.setText(team.getType() == TeamTypeEnum.Normal ? "您已退出该群组" : "您已退出该群组");
+                    tipText.setVisibility(team.isMyTeam() ? View.GONE : View.VISIBLE);
+                    hd.removeCallbacks(this);
+                } else {
+                    hd.postDelayed(this, 200);
+                }
+            } else {
+                hd.postDelayed(this, 200);
+            }
+        }
+    };
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = View.inflate(getActivity(), R.layout.fragment_nevideo_player2, null);
         initView(view);
+        hasLoad = true;
         return view;
     }
 
@@ -262,8 +284,11 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
 
         List<IMMessage> result = new ArrayList<>();
         for (IMMessage message : messages) {
-            result.add(message);
+            if (message.getMsgType() == MsgTypeEnum.text) {
+                result.add(message);
+            }
         }
+
         if (direction == QueryDirectionEnum.QUERY_NEW) {
             items.addAll(result);
         } else {
@@ -293,14 +318,19 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
             boolean needRefresh = false;
             List<IMMessage> addedListItems = new ArrayList<>(messages.size());
             for (IMMessage message : messages) {
-                if (isMyMessage(message)) {
+                Logger.e(message.toString());
+                if (isMyMessage(message) && message.getMsgType() == MsgTypeEnum.text) {
                     items.add(message);
                     addedListItems.add(message);
                     needRefresh = true;
                 }
             }
+            if (chatCallback != null) {
+                chatCallback.back(addedListItems);
+            }
             if (needRefresh) {
                 adapter.notifyDataSetChanged();
+                listView.getRefreshableView().setSelection(adapter.getCount() - 1);
             }
         }
     };
@@ -355,15 +385,7 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
         team = d;
 //        setTitle(team == null ? sessionId : team.getName() + "(" + team.getMemberCount() + "人)");
 //
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (tipText != null) {
-                    tipText.setText(team.getType() == TeamTypeEnum.Normal ? "您已退出该群组" : "您已退出该群组");
-                    tipText.setVisibility(team.isMyTeam() ? View.GONE : View.VISIBLE);
-                }
-            }
-        }, 1500);
+        hd.postDelayed(runnable, 200);
     }
 
     public boolean isAllowSendMessage() {
@@ -459,5 +481,13 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public void setChatCallBack(Callback c) {
+        this.chatCallback = c;
+    }
+
+    public interface Callback {
+        void back(List<IMMessage> result);
     }
 }

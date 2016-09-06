@@ -136,7 +136,7 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent(ClassTimeTableActivity.this, RemedialClassDetailActivity.class);
-                                intent.putExtra("id", item.getCourse_id());
+                                intent.putExtra("id", Integer.valueOf(item.getCourse_id()));
                                 intent.putExtra("pager", 2);
                                 startActivity(intent);
                             }

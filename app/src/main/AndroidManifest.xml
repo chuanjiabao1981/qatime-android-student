@@ -105,7 +105,8 @@
 
         <!--网易云信  end-->
 
-        <activity android:name=".activity.StartActivity">
+        <activity android:name=".activity.StartActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -235,7 +236,15 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.PersonalMyOrderDetailActivity"
+            android:name=".activity.PersonalMyOrderUnpaidDetailActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PersonalMyOrderPaidDetailActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PersonalMyOrderCanceledDetailActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity

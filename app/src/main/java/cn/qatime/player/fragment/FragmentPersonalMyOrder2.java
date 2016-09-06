@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -28,7 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
-import cn.qatime.player.activity.PersonalMyOrderDetailActivity;
+import cn.qatime.player.activity.PersonalMyOrderPaidDetailActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.MyOrderBean;
@@ -57,28 +58,49 @@ public class FragmentPersonalMyOrder2 extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_personal_my_order2, container, false);
         initview(view);
-        initData(1);
         return view;
     }
 
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
 
+        listView.setMode(PullToRefreshBase.Mode.BOTH);
+        listView.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
+        listView.getLoadingLayoutProxy(false, true).setPullLabel(getResources().getString(R.string.pull_to_load));
+        listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResources().getString(R.string.refreshing));
+        listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
+        listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
+        listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
+
         adapter = new CommonAdapter<MyOrderBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_order2) {
             @Override
             public void convert(ViewHolder helper, MyOrderBean.Data item, int position) {
                 Glide.with(getActivity()).load(item.getProduct().getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.classname, item.getProduct().getName());
-                helper.setText(R.id.grade, item.getProduct().getGrade());
-                helper.setText(R.id.subject, item.getProduct().getSubject());
-                helper.setText(R.id.teacher, item.getProduct().getTeacher_name());
+                if (StringUtils.isNullOrBlanK(item.getProduct().getGrade())) {
+                    helper.setText(R.id.grade, "年级");
+                } else {
+                    helper.setText(R.id.grade, item.getProduct().getGrade());
+                }
+                if (StringUtils.isNullOrBlanK(item.getProduct().getSubject())) {
+                    helper.setText(R.id.subject, "科目");
+                } else {
+                    helper.setText(R.id.subject, item.getProduct().getSubject());
+                }
+                if (StringUtils.isNullOrBlanK(item.getProduct().getTeacher_name())) {
+                    helper.setText(R.id.teacher, "老师");
+                } else {
+                    helper.setText(R.id.teacher, item.getProduct().getTeacher_name());
+                }
                 helper.setText(R.id.progress, item.getProduct().getCompleted_lesson_count() + "/" + item.getProduct().getPreset_lesson_count());//进度
-                if (item.getStatus().equals("unpaid")) {//待付款
-                    helper.setText(R.id.status, getResources().getString(R.string.paying));
-                } else if (item.getStatus().equals("paid")) {//已付款
-                    helper.setText(R.id.status, getResources().getString(R.string.paid));
-                } else {//已取消
-                    helper.setText(R.id.status, getResources().getString(R.string.cancelled));
+                if (item.getStatus().equals("shipped")) {//正在交易
+                    helper.setText(R.id.status, getActivity().getResources().getString(R.string.dealing));
+                } else if (item.getStatus().equals("paid")) {//正在交易
+                    helper.setText(R.id.status, getActivity().getResources().getString(R.string.dealing));
+                } else if (item.getStatus().equals("completed")) {//交易完成
+                    helper.setText(R.id.status, getActivity().getResources().getString(R.string.deal_done));
+                } else {//
+                    helper.setText(R.id.status, "  ");
                 }
                 String price = df.format(item.getProduct().getPrice());
                 if (price.startsWith(".")) {
@@ -137,24 +159,29 @@ public class FragmentPersonalMyOrder2 extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), PersonalMyOrderDetailActivity.class);
+                Intent intent = new Intent(getActivity(), PersonalMyOrderPaidDetailActivity.class);
                 intent.putExtra("id", list.get(position - 1).getId());
                 OrderDetailBean bean = new OrderDetailBean();
                 bean.image = list.get(position - 1).getProduct().getPublicize();
                 bean.name = list.get(position - 1).getProduct().getName();
                 bean.subject = list.get(position - 1).getProduct().getSubject();
+                bean.status = list.get(position - 1).getStatus();
                 bean.grade = list.get(position - 1).getProduct().getGrade();
                 bean.teacher = list.get(position - 1).getProduct().getTeacher_name();
                 bean.Preset_lesson_count = list.get(position - 1).getProduct().getPreset_lesson_count();
                 bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
                 bean.price = list.get(position - 1).getProduct().getPrice();
                 intent.putExtra("data", bean);
+                intent.putExtra("payType", list.get(position - 1).getPay_type());
+                intent.putExtra("created_at", list.get(position - 1).getCreated_at());
+                intent.putExtra("pay_at", list.get(position - 1).getPay_at());
                 startActivity(intent);
             }
         });
 
     }
 
+    @Override
     public void onShow() {
         if (!isLoad) {
             initData(1);
@@ -186,7 +213,7 @@ public class FragmentPersonalMyOrder2 extends BaseFragment {
 
                         try {
                             MyOrderBean data = JsonUtils.objectFromJson(response.toString(), MyOrderBean.class);
-                            if (data != null) {
+                            if (data != null & data.getData() != null) {
                                 list.addAll(data.getData());
                             }
                             adapter.notifyDataSetChanged();
