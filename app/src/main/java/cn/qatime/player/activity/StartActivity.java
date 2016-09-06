@@ -29,7 +29,6 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
-import cn.qatime.player.utils.AppUtils;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.DownFileUtil;
 import cn.qatime.player.utils.UrlUtils;
@@ -68,8 +67,8 @@ public class StartActivity extends Activity implements View.OnClickListener {
         Map<String, String> map = new HashMap<>();
         map.put("category", "student_client");
         map.put("platform", "android");
-        map.put("version", AppUtils.getVersionName(this));
-//        map.put("version", "0.0.1");
+//        map.put("version", AppUtils.getVersionName(this));
+        map.put("version", "0.0.1");
         BaseApplication.getRequestQueue().add(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlcheckUpdate, map), null, new VolleyListener(this) {
             @Override
             protected void onTokenOut() {
