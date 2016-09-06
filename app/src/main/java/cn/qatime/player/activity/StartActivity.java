@@ -29,6 +29,7 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.utils.AppUtils;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.DownFileUtil;
 import cn.qatime.player.utils.UrlUtils;
@@ -67,8 +68,8 @@ public class StartActivity extends Activity implements View.OnClickListener {
         Map<String, String> map = new HashMap<>();
         map.put("category", "student_client");
         map.put("platform", "android");
-//        map.put("version", AppUtils.getVersionName(this));
-        map.put("version", "0.0.1");
+        map.put("version", AppUtils.getVersionName(this));
+//        map.put("version", "0.0.1");
         BaseApplication.getRequestQueue().add(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlcheckUpdate, map), null, new VolleyListener(this) {
             @Override
             protected void onTokenOut() {
@@ -92,12 +93,12 @@ public class StartActivity extends Activity implements View.OnClickListener {
                     try {
                         if (!response.getJSONObject("data").getBoolean("enforce")) {
                             x.setOnClickListener(StartActivity.this);
-                            alertDialog.setCancelable(false);
                         } else {
                             Toast.makeText(StartActivity.this, "重大更新，请先进行升级", Toast.LENGTH_SHORT).show();
+                            alertDialog.setCancelable(false);
                         }
                         String descStr = response.getJSONObject("data").getString("description");
-                        desc.setText(StringUtils.isNullOrBlanK(descStr) ? "性能优化" : descStr);
+//                        desc.setText(StringUtils.isNullOrBlanK(descStr) ? "性能优化" : descStr);
                         downLoadLinks = response.getJSONObject("data").getString("download_links");
                         newVersion.setText("V" + response.getJSONObject("data").getString("version"));
                     } catch (JSONException e) {
@@ -127,6 +128,7 @@ public class StartActivity extends Activity implements View.OnClickListener {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 Toast.makeText(StartActivity.this, "检查更新失败,请检查网络连接", Toast.LENGTH_SHORT).show();
+                startApp();
             }
         }));
 
@@ -177,7 +179,9 @@ public class StartActivity extends Activity implements View.OnClickListener {
                         StartActivity.this.startActivity(intent);
                         StartActivity.this.finish();
                     } else {
-                        StartActivity.this.startActivity(new Intent(StartActivity.this, LoginActivity.class));
+                        Intent intent = new Intent(StartActivity.this, LoginActivity.class);
+                        intent.putExtra("newVersion", newVersion);
+                        StartActivity.this.startActivity(intent);
                         StartActivity.this.finish();
                     }
                 }

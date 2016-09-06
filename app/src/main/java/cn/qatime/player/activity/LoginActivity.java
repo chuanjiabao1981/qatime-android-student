@@ -9,7 +9,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.netease.nimlib.sdk.AbortableFuture;
@@ -29,11 +28,11 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.config.UserPreferences;
-import cn.qatime.player.utils.Constant;
-import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.im.cache.FriendDataCache;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
+import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.Profile;
 import libraryextra.utils.CheckUtil;
 import libraryextra.utils.DialogUtils;
@@ -179,7 +178,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                         @Override
                                         public void onSuccess(LoginInfo o) {
                                             DialogUtils.dismissDialog(progress);
-                                            Logger.e("云信登录成功"+o.getAccount());
+                                            Logger.e("云信登录成功" + o.getAccount());
                                             // 初始化消息提醒
                                             NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
 
@@ -199,6 +198,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                             FriendDataCache.getInstance().registerObservers(true);
 
                                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                            intent.putExtra("newVersion", getIntent().getBooleanExtra("newVersion", false));
                                             startActivity(intent);
                                             finish();
                                         }
@@ -207,7 +207,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                         public void onFailed(int code) {
                                             DialogUtils.dismissDialog(progress);
                                             BaseApplication.clearToken();
-                                            Logger.e(code+"code");
+                                            Logger.e(code + "code");
                                             if (code == 302 || code == 404) {
                                                 Toast.makeText(LoginActivity.this, R.string.account_or_password_error, Toast.LENGTH_SHORT).show();
                                             } else {
