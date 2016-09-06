@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ import cn.qatime.player.utils.AppUtils;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.DownFileUtil;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.utils.DensityUtils;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
@@ -82,14 +84,18 @@ public class StartActivity extends Activity implements View.OnClickListener {
                     Logger.e(response.toString());
                     newVersion = true;
                     AlertDialog.Builder builder = new AlertDialog.Builder(StartActivity.this);
-                    View view = View.inflate(StartActivity.this, R.layout.dialog_check_update, null);
+                    final View view = View.inflate(StartActivity.this, R.layout.dialog_check_update, null);
                     Button down = (Button) view.findViewById(R.id.download);
                     View x = view.findViewById(R.id.text_x);
                     TextView newVersion = (TextView) view.findViewById(R.id.new_version);
                     TextView desc = (TextView) view.findViewById(R.id.desc);
+                    alertDialog = builder.create();
                     try {
                         if (!response.getJSONObject("data").getBoolean("enforce")) {
                             x.setOnClickListener(StartActivity.this);
+                            alertDialog.setCancelable(false);
+                        } else {
+                            Toast.makeText(StartActivity.this, "重大更新，请先进行升级", Toast.LENGTH_SHORT).show();
                         }
                         String descStr = response.getJSONObject("data").getString("desc");
                         desc.setText(StringUtils.isNullOrBlanK(descStr) ? "性能优化" : descStr);
@@ -99,10 +105,17 @@ public class StartActivity extends Activity implements View.OnClickListener {
                         e.printStackTrace();
                     }
                     down.setOnClickListener(StartActivity.this);
-                    alertDialog = builder.create();
                     alertDialog.show();
+                    view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                        @Override
+                        public void onGlobalLayout() {
+                            if (DensityUtils.px2dp(StartActivity.this, view.getMeasuredHeight()) > 500) {
+                                alertDialog.getWindow().setLayout(DensityUtils.dp2px(StartActivity.this, 300), DensityUtils.dp2px(StartActivity.this, 500));
+                            }
+                        }
+                    });
                     alertDialog.setContentView(view);
-                    alertDialog.setCancelable(false);
+
                 }
             }
 

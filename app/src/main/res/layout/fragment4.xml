@@ -66,18 +66,6 @@
                         android:textColor="#fff"/>
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/modify"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="1dp"
-                    android:paddingBottom="30dp"
-                    android:paddingLeft="50dp"
-                    android:paddingRight="2dp"
-                    android:paddingTop="30dp"
-                    android:src="@mipmap/personal_enter"/>
             </RelativeLayout>
 
             <TextView

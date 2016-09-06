@@ -3,6 +3,7 @@ package cn.qatime.player.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -135,11 +136,12 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                     @Override
                     protected void onSuccess(JSONObject response) {
                         if (response.isNull("data")) {
+                            Toast.makeText(SystemSettingActivity.this, "已经是最新版本", Toast.LENGTH_SHORT).show();
                         } else {
                             //TODO 获取更新信信息0
                             Logger.e(response.toString());
                             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(SystemSettingActivity.this);
-                            View view = View.inflate(SystemSettingActivity.this, R.layout.dialog_check_update, null);
+                            final View view = View.inflate(SystemSettingActivity.this, R.layout.dialog_check_update, null);
                             Button down = (Button) view.findViewById(R.id.download);
                             View x = view.findViewById(R.id.text_x);
                             TextView newVersion = (TextView) view.findViewById(R.id.new_version);
@@ -160,7 +162,14 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                             alertDialog = builder.create();
                             alertDialog.show();
                             alertDialog.setContentView(view);
-                            alertDialog.setCanceledOnTouchOutside(false);
+                            view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                                @Override
+                                public void onGlobalLayout() {
+                                    if (DensityUtils.px2dp(SystemSettingActivity.this, view.getMeasuredHeight()) > 500) {
+                                        alertDialog.getWindow().setLayout(DensityUtils.dp2px(SystemSettingActivity.this, 300), DensityUtils.dp2px(SystemSettingActivity.this, 500));
+                                    }
+                                }
+                            });
                         }
                     }
 
