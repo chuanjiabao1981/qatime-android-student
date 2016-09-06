@@ -151,7 +151,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                                 if (!response.getJSONObject("data").getBoolean("enforce")) {
                                     x.setOnClickListener(SystemSettingActivity.this);
                                 }
-                                String descStr = response.getJSONObject("data").getString("desc");
+                                String descStr = response.getJSONObject("data").getString("description");
                                 desc.setText(StringUtils.isNullOrBlanK(descStr) ? "性能优化" : descStr);
                                 downLoadLinks = response.getJSONObject("data").getString("download_links");
                                 newVersion.setText("V" + response.getJSONObject("data").getString("version"));

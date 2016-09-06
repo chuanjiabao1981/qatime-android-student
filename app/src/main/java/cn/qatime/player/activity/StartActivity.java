@@ -96,7 +96,7 @@ public class StartActivity extends Activity implements View.OnClickListener {
                         } else {
                             Toast.makeText(StartActivity.this, "重大更新，请先进行升级", Toast.LENGTH_SHORT).show();
                         }
-                        String descStr = response.getJSONObject("data").getString("desc");
+                        String descStr = response.getJSONObject("data").getString("description");
                         desc.setText(StringUtils.isNullOrBlanK(descStr) ? "性能优化" : descStr);
                         downLoadLinks = response.getJSONObject("data").getString("download_links");
                         newVersion.setText("V" + response.getJSONObject("data").getString("version"));
