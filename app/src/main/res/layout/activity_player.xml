@@ -75,11 +75,11 @@
                     android:text="发送"
                     android:textColor="#fff" />
             </LinearLayout>
-            <libraryextra.view.TagViewPager
-                android:id="@+id/tagViewPager"
+
+            <cn.qatime.player.view.BiaoQingView
+                android:id="@+id/biaoQingView"
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:visibility="gone" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </LinearLayout>
 

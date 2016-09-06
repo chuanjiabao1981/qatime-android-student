@@ -31,6 +31,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
+import libraryextra.utils.DensityUtils;
 import libraryextra.view.TagViewPager;
 
 public class BiaoQingView extends RelativeLayout {
@@ -55,6 +56,11 @@ public class BiaoQingView extends RelativeLayout {
     }
 
     private void initEmoji() {
+        viewPager = new TagViewPager(getContext());
+        LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, (int) (DensityUtils.dp2px(getContext(), 180)));
+        viewPager.setLayoutParams(params);
+        viewPager.setVisibility(View.GONE);
+        this.addView(viewPager);
         emoji.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -193,9 +199,8 @@ public class BiaoQingView extends RelativeLayout {
         return spannableString;
     }
 
-    public void init(EditText edit, ImageView emoji, TagViewPager viewPager) {
+    public void init(EditText edit, ImageView emoji) {
         this.content = edit;
-        this.viewPager = viewPager;
         this.emoji = emoji;
         initEmoji();
     }

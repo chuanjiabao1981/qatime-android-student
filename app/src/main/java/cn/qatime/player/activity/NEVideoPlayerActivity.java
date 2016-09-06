@@ -45,7 +45,6 @@ import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.FragmentLayoutWithLine;
-import libraryextra.view.TagViewPager;
 
 public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVideoPlayer.ControlListener {
     public final static String TAG = "NEVideoPlayerActivity";
@@ -78,7 +77,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     private String sessionId;
     private SessionTypeEnum sessionType = SessionTypeEnum.Team;
     private ImageView emoji;
-    private TagViewPager viewPager;
     private EditText content;
     //    Runnable runnable = new Runnable() {
 //        @Override
@@ -157,7 +155,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
 
         content = (EditText) findViewById(R.id.content);
         emoji = (ImageView) findViewById(R.id.emoji);
-        viewPager = (TagViewPager) findViewById(R.id.tagViewPager);
 
         Button send = (Button) findViewById(R.id.send);
         send.setOnClickListener(new View.OnClickListener() {
@@ -186,8 +183,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
                 content.setText("");
             }
         });
-        BiaoQingView bq = new BiaoQingView(this);
-        bq.init(content,emoji, viewPager);
+        BiaoQingView bq = (BiaoQingView) findViewById(R.id.biaoQingView);
+        bq.init(content,emoji);
     }
 
     private void initData() {

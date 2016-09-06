@@ -47,7 +47,6 @@ import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.StringUtils;
-import libraryextra.view.TagViewPager;
 
 /**
  * @author luntify
@@ -75,7 +74,6 @@ public class MessageActivity extends BaseActivity {
     private Button send;
     private TextView tipText;
     private ImageView emoji;
-    private TagViewPager viewPager;
     private EditText content;
     private Handler hd = new Handler();
 
@@ -127,7 +125,6 @@ public class MessageActivity extends BaseActivity {
         listView.setAdapter(adapter);
         content = (EditText) findViewById(R.id.content);
         emoji = (ImageView) findViewById(R.id.emoji);
-        viewPager = (TagViewPager) findViewById(R.id.tagViewPager);
 
         send = (Button) findViewById(R.id.send);
         send.setOnClickListener(new View.OnClickListener() {
@@ -171,8 +168,8 @@ public class MessageActivity extends BaseActivity {
             }
         });
         loadMessage(false);
-        BiaoQingView bq = new BiaoQingView(this);
-        bq.init(content,emoji, viewPager);
+        BiaoQingView bq = (BiaoQingView) findViewById(R.id.biaoQingView);
+        bq.init(content, emoji);
     }
 
 
