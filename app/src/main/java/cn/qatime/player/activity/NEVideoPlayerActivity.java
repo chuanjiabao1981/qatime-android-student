@@ -28,6 +28,7 @@ import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragmentActivity;
+import cn.qatime.player.bean.Announcements;
 import cn.qatime.player.fragment.FragmentNEVideoPlayer1;
 import cn.qatime.player.fragment.FragmentNEVideoPlayer2;
 import cn.qatime.player.fragment.FragmentNEVideoPlayer3;
@@ -105,7 +106,49 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
             }
         });
         initView();
+        getAnnouncementsData();
         initData();
+    }
+
+    private void getAnnouncementsData() {
+        if (id != 0) {
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass + "/" + id + "/realtime", null,
+                    new VolleyListener(NEVideoPlayerActivity.this) {
+                        @Override
+                        protected void onSuccess(JSONObject response) {
+                            Announcements data = JsonUtils.objectFromJson(response.toString(), Announcements.class);
+                            if (data != null) {
+                                if (data.getData() != null) {
+                                    if (data.getData().getMembers() != null) {
+                                        ((FragmentNEVideoPlayer4) fragBaseFragments.get(3)).setData(data.getData().getMembers());
+                                    }
+                                    if (data.getData().getAnnouncements() != null) {
+                                        ((FragmentNEVideoPlayer1) fragBaseFragments.get(0)).setData(data.getData().getAnnouncements());
+                                    }
+                                }
+
+                            }
+                        }
+
+                        @Override
+                        protected void onError(JSONObject response) {
+
+                        }
+
+                        @Override
+                        protected void onTokenOut() {
+                            tokenOut();
+                        }
+                    }
+
+                    , new VolleyErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    super.onErrorResponse(volleyError);
+                }
+            });
+            addToRequestQueue(request);
+        }
     }
 
     private void initView() {
@@ -208,10 +251,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
                             RemedialClassDetailBean data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
                             if (data != null) {
                                 ((FragmentNEVideoPlayer3) fragBaseFragments.get(2)).setData(data);
-                                if (data.getData() != null && data.getData().getChat_team() != null && data.getData().getChat_team().getAccounts() != null) {
-                                    ((FragmentNEVideoPlayer4) fragBaseFragments.get(3)).setData(data.getData().getChat_team().getAccounts());
-                                }
-                                ((FragmentNEVideoPlayer1)fragBaseFragments.get(0)).setTeamId(data.getData().getChat_team_id());
+//                                if (data.getData() != null && data.getData().getChat_team() != null && data.getData().getChat_team().getAccounts() != null) {
+//                                    ((FragmentNEVideoPlayer4) fragBaseFragments.get(3)).setData(data.getData().getChat_team().getAccounts());
+//                                }
+//                                ((FragmentNEVideoPlayer1) fragBaseFragments.get(0)).setTeamId(data.getData().getChat_team_id());
                             }
                         }
 

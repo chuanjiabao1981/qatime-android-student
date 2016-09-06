@@ -268,4 +268,22 @@
 
     <string name="team_send_message_not_allow">您已不在该群，不能发送消息</string>
     <string name="team_not_exist">该群不存在</string>
+    <string name="Remedial_classes">辅导班课程</string>
+    <string name="about_us">关于我们</string>
+    <string name="about_us_desc"><![CDATA[    北京维幄通达网络科技有限公司，成立于2012年初，主要从事教育科研产品的销售以及教育网络推广。公司实力优越，拥有一批科研技术专业能力强大的研发团队。目前，教育信息化改革的背景下，公司紧紧围绕互联网技术与教育产生信息化这一特点，重点着力于建立独具特色的现代信息化教育模式，公司的研发成果为优化教育资源，推进教育信息改革起到了很大的促进作用。现阶段公司正积极面向全国开展销售推广业务，具有强大的发展潜力和良好的发展前景。现诚邀有志之士加入我们，与我们携手共同实现理想。]]></string>
+    <string name="advance">提前</string>
+    <string name="agree_agreement">是否同意有关协议</string>
+    <string name="alert_mode">提醒方式</string>
+    <string name="amount_payment_item">实付金额</string>
+    <string name="amount_payment_order">支付金额</string>
+    <string name="bind_email">绑定邮箱</string>
+    <string name="bind_phone_number">绑定手机</string>
+    <string name="change_password">修改密码</string>
+    <string name="check_update">检查更新</string>
+    <string name="class_1">第一课</string>
+    <string name="class_2">第二课</string>
+    <string name="class_desc">学习中与老师交互</string>
+    <string name="class_n">第N课</string>
+    <string name="class_range">课程范围</string>
+    <string name="clean_cache">清理缓存</string>
 </resources>
