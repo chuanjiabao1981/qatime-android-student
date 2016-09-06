@@ -200,6 +200,7 @@ public class BaseApplication extends Application {
 
     public static void setProfile(Profile profile) {
         BaseApplication.profile = profile;
+        SPUtils.putObject(context, "profile", profile);
     }
 
     public static void clearToken() {

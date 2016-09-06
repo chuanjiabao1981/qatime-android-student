@@ -199,7 +199,6 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                                                 SPUtils.put(RegisterPerfectActivity.this, "username", username);
                                                 Profile profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
                                                 if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
-                                                    SPUtils.putObject(RegisterPerfectActivity.this, "profile", profile);
                                                     BaseApplication.setProfile(profile);
                                                     Intent intent = new Intent(RegisterPerfectActivity.this, MainActivity.class);
                                                     startActivity(intent);

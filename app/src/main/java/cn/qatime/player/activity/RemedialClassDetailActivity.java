@@ -26,8 +26,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
 import libraryextra.bean.OrderPayBean;
+import libraryextra.bean.PersonalInformationBean;
+import libraryextra.bean.Profile;
 import libraryextra.bean.RemedialClassDetailBean;
 import cn.qatime.player.fragment.FragmentRemedialClassDetail1;
 import cn.qatime.player.fragment.FragmentRemedialClassDetail2;
@@ -79,7 +82,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     public void initView() {
         EventBus.getDefault().register(this);
         image = (ImageView) findViewById(R.id.image);
-        name=(TextView)findViewById(R.id.name);
+        name = (TextView) findViewById(R.id.name);
         image.setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenWidth(this) * 5 / 8));
 
         fragBaseFragments.add(new FragmentRemedialClassDetail1());
@@ -240,6 +243,36 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                         //已加入试听
                         audition.setEnabled(false);
                         audition.setText(getResources().getString(R.string.Joined_the_audition));
+                        if (StringUtils.isNullOrBlanK(BaseApplication.getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getAccountToken())) {
+                            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null,
+                                    new VolleyListener(RemedialClassDetailActivity.this) {
+                                        @Override
+                                        protected void onSuccess(JSONObject response) {
+                                            PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
+                                            if (bean != null && bean.getData() != null) {
+                                                Profile profile = BaseApplication.getProfile();
+                                                profile.getData().getUser().setChat_account(bean.getData().getChat_account());
+                                                BaseApplication.setProfile(profile);
+                                            }
+                                        }
+
+                                        @Override
+                                        protected void onError(JSONObject response) {
+
+                                        }
+
+                                        @Override
+                                        protected void onTokenOut() {
+                                            tokenOut();
+                                        }
+                                    }, new VolleyErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError volleyError) {
+                                    super.onErrorResponse(volleyError);
+                                }
+                            });
+                            addToRequestQueue(request);
+                        }
                     }
 
                     @Override
