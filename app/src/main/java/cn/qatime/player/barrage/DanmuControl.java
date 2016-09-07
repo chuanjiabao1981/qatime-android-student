@@ -34,13 +34,13 @@ public class DanmuControl {
     private static final int ORANGE_COLOR = 0xffff815a;
     private final Context context;
 
-    private int   BITMAP_HEIGHT   = 18;
-    private float DANMU_TEXT_SIZE = 10f;//弹幕字体的大小
+    private int BITMAP_HEIGHT = 18;
+    private float DANMU_TEXT_SIZE = 12f;//弹幕字体的大小
 
     //这两个用来控制两行弹幕之间的间距
-    private int DANMU_PADDING       = 8;
+    private int DANMU_PADDING = 8;
     private int DANMU_PADDING_INNER = 6;
-    private int DANMU_RADIUS        = 10;//圆角半径
+    private int DANMU_RADIUS = 10;//圆角半径
 
     private IDanmakuView mDanmakuView;
     private DanmakuContext mDanmakuContext;
@@ -68,7 +68,7 @@ public class DanmuControl {
     private void initDanmuConfig() {
         // 设置最大显示行数
         HashMap<Integer, Integer> maxLinesPair = new HashMap<Integer, Integer>();
-        maxLinesPair.put(BaseDanmaku.TYPE_SCROLL_RL, 4); // 滚动弹幕最大显示2行
+        maxLinesPair.put(BaseDanmaku.TYPE_SCROLL_RL, 6); // 滚动弹幕最大显示2行
         // 设置是否禁止重叠
         HashMap<Integer, Boolean> overlappingEnablePair = new HashMap<Integer, Boolean>();
         overlappingEnablePair.put(BaseDanmaku.TYPE_SCROLL_RL, true);
@@ -80,6 +80,7 @@ public class DanmuControl {
                 .setDuplicateMergingEnabled(false)
                 .setScrollSpeedFactor(1.2f)//越大速度越慢
                 .setScaleTextSize(1.2f)
+                .setCacheStuffer(new SpannedCacheStuffer(), mCacheStufferAdapter) // 图文混排使用SpannedCacheStuffer
 //                .setCacheStuffer(new BackgroundCacheStuffer(), mCacheStufferAdapter)
                 .setMaximumLines(maxLinesPair)
                 .preventOverlapping(overlappingEnablePair);
@@ -94,24 +95,12 @@ public class DanmuControl {
 
         @Override
         public void measure(BaseDanmaku danmaku, TextPaint paint, boolean fromWorkerThread) {
-//            danmaku.padding = 20;  // 在背景绘制模式下增加padding
             super.measure(danmaku, paint, fromWorkerThread);
         }
 
         @Override
         public void drawBackground(BaseDanmaku danmaku, Canvas canvas, float left, float top) {
             paint.setAntiAlias(true);
-//            if (!danmaku.isGuest && danmaku.userId == mGoodUserId && mGoodUserId != 0) {
-//                paint.setColor(PINK_COLOR);//粉红 楼主
-//            } else if (!danmaku.isGuest && danmaku.userId == mMyUserId
-//                    && danmaku.userId != 0) {
-//                paint.setColor(ORANGE_COLOR);//橙色 我
-//            } else {
-//                paint.setColor(BLACK_COLOR);//黑色 普通
-//            }
-//            if (danmaku.isGuest) {//如果是赞 就不要设置背景
-//                paint.setColor(Color.TRANSPARENT);
-//            }
             canvas.drawRoundRect(new RectF(left + DANMU_PADDING_INNER, top + DANMU_PADDING_INNER
                             , left + danmaku.paintWidth - DANMU_PADDING_INNER + 6,
                             top + danmaku.paintHeight - DANMU_PADDING_INNER + 6),//+6 主要是底部被截得太厉害了，+6是增加padding的效果
@@ -226,7 +215,7 @@ public class DanmuControl {
     public void addDanmu(IMMessage danmu, int i) {
         BaseDanmaku danmaku = mDanmakuContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
 
-        danmaku.text = ExpressionUtil.getExpressionString(context,danmu.getContent(),ExpressionUtil.emoji);
+        danmaku.text = ExpressionUtil.getExpressionString(context, danmu.getContent(), ExpressionUtil.emoji);
 
         danmaku.padding = DANMU_PADDING;
         danmaku.priority = 0;  // 1:一定会显示, 一般用于本机发送的弹幕,但会导致行数的限制失效
