@@ -3,7 +3,6 @@ package cn.qatime.player.view;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.text.Spannable;
@@ -21,12 +20,14 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.utils.GifHelper;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.utils.DensityUtils;
@@ -54,7 +55,7 @@ public class BiaoQingView extends RelativeLayout {
 
     private void initEmoji() {
         viewPager = new TagViewPager(getContext());
-        LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, (int) (DensityUtils.dp2px(getContext(), 180)));
+        LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, DensityUtils.dp2px(getContext(), 180));
         viewPager.setLayoutParams(params);
         viewPager.setVisibility(View.GONE);
         this.addView(viewPager);
@@ -72,7 +73,6 @@ public class BiaoQingView extends RelativeLayout {
                             viewPager.setVisibility(View.GONE);
                             emoji.setImageResource(R.mipmap.biaoqing);
                         }
-
                     }
                 }, 100);
             }
@@ -81,7 +81,6 @@ public class BiaoQingView extends RelativeLayout {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 openInput();
-                content.requestFocus();
                 emoji.setImageResource(R.mipmap.biaoqing);
                 viewPager.setVisibility(View.GONE);
                 return false;
@@ -106,8 +105,17 @@ public class BiaoQingView extends RelativeLayout {
                         ImageView view = holder.getView(R.id.emoji_image);
                         if (item.get("image") != null) {
                             int resId = item.get("image");
-                            view.setImageResource(resId);
-                            view.setEnabled(true);
+                            if (position == 27) {
+                                view.setImageResource(resId);
+                                view.setEnabled(true);
+                            } else {
+                                GifHelper helper = new GifHelper();
+                                InputStream is = getResources().openRawResource(resId);
+                                helper.read(is);
+                                Bitmap image = helper.getImage();
+                                view.setImageBitmap(image);
+                                view.setEnabled(true);
+                            }
                         } else {
                             view.setEnabled(false);
                         }
@@ -153,7 +161,7 @@ public class BiaoQingView extends RelativeLayout {
                     listitem1.put("image",
                             Integer.parseInt(R.mipmap.class.getDeclaredField("em_" + i).get(null).toString()));
                 } else {
-                    listitem1.put("image", R.mipmap.left_arrow);
+                    listitem1.put("image", R.mipmap.emotion_del_normal);
                 }
                 listitems1.add(listitem1);
             }
@@ -162,7 +170,7 @@ public class BiaoQingView extends RelativeLayout {
                 if (i != 55) {
                     listitem2.put("image", Integer.parseInt(R.mipmap.class.getDeclaredField("em_" + i).get(null).toString()));
                 } else {
-                    listitem2.put("image", R.mipmap.left_arrow);
+                    listitem2.put("image", R.mipmap.emotion_del_normal);
                 }
                 listitems2.add(listitem2);
             }
@@ -172,7 +180,7 @@ public class BiaoQingView extends RelativeLayout {
                 if (i <= 75) {
                     listitem3.put("image", Integer.parseInt(R.mipmap.class.getDeclaredField("em_" + i).get(null).toString()));
                 } else if (i == 82) {
-                    listitem3.put("image", R.mipmap.left_arrow);
+                    listitem3.put("image", R.mipmap.emotion_del_normal);
                 } else {
                     listitem3.put("image", null);
                 }
@@ -195,7 +203,10 @@ public class BiaoQingView extends RelativeLayout {
         SpannableString spannableString = new SpannableString("" + emoji);
         Resources res = getResources();
         int size = (int) content.getTextSize();
-        Bitmap bitmap = BitmapFactory.decodeResource(res, resId);
+        GifHelper helper = new GifHelper();
+        InputStream is = getResources().openRawResource(resId);
+        helper.read(is);
+        Bitmap bitmap = helper.getImage();
         Bitmap scaleBitmap = Bitmap.createScaledBitmap(bitmap, size, size, true);
         ImageSpan span = new ImageSpan(getContext(), scaleBitmap);
         spannableString.setSpan(span, 0, spannableString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
