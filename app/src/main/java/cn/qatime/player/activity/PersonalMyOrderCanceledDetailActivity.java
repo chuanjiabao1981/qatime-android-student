@@ -10,12 +10,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import libraryextra.bean.OrderDetailBean;
-import libraryextra.bean.OrderPayBean;
 import libraryextra.utils.StringUtils;
 
 
@@ -36,7 +34,6 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
     private int classid;
     private TextView payprice;
     DecimalFormat df = new DecimalFormat("#.00");
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +91,7 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
             buildtime.setText("        ");
         }//创建时间
         else {
-            buildtime.setText((getIntent().getStringExtra("created_at")));
+            buildtime.setText(getIntent().getStringExtra("created_at"));
 
         }
         if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("created_at"))) {
