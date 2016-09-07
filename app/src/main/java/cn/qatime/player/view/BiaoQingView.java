@@ -20,6 +20,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.orhanobut.logger.Logger;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +38,7 @@ import libraryextra.view.TagViewPager;
 public class BiaoQingView extends RelativeLayout {
     private EditText content;
     private TagViewPager viewPager;
-
+    private List<Bitmap> bitmapList = new ArrayList<>();
 
     private Handler hd = new Handler();
     private ImageView emoji;
@@ -113,6 +115,7 @@ public class BiaoQingView extends RelativeLayout {
                                 InputStream is = getResources().openRawResource(resId);
                                 helper.read(is);
                                 Bitmap image = helper.getImage();
+                                bitmapList.add(image);
                                 view.setImageBitmap(image);
                                 view.setEnabled(true);
                             }
@@ -122,7 +125,6 @@ public class BiaoQingView extends RelativeLayout {
                         view.setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                // TODO: 2016/9/5 加入到eidttext
                                 if (position < 21) {
                                     content.append(getEmotionContent(item.get("image")));
                                 } else if (position == 27) {
@@ -210,6 +212,8 @@ public class BiaoQingView extends RelativeLayout {
         Bitmap scaleBitmap = Bitmap.createScaledBitmap(bitmap, size, size, true);
         ImageSpan span = new ImageSpan(getContext(), scaleBitmap);
         spannableString.setSpan(span, 0, spannableString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        bitmapList.add(bitmap);
+        bitmapList.add(scaleBitmap);
         return spannableString;
     }
 
@@ -217,6 +221,16 @@ public class BiaoQingView extends RelativeLayout {
         this.content = edit;
         this.emoji = emoji;
         initEmoji();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        //回收bitmap
+        Logger.e("BiaoQingView回收Bitmp");
+        for (Bitmap bitmap : bitmapList) {
+            bitmap.recycle();
+        }
     }
 
     /**
