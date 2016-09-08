@@ -96,7 +96,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         setContentView(R.layout.activity_player);
         id = getIntent().getIntExtra("id", 0);//从前一页进来的id 获取详情用
         if (id == 0) {
-            Toast.makeText(this, "id不能为0", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "暂无辅导班信息", Toast.LENGTH_SHORT).show();
         }
         sessionId = getIntent().getStringExtra("sessionId");
         String url = getIntent().getStringExtra("url");

@@ -1,5 +1,6 @@
 package cn.qatime.player.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.DateUtils;
@@ -87,12 +88,24 @@ public class MessageActivity extends BaseActivity {
         setContentView(R.layout.activity_message);
         sessionId = getIntent().getStringExtra("sessionId");
         sessionType = (SessionTypeEnum) getIntent().getSerializableExtra("sessionType");
+        final int courseId = getIntent().getIntExtra("courseId", 0);
+        final String pull_address = getIntent().getStringExtra("pull_address");
         initView();
-
+        setRightImage(R.mipmap.online_room, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MessageActivity.this, NEVideoPlayerActivity.class);
+                intent.putExtra("url", pull_address);
+                intent.putExtra("id", courseId);
+                intent.putExtra("sessionId", sessionId);
+                startActivity(intent);
+            }
+        });
         registerTeamUpdateObserver(true);
     }
 
     private void initView() {
+
         tipText = (TextView) findViewById(R.id.tip);
         listView = (PullToRefreshListView) findViewById(R.id.list);
 

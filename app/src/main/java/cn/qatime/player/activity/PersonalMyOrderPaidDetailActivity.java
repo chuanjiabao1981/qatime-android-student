@@ -10,9 +10,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
@@ -37,7 +34,6 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
     private TextView payprice;
     private int classid;
     DecimalFormat df = new DecimalFormat("#.00");
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,21 +76,13 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
         if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("created_at"))) {
             buildtime.setText("为空");
         } else {
-            try {
-                buildtime.setText(format.parse((getIntent().getStringExtra("created_at"))).toString());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            buildtime.setText(getIntent().getStringExtra("created_at"));
         }
         //支付时间
         if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("pay_at"))) {
             paytime.setText("为空");
         } else {
-            try {
-                paytime.setText(format.parse((getIntent().getStringExtra("pay_at"))).toString());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            paytime.setText(getIntent().getStringExtra("pay_at"));
         }
         int payType = getIntent().getIntExtra("payType", 0);//支付方式
         if (payType == 1) {

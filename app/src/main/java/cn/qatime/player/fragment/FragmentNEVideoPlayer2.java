@@ -49,7 +49,6 @@ import cn.qatime.player.utils.ExpressionUtil;
 import cn.qatime.player.view.GifDrawable;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.Profile;
 import libraryextra.transformation.GlideCircleTransform;
 
 public class FragmentNEVideoPlayer2 extends BaseFragment {
@@ -318,7 +317,6 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
             boolean needRefresh = false;
             List<IMMessage> addedListItems = new ArrayList<>(messages.size());
             for (IMMessage message : messages) {
-                Logger.e(message.toString());
                 if (isMyMessage(message) && message.getMsgType() == MsgTypeEnum.text) {
                     items.add(message);
                     addedListItems.add(message);

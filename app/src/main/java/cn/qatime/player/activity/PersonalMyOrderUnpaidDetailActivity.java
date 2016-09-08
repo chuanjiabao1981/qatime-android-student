@@ -15,16 +15,9 @@ import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.orhanobut.logger.Logger;
 
-
 import org.json.JSONObject;
 
-import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
-
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
@@ -60,9 +53,6 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
     //    yyyy-MM-dd'T'HH:mm:ss.SSSZ  yyyy年MM月dd日 HH时mm分ss秒 E
     private int classid;
     DecimalFormat df = new DecimalFormat("#.00");
-
-//    SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS+xx:oo");
-//    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd THH:mm:ss-www-xx-oo");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,17 +100,11 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         ordernumber.setText(getIntent().getStringExtra("id"));
         //创建时间
         Logger.e(getIntent().getStringExtra("created_at"));
+        Logger.e("" + getIntent().getIntExtra("payType", 0));
         if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("created_at"))) {
             buildtime.setText("为空");
         } else {
-            try {
-                DateFormat format = new SimpleDateFormat("EEE MMM dd  yyyy HH:mm:ss z");
-                format.setTimeZone(TimeZone.getTimeZone("GMT"));
-                buildtime.setText(format.parse((getIntent().getStringExtra("created_at"))).toString());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
+            buildtime.setText(getIntent().getStringExtra("created_at"));
         }
         int payType = getIntent().getIntExtra("payType", 0);//支付方式
         if (payType == 1) {

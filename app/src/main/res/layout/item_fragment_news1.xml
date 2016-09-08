@@ -2,30 +2,32 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="12dp"
     android:background="#fff"
+    android:paddingBottom="12dp"
     android:paddingLeft="15dp"
     android:paddingTop="12dp">
 
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
-        android:maxLines="1"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:maxLines="1" />
+
+
+    <ImageView
+        android:id="@+id/notify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/name"
+        android:src="@mipmap/chat_ring" />
 
     <TextView
         android:id="@+id/count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#ff0000"
-        android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@id/name"/>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
         android:layout_marginRight="15dp"
-        android:src="@mipmap/chat_ring" />
+        android:textColor="#ff0000" />
 </RelativeLayout>

@@ -175,8 +175,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                     String token = BaseApplication.getAccountToken();
 
                                     if (!StringUtils.isNullOrBlanK(account)&&!StringUtils.isNullOrBlanK(token)){
-                                        AbortableFuture<LoginInfo> loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, token));
-                                        loginRequest.setCallback(new RequestCallback<LoginInfo>() {
+                                        NIMClient.getService(AuthService.class).login(new LoginInfo(account, token)).setCallback(new RequestCallback<LoginInfo>() {
                                             @Override
                                             public void onSuccess(LoginInfo o) {
                                                 DialogUtils.dismissDialog(progress);
@@ -199,10 +198,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                                 TeamDataCache.getInstance().registerObservers(true);
 //                                                FriendDataCache.getInstance().registerObservers(true);
 
-                                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                                startActivity(intent);
-                                                finish();
-                                            }
+                                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                            intent.putExtra("newVersion", getIntent().getBooleanExtra("newVersion", false));
+                                            startActivity(intent);
+                                            finish();
+                                        }
 
                                             @Override
                                             public void onFailed(int code) {

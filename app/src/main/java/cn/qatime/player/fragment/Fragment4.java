@@ -28,7 +28,6 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
     private LinearLayout information;
     private ImageView banner;
     private ImageView headSculpture;
-    private ImageView modify;
     private LinearLayout paying;
     private LinearLayout paid;
     private LinearLayout canceled;
@@ -47,12 +46,11 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment4, container, false);
         assignViews(view);
-
+        newVersion.setVisibility(getActivity().getIntent().getBooleanExtra("newVersion", false) ? View.VISIBLE : View.INVISIBLE);
         if (BaseApplication.getProfile().getData() != null && BaseApplication.getProfile().getData().getUser() != null) {
             Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getSmall_avatar_url()).placeholder(R.mipmap.personal_information_head).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
         }
         name.setText(BaseApplication.getProfile().getData().getUser().getName());
-        modify.setOnClickListener(this);
 
         paying.setOnClickListener(this);
         paid.setOnClickListener(this);
@@ -63,6 +61,7 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
         calssed.setOnClickListener(this);
         overed.setOnClickListener(this);
         trying.setOnClickListener(this);
+        information.setOnClickListener(this);
 
         security.setOnClickListener(this);
         setting.setOnClickListener(this);
@@ -72,7 +71,7 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.modify:
+            case R.id.information:
                 Intent intent = new Intent(getActivity(), PersonalInformationActivity.class);
                 startActivityForResult(intent, Constant.REQUEST);
                 break;
@@ -142,7 +141,6 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
         banner = (ImageView) view.findViewById(R.id.head_sculpture);
         headSculpture = (ImageView) view.findViewById(R.id.head_sculpture);
         name = (TextView) view.findViewById(R.id.name);
-        modify = (ImageView) view.findViewById(R.id.modify);
         paying = (LinearLayout) view.findViewById(R.id.paying);
         paid = (LinearLayout) view.findViewById(R.id.paid);
         canceled = (LinearLayout) view.findViewById(R.id.canceled);
