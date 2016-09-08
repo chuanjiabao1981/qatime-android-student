@@ -20,6 +20,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.orhanobut.logger.Logger;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -226,6 +228,16 @@ public class BiaoQingView extends RelativeLayout {
         this.content = edit;
         this.emoji = emoji;
         initEmoji();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        //回收bitmap
+        Logger.e("BiaoQingView回收Bitmp");
+        for (Bitmap bitmap : bitmapList) {
+            bitmap.recycle();
+        }
     }
 
     /**
