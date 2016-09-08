@@ -143,7 +143,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(SystemSettingActivity.this);
                             final View view = View.inflate(SystemSettingActivity.this, R.layout.dialog_check_update, null);
                             Button down = (Button) view.findViewById(R.id.download);
-                            View x = view.findViewById(R.id.text_x);
+                            View x = view.findViewById(R.id.image_x);
                             TextView newVersion = (TextView) view.findViewById(R.id.new_version);
                             TextView desc = (TextView) view.findViewById(R.id.desc);
                             desc.setMaxHeight(DensityUtils.dp2px(SystemSettingActivity.this, 300));
@@ -165,8 +165,10 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                             view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                                 @Override
                                 public void onGlobalLayout() {
-                                    if (DensityUtils.px2dp(SystemSettingActivity.this, view.getMeasuredHeight()) > 500) {
+                                    if (DensityUtils.px2dp(SystemSettingActivity.this, alertDialog.getWindow().getAttributes().height) > 500) {
                                         alertDialog.getWindow().setLayout(DensityUtils.dp2px(SystemSettingActivity.this, 300), DensityUtils.dp2px(SystemSettingActivity.this, 500));
+                                    } else {
+                                        alertDialog.getWindow().setLayout(DensityUtils.dp2px(SystemSettingActivity.this, 300), alertDialog.getWindow().getAttributes().height);
                                     }
                                 }
                             });
@@ -220,7 +222,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 downFileUtil.downFile();
                 alertDialog.dismiss();
                 break;
-            case R.id.text_x:
+            case R.id.image_x:
                 alertDialog.dismiss();
                 break;
         }
