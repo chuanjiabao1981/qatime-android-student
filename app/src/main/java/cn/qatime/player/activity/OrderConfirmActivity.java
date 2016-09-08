@@ -10,19 +10,29 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
+import libraryextra.bean.OrderConfirmBean;
 import libraryextra.bean.OrderPayBean;
+import libraryextra.utils.JsonUtils;
+import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 
 public class OrderConfirmActivity extends BaseActivity implements View.OnClickListener {
     TextView name;
@@ -33,7 +43,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     TextView classnumber;
     TextView classstarttime;
     TextView classendtime;
-    TextView status;
+//    TextView status;
     TextView price;
     TextView payprice;
     private Button pay;
@@ -41,11 +51,9 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     private RadioButton aliPay;
     private RadioGroup radioGroup;
     private int id;
-    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
     private String payType = "1";
     private int priceNumber = 0;
-
+    private OrderConfirmBean data;
     DecimalFormat df = new DecimalFormat("#.00");
 
     @Override
@@ -76,16 +84,15 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         grade.setText(getResources().getString(R.string.grade_type) + data.grade);
         classnumber.setText(getResources().getString(R.string.total_class_hours) + data.classnumber);
         teacher.setText(getResources().getString(R.string.teacher) + data.teacher);
-        classstarttime.setText(getResources().getString(R.string.class_start_time) +data.classstarttime);
+        classstarttime.setText(getResources().getString(R.string.class_start_time) + data.classstarttime);
         classendtime.setText(getResources().getString(R.string.class_end_time) + data.classendtime);
-        if (data.status.equals("preview")) {
-            status.setText(getResources().getString(R.string.status_preview));
-        } else if (data.status.equals("teaching")) {
-            status.setText(getResources().getString(R.string.status_teaching));
-        } else {
-            status.setText(getResources().getString(R.string.status_over));
-        }
-
+//        if (data.status.equals("preview")) {
+//            status.setText(getResources().getString(R.string.status_preview));
+//        } else if (data.status.equals("teaching")) {
+//            status.setText(getResources().getString(R.string.status_teaching));
+//        } else {
+//            status.setText(getResources().getString(R.string.status_over));
+//        }
         String price = df.format(data.price);
         if (price.startsWith(".")) {
             price = "0" + price;
@@ -97,12 +104,55 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
-        intent.putExtra("id", id);
-        intent.putExtra("price", priceNumber);
-        intent.putExtra("payType", payType);
-        startActivity(intent);
+        Toast.makeText(OrderConfirmActivity.this, "正在生成订单", Toast.LENGTH_SHORT).show();
+        Map<String, String> map = new HashMap<>();
+        map.put("pay_type", payType);
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlPayPrepare + id + "/orders", map), null,
+                new VolleyListener(OrderConfirmActivity.this) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        data = JsonUtils.objectFromJson(response.toString(), OrderConfirmBean.class);
+                        if (data != null) {
+//                            canPay = true;
+                            Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
+                            intent.putExtra("price", priceNumber);
+                            intent.putExtra("id", data.getData().getId());
+                            intent.putExtra("time", data.getData().getCreated_at());
+                            intent.putExtra("type", (data.getData().getPay_type() + "").equals("1") ? getResources().getString(R.string.method_payment) + "：微信支付" : getResources().getString(R.string.method_payment) + "：支付宝支付");
+                            OrderConfirmBean.App_pay_params app_pay_params = data.getData().getApp_pay_params();
+                            intent.putExtra("data", app_pay_params);
+                            Toast.makeText(OrderConfirmActivity.this, "订单生成成功", Toast.LENGTH_SHORT).show();
+                            startActivity(intent);
+                            SPUtils.put(OrderConfirmActivity.this, "orderId", data.getData().getId());
+                            SPUtils.put(OrderConfirmActivity.this, "price", priceNumber);
+                        } else {
+                            //                            canPay = false;
+                            Toast.makeText(OrderConfirmActivity.this, "订单生成失败", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                        //                            canPay = false;
+                        Toast.makeText(OrderConfirmActivity.this, "订单生成失败", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+                Toast.makeText(OrderConfirmActivity.this, "请检查网络连接", Toast.LENGTH_SHORT).show();
+            }
+        });
+        addToRequestQueue(request);
+
+
     }
+
 
     public void initView() {
 
@@ -114,7 +164,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         classnumber = (TextView) findViewById(R.id.class_number);
         classstarttime = (TextView) findViewById(R.id.class_start_time);
         classendtime = (TextView) findViewById(R.id.class_end_time);
-        status = (TextView) findViewById(R.id.status);
+//        status = (TextView) findViewById(R.id.status);
         radioGroup = (RadioGroup) findViewById(R.id.radiogroup);
         wechatPay = (RadioButton) findViewById(R.id.wechat_pay);
         aliPay = (RadioButton) findViewById(R.id.alipay);

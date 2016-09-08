@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:weightSum="1">
+              android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:weightSum="1">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#ffffff"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -26,23 +23,14 @@
                 android:paddingTop="5dp">
 
                 <TextView
-                    android:id="@+id/class_date"
+                    android:id="@+id/course"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:paddingBottom="5dp"
-                    android:text="日期"
-                    android:textColor="#ffc400"
-                    />
-
-                <TextView
-                    android:id="@+id/live_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:paddingBottom="5dp"
-                    android:text="时间"
-                    android:textColor="#ffc400"/>
+                    android:text="课程"/>
             </LinearLayout>
 
             <TextView
@@ -50,6 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:paddingTop="5dp"
                 android:text="@string/done"/>
@@ -77,8 +66,28 @@
                     android:layout_height="match_parent"
                     android:background="@color/guideline"
                     android:orientation="vertical"
-                    android:padding="10dp"
-                    >
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingBottom="10dp">
+
+                        <TextView
+                            android:id="@+id/class_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="日期"
+                            android:textColor="#ff6a00"/>
+
+                        <TextView
+                            android:id="@+id/live_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="时间"
+                            android:textColor="#ff6a00"/>
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -93,27 +102,22 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
-                            android:maxLines="2"
-                            android:text="高考考前急速冲刺训练班训练班训惺惺相惜学校学校练班"
-                            android:textSize="15sp"/>
+                            android:maxLines="1"
+                            android:text="高考考前急速冲刺班相学练班"/>
                     </LinearLayout>
 
                     <TextView
                         android:id="@+id/subject"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="2dp"
                         android:paddingLeft="2dp"
-                        android:paddingTop="2dp"
                         android:text="科目"/>
 
                     <TextView
                         android:id="@+id/teacher"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="2dp"
                         android:paddingLeft="2dp"
-                        android:paddingTop="2dp"
                         android:text="老师"/>
                 </LinearLayout>
 
@@ -122,4 +126,5 @@
         </LinearLayout>
 
     </LinearLayout>
+
 </LinearLayout>

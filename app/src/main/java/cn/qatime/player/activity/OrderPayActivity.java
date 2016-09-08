@@ -1,53 +1,41 @@
 package cn.qatime.player.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.VolleyError;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.json.JSONObject;
 
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
-import libraryextra.bean.OrderConfirmBean;
 import cn.qatime.player.utils.Constant;
-import cn.qatime.player.utils.DaYiJsonObjectRequest;
-import libraryextra.utils.JsonUtils;
-import libraryextra.utils.SPUtils;
+import libraryextra.bean.OrderConfirmBean;
 import libraryextra.utils.StringUtils;
-import cn.qatime.player.utils.UrlUtils;
-import libraryextra.utils.VolleyErrorListener;
-import libraryextra.utils.VolleyListener;
 
 public class OrderPayActivity extends BaseActivity {
     TextView code;
     TextView time;
-    TextView type;
     TextView price;
+    TextView type;
+    TextView phone;
     Button commit;
-    private OrderConfirmBean data;
-    private IWXAPI api;
-    private boolean canPay = false;
 
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
-    private int priceNumber;
+    private IWXAPI api;
+
+
 
     DecimalFormat df = new DecimalFormat("#.00");
+    private OrderConfirmBean.App_pay_params data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,61 +50,21 @@ public class OrderPayActivity extends BaseActivity {
         // 将该app注册到微信
         api.registerApp(Constant.APP_ID);
 
-        int id = getIntent().getIntExtra("id", 0);
-        String payType = getIntent().getStringExtra("payType");
-        priceNumber = getIntent().getIntExtra("price", 0);
-        initData(id, payType);
+        initData();
     }
 
-    private void initData(int id, final String payType) {
-        Map<String, String> map = new HashMap<>();
-        map.put("pay_type", payType);
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlPayPrepare + id + "/orders", map), null,
-                new VolleyListener(OrderPayActivity.this) {
+    private void initData() {
+        //1
+        data = (OrderConfirmBean.App_pay_params) getIntent().getSerializableExtra("data");
 
-
-                    @Override
-                    protected void onSuccess(JSONObject response) {
-                        data = JsonUtils.objectFromJson(response.toString(), OrderConfirmBean.class);
-
-                        if (data != null) {
-                            canPay = true;
-                            code.setText(getResources().getString(R.string.order_number)+"：" + data.getData().getId());
-                            time.setText(getResources().getString(R.string.time_built)+"：" + format.format(new Date()));
-                            if (payType.equals("1")) {
-                                type.setText(getResources().getString(R.string.method_payment)+"：微信支付");
-                            } else {
-                                type.setText(getResources().getString(R.string.method_payment)+"：支付宝支付");
-                            }
-
-                            String price = df.format(priceNumber);
-                            if (price.startsWith(".")) {
-                                price = "0" + price;
-                            }
-                            OrderPayActivity.this.price.setText(getResources().getString(R.string.amount_payment)+"：￥" + price);
-
-
-                            commit.setEnabled(true);
-                        }
-                    }
-
-                    @Override
-                    protected void onError(JSONObject response) {
-                        canPay = false;
-
-                    }
-
-                    @Override
-                    protected void onTokenOut() {
-                        tokenOut();
-                    }
-                }, new VolleyErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
-            }
-        });
-        addToRequestQueue(request);
+        String price = df.format(getIntent().getIntExtra("price", 0));
+        if (price.startsWith(".")) {
+            price = "0" + price;
+        }
+        code.setText(getResources().getString(R.string.order_number) + "：" + getIntent().getStringExtra("id"));
+        time.setText(getResources().getString(R.string.time_built) + "：" + getIntent().getStringExtra("time"));
+        type.setText(getIntent().getStringExtra("type"));
+        this.price.setText(getResources().getString(R.string.amount_payment) + "：￥" + price);
     }
 
     public void initView() {
@@ -124,37 +72,38 @@ public class OrderPayActivity extends BaseActivity {
         code = (TextView) findViewById(R.id.code);
         time = (TextView) findViewById(R.id.time);
         type = (TextView) findViewById(R.id.type);
+        phone = (TextView) findViewById(R.id.phone);
         price = (TextView) findViewById(R.id.price);
         commit = (Button) findViewById(R.id.commit);
-        commit.setEnabled(false);
+        //拨打电话
+        phone.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
+                startActivity(intent);
+            }
+        });
         commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (canPay) {
-                    PayReq request = new PayReq();
+                PayReq request = new PayReq();
 
-                    request.appId = data.getData().getApp_pay_params().getAppid();
+                request.appId = data.getAppid();
 
-                    request.partnerId = data.getData().getApp_pay_params().getPartnerid();
+                request.partnerId = data.getPartnerid();
 
-                    request.prepayId = data.getData().getApp_pay_params().getPrepayid();
+                request.prepayId = data.getPrepayid();
 
-                    request.packageValue = data.getData().getApp_pay_params().getPackage();
+                request.packageValue = data.getPackage();
 
-                    request.nonceStr = data.getData().getNonce_str();
+                request.nonceStr = data.getNoncestr();
 
-                    request.timeStamp = data.getData().getApp_pay_params().getTimestamp();
+                request.timeStamp = data.getTimestamp();
 
-
-                    request.sign = data.getData().getApp_pay_params().getSign();
-                    api.sendReq(request);
-                    SPUtils.put(OrderPayActivity.this, "orderId", data.getData().getId());
-                    SPUtils.put(OrderPayActivity.this, "price", priceNumber);
-                } else {
-                    Toast.makeText(OrderPayActivity.this, getResources().getString(R.string.fail_pay), Toast.LENGTH_SHORT).show();
-                }
-
+                request.sign = data.getSign();
+                api.sendReq(request);
             }
         });
     }

@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@drawable/text_background"
+              android:background="@drawable/stroke_background"
+              android:descendantFocusability="blocksDescendants"
 
               android:weightSum="1">
 
@@ -36,7 +37,7 @@
                 android:padding="2dp">
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/classname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="2"
@@ -50,12 +51,20 @@
                     android:orientation="horizontal">
 
                     <TextView
-
+                        android:id="@+id/grade"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
-                        android:padding="2dp"
-                        android:text="高一数学"
+                        android:paddingLeft="2dp"
+                        android:text="年级"
+                        android:textSize="13sp"/>
+
+                    <TextView
+                        android:id="@+id/subject"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:text="科目"
                         android:textSize="13sp"/>
 
                     <View
@@ -63,12 +72,12 @@
                         android:layout_height="match_parent"/>
 
                     <TextView
-
+                        android:id="@+id/teacher"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
                         android:padding="2dp"
-                        android:text="司马光"
+                        android:text="教师"
                         android:textSize="13sp"/>
 
                     <View
@@ -76,7 +85,7 @@
                         android:layout_height="match_parent"/>
 
                     <TextView
-
+                        android:id="@+id/progress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
@@ -107,13 +116,13 @@
                 android:gravity="center">
 
                 <TextView
-
+                    android:id="@+id/status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="@string/paying"
+                    android:text="状态"
                     android:textColor="#ffa217"
-                    android:textSize="16sp"/>
+                  />
 
             </RelativeLayout>
 
@@ -122,8 +131,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:orientation="horizontal">
+            android:layout_height="30dp"
+            android:orientation="horizontal"
+            android:paddingBottom="1dp">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -135,22 +145,24 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/amount_payment"/>
+                    android:text="@string/amount_payment_item"/>
 
                 <TextView
+                    android:id="@+id/price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="￥1440.00"
+                    android:text="￥"
                     android:textColor="#f9270c"
                     android:textStyle="bold"/>
             </LinearLayout>
 
 
             <TextView
+                android:id="@+id/cancel_order"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/stroke_background"
+                android:background="@drawable/button_background"
                 android:gravity="center"
                 android:singleLine="true"
                 android:text="@string/cancel_order"/>
@@ -160,6 +172,7 @@
                 android:layout_height="match_parent"/>
 
             <TextView
+                android:id="@+id/pay"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

@@ -1,4 +1,4 @@
-<resources>
+<resources tools:ignore="MissingTranslation" xmlns:tools="http://schemas.android.com/tools">
     <!--//刷新-->
     <string name="pull_to_refresh">下拉刷新</string>
     <string name="pull_to_load">上拉加载</string>
@@ -62,7 +62,7 @@
     <string name="primary2">二年级</string>
     <string name="primary1">一年级</string>
     <!--//fragment2-->
-    <string name="course_to_be_done">待上课</string>
+    <string name="course_to_be_done">未上课</string>
     <string name="course_finished">已上课</string>
     <string name="all_course">全部课程</string>
     <!--//fragment4-->
@@ -106,26 +106,31 @@
     <string name="tutor_information">辅导班详情</string>
     <!--//我的订单-->
     <string name="detail_of_order">订单详情</string>
-    <string name="waiting_for_payment">等待付款中</string>
+    <string name="waiting_for_payment">等待付款</string>
     <string name="order_number">订单编号</string>
     <string name="time_built">创建时间</string>
     <string name="time_payment">支付时间</string>
     <string name="method_payment">支付方式</string>
     <string name="amount_payment">应付金额</string>
+    <string name="amount_payment_item">实付金额</string>
+    <string name="amount_payment_order">支付金额</string>
     <string name="cancel_order">取消订单</string>
     <string name="delete_order">删除订单</string>
-    <string name="reorder">重新下单</string>
+    <string name="reorder">重新购买</string>
     <string name="pay">付款</string>
-    <string name="deal_down">交易完成</string>//
+    <string name="deal_done">交易完成</string>//
+    <string name="dealing">正在交易</string>//
     <string name="deal_closed">交易关闭</string>//
     <string name="order_confirm">订单确认</string>
     <string name="pay_confirm">支付确认</string>
     <string name="commodity_name">商品名称</string>
     <string name="commodity_detail">商品详情</string>
     <string name="pay_remind">请您在24小时内完成支付，否则订单会自动取消。</string>
+    <string name="problem_phone">如遇支付问题，请拨打电话</string>
     <!--//详情-->
-    <string name="information_detail">信息详情</string>
-    <string name="teacher_detail">教师详情</string>
+    <string name="information_detail">辅导概况</string>
+
+    <string name="teacher_detail">教师资料</string>
     <string name="course_list">课程列表</string>
     <!--//课程详情-->
     <string name="student_number">学习人数</string>
@@ -187,7 +192,7 @@
     <string name="status_preview">当前状态：招生中</string>
     <string name="status_teaching">当前状态：已开课</string>
     <string name="status_over">当前状态：已结束</string>
-    <string name="grade_type">年级类型：</string>
+    <string name="grade_type">授课类型：</string>
     <!--//课程详情2-->
     <string name="teacher_name">老师姓名：</string>
     <string name="teacher_years">执教年龄：</string>
@@ -195,7 +200,7 @@
     <string name="within_ten_years">3-10年</string>
     <string name="more_than_ten_years">20年以上</string>
     <string name="within_twenty_years">10-20年</string>
-    <string name="teacher_subject">所授科目：</string>
+    <string name="teacher_subject">授课科目：</string>
     <string name="teacher_school">所在学校：</string>
     <string name="teacher_introduction">自我介绍：</string>
     <!--课程状态-->
@@ -263,7 +268,8 @@
     <string name="position_bottom">下方</string>
     <string name="full_screen">全屏</string>
     <string name="comment_content">评论内容</string>
-    <string name="barrage">打开弹幕</string>
+    <string name="barrage_open">打开弹幕</string>
+    <string name="barrage_close">关闭弹幕</string>
     <string name="system_setting">系统设置</string>
 
 
@@ -340,4 +346,5 @@
     <string name="weixin">官方微信</string>
     <string name="about_us_desc"><![CDATA[    北京维幄通达网络科技有限公司，成立于2012年初，主要从事教育科研产品的销售以及教育网络推广。公司实力优越，拥有一批科研技术专业能力强大的研发团队。目前，教育信息化改革的背景下，公司紧紧围绕互联网技术与教育产生信息化这一特点，重点着力于建立独具特色的现代信息化教育模式，公司的研发成果为优化教育资源，推进教育信息改革起到了很大的促进作用。现阶段公司正积极面向全国开展销售推广业务，具有强大的发展潜力和良好的发展前景。现诚邀有志之士加入我们，与我们携手共同实现理想。]]></string>
     <string name="team_send_message_not_allow">您已不在该群，不能发送消息</string>
+    <string name="team_not_exist">该群不存在</string>
 </resources>

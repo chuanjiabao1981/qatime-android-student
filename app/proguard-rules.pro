@@ -16,6 +16,8 @@
 #   public *;
 #}
 
+#彈幕混淆
+-keep class cn.qatime.player.barrage.**{*;}
 
 #eventbus
 -keep class de.greenrobot.event.** {*;}

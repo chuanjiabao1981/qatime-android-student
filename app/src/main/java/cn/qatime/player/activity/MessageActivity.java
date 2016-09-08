@@ -1,17 +1,19 @@
 package cn.qatime.player.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.format.DateUtils;
 import android.view.View;
-import android.view.ViewStructure;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -20,22 +22,20 @@ import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
-import com.netease.nimlib.sdk.msg.model.MessageReceipt;
 import com.netease.nimlib.sdk.msg.model.QueryDirectionEnum;
 import com.netease.nimlib.sdk.team.constant.TeamTypeEnum;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
-import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.orhanobut.logger.Logger;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.AbstractSequentialList;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.List;
 
 import cn.qatime.player.R;
@@ -44,10 +44,12 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.FriendDataCache;
 import cn.qatime.player.im.cache.TeamDataCache;
+import cn.qatime.player.utils.ExpressionUtil;
+import cn.qatime.player.view.BiaoQingView;
+import cn.qatime.player.view.GifDrawable;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.transformation.GlideCircleTransform;
-import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.StringUtils;
 
 /**
@@ -58,7 +60,7 @@ import libraryextra.utils.StringUtils;
 public class MessageActivity extends BaseActivity {
     private String sessionId;//聊天对象id
     private SessionTypeEnum sessionType;
-    private ListView listView;
+    private PullToRefreshListView listView;
 
     private boolean firstLoad = true;
 
@@ -75,6 +77,9 @@ public class MessageActivity extends BaseActivity {
     private Team team;
     private Button send;
     private TextView tipText;
+    private ImageView emoji;
+    private EditText content;
+    Hashtable<Integer, GifDrawable> cache = new Hashtable<Integer, GifDrawable>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,30 +94,56 @@ public class MessageActivity extends BaseActivity {
 
     private void initView() {
         tipText = (TextView) findViewById(R.id.tip);
-        listView = (ListView) findViewById(R.id.list);
+        listView = (PullToRefreshListView) findViewById(R.id.list);
+
+        listView.getRefreshableView().setDividerHeight(0);
+        listView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+        listView.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
+        listView.getLoadingLayoutProxy(false, true).setPullLabel(getResources().getString(R.string.pull_to_load));
+        listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResources().getString(R.string.refreshing));
+        listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
+        listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
+        listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
+
         adapter = new CommonAdapter<IMMessage>(this, items, R.layout.item_message) {
             @Override
-            public void convert(ViewHolder holder, IMMessage item, int position) {
+            public void convert(final ViewHolder holder, IMMessage item, int position) {
 
                 if (item.getFromAccount().equals(BaseApplication.getAccount())) {
                     holder.getView(R.id.right).setVisibility(View.VISIBLE);
                     holder.getView(R.id.left).setVisibility(View.GONE);
                     Glide.with(MessageActivity.this).load(BaseApplication.getProfile().getData().getUser().getChat_account().getIcon()).crossFade().dontAnimate().transform(new GlideCircleTransform(MessageActivity.this)).into((ImageView) holder.getView(R.id.my_head));
                     holder.setText(R.id.my_time, getTime(item.getTime()));
-                    holder.setText(R.id.my_content, item.getContent());
+                    ((TextView) holder.getView(R.id.my_content)).setText(ExpressionUtil.getExpressionString(
+                            MessageActivity.this, item.getContent(), ExpressionUtil.emoji, cache, new GifDrawable.UpdateListener() {
+                                @Override
+                                public void update() {
+                                    ((TextView) holder.getView(R.id.my_content)).postInvalidate();
+                                }
+                            }));
+//                    ((TextView) holder.getView(R.id.my_content)).setText(ExpressionUtil.getExpressionString(MessageActivity.this,
+//                            item.getContent(), ExpressionUtil.emoji));
                 } else {
                     holder.getView(R.id.right).setVisibility(View.GONE);
                     holder.getView(R.id.left).setVisibility(View.VISIBLE);
                     Glide.with(MessageActivity.this).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_32).crossFade().dontAnimate().transform(new GlideCircleTransform(MessageActivity.this)).into((ImageView) holder.getView(R.id.other_head));
                     holder.setText(R.id.other_name, item.getFromNick());
-                    holder.setText(R.id.other_content, item.getContent());
+                    ((TextView) holder.getView(R.id.other_content)).setText(ExpressionUtil.getExpressionString(
+                            MessageActivity.this, item.getContent(), ExpressionUtil.emoji, cache, new GifDrawable.UpdateListener() {
+                                @Override
+                                public void update() {
+                                    ((TextView) holder.getView(R.id.other_content)).postInvalidate();
+                                }
+                            }));
                     holder.setText(R.id.other_time, getTime(item.getTime()));
                 }
 
             }
         };
         listView.setAdapter(adapter);
-        final EditText content = (EditText) findViewById(R.id.content);
+        content = (EditText) findViewById(R.id.content);
+        emoji = (ImageView) findViewById(R.id.emoji);
+
         send = (Button) findViewById(R.id.send);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,14 +167,29 @@ public class MessageActivity extends BaseActivity {
 
                 items.add(message);
                 adapter.notifyDataSetChanged();
-                listView.setSelection(items.size() - 1);
+                listView.getRefreshableView().setSelection(items.size() - 1);
                 content.setText("");
             }
         });
-
+        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        String label = DateUtils.formatDateTime(MessageActivity.this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+                        listView.getLoadingLayoutProxy(false, true).setLastUpdatedLabel(label);
+                        listView.onRefreshComplete();
+                    }
+                }, 200);
+                loadFromRemote();
+            }
+        });
         loadMessage(false);
-
+        BiaoQingView bq = (BiaoQingView) findViewById(R.id.biaoQingView);
+        bq.init(content, emoji);
     }
+
 
     /**
      * 将long值转换为时间
@@ -174,7 +220,6 @@ public class MessageActivity extends BaseActivity {
 
     private void loadFromLocal(QueryDirectionEnum direction) {
         this.direction = direction;
-//        messageListView.onRefreshStart(direction == QueryDirectionEnum.QUERY_NEW ? AutoRefreshListView.Mode.END : AutoRefreshListView.Mode.START);
         NIMClient.getService(MsgService.class).queryMessageListEx(anchor(), direction, LOAD_MESSAGE_COUNT, true)
                 .setCallback(callback);
     }
@@ -206,7 +251,6 @@ public class MessageActivity extends BaseActivity {
     private void loadAnchorContext() {
         // query old
         this.direction = QueryDirectionEnum.QUERY_OLD;
-//        messageListView.onRefreshStart(AutoRefreshListView.Mode.START);
         NIMClient.getService(MsgService.class).queryMessageListEx(anchor(), direction, LOAD_MESSAGE_COUNT, true)
                 .setCallback(new RequestCallbackWrapper<List<IMMessage>>() {
                     @Override
@@ -218,7 +262,6 @@ public class MessageActivity extends BaseActivity {
 
                         // query new
                         direction = QueryDirectionEnum.QUERY_NEW;
-//                        messageListView.onRefreshStart(AutoRefreshListView.Mode.END);
                         NIMClient.getService(MsgService.class).queryMessageListEx(anchor(), direction, LOAD_MESSAGE_COUNT, true)
                                 .setCallback(new RequestCallbackWrapper<List<IMMessage>>() {
                                     @Override
@@ -227,8 +270,6 @@ public class MessageActivity extends BaseActivity {
                                             return;
                                         }
                                         onMessageLoaded(messages);
-                                        // scroll to position
-//                                        scrollToAnchor(anchor);
                                     }
                                 });
                     }
@@ -242,12 +283,9 @@ public class MessageActivity extends BaseActivity {
      * @param messages
      */
     private void onMessageLoaded(List<IMMessage> messages) {
-        int count = messages.size();
-
         if (remote) {
             Collections.reverse(messages);
         }
-
         if (firstLoad && items.size() > 0) {
             // 在第一次加载的过程中又收到了新消息，做一下去重
             for (IMMessage message : messages) {
@@ -266,7 +304,9 @@ public class MessageActivity extends BaseActivity {
 
         List<IMMessage> result = new ArrayList<>();
         for (IMMessage message : messages) {
-            result.add(message);
+            if (message.getMsgType() == MsgTypeEnum.text) {
+                result.add(message);
+            }
         }
         if (direction == QueryDirectionEnum.QUERY_NEW) {
             items.addAll(result);
@@ -275,8 +315,7 @@ public class MessageActivity extends BaseActivity {
         }
 
         adapter.notifyDataSetChanged();
-        listView.setSelection(items.size() - 1);
-//        messageListView.onRefreshComplete(count, LOAD_MESSAGE_COUNT, true);
+        listView.getRefreshableView().setSelection(result.size());
         firstLoad = false;
     }
 
@@ -297,7 +336,7 @@ public class MessageActivity extends BaseActivity {
             boolean needRefresh = false;
             List<IMMessage> addedListItems = new ArrayList<>(messages.size());
             for (IMMessage message : messages) {
-                if (isMyMessage(message)) {
+                if (isMyMessage(message) && message.getMsgType() == MsgTypeEnum.text) {
                     items.add(message);
                     addedListItems.add(message);
                     needRefresh = true;
@@ -305,6 +344,7 @@ public class MessageActivity extends BaseActivity {
             }
             if (needRefresh) {
                 adapter.notifyDataSetChanged();
+                listView.getRefreshableView().setSelection(adapter.getCount() - 1);
             }
         }
     };
@@ -315,7 +355,6 @@ public class MessageActivity extends BaseActivity {
         @Override
         public void onEvent(IMMessage message) {
             if (isMyMessage(message)) {
-//                onMessageStatusChange(message);
             }
         }
     };
@@ -357,8 +396,6 @@ public class MessageActivity extends BaseActivity {
             return;
         }
         team = d;
-//        setTitle(team == null ? sessionId : team.getName() + "(" + team.getMemberCount() + "人)");
-//
         tipText.setText(team.getType() == TeamTypeEnum.Normal ? "您已退出该群组" : "您已退出该群组");
         tipText.setVisibility(team.isMyTeam() ? View.GONE : View.VISIBLE);
     }

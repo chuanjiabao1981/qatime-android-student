@@ -1,13 +1,11 @@
 package cn.qatime.player.activity;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -37,7 +35,6 @@ import cn.qatime.player.view.MonthDateView;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import cn.qatime.player.base.BaseActivity;
-import libraryextra.bean.RemedialClassBean;
 import libraryextra.utils.DensityUtils;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
@@ -51,7 +48,6 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
     private List<Integer> alertList = new ArrayList<>();
     private MonthDateView monthDateView;
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
-
     private String date = parse.format(new Date());
     private List<ClassTimeTableBean.DataEntity.LessonsEntity> itemList = new ArrayList<>();
 
@@ -111,7 +107,6 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         itemList.clear();
         for (int i = 0; i < totalList.size(); i++) {
             Logger.e(date + "--------" + totalList.get(i).getDate());
-
             if (date.equals(totalList.get(i).getDate())) {
                 itemList.addAll(totalList.get(i).getLessons());
                 break;
@@ -135,22 +130,19 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         adapter = new CommonAdapter<ClassTimeTableBean.DataEntity.LessonsEntity>(this, itemList, R.layout.item_activity_class_time_table) {
             @Override
             public void convert(ViewHolder helper, final ClassTimeTableBean.DataEntity.LessonsEntity item, int position) {
-
-
                 Glide.with(ClassTimeTableActivity.this).load(item.getCourse_publicize()).centerCrop().crossFade().dontAnimate().into((ImageView) helper.getView(R.id.image));
                 helper.getView(R.id.image).setOnClickListener(
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent(ClassTimeTableActivity.this, RemedialClassDetailActivity.class);
-                                intent.putExtra("id", item.getId());
+                                intent.putExtra("id", Integer.valueOf(item.getCourse_id()));
                                 intent.putExtra("pager", 2);
                                 startActivity(intent);
                             }
                         });
-//
-
-                helper.setText(R.id.classname,item.getName());
+                helper.setText(R.id.course, item.getCourse_name());
+                helper.setText(R.id.classname, item.getName());
                 helper.setText(R.id.status, getStatus(item.getStatus()));
                 helper.setText(R.id.class_date, item.getClass_date() + " ");
                 helper.setText(R.id.live_time, item.getLive_time());
@@ -166,8 +158,6 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                         startActivity(intent);
                     }
                 });
-
-
             }
         };
         listView.setAdapter(adapter);

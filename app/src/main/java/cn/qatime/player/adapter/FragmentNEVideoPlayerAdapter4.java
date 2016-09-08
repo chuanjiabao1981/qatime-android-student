@@ -1,16 +1,20 @@
 package cn.qatime.player.adapter;
 
 import android.content.Context;
-import android.widget.TextView;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.bean.Announcements;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.RemedialClassDetailBean;
+import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.StringUtils;
 
 /**
@@ -18,11 +22,13 @@ import libraryextra.utils.StringUtils;
  * @date 2016/8/9 17:15
  * @Description 直播-成员列表
  */
-public class FragmentNEVideoPlayerAdapter4 extends CommonAdapter<RemedialClassDetailBean.Accounts> {
+public class FragmentNEVideoPlayerAdapter4 extends CommonAdapter<Announcements.DataBean.MembersBean> {
     private Map<String, Integer> letterMap = new HashMap<String, Integer>();
+    private Context context;
 
-    public FragmentNEVideoPlayerAdapter4(Context context, List<RemedialClassDetailBean.Accounts> mDatas, int itemLayoutId) {
+    public FragmentNEVideoPlayerAdapter4(Context context, List<Announcements.DataBean.MembersBean> mDatas, int itemLayoutId) {
         super(context, mDatas, itemLayoutId);
+        this.context = context;
     }
 
     public void clearLetterMap() {
@@ -30,24 +36,12 @@ public class FragmentNEVideoPlayerAdapter4 extends CommonAdapter<RemedialClassDe
     }
 
     @Override
-    public void convert(ViewHolder holder, RemedialClassDetailBean.Accounts item, int position) {
+    public void convert(ViewHolder holder, Announcements.DataBean.MembersBean item, int position) {
         if (!letterMap.containsKey(item.getFirstLetter())) {
             letterMap.put(item.getFirstLetter(), position);
         }
-//        if (position == letterMap.get(item.getFirstLetter()) && !StringUtils.isNullOrBlanK(item.getFirstLetter())) {
-//            holder.getView(R.id.top).setVisibility(View.VISIBLE);
-//        } else {
-//            holder.getView(R.id.top).setVisibility(View.GONE);
-//        }
-//        holder.setText(R.id.top, item.getFirstLetter());
-//        if (position > 5) {
-//            ((TextView)holder.getView(R.id.name)).setTextColor(0xff6c6c6c);
-//            ((TextView)holder.getView(R.id.role)).setTextColor(0xff6c6c6c);
-//        } else {
-//            ((TextView)holder.getView(R.id.name)).setTextColor(0xffed0000);
-//            ((TextView)holder.getView(R.id.role)).setTextColor(0xffed0000);
-//        }
         holder.setText(R.id.name, item.getName());
+        Glide.with(context).load(item.getIcon()).placeholder(R.mipmap.head_32).fitCenter().crossFade().transform(new GlideCircleTransform(context)).dontAnimate().into((ImageView) holder.getView(R.id.image));
     }
 
     public int getPositionByLetter(String s) {

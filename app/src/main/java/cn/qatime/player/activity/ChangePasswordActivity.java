@@ -16,7 +16,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -28,7 +27,6 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
-import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyListener;
 
@@ -129,7 +127,7 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
             case R.id.forget_password:
                 Intent intent = new Intent(this, ForgetPasswordActivity.class);
                 intent.putExtra("status_login", true);
-                startActivity(intent);
+                startActivityForResult(intent, Constant.REQUEST_EXIT_LOGIN);
                 break;
             case R.id.button_over:
                 if (!(StringUtils.isGoodPWD(password1) || StringUtils.isGoodPWD(password2) || StringUtils.isGoodPWD(password3))) {
@@ -154,30 +152,19 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
 
                     @Override
                     protected void onSuccess(JSONObject response) {
-
-
                         Logger.e("验证成功");
                         Toast.makeText(ChangePasswordActivity.this, "密码修改成功，请用新密码重新登录", Toast.LENGTH_SHORT).show();
                         BaseApplication.clearToken();
                         setResult(Constant.RESPONSE_EXIT_LOGIN);
-                        SPUtils.putObject(ChangePasswordActivity.this, "profile", BaseApplication.getProfile());
                         Intent intent = new Intent(ChangePasswordActivity.this, LoginActivity.class);
                         intent.putExtra("sign", "exit_login");
                         startActivity(intent);
                         finish();
-
-
                     }
 
                     @Override
                     protected void onError(JSONObject response) {
-                        try {
-                            JSONObject error = response.getJSONObject("error");
-                            Toast.makeText(ChangePasswordActivity.this, "密码错误", Toast.LENGTH_SHORT).show();
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        Toast.makeText(ChangePasswordActivity.this, "密码错误", Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {
 
@@ -187,6 +174,14 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
                     }
                 }));
                 break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constant.REQUEST_EXIT_LOGIN && resultCode == Constant.RESPONSE_EXIT_LOGIN) {
+            setResult(Constant.RESPONSE_EXIT_LOGIN);
+            finish();
         }
     }
 }

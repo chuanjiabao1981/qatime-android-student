@@ -65,7 +65,7 @@ public class FragmentRemedialClassDetail1 extends BaseFragment {
 
 //            name.setText(getResources().getString(R.string.class_name) + bean.getName());
             subject.setText(getResources().getString(R.string.subject_type) + bean.getSubject());
-            teacher.setText(getResources().getString(R.string.teacher) + bean.getTeacher().getName());
+            teacher.setText(getActivity().getResources().getString(R.string.teacher) + bean.getTeacher().getName());
             progress.setText(getResources().getString(R.string.progress) + bean.getCompleted_lesson_count() + "/" + bean.getPreset_lesson_count());
             classstarttime.setText(getResources().getString(R.string.class_start_time) + bean.getLive_start_time());
             classendtime.setText(getResources().getString(R.string.class_end_time) + bean.getLive_end_time());

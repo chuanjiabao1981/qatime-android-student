@@ -155,6 +155,8 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
                             Toast.makeText(ParentPhoneActivity.this, "家长手机修改成功", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(ParentPhoneActivity.this, SecurityManagerActivity.class);
                             startActivity(intent);
+                        } else {
+                            Toast.makeText(ParentPhoneActivity.this, "家长手机已被使用", Toast.LENGTH_SHORT).show();
                         }
 
                     }
@@ -169,7 +171,7 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
                             } else if (error.getString("msg").contains("与确认值不匹配")) {
                                 Toast.makeText(ParentPhoneActivity.this, "验证码错误", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(ParentPhoneActivity.this, "家长手机可能已被使用", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ParentPhoneActivity.this, "家长手机已被使用", Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

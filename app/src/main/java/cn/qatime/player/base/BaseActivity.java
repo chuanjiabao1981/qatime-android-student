@@ -88,6 +88,7 @@ public class BaseActivity extends AppCompatActivity {
 
     private void out() {
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("out", "out");
         startActivity(intent);
 //        this.finish();
     }

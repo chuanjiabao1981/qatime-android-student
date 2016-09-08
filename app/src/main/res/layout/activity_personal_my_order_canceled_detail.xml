@@ -18,60 +18,20 @@
             android:padding="10dp">
 
             <TextView
+                android:id="@+id/status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:padding="8dp"
                 android:text="@string/waiting_for_payment"
+                android:textSize="20sp"
                 android:textColor="#ffbc04"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="5dp">
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-
-                    android:text="订单将于"
-                    android:textColor="#ffffff"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-
-                    android:text="xx:xx:xx:xx"
-                    android:textColor="#ffffff"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-
-                    android:text="后自动关闭"
-                    android:textColor="#ffffff"/>
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1"/>
-                "
-
-
-            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/list_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/text_background"
@@ -95,7 +55,7 @@
             android:padding="2dp">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="2"
@@ -109,12 +69,20 @@
                 android:orientation="horizontal">
 
                 <TextView
-
+                    android:id="@+id/grade"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:padding="2dp"
-                    android:text="高一数学"
+                    android:paddingLeft="2dp"
+                    android:text="高一"
+                    android:textSize="13sp"/>
+
+                <TextView
+                    android:id="@+id/subject"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="数学"
                     android:textSize="13sp"/>
 
                 <View
@@ -122,7 +90,7 @@
                     android:layout_height="match_parent"></View>
 
                 <TextView
-
+                    android:id="@+id/teacher"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
@@ -135,7 +103,7 @@
                     android:layout_height="match_parent"></View>
 
                 <TextView
-
+                    android:id="@+id/progress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
@@ -189,6 +157,7 @@
                 android:text="@string/order_number"/>
 
             <TextView
+                android:id="@+id/order_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="40dp"
@@ -206,6 +175,7 @@
                 android:text="@string/time_built"/>
 
             <TextView
+                android:id="@+id/build_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
@@ -213,24 +183,25 @@
                 android:text="3232323232323"/>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="4dp"
-            >
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:padding="4dp"-->
+            <!--&gt;-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/time_payment"/>
+            <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:text="@string/time_payment"/>&ndash;&gt;-->
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
+            <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+                <!--&lt;!&ndash;android:id="@+id/pay_time"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_marginLeft="40dp"&ndash;&gt;-->
 
-                android:text="3232323232323"/>
-        </LinearLayout>
+                <!--&lt;!&ndash;android:text="3232323232323"/>&ndash;&gt;-->
+        <!--</LinearLayout>-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -244,10 +215,10 @@
                 android:text="@string/method_payment"/>
 
             <TextView
+                android:id="@+id/pay_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="40dp"
-
                 android:text="3232323232323"/>
         </LinearLayout>
 
@@ -260,9 +231,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:text="@string/amount_payment"/>
+                android:text="@string/amount_payment_order"/>
 
             <TextView
+                android:id="@+id/pay_price"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="40dp"
@@ -282,17 +255,19 @@
         android:orientation="horizontal"
         android:padding="5dp">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            android:layout_weight="1"
-            android:background="@drawable/text_background"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="@string/cancel_order"/>
+        <!--<TextView-->
+            <!--android:id="@+id/cancel_order"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_margin="2dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:background="@drawable/text_background"-->
+            <!--android:gravity="center"-->
+            <!--android:padding="10dp"-->
+            <!--android:text="@string/cancel_order"/>-->
 
         <TextView
+            android:id="@+id/reorder"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
@@ -300,7 +275,7 @@
             android:background="@drawable/button_bg_selector_orange"
             android:gravity="center"
             android:padding="10dp"
-            android:text="@string/pay"/>
+            android:text="@string/reorder"/>
     </LinearLayout>
 
 </LinearLayout>

@@ -15,6 +15,12 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
+import com.netease.nimlib.sdk.AbortableFuture;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -26,13 +32,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
+import cn.qatime.player.config.UserPreferences;
+import cn.qatime.player.im.cache.TeamDataCache;
+import cn.qatime.player.im.cache.UserInfoCache;
 import libraryextra.bean.OrderPayBean;
+import libraryextra.bean.PersonalInformationBean;
+import libraryextra.bean.Profile;
 import libraryextra.bean.RemedialClassDetailBean;
 import cn.qatime.player.fragment.FragmentRemedialClassDetail1;
 import cn.qatime.player.fragment.FragmentRemedialClassDetail2;
 import cn.qatime.player.fragment.FragmentRemedialClassDetail3;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import libraryextra.utils.DialogUtils;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.StringUtils;
@@ -44,7 +57,7 @@ import libraryextra.view.SimpleViewPagerIndicator;
 public class RemedialClassDetailActivity extends BaseFragmentActivity implements View.OnClickListener {
     ImageView image;
     private int id;
-    private String[] mTitles = new String[]{"信息详情", "教师详情", "课程列表"};
+    private String[] mTitles = new String[]{"辅导概况", "教师资料", "课程列表"};
     private SimpleViewPagerIndicator mIndicator;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
     private Button audition;
@@ -79,7 +92,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     public void initView() {
         EventBus.getDefault().register(this);
         image = (ImageView) findViewById(R.id.image);
-        name=(TextView)findViewById(R.id.name);
+        name = (TextView) findViewById(R.id.name);
         image.setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenWidth(this) * 5 / 8));
 
         fragBaseFragments.add(new FragmentRemedialClassDetail1());
@@ -154,7 +167,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                             name.setText(data.getData().getName());
                             title.setText(data.getData().getName());
                             RemedialClassDetailActivity.this.price.setText("￥" + price);
-                            studentnumber.setText("报名人数 " + data.getData().getBuy_tickets_count());
+                            studentnumber.setText("已购人数 " + data.getData().getBuy_tickets_count());
                         }
                         if (data != null) {
                             ((FragmentRemedialClassDetail1) fragBaseFragments.get(0)).setData(data);
@@ -234,12 +247,78 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass + "/" + id + "/taste", map), null,
                 new VolleyListener(RemedialClassDetailActivity.this) {
 
-
                     @Override
                     protected void onSuccess(JSONObject response) {
                         //已加入试听
                         audition.setEnabled(false);
                         audition.setText(getResources().getString(R.string.Joined_the_audition));
+                        if (StringUtils.isNullOrBlanK(BaseApplication.getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getAccountToken())) {
+                            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null,
+                                    new VolleyListener(RemedialClassDetailActivity.this) {
+                                        @Override
+                                        protected void onSuccess(JSONObject response) {
+                                            PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
+                                            if (bean != null && bean.getData() != null && bean.getData().getChat_account() != null) {
+                                                Profile profile = BaseApplication.getProfile();
+                                                profile.getData().getUser().setChat_account(bean.getData().getChat_account());
+                                                BaseApplication.setProfile(profile);
+
+                                                String account = BaseApplication.getAccount();
+                                                String token = BaseApplication.getAccountToken();
+
+                                                if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
+                                                    AbortableFuture<LoginInfo> loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, token));
+                                                    loginRequest.setCallback(new RequestCallback<LoginInfo>() {
+                                                        @Override
+                                                        public void onSuccess(LoginInfo o) {
+                                                            Logger.e("云信登录成功" + o.getAccount());
+                                                            // 初始化消息提醒
+                                                            NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
+
+                                                            NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
+                                                            //缓存
+                                                            UserInfoCache.getInstance().clear();
+                                                            TeamDataCache.getInstance().clear();
+
+                                                            UserInfoCache.getInstance().buildCache();
+                                                            TeamDataCache.getInstance().buildCache();
+
+                                                            UserInfoCache.getInstance().registerObservers(true);
+                                                            TeamDataCache.getInstance().registerObservers(true);
+                                                        }
+
+                                                        @Override
+                                                        public void onFailed(int code) {
+                                                            BaseApplication.clearToken();
+                                                        }
+
+                                                        @Override
+                                                        public void onException(Throwable throwable) {
+                                                            Logger.e(throwable.getMessage());
+                                                            BaseApplication.clearToken();
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        protected void onError(JSONObject response) {
+
+                                        }
+
+                                        @Override
+                                        protected void onTokenOut() {
+                                            tokenOut();
+                                        }
+                                    }, new VolleyErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError volleyError) {
+                                    super.onErrorResponse(volleyError);
+                                }
+                            });
+                            addToRequestQueue(request);
+                        }
                     }
 
                     @Override

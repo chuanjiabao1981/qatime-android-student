@@ -274,8 +274,8 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
 
         map.put("price_floor", priceLow.getText().toString());
         map.put("price_ceil", priceHigh.getText().toString());
-        map.put("class_date_floor", subjectLow.getText().toString());
-        map.put("class_date_ceil", subjectHigh.getText().toString());
+        map.put("preset_lesson_count_floor", subjectLow.getText().toString());
+        map.put("preset_lesson_count_ceil", subjectHigh.getText().toString());
         map.put("status", status);
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass, map), null,
                 new VolleyListener(getActivity()) {

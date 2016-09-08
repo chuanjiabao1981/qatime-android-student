@@ -47,7 +47,8 @@
             <TextView
                 android:id="@+id/other_content"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginRight="50dp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -77,7 +78,8 @@
                 android:id="@+id/my_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right" />
+                android:layout_gravity="right"
+                android:layout_marginLeft="50dp" />
         </LinearLayout>
 
         <ImageView

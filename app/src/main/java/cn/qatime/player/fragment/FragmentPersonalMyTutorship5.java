@@ -87,8 +87,8 @@ public class FragmentPersonalMyTutorship5 extends BaseFragment {
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
                         intent.putExtra("url", item.getPull_address());
-                        intent.putExtra("id",item.getId());
-                        intent.putExtra("sessionId",item.getChat_team_id());
+                        intent.putExtra("id", item.getId());
+                        intent.putExtra("sessionId", item.getChat_team_id());
                         startActivity(intent);
                     }
                 });
@@ -116,15 +116,15 @@ public class FragmentPersonalMyTutorship5 extends BaseFragment {
                 });
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
-                helper.setText(R.id.subject, getResources().getString(R.string.item_subject)+ item.getSubject());
-                helper.setText(R.id.teacher,getResources().getString(R.string.item_teacher)+ item.getTeacher_name());
+                helper.setText(R.id.subject, getResources().getString(R.string.item_subject) + item.getSubject());
+                helper.setText(R.id.teacher, getResources().getString(R.string.item_teacher) + item.getTeacher_name());
                 helper.setText(R.id.progress, item.getCompleted_lesson_count() + "/" + item.getPreset_lesson_count());
                 ((ProgressBar) helper.getView(R.id.progressbar)).setProgress(item.getCompleted_lesson_count());
                 ((ProgressBar) helper.getView(R.id.progressbar)).setMax(item.getPreset_lesson_count());
-                helper.setText(R.id.remain_class, String.valueOf(item.getPreset_lesson_count()-item.getCompleted_lesson_count()));
+                helper.setText(R.id.remain_class, String.valueOf(item.getPreset_lesson_count() - item.getCompleted_lesson_count()));
 
 
-                helper.setText(R.id.next_teaching_time, getResources().getString(R.string.item_next_class)+ item.getPreview_time());
+                helper.setText(R.id.next_teaching_time, getResources().getString(R.string.item_next_class) + item.getPreview_time());
 
 
             }
