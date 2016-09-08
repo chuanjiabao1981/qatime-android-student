@@ -98,7 +98,7 @@ public class StartActivity extends Activity implements View.OnClickListener {
                             alertDialog.setCancelable(false);
                         }
                         String descStr = response.getJSONObject("data").getString("description");
-//                        desc.setText(StringUtils.isNullOrBlanK(descStr) ? "性能优化" : descStr);
+                        desc.setText(StringUtils.isNullOrBlanK(descStr) ? "性能优化" : descStr);
                         downLoadLinks = response.getJSONObject("data").getString("download_links");
                         newVersion.setText("V" + response.getJSONObject("data").getString("version"));
                     } catch (JSONException e) {
