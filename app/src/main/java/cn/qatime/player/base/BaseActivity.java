@@ -11,10 +11,8 @@ import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 
 import cn.qatime.player.R;
-import cn.qatime.player.activity.LoginActivity;
 import cn.qatime.player.activity.MainActivity;
 import libraryextra.utils.StringUtils;
 
@@ -22,12 +20,12 @@ import libraryextra.utils.StringUtils;
  * 基础类
  */
 public class BaseActivity extends AppCompatActivity {
-    private RequestQueue Queue;
+    private RequestQueue Queue = BaseApplication.getRequestQueue();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Queue = Volley.newRequestQueue(this);
+
     }
 
     public void setTitle(String text) {

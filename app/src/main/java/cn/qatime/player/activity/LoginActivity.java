@@ -198,10 +198,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                                 TeamDataCache.getInstance().registerObservers(true);
 //                                                FriendDataCache.getInstance().registerObservers(true);
 
-                                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                                startActivity(intent);
-                                                finish();
-                                            }
+                                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                            intent.putExtra("newVersion", getIntent().getBooleanExtra("newVersion", false));
+                                            startActivity(intent);
+                                            finish();
+                                        }
 
                                             @Override
                                             public void onFailed(int code) {

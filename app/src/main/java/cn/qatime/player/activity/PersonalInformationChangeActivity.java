@@ -79,7 +79,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
 //        if (!StringUtils.isNullOrBlanK(school)) {
 //            schoolBean = JsonUtils.objectFromJson(school, SchoolBean.class);
 //        }
-        String gradeString = FileUtil.readFile(getCacheDir() + "/grade.txt");
+        String gradeString = FileUtil.readFile(getFilesDir() + "/grade.txt");
 //        LogUtils.e("班级基础信息" + gradeString);
         if (!StringUtils.isNullOrBlanK(gradeString)) {
             gradeBean = JsonUtils.objectFromJson(gradeString, GradeBean.class);
@@ -155,6 +155,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                             }
                         }
                     }, parse.parse(select).getYear() + 1900, parse.parse(select).getMonth() + 1, parse.parse(select).getDay());
+                    dataDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
                     dataDialog.show();
                 } catch (ParseException e) {
                     e.printStackTrace();
