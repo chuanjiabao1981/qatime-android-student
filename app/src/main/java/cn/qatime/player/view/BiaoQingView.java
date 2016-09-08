@@ -20,6 +20,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.bumptech.glide.Glide;
 import com.orhanobut.logger.Logger;
 
 import java.io.InputStream;
@@ -118,13 +119,8 @@ public class BiaoQingView extends RelativeLayout {
                                 view.setImageResource(resId);
                                 view.setEnabled(true);
                             } else {
-                                GifHelper helper = new GifHelper();
-                                InputStream is = getResources().openRawResource(resId);
-                                helper.read(is);
-                                Bitmap image = helper.getImage();
-                                bitmapList.add(image);
-                                view.setImageBitmap(image);
-                                view.setEnabled(true);
+                                Glide.with(getContext()).load(resId).asGif().into(view);
+//                                view.setImageResource(resId);
                             }
                         } else {
                             view.setEnabled(false);
