@@ -18,15 +18,16 @@ import java.util.Date;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.SchoolBean;
 import libraryextra.transformation.GlideCircleTransform;
-import cn.qatime.player.utils.Constant;
-import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
-import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -69,6 +70,8 @@ public class PersonalInformationActivity extends BaseActivity {
                 if (sData != null && sData.getData() != null) {
                     setValue(sData);
                     Intent intent = new Intent();
+                    BaseApplication.getProfile().getData().getUser().setAvatar_url(sData.getData().getAvatar_url());
+                    SPUtils.putObject(this, "profile", BaseApplication.getProfile());
                     intent.putExtra("url", sData.getData().getAvatar_url());
                     setResult(Constant.RESPONSE, intent);
                 }
@@ -94,6 +97,7 @@ public class PersonalInformationActivity extends BaseActivity {
                     protected void onError(JSONObject response) {
 
                     }
+
                     @Override
                     protected void onTokenOut() {
                         tokenOut();

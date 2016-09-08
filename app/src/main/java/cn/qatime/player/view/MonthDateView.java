@@ -14,10 +14,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import cn.qatime.player.R;
 import cn.qatime.player.utils.DateUtils;
 import libraryextra.utils.DensityUtils;
-import libraryextra.utils.ScreenUtils;
 
 /**
  * @author luntify
@@ -40,7 +38,7 @@ public class MonthDateView extends View {
     private TextView tv_date, tv_week;
     private int weekRow;
     private int[][] daysString;
-    private int mCircleRadius = DensityUtils.dp2px(getContext(),3);
+    private int mCircleRadius = DensityUtils.dp2px(getContext(), 3);
     private DateClick dateClick;
     private int mCircleColor = Color.parseColor("#ff0000");
     private List<Integer> daysHasThingList = new ArrayList<>();
@@ -91,7 +89,7 @@ public class MonthDateView extends View {
             }
             //绘制事务圆形标志
             drawCircle(row, column, day + 1, canvas);
-            if (dayString.equals(mCurrDay + "") && mCurrDay != mSelDay && mCurrMonth == mSelMonth) {
+            if (dayString.equals(mCurrDay + "") && mCurrDay != mSelDay && mCurrMonth == mSelMonth && mCurrYear == mSelYear) {
                 //正常月，选中其他日期，则今日为红色
                 int startRecX = mColumnSize * column;
                 int startRecY = mRowSize * row;
