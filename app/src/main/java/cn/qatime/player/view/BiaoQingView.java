@@ -61,16 +61,18 @@ public class BiaoQingView extends RelativeLayout {
         emoji.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                closeInput();
                 hd.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         if (viewPager.getVisibility() == GONE) {
                             viewPager.setVisibility(View.VISIBLE);
                             emoji.setImageResource(R.mipmap.keybord);
+                            closeInput();
                         } else {
                             viewPager.setVisibility(View.GONE);
                             emoji.setImageResource(R.mipmap.biaoqing);
+                            content.requestFocus();
+                            openInput();
                         }
 
                     }
@@ -153,7 +155,7 @@ public class BiaoQingView extends RelativeLayout {
                     listitem1.put("image",
                             Integer.parseInt(R.mipmap.class.getDeclaredField("em_" + i).get(null).toString()));
                 } else {
-                    listitem1.put("image", R.mipmap.left_arrow);
+                    listitem1.put("image", R.mipmap.emoji_delete);
                 }
                 listitems1.add(listitem1);
             }
@@ -162,7 +164,7 @@ public class BiaoQingView extends RelativeLayout {
                 if (i != 55) {
                     listitem2.put("image", Integer.parseInt(R.mipmap.class.getDeclaredField("em_" + i).get(null).toString()));
                 } else {
-                    listitem2.put("image", R.mipmap.left_arrow);
+                    listitem2.put("image", R.mipmap.emoji_delete);
                 }
                 listitems2.add(listitem2);
             }
@@ -172,7 +174,7 @@ public class BiaoQingView extends RelativeLayout {
                 if (i <= 75) {
                     listitem3.put("image", Integer.parseInt(R.mipmap.class.getDeclaredField("em_" + i).get(null).toString()));
                 } else if (i == 82) {
-                    listitem3.put("image", R.mipmap.left_arrow);
+                    listitem3.put("image", R.mipmap.emoji_delete);
                 } else {
                     listitem3.put("image", null);
                 }

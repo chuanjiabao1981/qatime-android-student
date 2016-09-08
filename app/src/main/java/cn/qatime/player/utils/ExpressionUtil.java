@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.style.ImageSpan;
 
 import com.orhanobut.logger.Logger;
@@ -31,7 +32,7 @@ public class ExpressionUtil {
      * @param patten
      * @param start
      */
-    public static void dealExpression(Context context, SpannableString spannableString, Pattern patten, int start) throws Exception {
+    public static void dealExpression(Context context, SpannableStringBuilder spannableString, Pattern patten, int start) throws Exception {
         Matcher matcher = patten.matcher(spannableString);
         while (matcher.find()) {
             String key = matcher.group();
@@ -126,8 +127,8 @@ public class ExpressionUtil {
      * @param str
      * @return
      */
-    public static SpannableString getExpressionString(Context context, String str, String zhengze) {
-        SpannableString spannableString = new SpannableString(str);
+    public static SpannableStringBuilder getExpressionString(Context context, String str, String zhengze) {
+        SpannableStringBuilder spannableString = new SpannableStringBuilder(str);
         Pattern sinaPatten = Pattern.compile(zhengze, Pattern.CASE_INSENSITIVE); // 通过传入的正则表达式来生成一个pattern
         try {
             dealExpression(context, spannableString, sinaPatten, 0);

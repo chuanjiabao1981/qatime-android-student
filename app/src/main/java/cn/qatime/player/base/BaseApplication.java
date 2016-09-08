@@ -184,6 +184,7 @@ public class BaseApplication extends Application {
         String token = getAccountToken();
 
         if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
+            Logger.e("云信初始化有账号****************************" + account + "--------" + token);
             return new LoginInfo(account, token);
         } else {
             return null;
