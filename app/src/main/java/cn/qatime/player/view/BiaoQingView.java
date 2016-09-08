@@ -20,8 +20,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.orhanobut.logger.Logger;
-
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,21 +62,26 @@ public class BiaoQingView extends RelativeLayout {
         emoji.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hd.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (viewPager.getVisibility() == GONE) {
+                if (viewPager.getVisibility() == GONE) {
+                    hd.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
                             viewPager.setVisibility(View.VISIBLE);
                             emoji.setImageResource(R.mipmap.keybord);
-                            closeInput();
-                        } else {
+                        }
+                    }, 50);
+                    closeInput();
+                } else {
+                    hd.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
                             viewPager.setVisibility(View.GONE);
                             emoji.setImageResource(R.mipmap.biaoqing);
-                            content.requestFocus();
-                            openInput();
                         }
-                    }
-                }, 100);
+                    }, 50);
+                    content.requestFocus();
+                    openInput();
+                }
             }
         });
         content.setOnTouchListener(new View.OnTouchListener() {
@@ -223,16 +226,6 @@ public class BiaoQingView extends RelativeLayout {
         this.content = edit;
         this.emoji = emoji;
         initEmoji();
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        //回收bitmap
-        Logger.e("BiaoQingView回收Bitmp");
-        for (Bitmap bitmap : bitmapList) {
-            bitmap.recycle();
-        }
     }
 
     /**
