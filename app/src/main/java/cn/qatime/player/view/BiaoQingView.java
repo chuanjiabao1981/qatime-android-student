@@ -1,11 +1,10 @@
 package cn.qatime.player.view;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
@@ -16,17 +15,23 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.bumptech.glide.Glide;
+import com.orhanobut.logger.Logger;
+
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.utils.GifHelper;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.utils.DensityUtils;
@@ -35,10 +40,14 @@ import libraryextra.view.TagViewPager;
 public class BiaoQingView extends RelativeLayout {
     private EditText content;
     private TagViewPager viewPager;
-
+    private List<Bitmap> bitmapList = new ArrayList<>();
 
     private Handler hd = new Handler();
     private ImageView emoji;
+    private Runnable r1;
+    private List<List<Map<String, Integer>>> listmap;
+    private List<GridView> gv;
+    private KeyEvent delete;
 
     public BiaoQingView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -54,100 +63,110 @@ public class BiaoQingView extends RelativeLayout {
 
     private void initEmoji() {
         viewPager = new TagViewPager(getContext());
-        LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, (int) (DensityUtils.dp2px(getContext(), 180)));
+        LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, DensityUtils.dp2px(getContext(), 180));
         viewPager.setLayoutParams(params);
         viewPager.setVisibility(View.GONE);
         this.addView(viewPager);
+        r1 = new Runnable() {
+
+            @Override
+            public void run() {
+                viewPager.setVisibility(View.VISIBLE);
+                emoji.setImageResource(R.mipmap.keybord);
+            }
+
+        };
         emoji.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hd.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (viewPager.getVisibility() == GONE) {
-                            viewPager.setVisibility(View.VISIBLE);
-                            emoji.setImageResource(R.mipmap.keybord);
-                            closeInput();
-                        } else {
-                            viewPager.setVisibility(View.GONE);
-                            emoji.setImageResource(R.mipmap.biaoqing);
-                            content.requestFocus();
-                            openInput();
-                        }
-
-                    }
-                }, 100);
+                if (viewPager.getVisibility() == GONE) {
+                    hd.postDelayed(r1, 50);
+                    closeInput();
+                } else {
+                    viewPager.setVisibility(View.GONE);
+                    emoji.setImageResource(R.mipmap.biaoqing);
+                    content.requestFocus();
+                    openInput();
+                }
             }
         });
         content.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 openInput();
-                content.requestFocus();
                 emoji.setImageResource(R.mipmap.biaoqing);
                 viewPager.setVisibility(View.GONE);
                 return false;
             }
         });
-        List<List<Map<String, Integer>>> listmap = initData();
-        initViewPager(listmap);
+        initData();
+        initGv();
+        initViewPager();
     }
 
-    private void initViewPager(final List<List<Map<String, Integer>>> listmap) {
+    private void initViewPager() {
         viewPager.init(R.drawable.shape_photo_tag_select, R.drawable.shape_photo_tag_nomal, 16, 8, 2, 40);
         viewPager.setAutoNext(false, 0);
         viewPager.setOnGetView(new TagViewPager.OnGetView() {
             @Override
             public View getView(ViewGroup container, int position) {
-                final GridView gv = new GridView(getContext());
-                gv.setNumColumns(7);
-                gv.setAdapter(new CommonAdapter<Map<String, Integer>>(getContext(), listmap.get(position), R.layout.list_emoji_page) {
-
-                    @Override
-                    public void convert(ViewHolder holder, final Map<String, Integer> item, final int position) {
-                        ImageView view = holder.getView(R.id.emoji_image);
-                        if (item.get("image") != null) {
-                            int resId = item.get("image");
-                            view.setImageResource(resId);
-                            view.setEnabled(true);
-                        } else {
-                            view.setEnabled(false);
-                        }
-                        view.setOnClickListener(new OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                // TODO: 2016/9/5 加入到eidttext
-                                if (position < 21) {
-                                    content.append(getEmotionContent(item.get("image")));
-                                } else if (position == 27) {
-                                    //动作按下
-                                    int action = KeyEvent.ACTION_DOWN;
-                                    //code:删除，其他code也可以，例如 code = 0
-                                    int code = KeyEvent.KEYCODE_DEL;
-                                    KeyEvent event = new KeyEvent(action, code);
-                                    content.setPressed(true);
-                                    content.onKeyDown(KeyEvent.KEYCODE_DEL, event); //抛给系统处理了
-                                } else if (viewPager.getCurrentItem() != 2) {
-                                    content.append(getEmotionContent(item.get("image")));
-                                }
-                            }
-                        });
-                    }
-                });
-                gv.setLayoutParams(new GridView.LayoutParams(GridView.LayoutParams.MATCH_PARENT, GridView.LayoutParams.WRAP_CONTENT));
-                gv.setGravity(Gravity.CENTER);
-                container.addView(gv);
-                return gv;
+                container.addView(gv.get(position));
+                return gv.get(position);
             }
         });
         viewPager.setAdapter(3);
     }
 
-    @NonNull
-    private List<List<Map<String, Integer>>> initData() {
-        final List<Map<String, Integer>> listitems1 = new ArrayList<>();
-        final List<Map<String, Integer>> listitems2 = new ArrayList<>();
-        final List<Map<String, Integer>> listitems3 = new ArrayList<>();
+    private void initGv() {
+        int action = KeyEvent.ACTION_DOWN;
+        //code:删除，其他code也可以，例如 code = 0
+        int code = KeyEvent.KEYCODE_DEL;
+        delete = new KeyEvent(action, code);
+        gv = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            GridView grid = new GridView(getContext());
+            grid.setNumColumns(7);
+            grid.setSelector(new ColorDrawable(Color.TRANSPARENT));
+            grid.setLayoutParams(new GridView.LayoutParams(GridView.LayoutParams.MATCH_PARENT, GridView.LayoutParams.WRAP_CONTENT));
+            grid.setGravity(Gravity.CENTER);
+            grid.setAdapter(new CommonAdapter<Map<String, Integer>>(getContext(), listmap.get(i), R.layout.list_emoji_page) {
+
+                @Override
+                public void convert(ViewHolder holder, Map<String, Integer> item, int position) {
+                    ImageView view = holder.getView(R.id.emoji_image);
+                    if (item.get("image") != null) {
+                        int resId = item.get("image");
+                        if (position == 27) {
+                            view.setImageResource(resId);
+                        } else {
+                            Glide.with(getContext()).load(resId).asGif().into(view);
+//                                view.setImageResource(resId);
+                        }
+                    }
+                }
+            });
+            grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (position < 21) {
+                        content.append(getEmotionContent(listmap.get(viewPager.getCurrentItem()).get(position).get("image")));
+                    } else if (position == 27) {
+                        //动作按下
+                        content.setPressed(true);
+                        content.onKeyDown(KeyEvent.KEYCODE_DEL, delete); //抛给系统处理了
+                    } else if (viewPager.getCurrentItem() != 2) {
+                        content.append(getEmotionContent(listmap.get(viewPager.getCurrentItem()).get(position).get("image")));
+                    }
+                }
+            });
+            gv.add(grid);
+        }
+    }
+
+    private void initData() {
+        List<Map<String, Integer>> listitems1 = new ArrayList<>();
+        List<Map<String, Integer>> listitems2 = new ArrayList<>();
+        List<Map<String, Integer>> listitems3 = new ArrayList<>();
         try {
             for (int i = 1; i <= 28; i++) {
                 Map<String, Integer> listitem1 = new HashMap<>();
@@ -185,22 +204,25 @@ public class BiaoQingView extends RelativeLayout {
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
-        final List<List<Map<String, Integer>>> listmap = new ArrayList();
+        listmap = new ArrayList();
         listmap.add(listitems1);
         listmap.add(listitems2);
         listmap.add(listitems3);
-        return listmap;
     }
 
     public SpannableString getEmotionContent(int resId) {
         String emoji = "[" + getResources().getResourceName(resId).replace("cn.qatime.player:mipmap/", "") + "]";
-        SpannableString spannableString = new SpannableString("" + emoji);
-        Resources res = getResources();
+        SpannableString spannableString = new SpannableString(emoji);
         int size = (int) content.getTextSize();
-        Bitmap bitmap = BitmapFactory.decodeResource(res, resId);
+        GifHelper helper = new GifHelper();
+        InputStream is = getResources().openRawResource(resId);
+        helper.read(is);
+        Bitmap bitmap = helper.getImage();
         Bitmap scaleBitmap = Bitmap.createScaledBitmap(bitmap, size, size, true);
         ImageSpan span = new ImageSpan(getContext(), scaleBitmap);
         spannableString.setSpan(span, 0, spannableString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        bitmapList.add(bitmap);
+        bitmapList.add(scaleBitmap);
         return spannableString;
     }
 
@@ -208,6 +230,18 @@ public class BiaoQingView extends RelativeLayout {
         this.content = edit;
         this.emoji = emoji;
         initEmoji();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        listmap.clear();
+        gv.clear();
+        //回收bitmap
+        Logger.e("BiaoQingView回收Bitmp");
+        for (Bitmap bitmap : bitmapList) {
+            bitmap.recycle();
+        }
     }
 
     /**
