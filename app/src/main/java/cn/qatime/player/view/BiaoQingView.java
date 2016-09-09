@@ -21,7 +21,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.bumptech.glide.Glide;
 import com.orhanobut.logger.Logger;
 
 import java.io.InputStream;
@@ -62,11 +61,6 @@ public class BiaoQingView extends RelativeLayout {
     }
 
     private void initEmoji() {
-        viewPager = new TagViewPager(getContext());
-        LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, DensityUtils.dp2px(getContext(), 180));
-        viewPager.setLayoutParams(params);
-        viewPager.setVisibility(View.GONE);
-        this.addView(viewPager);
         r1 = new Runnable() {
 
             @Override
@@ -105,7 +99,12 @@ public class BiaoQingView extends RelativeLayout {
     }
 
     private void initViewPager() {
-        viewPager.init(R.drawable.shape_photo_tag_select, R.drawable.shape_photo_tag_nomal, 16, 8, 2, 40);
+        viewPager = new TagViewPager(getContext());
+        LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, DensityUtils.dp2px(getContext(), 180));
+        viewPager.setLayoutParams(params);
+        viewPager.setVisibility(View.GONE);
+        this.addView(viewPager);
+        viewPager.init(R.drawable.shape_biaoqing_tag_select, R.drawable.shape_biaoqing_tag_nomal, 16, 8, 2, 40);
         viewPager.setAutoNext(false, 0);
         viewPager.setOnGetView(new TagViewPager.OnGetView() {
             @Override
@@ -127,6 +126,8 @@ public class BiaoQingView extends RelativeLayout {
             GridView grid = new GridView(getContext());
             grid.setNumColumns(7);
             grid.setSelector(new ColorDrawable(Color.TRANSPARENT));
+            grid.setPadding(0,20,0,0);
+            grid.setBackgroundColor(Color.WHITE);
             grid.setLayoutParams(new GridView.LayoutParams(GridView.LayoutParams.MATCH_PARENT, GridView.LayoutParams.WRAP_CONTENT));
             grid.setGravity(Gravity.CENTER);
             grid.setAdapter(new CommonAdapter<Map<String, Integer>>(getContext(), listmap.get(i), R.layout.list_emoji_page) {
@@ -136,12 +137,12 @@ public class BiaoQingView extends RelativeLayout {
                     ImageView view = holder.getView(R.id.emoji_image);
                     if (item.get("image") != null) {
                         int resId = item.get("image");
-                        if (position == 27) {
+//                        if (position == 27) {
                             view.setImageResource(resId);
-                        } else {
-                            Glide.with(getContext()).load(resId).asGif().into(view);
-//                                view.setImageResource(resId);
-                        }
+//                        } else {
+//                            Glide.with(getContext()).load(resId).dontAnimate().crossFade().into(view);
+////                                view.setImageResource(resId);
+//                        }
                     }
                 }
             });
