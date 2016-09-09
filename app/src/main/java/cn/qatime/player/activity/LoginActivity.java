@@ -174,7 +174,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                     String account = BaseApplication.getAccount();
                                     String token = BaseApplication.getAccountToken();
 
-                                    if (!StringUtils.isNullOrBlanK(account)&&!StringUtils.isNullOrBlanK(token)){
+                                    if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
                                         NIMClient.getService(AuthService.class).login(new LoginInfo(account, token)).setCallback(new RequestCallback<LoginInfo>() {
                                             @Override
                                             public void onSuccess(LoginInfo o) {
@@ -198,11 +198,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                                 TeamDataCache.getInstance().registerObservers(true);
 //                                                FriendDataCache.getInstance().registerObservers(true);
 
-                                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                            intent.putExtra("newVersion", getIntent().getBooleanExtra("newVersion", false));
-                                            startActivity(intent);
-                                            finish();
-                                        }
+                                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                                intent.putExtra("newVersion", getIntent().getBooleanExtra("newVersion", false));
+                                                startActivity(intent);
+                                                finish();
+                                            }
 
                                             @Override
                                             public void onFailed(int code) {
@@ -223,9 +223,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                                 BaseApplication.clearToken();
                                             }
                                         });
-                                    }else {//没有云信账号,直接登录
+                                    } else {//没有云信账号,直接登录
                                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                         startActivity(intent);
+                                        finish();
                                     }
                                 } else {
                                     //没有数据或token

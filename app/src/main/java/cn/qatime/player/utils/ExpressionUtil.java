@@ -27,36 +27,36 @@ public class ExpressionUtil {
     /**
      * 对spannableString经行正则判断，如果匹配成功，就用表情图片替代字符串
      *
-     * @param context
      * @param spannableString
      * @param patten
      * @param start
      */
-    public static void dealExpression(Context context, SpannableStringBuilder spannableString, Pattern patten, int start) throws Exception {
+    public static String dealExpression(String spannableString, Pattern patten, int start) throws Exception {
         Matcher matcher = patten.matcher(spannableString);
         while (matcher.find()) {
             String key = matcher.group();
             if (matcher.start() < start) {
                 continue;
             }
+            spannableString = spannableString.replace(key, "");
             // String imagekey = "b"
             // + key.substring(key.indexOf("#") + 1, key.lastIndexOf("#"));
-            String imagekey = "f"
-                    + key.substring(key.indexOf("#") + 1, key.lastIndexOf("#"));
-            Field field = R.drawable.class.getDeclaredField(imagekey);
-            int resId = Integer.parseInt(field.get(null).toString());
-            if (resId != 0) {
-                Bitmap bitmap = BitmapFactory.decodeResource(
-                        context.getResources(), resId);
-                ImageSpan imageSpan = new ImageSpan(context, bitmap);
-                int end = matcher.start() + key.length();
-                spannableString.setSpan(imageSpan, matcher.start(), end,
-                        Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-                if (end < matcher.end()) {
-
-                }
-            }
+//            String imagekey = key.replace("[", "").replace("]", "");
+//            Field field = R.mipmap.class.getDeclaredField(imagekey);
+//            int resId = Integer.parseInt(field.get(null).toString());
+//            if (resId != 0) {
+//                Bitmap bitmap = BitmapFactory.decodeResource(
+//                        context.getResources(), resId);
+//                ImageSpan imageSpan = new ImageSpan(context, bitmap);
+//                int end = matcher.start() + key.length();
+//                spannableString.setSpan(imageSpan, matcher.start(), end,
+//                        Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+//                if (end < matcher.end()) {
+//
+//                }
         }
+        return spannableString;
+
     }
 
     /**
@@ -90,7 +90,7 @@ public class ExpressionUtil {
         Matcher matcher = patten.matcher(spannableString);
         while (matcher.find()) {
             String key = matcher.group();
-            String imagkey = key.replace("[","").replace("]","");
+            String imagkey = key.replace("[", "").replace("]", "");
             Field field = R.mipmap.class.getDeclaredField(imagkey);
             int resId = Integer.parseInt(field.get(null).toString());
             if (resId != 0) {
@@ -123,18 +123,17 @@ public class ExpressionUtil {
     /**
      * 得到一个SpanableString对象，通过传入的字符串,并进行正则判断
      *
-     * @param context
      * @param str
      * @return
      */
-    public static SpannableStringBuilder getExpressionString(Context context, String str, String zhengze) {
-        SpannableStringBuilder spannableString = new SpannableStringBuilder(str);
+    public static String getExpressionString(String str, String zhengze) {
+//        SpannableString spannableString = new SpannableString(str);
         Pattern sinaPatten = Pattern.compile(zhengze, Pattern.CASE_INSENSITIVE); // 通过传入的正则表达式来生成一个pattern
         try {
-            dealExpression(context, spannableString, sinaPatten, 0);
+            return dealExpression(str, sinaPatten, 0);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return spannableString;
+        return str;
     }
 }

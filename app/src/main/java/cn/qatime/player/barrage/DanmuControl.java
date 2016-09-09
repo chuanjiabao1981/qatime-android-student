@@ -9,6 +9,7 @@ import android.text.Spanned;
 import android.text.TextPaint;
 
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.orhanobut.logger.Logger;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +26,7 @@ import cn.qatime.player.barrage.model.SpannedCacheStuffer;
 import cn.qatime.player.barrage.parser.BaseDanmakuParser;
 import cn.qatime.player.utils.ExpressionUtil;
 import libraryextra.utils.DensityUtils;
+import libraryextra.utils.StringUtils;
 
 public class DanmuControl {
 
@@ -213,17 +215,21 @@ public class DanmuControl {
     }
 
     public void addDanmu(IMMessage danmu, int i) {
-        BaseDanmaku danmaku = mDanmakuContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
+        String result = ExpressionUtil.getExpressionString(danmu.getContent(), ExpressionUtil.emoji);
+        Logger.e("弹幕收到消息");
+        if (!StringUtils.isNullOrBlanK(result)) {
+            BaseDanmaku danmaku = mDanmakuContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
 
-        danmaku.text = ExpressionUtil.getExpressionString(context, danmu.getContent(), ExpressionUtil.emoji);
+            danmaku.text = result;
 
-        danmaku.padding = DANMU_PADDING;
-        danmaku.priority = 0;  // 1:一定会显示, 一般用于本机发送的弹幕,但会导致行数的限制失效
-        danmaku.isLive = false;
-        danmaku.time = mDanmakuView.getCurrentTime() + (i * ADD_DANMU_TIME);
-        danmaku.textSize = DANMU_TEXT_SIZE/* * (mDanmakuContext.getDisplayer().getDensity() - 0.6f)*/;
-        danmaku.textColor = Color.WHITE;
-        danmaku.textShadowColor = 0; // 重要：如果有图文混排，最好不要设置描边(设textShadowColor=0)，否则会进行两次复杂的绘制导致运行效率降低
-        mDanmakuView.addDanmaku(danmaku);
+            danmaku.padding = DANMU_PADDING;
+            danmaku.priority = 0;  // 1:一定会显示, 一般用于本机发送的弹幕,但会导致行数的限制失效
+            danmaku.isLive = false;
+            danmaku.time = mDanmakuView.getCurrentTime() + (i * ADD_DANMU_TIME);
+            danmaku.textSize = DANMU_TEXT_SIZE/* * (mDanmakuContext.getDisplayer().getDensity() - 0.6f)*/;
+            danmaku.textColor = Color.WHITE;
+            danmaku.textShadowColor = 0; // 重要：如果有图文混排，最好不要设置描边(设textShadowColor=0)，否则会进行两次复杂的绘制导致运行效率降低
+            mDanmakuView.addDanmaku(danmaku);
+        }
     }
 }

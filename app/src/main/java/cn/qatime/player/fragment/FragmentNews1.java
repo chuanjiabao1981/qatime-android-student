@@ -6,9 +6,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -172,7 +178,7 @@ public class FragmentNews1 extends BaseFragment {
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 if (NIMClient.getStatus() == StatusCode.LOGINED) {
                     final Dialog dialog = new Dialog(getActivity(), R.style.Transparent);
-                    View v = View.inflate(getActivity(), R.layout.team_notify_alert_dialog, null);
+                    final View v = View.inflate(getActivity(), R.layout.team_notify_alert_dialog, null);
                     ((TextView) v.findViewById(R.id.text)).setText(items.get(position - 1).isMute() ? "取消消息免打扰" : "消息免打扰");
                     v.findViewById(R.id.text).setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -201,7 +207,19 @@ public class FragmentNews1 extends BaseFragment {
                         }
                     });
                     dialog.setContentView(v);
+                    dialog.setCanceledOnTouchOutside(true);
                     dialog.show();
+                    v.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                        @Override
+                        public void onGlobalLayout() {
+                            Window window = dialog.getWindow();
+                            WindowManager.LayoutParams lp = window.getAttributes();
+                            lp.gravity = Gravity.CENTER;
+                            lp.width = v.getWidth();
+                            lp.height = v.getHeight();
+                            dialog.getWindow().setAttributes(lp);
+                        }
+                    });
                     return true;
                 }
                 return false;

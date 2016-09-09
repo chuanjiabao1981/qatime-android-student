@@ -10,9 +10,10 @@ import libraryextra.utils.StringUtils;
  */
 public class UrlUtils {
     private static boolean isDebug = true;
+
     public static String baseUrl = isDebug ? "http://testing.qatime.cn/" : "http://qatime.cn/";
     //云信key
-    public static String appKey = isDebug ? "95055b08a6ec75ca3b1a0b6b77c6b2ff" : "";
+    public static String appKey = isDebug ? "95055b08a6ec75ca3b1a0b6b77c6b2ff" : "4fe3a3fba0a40a00daf011049a29d995";
     //登录
     public static String urlLogin = baseUrl + "api/v1/sessions";
     //辅导班

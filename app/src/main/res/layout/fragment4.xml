@@ -2,10 +2,10 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="#ffffff"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
         <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:background="@color/colorPrimary"/>
+            android:background="@color/colorPrimary" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -22,7 +22,7 @@
             android:layout_centerInParent="true"
             android:text="@string/personal_center"
             android:textColor="#fff"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
     </RelativeLayout>
 
     <ScrollView
@@ -42,7 +42,7 @@
                 <ImageView
                     android:id="@+id/banner"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent" />
 
                 <LinearLayout
                     android:id="@+id/information"
@@ -56,14 +56,14 @@
                         android:id="@+id/head_sculpture"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
-                        android:src="@mipmap/personal_information_head"/>
+                        android:src="@mipmap/personal_information_head" />
 
                     <TextView
                         android:id="@+id/name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="姓名"
-                        android:textColor="#fff"/>
+                        android:textColor="#fff" />
                 </LinearLayout>
 
             </RelativeLayout>
@@ -72,12 +72,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="@string/my_order"/>
+                android:text="@string/my_order" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="#cdcdcd"/>
+                android:background="#cdcdcd" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -99,7 +99,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="16dp"
                         android:layout_gravity="center"
-                        android:src="@mipmap/wallet_32_gray"/>
+                        android:src="@mipmap/wallet_32_gray" />
 
                     <TextView
 
@@ -108,13 +108,16 @@
                         android:paddingBottom="5dp"
                         android:paddingTop="5dp"
                         android:text="@string/paying"
-                        android:textColor="#61c1dc"/>
+                        android:textColor="#61c1dc" />
+
                     <ImageView
+                        android:id="@+id/red_remind_pay"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:id="@+id/red_remind_pay"
-                        android:src="@mipmap/red_remind_16"/>
+                        android:layout_gravity="top"
+                        android:layout_marginTop="5dp"
+                        android:src="@mipmap/red_remind_16"
+                        android:visibility="gone" />
 
 
                 </LinearLayout>
@@ -134,7 +137,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="16dp"
                         android:layout_gravity="center"
-                        android:src="@mipmap/wallet_32_gray"/>
+                        android:src="@mipmap/wallet_32_gray" />
 
                     <TextView
 
@@ -143,7 +146,7 @@
                         android:paddingBottom="5dp"
                         android:paddingTop="5dp"
                         android:text="@string/paid"
-                        android:textColor="#61c1dc"/>
+                        android:textColor="#61c1dc" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -161,7 +164,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="16dp"
                         android:layout_gravity="center"
-                        android:src="@mipmap/wallet_32_gray"/>
+                        android:src="@mipmap/wallet_32_gray" />
 
                     <TextView
 
@@ -170,7 +173,7 @@
                         android:paddingBottom="5dp"
                         android:paddingTop="5dp"
                         android:text="@string/cancelled"
-                        android:textColor="#61c1dc"/>
+                        android:textColor="#61c1dc" />
                 </LinearLayout>
 
 
@@ -179,13 +182,18 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="#dfdddd"/>
+                android:background="#dfdddd" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="@string/my_course"/>
+                android:text="@string/my_course" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#dfdddd" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -207,14 +215,16 @@
                         android:paddingBottom="8dp"
                         android:paddingTop="8dp"
                         android:text="@string/today"
-                        android:textColor="#61c1dc"/>
+                        android:textColor="#61c1dc" />
 
                     <ImageView
                         android:id="@+id/red_remind_today"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:src="@mipmap/red_remind_16"/>
+                        android:layout_gravity="top"
+                        android:layout_marginTop="5dp"
+                        android:src="@mipmap/red_remind_16"
+                        android:visibility="gone" />
 
 
                 </LinearLayout>
@@ -228,7 +238,7 @@
                     android:paddingBottom="8dp"
                     android:paddingTop="8dp"
                     android:text="@string/to_start"
-                    android:textColor="#61c1dc"/>
+                    android:textColor="#61c1dc" />
 
                 <TextView
                     android:id="@+id/calssed"
@@ -239,7 +249,7 @@
                     android:paddingBottom="8dp"
                     android:paddingTop="8dp"
                     android:text="@string/started"
-                    android:textColor="#61c1dc"/>
+                    android:textColor="#61c1dc" />
 
                 <TextView
                     android:id="@+id/overed"
@@ -250,7 +260,7 @@
                     android:paddingBottom="8dp"
                     android:paddingTop="8dp"
                     android:text="@string/done"
-                    android:textColor="#61c1dc"/>
+                    android:textColor="#61c1dc" />
 
                 <TextView
                     android:id="@+id/trying"
@@ -261,7 +271,7 @@
                     android:paddingBottom="8dp"
                     android:paddingTop="8dp"
                     android:text="@string/audition"
-                    android:textColor="#61c1dc"/>
+                    android:textColor="#61c1dc" />
 
 
             </LinearLayout>
@@ -269,7 +279,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="#dfdddd"/>
+                android:background="#dfdddd" />
 
             <LinearLayout
                 android:id="@+id/security"
@@ -282,25 +292,25 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="@string/security_management"/>
+                    android:text="@string/security_management" />
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_weight="1"
-                    android:background="#ffffff"/>
+                    android:background="#ffffff" />
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_gravity="center"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/personal_enter"/>
+                    android:layout_gravity="center"
+                    android:src="@mipmap/personal_enter" />
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="#dfdddd"/>
+                android:background="#dfdddd" />
 
             <LinearLayout
                 android:id="@+id/setting"
@@ -315,7 +325,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="@string/setting"/>
+                    android:text="@string/setting" />
 
                 <TextView
                     android:id="@+id/new_version"
@@ -324,24 +334,24 @@
                     android:layout_gravity="top"
                     android:text="@string/new_edition"
                     android:textColor="#e20914"
-                    android:textSize="10dp"/>
+                    android:textSize="10dp" />
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="1px"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@mipmap/personal_enter"/>
+                    android:src="@mipmap/personal_enter" />
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="#dfdddd"/>
+                android:background="#dfdddd" />
         </LinearLayout>
     </ScrollView>
 
