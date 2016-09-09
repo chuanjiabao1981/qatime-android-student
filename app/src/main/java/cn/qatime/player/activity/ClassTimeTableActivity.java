@@ -183,7 +183,7 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         monthDateView = (MonthDateView) findViewById(R.id.monthDateView);
         monthDateView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, DensityUtils.dp2px(this, 25) * 7));
         TextView tvDate = (TextView) findViewById(R.id.date_text);
-        TextView tvToday = (TextView) findViewById(R.id.tv_today);
+        View tvToday = findViewById(R.id.date_operator_ll);
         monthDateView.setTextView(tvDate, null);
         ivLeft.setOnClickListener(this);
         ivRight.setOnClickListener(this);
@@ -215,7 +215,7 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                 getDate();
                 initData();
                 break;
-            case R.id.tv_today:
+            case R.id.date_operator_ll:
                 monthDateView.setTodayToView();
                 getDate();
                 initData();

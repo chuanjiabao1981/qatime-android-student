@@ -50,7 +50,7 @@ import cn.qatime.player.view.BiaoQingView;
 import cn.qatime.player.view.GifDrawable;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.transformation.GlideCircleTransform;
+import libraryextra.transformation.GlideRoundTransform;
 import libraryextra.utils.StringUtils;
 
 /**
@@ -125,7 +125,7 @@ public class MessageActivity extends BaseActivity {
                 if (item.getFromAccount().equals(BaseApplication.getAccount())) {
                     holder.getView(R.id.right).setVisibility(View.VISIBLE);
                     holder.getView(R.id.left).setVisibility(View.GONE);
-                    Glide.with(MessageActivity.this).load(BaseApplication.getProfile().getData().getUser().getChat_account().getIcon()).crossFade().dontAnimate().transform(new GlideCircleTransform(MessageActivity.this)).into((ImageView) holder.getView(R.id.my_head));
+                    Glide.with(MessageActivity.this).load(BaseApplication.getProfile().getData().getUser().getChat_account().getIcon()).crossFade().dontAnimate().transform(new GlideRoundTransform(MessageActivity.this)).into((ImageView) holder.getView(R.id.my_head));
                     holder.setText(R.id.my_time, getTime(item.getTime()));
                     ((TextView) holder.getView(R.id.my_content)).setText(ExpressionUtil.getExpressionString(
                             MessageActivity.this, item.getContent(), ExpressionUtil.emoji, cache, new GifDrawable.UpdateListener() {
@@ -139,7 +139,7 @@ public class MessageActivity extends BaseActivity {
                 } else {
                     holder.getView(R.id.right).setVisibility(View.GONE);
                     holder.getView(R.id.left).setVisibility(View.VISIBLE);
-                    Glide.with(MessageActivity.this).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_32).crossFade().dontAnimate().transform(new GlideCircleTransform(MessageActivity.this)).into((ImageView) holder.getView(R.id.other_head));
+                    Glide.with(MessageActivity.this).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_32).crossFade().dontAnimate().transform(new GlideRoundTransform(MessageActivity.this)).into((ImageView) holder.getView(R.id.other_head));
                     holder.setText(R.id.other_name, item.getFromNick());
                     ((TextView) holder.getView(R.id.other_content)).setText(ExpressionUtil.getExpressionString(
                             MessageActivity.this, item.getContent(), ExpressionUtil.emoji, cache, new GifDrawable.UpdateListener() {

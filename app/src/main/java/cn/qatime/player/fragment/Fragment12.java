@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -37,6 +38,8 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -103,7 +106,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
     //辅导班状态
     private String status = "";
     private int page = 1;
-
+    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     DecimalFormat df = new DecimalFormat("#.00");
 
     @Nullable
@@ -144,11 +147,21 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                     Logger.e("item數據空");
                     return;
                 }
-                ((ImageView) helper.getView(R.id.image)).setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()) / 2, ScreenUtils.getScreenWidth(getActivity()) / 2 * 5 / 8));
+                ((ImageView) helper.getView(R.id.image)).setLayoutParams(new RelativeLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()) / 2, ScreenUtils.getScreenWidth(getActivity()) / 2 * 5 / 8));
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.image)));
-                helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.grade, item.getGrade());
+                try {
+                    long time = System.currentTimeMillis() - parse.parse(item.getPreview_time()).getTime();
+                    int value = 0;
+                    if (time > 0) {
+                        value = (int) (time / (1000 * 3600 * 24));
+                    }
+                    helper.setText(R.id.teaching_time, getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    helper.getView(R.id.teaching_time).setVisibility(View.GONE);
+                }
                 if (item.getTeacher_name() != null) {
                     helper.setText(R.id.teacher, item.getTeacher_name());
                 }
@@ -203,7 +216,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
         endcLassMonth = (TextView) view.findViewById(R.id.end_class_month);
         endClassDay = (TextView) view.findViewById(R.id.end_class_day);
         spinner = (Spinner) view.findViewById(R.id.spinner);
-        List<String> data =new ArrayList<>();
+        List<String> data = new ArrayList<>();
         data.add(getResources().getString(R.string.whole));
         data.add(getResources().getString(R.string.recruiting));
         data.add(getResources().getString(R.string.started));
@@ -264,7 +277,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
         }
 
 
-        if (!classtext.getText().equals(getResources().getString(R.string.by_grade))&&!classtext.getText().equals("全部")) {
+        if (!classtext.getText().equals(getResources().getString(R.string.by_grade)) && !classtext.getText().equals("全部")) {
             try {
                 map.put("grade", URLEncoder.encode(classtext.getText().toString(), "UTF-8"));
             } catch (UnsupportedEncodingException e) {
@@ -435,7 +448,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 listView = (ListView) popView.findViewById(R.id.list);
                 final List<String> classList = new ArrayList<>();
                 String gradeString = FileUtil.readFile(getActivity().getFilesDir() + "/grade.txt");
-                    if (!StringUtils.isNullOrBlanK(gradeString)) {
+                if (!StringUtils.isNullOrBlanK(gradeString)) {
                     GradeBean gradeBean = JsonUtils.objectFromJson(gradeString, GradeBean.class);
                     classList.add("全部");
                     classList.addAll(gradeBean.getData().getGrades());

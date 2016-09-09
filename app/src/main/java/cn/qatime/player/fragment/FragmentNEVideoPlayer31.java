@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
-
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.bean.RemedialClassDetailBean;
@@ -21,7 +19,6 @@ public class FragmentNEVideoPlayer31 extends BaseFragment {
     TextView classstarttime;
     TextView subject;
     TextView grade;
-    TextView timetostart;
     TextView status;
     TextView classendtime;
     TextView teacher;
@@ -61,7 +58,6 @@ public class FragmentNEVideoPlayer31 extends BaseFragment {
         name = (TextView) view.findViewById(R.id.name);
         subject = (TextView) view.findViewById(R.id.subject);
         classstarttime = (TextView) view.findViewById(R.id.class_start_time);
-        timetostart = (TextView) view.findViewById(R.id.time_to_start);
         grade = (TextView) view.findViewById(R.id.grade);
         status = (TextView) view.findViewById(R.id.status);
         describe = (TextView) view.findViewById(R.id.describe);

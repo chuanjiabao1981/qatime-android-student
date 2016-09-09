@@ -50,13 +50,14 @@ public class DateUtils {
      *
      * @param year  年份
      * @param month 月份，传入系统获取的，不需要正常的
-     * @return 日：1		一：2		二：3		三：4		四：5		五：6		六：7
+     * @return 一：1		二：2		三：3		四：4		五：5		六：6 日：7
      */
     public static int getFirstDayWeek(int year, int month) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, 1);
 //        Logger.e("DateView", "DateView:First:" + calendar.getFirstDayOfWeek());
-        return calendar.get(Calendar.DAY_OF_WEEK);
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+        return dayOfWeek == 0 ? 7 : dayOfWeek;
     }
 
 

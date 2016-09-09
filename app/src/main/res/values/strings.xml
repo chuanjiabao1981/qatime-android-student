@@ -348,5 +348,6 @@
     <string name="team_send_message_not_allow">您已不在该群，不能发送消息</string>
     <string name="team_not_exist">该群不存在</string>
     <string name="please_update">请升级版本后使用</string>
+    <string name="item_to_start_main">距开课</string>
 
 </resources>
