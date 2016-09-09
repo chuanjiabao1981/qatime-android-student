@@ -86,6 +86,12 @@ public class MessageActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
+        String name = getIntent().getStringExtra("name");
+        if (!StringUtils.isNullOrBlanK(name)) {
+            setTitle(name);
+        } else {
+            setTitle(getResources().getString(R.string.team));
+        }
         sessionId = getIntent().getStringExtra("sessionId");
         sessionType = (SessionTypeEnum) getIntent().getSerializableExtra("sessionType");
         final int courseId = getIntent().getIntExtra("courseId", 0);

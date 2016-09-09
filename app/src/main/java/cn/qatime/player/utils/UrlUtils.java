@@ -37,7 +37,7 @@ public class UrlUtils {
     //用户信息
     public static String urlUser = baseUrl + "api/v1/users/";
     //检查更新
-    public static String urlcheckUpdate = baseUrl + "/api/v1/system/check_update";
+    public static String urlcheckUpdate = baseUrl + "api/v1/system/check_update";
     //用户信息
     public static String urlfindPassword = baseUrl + "api/v1/password";
 
