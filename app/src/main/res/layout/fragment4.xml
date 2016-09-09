@@ -68,219 +68,100 @@
 
             </RelativeLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="@string/my_order" />
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="#cdcdcd" />
-
+                android:background="#dfdddd" />
             <LinearLayout
+                android:id="@+id/my_ticket"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
+                android:gravity="center"
                 android:orientation="horizontal">
 
-                <LinearLayout
-                    android:id="@+id/paying"
-                    android:layout_width="0dp"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
+                    android:padding="10dp"
+                    android:text="我的钱包" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="16dp"
-                        android:layout_gravity="center"
-                        android:src="@mipmap/wallet_32_gray" />
-
-                    <TextView
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="5dp"
-                        android:paddingTop="5dp"
-                        android:text="@string/paying"
-                        android:textColor="#61c1dc" />
-
-                    <ImageView
-                        android:id="@+id/red_remind_pay"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="top"
-                        android:layout_marginTop="5dp"
-                        android:src="@mipmap/red_remind_16"
-                        android:visibility="gone" />
-
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:id="@+id/paid"
+                <View
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="1dp"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
+                    android:background="#ffffff" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="16dp"
-                        android:layout_gravity="center"
-                        android:src="@mipmap/wallet_32_gray" />
-
-                    <TextView
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="5dp"
-                        android:paddingTop="5dp"
-                        android:text="@string/paid"
-                        android:textColor="#61c1dc" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/canceled"
-                    android:layout_width="0dp"
+                <ImageView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:paddingBottom="5dp"
-                    android:paddingRight="5dp"
-                    android:paddingTop="5dp">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="16dp"
-                        android:layout_gravity="center"
-                        android:src="@mipmap/wallet_32_gray" />
-
-                    <TextView
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="5dp"
-                        android:paddingTop="5dp"
-                        android:text="@string/cancelled"
-                        android:textColor="#61c1dc" />
-                </LinearLayout>
-
-
+                    android:layout_gravity="center"
+                    android:src="@mipmap/personal_enter" />
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="#dfdddd" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="@string/my_course" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#dfdddd" />
-
             <LinearLayout
+                android:id="@+id/my_order"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:orientation="horizontal">
 
-                <LinearLayout
-                    android:id="@+id/today"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:paddingBottom="8dp"
-                        android:paddingTop="8dp"
-                        android:text="@string/today"
-                        android:textColor="#61c1dc" />
-
-                    <ImageView
-                        android:id="@+id/red_remind_today"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="top"
-                        android:layout_marginTop="5dp"
-                        android:src="@mipmap/red_remind_16"
-                        android:visibility="gone" />
-
-
-                </LinearLayout>
-
                 <TextView
-                    android:id="@+id/waitting"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:paddingBottom="8dp"
-                    android:paddingTop="8dp"
-                    android:text="@string/to_start"
-                    android:textColor="#61c1dc" />
+                    android:padding="10dp"
+                    android:text="我的订单" />
 
-                <TextView
-                    android:id="@+id/calssed"
+                <View
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="1dp"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:paddingBottom="8dp"
-                    android:paddingTop="8dp"
-                    android:text="@string/started"
-                    android:textColor="#61c1dc" />
+                    android:background="#ffffff" />
 
-                <TextView
-                    android:id="@+id/overed"
-                    android:layout_width="0dp"
+                <ImageView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:paddingBottom="8dp"
-                    android:paddingTop="8dp"
-                    android:text="@string/done"
-                    android:textColor="#61c1dc" />
-
-                <TextView
-                    android:id="@+id/trying"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:paddingBottom="8dp"
-                    android:paddingTop="8dp"
-                    android:text="@string/audition"
-                    android:textColor="#61c1dc" />
-
-
+                    android:layout_gravity="center"
+                    android:src="@mipmap/personal_enter" />
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="#dfdddd" />
+            <LinearLayout
+                android:id="@+id/my_course"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="我的辅导" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:background="#ffffff" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@mipmap/personal_enter" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#dfdddd" />
             <LinearLayout
                 android:id="@+id/security"
                 android:layout_width="match_parent"
@@ -352,6 +233,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="#dfdddd" />
+
+
+
         </LinearLayout>
     </ScrollView>
 

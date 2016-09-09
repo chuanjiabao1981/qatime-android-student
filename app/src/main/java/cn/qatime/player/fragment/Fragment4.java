@@ -28,9 +28,9 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
     private LinearLayout information;
     private ImageView banner;
     private ImageView headSculpture;
-    private LinearLayout paying;
+    private LinearLayout order;
     private LinearLayout paid;
-    private LinearLayout canceled;
+    private LinearLayout course;
     private LinearLayout today;
     private TextView waitting;
     private TextView calssed;
@@ -52,9 +52,9 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
         }
         name.setText(BaseApplication.getProfile().getData().getUser().getName());
 
-        paying.setOnClickListener(this);
+        order.setOnClickListener(this);
         paid.setOnClickListener(this);
-        canceled.setOnClickListener(this);
+        course.setOnClickListener(this);
 
         today.setOnClickListener(this);
         waitting.setOnClickListener(this);
@@ -75,44 +75,19 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
                 Intent intent = new Intent(getActivity(), PersonalInformationActivity.class);
                 startActivityForResult(intent, Constant.REQUEST);
                 break;
-            case R.id.paying:
+            case R.id.my_ticket:
                 intent = new Intent(getActivity(), PersonalMyOrderActivity.class);
                 intent.putExtra("pager", 0);
                 startActivity(intent);
                 break;
-            case R.id.paid:
+            case R.id.my_order:
                 intent = new Intent(getActivity(), PersonalMyOrderActivity.class);
                 intent.putExtra("pager", 1);
                 startActivity(intent);
                 break;
-            case R.id.canceled:
-                intent = new Intent(getActivity(), PersonalMyOrderActivity.class);
-                intent.putExtra("pager", 2);
-                startActivity(intent);
-                break;
-            case R.id.today:
-                intent = new Intent(getActivity(), PersonalMyTutorshipActivity.class);
-                intent.putExtra("pager", 0);
-                startActivity(intent);
-                break;
-            case R.id.waitting:
-                intent = new Intent(getActivity(), PersonalMyTutorshipActivity.class);
-                intent.putExtra("pager", 1);
-                startActivity(intent);
-                break;
-            case R.id.calssed:
+            case R.id.my_course:
                 intent = new Intent(getActivity(), PersonalMyTutorshipActivity.class);
                 intent.putExtra("pager", 2);
-                startActivity(intent);
-                break;
-            case R.id.overed:
-                intent = new Intent(getActivity(), PersonalMyTutorshipActivity.class);
-                intent.putExtra("pager", 3);
-                startActivity(intent);
-                break;
-            case R.id.trying:
-                intent = new Intent(getActivity(), PersonalMyTutorshipActivity.class);
-                intent.putExtra("pager", 4);
                 startActivity(intent);
                 break;
             case R.id.security:// 安全管理
@@ -141,14 +116,9 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
         banner = (ImageView) view.findViewById(R.id.head_sculpture);
         headSculpture = (ImageView) view.findViewById(R.id.head_sculpture);
         name = (TextView) view.findViewById(R.id.name);
-        paying = (LinearLayout) view.findViewById(R.id.paying);
-        paid = (LinearLayout) view.findViewById(R.id.paid);
-        canceled = (LinearLayout) view.findViewById(R.id.canceled);
-        today = (LinearLayout) view.findViewById(R.id.today);
-        waitting = (TextView) view.findViewById(R.id.waitting);
-        calssed = (TextView) view.findViewById(R.id.calssed);
-        overed = (TextView) view.findViewById(R.id.overed);
-        trying = (TextView) view.findViewById(R.id.trying);
+        order = (LinearLayout) view.findViewById(R.id.my_order);
+        paid = (LinearLayout) view.findViewById(R.id.my_ticket);
+        course = (LinearLayout) view.findViewById(R.id.my_course);
         security = (LinearLayout) view.findViewById(R.id.security);
         setting = (LinearLayout) view.findViewById(R.id.setting);
         newVersion = (TextView) view.findViewById(R.id.new_version);
