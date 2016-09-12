@@ -57,22 +57,22 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
 
         Glide.with(PersonalMyOrderCanceledDetailActivity.this).load(data.image).placeholder(R.mipmap.photo).centerCrop().crossFade().into(image);
         if (StringUtils.isNullOrBlanK(data.name)) {
-            name.setText("名称 ");
+            name.setText(getResourceString(R.string.cancel_order_name));
         } else {
             name.setText(data.name);
         }
         if (StringUtils.isNullOrBlanK(data.grade)) {
-            grade.setText("年级");
+            grade.setText(getResourceString(R.string.grade));
         } else {
             grade.setText(data.grade);
         }
         if (StringUtils.isNullOrBlanK(data.subject)) {
-            subject.setText("科目");
+            subject.setText(getResourceString(R.string.subject));
         } else {
             subject.setText(data.subject);
         }
         if (StringUtils.isNullOrBlanK(data.teacher)) {
-            teacher.setText("老师");
+            teacher.setText(getResourceString(R.string.cancel_order_teacher));
         } else {
             teacher.setText(data.teacher);
         }
@@ -100,9 +100,9 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
         } else {
             int payType = getIntent().getIntExtra("payType", 0);//支付方式
             if (payType == 1) {
-                paytype.setText("微信支付");
+                paytype.setText(getResourceString(R.string.wechat_payment));
             } else {
-                paytype.setText("支付宝支付");
+                paytype.setText(getResourceString(R.string.alipay_payment));
             }
         }
         progress.setText(data.Completed_lesson_count + "/" + data.Preset_lesson_count);

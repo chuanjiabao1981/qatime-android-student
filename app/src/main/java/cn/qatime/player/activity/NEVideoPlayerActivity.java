@@ -96,7 +96,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         setContentView(R.layout.activity_player);
         id = getIntent().getIntExtra("id", 0);//从前一页进来的id 获取详情用
         if (id == 0) {
-            Toast.makeText(this, "暂无辅导班信息", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResourceString(R.string.no_course_information), Toast.LENGTH_SHORT).show();
         }
         sessionId = getIntent().getStringExtra("sessionId");
         String url = getIntent().getStringExtra("url");
@@ -222,7 +222,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
             }
         });
         BiaoQingView bq = (BiaoQingView) findViewById(R.id.biaoQingView);
-        bq.init(content,emoji);
+        bq.init(content, emoji);
         videoPlayer.setChatCallback(new QaVideoPlayer.ChatCallback() {
             @Override
             public void back(String result) {
@@ -240,11 +240,11 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
      */
     private void sendMessage(String comment, boolean isSendToDanmu) {
         if (!fragment2.isAllowSendMessage()) {
-            Toast.makeText(NEVideoPlayerActivity.this, "您已不在该群,不能发送消息", Toast.LENGTH_SHORT).show();
+            Toast.makeText(NEVideoPlayerActivity.this, getResourceString(R.string.team_send_message_not_allow), Toast.LENGTH_SHORT).show();
             return;
         }
         if (StringUtils.isNullOrBlanK(comment)) {
-            Toast.makeText(NEVideoPlayerActivity.this, "消息不能为空", Toast.LENGTH_SHORT).show();
+            Toast.makeText(NEVideoPlayerActivity.this, getResourceString(R.string.message_can_not_null), Toast.LENGTH_SHORT).show();
             return;
         }
         // 创建文本消息

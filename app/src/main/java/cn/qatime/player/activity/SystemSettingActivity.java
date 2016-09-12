@@ -130,13 +130,13 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 BaseApplication.getRequestQueue().add(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlcheckUpdate, map), null, new VolleyListener(this) {
                     @Override
                     protected void onTokenOut() {
-
+                        tokenOut();
                     }
 
                     @Override
                     protected void onSuccess(JSONObject response) {
                         if (response.isNull("data")) {
-                            Toast.makeText(SystemSettingActivity.this, "已经是最新版本", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SystemSettingActivity.this, getResourceString(R.string.is_newest_version), Toast.LENGTH_SHORT).show();
                         } else {
                             //TODO 获取更新信信息0
                             Logger.e(response.toString());
@@ -152,7 +152,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                                     x.setOnClickListener(SystemSettingActivity.this);
                                 }
                                 String descStr = response.getJSONObject("data").getString("description");
-                                desc.setText(StringUtils.isNullOrBlanK(descStr) ? "性能优化" : descStr);
+                                desc.setText(StringUtils.isNullOrBlanK(descStr) ? getResourceString(R.string.performance_optimization) : descStr);
                                 downLoadLinks = response.getJSONObject("data").getString("download_links");
                                 newVersion.setText("V" + response.getJSONObject("data").getString("version"));
                             } catch (JSONException e) {
@@ -177,12 +177,12 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
 
                     @Override
                     protected void onError(JSONObject response) {
-                        Toast.makeText(SystemSettingActivity.this, "检查更新失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SystemSettingActivity.this, getResourceString(R.string.check_for_update_failed), Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        Toast.makeText(SystemSettingActivity.this, "检查更新失败,请检查网络连接", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SystemSettingActivity.this, getResourceString(R.string.check_for_update_failed_check_net), Toast.LENGTH_SHORT).show();
                     }
                 }));
                 break;
@@ -207,8 +207,8 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 break;
             case R.id.download:
                 //TODO 更新版本
-                Toast.makeText(SystemSettingActivity.this, "开始下载", Toast.LENGTH_SHORT).show();
-                DownFileUtil downFileUtil = new DownFileUtil(this, downLoadLinks, "qatime.apk", "", "答疑时间.apk") {
+                Toast.makeText(SystemSettingActivity.this, getResourceString(R.string.start_download), Toast.LENGTH_SHORT).show();
+                DownFileUtil downFileUtil = new DownFileUtil(this, downLoadLinks, "qatime.apk", "", "qatime.apk") {
                     @Override
                     public void downOK() {
                         DownFileUtil.insertAPK("", getApplicationContext());

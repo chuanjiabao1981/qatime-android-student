@@ -40,7 +40,7 @@ public class NotifyMessageActivity extends BaseActivity implements View.OnClickL
 
     private void initView() {
         setContentView(R.layout.activity_notify_message);
-        setTitle("消息提醒");
+        setTitle(getResourceString(R.string.notify_message));
         assignViews();
         voice.setOnClickListener(this);
         shake.setOnClickListener(this);

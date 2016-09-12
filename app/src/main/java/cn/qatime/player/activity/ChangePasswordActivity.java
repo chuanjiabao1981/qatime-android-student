@@ -147,13 +147,13 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
                 addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getUserId() + "/password", map), null, new VolleyListener(this) {
                     @Override
                     protected void onTokenOut() {
-
+                        tokenOut();
                     }
 
                     @Override
                     protected void onSuccess(JSONObject response) {
                         Logger.e("验证成功");
-                        Toast.makeText(ChangePasswordActivity.this, "密码修改成功，请用新密码重新登录", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ChangePasswordActivity.this, getResourceString(R.string.change_password_success), Toast.LENGTH_SHORT).show();
                         BaseApplication.clearToken();
                         setResult(Constant.RESPONSE_EXIT_LOGIN);
                         Intent intent = new Intent(ChangePasswordActivity.this, LoginActivity.class);
@@ -164,13 +164,13 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
 
                     @Override
                     protected void onError(JSONObject response) {
-                        Toast.makeText(ChangePasswordActivity.this, "密码错误", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ChangePasswordActivity.this, getResourceString(R.string.password_error), Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        Toast.makeText(getApplicationContext(), "服务器异常，请检查网络", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show();
                     }
                 }));
                 break;

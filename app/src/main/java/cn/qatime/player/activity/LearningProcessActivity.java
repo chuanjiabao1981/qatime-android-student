@@ -8,7 +8,7 @@ import cn.qatime.player.base.BaseActivity;
 /**
  * Created by lenovo on 2016/8/22.
  */
-public class LearningProcessActivity extends BaseActivity{
+public class LearningProcessActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,9 +18,8 @@ public class LearningProcessActivity extends BaseActivity{
     }
 
 
-
     private void initView() {
         setContentView(R.layout.activity_learning_process);
-        setTitle("学习流程");
+        setTitle(getResourceString(R.string.learning_process));
     }
 }

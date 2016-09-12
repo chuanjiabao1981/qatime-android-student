@@ -11,7 +11,6 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
@@ -28,7 +27,6 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.config.UserPreferences;
-import cn.qatime.player.im.cache.FriendDataCache;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.Constant;
@@ -212,7 +210,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                                 if (code == 302 || code == 404) {
                                                     Toast.makeText(LoginActivity.this, R.string.account_or_password_error, Toast.LENGTH_SHORT).show();
                                                 } else {
-                                                    Toast.makeText(LoginActivity.this, "登录失败: " + code, Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(LoginActivity.this, getResourceString(R.string.login_failed) + code, Toast.LENGTH_SHORT).show();
                                                 }
                                             }
 
@@ -251,7 +249,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             public void onErrorResponse(VolleyError volleyError) {
                 DialogUtils.dismissDialog(progress);
                 BaseApplication.clearToken();
-                Toast.makeText(LoginActivity.this, "请检查您的网络或稍后再试", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, getResourceString(R.string.after_try_again), Toast.LENGTH_SHORT).show();
                 super.onErrorResponse(volleyError);
                 login.setClickable(true);
                 password.setText("");

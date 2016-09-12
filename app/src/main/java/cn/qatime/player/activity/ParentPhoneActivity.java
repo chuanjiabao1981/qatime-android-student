@@ -100,24 +100,24 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
                 addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlGetCode, map), null, new VolleyListener(this) {
                     @Override
                     protected void onTokenOut() {
-
+                        tokenOut();
                     }
 
                     @Override
                     protected void onSuccess(JSONObject response) {
                         Logger.e("验证码发送成功" + phone + "---" + response.toString());
-                        Toast.makeText(getApplicationContext(), "验证码已经发送至" + phone + "，请注意查收", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getResourceString(R.string.code_send_success), Toast.LENGTH_LONG).show();
                     }
 
                     @Override
                     protected void onError(JSONObject response) {
-                        Toast.makeText(getApplicationContext(), "验证码发送失败" + phone, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getResourceString(R.string.code_send_failed), Toast.LENGTH_LONG).show();
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        Toast.makeText(getApplicationContext(), "服务器异常，请检查网络", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show();
                     }
                 }));
 
@@ -143,7 +143,7 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
                 addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.getUrl(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/parent_phone", map), null, new VolleyListener(this) {
                     @Override
                     protected void onTokenOut() {
-
+                        tokenOut();
                     }
 
                     @Override
@@ -152,11 +152,11 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
 
                         if (!response.isNull("data")) {
                             Logger.e("验证成功");
-                            Toast.makeText(ParentPhoneActivity.this, "家长手机修改成功", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ParentPhoneActivity.this, getResourceString(R.string.bind_parent_phone_success), Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(ParentPhoneActivity.this, SecurityManagerActivity.class);
                             startActivity(intent);
                         } else {
-                            Toast.makeText(ParentPhoneActivity.this, "家长手机已被使用", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ParentPhoneActivity.this, getResourceString(R.string.bind_parent_phone_failed), Toast.LENGTH_SHORT).show();
                         }
 
                     }
@@ -167,11 +167,11 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
                         try {
                             JSONObject error = response.getJSONObject("error");
                             if (error.getString("msg").contains("是无效的")) {
-                                Toast.makeText(ParentPhoneActivity.this, "密码错误", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ParentPhoneActivity.this, getResourceString(R.string.password_error), Toast.LENGTH_SHORT).show();
                             } else if (error.getString("msg").contains("与确认值不匹配")) {
-                                Toast.makeText(ParentPhoneActivity.this, "验证码错误", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ParentPhoneActivity.this, getResourceString(R.string.code_error), Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(ParentPhoneActivity.this, "家长手机已被使用", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ParentPhoneActivity.this, getResourceString(R.string.bind_parent_phone_failed), Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -181,7 +181,7 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
 
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        Toast.makeText(getApplicationContext(), "服务器异常，请检查网络", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show();
                     }
                 }));
 
@@ -196,14 +196,14 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
 
         @Override
         public void onFinish() {// 计时完毕
-            textGetcode.setText("获取验证码");
+            textGetcode.setText(getResourceString(R.string.getcode));
             textGetcode.setEnabled(true);
         }
 
         @Override
         public void onTick(long millisUntilFinished) {// 计时过程
             textGetcode.setEnabled(false);//防止重复点击
-            textGetcode.setText(millisUntilFinished / 1000 + "s后重新获取");
+            textGetcode.setText(millisUntilFinished / 1000 + getResourceString(R.string.time_after_acquisition));
         }
     }
 }

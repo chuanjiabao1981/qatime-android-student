@@ -78,24 +78,24 @@ public class VerifyPhoneActivity extends BaseActivity implements View.OnClickLis
                 addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlGetCode, map), null, new VolleyListener(this) {
                     @Override
                     protected void onTokenOut() {
-
+                        tokenOut();
                     }
 
                     @Override
                     protected void onSuccess(JSONObject response) {
                         Logger.e("验证码发送成功" + currentPhone.getText().toString().trim() + "---" + response.toString());
-                        Toast.makeText(getApplicationContext(), "验证码已经发送至" + currentPhone.getText().toString().trim() + "，请注意查收", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getResourceString(R.string.code_send_success), Toast.LENGTH_LONG).show();
                     }
 
                     @Override
                     protected void onError(JSONObject response) {
-
+                        Toast.makeText(getApplicationContext(), getResourceString(R.string.code_send_failed), Toast.LENGTH_LONG).show();
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-
+                        Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show();
                     }
                 }));
 
@@ -114,7 +114,7 @@ public class VerifyPhoneActivity extends BaseActivity implements View.OnClickLis
                 addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlGetCode + "/verify", map), null, new VolleyListener(this) {
                     @Override
                     protected void onTokenOut() {
-
+                        tokenOut();
                     }
 
                     @Override
@@ -131,7 +131,7 @@ public class VerifyPhoneActivity extends BaseActivity implements View.OnClickLis
                                 startActivity(intent);
                             }
                         } else {
-                            Toast.makeText(VerifyPhoneActivity.this, "验证码错误", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(VerifyPhoneActivity.this, getResourceString(R.string.code_error), Toast.LENGTH_SHORT).show();
                         }
 
 
@@ -139,13 +139,13 @@ public class VerifyPhoneActivity extends BaseActivity implements View.OnClickLis
 
                     @Override
                     protected void onError(JSONObject response) {
-
+                        Toast.makeText(VerifyPhoneActivity.this, getResourceString(R.string.code_error), Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-
+                        Toast.makeText(VerifyPhoneActivity.this, getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
                     }
                 }));
 
@@ -160,14 +160,14 @@ public class VerifyPhoneActivity extends BaseActivity implements View.OnClickLis
 
         @Override
         public void onFinish() {// 计时完毕
-            textGetcode.setText("获取验证码");
+            textGetcode.setText(getResourceString(R.string.getcode));
             textGetcode.setEnabled(true);
         }
 
         @Override
         public void onTick(long millisUntilFinished) {// 计时过程
             textGetcode.setEnabled(false);//防止重复点击
-            textGetcode.setText(millisUntilFinished / 1000 + "s后重新获取");
+            textGetcode.setText(millisUntilFinished / 1000 + getResourceString(R.string.time_after_acquisition));
         }
     }
 

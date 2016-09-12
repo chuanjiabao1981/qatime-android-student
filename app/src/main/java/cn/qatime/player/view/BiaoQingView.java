@@ -85,8 +85,10 @@ public class BiaoQingView extends RelativeLayout {
             }
         });
         content.setOnTouchListener(new View.OnTouchListener() {
+
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                content.requestFocus();
                 openInput();
                 emoji.setImageResource(R.mipmap.biaoqing);
                 viewPager.setVisibility(View.GONE);
@@ -262,5 +264,11 @@ public class BiaoQingView extends RelativeLayout {
         InputMethodManager inputMethodManager = (InputMethodManager) this.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         // 接受软键盘输入的编辑文本或其它视图
         inputMethodManager.showSoftInput(content, 0);
+    }
+
+    public void closeEmojiAndInput() {
+        viewPager.setVisibility(View.GONE);
+        emoji.setImageResource(R.mipmap.biaoqing);
+        closeInput();
     }
 }

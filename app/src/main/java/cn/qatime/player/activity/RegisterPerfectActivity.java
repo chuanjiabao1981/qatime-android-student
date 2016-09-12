@@ -171,7 +171,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                         data.putExtra("data", result);
                         setResult(Constant.RESPONSE, data);
                         DialogUtils.dismissDialog(progress);
-                        Toast.makeText(RegisterPerfectActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterPerfectActivity.this, getResourceString(R.string.regiset_success), Toast.LENGTH_SHORT).show();
                         Map<String, String> map = new HashMap<>();
                         Intent intent = getIntent();
                         final String username = intent.getStringExtra("username");
@@ -220,7 +220,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
 
                                     @Override
                                     protected void onError(JSONObject response) {
-                                        Toast.makeText(RegisterPerfectActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(RegisterPerfectActivity.this, getResourceString(R.string.login_failed), Toast.LENGTH_SHORT).show();
                                     }
                                 }, new VolleyErrorListener() {
                             @Override
@@ -233,13 +233,13 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
 
                     @Override
                     protected void httpFailed(String result) {
-                        Toast.makeText(RegisterPerfectActivity.this, "服务器异常", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterPerfectActivity.this, getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
                         DialogUtils.dismissDialog(progress);
                     }
                 };
 
                 if (StringUtils.isNullOrBlanK(imageUrl) || (!StringUtils.isNullOrBlanK(imageUrl) && !new File(imageUrl).exists())) {
-                    Toast.makeText(this, "请您选择头像", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getResourceString(R.string.please_set_head), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (StringUtils.isNullOrBlanK(BaseApplication.getUserId())) {

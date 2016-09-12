@@ -168,11 +168,11 @@ public class MessageActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (!isAllowSendMessage()) {
-                    Toast.makeText(MessageActivity.this, "您已不在该群,不能发送消息", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MessageActivity.this, getResourceString(R.string.team_send_message_not_allow), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (StringUtils.isNullOrBlanK(content.getText().toString())) {
-                    Toast.makeText(MessageActivity.this, "消息不能为空", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MessageActivity.this, getResourceString(R.string.message_can_not_null), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 // 创建文本消息
@@ -399,7 +399,7 @@ public class MessageActivity extends BaseActivity {
                     if (success && result != null) {
                         updateTeamInfo(result);
                     } else {
-                        Toast.makeText(MessageActivity.this, "获取群组信息失败!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MessageActivity.this, getResourceString(R.string.get_group_failed), Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 }
@@ -415,7 +415,7 @@ public class MessageActivity extends BaseActivity {
             return;
         }
         team = d;
-        tipText.setText(team.getType() == TeamTypeEnum.Normal ? "您已退出该群组" : "您已退出该群组");
+        tipText.setText(team.getType() == TeamTypeEnum.Normal ? getResourceString(R.string.you_have_quit_the_group) : getResourceString(R.string.you_have_quit_the_group));
         tipText.setVisibility(team.isMyTeam() ? View.GONE : View.VISIBLE);
     }
 

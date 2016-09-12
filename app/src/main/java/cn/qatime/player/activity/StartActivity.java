@@ -1,7 +1,6 @@
 package cn.qatime.player.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -156,7 +155,7 @@ public class StartActivity extends BaseActivity implements View.OnClickListener 
             case R.id.download:
                 //TODO 更新版本
                 Toast.makeText(StartActivity.this, getResourceString(R.string.start_download), Toast.LENGTH_SHORT).show();
-                DownFileUtil downFileUtil = new DownFileUtil(this, downLoadLinks, "qatime.apk", "", "答疑时间.apk") {
+                DownFileUtil downFileUtil = new DownFileUtil(this, downLoadLinks, "qatime.apk", "", "qatime.apk") {
                     @Override
                     public void downOK() {
                         DownFileUtil.insertAPK("", getApplicationContext());
@@ -224,7 +223,7 @@ public class StartActivity extends BaseActivity implements View.OnClickListener 
 
                     @Override
                     protected void onTokenOut() {
-
+                        tokenOut();
                     }
                 }, new VolleyErrorListener() {
             @Override

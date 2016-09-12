@@ -59,7 +59,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null, new VolleyListener(this) {
             @Override
             protected void onTokenOut() {
-
+                tokenOut();
             }
 
             @Override
@@ -71,7 +71,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
 
             @Override
             protected void onError(JSONObject response) {
-                Toast.makeText(SecurityManagerActivity.this, "网络异常", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SecurityManagerActivity.this, getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -89,7 +89,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
             phoneNumberP.setText("" + parentPhone);
             phoneNumberP.setTextColor(Color.BLACK);
         } else {
-            phoneNumberP.setText("未绑定");
+            phoneNumberP.setText(getResourceString(R.string.not_bind));
             phoneNumberP.setTextColor(Color.RED);
         }
         String email = bean.getData().getEmail();
@@ -97,7 +97,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
             this.email.setText("" + email);
             this.email.setTextColor(Color.BLACK);
         } else {
-            this.email.setText("未绑定");
+            this.email.setText(getResourceString(R.string.not_bind));
             this.email.setTextColor(Color.RED);
         }
 
@@ -106,7 +106,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
             phoneNumberM.setText("" + loginMobile);
             phoneNumberM.setTextColor(Color.BLACK);
         } else {
-            phoneNumberM.setText("未绑定");
+            phoneNumberM.setText(getResourceString(R.string.not_bind));
             phoneNumberM.setTextColor(Color.RED);
         }
     }

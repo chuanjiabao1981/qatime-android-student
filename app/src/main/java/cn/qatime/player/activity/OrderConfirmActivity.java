@@ -43,7 +43,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     TextView classnumber;
     TextView classstarttime;
     TextView classendtime;
-//    TextView status;
+    //    TextView status;
     TextView price;
     TextView payprice;
     private Button pay;
@@ -97,14 +97,14 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         if (price.startsWith(".")) {
             price = "0" + price;
         }
-        OrderConfirmActivity.this.price.setText("价    格：" + price);
+        OrderConfirmActivity.this.price.setText(getResourceString(R.string.order_price) + price);
         payprice.setText(" " + price + " ");
 
     }
 
     @Override
     public void onClick(View v) {
-        Toast.makeText(OrderConfirmActivity.this, "正在生成订单", Toast.LENGTH_SHORT).show();
+        Toast.makeText(OrderConfirmActivity.this, getResourceString(R.string.order_creating), Toast.LENGTH_SHORT).show();
         Map<String, String> map = new HashMap<>();
         map.put("pay_type", payType);
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlPayPrepare + id + "/orders", map), null,
@@ -118,23 +118,23 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                             intent.putExtra("price", priceNumber);
                             intent.putExtra("id", data.getData().getId());
                             intent.putExtra("time", data.getData().getCreated_at());
-                            intent.putExtra("type", (data.getData().getPay_type() + "").equals("1") ? getResources().getString(R.string.method_payment) + "：微信支付" : getResources().getString(R.string.method_payment) + "：支付宝支付");
+                            intent.putExtra("type", (data.getData().getPay_type() + "").equals("1") ? getResources().getString(R.string.method_payment) + getResourceString(R.string.pay_wexin) : getResources().getString(R.string.method_payment) + "：支付宝支付");
                             OrderConfirmBean.App_pay_params app_pay_params = data.getData().getApp_pay_params();
                             intent.putExtra("data", app_pay_params);
-                            Toast.makeText(OrderConfirmActivity.this, "订单生成成功", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(OrderConfirmActivity.this, getResourceString(R.string.order_create_success), Toast.LENGTH_SHORT).show();
                             startActivity(intent);
                             SPUtils.put(OrderConfirmActivity.this, "orderId", data.getData().getId());
                             SPUtils.put(OrderConfirmActivity.this, "price", priceNumber);
                         } else {
                             //                            canPay = false;
-                            Toast.makeText(OrderConfirmActivity.this, "订单生成失败", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(OrderConfirmActivity.this, getResourceString(R.string.order_create_failed), Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     protected void onError(JSONObject response) {
                         //                            canPay = false;
-                        Toast.makeText(OrderConfirmActivity.this, "订单生成失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(OrderConfirmActivity.this, getResourceString(R.string.order_create_failed), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -145,7 +145,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
-                Toast.makeText(OrderConfirmActivity.this, "请检查网络连接", Toast.LENGTH_SHORT).show();
+                Toast.makeText(OrderConfirmActivity.this, getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
             }
         });
         addToRequestQueue(request);
@@ -183,7 +183,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 
                 //TODO 集成完支付宝后，去掉下面这段
                 if (checkedId == aliPay.getId()) {
-                    Toast.makeText(OrderConfirmActivity.this, "暂不支持支付宝支付", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OrderConfirmActivity.this, getResourceString(R.string.not_support_alipay), Toast.LENGTH_SHORT).show();
                     wechatPay.setChecked(true);
                     aliPay.setChecked(false);
                     payType = "1";

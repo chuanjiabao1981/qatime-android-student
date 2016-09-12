@@ -61,28 +61,28 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
             if (i <= 9) {
                 str = "0" + str;
             }
-            str += "小时";
+            str += getResourceString(R.string.hour);
             al_hours.add(str);
         }
-        al_minute.add("00分钟");
-        al_minute.add("01分钟");
-        al_minute.add("02分钟");
-        al_minute.add("03分钟");
-        al_minute.add("04分钟");
-        al_minute.add("05分钟");
+        al_minute.add("00" + getResourceString(R.string.minute));
+        al_minute.add("01" + getResourceString(R.string.minute));
+        al_minute.add("02" + getResourceString(R.string.minute));
+        al_minute.add("03" + getResourceString(R.string.minute));
+        al_minute.add("04" + getResourceString(R.string.minute));
+        al_minute.add("05" + getResourceString(R.string.minute));
         for (int i = 10; i <= 50; i += 5) {
             str = String.valueOf(i);
-            str += "分钟";
+            str += getResourceString(R.string.minute);
             al_minute.add(str);
         }
         spinnerHours.setAdapter(new ArrayAdapter<>(this, R.layout.item_spinner_time, al_hours));
         spinnerMinute.setAdapter(new ArrayAdapter<>(this, R.layout.item_spinner_time, al_minute));
-        hour = al_hours.get((int) spinnerHours.getSelectedItemId()).replace("小时", "");
-        minute = al_minute.get((int) spinnerHours.getSelectedItemId()).replace("分钟", "");
+        hour = al_hours.get((int) spinnerHours.getSelectedItemId()).replace(getResourceString(R.string.hour), "");
+        minute = al_minute.get((int) spinnerHours.getSelectedItemId()).replace(getResourceString(R.string.minute), "");
         spinnerHours.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                hour = al_hours.get((int) spinnerHours.getSelectedItemId()).replace("小时", "");
+                hour = al_hours.get((int) spinnerHours.getSelectedItemId()).replace(getResourceString(R.string.hour), "");
                 SPUtils.put(NotifyCourseActivity.this, "notify_hour", hour);
                 Logger.e("hour=" + hour);
             }
@@ -95,7 +95,7 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
         spinnerMinute.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                minute = al_minute.get((int) spinnerMinute.getSelectedItemId()).replace("分钟", "");
+                minute = al_minute.get((int) spinnerMinute.getSelectedItemId()).replace(getResourceString(R.string.minute), "");
                 Logger.e("minute=" + minute);
                 SPUtils.put(NotifyCourseActivity.this, "notify_minute", minute);
             }
@@ -109,13 +109,13 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
         String notify_hour = (String) SPUtils.get(this, "notify_hour", "00");
         String notify_minute = (String) SPUtils.get(this, "notify_minute", "00");
 
-        spinnerHours.setSelection(al_hours.indexOf(notify_hour + "小时"));
-        spinnerMinute.setSelection(al_minute.indexOf(notify_minute + "分钟"));
+        spinnerHours.setSelection(al_hours.indexOf(notify_hour + getResourceString(R.string.hour)));
+        spinnerMinute.setSelection(al_minute.indexOf(notify_minute + getResourceString(R.string.minute)));
     }
 
     private void initView() {
         setContentView(R.layout.activity_notify_course);
-        setTitle("课程提醒");
+        setTitle(getResourceString(R.string.notify_classes));
         assignViews();
         cb1.setChecked((Boolean) SPUtils.get(this, "notify_course", true));
         cb2.setChecked((Boolean) SPUtils.get(this, "notify_public", true));

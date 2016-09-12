@@ -92,25 +92,25 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
                 addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlGetCode, map), null, new VolleyListener(this) {
                     @Override
                     protected void onTokenOut() {
-
+                        tokenOut();
                     }
 
                     @Override
                     protected void onSuccess(JSONObject response) {
                         Logger.e("验证码发送成功" + email1 + "---" + response.toString());
-                        Toast.makeText(getApplicationContext(), "验证码已经发送至：" + email1 + "，请注意查收", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getResourceString(R.string.code_send_success), Toast.LENGTH_LONG).show();
                     }
 
                     @Override
                     protected void onError(JSONObject response) {
-                        Toast.makeText(getApplicationContext(), "验证码发送失败：" + email1 + "，请注意查收", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getResourceString(R.string.code_send_failed), Toast.LENGTH_LONG).show();
 
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        Toast.makeText(getApplicationContext(), "服务器异常，请检查网络", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show();
                     }
                 }));
 
@@ -141,7 +141,7 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
                 addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getUserId() + "/email", map), null, new VolleyListener(this) {
                     @Override
                     protected void onTokenOut() {
-
+                        tokenOut();
                     }
 
                     @Override
@@ -149,7 +149,7 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
 
 
                         Logger.e("验证成功");
-                        Toast.makeText(BindEmailActivity.this, "绑定邮箱修改成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BindEmailActivity.this, getResourceString(R.string.bind_email_success), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(BindEmailActivity.this, SecurityManagerActivity.class);
                         startActivity(intent);
 
@@ -161,9 +161,9 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
                         try {
                             JSONObject error = response.getJSONObject("error");
                             if (error.getString("msg").contains("与确认值不匹配")) {
-                                Toast.makeText(BindEmailActivity.this, "验证码错误", Toast.LENGTH_SHORT).show();
-                            }else{
-                                Toast.makeText(BindEmailActivity.this, "邮箱已经被绑定", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(BindEmailActivity.this, getResourceString(R.string.code_error), Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(BindEmailActivity.this, getResourceString(R.string.email_already_bind), Toast.LENGTH_SHORT).show();
                             }
 
                         } catch (JSONException e) {
@@ -174,7 +174,7 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
 
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        Toast.makeText(getApplicationContext(), "服务器异常，请检查网络", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show();
                     }
                 }));
 
@@ -197,7 +197,7 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
         @Override
         public void onTick(long millisUntilFinished) {// 计时过程
             textGetcode.setEnabled(false);//防止重复点击
-            textGetcode.setText(millisUntilFinished / 1000 + "s后重新获取");
+            textGetcode.setText(millisUntilFinished / 1000 + getResourceString(R.string.time_after_acquisition));
         }
     }
 }
