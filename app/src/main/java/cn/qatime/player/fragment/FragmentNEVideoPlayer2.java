@@ -365,7 +365,7 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
                     if (success && result != null) {
                         updateTeamInfo(result);
                     } else {
-                        Toast.makeText(getActivity(), "获取群组信息失败!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getResourceString(R.string.failed_to_obtain_group_information), Toast.LENGTH_SHORT).show();
                         getActivity().finish();
                     }
                 }

@@ -59,23 +59,23 @@ public class FragmentRemedialClassDetail1 extends BaseFragment {
         RemedialClassDetailBean.Data bean = data.getData();
         if (bean != null) {
 
-//            name.setText(getResources().getString(R.string.class_name) + bean.getName());
-            subject.setText(getResources().getString(R.string.subject_type) + bean.getSubject());
-            teacher.setText(getActivity().getResources().getString(R.string.teacher) + bean.getTeacher().getName());
-            progress.setText(getResources().getString(R.string.progress) + bean.getCompleted_lesson_count() + "/" + bean.getPreset_lesson_count());
-            classstarttime.setText(getResources().getString(R.string.class_start_time) + bean.getLive_start_time());
-            classendtime.setText(getResources().getString(R.string.class_end_time) + bean.getLive_end_time());
+//            name.setText(getResourceString(R.string.class_name) + bean.getName());
+            subject.setText(getResourceString(R.string.subject_type) + bean.getSubject());
+            teacher.setText(getResourceString(R.string.teacher) + bean.getTeacher().getName());
+            progress.setText(getResourceString(R.string.progress) + bean.getCompleted_lesson_count() + "/" + bean.getPreset_lesson_count());
+            classstarttime.setText(getResourceString(R.string.class_start_time) + bean.getLive_start_time());
+            classendtime.setText(getResourceString(R.string.class_end_time) + bean.getLive_end_time());
 
-//            teachway.setText(getResources().getString(R.string.teach_way));
-            grade.setText(getResources().getString(R.string.grade_type) + bean.getGrade());
-            totalclass.setText(getResources().getString(R.string.total_class_hours) + bean.getPreset_lesson_count());
-            remainclass.setText(getResources().getString(R.string.remain_class) + (bean.getPreset_lesson_count() - bean.getCompleted_lesson_count()));
+//            teachway.setText(getResourceString(R.string.teach_way));
+            grade.setText(getResourceString(R.string.grade_type) + bean.getGrade());
+            totalclass.setText(getResourceString(R.string.total_class_hours) + bean.getPreset_lesson_count());
+            remainclass.setText(getResourceString(R.string.remain_class) + (bean.getPreset_lesson_count() - bean.getCompleted_lesson_count()));
             if (bean.getStatus().equals("preview")) {
-                status.setText(getResources().getString(R.string.status_preview));
+                status.setText(getResourceString(R.string.status_preview));
             } else if (bean.getStatus().equals("teaching")) {
-                status.setText(getResources().getString(R.string.status_teaching));
+                status.setText(getResourceString(R.string.status_teaching));
             } else {
-                status.setText(getResources().getString(R.string.status_over));
+                status.setText(getResourceString(R.string.status_over));
             }
 
             describe.setText(bean.getDescription());

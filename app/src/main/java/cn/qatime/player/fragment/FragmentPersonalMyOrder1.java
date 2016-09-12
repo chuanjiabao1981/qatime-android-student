@@ -66,12 +66,12 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
 
         listView.setMode(PullToRefreshBase.Mode.BOTH);
-        listView.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
-        listView.getLoadingLayoutProxy(false, true).setPullLabel(getResources().getString(R.string.pull_to_load));
-        listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResources().getString(R.string.refreshing));
-        listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
-        listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
-        listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
+        listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
+        listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
+        listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResourceString(R.string.refreshing));
+        listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResourceString(R.string.loading));
+        listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
+        listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
 
         adapter = new CommonAdapter<MyOrderBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_order1) {
             @Override
@@ -95,11 +95,11 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
                 helper.setText(R.id.progress, item.getProduct().getCompleted_lesson_count() + "/" + item.getProduct().getPreset_lesson_count());//进度
 
                 if (item.getStatus().equals("unpaid")) {//待付款
-                    helper.setText(R.id.status, getActivity().getResources().getString(R.string.waiting_for_payment));
+                    helper.setText(R.id.status, getResourceString(R.string.waiting_for_payment));
                 } else if (item.getStatus().equals("paid")) {//已付款
-                    helper.setText(R.id.status, getActivity().getResources().getString(R.string.deal_done));
+                    helper.setText(R.id.status, getResourceString(R.string.deal_done));
                 } else {//已取消
-                    helper.setText(R.id.status, getActivity().getResources().getString(R.string.deal_closed));
+                    helper.setText(R.id.status, getResourceString(R.string.deal_closed));
                 }
                 String price = df.format(item.getProduct().getPrice());
                 if (price.startsWith(".")) {

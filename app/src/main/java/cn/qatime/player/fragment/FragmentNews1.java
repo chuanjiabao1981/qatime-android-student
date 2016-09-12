@@ -179,7 +179,7 @@ public class FragmentNews1 extends BaseFragment {
                 if (NIMClient.getStatus() == StatusCode.LOGINED) {
                     final Dialog dialog = new Dialog(getActivity(), R.style.Transparent);
                     final View v = View.inflate(getActivity(), R.layout.team_notify_alert_dialog, null);
-                    ((TextView) v.findViewById(R.id.text)).setText(items.get(position - 1).isMute() ? getResources().getString(R.string.resume_alert) : getResources().getString(R.string.nolongger_alert));
+                    ((TextView) v.findViewById(R.id.text)).setText(items.get(position - 1).isMute() ? getResourceString(R.string.resume_alert) : getResourceString(R.string.nolongger_alert));
                     v.findViewById(R.id.text).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -519,7 +519,6 @@ public class FragmentNews1 extends BaseFragment {
             if (index >= 0 && index < items.size()) {
                 MessageListBean item = items.get(index);
                 item.setMsgStatus(message.getStatus());
-//                refreshViewHolderByIndex(index);
             }
         }
     };
@@ -579,19 +578,6 @@ public class FragmentNews1 extends BaseFragment {
         return -1;
     }
 
-    protected void refreshViewHolderByIndex(final int index) {
-        getActivity().runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-//                Object tag = ListViewUtil.getViewHolderByIndex(listView, index);
-//                if (tag instanceof RecentViewHolder) {
-//                    RecentViewHolder viewHolder = (RecentViewHolder) tag;
-//                    viewHolder.refreshCurrentItem();
-//                }
-            }
-        });
-    }
 
     @Override
     public void onDestroy() {

@@ -108,6 +108,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
     private int page = 1;
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     DecimalFormat df = new DecimalFormat("#.00");
+    private GradeBean gradeBean;
 
     @Nullable
     @Override
@@ -115,6 +116,11 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment12, container, false);
         initView(view);
         initData(1);
+        String gradeString = FileUtil.readFile(getActivity().getFilesDir() + "/grade.txt");
+//        LogUtils.e("班级基础信息" + gradeString);
+        if (!StringUtils.isNullOrBlanK(gradeString)) {
+            gradeBean = JsonUtils.objectFromJson(gradeString, GradeBean.class);
+        }
         return view;
     }
 
@@ -377,10 +383,10 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 View popView = View.inflate(getActivity(), R.layout.pop_fragment12, null);
                 ListView listView = (ListView) popView.findViewById(R.id.list);
                 final List<String> timeList = new ArrayList<>();
-                timeList.add("综合排序");
-                timeList.add("按价格-低到高");
-                timeList.add("按价格-高到低");
-                timeList.add("按购买人数");
+                timeList.add(getResourceString(R.string.comprehensive_sort));
+                timeList.add(getResourceString(R.string.in_price_low_to_high));
+                timeList.add(getResourceString(R.string.in_price_high_to_low));
+                timeList.add(getResourceString(R.string.in_number));
                 listView.setAdapter(new CommonAdapter<String>(getActivity(), timeList, R.layout.item_pop_fragment12) {
                     @Override
                     public void convert(ViewHolder holder, String item, int position) {
@@ -390,9 +396,9 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        if (timeList.get(position).equals(getResources().getString(R.string.in_price_low_to_high))) {
+                        if (timeList.get(position).equals(getResourceString(R.string.in_price_low_to_high))) {
                             timetext.setText(getResources().getString(R.string.by_price_up));
-                        } else if (timeList.get(position).equals(getResources().getString(R.string.in_price_high_to_low))) {
+                        } else if (timeList.get(position).equals(getResourceString(R.string.in_price_high_to_low))) {
                             timetext.setText(getResources().getString(R.string.by_price_down));
                         } else {
                             timetext.setText(timeList.get(position));
@@ -416,17 +422,17 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 popView = View.inflate(getActivity(), R.layout.pop_fragment12, null);
                 listView = (ListView) popView.findViewById(R.id.list);
                 final List<String> subjectList = new ArrayList<>();
-                subjectList.add("全部");
-                subjectList.add("语文");
-                subjectList.add("数学");
-                subjectList.add("英语");
-                subjectList.add("物理");
-                subjectList.add("化学");
-                subjectList.add("生物");
-                subjectList.add("地理");
-                subjectList.add("政治");
-                subjectList.add("历史");
-                subjectList.add("科学");
+                subjectList.add(getResourceString(R.string.whole));
+                subjectList.add(getResourceString(R.string.chinese));
+                subjectList.add(getResourceString(R.string.math));
+                subjectList.add(getResourceString(R.string.english));
+                subjectList.add(getResourceString(R.string.physics));
+                subjectList.add(getResourceString(R.string.chemistry));
+                subjectList.add(getResourceString(R.string.geography));
+                subjectList.add(getResourceString(R.string.politics));
+                subjectList.add(getResourceString(R.string.history));
+                subjectList.add(getResourceString(R.string.science));
+                subjectList.add(getResourceString(R.string.biology));
                 listView.setAdapter(new CommonAdapter<String>(getActivity(), subjectList, R.layout.item_pop_fragment12) {
                     @Override
                     public void convert(ViewHolder holder, String item, int position) {
@@ -447,11 +453,22 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 popView = View.inflate(getActivity(), R.layout.pop_fragment12, null);
                 listView = (ListView) popView.findViewById(R.id.list);
                 final List<String> classList = new ArrayList<>();
-                String gradeString = FileUtil.readFile(getActivity().getFilesDir() + "/grade.txt");
-                if (!StringUtils.isNullOrBlanK(gradeString)) {
-                    GradeBean gradeBean = JsonUtils.objectFromJson(gradeString, GradeBean.class);
-                    classList.add("全部");
+                classList.add(getResourceString(R.string.whole));
+                if (gradeBean != null && gradeBean.getData() != null && gradeBean.getData().getGrades() != null && gradeBean.getData().getGrades().size() > 0) {
                     classList.addAll(gradeBean.getData().getGrades());
+                } else {
+                    classList.add(getResourceString(R.string.high3));
+                    classList.add(getResourceString(R.string.high2));
+                    classList.add(getResourceString(R.string.high1));
+                    classList.add(getResourceString(R.string.middle3));
+                    classList.add(getResourceString(R.string.middle2));
+                    classList.add(getResourceString(R.string.middle1));
+                    classList.add(getResourceString(R.string.primary6));
+                    classList.add(getResourceString(R.string.primary5));
+                    classList.add(getResourceString(R.string.primary4));
+                    classList.add(getResourceString(R.string.primary3));
+                    classList.add(getResourceString(R.string.primary2));
+                    classList.add(getResourceString(R.string.primary1));
                 }
 
                 listView.setAdapter(new CommonAdapter<String>(getActivity(), classList, R.layout.item_pop_fragment12) {

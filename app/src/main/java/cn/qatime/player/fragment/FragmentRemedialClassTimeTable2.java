@@ -61,12 +61,12 @@ public class FragmentRemedialClassTimeTable2 extends BaseFragment {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
         listView.getRefreshableView().setDividerHeight(2);
         listView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
-        listView.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
-        listView.getLoadingLayoutProxy(false, true).setPullLabel(getResources().getString(R.string.pull_to_load));
-        listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResources().getString(R.string.refreshing));
-        listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
-        listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
-        listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
+        listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
+        listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
+        listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResourceString(R.string.refreshing));
+        listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResourceString(R.string.loading));
+        listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
+        listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
 
 
         adapter = new CommonAdapter<ClassTimeTableBean.DataEntity.LessonsEntity>(getActivity(), itemList, R.layout.item_fragment_remedial_class_time_table2) {
@@ -88,8 +88,8 @@ public class FragmentRemedialClassTimeTable2 extends BaseFragment {
                 helper.setText(R.id.status, getStatus(item.getStatus()));
                 helper.setText(R.id.class_date, item.getClass_date() + " ");
                 helper.setText(R.id.live_time, item.getLive_time());
-                helper.setText(R.id.subject, getResources().getString(R.string.item_subject) + item.getSubject());
-                helper.setText(R.id.teacher, getResources().getString(R.string.item_teacher) + item.getTeacher_name());
+                helper.setText(R.id.subject, getResourceString(R.string.item_subject) + item.getSubject());
+                helper.setText(R.id.teacher, getResourceString(R.string.item_teacher) + item.getTeacher_name());
             }
         };
         listView.setAdapter(adapter);
@@ -123,17 +123,17 @@ public class FragmentRemedialClassTimeTable2 extends BaseFragment {
 
     private String getStatus(String status) {
         if (status.equals("teaching")) {//直播中
-            return getResources().getString(R.string.class_teaching);
+            return getResourceString(R.string.class_teaching);
         } else if (status.equals("paused")) {
-            return getResources().getString(R.string.class_teaching);
+            return getResourceString(R.string.class_teaching);
         } else if (status.equals("init")) {//未开始
-            return getResources().getString(R.string.class_init);
+            return getResourceString(R.string.class_init);
         } else if (status.equals("ready")) {//待开课
-            return getResources().getString(R.string.class_ready);
+            return getResourceString(R.string.class_ready);
         } else if (status.equals("paused_inner")) {//暂停中
-            return getResources().getString(R.string.class_paused_inner);
+            return getResourceString(R.string.class_paused_inner);
         } else {
-            return getResources().getString(R.string.class_over);//已结束
+            return getResourceString(R.string.class_over);//已结束
         }
     }
 

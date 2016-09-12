@@ -94,11 +94,11 @@ public class FragmentPersonalMyOrder2 extends BaseFragment {
                 }
                 helper.setText(R.id.progress, item.getProduct().getCompleted_lesson_count() + "/" + item.getProduct().getPreset_lesson_count());//进度
                 if (item.getStatus().equals("shipped")) {//正在交易
-                    helper.setText(R.id.status, getActivity().getResources().getString(R.string.dealing));
+                    helper.setText(R.id.status, getResourceString(R.string.dealing));
                 } else if (item.getStatus().equals("paid")) {//正在交易
-                    helper.setText(R.id.status, getActivity().getResources().getString(R.string.dealing));
+                    helper.setText(R.id.status, getResourceString(R.string.dealing));
                 } else if (item.getStatus().equals("completed")) {//交易完成
-                    helper.setText(R.id.status, getActivity().getResources().getString(R.string.deal_done));
+                    helper.setText(R.id.status, getResourceString(R.string.deal_done));
                 } else {//
                     helper.setText(R.id.status, "  ");
                 }
