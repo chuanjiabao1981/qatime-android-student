@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.AppUtils;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
@@ -44,7 +45,7 @@ import libraryextra.utils.VolleyListener;
 /**
  * 起始页
  */
-public class StartActivity extends Activity implements View.OnClickListener {
+public class StartActivity extends BaseActivity implements View.OnClickListener {
     private AlertDialog alertDialog;
     private String downLoadLinks;
     private boolean newVersion = false;
@@ -71,7 +72,7 @@ public class StartActivity extends Activity implements View.OnClickListener {
         map.put("platform", "android");
         map.put("version", AppUtils.getVersionName(this));
 //        map.put("version", "0.0.1");
-        BaseApplication.getRequestQueue().add(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlcheckUpdate, map), null, new VolleyListener(this) {
+        addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlcheckUpdate, map), null, new VolleyListener(this) {
             @Override
             protected void onTokenOut() {
 
@@ -112,7 +113,7 @@ public class StartActivity extends Activity implements View.OnClickListener {
                             }
                         });
                         String descStr = response.getJSONObject("data").getString("description");
-                        desc.setText(StringUtils.isNullOrBlanK(descStr) ? "性能优化" : descStr);
+                        desc.setText(StringUtils.isNullOrBlanK(descStr) ? getResourceString(R.string.performance_optimization) : descStr);
                         downLoadLinks = response.getJSONObject("data").getString("download_links");
                         newVersion.setText("V" + response.getJSONObject("data").getString("version"));
                     } catch (JSONException e) {
@@ -136,13 +137,13 @@ public class StartActivity extends Activity implements View.OnClickListener {
 
             @Override
             protected void onError(JSONObject response) {
-                Toast.makeText(StartActivity.this, "检查更新失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(StartActivity.this, getResourceString(R.string.check_for_update_failed), Toast.LENGTH_SHORT).show();
                 startApp();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Toast.makeText(StartActivity.this, "检查更新失败,请检查网络连接", Toast.LENGTH_SHORT).show();
+                Toast.makeText(StartActivity.this, getResourceString(R.string.check_for_update_failed_check_net), Toast.LENGTH_SHORT).show();
                 startApp();
             }
         }));
@@ -154,7 +155,7 @@ public class StartActivity extends Activity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.download:
                 //TODO 更新版本
-                Toast.makeText(StartActivity.this, "开始下载", Toast.LENGTH_SHORT).show();
+                Toast.makeText(StartActivity.this, getResourceString(R.string.start_download), Toast.LENGTH_SHORT).show();
                 DownFileUtil downFileUtil = new DownFileUtil(this, downLoadLinks, "qatime.apk", "", "答疑时间.apk") {
                     @Override
                     public void downOK() {
@@ -231,6 +232,6 @@ public class StartActivity extends Activity implements View.OnClickListener {
                 super.onErrorResponse(volleyError);
             }
         });
-        BaseApplication.getRequestQueue().add(request);
+        addToRequestQueue(request);
     }
 }

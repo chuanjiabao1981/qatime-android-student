@@ -73,4 +73,8 @@ public class BaseFragment extends Fragment {
     public void cancelAll(final RequestQueue.RequestFilter filter) {
         Queue.cancelAll(filter);
     }
+
+    protected String getResourceString(int id){
+        return getResources().getString(id);
+    }
 }

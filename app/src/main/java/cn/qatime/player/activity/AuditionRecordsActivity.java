@@ -31,7 +31,7 @@ public class AuditionRecordsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audition_records);
-        setTitle(getResources().getString(R.string.audition_records));
+        setTitle(getResourceString(R.string.audition_records));
         list.add("1");
         list.add("1");
         list.add("1");

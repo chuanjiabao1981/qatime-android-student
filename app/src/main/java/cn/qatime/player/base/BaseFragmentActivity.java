@@ -41,7 +41,7 @@ public class BaseFragmentActivity extends FragmentActivity {
     }
 
     public void setRightText(String text, View.OnClickListener listener) {
-        if (StringUtils.isNullOrBlanK(text)){
+        if (StringUtils.isNullOrBlanK(text)) {
             throw new IllegalArgumentException("text can not be a null object");
         }
         if (findViewById(R.id.right_text) != null) {
@@ -87,6 +87,7 @@ public class BaseFragmentActivity extends FragmentActivity {
         });
         dialog.show();
     }
+
     private void out() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("out", "out");
@@ -103,5 +104,9 @@ public class BaseFragmentActivity extends FragmentActivity {
 
     public void cancelAll(final RequestQueue.RequestFilter filter) {
         Queue.cancelAll(filter);
+    }
+
+    protected String getResourceString(int id) {
+        return getResources().getString(id);
     }
 }
