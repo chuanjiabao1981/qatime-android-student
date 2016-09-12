@@ -142,6 +142,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         map.put("login_account", username.getText().toString().trim());
         map.put("password", password.getText().toString().trim());
         map.put("client_type", "app");
+        map.put("client_cate", "student_client");
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlLogin, map), null,
                 new VolleyListener(LoginActivity.this) {
                     @Override

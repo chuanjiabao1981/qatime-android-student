@@ -371,6 +371,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             return;
         }
+        if (findViewById(R.id.viewPager) != null && findViewById(R.id.viewPager).getVisibility() == View.VISIBLE) {
+            findViewById(R.id.viewPager).setVisibility(View.GONE);
+            return;
+        }
         super.onBackPressed();
     }
 

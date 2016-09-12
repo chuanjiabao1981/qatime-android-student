@@ -131,7 +131,7 @@ public class MessageActivity extends BaseActivity {
                 if (item.getFromAccount().equals(BaseApplication.getAccount())) {
                     holder.getView(R.id.right).setVisibility(View.VISIBLE);
                     holder.getView(R.id.left).setVisibility(View.GONE);
-                    Glide.with(MessageActivity.this).load(BaseApplication.getProfile().getData().getUser().getChat_account().getIcon()).crossFade().dontAnimate().transform(new GlideRoundTransform(MessageActivity.this)).into((ImageView) holder.getView(R.id.my_head));
+                    Glide.with(MessageActivity.this).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).crossFade().dontAnimate().transform(new GlideRoundTransform(MessageActivity.this)).into((ImageView) holder.getView(R.id.my_head));
                     holder.setText(R.id.my_time, getTime(item.getTime()));
                     ((TextView) holder.getView(R.id.my_content)).setText(ExpressionUtil.getExpressionString(
                             MessageActivity.this, item.getContent(), ExpressionUtil.emoji, cache, new GifDrawable.UpdateListener() {
@@ -204,7 +204,7 @@ public class MessageActivity extends BaseActivity {
                 loadFromRemote();
             }
         });
-        loadMessage(false);
+//        loadMessage(false);
         BiaoQingView bq = (BiaoQingView) findViewById(R.id.biaoQingView);
         bq.init(content, emoji);
     }
@@ -441,7 +441,7 @@ public class MessageActivity extends BaseActivity {
             TeamDataCache.getInstance().unregisterTeamDataChangedObserver(teamDataChangedObserver);
             TeamDataCache.getInstance().unregisterTeamMemberDataChangedObserver(teamMemberDataChangedObserver);
         }
-        FriendDataCache.getInstance().registerFriendDataChangedObserver(friendDataChangedObserver, register);
+//        FriendDataCache.getInstance().registerFriendDataChangedObserver(friendDataChangedObserver, register);
     }
 
     /**
@@ -487,46 +487,56 @@ public class MessageActivity extends BaseActivity {
         }
     };
 
-    FriendDataCache.FriendDataChangedObserver friendDataChangedObserver = new FriendDataCache.FriendDataChangedObserver() {
-        @Override
-        public void onAddedOrUpdatedFriends(List<String> accounts) {
-            adapter.notifyDataSetChanged();
-        }
-
-        @Override
-        public void onDeletedFriends(List<String> accounts) {
-            adapter.notifyDataSetChanged();
-        }
-
-        @Override
-        public void onAddUserToBlackList(List<String> account) {
-            adapter.notifyDataSetChanged();
-        }
-
-        @Override
-        public void onRemoveUserFromBlackList(List<String> account) {
-            adapter.notifyDataSetChanged();
-        }
-    };
+//    FriendDataCache.FriendDataChangedObserver friendDataChangedObserver = new FriendDataCache.FriendDataChangedObserver() {
+//        @Override
+//        public void onAddedOrUpdatedFriends(List<String> accounts) {
+//            adapter.notifyDataSetChanged();
+//        }
+//
+//        @Override
+//        public void onDeletedFriends(List<String> accounts) {
+//            adapter.notifyDataSetChanged();
+//        }
+//
+//        @Override
+//        public void onAddUserToBlackList(List<String> account) {
+//            adapter.notifyDataSetChanged();
+//        }
+//
+//        @Override
+//        public void onRemoveUserFromBlackList(List<String> account) {
+//            adapter.notifyDataSetChanged();
+//        }
+//    };
 
     @Override
     protected void onResume() {
         super.onResume();
+        loadMessage(false);
         registerObservers(true);
         requestTeamInfo();
         NIMClient.getService(MsgService.class).setChattingAccount(sessionId, sessionType);
     }
 
     @Override
+    public void onBackPressed() {
+        if (findViewById(R.id.viewPager) != null && findViewById(R.id.viewPager).getVisibility() == View.VISIBLE) {
+            findViewById(R.id.viewPager).setVisibility(View.GONE);
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
+        registerObservers(false);
         NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        registerObservers(false);
         registerTeamUpdateObserver(false);
     }
 }
