@@ -1,8 +1,7 @@
 package cn.qatime.player.activity;
 
-import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.TextView;
 
@@ -20,7 +19,6 @@ public class PersonalMyOrderActivity extends BaseFragmentActivity {
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3};
     FragmentLayoutWithLine fragmentlayout;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
-    private int pager = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +26,6 @@ public class PersonalMyOrderActivity extends BaseFragmentActivity {
         setContentView(R.layout.activity_personal_my_order);
         setTitle(getResources().getString(R.string.my_order));
 
-        pager = getIntent().getIntExtra("pager", 0);
         initView();
     }
 
@@ -56,12 +53,6 @@ public class PersonalMyOrderActivity extends BaseFragmentActivity {
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_personal_my_order, 0x0311);
         fragmentlayout.getViewPager().setOffscreenPageLimit(2);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                fragmentlayout.setCurrenItem(pager);
-            }
-        }, 500);
 
     }
 }

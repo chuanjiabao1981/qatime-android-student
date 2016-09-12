@@ -26,16 +26,10 @@ import libraryextra.transformation.GlideCircleTransform;
 
 public class Fragment4 extends BaseFragment implements View.OnClickListener {
     private LinearLayout information;
-    private ImageView banner;
     private ImageView headSculpture;
     private LinearLayout order;
-    private LinearLayout paid;
+    private LinearLayout ticket;
     private LinearLayout course;
-    private LinearLayout today;
-    private TextView waitting;
-    private TextView calssed;
-    private TextView overed;
-    private TextView trying;
     private LinearLayout security;
     private LinearLayout setting;
     private TextView newVersion;
@@ -53,14 +47,8 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
         name.setText(BaseApplication.getProfile().getData().getUser().getName());
 
         order.setOnClickListener(this);
-        paid.setOnClickListener(this);
+        ticket.setOnClickListener(this);
         course.setOnClickListener(this);
-
-        today.setOnClickListener(this);
-        waitting.setOnClickListener(this);
-        calssed.setOnClickListener(this);
-        overed.setOnClickListener(this);
-        trying.setOnClickListener(this);
         information.setOnClickListener(this);
 
         security.setOnClickListener(this);
@@ -77,17 +65,14 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.my_ticket:
                 intent = new Intent(getActivity(), PersonalMyOrderActivity.class);
-                intent.putExtra("pager", 0);
                 startActivity(intent);
                 break;
             case R.id.my_order:
                 intent = new Intent(getActivity(), PersonalMyOrderActivity.class);
-                intent.putExtra("pager", 1);
                 startActivity(intent);
                 break;
             case R.id.my_course:
                 intent = new Intent(getActivity(), PersonalMyTutorshipActivity.class);
-                intent.putExtra("pager", 2);
                 startActivity(intent);
                 break;
             case R.id.security:// 安全管理
@@ -113,11 +98,10 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
 
     private void assignViews(View view) {
         information = (LinearLayout) view.findViewById(R.id.information);
-        banner = (ImageView) view.findViewById(R.id.head_sculpture);
         headSculpture = (ImageView) view.findViewById(R.id.head_sculpture);
         name = (TextView) view.findViewById(R.id.name);
         order = (LinearLayout) view.findViewById(R.id.my_order);
-        paid = (LinearLayout) view.findViewById(R.id.my_ticket);
+        ticket = (LinearLayout) view.findViewById(R.id.my_ticket);
         course = (LinearLayout) view.findViewById(R.id.my_course);
         security = (LinearLayout) view.findViewById(R.id.security);
         setting = (LinearLayout) view.findViewById(R.id.setting);

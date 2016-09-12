@@ -82,7 +82,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="15dp"
                     android:text="我的钱包" />
 
                 <View
@@ -90,7 +90,10 @@
                     android:layout_height="1dp"
                     android:layout_weight="1"
                     android:background="#ffffff" />
-
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="￥0.00"
+                    android:layout_height="wrap_content" />
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -112,7 +115,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="15dp"
                     android:text="我的订单" />
 
                 <View
@@ -142,7 +145,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="15dp"
                     android:text="我的辅导" />
 
                 <View
@@ -172,7 +175,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="15dp"
                     android:text="@string/security_management" />
 
                 <View
@@ -198,9 +201,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="10dp"
-                android:paddingLeft="10dp"
-                android:paddingTop="10dp">
+                android:paddingBottom="15dp"
+                android:paddingLeft="15dp"
+                android:paddingTop="15dp">
 
                 <TextView
                     android:layout_width="wrap_content"

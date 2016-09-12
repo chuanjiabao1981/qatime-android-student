@@ -1,18 +1,16 @@
 package cn.qatime.player.activity;
 
-import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.base.BaseFragmentActivity;
-
 import android.content.Intent;
-import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import cn.qatime.player.R;
+import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.fragment.FragmentPersonalMyTutorship1;
 import cn.qatime.player.fragment.FragmentPersonalMyTutorship2;
 import cn.qatime.player.fragment.FragmentPersonalMyTutorship3;
@@ -27,7 +25,6 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3, R.id.tab_text4, R.id.tab_text5};
     FragmentLayoutWithLine fragmentlayout;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
-    private int pager = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +32,6 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
         setContentView(R.layout.activity_personal_my_tutorship);
         setTitle(getResources().getString(R.string.my_course));
 
-        pager = getIntent().getIntExtra("pager", 0);
         setRightImage(R.mipmap.audition_records, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,11 +74,5 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tableout_personal_my_tutor, 0x0311);
         fragmentlayout.getViewPager().setOffscreenPageLimit(4);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                fragmentlayout.setCurrenItem(pager);
-            }
-        }, 500);
     }
 }
