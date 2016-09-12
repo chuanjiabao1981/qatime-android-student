@@ -159,7 +159,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                     }
                     helper.setText(R.id.teaching_time, getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day));
                 } catch (ParseException e) {
-                    e.printStackTrace();
+//                    e.printStackTrace();
                     helper.getView(R.id.teaching_time).setVisibility(View.GONE);
                 }
                 if (item.getTeacher_name() != null) {
