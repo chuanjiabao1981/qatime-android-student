@@ -51,27 +51,37 @@
                 android:orientation="horizontal"
                 android:padding="6dp">
 
-                <EditText
-                    android:id="@+id/content"
+                <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:background="@drawable/shape_input"
-                    android:maxLines="3"
-                    android:minHeight="40dp"
-                    android:paddingLeft="3dp" />
+                    android:layout_weight="1">
 
-                <ImageView
-                    android:id="@+id/emoji"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_gravity="bottom"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:src="@mipmap/biaoqing" />
+                    <EditText
+                        android:id="@+id/content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/shape_input"
+                        android:maxLines="3"
+                        android:textSize="14sp"
+                        android:minHeight="40dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="40dp" />
+
+                    <ImageView
+                        android:id="@+id/emoji"
+                        android:layout_width="wrap_content"
+                        android:layout_height="34dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_alignBottom="@id/content"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:src="@mipmap/biaoqing" />
+                </RelativeLayout>
 
                 <Button
                     android:id="@+id/send"

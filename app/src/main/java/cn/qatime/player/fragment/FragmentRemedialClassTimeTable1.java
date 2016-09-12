@@ -66,7 +66,7 @@ public class FragmentRemedialClassTimeTable1 extends BaseFragment {
         map.put("month", date);
         map.put("state", "unclosed");
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/schedule", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/schedule", map), null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {

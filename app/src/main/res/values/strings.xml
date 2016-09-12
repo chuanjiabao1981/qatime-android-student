@@ -349,5 +349,8 @@
     <string name="team_not_exist">该群不存在</string>
     <string name="please_update">请升级版本后使用</string>
     <string name="item_to_start_main">距开课</string>
+    <string name="team">群组</string>
+    <string name="resume_alert">恢复提醒</string>
+    <string name="nolongger_alert">不再提醒</string>
 
 </resources>

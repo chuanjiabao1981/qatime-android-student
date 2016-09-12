@@ -21,7 +21,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="5dp"
         android:layout_toRightOf="@id/name"
-        android:src="@mipmap/chat_ring" />
+        android:src="@mipmap/chat_unring" />
 
     <TextView
         android:id="@+id/count"
@@ -29,5 +29,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_marginRight="15dp"
-        android:textColor="#ff0000" />
+        android:gravity="center"
+        android:background="@drawable/notify_count_bg"
+        android:padding="2dp"
+        android:visibility="gone"
+        android:textColor="#fff" />
 </RelativeLayout>

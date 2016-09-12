@@ -107,7 +107,6 @@ public class FragmentNews1 extends BaseFragment {
 
                     @Override
                     protected void onError(JSONObject response) {
-
                     }
 
                     @Override
@@ -150,9 +149,9 @@ public class FragmentNews1 extends BaseFragment {
             public void convert(ViewHolder holder, MessageListBean item, int position) {
                 if (item.getSessionType() == SessionTypeEnum.Team) {
                     ((TextView) holder.getView(R.id.name)).setMaxWidth((int) (ScreenUtils.getScreenWidth(getActivity()) * 0.8));
-                    holder.setText(R.id.name, TeamDataCache.getInstance().getTeamName(item.getContactId()).replace("讨论组", ""));
+                    holder.setText(R.id.name, item.getContent().replace("讨论组", ""));
                 }
-                ((ImageView) holder.getView(R.id.notify)).setImageResource(item.isMute() ? R.mipmap.chat_unring : R.mipmap.chat_ring);
+                ((ImageView) holder.getView(R.id.notify)).setVisibility(item.isMute() ? View.VISIBLE : View.GONE);
                 holder.getView(R.id.count).setVisibility(item.getUnreadCount() == 0 ? View.GONE : View.VISIBLE);
                 holder.setText(R.id.count, String.valueOf(item.getUnreadCount()));
 
@@ -168,6 +167,7 @@ public class FragmentNews1 extends BaseFragment {
                 intent.putExtra("sessionType", items.get(position - 1).getSessionType());
                 intent.putExtra("courseId", items.get(position - 1).getCourseId());
                 intent.putExtra("pull_address", items.get(position - 1).getPull_address());
+                intent.putExtra("name", items.get(position - 1).getContent());
                 startActivity(intent);
             }
         });
@@ -179,7 +179,7 @@ public class FragmentNews1 extends BaseFragment {
                 if (NIMClient.getStatus() == StatusCode.LOGINED) {
                     final Dialog dialog = new Dialog(getActivity(), R.style.Transparent);
                     final View v = View.inflate(getActivity(), R.layout.team_notify_alert_dialog, null);
-                    ((TextView) v.findViewById(R.id.text)).setText(items.get(position - 1).isMute() ? "取消消息免打扰" : "消息免打扰");
+                    ((TextView) v.findViewById(R.id.text)).setText(items.get(position - 1).isMute() ? getResources().getString(R.string.resume_alert) : getResources().getString(R.string.nolongger_alert));
                     v.findViewById(R.id.text).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -206,20 +206,27 @@ public class FragmentNews1 extends BaseFragment {
                             });
                         }
                     });
+                    v.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
                     dialog.setContentView(v);
                     dialog.setCanceledOnTouchOutside(true);
                     dialog.show();
-                    v.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                        @Override
-                        public void onGlobalLayout() {
-                            Window window = dialog.getWindow();
-                            WindowManager.LayoutParams lp = window.getAttributes();
-                            lp.gravity = Gravity.CENTER;
-                            lp.width = v.getWidth();
-                            lp.height = v.getHeight();
-                            dialog.getWindow().setAttributes(lp);
-                        }
-                    });
+//                    v.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//                        @Override
+//                        public void onGlobalLayout() {
+//                            Window window = dialog.getWindow();
+//                            WindowManager.LayoutParams lp = window.getAttributes();
+//                            lp.gravity = Gravity.CENTER;
+//                            lp.width = v.getWidth();
+//                            lp.height = v.getHeight();
+//                            dialog.getWindow().setAttributes(lp);
+//                        }
+//                    });
                     return true;
                 }
                 return false;
