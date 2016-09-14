@@ -37,7 +37,7 @@ import libraryextra.utils.VolleyListener;
  * @date 2016/8/15 11:11
  * @Description
  */
-public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandler, View.OnClickListener {
+public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandler{
     private IWXAPI api;
     private boolean reLoad = false;
     private ImageView image;
@@ -76,7 +76,7 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
         complete = (Button) findViewById(R.id.complete);
         loading = (RelativeLayout) findViewById(R.id.loading);
 //        viewOrder.setOnClickListener(this);
-        complete.setOnClickListener(this);
+        complete.setOnClickListener(this::onClick);
         orderId.setText((String) SPUtils.get(WXPayEntryActivity.this, "orderId", ""));
         String price = df.format(SPUtils.get(WXPayEntryActivity.this, "price", 0));
         if (price.startsWith(".")) {
@@ -198,7 +198,6 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
         addToRequestQueue(request);
     }
 
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
 //            case R.id.view_order://查看订单

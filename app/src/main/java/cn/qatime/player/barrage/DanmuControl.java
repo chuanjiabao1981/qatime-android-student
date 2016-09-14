@@ -204,12 +204,9 @@ public class DanmuControl {
     }
 
     public void addDanmuList(final List<IMMessage> danmuLists) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < danmuLists.size(); i++) {
-                    addDanmu(danmuLists.get(i), i);
-                }
+        new Thread(() -> {
+            for (int i = 0; i < danmuLists.size(); i++) {
+                addDanmu(danmuLists.get(i), i);
             }
         }).start();
     }
@@ -227,7 +224,7 @@ public class DanmuControl {
             danmaku.isLive = false;
             danmaku.time = mDanmakuView.getCurrentTime() + (i * ADD_DANMU_TIME);
             danmaku.textSize = DANMU_TEXT_SIZE/* * (mDanmakuContext.getDisplayer().getDensity() - 0.6f)*/;
-            danmaku.textColor = Color.WHITE;
+            danmaku.textColor = Color.BLACK;
             danmaku.textShadowColor = 0; // 重要：如果有图文混排，最好不要设置描边(设textShadowColor=0)，否则会进行两次复杂的绘制导致运行效率降低
             mDanmakuView.addDanmaku(danmaku);
         }

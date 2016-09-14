@@ -73,12 +73,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         getcode.setOnClickListener(this);
         next.setOnClickListener(this);
         agreement.setOnClickListener(this);
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                next.setEnabled(isChecked);
-            }
-        });
+        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> next.setEnabled(isChecked));
     }
 
     @Override
@@ -110,12 +105,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                         }
 
 
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError volleyError) {
-                            Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show();
-                        }
-                    });
+                    }, volleyError -> Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show());
                     addToRequestQueue(request);
 
                 } else {
@@ -263,12 +253,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             }
 
 
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show();
-            }
-        });
+        }, volleyError -> Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show());
 
         addToRequestQueue(request);
 //下一步跳转

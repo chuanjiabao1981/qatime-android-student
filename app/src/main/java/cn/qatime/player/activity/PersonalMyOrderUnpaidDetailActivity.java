@@ -137,27 +137,16 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         pay = (TextView) findViewById(R.id.pay);
         listitem = (LinearLayout) findViewById(R.id.list_item);//内详情点击
         cancelorder = (TextView) findViewById(R.id.cancel_order);
-        listitem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(PersonalMyOrderUnpaidDetailActivity.this, RemedialClassDetailActivity.class);
-                intent.putExtra("id", classid);
-                intent.putExtra("page", 0);
-                startActivity(intent);
-            }
+        listitem.setOnClickListener(v -> {
+            Intent intent = new Intent(PersonalMyOrderUnpaidDetailActivity.this, RemedialClassDetailActivity.class);
+            intent.putExtra("id", classid);
+            intent.putExtra("page", 0);
+            startActivity(intent);
         });
-        pay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: 2016/9/1 付款
-            }
+        pay.setOnClickListener(v -> {
+            // TODO: 2016/9/1 付款
         });
-        cancelorder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog(getIntent().getStringExtra("id"));
-            }
-        });
+        cancelorder.setOnClickListener(v -> dialog(getIntent().getStringExtra("id")));
 
     }
 

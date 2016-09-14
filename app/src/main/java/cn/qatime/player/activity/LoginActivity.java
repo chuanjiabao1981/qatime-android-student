@@ -45,7 +45,7 @@ import libraryextra.view.CustomProgressDialog;
 /**
  * 登陆页
  */
-public class LoginActivity extends BaseActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity {
     private EditText username;
     private EditText password;
     private int errornum = 0;
@@ -71,11 +71,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         View loginerror = findViewById(R.id.login_error);//忘记密码
         View reload = findViewById(R.id.reload);
 
-        login.setOnClickListener(this);
-        register.setOnClickListener(this);
-        loginerror.setOnClickListener(this);
-        reload.setOnClickListener(this);
-        checkview.setOnClickListener(this);
+        login.setOnClickListener(this::onClick);
+        register.setOnClickListener(this::onClick);
+        loginerror.setOnClickListener(this::onClick);
+        reload.setOnClickListener(this::onClick);
+        checkview.setOnClickListener(this::onClick);
 
         if (!StringUtils.isNullOrBlanK(SPUtils.get(LoginActivity.this, "username", ""))) {
             username.setText(SPUtils.get(LoginActivity.this, "username", "").toString());
@@ -87,7 +87,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
     }
 
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.login://登陆
@@ -142,6 +141,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         map.put("login_account", username.getText().toString().trim());
         map.put("password", password.getText().toString().trim());
         map.put("client_type", "app");
+        map.put("client_cate", "student_client");
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlLogin, map), null,
                 new VolleyListener(LoginActivity.this) {
                     @Override
@@ -244,13 +244,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         BaseApplication.clearToken();
                         login.setClickable(true);
                     }
-                }, new VolleyErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
+                }, volleyError-> {
                 DialogUtils.dismissDialog(progress);
                 BaseApplication.clearToken();
                 Toast.makeText(LoginActivity.this, getResourceString(R.string.after_try_again), Toast.LENGTH_SHORT).show();
-                super.onErrorResponse(volleyError);
                 login.setClickable(true);
                 password.setText("");
                 //当密码错误5次以上，开始使用验证码
@@ -259,7 +256,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     checklayout.setVisibility(View.VISIBLE);
                     initCheckNum();
                 }
-            }
         });
         addToRequestQueue(request);
     }

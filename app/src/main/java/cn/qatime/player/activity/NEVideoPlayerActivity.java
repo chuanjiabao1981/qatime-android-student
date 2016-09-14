@@ -111,15 +111,12 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
             videoPlayer.start();
         }
         final String finalUrl = url;
-        videoPlayer.setOnVideoRefreshListener(new QaVideoPlayer.VideoRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (!StringUtils.isNullOrBlanK(finalUrl)) {
-                    videoPlayer.release_resource();
-                    videoPlayer.setVideoPath(finalUrl);
-                    videoPlayer.setOnControlListener(NEVideoPlayerActivity.this);
-                    videoPlayer.start();
-                }
+        videoPlayer.setOnVideoRefreshListener(() -> {
+            if (!StringUtils.isNullOrBlanK(finalUrl)) {
+                videoPlayer.release_resource();
+                videoPlayer.setVideoPath(finalUrl);
+                videoPlayer.setOnControlListener(NEVideoPlayerActivity.this);
+                videoPlayer.start();
             }
         });
         initView();
@@ -183,19 +180,16 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         fragmentLayout.setScorll(true);
         fragmentLayout.setWhereTab(1);
         fragmentLayout.setTabHeight(6, 0xff000000);
-        fragmentLayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
-            @Override
-            public void change(int lastPosition, int positon, View lastTabView, View currentTabView) {
-                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff858585);
-                ((TextView) currentTabView.findViewById(tab_text[positon])).setTextColor(0xff222222);
-                lastTabView.setBackgroundColor(0xffffffff);
-                currentTabView.setBackgroundColor(0xffeeeeee);
-                if (positon == 1) {
-                    inputLayout.setVisibility(View.VISIBLE);
-                } else {
-                    KeyBoardUtils.closeKeybord(NEVideoPlayerActivity.this);
-                    inputLayout.setVisibility(View.GONE);
-                }
+        fragmentLayout.setOnChangeFragmentListener((lastPosition, positon, lastTabView, currentTabView) -> {
+            ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff858585);
+            ((TextView) currentTabView.findViewById(tab_text[positon])).setTextColor(0xff222222);
+            lastTabView.setBackgroundColor(0xffffffff);
+            currentTabView.setBackgroundColor(0xffeeeeee);
+            if (positon == 1) {
+                inputLayout.setVisibility(View.VISIBLE);
+            } else {
+                KeyBoardUtils.closeKeybord(NEVideoPlayerActivity.this);
+                inputLayout.setVisibility(View.GONE);
             }
         });
         fragmentLayout.setAdapter(fragBaseFragments, R.layout.tablayout_nevideo_player, 0x0102);
@@ -203,32 +197,21 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         fragment2 = (FragmentNEVideoPlayer2) fragBaseFragments.get(1);
         fragment2.setSessionId(sessionId);
         fragment2.requestTeamInfo();
-        fragment2.setChatCallBack(new FragmentNEVideoPlayer2.Callback() {
-            @Override
-            public void back(List<IMMessage> result) {
-                videoPlayer.addDanmaku(result);
-            }
-        });
+        fragment2.setChatCallBack(result -> videoPlayer.addDanmaku(result));
 
         content = (EditText) findViewById(R.id.content);
         emoji = (ImageView) findViewById(R.id.emoji);
 
         Button send = (Button) findViewById(R.id.send);
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendMessage(content.getText().toString().trim(), false);
-                content.setText("");
-            }
+        send.setOnClickListener(v -> {
+            sendMessage(content.getText().toString().trim(), false);
+            content.setText("");
         });
         BiaoQingView bq = (BiaoQingView) findViewById(R.id.biaoQingView);
         bq.init(content, emoji);
-        videoPlayer.setChatCallback(new QaVideoPlayer.ChatCallback() {
-            @Override
-            public void back(String result) {
-                Logger.e(result + "result");
-                sendMessage(result, true);
-            }
+        videoPlayer.setChatCallback(result -> {
+            Logger.e(result + "result");
+            sendMessage(result, true);
         });
     }
 
@@ -369,6 +352,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     public void onBackPressed() {
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            return;
+        }
+        if (findViewById(R.id.viewPager) != null && findViewById(R.id.viewPager).getVisibility() == View.VISIBLE) {
+            findViewById(R.id.viewPager).setVisibility(View.GONE);
             return;
         }
         super.onBackPressed();

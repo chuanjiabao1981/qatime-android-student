@@ -104,6 +104,7 @@ public class BiaoQingView extends RelativeLayout {
         viewPager = new TagViewPager(getContext());
         LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, DensityUtils.dp2px(getContext(), 180));
         viewPager.setLayoutParams(params);
+        viewPager.setId(R.id.viewPager);
         viewPager.setVisibility(View.GONE);
         this.addView(viewPager);
         viewPager.init(R.drawable.shape_biaoqing_tag_select, R.drawable.shape_biaoqing_tag_nomal, 16, 8, 2, 40);

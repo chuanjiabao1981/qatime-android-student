@@ -34,7 +34,7 @@ import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
-public class OrderConfirmActivity extends BaseActivity implements View.OnClickListener {
+public class OrderConfirmActivity extends BaseActivity  {
     TextView name;
     ImageView image;
     TextView project;
@@ -72,7 +72,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
             priceNumber = data.price;
 //            initData(data.getData().getId());
         }
-        pay.setOnClickListener(this);
+        pay.setOnClickListener(this::onClick);
     }
 
 
@@ -102,7 +102,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 
     }
 
-    @Override
     public void onClick(View v) {
         Toast.makeText(OrderConfirmActivity.this, getResourceString(R.string.order_creating), Toast.LENGTH_SHORT).show();
         Map<String, String> map = new HashMap<>();
@@ -172,22 +171,19 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         payprice = (TextView) findViewById(R.id.pay_price);
         pay = (Button) findViewById(R.id.pay);
 
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == wechatPay.getId()) {
-                    payType = "1";
-                } else {
-                    payType = "0";
-                }
+        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == wechatPay.getId()) {
+                payType = "1";
+            } else {
+                payType = "0";
+            }
 
-                //TODO 集成完支付宝后，去掉下面这段
-                if (checkedId == aliPay.getId()) {
-                    Toast.makeText(OrderConfirmActivity.this, getResourceString(R.string.not_support_alipay), Toast.LENGTH_SHORT).show();
-                    wechatPay.setChecked(true);
-                    aliPay.setChecked(false);
-                    payType = "1";
-                }
+            //TODO 集成完支付宝后，去掉下面这段
+            if (checkedId == aliPay.getId()) {
+                Toast.makeText(OrderConfirmActivity.this, getResourceString(R.string.not_support_alipay), Toast.LENGTH_SHORT).show();
+                wechatPay.setChecked(true);
+                aliPay.setChecked(false);
+                payType = "1";
             }
         });
     }

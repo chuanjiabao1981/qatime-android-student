@@ -162,20 +162,17 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         };
         listView.setAdapter(adapter);
 
-        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
-            @Override
-            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        String label = DateUtils.formatDateTime(ClassTimeTableActivity.this, System.currentTimeMillis(),
-                                DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
-                        listView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
-                        listView.onRefreshComplete();
-                    }
-                }, 300);
-                initData();
-            }
+        listView.setOnRefreshListener(refreshView -> {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    String label = DateUtils.formatDateTime(ClassTimeTableActivity.this, System.currentTimeMillis(),
+                            DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+                    listView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
+                    listView.onRefreshComplete();
+                }
+            }, 300);
+            initData();
         });
 
         ImageView ivLeft = (ImageView) findViewById(R.id.iv_left);
@@ -188,12 +185,9 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         ivLeft.setOnClickListener(this);
         ivRight.setOnClickListener(this);
         tvToday.setOnClickListener(this);
-        monthDateView.setDateClick(new MonthDateView.DateClick() {
-            @Override
-            public void onClickOnDate() {
-                getDate();
-                filterList();
-            }
+        monthDateView.setDateClick(() -> {
+            getDate();
+            filterList();
         });
     }
 

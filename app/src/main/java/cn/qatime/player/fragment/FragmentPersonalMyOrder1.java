@@ -66,12 +66,12 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
 
         listView.setMode(PullToRefreshBase.Mode.BOTH);
-        listView.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
-        listView.getLoadingLayoutProxy(false, true).setPullLabel(getResources().getString(R.string.pull_to_load));
-        listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResources().getString(R.string.refreshing));
-        listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
-        listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
-        listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
+        listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
+        listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
+        listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResourceString(R.string.refreshing));
+        listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResourceString(R.string.loading));
+        listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
+        listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
 
         adapter = new CommonAdapter<MyOrderBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_order1) {
             @Override
@@ -95,11 +95,11 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
                 helper.setText(R.id.progress, item.getProduct().getCompleted_lesson_count() + "/" + item.getProduct().getPreset_lesson_count());//进度
 
                 if (item.getStatus().equals("unpaid")) {//待付款
-                    helper.setText(R.id.status, getActivity().getResources().getString(R.string.waiting_for_payment));
+                    helper.setText(R.id.status, getResourceString(R.string.waiting_for_payment));
                 } else if (item.getStatus().equals("paid")) {//已付款
-                    helper.setText(R.id.status, getActivity().getResources().getString(R.string.deal_done));
+                    helper.setText(R.id.status, getResourceString(R.string.deal_done));
                 } else {//已取消
-                    helper.setText(R.id.status, getActivity().getResources().getString(R.string.deal_closed));
+                    helper.setText(R.id.status, getResourceString(R.string.deal_closed));
                 }
                 String price = df.format(item.getProduct().getPrice());
                 if (price.startsWith(".")) {
@@ -109,26 +109,20 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
 
 
                 helper.getView(R.id.pay).setOnClickListener(
-                        new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(getActivity(), OrderPayActivity.class);
-                                OrderConfirmBean.App_pay_params app_pay_params = item.getApp_pay_params();
-                                intent.putExtra("data", app_pay_params);
-                                intent.putExtra("id", item.getId());
-                                intent.putExtra("time", item.getCreated_at());
-                                intent.putExtra("price", item.getProduct().getPrice());
-                                intent.putExtra("type", (item.getPay_type() + "").equals("1") ? getResources().getString(R.string.method_payment) + "：微信支付" : getResources().getString(R.string.method_payment) + "：支付宝支付");
-                                startActivity(intent);
-                            }
+                        v -> {
+                            Intent intent = new Intent(getActivity(), OrderPayActivity.class);
+                            OrderConfirmBean.App_pay_params app_pay_params = item.getApp_pay_params();
+                            intent.putExtra("data", app_pay_params);
+                            intent.putExtra("id", item.getId());
+                            intent.putExtra("time", item.getCreated_at());
+                            intent.putExtra("price", item.getProduct().getPrice());
+                            intent.putExtra("type", (item.getPay_type() + "").equals("1") ? getResources().getString(R.string.method_payment) + "：微信支付" : getResources().getString(R.string.method_payment) + "：支付宝支付");
+                            startActivity(intent);
                         });
                 helper.getView(R.id.cancel_order).setOnClickListener(
-                        new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                String id = list.get(position).getId();
-                                dialog(position, id);
-                            }
+                        v -> {
+                            String id = list.get(position).getId();
+                            dialog(position, id);
                         });
 
             }
@@ -140,19 +134,17 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page = 1;
-                new Handler().postDelayed(new Runnable() {
-                    public void run() {
-                        String label = DateUtils.formatDateTime(
-                                getActivity(),
-                                System.currentTimeMillis(),
-                                DateUtils.FORMAT_SHOW_TIME
-                                        | DateUtils.FORMAT_SHOW_DATE
-                                        | DateUtils.FORMAT_ABBREV_ALL);
-                        // Update the LastUpdatedLabel
-                        listView.getLoadingLayoutProxy(false, true)
-                                .setLastUpdatedLabel(label);
-                        listView.onRefreshComplete();
-                    }
+                new Handler().postDelayed(() -> {
+                    String label = DateUtils.formatDateTime(
+                            getActivity(),
+                            System.currentTimeMillis(),
+                            DateUtils.FORMAT_SHOW_TIME
+                                    | DateUtils.FORMAT_SHOW_DATE
+                                    | DateUtils.FORMAT_ABBREV_ALL);
+                    // Update the LastUpdatedLabel
+                    listView.getLoadingLayoutProxy(false, true)
+                            .setLastUpdatedLabel(label);
+                    listView.onRefreshComplete();
                 }, 200);
                 initData(1);
             }
@@ -160,44 +152,39 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page++;
-                new Handler().postDelayed(new Runnable() {
-                    public void run() {
-                        String label = DateUtils.formatDateTime(
-                                getActivity(),
-                                System.currentTimeMillis(),
-                                DateUtils.FORMAT_SHOW_TIME
-                                        | DateUtils.FORMAT_SHOW_DATE
-                                        | DateUtils.FORMAT_ABBREV_ALL);
-                        // Update the LastUpdatedLabel
-                        listView.getLoadingLayoutProxy(false, true)
-                                .setLastUpdatedLabel(label);
-                        listView.onRefreshComplete();
-                    }
+                new Handler().postDelayed(() -> {
+                    String label = DateUtils.formatDateTime(
+                            getActivity(),
+                            System.currentTimeMillis(),
+                            DateUtils.FORMAT_SHOW_TIME
+                                    | DateUtils.FORMAT_SHOW_DATE
+                                    | DateUtils.FORMAT_ABBREV_ALL);
+                    // Update the LastUpdatedLabel
+                    listView.getLoadingLayoutProxy(false, true)
+                            .setLastUpdatedLabel(label);
+                    listView.onRefreshComplete();
                 }, 200);
                 initData(2);
             }
         });
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), PersonalMyOrderUnpaidDetailActivity.class);
-                intent.putExtra("id", list.get(position - 1).getId());
-                OrderDetailBean bean = new OrderDetailBean();
-                bean.id = list.get(position - 1).getProduct().getId();
-                bean.image = list.get(position - 1).getProduct().getPublicize();
-                bean.name = list.get(position - 1).getProduct().getName();
-                bean.subject = list.get(position - 1).getProduct().getSubject();
-                bean.grade = list.get(position - 1).getProduct().getGrade();
-                bean.status = list.get(position - 1).getStatus();
-                bean.teacher = list.get(position - 1).getProduct().getTeacher_name();
-                bean.Preset_lesson_count = list.get(position - 1).getProduct().getPreset_lesson_count();
-                bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
-                bean.price = list.get(position - 1).getProduct().getPrice();
-                intent.putExtra("data", bean);
-                intent.putExtra("payType", list.get(position - 1).getPay_type());
-                intent.putExtra("created_at", list.get(position - 1).getCreated_at());
-                startActivity(intent);
-            }
+        listView.setOnItemClickListener((parent, view1, position, id) -> {
+            Intent intent = new Intent(getActivity(), PersonalMyOrderUnpaidDetailActivity.class);
+            intent.putExtra("id", list.get(position - 1).getId());
+            OrderDetailBean bean = new OrderDetailBean();
+            bean.id = list.get(position - 1).getProduct().getId();
+            bean.image = list.get(position - 1).getProduct().getPublicize();
+            bean.name = list.get(position - 1).getProduct().getName();
+            bean.subject = list.get(position - 1).getProduct().getSubject();
+            bean.grade = list.get(position - 1).getProduct().getGrade();
+            bean.status = list.get(position - 1).getStatus();
+            bean.teacher = list.get(position - 1).getProduct().getTeacher_name();
+            bean.Preset_lesson_count = list.get(position - 1).getProduct().getPreset_lesson_count();
+            bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
+            bean.price = list.get(position - 1).getProduct().getPrice();
+            intent.putExtra("data", bean);
+            intent.putExtra("payType", list.get(position - 1).getPay_type());
+            intent.putExtra("created_at", list.get(position - 1).getCreated_at());
+            startActivity(intent);
         });
     }
 
@@ -265,19 +252,12 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
     protected void dialog(final int position, final String id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("确认取消订单吗？");
-        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                CancelOrder(position, id);
-                dialog.dismiss();
-            }
+        builder.setPositiveButton("确认", (dialog, which) -> {
+            CancelOrder(position, id);
+            dialog.dismiss();
         });
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
+        builder.setNegativeButton("取消", (dialog, which) -> {
+            dialog.dismiss();
         });
         builder.create().show();
     }

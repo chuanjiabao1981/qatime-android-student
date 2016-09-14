@@ -73,11 +73,8 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
             protected void onError(JSONObject response) {
                 Toast.makeText(SecurityManagerActivity.this, getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
+        }, volleyError -> {
 
-            }
         });
         addToRequestQueue(request);
 

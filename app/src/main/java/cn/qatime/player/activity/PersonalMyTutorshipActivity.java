@@ -35,12 +35,9 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
         setTitle(getResources().getString(R.string.my_course));
 
         pager = getIntent().getIntExtra("pager", 0);
-        setRightImage(R.mipmap.audition_records, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(PersonalMyTutorshipActivity.this, AuditionRecordsActivity.class);
-                startActivity(intent);
-            }
+        setRightImage(R.mipmap.audition_records, v -> {
+            Intent intent = new Intent(PersonalMyTutorshipActivity.this, AuditionRecordsActivity.class);
+            startActivity(intent);
         });
         initView();
     }
@@ -61,27 +58,19 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
         fragmentlayout.setScorll(true);
         fragmentlayout.setWhereTab(1);
         fragmentlayout.setTabHeight(6, 0xff000000);
-        fragmentlayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
-            @Override
-            public void change(int lastPosition, int positon, View lastTabView, View currentTabView) {
-                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff858585);
-                ((TextView) currentTabView.findViewById(tab_text[positon])).setTextColor(0xff222222);
+        fragmentlayout.setOnChangeFragmentListener((lastPosition, positon, lastTabView, currentTabView) -> {
+            ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff858585);
+            ((TextView) currentTabView.findViewById(tab_text[positon])).setTextColor(0xff222222);
 
-                if (positon == 4) {
-                    findViewById(R.id.right).setVisibility(View.VISIBLE);
-                } else {
-                    findViewById(R.id.right).setVisibility(View.GONE);
-                }
-                ((BaseFragment) fragBaseFragments.get(positon)).onShow();
+            if (positon == 4) {
+                findViewById(R.id.right).setVisibility(View.VISIBLE);
+            } else {
+                findViewById(R.id.right).setVisibility(View.GONE);
             }
+            ((BaseFragment) fragBaseFragments.get(positon)).onShow();
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tableout_personal_my_tutor, 0x0311);
         fragmentlayout.getViewPager().setOffscreenPageLimit(4);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                fragmentlayout.setCurrenItem(pager);
-            }
-        }, 500);
+        new Handler().postDelayed(() -> fragmentlayout.setCurrenItem(pager), 500);
     }
 }

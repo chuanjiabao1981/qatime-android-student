@@ -87,19 +87,16 @@ public class PictureSelectActivity extends BaseActivity {
         gridView = (GridView) findViewById(R.id.gridView);
         adapter = new PictureSelectAdapter(this, detailList);
         gridView.setAdapter(adapter);
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
-                    // ##########拍照##########
-                    Intent newIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(newIntent, Constant.REQUEST_CAMERA);
-                } else {
-                    Intent data = new Intent();
-                    data.putExtra("data", detailList.get(position - 1));
-                    setResult(Constant.RESPONSE_PICTURE_SELECT, data);
-                    finish();
-                }
+        gridView.setOnItemClickListener((parent, view, position, id) -> {
+            if (position == 0) {
+                // ##########拍照##########
+                Intent newIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(newIntent, Constant.REQUEST_CAMERA);
+            } else {
+                Intent data = new Intent();
+                data.putExtra("data", detailList.get(position - 1));
+                setResult(Constant.RESPONSE_PICTURE_SELECT, data);
+                finish();
             }
         });
     }

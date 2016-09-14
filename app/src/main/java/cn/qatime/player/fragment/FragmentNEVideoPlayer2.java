@@ -108,12 +108,12 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
         listView.getRefreshableView().setDividerHeight(0);
         listView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
-        listView.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
-        listView.getLoadingLayoutProxy(false, true).setPullLabel(getResources().getString(R.string.pull_to_load));
-        listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResources().getString(R.string.refreshing));
-        listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
-        listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
-        listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
+        listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
+        listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
+        listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResourceString(R.string.refreshing));
+        listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResourceString(R.string.loading));
+        listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
+        listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
 
         adapter = new CommonAdapter<IMMessage>(getActivity(), items, R.layout.item_message) {
             @Override
@@ -122,7 +122,7 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
                 if (item.getFromAccount().equals(BaseApplication.getAccount())) {
                     holder.getView(R.id.right).setVisibility(View.VISIBLE);
                     holder.getView(R.id.left).setVisibility(View.GONE);
-                    Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getChat_account().getIcon()).crossFade().dontAnimate().transform(new GlideCircleTransform(getContext())).into((ImageView) holder.getView(R.id.my_head));
+                    Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).crossFade().dontAnimate().transform(new GlideCircleTransform(getContext())).into((ImageView) holder.getView(R.id.my_head));
                     holder.setText(R.id.my_time, getTime(item.getTime()));
                     ((TextView) holder.getView(R.id.my_content)).setText(ExpressionUtil.getExpressionString(
                             getActivity(), item.getContent(), ExpressionUtil.emoji, new Hashtable<Integer, GifDrawable>(), new GifDrawable.UpdateListener() {
@@ -150,19 +150,13 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
         };
         listView.setAdapter(adapter);
 
-        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
-            @Override
-            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
-                        listView.getLoadingLayoutProxy(false, true).setLastUpdatedLabel(label);
-                        listView.onRefreshComplete();
-                    }
-                }, 200);
-                loadFromRemote();
-            }
+        listView.setOnRefreshListener(refreshView -> {
+            new Handler().postDelayed(() -> {
+                String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+                listView.getLoadingLayoutProxy(false, true).setLastUpdatedLabel(label);
+                listView.onRefreshComplete();
+            }, 200);
+            loadFromRemote();
         });
         loadMessage(false);
     }
@@ -335,12 +329,9 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
     /**
      * 消息状态变化观察者
      */
-    Observer<IMMessage> messageStatusObserver = new Observer<IMMessage>() {
-        @Override
-        public void onEvent(IMMessage message) {
-            if (isMyMessage(message)) {
+    Observer<IMMessage> messageStatusObserver = (Observer<IMMessage>) message -> {
+        if (isMyMessage(message)) {
 //                onMessageStatusChange(message);
-            }
         }
     };
 
@@ -359,15 +350,12 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
         if (team != null) {
             updateTeamInfo(team);
         } else {
-            TeamDataCache.getInstance().fetchTeamById(sessionId, new SimpleCallback<Team>() {
-                @Override
-                public void onResult(boolean success, Team result) {
-                    if (success && result != null) {
-                        updateTeamInfo(result);
-                    } else {
-                        Toast.makeText(getActivity(), "获取群组信息失败!", Toast.LENGTH_SHORT).show();
-                        getActivity().finish();
-                    }
+            TeamDataCache.getInstance().fetchTeamById(sessionId, (success, result) -> {
+                if (success && result != null) {
+                    updateTeamInfo(result);
+                } else {
+                    Toast.makeText(getActivity(), getResourceString(R.string.failed_to_obtain_group_information), Toast.LENGTH_SHORT).show();
+                    getActivity().finish();
                 }
             });
         }

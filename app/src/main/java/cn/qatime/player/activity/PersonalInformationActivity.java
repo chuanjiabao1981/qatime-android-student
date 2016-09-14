@@ -50,13 +50,10 @@ public class PersonalInformationActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_information);
         setTitle(getResources().getString(R.string.personal_information));
-        setRightImage(R.mipmap.personal_change_information, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(PersonalInformationActivity.this, PersonalInformationChangeActivity.class);
-                intent.putExtra("data", bean);
-                startActivityForResult(intent, Constant.REQUEST);
-            }
+        setRightImage(R.mipmap.personal_change_information, v -> {
+            Intent intent = new Intent(PersonalInformationActivity.this, PersonalInformationChangeActivity.class);
+            intent.putExtra("data", bean);
+            startActivityForResult(intent, Constant.REQUEST);
         });
         initView();
         initData();

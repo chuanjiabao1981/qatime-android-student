@@ -36,22 +36,13 @@ public class BaseFragment extends Fragment {
         BaseApplication.clearToken();
         final Dialog dialog = new Dialog(getActivity(), R.style.Transparent);
         View view = View.inflate(getActivity(), R.layout.activity_out_alertdialog, null);
-        view.findViewById(R.id.alert_dialog_confirm).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                out();
-            }
+        view.findViewById(R.id.alert_dialog_confirm).setOnClickListener(v -> {
+            dialog.dismiss();
+            out();
         });
         dialog.setContentView(view);
 
-        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                dialog.dismiss();
-                out();
-            }
-        });
+        dialog.setOnCancelListener(dialog1 -> out());
         dialog.show();
     }
 

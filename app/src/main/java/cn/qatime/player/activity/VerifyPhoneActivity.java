@@ -91,13 +91,7 @@ public class VerifyPhoneActivity extends BaseActivity implements View.OnClickLis
                     protected void onError(JSONObject response) {
                         Toast.makeText(getApplicationContext(), getResourceString(R.string.code_send_failed), Toast.LENGTH_LONG).show();
                     }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show();
-                    }
-                }));
+                }, volleyError -> Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show()));
 
 
                 time.start();
@@ -141,13 +135,7 @@ public class VerifyPhoneActivity extends BaseActivity implements View.OnClickLis
                     protected void onError(JSONObject response) {
                         Toast.makeText(VerifyPhoneActivity.this, getResourceString(R.string.code_error), Toast.LENGTH_SHORT).show();
                     }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        Toast.makeText(VerifyPhoneActivity.this, getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
-                    }
-                }));
+                }, volleyError -> Toast.makeText(VerifyPhoneActivity.this, getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show()));
 
                 break;
         }

@@ -11,7 +11,7 @@ import cn.qatime.player.base.BaseActivity;
 /**
  * Created by lenovo on 2016/8/22.
  */
-public class NotifySettingActivity extends BaseActivity implements View.OnClickListener {
+public class NotifySettingActivity extends BaseActivity {
 
     private View notifyMessage;
     private View notifyClasses;
@@ -39,11 +39,10 @@ public class NotifySettingActivity extends BaseActivity implements View.OnClickL
         setTitle(getResourceString(R.string.notify_setting));
         assignViews();
 
-        notifyClasses.setOnClickListener(this);
-        notifyMessage.setOnClickListener(this);
+        notifyClasses.setOnClickListener(this::onClick);
+        notifyMessage.setOnClickListener(this::onClick);
     }
 
-    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.notify_message:
