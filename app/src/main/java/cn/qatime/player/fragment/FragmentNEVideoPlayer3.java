@@ -42,22 +42,19 @@ public class FragmentNEVideoPlayer3 extends BaseFragment {
         point2 = (ImageView) view.findViewById(R.id.point2);
         point3 = (ImageView) view.findViewById(R.id.point3);
         VerticalSlide dragLayout = (VerticalSlide) view.findViewById(R.id.dragLayout);
-        dragLayout.setOnPageChangeListener(new VerticalSlide.OnPageChangeListener() {
-            @Override
-            public void onChange(int page) {
-                if (page == 0) {
-                    point1.setImageResource(R.mipmap.point_select);
-                    point2.setImageResource(R.mipmap.point_default);
-                    point3.setImageResource(R.mipmap.point_default);
-                } else if (page == 1) {
-                    point1.setImageResource(R.mipmap.point_default);
-                    point2.setImageResource(R.mipmap.point_select);
-                    point3.setImageResource(R.mipmap.point_default);
-                } else {
-                    point1.setImageResource(R.mipmap.point_default);
-                    point2.setImageResource(R.mipmap.point_default);
-                    point3.setImageResource(R.mipmap.point_select);
-                }
+        dragLayout.setOnPageChangeListener(page -> {
+            if (page == 0) {
+                point1.setImageResource(R.mipmap.point_select);
+                point2.setImageResource(R.mipmap.point_default);
+                point3.setImageResource(R.mipmap.point_default);
+            } else if (page == 1) {
+                point1.setImageResource(R.mipmap.point_default);
+                point2.setImageResource(R.mipmap.point_select);
+                point3.setImageResource(R.mipmap.point_default);
+            } else {
+                point1.setImageResource(R.mipmap.point_default);
+                point2.setImageResource(R.mipmap.point_default);
+                point3.setImageResource(R.mipmap.point_select);
             }
         });
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();

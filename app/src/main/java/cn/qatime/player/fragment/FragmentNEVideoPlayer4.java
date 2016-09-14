@@ -52,16 +52,13 @@ public class FragmentNEVideoPlayer4 extends BaseFragment {
         listView = (ListView) view.findViewById(R.id.listview);
         adapter = new FragmentNEVideoPlayerAdapter4(getActivity(), list, R.layout.item_fragment_nevideo_player4);
         listView.setAdapter(adapter);
-        sidebar.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
-            @Override
-            public void onTouchingLetterChanged(String s) {
-                if (s.equals("#")) {
-                    listView.setSelection(0);
-                } else {
-                    int position = adapter.getPositionByLetter(s);
-                    if (position >= 0) {
-                        listView.setSelection(position);
-                    }
+        sidebar.setOnTouchingLetterChangedListener(s -> {
+            if (s.equals("#")) {
+                listView.setSelection(0);
+            } else {
+                int position = adapter.getPositionByLetter(s);
+                if (position >= 0) {
+                    listView.setSelection(position);
                 }
             }
         });
@@ -80,12 +77,7 @@ public class FragmentNEVideoPlayer4 extends BaseFragment {
                     item.setFirstLetter(StringUtils.getPYIndexStr(item.getName().substring(0, 1)));
                 }
             }
-            Collections.sort(list, new Comparator<Announcements.DataBean.MembersBean>() {
-                @Override
-                public int compare(Announcements.DataBean.MembersBean lhs, Announcements.DataBean.MembersBean rhs) {
-                    return lhs.getFirstLetter().compareTo(rhs.getFirstLetter());
-                }
-            });
+            Collections.sort(list, (lhs, rhs) -> lhs.getFirstLetter().compareTo(rhs.getFirstLetter()));
             hd.postDelayed(runnable, 200);
         }
     }

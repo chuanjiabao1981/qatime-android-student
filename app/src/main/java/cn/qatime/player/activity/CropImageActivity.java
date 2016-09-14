@@ -85,31 +85,28 @@ public class CropImageActivity extends BaseActivity {
             cropper.setCropMode(cropMode);
         }
 
-        setRightText(getResources().getString(R.string.use), new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                v.setClickable(false);
-                progress = DialogUtils.startProgressDialog(progress, CropImageActivity.this);
-                progress.setCanceledOnTouchOutside(false);
-                progress.setCancelable(false);
-                cropper.startCrop(Uri.fromFile(new File(Constant.CACHEPATH + "/" + UUID.randomUUID().toString().replace("-", "") + ".jpg")), null, new SaveCallback() {
-                    @Override
-                    public void onSuccess(Uri outputUri) {
-                        Intent intent = new Intent();
-                        intent.putExtra("bitmap", outputUri.getPath());
-                        setResult(Constant.PHOTO_CROP, intent);
-                        v.setClickable(true);
-                        DialogUtils.dismissDialog(progress);
-                        finish();
+        setRightText(getResources().getString(R.string.use), v -> {
+            v.setClickable(false);
+            progress = DialogUtils.startProgressDialog(progress, CropImageActivity.this);
+            progress.setCanceledOnTouchOutside(false);
+            progress.setCancelable(false);
+            cropper.startCrop(Uri.fromFile(new File(Constant.CACHEPATH + "/" + UUID.randomUUID().toString().replace("-", "") + ".jpg")), null, new SaveCallback() {
+                @Override
+                public void onSuccess(Uri outputUri) {
+                    Intent intent = new Intent();
+                    intent.putExtra("bitmap", outputUri.getPath());
+                    setResult(Constant.PHOTO_CROP, intent);
+                    v.setClickable(true);
+                    DialogUtils.dismissDialog(progress);
+                    finish();
 
-                    }
+                }
 
-                    @Override
-                    public void onError() {
+                @Override
+                public void onError() {
 
-                    }
-                });
-            }
+                }
+            });
         });
 //        TextView more = (TextView) findViewById(R.id.more);
 //        more.setText("确定");

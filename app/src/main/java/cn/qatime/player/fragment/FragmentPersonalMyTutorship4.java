@@ -94,19 +94,17 @@ public class FragmentPersonalMyTutorship4 extends BaseFragment {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page = 1;
-                new Handler().postDelayed(new Runnable() {
-                    public void run() {
-                        String label = DateUtils.formatDateTime(
-                                getActivity(),
-                                System.currentTimeMillis(),
-                                DateUtils.FORMAT_SHOW_TIME
-                                        | DateUtils.FORMAT_SHOW_DATE
-                                        | DateUtils.FORMAT_ABBREV_ALL);
-                        // Update the LastUpdatedLabel
-                        listView.getLoadingLayoutProxy(false, true)
-                                .setLastUpdatedLabel(label);
-                        listView.onRefreshComplete();
-                    }
+                new Handler().postDelayed(() -> {
+                    String label = DateUtils.formatDateTime(
+                            getActivity(),
+                            System.currentTimeMillis(),
+                            DateUtils.FORMAT_SHOW_TIME
+                                    | DateUtils.FORMAT_SHOW_DATE
+                                    | DateUtils.FORMAT_ABBREV_ALL);
+                    // Update the LastUpdatedLabel
+                    listView.getLoadingLayoutProxy(false, true)
+                            .setLastUpdatedLabel(label);
+                    listView.onRefreshComplete();
                 }, 200);
                 initData(1);
             }
@@ -114,30 +112,25 @@ public class FragmentPersonalMyTutorship4 extends BaseFragment {
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page++;
-                new Handler().postDelayed(new Runnable() {
-                    public void run() {
-                        String label = DateUtils.formatDateTime(
-                                getActivity(),
-                                System.currentTimeMillis(),
-                                DateUtils.FORMAT_SHOW_TIME
-                                        | DateUtils.FORMAT_SHOW_DATE
-                                        | DateUtils.FORMAT_ABBREV_ALL);
-                        // Update the LastUpdatedLabel
-                        listView.getLoadingLayoutProxy(false, true)
-                                .setLastUpdatedLabel(label);
-                        listView.onRefreshComplete();
-                    }
+                new Handler().postDelayed(() -> {
+                    String label = DateUtils.formatDateTime(
+                            getActivity(),
+                            System.currentTimeMillis(),
+                            DateUtils.FORMAT_SHOW_TIME
+                                    | DateUtils.FORMAT_SHOW_DATE
+                                    | DateUtils.FORMAT_ABBREV_ALL);
+                    // Update the LastUpdatedLabel
+                    listView.getLoadingLayoutProxy(false, true)
+                            .setLastUpdatedLabel(label);
+                    listView.onRefreshComplete();
                 }, 200);
                 initData(2);
             }
         });
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                intent.putExtra("id", list.get(position - 1).getId());
-                startActivity(intent);
-            }
+        listView.setOnItemClickListener((parent, view1, position, id) -> {
+            Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+            intent.putExtra("id", list.get(position - 1).getId());
+            startActivity(intent);
         });
     }
 

@@ -56,7 +56,7 @@ public class FragmentNews2 extends BaseFragment {
             @Override
             public void convert(ViewHolder helper, String item, int position) {
 
-                    }
+            }
 
 
         };
@@ -66,45 +66,38 @@ public class FragmentNews2 extends BaseFragment {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page = 1;
-                new Handler().postDelayed(new Runnable() {
-                    public void run() {
-                        String label = DateUtils.formatDateTime(
-                                getActivity(),
-                                System.currentTimeMillis(),
-                                DateUtils.FORMAT_SHOW_TIME
-                                        | DateUtils.FORMAT_SHOW_DATE
-                                        | DateUtils.FORMAT_ABBREV_ALL);
-                        // Update the LastUpdatedLabel
-                        listView.getLoadingLayoutProxy(false, true)
-                                .setLastUpdatedLabel(label);
-                        listView.onRefreshComplete();
-                    }
+                new Handler().postDelayed(() -> {
+                    String label = DateUtils.formatDateTime(
+                            getActivity(),
+                            System.currentTimeMillis(),
+                            DateUtils.FORMAT_SHOW_TIME
+                                    | DateUtils.FORMAT_SHOW_DATE
+                                    | DateUtils.FORMAT_ABBREV_ALL);
+                    // Update the LastUpdatedLabel
+                    listView.getLoadingLayoutProxy(false, true)
+                            .setLastUpdatedLabel(label);
+                    listView.onRefreshComplete();
                 }, 200);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page++;
-                new Handler().postDelayed(new Runnable() {
-                    public void run() {
-                        String label = DateUtils.formatDateTime(
-                                getActivity(),
-                                System.currentTimeMillis(),
-                                DateUtils.FORMAT_SHOW_TIME
-                                        | DateUtils.FORMAT_SHOW_DATE
-                                        | DateUtils.FORMAT_ABBREV_ALL);
-                        // Update the LastUpdatedLabel
-                        listView.getLoadingLayoutProxy(false, true)
-                                .setLastUpdatedLabel(label);
-                        listView.onRefreshComplete();
-                    }
+                new Handler().postDelayed(() -> {
+                    String label = DateUtils.formatDateTime(
+                            getActivity(),
+                            System.currentTimeMillis(),
+                            DateUtils.FORMAT_SHOW_TIME
+                                    | DateUtils.FORMAT_SHOW_DATE
+                                    | DateUtils.FORMAT_ABBREV_ALL);
+                    // Update the LastUpdatedLabel
+                    listView.getLoadingLayoutProxy(false, true)
+                            .setLastUpdatedLabel(label);
+                    listView.onRefreshComplete();
                 }, 200);
             }
         });
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            }
+        listView.setOnItemClickListener((parent, view1, position, id) -> {
         });
     }
 }

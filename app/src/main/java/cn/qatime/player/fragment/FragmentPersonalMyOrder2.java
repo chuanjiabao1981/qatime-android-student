@@ -117,19 +117,17 @@ public class FragmentPersonalMyOrder2 extends BaseFragment {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page = 1;
-                new Handler().postDelayed(new Runnable() {
-                    public void run() {
-                        String label = DateUtils.formatDateTime(
-                                getActivity(),
-                                System.currentTimeMillis(),
-                                DateUtils.FORMAT_SHOW_TIME
-                                        | DateUtils.FORMAT_SHOW_DATE
-                                        | DateUtils.FORMAT_ABBREV_ALL);
-                        // Update the LastUpdatedLabel
-                        listView.getLoadingLayoutProxy(false, true)
-                                .setLastUpdatedLabel(label);
-                        listView.onRefreshComplete();
-                    }
+                new Handler().postDelayed(() -> {
+                    String label = DateUtils.formatDateTime(
+                            getActivity(),
+                            System.currentTimeMillis(),
+                            DateUtils.FORMAT_SHOW_TIME
+                                    | DateUtils.FORMAT_SHOW_DATE
+                                    | DateUtils.FORMAT_ABBREV_ALL);
+                    // Update the LastUpdatedLabel
+                    listView.getLoadingLayoutProxy(false, true)
+                            .setLastUpdatedLabel(label);
+                    listView.onRefreshComplete();
                 }, 200);
 
                 initData(1);
@@ -138,45 +136,40 @@ public class FragmentPersonalMyOrder2 extends BaseFragment {
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page++;
-                new Handler().postDelayed(new Runnable() {
-                    public void run() {
-                        String label = DateUtils.formatDateTime(
-                                getActivity(),
-                                System.currentTimeMillis(),
-                                DateUtils.FORMAT_SHOW_TIME
-                                        | DateUtils.FORMAT_SHOW_DATE
-                                        | DateUtils.FORMAT_ABBREV_ALL);
-                        // Update the LastUpdatedLabel
-                        listView.getLoadingLayoutProxy(false, true)
-                                .setLastUpdatedLabel(label);
-                        listView.onRefreshComplete();
-                    }
+                new Handler().postDelayed(() -> {
+                    String label = DateUtils.formatDateTime(
+                            getActivity(),
+                            System.currentTimeMillis(),
+                            DateUtils.FORMAT_SHOW_TIME
+                                    | DateUtils.FORMAT_SHOW_DATE
+                                    | DateUtils.FORMAT_ABBREV_ALL);
+                    // Update the LastUpdatedLabel
+                    listView.getLoadingLayoutProxy(false, true)
+                            .setLastUpdatedLabel(label);
+                    listView.onRefreshComplete();
                 }, 200);
 
                 initData(2);
             }
         });
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), PersonalMyOrderPaidDetailActivity.class);
-                intent.putExtra("id", list.get(position - 1).getId());
-                OrderDetailBean bean = new OrderDetailBean();
-                bean.image = list.get(position - 1).getProduct().getPublicize();
-                bean.name = list.get(position - 1).getProduct().getName();
-                bean.subject = list.get(position - 1).getProduct().getSubject();
-                bean.status = list.get(position - 1).getStatus();
-                bean.grade = list.get(position - 1).getProduct().getGrade();
-                bean.teacher = list.get(position - 1).getProduct().getTeacher_name();
-                bean.Preset_lesson_count = list.get(position - 1).getProduct().getPreset_lesson_count();
-                bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
-                bean.price = list.get(position - 1).getProduct().getPrice();
-                intent.putExtra("data", bean);
-                intent.putExtra("payType", list.get(position - 1).getPay_type());
-                intent.putExtra("created_at", list.get(position - 1).getCreated_at());
-                intent.putExtra("pay_at", list.get(position - 1).getPay_at());
-                startActivity(intent);
-            }
+        listView.setOnItemClickListener((parent, view1, position, id) -> {
+            Intent intent = new Intent(getActivity(), PersonalMyOrderPaidDetailActivity.class);
+            intent.putExtra("id", list.get(position - 1).getId());
+            OrderDetailBean bean = new OrderDetailBean();
+            bean.image = list.get(position - 1).getProduct().getPublicize();
+            bean.name = list.get(position - 1).getProduct().getName();
+            bean.subject = list.get(position - 1).getProduct().getSubject();
+            bean.status = list.get(position - 1).getStatus();
+            bean.grade = list.get(position - 1).getProduct().getGrade();
+            bean.teacher = list.get(position - 1).getProduct().getTeacher_name();
+            bean.Preset_lesson_count = list.get(position - 1).getProduct().getPreset_lesson_count();
+            bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
+            bean.price = list.get(position - 1).getProduct().getPrice();
+            intent.putExtra("data", bean);
+            intent.putExtra("payType", list.get(position - 1).getPay_type());
+            intent.putExtra("created_at", list.get(position - 1).getCreated_at());
+            intent.putExtra("pay_at", list.get(position - 1).getPay_at());
+            startActivity(intent);
         });
 
     }

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
@@ -159,63 +160,48 @@ public class FragmentNews1 extends BaseFragment {
         };
 
         listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), MessageActivity.class);
-                intent.putExtra("sessionId", items.get(position - 1).getContactId());
-                intent.putExtra("sessionType", items.get(position - 1).getSessionType());
-                intent.putExtra("courseId", items.get(position - 1).getCourseId());
-                intent.putExtra("pull_address", items.get(position - 1).getPull_address());
-                intent.putExtra("name", items.get(position - 1).getContent());
-                startActivity(intent);
-            }
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            Intent intent = new Intent(getActivity(), MessageActivity.class);
+            intent.putExtra("sessionId", items.get(position - 1).getContactId());
+            intent.putExtra("sessionType", items.get(position - 1).getSessionType());
+            intent.putExtra("courseId", items.get(position - 1).getCourseId());
+            intent.putExtra("pull_address", items.get(position - 1).getPull_address());
+            intent.putExtra("name", items.get(position - 1).getContent());
+            startActivity(intent);
         });
 
-        listView.getRefreshableView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        listView.getRefreshableView().setOnItemLongClickListener((parent, view, position, id) -> {
+            if (NIMClient.getStatus() == StatusCode.LOGINED) {
+                final Dialog dialog = new Dialog(getActivity(), R.style.Transparent);
+                final View v = View.inflate(getActivity(), R.layout.team_notify_alert_dialog, null);
+                ((TextView) v.findViewById(R.id.text)).setText(items.get(position - 1).isMute() ? getResourceString(R.string.resume_alert) : getResourceString(R.string.nolongger_alert));
+                v.findViewById(R.id.text).setOnClickListener(v1 -> {
+                    dialog.dismiss();
 
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                if (NIMClient.getStatus() == StatusCode.LOGINED) {
-                    final Dialog dialog = new Dialog(getActivity(), R.style.Transparent);
-                    final View v = View.inflate(getActivity(), R.layout.team_notify_alert_dialog, null);
-                    ((TextView) v.findViewById(R.id.text)).setText(items.get(position - 1).isMute() ? getResourceString(R.string.resume_alert) : getResourceString(R.string.nolongger_alert));
-                    v.findViewById(R.id.text).setOnClickListener(new View.OnClickListener() {
+                    NIMClient.getService(TeamService.class).muteTeam(items.get(position - 1).getContactId(), !items.get(position - 1).isMute()).setCallback(new RequestCallback<Void>() {
                         @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-
-                            NIMClient.getService(TeamService.class).muteTeam(items.get(position - 1).getContactId(), !items.get(position - 1).isMute()).setCallback(new RequestCallback<Void>() {
-                                @Override
-                                public void onSuccess(Void param) {
-                                    Team team = TeamDataCache.getInstance().getTeamById(items.get(position - 1).getContactId());
-                                    items.get(position - 1).setMute(team.mute());
+                        public void onSuccess(Void param) {
+                            Team team = TeamDataCache.getInstance().getTeamById(items.get(position - 1).getContactId());
+                            items.get(position - 1).setMute(team.mute());
 //                                notificationConfigText.setText(team.mute() ? getString(R.string.close) : getString(R.string.open));
-                                    adapter.notifyDataSetChanged();
-                                }
-
-                                @Override
-                                public void onFailed(int code) {
-                                    Logger.e("muteTeam failed code:" + code);
-                                }
-
-                                @Override
-                                public void onException(Throwable exception) {
-
-                                }
-                            });
+                            adapter.notifyDataSetChanged();
                         }
-                    });
-                    v.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
 
                         @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
+                        public void onFailed(int code) {
+                            Logger.e("muteTeam failed code:" + code);
+                        }
+
+                        @Override
+                        public void onException(Throwable exception) {
+
                         }
                     });
-                    dialog.setContentView(v);
-                    dialog.setCanceledOnTouchOutside(true);
-                    dialog.show();
+                });
+                v.findViewById(R.id.cancel).setOnClickListener(v1 -> dialog.dismiss());
+                dialog.setContentView(v);
+                dialog.setCanceledOnTouchOutside(true);
+                dialog.show();
 //                    v.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 //                        @Override
 //                        public void onGlobalLayout() {
@@ -227,10 +213,9 @@ public class FragmentNews1 extends BaseFragment {
 //                            dialog.getWindow().setAttributes(lp);
 //                        }
 //                    });
-                    return true;
-                }
-                return false;
+                return true;
             }
+            return false;
         });
     }
 
@@ -239,32 +224,28 @@ public class FragmentNews1 extends BaseFragment {
         if (msgLoaded) {
             return;
         }
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                if (msgLoaded) {
-                    return;
-                }
-                // 查询最近联系人列表数据
-                NIMClient.getService(MsgService.class).queryRecentContacts().setCallback(new RequestCallbackWrapper<List<RecentContact>>() {
-
-                    @Override
-                    public void onResult(int code, List<RecentContact> recents, Throwable exception) {
-                        if (code != ResponseCode.RES_SUCCESS || recents == null) {
-                            return;
-                        }
-                        loadedRecents = recents;
-
-                        // 此处如果是界面刚初始化，为了防止界面卡顿，可先在后台把需要显示的用户资料和群组资料在后台加载好，然后再刷新界面
-                        //
-                        msgLoaded = true;
-                        if (isAdded()) {
-                            onRecentContactsLoaded();
-                        }
-                    }
-                });
+        new Handler().postDelayed(() -> {
+            if (msgLoaded) {
+                return;
             }
+            // 查询最近联系人列表数据
+            NIMClient.getService(MsgService.class).queryRecentContacts().setCallback(new RequestCallbackWrapper<List<RecentContact>>() {
+
+                @Override
+                public void onResult(int code, List<RecentContact> recents, Throwable exception) {
+                    if (code != ResponseCode.RES_SUCCESS || recents == null) {
+                        return;
+                    }
+                    loadedRecents = recents;
+
+                    // 此处如果是界面刚初始化，为了防止界面卡顿，可先在后台把需要显示的用户资料和群组资料在后台加载好，然后再刷新界面
+                    //
+                    msgLoaded = true;
+                    if (isAdded()) {
+                        onRecentContactsLoaded();
+                    }
+                }
+            });
         }, delay ? 1000 : 0);
     }
 
@@ -350,19 +331,15 @@ public class FragmentNews1 extends BaseFragment {
         Collections.sort(list, comp);
     }
 
-    private static Comparator<MessageListBean> comp = new Comparator<MessageListBean>() {
-
-        @Override
-        public int compare(MessageListBean o1, MessageListBean o2) {
-            // 先比较置顶tag
+    private static Comparator<MessageListBean> comp = (o1, o2) -> {
+        // 先比较置顶tag
 //            long sticky = (o1.getTag() & RECENT_TAG_STICKY) - (o2.getTag() & RECENT_TAG_STICKY);
 //            if (sticky != 0) {
 //                return sticky > 0 ? -1 : 1;
 //            } else {
-            long time = o1.getTime() - o2.getTime();
-            return time == 0 ? 0 : (time > 0 ? -1 : 1);
+        long time = o1.getTime() - o2.getTime();
+        return time == 0 ? 0 : (time > 0 ? -1 : 1);
 //            }
-        }
     };
 
 
@@ -386,12 +363,7 @@ public class FragmentNews1 extends BaseFragment {
 
     private void registerUserInfoObserver() {
         if (userInfoObserver == null) {
-            userInfoObserver = new UserInfoObservable.UserInfoObserver() {
-                @Override
-                public void onUserInfoChanged(List<String> accounts) {
-                    refreshMessages(false);
-                }
-            };
+            userInfoObserver = accounts -> refreshMessages(false);
         }
 
         if (userInfoObservable == null) {
@@ -411,26 +383,22 @@ public class FragmentNews1 extends BaseFragment {
     /**
      * 监听用户在线状态
      */
-    Observer<StatusCode> userStatusObserver = new Observer<StatusCode>() {
-
-        @Override
-        public void onEvent(StatusCode code) {
-            if (code.wontAutoLogin()) {
+    Observer<StatusCode> userStatusObserver = (Observer<StatusCode>) code -> {
+        if (code.wontAutoLogin()) {
 //                kickOut(code);
-                Logger.e("未登录成功");
+            Logger.e("未登录成功");
+        } else {
+            if (code == StatusCode.NET_BROKEN) {
+                Logger.e("当前网络不可用");
+            } else if (code == StatusCode.UNLOGIN) {
+                Logger.e("未登录");
+            } else if (code == StatusCode.CONNECTING) {
+                Logger.e("连接中...");
+            } else if (code == StatusCode.LOGINING) {
+                Logger.e("登录中...");
             } else {
-                if (code == StatusCode.NET_BROKEN) {
-                    Logger.e("当前网络不可用");
-                } else if (code == StatusCode.UNLOGIN) {
-                    Logger.e("未登录");
-                } else if (code == StatusCode.CONNECTING) {
-                    Logger.e("连接中...");
-                } else if (code == StatusCode.LOGINING) {
-                    Logger.e("登录中...");
-                } else {
 //                    onRecentContactsLoaded();
-                    Logger.e("其他" + code);
-                }
+                Logger.e("其他" + code);
             }
         }
     };

@@ -100,13 +100,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                         Toast.makeText(BindPhoneActivity.this, getResourceString(R.string.code_send_failed), Toast.LENGTH_SHORT).show();
 
                     }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show();
-                    }
-                }));
+                }, volleyError -> Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show()));
 
                 time.start();
                 break;
@@ -158,13 +152,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                             e.printStackTrace();
                         }
                     }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show();
-                    }
-                }));
+                }, volleyError -> Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show()));
 
 
                 break;

@@ -166,13 +166,7 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
                     protected void onError(JSONObject response) {
                         Toast.makeText(ChangePasswordActivity.this, getResourceString(R.string.password_error), Toast.LENGTH_SHORT).show();
                     }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show();
-                    }
-                }));
+                }, volleyError -> Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show()));
                 break;
         }
     }

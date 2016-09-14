@@ -76,35 +76,28 @@ public class OrderPayActivity extends BaseActivity {
         price = (TextView) findViewById(R.id.price);
         commit = (Button) findViewById(R.id.commit);
         //拨打电话
-        phone.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
-                startActivity(intent);
-            }
+        phone.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
+            startActivity(intent);
         });
-        commit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        commit.setOnClickListener(v -> {
 
-                PayReq request = new PayReq();
+            PayReq request = new PayReq();
 
-                request.appId = data.getAppid();
+            request.appId = data.getAppid();
 
-                request.partnerId = data.getPartnerid();
+            request.partnerId = data.getPartnerid();
 
-                request.prepayId = data.getPrepayid();
+            request.prepayId = data.getPrepayid();
 
-                request.packageValue = data.getPackage();
+            request.packageValue = data.getPackage();
 
-                request.nonceStr = data.getNoncestr();
+            request.nonceStr = data.getNoncestr();
 
-                request.timeStamp = data.getTimestamp();
+            request.timeStamp = data.getTimestamp();
 
-                request.sign = data.getSign();
-                api.sendReq(request);
-            }
+            request.sign = data.getSign();
+            api.sendReq(request);
         });
     }
 

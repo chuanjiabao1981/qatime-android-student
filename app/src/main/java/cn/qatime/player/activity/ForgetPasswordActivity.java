@@ -113,13 +113,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
                         Toast.makeText(getApplicationContext(), getResourceString(R.string.code_send_failed), Toast.LENGTH_LONG).show();
 
                     }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show();
-                    }
-                }));
+                }, volleyError -> Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show()));
                 time.start();
                 break;
             case R.id.submit:

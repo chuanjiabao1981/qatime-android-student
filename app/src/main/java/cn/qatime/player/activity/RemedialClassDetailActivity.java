@@ -141,12 +141,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
             }
         });
-        mIndicator.setOnItemClickListener(new SimpleViewPagerIndicator.OnItemClickListener() {
-            @Override
-            public void OnClick(int position) {
-                mViewPager.setCurrentItem(position);
-            }
-        });
+        mIndicator.setOnItemClickListener(position -> mViewPager.setCurrentItem(position));
     }
 
 
