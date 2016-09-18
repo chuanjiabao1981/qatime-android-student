@@ -97,12 +97,15 @@ public class MessageActivity extends BaseActivity {
         final int courseId = getIntent().getIntExtra("courseId", 0);
         final String pull_address = getIntent().getStringExtra("pull_address");
         initView();
-        setRightImage(R.mipmap.online_room, v -> {
-            Intent intent = new Intent(MessageActivity.this, NEVideoPlayerActivity.class);
-            intent.putExtra("url", pull_address);
-            intent.putExtra("id", courseId);
-            intent.putExtra("sessionId", sessionId);
-            startActivity(intent);
+        setRightImage(R.mipmap.online_room, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MessageActivity.this, NEVideoPlayerActivity.class);
+                intent.putExtra("url", pull_address);
+                intent.putExtra("id", courseId);
+                intent.putExtra("sessionId", sessionId);
+                startActivity(intent);
+            }
         });
         registerTeamUpdateObserver(true);
     }
@@ -145,7 +148,12 @@ public class MessageActivity extends BaseActivity {
                     Glide.with(MessageActivity.this).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_32).crossFade().dontAnimate().transform(new GlideRoundTransform(MessageActivity.this)).into((ImageView) holder.getView(R.id.other_head));
                     holder.setText(R.id.other_name, item.getFromNick());
                     ((TextView) holder.getView(R.id.other_content)).setText(ExpressionUtil.getExpressionString(
-                            MessageActivity.this, item.getContent(), ExpressionUtil.emoji, cache, () -> ((TextView) holder.getView(R.id.other_content)).postInvalidate()));
+                            MessageActivity.this, item.getContent(), ExpressionUtil.emoji, cache, new GifDrawable.UpdateListener() {
+                                @Override
+                                public void update() {
+                                    ((TextView) holder.getView(R.id.other_content)).postInvalidate();
+                                }
+                            }));
                     holder.setText(R.id.other_time, getTime(item.getTime()));
                 }
 
@@ -156,36 +164,45 @@ public class MessageActivity extends BaseActivity {
         emoji = (ImageView) findViewById(R.id.emoji);
 
         send = (Button) findViewById(R.id.send);
-        send.setOnClickListener(v -> {
-            if (!isAllowSendMessage()) {
-                Toast.makeText(MessageActivity.this, getResourceString(R.string.team_send_message_not_allow), Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (StringUtils.isNullOrBlanK(content.getText().toString())) {
-                Toast.makeText(MessageActivity.this, getResourceString(R.string.message_can_not_null), Toast.LENGTH_SHORT).show();
-                return;
-            }
-            // 创建文本消息
-            IMMessage message = MessageBuilder.createTextMessage(
-                    sessionId, // 聊天对象的 ID，如果是单聊，为用户帐号，如果是群聊，为群组 ID
-                    sessionType, // 聊天类型，单聊或群组
-                    content.getText().toString() // 文本内容
-            );
-            // 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
-            NIMClient.getService(MsgService.class).sendMessage(message, true);
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    if (!isAllowSendMessage()) {
+                        Toast.makeText(MessageActivity.this, getResourceString(R.string.team_send_message_not_allow), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (StringUtils.isNullOrBlanK(content.getText().toString())) {
+                        Toast.makeText(MessageActivity.this, getResourceString(R.string.message_can_not_null), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    // 创建文本消息
+                    IMMessage message = MessageBuilder.createTextMessage(
+                            sessionId, // 聊天对象的 ID，如果是单聊，为用户帐号，如果是群聊，为群组 ID
+                            sessionType, // 聊天类型，单聊或群组
+                            content.getText().toString() // 文本内容
+                    );
+                    // 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
+                    NIMClient.getService(MsgService.class).sendMessage(message, true);
 
-            items.add(message);
-            adapter.notifyDataSetChanged();
-            listView.getRefreshableView().setSelection(items.size() - 1);
-            content.setText("");
+                    items.add(message);
+                    adapter.notifyDataSetChanged();
+                    listView.getRefreshableView().setSelection(items.size() - 1);
+                    content.setText("");
+            }
         });
-        listView.setOnRefreshListener(refreshView -> {
-            new Handler().postDelayed(() -> {
-                String label = DateUtils.formatDateTime(MessageActivity.this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
-                listView.getLoadingLayoutProxy(false, true).setLastUpdatedLabel(label);
-                listView.onRefreshComplete();
-            }, 200);
-            loadFromRemote();
+        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView)  {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        String label = DateUtils.formatDateTime(MessageActivity.this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+                        listView.getLoadingLayoutProxy(false, true).setLastUpdatedLabel(label);
+                        listView.onRefreshComplete();
+                    }
+                }, 200);
+                loadFromRemote();
+            }
         });
 //        loadMessage(false);
         BiaoQingView bq = (BiaoQingView) findViewById(R.id.biaoQingView);
@@ -353,8 +370,11 @@ public class MessageActivity extends BaseActivity {
     /**
      * 消息状态变化观察者
      */
-    Observer<IMMessage> messageStatusObserver = (Observer<IMMessage>) message -> {
-        if (isMyMessage(message)) {
+    Observer<IMMessage> messageStatusObserver = new Observer<IMMessage>() {
+        @Override
+        public void onEvent(IMMessage imMessage) {
+            if (isMyMessage(imMessage)) {
+            }
         }
     };
 
@@ -373,12 +393,15 @@ public class MessageActivity extends BaseActivity {
         if (team != null) {
             updateTeamInfo(team);
         } else {
-            TeamDataCache.getInstance().fetchTeamById(sessionId, (success, result) -> {
-                if (success && result != null) {
-                    updateTeamInfo(result);
-                } else {
-                    Toast.makeText(MessageActivity.this, getResourceString(R.string.get_group_failed), Toast.LENGTH_SHORT).show();
-                    finish();
+            TeamDataCache.getInstance().fetchTeamById(sessionId, new SimpleCallback<Team>() {
+                @Override
+                public void onResult(boolean success, Team result) {
+                        if (success && result != null) {
+                            updateTeamInfo(result);
+                        } else {
+                            Toast.makeText(MessageActivity.this, getResourceString(R.string.get_group_failed), Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
                 }
             });
         }

@@ -22,6 +22,7 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
 public class SecurityManagerActivity extends BaseActivity implements View.OnClickListener {
@@ -73,8 +74,11 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
             protected void onError(JSONObject response) {
                 Toast.makeText(SecurityManagerActivity.this, getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
             }
-        }, volleyError -> {
-
+        }, new VolleyErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
         });
         addToRequestQueue(request);
 

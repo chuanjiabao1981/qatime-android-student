@@ -114,10 +114,13 @@ public class Fragment11 extends BaseFragment {
                 initData(2);
             }
         });
-        grid.setOnItemClickListener((parent, view1, position, id) -> {
-            Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-            intent.putExtra("id", list.get(position).getId());
-            startActivity(intent);
+        grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                intent.putExtra("id", list.get(position).getId());
+                startActivity(intent);
+            }
         });
     }
 

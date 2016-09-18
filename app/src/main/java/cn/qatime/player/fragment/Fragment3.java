@@ -47,9 +47,12 @@ public class Fragment3 extends BaseFragment {
         fragmentlayout.setScorll(true);
         fragmentlayout.setWhereTab(1);
         fragmentlayout.setTabHeight(6, 0xff000000);
-        fragmentlayout.setOnChangeFragmentListener((lastPosition, positon, lastTabView, currentTabView) -> {
-            ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff858585);
-            ((TextView) currentTabView.findViewById(tab_text[positon])).setTextColor(0xff222222);
+        fragmentlayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
+            @Override
+            public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
+                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff858585);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff222222);
+            }
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_fragment_news, 0x0912);
 

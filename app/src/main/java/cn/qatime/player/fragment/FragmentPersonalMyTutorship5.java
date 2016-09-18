@@ -82,31 +82,36 @@ public class FragmentPersonalMyTutorship5 extends BaseFragment {
 
                 helper.getView(R.id.video).setVisibility(StringUtils.isNullOrBlanK(item.getPull_address()) ? View.GONE : View.VISIBLE);
                 helper.getView(R.id.enter).setVisibility(item.getIs_bought() ? View.GONE : View.VISIBLE);
-                helper.getView(R.id.video).setOnClickListener(v -> {
-                    Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
-                    intent.putExtra("url", item.getPull_address());
-                    intent.putExtra("id", item.getId());
-                    intent.putExtra("sessionId", item.getChat_team_id());
-                    startActivity(intent);
+                helper.getView(R.id.video).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
+                        intent.putExtra("url", item.getPull_address());
+                        intent.putExtra("id", item.getId());
+                        intent.putExtra("sessionId", item.getChat_team_id());
+                        startActivity(intent);
+                    }
                 });
-                helper.getView(R.id.enter).setOnClickListener(v -> {
+                helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), OrderConfirmActivity.class);
+                        intent.putExtra("id", item.getId());
+                        OrderPayBean bean = new OrderPayBean();
+                        bean.image = item.getPublicize();
+                        bean.name = item.getName();
+                        bean.subject = item.getSubject();
+                        bean.grade = item.getGrade();
+                        bean.classnumber = item.getPreset_lesson_count();
+                        bean.teacher = item.getTeacher_name();
+                        bean.classendtime = item.getLive_end_time();
+                        bean.status = "";
+                        bean.classstarttime = item.getLive_start_time();
+                        bean.price = item.getPrice();
 
-                    Intent intent = new Intent(getActivity(), OrderConfirmActivity.class);
-                    intent.putExtra("id", item.getId());
-                    OrderPayBean bean = new OrderPayBean();
-                    bean.image = item.getPublicize();
-                    bean.name = item.getName();
-                    bean.subject = item.getSubject();
-                    bean.grade = item.getGrade();
-                    bean.classnumber = item.getPreset_lesson_count();
-                    bean.teacher = item.getTeacher_name();
-                    bean.classendtime = item.getLive_end_time();
-                    bean.status = "";
-                    bean.classstarttime = item.getLive_start_time();
-                    bean.price = item.getPrice();
-
-                    intent.putExtra("data", bean);
-                    startActivity(intent);
+                        intent.putExtra("data", bean);
+                        startActivity(intent);
+                    }
                 });
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
@@ -129,17 +134,20 @@ public class FragmentPersonalMyTutorship5 extends BaseFragment {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page = 1;
-                new Handler().postDelayed(() -> {
-                    String label = DateUtils.formatDateTime(
-                            getActivity(),
-                            System.currentTimeMillis(),
-                            DateUtils.FORMAT_SHOW_TIME
-                                    | DateUtils.FORMAT_SHOW_DATE
-                                    | DateUtils.FORMAT_ABBREV_ALL);
-                    // Update the LastUpdatedLabel
-                    listView.getLoadingLayoutProxy(false, true)
-                            .setLastUpdatedLabel(label);
-                    listView.onRefreshComplete();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        String label = DateUtils.formatDateTime(
+                                getActivity(),
+                                System.currentTimeMillis(),
+                                DateUtils.FORMAT_SHOW_TIME
+                                        | DateUtils.FORMAT_SHOW_DATE
+                                        | DateUtils.FORMAT_ABBREV_ALL);
+                        // Update the LastUpdatedLabel
+                        listView.getLoadingLayoutProxy(false, true)
+                                .setLastUpdatedLabel(label);
+                        listView.onRefreshComplete();
+                    }
                 }, 200);
                 initData(1);
             }
@@ -147,25 +155,31 @@ public class FragmentPersonalMyTutorship5 extends BaseFragment {
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page++;
-                new Handler().postDelayed(() -> {
-                    String label = DateUtils.formatDateTime(
-                            getActivity(),
-                            System.currentTimeMillis(),
-                            DateUtils.FORMAT_SHOW_TIME
-                                    | DateUtils.FORMAT_SHOW_DATE
-                                    | DateUtils.FORMAT_ABBREV_ALL);
-                    // Update the LastUpdatedLabel
-                    listView.getLoadingLayoutProxy(false, true)
-                            .setLastUpdatedLabel(label);
-                    listView.onRefreshComplete();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        String label = DateUtils.formatDateTime(
+                                getActivity(),
+                                System.currentTimeMillis(),
+                                DateUtils.FORMAT_SHOW_TIME
+                                        | DateUtils.FORMAT_SHOW_DATE
+                                        | DateUtils.FORMAT_ABBREV_ALL);
+                        // Update the LastUpdatedLabel
+                        listView.getLoadingLayoutProxy(false, true)
+                                .setLastUpdatedLabel(label);
+                        listView.onRefreshComplete();
+                    }
                 }, 200);
                 initData(2);
             }
         });
-        listView.setOnItemClickListener((parent, view1, position, id) -> {
-            Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-            intent.putExtra("id", list.get(position - 1).getId());
-            startActivity(intent);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                intent.putExtra("id", list.get(position - 1).getId());
+                startActivity(intent);
+            }
         });
         listView.getRefreshableView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override

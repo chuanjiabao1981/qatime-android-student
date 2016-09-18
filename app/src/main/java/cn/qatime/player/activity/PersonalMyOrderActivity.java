@@ -46,14 +46,22 @@ public class PersonalMyOrderActivity extends BaseFragmentActivity {
         fragmentlayout.setScorll(true);
         fragmentlayout.setWhereTab(1);
         fragmentlayout.setTabHeight(6, 0xff000000);
-        fragmentlayout.setOnChangeFragmentListener((lastPosition, positon, lastTabView, currentTabView) -> {
-            ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff858585);
-            ((TextView) currentTabView.findViewById(tab_text[positon])).setTextColor(0xff222222);
-            ((BaseFragment) fragBaseFragments.get(positon)).onShow();
+        fragmentlayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
+            @Override
+            public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
+                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff858585);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff222222);
+                ((BaseFragment) fragBaseFragments.get(position)).onShow();
+            }
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_personal_my_order, 0x0311);
         fragmentlayout.getViewPager().setOffscreenPageLimit(2);
-        new Handler().postDelayed(() -> fragmentlayout.setCurrenItem(pager), 500);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                fragmentlayout.setCurrenItem(pager);
+            }
+        }, 500);
 
     }
 }

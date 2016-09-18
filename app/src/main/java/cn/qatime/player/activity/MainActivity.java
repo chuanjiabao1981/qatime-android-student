@@ -129,13 +129,16 @@ public class MainActivity extends BaseFragmentActivity {
         fragmentlayout.setScorllToNext(false);
         fragmentlayout.setScorll(false);
         fragmentlayout.setWhereTab(0);
-        fragmentlayout.setOnChangeFragmentListener((lastPosition, position, lastTabView, currentTabView) -> {
-            currentPosition = position;
-            ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff858786);
-            ((ImageView) lastTabView.findViewById(tab_img[lastPosition])).setImageResource(tabImages[lastPosition][1]);
-            ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffeb6a4b);
-            ((ImageView) currentTabView.findViewById(tab_img[position])).setImageResource(tabImages[position][0]);
-            enableMsgNotification(false);
+        fragmentlayout.setOnChangeFragmentListener(new FragmentLayout.ChangeFragmentListener() {
+            @Override
+            public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
+                currentPosition = position;
+                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff858786);
+                ((ImageView) lastTabView.findViewById(tab_img[lastPosition])).setImageResource(tabImages[lastPosition][1]);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffeb6a4b);
+                ((ImageView) currentTabView.findViewById(tab_img[position])).setImageResource(tabImages[position][0]);
+                enableMsgNotification(false);
+            }
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout, 0x1000);
         fragmentlayout.getViewPager().setOffscreenPageLimit(3);
@@ -160,7 +163,12 @@ public class MainActivity extends BaseFragmentActivity {
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
             flag = true;
-            new Handler().postDelayed(() -> flag = false, 2500);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    flag = false;
+                }
+            }, 2500);
         } else {
             this.finish();
         }

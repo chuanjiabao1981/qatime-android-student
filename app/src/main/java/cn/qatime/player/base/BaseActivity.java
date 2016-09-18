@@ -68,13 +68,21 @@ public class BaseActivity extends AppCompatActivity {
         BaseApplication.clearToken();
         final Dialog dialog = new Dialog(this, R.style.Transparent);
         View view = View.inflate(this, R.layout.activity_out_alertdialog, null);
-        view.findViewById(R.id.alert_dialog_confirm).setOnClickListener(v -> {
-            dialog.dismiss();
-            out();
+        view.findViewById(R.id.alert_dialog_confirm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                out();
+            }
         });
         dialog.setContentView(view);
 
-        dialog.setOnCancelListener(dialog1 -> out());
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                out();
+            }
+        });
         dialog.show();
     }
 

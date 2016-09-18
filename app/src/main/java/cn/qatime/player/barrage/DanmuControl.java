@@ -204,9 +204,12 @@ public class DanmuControl {
     }
 
     public void addDanmuList(final List<IMMessage> danmuLists) {
-        new Thread(() -> {
-            for (int i = 0; i < danmuLists.size(); i++) {
-                addDanmu(danmuLists.get(i), i);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < danmuLists.size(); i++) {
+                    addDanmu(danmuLists.get(i), i);
+                }
             }
         }).start();
     }

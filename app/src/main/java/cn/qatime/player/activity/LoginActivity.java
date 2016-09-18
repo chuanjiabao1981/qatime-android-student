@@ -45,7 +45,7 @@ import libraryextra.view.CustomProgressDialog;
 /**
  * 登陆页
  */
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
     private EditText username;
     private EditText password;
     private int errornum = 0;
@@ -71,11 +71,11 @@ public class LoginActivity extends BaseActivity {
         View loginerror = findViewById(R.id.login_error);//忘记密码
         View reload = findViewById(R.id.reload);
 
-        login.setOnClickListener(this::onClick);
-        register.setOnClickListener(this::onClick);
-        loginerror.setOnClickListener(this::onClick);
-        reload.setOnClickListener(this::onClick);
-        checkview.setOnClickListener(this::onClick);
+        login.setOnClickListener(this);
+        register.setOnClickListener(this);
+        loginerror.setOnClickListener(this);
+        reload.setOnClickListener(this);
+        checkview.setOnClickListener(this);
 
         if (!StringUtils.isNullOrBlanK(SPUtils.get(LoginActivity.this, "username", ""))) {
             username.setText(SPUtils.get(LoginActivity.this, "username", "").toString());
@@ -87,6 +87,8 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.login://登陆
@@ -244,7 +246,9 @@ public class LoginActivity extends BaseActivity {
                         BaseApplication.clearToken();
                         login.setClickable(true);
                     }
-                }, volleyError-> {
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
                 DialogUtils.dismissDialog(progress);
                 BaseApplication.clearToken();
                 Toast.makeText(LoginActivity.this, getResourceString(R.string.after_try_again), Toast.LENGTH_SHORT).show();
@@ -256,6 +260,7 @@ public class LoginActivity extends BaseActivity {
                     checklayout.setVisibility(View.VISIBLE);
                     initCheckNum();
                 }
+            }
         });
         addToRequestQueue(request);
     }

@@ -143,13 +143,15 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
             case R.id.birthday://生日
                 try {
 
-                    MDatePickerDialog dataDialog = new MDatePickerDialog(this, (view, year, monthOfYear, dayOfMonth) -> {
-
-                        select = (year + "-" + ((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1))) + "-" + ((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth))));
-                        try {
-                            birthday.setText(format.format(parse.parse(select)));
-                        } catch (ParseException e) {
-                            e.printStackTrace();
+                    MDatePickerDialog dataDialog = new MDatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                            select = (year + "-" + ((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1))) + "-" + ((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth))));
+                            try {
+                                birthday.setText(format.format(parse.parse(select)));
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }, parse.parse(select).getYear() + 1900, parse.parse(select).getMonth() + 1, parse.parse(select).getDay());
                     dataDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
@@ -221,7 +223,12 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         headsculpture = (ImageView) findViewById(R.id.head_sculpture);
         replace = (TextView) findViewById(R.id.replace);
         name = (EditText) findViewById(R.id.name);
-        name.setOnEditorActionListener((v, actionId, event) -> (event.getKeyCode() == KeyEvent.KEYCODE_ENTER));
+        name.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                return event.getKeyCode() == KeyEvent.KEYCODE_ENTER;
+            }
+        });
         men = (RadioButton) findViewById(R.id.men);
         women = (RadioButton) findViewById(R.id.women);
         radiogroup = (RadioGroup) findViewById(R.id.radiogroup);

@@ -32,20 +32,23 @@ public class AboutUsActivity extends BaseActivity {
         setTitle(getResources().getString(R.string.about_us));
         call = findViewById(R.id.call_phone);
         phone = (TextView) findViewById(R.id.phone);
-        call.setOnClickListener(v -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(AboutUsActivity.this);
-            builder.setTitle(getResourceString(R.string.alert));
-            builder.setMessage(getResourceString(R.string.call_customer_service_phone) + phone.getText().toString() + "?");
-            builder.setNegativeButton(getResourceString(R.string.call_right_now), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
-                    startActivity(intent);
-                }
-            });
-            builder.setPositiveButton(getResourceString(R.string.cancel), null);
-            builder.show();
+        call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(AboutUsActivity.this);
+                builder.setTitle(getResourceString(R.string.alert));
+                builder.setMessage(getResourceString(R.string.call_customer_service_phone) + phone.getText().toString() + "?");
+                builder.setNegativeButton(getResourceString(R.string.call_right_now), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
+                        startActivity(intent);
+                    }
+                });
+                builder.setPositiveButton(getResourceString(R.string.cancel), null);
+                builder.show();
 
+            }
         });
     }
 }
