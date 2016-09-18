@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,14 +41,12 @@ import java.util.List;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.FriendDataCache;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.utils.ExpressionUtil;
 import cn.qatime.player.view.GifDrawable;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.transformation.GlideCircleTransform;
 
 public class FragmentNEVideoPlayer2 extends BaseFragment {
     private TextView tipText;
@@ -122,7 +119,8 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
                 if (item.getFromAccount().equals(BaseApplication.getAccount())) {
                     holder.getView(R.id.right).setVisibility(View.VISIBLE);
                     holder.getView(R.id.left).setVisibility(View.GONE);
-                    Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).crossFade().dontAnimate().transform(new GlideCircleTransform(getContext())).into((ImageView) holder.getView(R.id.my_head));
+                    //.transform(new GlideRoundTransform(MessageActivity.this))
+                    Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).crossFade().dontAnimate().into((ImageView) holder.getView(R.id.my_head));
                     holder.setText(R.id.my_time, getTime(item.getTime()));
                     ((TextView) holder.getView(R.id.my_content)).setText(ExpressionUtil.getExpressionString(
                             getActivity(), item.getContent(), ExpressionUtil.emoji, new Hashtable<Integer, GifDrawable>(), new GifDrawable.UpdateListener() {
@@ -134,7 +132,7 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
                 } else {
                     holder.getView(R.id.right).setVisibility(View.GONE);
                     holder.getView(R.id.left).setVisibility(View.VISIBLE);
-                    Glide.with(getActivity()).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_32).crossFade().dontAnimate().transform(new GlideCircleTransform(getContext())).into((ImageView) holder.getView(R.id.other_head));
+                    Glide.with(getActivity()).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_32).crossFade().dontAnimate().into((ImageView) holder.getView(R.id.other_head));
                     holder.setText(R.id.other_name, item.getFromNick());
                     ((TextView) holder.getView(R.id.other_content)).setText(ExpressionUtil.getExpressionString(
                             getActivity(), item.getContent(), ExpressionUtil.emoji, new Hashtable<Integer, GifDrawable>(), new GifDrawable.UpdateListener() {

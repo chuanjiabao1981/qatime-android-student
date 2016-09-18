@@ -8,7 +8,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,13 +16,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.MsgService;
-import com.netease.nimlib.sdk.msg.SystemMessageObserver;
-import com.netease.nimlib.sdk.msg.SystemMessageService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.orhanobut.logger.Logger;
 
@@ -46,8 +42,6 @@ import cn.qatime.player.fragment.Fragment3;
 import cn.qatime.player.fragment.Fragment4;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
-import cn.qatime.player.im.manager.ReminderManager;
-import cn.qatime.player.im.model.ReminderItem;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -155,7 +149,6 @@ public class MainActivity extends BaseFragmentActivity {
     @Override
     public void onBackPressed() {
         if (!flag) {
-            setResult(Constant.REGIST);
             Toast toast = Toast.makeText(this, getResources().getString(R.string.press_again_to_exit), Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();

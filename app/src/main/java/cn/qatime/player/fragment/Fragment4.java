@@ -46,7 +46,7 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment4, container, false);
         assignViews(view);
-        newVersion.setVisibility(getActivity().getIntent().getBooleanExtra("newVersion", false) ? View.VISIBLE : View.INVISIBLE);
+        newVersion.setVisibility(BaseApplication.newVersion ? View.VISIBLE : View.INVISIBLE);
         if (BaseApplication.getProfile().getData() != null && BaseApplication.getProfile().getData().getUser() != null) {
             Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getSmall_avatar_url()).placeholder(R.mipmap.personal_information_head).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
         }

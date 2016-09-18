@@ -1,6 +1,5 @@
 package cn.qatime.player.activity;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -12,7 +11,6 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -25,6 +23,10 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.orhanobut.logger.Logger;
 
 import org.json.JSONException;
@@ -40,6 +42,9 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.config.UserPreferences;
+import cn.qatime.player.im.cache.TeamDataCache;
+import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.UpLoadUtil;
 import cn.qatime.player.utils.UrlUtils;
@@ -87,7 +92,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
         setTitle(getResources().getString(R.string.information_perfect));
         initView();
 
-        String gradeString = FileUtil.readFile(getCacheDir() + "/grade.txt");
+        String gradeString = FileUtil.readFile(getFilesDir() + "/grade.txt");
         if (!StringUtils.isNullOrBlanK(gradeString)) {
             gradeBean = JsonUtils.objectFromJson(gradeString, GradeBean.class);
         }
@@ -166,7 +171,6 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                     protected void httpSuccess(final String result) {
                         Intent data = new Intent();
                         data.putExtra("data", result);
-                        setResult(Constant.RESPONSE, data);
                         DialogUtils.dismissDialog(progress);
                         Toast.makeText(RegisterPerfectActivity.this, getResourceString(R.string.regiset_success), Toast.LENGTH_SHORT).show();
                         Map<String, String> map = new HashMap<>();
@@ -176,11 +180,11 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                         map.put("login_account", username);
                         map.put("password", password);
                         map.put("client_type", "app");
+                        map.put("client_cate", "student_client");
                         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlLogin, map), null,
                                 new VolleyListener(RegisterPerfectActivity.this) {
                                     @Override
                                     protected void onTokenOut() {
-
                                         tokenOut();
                                     }
 
@@ -198,21 +202,14 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                                                 Profile profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
                                                 if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
                                                     BaseApplication.setProfile(profile);
-                                                    Intent intent = new Intent(RegisterPerfectActivity.this, MainActivity.class);
-                                                    startActivity(intent);
-                                                    setResult(Constant.REGIST);
-                                                    finish();
+                                                    loginAccount();
                                                 } else {
                                                     //没有数据或token
                                                 }
                                             }
                                         } catch (JSONException e) {
-
                                             e.printStackTrace();
-//                            LogUtils.e("error"+e.getMessage());
                                         }
-
-
                                     }
 
                                     @Override
@@ -266,7 +263,61 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                 break;
         }
     }
+    private void loginAccount() {
+        String account = BaseApplication.getAccount();
+        String token = BaseApplication.getAccountToken();
 
+        if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
+            NIMClient.getService(AuthService.class).login(new LoginInfo(account, token)).setCallback(new RequestCallback<LoginInfo>() {
+                @Override
+                public void onSuccess(LoginInfo o) {
+                    Logger.e("云信登录成功" + o.getAccount());
+                    // 初始化消息提醒
+                    NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
+
+                    NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
+                    //缓存
+                    UserInfoCache.getInstance().clear();
+                    TeamDataCache.getInstance().clear();
+                    //                FriendDataCache.getInstance().clear();
+
+                    UserInfoCache.getInstance().buildCache();
+                    TeamDataCache.getInstance().buildCache();
+                    //好友维护,目前不需要
+                    //                FriendDataCache.getInstance().buildCache();
+
+                    UserInfoCache.getInstance().registerObservers(true);
+                    TeamDataCache.getInstance().registerObservers(true);
+//                                                FriendDataCache.getInstance().registerObservers(true);
+
+                    Intent intent = new Intent(RegisterPerfectActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    setResult(Constant.REGIST);
+                    finish();
+                }
+                @Override
+                public void onFailed(int code) {
+                    BaseApplication.clearToken();
+                    Logger.e(code + "code");
+                    if (code == 302 || code == 404) {
+                        Toast.makeText(RegisterPerfectActivity.this, R.string.account_or_password_error, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(RegisterPerfectActivity.this, getResourceString(R.string.login_failed) + code, Toast.LENGTH_SHORT).show();
+                    }
+                }
+                @Override
+                public void onException(Throwable throwable) {
+                    Logger.e(throwable.getMessage());
+                    BaseApplication.clearToken();
+                }
+            });
+        } else {//没有云信账号,直接登录
+            Intent intent = new Intent(RegisterPerfectActivity.this, MainActivity.class);
+            startActivity(intent);
+            setResult(Constant.REGIST);
+            finish();
+        }
+    }
 
     private void initView() {
         headsculpture = (ImageView) findViewById(R.id.head_sculpture);

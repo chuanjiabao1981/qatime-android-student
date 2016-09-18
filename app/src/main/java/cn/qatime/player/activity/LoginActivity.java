@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.netease.nimlib.sdk.NIMClient;
@@ -30,14 +31,15 @@ import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
 import libraryextra.utils.CheckUtil;
 import libraryextra.utils.DialogUtils;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
-import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.CheckView;
 import libraryextra.view.CustomProgressDialog;
@@ -55,6 +57,7 @@ public class LoginActivity extends BaseActivity {
     private EditText checkcode;
     private Button login;
     private CustomProgressDialog progress;
+    private Profile profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +136,7 @@ public class LoginActivity extends BaseActivity {
             login.setClickable(true);
             return;
         }
-        progress = DialogUtils.startProgressDialog(progress, LoginActivity.this, "登录中...");
+        progress = DialogUtils.startProgressDialog(progress, LoginActivity.this,  getResourceString(R.string.landing));
         progress.setCancelable(false);
         progress.setCanceledOnTouchOutside(false);
 
@@ -162,70 +165,13 @@ public class LoginActivity extends BaseActivity {
                                     DialogUtils.dismissDialog(progress);
                                 }
                             } else {
+                                profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
                                 Logger.e("登录", response.toString());
-                                SPUtils.put(LoginActivity.this, "username", username.getText().toString());
-                                Profile profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
                                 if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
 
                                     BaseApplication.setProfile(profile);
 
-                                    String account = BaseApplication.getAccount();
-                                    String token = BaseApplication.getAccountToken();
-
-                                    if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
-                                        NIMClient.getService(AuthService.class).login(new LoginInfo(account, token)).setCallback(new RequestCallback<LoginInfo>() {
-                                            @Override
-                                            public void onSuccess(LoginInfo o) {
-                                                DialogUtils.dismissDialog(progress);
-                                                Logger.e("云信登录成功" + o.getAccount());
-                                                // 初始化消息提醒
-                                                NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
-
-                                                NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
-                                                //缓存
-                                                UserInfoCache.getInstance().clear();
-                                                TeamDataCache.getInstance().clear();
-                                                //                FriendDataCache.getInstance().clear();
-
-                                                UserInfoCache.getInstance().buildCache();
-                                                TeamDataCache.getInstance().buildCache();
-                                                //好友维护,目前不需要
-                                                //                FriendDataCache.getInstance().buildCache();
-
-                                                UserInfoCache.getInstance().registerObservers(true);
-                                                TeamDataCache.getInstance().registerObservers(true);
-//                                                FriendDataCache.getInstance().registerObservers(true);
-
-                                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                                intent.putExtra("newVersion", getIntent().getBooleanExtra("newVersion", false));
-                                                startActivity(intent);
-                                                finish();
-                                            }
-
-                                            @Override
-                                            public void onFailed(int code) {
-                                                DialogUtils.dismissDialog(progress);
-                                                BaseApplication.clearToken();
-                                                Logger.e(code + "code");
-                                                if (code == 302 || code == 404) {
-                                                    Toast.makeText(LoginActivity.this, R.string.account_or_password_error, Toast.LENGTH_SHORT).show();
-                                                } else {
-                                                    Toast.makeText(LoginActivity.this, getResourceString(R.string.login_failed) + code, Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onException(Throwable throwable) {
-                                                DialogUtils.dismissDialog(progress);
-                                                Logger.e(throwable.getMessage());
-                                                BaseApplication.clearToken();
-                                            }
-                                        });
-                                    } else {//没有云信账号,直接登录
-                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }
+                                    checkUserInfo();
                                 } else {
                                     //没有数据或token
                                 }
@@ -244,20 +190,128 @@ public class LoginActivity extends BaseActivity {
                         BaseApplication.clearToken();
                         login.setClickable(true);
                     }
-                }, volleyError-> {
-                DialogUtils.dismissDialog(progress);
-                BaseApplication.clearToken();
-                Toast.makeText(LoginActivity.this, getResourceString(R.string.after_try_again), Toast.LENGTH_SHORT).show();
-                login.setClickable(true);
-                password.setText("");
-                //当密码错误5次以上，开始使用验证码
-                errornum++;
-                if (errornum >= 5) {
-                    checklayout.setVisibility(View.VISIBLE);
-                    initCheckNum();
-                }
+                }, volleyError -> {
+            DialogUtils.dismissDialog(progress);
+            BaseApplication.clearToken();
+            Toast.makeText(LoginActivity.this, getResourceString(R.string.after_try_again), Toast.LENGTH_SHORT).show();
+            login.setClickable(true);
+            password.setText("");
+            //当密码错误5次以上，开始使用验证码
+            errornum++;
+            if (errornum >= 5) {
+                checklayout.setVisibility(View.VISIBLE);
+                initCheckNum();
+            }
         });
         addToRequestQueue(request);
+    }
+
+    /**
+     * 检查用户信息是否完整
+     */
+    private void checkUserInfo() {
+
+        DaYiJsonObjectRequest request1 = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null, new VolleyListener(LoginActivity.this) {
+            @Override
+            protected void onTokenOut() {
+                tokenOut();
+            }
+
+            @Override
+            protected void onSuccess(JSONObject response) {
+                PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
+                Logger.e(bean.toString());
+                String name = bean.getData().getName();
+                String grade = bean.getData().getGrade();
+                if (StringUtils.isNullOrBlanK(name) || StringUtils.isNullOrBlanK(grade)) {
+                    Intent intent = new Intent(LoginActivity.this, RegisterPerfectActivity.class);
+                    Toast.makeText(LoginActivity.this, getResourceString(R.string.please_set_information), Toast.LENGTH_SHORT).show();
+                    intent.putExtra("username", username.getText().toString().trim());
+                    intent.putExtra("password", password.getText().toString().trim());
+                    startActivityForResult(intent, Constant.REGIST);
+                } else {
+                    Logger.e("登录", response.toString());
+                    SPUtils.put(LoginActivity.this, "username", username.getText().toString());
+                    loginAccount();//登陆云信
+                }
+
+            }
+
+            @Override
+            protected void onError(JSONObject response) {
+                Toast.makeText(LoginActivity.this,  getResourceString(R.string.login_failed), Toast.LENGTH_SHORT).show();
+                BaseApplication.clearToken();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                BaseApplication.clearToken();
+            }
+        });
+        addToRequestQueue(request1);
+    }
+
+    /**
+     * 登陆云信
+     */
+    private void loginAccount() {
+        String account = BaseApplication.getAccount();
+        String token = BaseApplication.getAccountToken();
+
+        if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
+            NIMClient.getService(AuthService.class).login(new LoginInfo(account, token)).setCallback(new RequestCallback<LoginInfo>() {
+                @Override
+                public void onSuccess(LoginInfo o) {
+                    DialogUtils.dismissDialog(progress);
+                    Logger.e("云信登录成功" + o.getAccount());
+                    // 初始化消息提醒
+                    NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
+
+                    NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
+                    //缓存
+                    UserInfoCache.getInstance().clear();
+                    TeamDataCache.getInstance().clear();
+                    //                FriendDataCache.getInstance().clear();
+
+                    UserInfoCache.getInstance().buildCache();
+                    TeamDataCache.getInstance().buildCache();
+                    //好友维护,目前不需要
+                    //                FriendDataCache.getInstance().buildCache();
+
+                    UserInfoCache.getInstance().registerObservers(true);
+                    TeamDataCache.getInstance().registerObservers(true);
+//                                                FriendDataCache.getInstance().registerObservers(true);
+
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+
+                @Override
+                public void onFailed(int code) {
+                    DialogUtils.dismissDialog(progress);
+                    BaseApplication.clearToken();
+                    Logger.e(code + "code");
+                    if (code == 302 || code == 404) {
+                        Toast.makeText(LoginActivity.this, R.string.account_or_password_error, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(LoginActivity.this, getResourceString(R.string.login_failed) + code, Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onException(Throwable throwable) {
+                    DialogUtils.dismissDialog(progress);
+                    Logger.e(throwable.getMessage());
+                    BaseApplication.clearToken();
+                }
+            });
+        } else {//没有云信账号,直接登录
+            Logger.e("没有云信账号,直接登录");
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     /**

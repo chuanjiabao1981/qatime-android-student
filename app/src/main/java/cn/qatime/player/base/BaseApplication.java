@@ -40,6 +40,7 @@ public class BaseApplication extends Application {
     public static UserInfoProvider userInfoProvider;
     private static BaseApplication context;
     private static RequestQueue Queue;
+    public static boolean newVersion;
 
     public static RequestQueue getRequestQueue() {
         return Queue;

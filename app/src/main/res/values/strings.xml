@@ -406,6 +406,7 @@
     <string name="please_set_head">请选择头像</string>
     <string name="not_bind">未绑定</string>
     <string name="is_newest_version">已经是最新版本</string>
+    <string name="landing">登陆中...</string>
 
 
 </resources>
