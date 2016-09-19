@@ -67,7 +67,11 @@ public class AuditionRecordsActivity extends BaseActivity {
                 listView.onRefreshComplete();
             }
         });
-        listView.setOnItemClickListener((parent, view, position, id) -> {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
         });
     }
 }

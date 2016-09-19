@@ -41,7 +41,7 @@ import libraryextra.utils.VolleyListener;
 /**
  * 起始页
  */
-public class StartActivity extends BaseActivity {
+public class StartActivity extends BaseActivity implements View.OnClickListener {
     private AlertDialog alertDialog;
     private String downLoadLinks;
 
@@ -90,7 +90,7 @@ public class StartActivity extends BaseActivity {
                     TextView desc = (TextView) view.findViewById(R.id.desc);
                     alertDialog = builder.create();
                     try {
-                        x.setOnClickListener(StartActivity.this::onClick);
+                        x.setOnClickListener(StartActivity.this);
                         final boolean enforce = response.getJSONObject("data").getBoolean("enforce");
                         if (enforce) {
                             TextView pleaseUpdate = (TextView) view.findViewById(R.id.please_update);
@@ -98,11 +98,14 @@ public class StartActivity extends BaseActivity {
 //                            Toast.makeText(StartActivity.this, "重大更新，请先进行升级", Toast.LENGTH_SHORT).show();
 //                            alertDialog.setCancelable(false);
                         }
-                        alertDialog.setOnDismissListener(dialog -> {
-                            if (enforce) {
-                                finish();
-                            } else {
-                                startApp();
+                        alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                if (enforce) {
+                                    finish();
+                                } else {
+                                    startApp();
+                                }
                             }
                         });
                         String descStr = response.getJSONObject("data").getString("description");
@@ -112,13 +115,16 @@ public class StartActivity extends BaseActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    down.setOnClickListener(StartActivity.this::onClick);
+                    down.setOnClickListener(StartActivity.this);
                     alertDialog.show();
-                    view.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
-                        if (DensityUtils.px2dp(StartActivity.this, alertDialog.getWindow().getAttributes().height) > 500) {
-                            alertDialog.getWindow().setLayout(DensityUtils.dp2px(StartActivity.this, 300), DensityUtils.dp2px(StartActivity.this, 500));
-                        } else {
-                            alertDialog.getWindow().setLayout(DensityUtils.dp2px(StartActivity.this, 300), alertDialog.getWindow().getAttributes().height);
+                    view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                        @Override
+                        public void onGlobalLayout() {
+                            if (DensityUtils.px2dp(StartActivity.this, alertDialog.getWindow().getAttributes().height) > 500) {
+                                alertDialog.getWindow().setLayout(DensityUtils.dp2px(StartActivity.this, 300), DensityUtils.dp2px(StartActivity.this, 500));
+                            } else {
+                                alertDialog.getWindow().setLayout(DensityUtils.dp2px(StartActivity.this, 300), alertDialog.getWindow().getAttributes().height);
+                            }
                         }
                     });
                     alertDialog.setContentView(view);
@@ -130,13 +136,18 @@ public class StartActivity extends BaseActivity {
                 Toast.makeText(StartActivity.this, getResourceString(R.string.check_for_update_failed), Toast.LENGTH_SHORT).show();
                 startApp();
             }
-        }, volleyError -> {
-            Toast.makeText(StartActivity.this, getResourceString(R.string.check_for_update_failed_check_net), Toast.LENGTH_SHORT).show();
-            startApp();
+        }, new VolleyErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+                Toast.makeText(StartActivity.this, getResourceString(R.string.check_for_update_failed_check_net), Toast.LENGTH_SHORT).show();
+                startApp();
+            }
         }));
 
     }
 
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.download:

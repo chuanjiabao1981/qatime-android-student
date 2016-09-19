@@ -74,11 +74,14 @@ public class FragmentRemedialClassTimeTable2 extends BaseFragment {
             public void convert(ViewHolder helper, final ClassTimeTableBean.DataEntity.LessonsEntity item, int position) {
                 Glide.with(getActivity()).load(item.getCourse_publicize()).centerCrop().crossFade().dontAnimate().into((ImageView) helper.getView(R.id.image));
                 helper.getView(R.id.image).setOnClickListener(
-                        v -> {
-                            Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                            intent.putExtra("id", Integer.valueOf(item.getCourse_id()));
-                            intent.putExtra("pager", 2);
-                            startActivity(intent);
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                                intent.putExtra("id", Integer.valueOf(item.getCourse_id()));
+                                intent.putExtra("pager", 2);
+                                startActivity(intent);
+                            }
                         });
 //
                 helper.setText(R.id.classname, item.getName());
@@ -91,22 +94,32 @@ public class FragmentRemedialClassTimeTable2 extends BaseFragment {
         };
         listView.setAdapter(adapter);
 
-        listView.setOnRefreshListener(refreshView -> {
-            new Handler().postDelayed(() -> {
-                String label = DateUtils.formatDateTime(
-                        getActivity(),
-                        System.currentTimeMillis(),
-                        DateUtils.FORMAT_SHOW_TIME
-                                | DateUtils.FORMAT_SHOW_DATE
-                                | DateUtils.FORMAT_ABBREV_ALL);
-                // Update the LastUpdatedLabel
-                listView.getLoadingLayoutProxy(false, true)
-                        .setLastUpdatedLabel(label);
-                listView.onRefreshComplete();
-            }, 200);
-            initData();
+        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        String label = DateUtils.formatDateTime(
+                                getActivity(),
+                                System.currentTimeMillis(),
+                                DateUtils.FORMAT_SHOW_TIME
+                                        | DateUtils.FORMAT_SHOW_DATE
+                                        | DateUtils.FORMAT_ABBREV_ALL);
+                        // Update the LastUpdatedLabel
+                        listView.getLoadingLayoutProxy(false, true)
+                                .setLastUpdatedLabel(label);
+                        listView.onRefreshComplete();
+                    }
+                }, 200);
+                initData();
+            }
         });
-        listView.setOnItemClickListener((parent, view1, position, id) -> {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
         });
     }
 

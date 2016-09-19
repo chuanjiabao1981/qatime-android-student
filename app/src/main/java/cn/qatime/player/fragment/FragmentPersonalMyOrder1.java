@@ -109,20 +109,26 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
 
 
                 helper.getView(R.id.pay).setOnClickListener(
-                        v -> {
-                            Intent intent = new Intent(getActivity(), OrderPayActivity.class);
-                            OrderConfirmBean.App_pay_params app_pay_params = item.getApp_pay_params();
-                            intent.putExtra("data", app_pay_params);
-                            intent.putExtra("id", item.getId());
-                            intent.putExtra("time", item.getCreated_at());
-                            intent.putExtra("price", item.getProduct().getPrice());
-                            intent.putExtra("type", (item.getPay_type() + "").equals("1") ? getResources().getString(R.string.method_payment) + "：微信支付" : getResources().getString(R.string.method_payment) + "：支付宝支付");
-                            startActivity(intent);
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(getActivity(), OrderPayActivity.class);
+                                OrderConfirmBean.App_pay_params app_pay_params = item.getApp_pay_params();
+                                intent.putExtra("data", app_pay_params);
+                                intent.putExtra("id", item.getId());
+                                intent.putExtra("time", item.getCreated_at());
+                                intent.putExtra("price", item.getProduct().getPrice());
+                                intent.putExtra("type", (item.getPay_type() + "").equals("1") ? getResources().getString(R.string.method_payment) + "：微信支付" : getResources().getString(R.string.method_payment) + "：支付宝支付");
+                                startActivity(intent);
+                            }
                         });
                 helper.getView(R.id.cancel_order).setOnClickListener(
-                        v -> {
-                            String id = list.get(position).getId();
-                            dialog(position, id);
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                String id = list.get(position).getId();
+                                dialog(position, id);
+                            }
                         });
 
             }
@@ -134,17 +140,20 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page = 1;
-                new Handler().postDelayed(() -> {
-                    String label = DateUtils.formatDateTime(
-                            getActivity(),
-                            System.currentTimeMillis(),
-                            DateUtils.FORMAT_SHOW_TIME
-                                    | DateUtils.FORMAT_SHOW_DATE
-                                    | DateUtils.FORMAT_ABBREV_ALL);
-                    // Update the LastUpdatedLabel
-                    listView.getLoadingLayoutProxy(false, true)
-                            .setLastUpdatedLabel(label);
-                    listView.onRefreshComplete();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        String label = DateUtils.formatDateTime(
+                                getActivity(),
+                                System.currentTimeMillis(),
+                                DateUtils.FORMAT_SHOW_TIME
+                                        | DateUtils.FORMAT_SHOW_DATE
+                                        | DateUtils.FORMAT_ABBREV_ALL);
+                        // Update the LastUpdatedLabel
+                        listView.getLoadingLayoutProxy(false, true)
+                                .setLastUpdatedLabel(label);
+                        listView.onRefreshComplete();
+                    }
                 }, 200);
                 initData(1);
             }
@@ -152,39 +161,45 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page++;
-                new Handler().postDelayed(() -> {
-                    String label = DateUtils.formatDateTime(
-                            getActivity(),
-                            System.currentTimeMillis(),
-                            DateUtils.FORMAT_SHOW_TIME
-                                    | DateUtils.FORMAT_SHOW_DATE
-                                    | DateUtils.FORMAT_ABBREV_ALL);
-                    // Update the LastUpdatedLabel
-                    listView.getLoadingLayoutProxy(false, true)
-                            .setLastUpdatedLabel(label);
-                    listView.onRefreshComplete();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        String label = DateUtils.formatDateTime(
+                                getActivity(),
+                                System.currentTimeMillis(),
+                                DateUtils.FORMAT_SHOW_TIME
+                                        | DateUtils.FORMAT_SHOW_DATE
+                                        | DateUtils.FORMAT_ABBREV_ALL);
+                        // Update the LastUpdatedLabel
+                        listView.getLoadingLayoutProxy(false, true)
+                                .setLastUpdatedLabel(label);
+                        listView.onRefreshComplete();
+                    }
                 }, 200);
                 initData(2);
             }
         });
-        listView.setOnItemClickListener((parent, view1, position, id) -> {
-            Intent intent = new Intent(getActivity(), PersonalMyOrderUnpaidDetailActivity.class);
-            intent.putExtra("id", list.get(position - 1).getId());
-            OrderDetailBean bean = new OrderDetailBean();
-            bean.id = list.get(position - 1).getProduct().getId();
-            bean.image = list.get(position - 1).getProduct().getPublicize();
-            bean.name = list.get(position - 1).getProduct().getName();
-            bean.subject = list.get(position - 1).getProduct().getSubject();
-            bean.grade = list.get(position - 1).getProduct().getGrade();
-            bean.status = list.get(position - 1).getStatus();
-            bean.teacher = list.get(position - 1).getProduct().getTeacher_name();
-            bean.Preset_lesson_count = list.get(position - 1).getProduct().getPreset_lesson_count();
-            bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
-            bean.price = list.get(position - 1).getProduct().getPrice();
-            intent.putExtra("data", bean);
-            intent.putExtra("payType", list.get(position - 1).getPay_type());
-            intent.putExtra("created_at", list.get(position - 1).getCreated_at());
-            startActivity(intent);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), PersonalMyOrderUnpaidDetailActivity.class);
+                intent.putExtra("id", list.get(position - 1).getId());
+                OrderDetailBean bean = new OrderDetailBean();
+                bean.id = list.get(position - 1).getProduct().getId();
+                bean.image = list.get(position - 1).getProduct().getPublicize();
+                bean.name = list.get(position - 1).getProduct().getName();
+                bean.subject = list.get(position - 1).getProduct().getSubject();
+                bean.grade = list.get(position - 1).getProduct().getGrade();
+                bean.status = list.get(position - 1).getStatus();
+                bean.teacher = list.get(position - 1).getProduct().getTeacher_name();
+                bean.Preset_lesson_count = list.get(position - 1).getProduct().getPreset_lesson_count();
+                bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
+                bean.price = list.get(position - 1).getProduct().getPrice();
+                intent.putExtra("data", bean);
+                intent.putExtra("payType", list.get(position - 1).getPay_type());
+                intent.putExtra("created_at", list.get(position - 1).getCreated_at());
+                startActivity(intent);
+            }
         });
     }
 
@@ -252,12 +267,18 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
     protected void dialog(final int position, final String id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("确认取消订单吗？");
-        builder.setPositiveButton("确认", (dialog, which) -> {
-            CancelOrder(position, id);
-            dialog.dismiss();
+        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                CancelOrder(position, id);
+                dialog.dismiss();
+            }
         });
-        builder.setNegativeButton("取消", (dialog, which) -> {
-            dialog.dismiss();
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
         });
         builder.create().show();
     }

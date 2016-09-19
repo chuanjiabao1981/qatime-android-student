@@ -31,9 +31,12 @@ public class UserInfoObservable {
     }
 
     synchronized public void notifyObservers(final List<String> accounts) {
-        uiHandler.post(() -> {
-            for (UserInfoObserver observer : observers) {
-                observer.onUserInfoChanged(accounts);
+        uiHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (UserInfoObserver observer : observers) {
+                    observer.onUserInfoChanged(accounts);
+                }
             }
         });
     }

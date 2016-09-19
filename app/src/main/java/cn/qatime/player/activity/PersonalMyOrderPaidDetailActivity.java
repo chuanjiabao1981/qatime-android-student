@@ -122,11 +122,14 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
         listitem = (LinearLayout) findViewById(R.id.list_item);//内详情点击
 
         payprice = (TextView) findViewById(R.id.pay_price);//支付价格
-        listitem.setOnClickListener(v -> {
-            Intent intent = new Intent(PersonalMyOrderPaidDetailActivity.this, RemedialClassDetailActivity.class);
-            intent.putExtra("id", classid);
-            intent.putExtra("page", 0);
-            startActivity(intent);
+        listitem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PersonalMyOrderPaidDetailActivity.this, RemedialClassDetailActivity.class);
+                intent.putExtra("id", classid);
+                intent.putExtra("page", 0);
+                startActivity(intent);
+            }
         });
     }
 

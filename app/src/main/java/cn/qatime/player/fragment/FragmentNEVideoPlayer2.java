@@ -148,13 +148,19 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
         };
         listView.setAdapter(adapter);
 
-        listView.setOnRefreshListener(refreshView -> {
-            new Handler().postDelayed(() -> {
-                String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
-                listView.getLoadingLayoutProxy(false, true).setLastUpdatedLabel(label);
-                listView.onRefreshComplete();
-            }, 200);
-            loadFromRemote();
+        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+                        listView.getLoadingLayoutProxy(false, true).setLastUpdatedLabel(label);
+                        listView.onRefreshComplete();
+                    }
+                }, 200);
+                loadFromRemote();
+            }
         });
         loadMessage(false);
     }
@@ -327,9 +333,12 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
     /**
      * 消息状态变化观察者
      */
-    Observer<IMMessage> messageStatusObserver = (Observer<IMMessage>) message -> {
-        if (isMyMessage(message)) {
+    Observer<IMMessage> messageStatusObserver = new Observer<IMMessage>() {
+        @Override
+        public void onEvent(IMMessage imMessage) {
+            if (isMyMessage(imMessage)) {
 //                onMessageStatusChange(message);
+            }
         }
     };
 
@@ -348,12 +357,15 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
         if (team != null) {
             updateTeamInfo(team);
         } else {
-            TeamDataCache.getInstance().fetchTeamById(sessionId, (success, result) -> {
-                if (success && result != null) {
-                    updateTeamInfo(result);
-                } else {
-                    Toast.makeText(getActivity(), getResourceString(R.string.failed_to_obtain_group_information), Toast.LENGTH_SHORT).show();
-                    getActivity().finish();
+            TeamDataCache.getInstance().fetchTeamById(sessionId, new SimpleCallback<Team>() {
+                @Override
+                public void onResult(boolean success, Team result) {
+                    if (success && result != null) {
+                        updateTeamInfo(result);
+                    } else {
+                        Toast.makeText(getActivity(), getResourceString(R.string.failed_to_obtain_group_information), Toast.LENGTH_SHORT).show();
+                        getActivity().finish();
+                    }
                 }
             });
         }

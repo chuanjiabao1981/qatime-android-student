@@ -37,27 +37,30 @@ public class GuideActivity extends BaseActivity {
         viewPager.init(R.drawable.shape_photo_tag_select, R.drawable.shape_photo_tag_nomal, 16, 8, 2, 40);
         viewPager.setAutoNext(false, 0);
 //        viewPager.setId(1252);
-        viewPager.setOnGetView((container, position) -> {
-            ImageView iv = new ImageView(GuideActivity.this);
-            iv.setClickable(true);
-            iv.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
-            iv.setId(position);
-            iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        viewPager.setOnGetView(new TagViewPager.OnGetView() {
+            @Override
+            public View getView(ViewGroup container, int position){
+                ImageView iv = new ImageView(GuideActivity.this);
+                iv.setClickable(true);
+                iv.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
+                iv.setId(position);
+                iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
 //				iv.setImageResource(imageIds[position]);
-            iv.setImageBitmap(BitmapUtil.decodeBitmapFromResource(getResources(), imageIds[position], width, height));
-            container.addView(iv);
-            if (position == imageIds.length - 1) {
-                iv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(GuideActivity.this, LoginActivity.class);
-                        GuideActivity.this.startActivity(intent);
-                        getSharedPreferences("first", MODE_PRIVATE).edit().putBoolean("firstlogin",false).commit();
-                        GuideActivity.this.finish();
-                    }
-                });
+                iv.setImageBitmap(BitmapUtil.decodeBitmapFromResource(getResources(), imageIds[position], width, height));
+                container.addView(iv);
+                if (position == imageIds.length - 1) {
+                    iv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(GuideActivity.this, LoginActivity.class);
+                            GuideActivity.this.startActivity(intent);
+                            getSharedPreferences("first", MODE_PRIVATE).edit().putBoolean("firstlogin",false).commit();
+                            GuideActivity.this.finish();
+                        }
+                    });
+                }
+                return iv;
             }
-            return iv;
         });
         viewPager.setAdapter(imageIds.length, 0);
     }}

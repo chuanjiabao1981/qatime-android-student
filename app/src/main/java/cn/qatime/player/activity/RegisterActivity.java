@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
 
 import org.json.JSONException;
@@ -27,6 +28,7 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.Profile;
 import libraryextra.utils.StringUtils;
+import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
 public class RegisterActivity extends BaseActivity implements View.OnClickListener {
@@ -70,7 +72,12 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         getcode.setOnClickListener(this);
         next.setOnClickListener(this);
         agreement.setOnClickListener(this);
-        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> next.setEnabled(isChecked));
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                next.setEnabled(isChecked);
+            }
+        });
     }
 
     @Override
@@ -102,7 +109,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                         }
 
 
-                    }, volleyError -> Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show());
+                    }, new VolleyErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+                            super.onErrorResponse(volleyError);
+                            Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show();
+                        }
+                    });
                     addToRequestQueue(request);
 
                 } else {
@@ -250,7 +263,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             }
 
 
-        }, volleyError -> Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show());
+        }, new VolleyErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+                Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show();
+            }
+        });
 
         addToRequestQueue(request);
 //下一步跳转

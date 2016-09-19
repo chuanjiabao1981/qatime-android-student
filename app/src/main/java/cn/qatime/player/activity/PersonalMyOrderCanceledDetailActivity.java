@@ -129,17 +129,23 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
         payprice = (TextView) findViewById(R.id.pay_price);//支付价格
         reorder = (TextView) findViewById(R.id.reorder);
         listitem = (LinearLayout) findViewById(R.id.list_item);//内详情点击
-        listitem.setOnClickListener(v -> {
-            Intent intent = new Intent(PersonalMyOrderCanceledDetailActivity.this, RemedialClassDetailActivity.class);
-            intent.putExtra("id", classid);
-            intent.putExtra("page", 0);
-            startActivity(intent);
+        listitem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PersonalMyOrderCanceledDetailActivity.this, RemedialClassDetailActivity.class);
+                intent.putExtra("id", classid);
+                intent.putExtra("page", 0);
+                startActivity(intent);
+            }
         });
-        reorder.setOnClickListener(v -> {
-            Intent intent = new Intent(PersonalMyOrderCanceledDetailActivity.this, RemedialClassDetailActivity.class);
-            intent.putExtra("id", classid);
-            intent.putExtra("page", 0);
-            startActivity(intent);
+        reorder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PersonalMyOrderCanceledDetailActivity.this, RemedialClassDetailActivity.class);
+                intent.putExtra("id", classid);
+                intent.putExtra("page", 0);
+                startActivity(intent);
+            }
         });
     }
 

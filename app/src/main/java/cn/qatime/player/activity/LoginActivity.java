@@ -47,7 +47,7 @@ import libraryextra.view.CustomProgressDialog;
 /**
  * 登陆页
  */
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
     private EditText username;
     private EditText password;
     private int errornum = 0;
@@ -74,11 +74,11 @@ public class LoginActivity extends BaseActivity {
         View loginerror = findViewById(R.id.login_error);//忘记密码
         View reload = findViewById(R.id.reload);
 
-        login.setOnClickListener(this::onClick);
-        register.setOnClickListener(this::onClick);
-        loginerror.setOnClickListener(this::onClick);
-        reload.setOnClickListener(this::onClick);
-        checkview.setOnClickListener(this::onClick);
+        login.setOnClickListener(this);
+        register.setOnClickListener(this);
+        loginerror.setOnClickListener(this);
+        reload.setOnClickListener(this);
+        checkview.setOnClickListener(this);
 
         if (!StringUtils.isNullOrBlanK(SPUtils.get(LoginActivity.this, "username", ""))) {
             username.setText(SPUtils.get(LoginActivity.this, "username", "").toString());
@@ -90,6 +90,8 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.login://登陆
@@ -167,6 +169,8 @@ public class LoginActivity extends BaseActivity {
                             } else {
                                 profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
                                 Logger.e("登录", response.toString());
+                                SPUtils.put(LoginActivity.this, "username", username.getText().toString());
+                                Profile profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
                                 if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
 
                                     BaseApplication.setProfile(profile);

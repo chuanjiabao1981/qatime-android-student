@@ -107,7 +107,9 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
                 helper.setText(R.id.price, "￥" + price);
 
                 helper.getView(R.id.reorder).setOnClickListener(
-                        v -> {
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
 //                                Intent intent = new Intent(getActivity(), OrderConfirmActivity.class);
 //                                intent.putExtra("id", list.get(position).getProduct().getId());
 //                                OrderPayBean bean = new OrderPayBean();
@@ -130,10 +132,11 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
 //                                intent.putExtra("data", bean);
 //
 //                                startActivity(intent);
-                            Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                            intent.putExtra("id", item.getProduct().getId());
-                            intent.putExtra("page", 0);
-                            startActivity(intent);
+                                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                                intent.putExtra("id", item.getProduct().getId());
+                                intent.putExtra("page", 0);
+                                startActivity(intent);
+                            }
                         });
             }
         };
@@ -143,17 +146,20 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page = 1;
-                new Handler().postDelayed(() -> {
-                    String label = DateUtils.formatDateTime(
-                            getActivity(),
-                            System.currentTimeMillis(),
-                            DateUtils.FORMAT_SHOW_TIME
-                                    | DateUtils.FORMAT_SHOW_DATE
-                                    | DateUtils.FORMAT_ABBREV_ALL);
-                    // Update the LastUpdatedLabel
-                    listView.getLoadingLayoutProxy(false, true)
-                            .setLastUpdatedLabel(label);
-                    listView.onRefreshComplete();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        String label = DateUtils.formatDateTime(
+                                getActivity(),
+                                System.currentTimeMillis(),
+                                DateUtils.FORMAT_SHOW_TIME
+                                        | DateUtils.FORMAT_SHOW_DATE
+                                        | DateUtils.FORMAT_ABBREV_ALL);
+                        // Update the LastUpdatedLabel
+                        listView.getLoadingLayoutProxy(false, true)
+                                .setLastUpdatedLabel(label);
+                        listView.onRefreshComplete();
+                    }
                 }, 200);
 
                 initData(1);
@@ -162,55 +168,61 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page++;
-                new Handler().postDelayed(() -> {
-                    String label = DateUtils.formatDateTime(
-                            getActivity(),
-                            System.currentTimeMillis(),
-                            DateUtils.FORMAT_SHOW_TIME
-                                    | DateUtils.FORMAT_SHOW_DATE
-                                    | DateUtils.FORMAT_ABBREV_ALL);
-                    // Update the LastUpdatedLabel
-                    listView.getLoadingLayoutProxy(false, true)
-                            .setLastUpdatedLabel(label);
-                    listView.onRefreshComplete();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        String label = DateUtils.formatDateTime(
+                                getActivity(),
+                                System.currentTimeMillis(),
+                                DateUtils.FORMAT_SHOW_TIME
+                                        | DateUtils.FORMAT_SHOW_DATE
+                                        | DateUtils.FORMAT_ABBREV_ALL);
+                        // Update the LastUpdatedLabel
+                        listView.getLoadingLayoutProxy(false, true)
+                                .setLastUpdatedLabel(label);
+                        listView.onRefreshComplete();
+                    }
                 }, 200);
                 initData(2);
             }
         });
-        listView.setOnItemClickListener((parent, view1, position, id1) -> {
-            Intent intent = new Intent(getActivity(), PersonalMyOrderCanceledDetailActivity.class);
-            Logger.e(list.get(position - 1).getId());
-            intent.putExtra("id", list.get(position - 1).getProduct().getId());
-            intent.putExtra("order_id", list.get(position - 1).getId());
-            OrderPayBean payBean = new OrderPayBean();//重新下单数据
-            payBean.image = list.get(position - 1).getProduct().getPublicize();
-            payBean.name = list.get(position - 1).getProduct().getName();
-            payBean.subject = list.get(position - 1).getProduct().getSubject();
-            payBean.grade = list.get(position - 1).getProduct().getGrade();
-            payBean.classnumber = list.get(position - 1).getProduct().getPreset_lesson_count();
-            payBean.teacher = list.get(position - 1).getProduct().getTeacher_name();
-            payBean.classendtime = list.get(position - 1).getProduct().getLive_end_time();
-            payBean.classstarttime = list.get(position - 1).getProduct().getLive_start_time();
-            if (StringUtils.isNullOrBlanK(list.get(position - 1).getProduct().getStatus())) {
-                payBean.status = " ";
-            } else {
-                payBean.status = list.get(position - 1).getProduct().getStatus();
-            }
-            payBean.price = list.get(position - 1).getProduct().getPrice();
-            intent.putExtra("pay_data", payBean);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), PersonalMyOrderCanceledDetailActivity.class);
+                Logger.e(list.get(position - 1).getId());
+                intent.putExtra("id", list.get(position - 1).getProduct().getId());
+                intent.putExtra("order_id", list.get(position - 1).getId());
+                OrderPayBean payBean = new OrderPayBean();//重新下单数据
+                payBean.image = list.get(position - 1).getProduct().getPublicize();
+                payBean.name = list.get(position - 1).getProduct().getName();
+                payBean.subject = list.get(position - 1).getProduct().getSubject();
+                payBean.grade = list.get(position - 1).getProduct().getGrade();
+                payBean.classnumber = list.get(position - 1).getProduct().getPreset_lesson_count();
+                payBean.teacher = list.get(position - 1).getProduct().getTeacher_name();
+                payBean.classendtime = list.get(position - 1).getProduct().getLive_end_time();
+                payBean.classstarttime = list.get(position - 1).getProduct().getLive_start_time();
+                if (StringUtils.isNullOrBlanK(list.get(position - 1).getProduct().getStatus())) {
+                    payBean.status = " ";
+                } else {
+                    payBean.status = list.get(position - 1).getProduct().getStatus();
+                }
+                payBean.price = list.get(position - 1).getProduct().getPrice();
+                intent.putExtra("pay_data", payBean);
 
-            OrderDetailBean bean = new OrderDetailBean();//订单详情数据
-            bean.image = list.get(position - 1).getProduct().getPublicize();
-            bean.name = list.get(position - 1).getProduct().getName();
-            bean.subject = list.get(position - 1).getProduct().getSubject();
-            bean.grade = list.get(position - 1).getProduct().getGrade();
-            bean.status = list.get(position - 1).getStatus();
-            bean.teacher = list.get(position - 1).getProduct().getTeacher_name();
-            bean.Preset_lesson_count = list.get(position - 1).getProduct().getPreset_lesson_count();
-            bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
-            bean.price = list.get(position - 1).getProduct().getPrice();
-            intent.putExtra("data", bean);
-            startActivity(intent);
+                OrderDetailBean bean = new OrderDetailBean();//订单详情数据
+                bean.image = list.get(position - 1).getProduct().getPublicize();
+                bean.name = list.get(position - 1).getProduct().getName();
+                bean.subject = list.get(position - 1).getProduct().getSubject();
+                bean.grade = list.get(position - 1).getProduct().getGrade();
+                bean.status = list.get(position - 1).getStatus();
+                bean.teacher = list.get(position - 1).getProduct().getTeacher_name();
+                bean.Preset_lesson_count = list.get(position - 1).getProduct().getPreset_lesson_count();
+                bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
+                bean.price = list.get(position - 1).getProduct().getPrice();
+                intent.putExtra("data", bean);
+                startActivity(intent);
+            }
         });
     }
 
