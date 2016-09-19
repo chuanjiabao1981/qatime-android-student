@@ -21,6 +21,7 @@ import libraryextra.utils.StringUtils;
  */
 public class BaseActivity extends AppCompatActivity {
     private RequestQueue Queue = BaseApplication.getRequestQueue();
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,24 +67,28 @@ public class BaseActivity extends AppCompatActivity {
      */
     public void tokenOut() {
         BaseApplication.clearToken();
-        final Dialog dialog = new Dialog(this, R.style.Transparent);
-        View view = View.inflate(this, R.layout.activity_out_alertdialog, null);
-        view.findViewById(R.id.alert_dialog_confirm).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                out();
-            }
-        });
-        dialog.setContentView(view);
+        if (dialog == null) {
+            dialog = new Dialog(this, R.style.Transparent);
+            View view = View.inflate(this, R.layout.activity_out_alertdialog, null);
+            view.findViewById(R.id.alert_dialog_confirm).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    out();
+                }
+            });
+            dialog.setContentView(view);
 
-        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                out();
-            }
-        });
-        dialog.show();
+            dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    out();
+                }
+            });
+        }
+        if (!dialog.isShowing()) {
+            dialog.show();
+        }
     }
 
     private void out() {

@@ -1,7 +1,9 @@
 package cn.qatime.player.activity;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -28,6 +30,7 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.OrderConfirmBean;
 import libraryextra.bean.OrderPayBean;
+import libraryextra.utils.DensityUtils;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
@@ -55,6 +58,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     private int priceNumber = 0;
     private OrderConfirmBean data;
     DecimalFormat df = new DecimalFormat("#.00");
+    private AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +108,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        Toast.makeText(OrderConfirmActivity.this, getResourceString(R.string.order_creating), Toast.LENGTH_SHORT).show();
         Map<String, String> map = new HashMap<>();
         map.put("pay_type", payType);
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlPayPrepare + id + "/orders", map), null,
@@ -121,20 +124,19 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                             intent.putExtra("type", (data.getData().getPay_type() + "").equals("1") ? getResources().getString(R.string.method_payment) + getResourceString(R.string.pay_wexin) : getResources().getString(R.string.method_payment) + "：支付宝支付");
                             OrderConfirmBean.App_pay_params app_pay_params = data.getData().getApp_pay_params();
                             intent.putExtra("data", app_pay_params);
-                            Toast.makeText(OrderConfirmActivity.this, getResourceString(R.string.order_create_success), Toast.LENGTH_SHORT).show();
                             startActivity(intent);
                             SPUtils.put(OrderConfirmActivity.this, "orderId", data.getData().getId());
                             SPUtils.put(OrderConfirmActivity.this, "price", priceNumber);
                         } else {
                             //                            canPay = false;
-                            Toast.makeText(OrderConfirmActivity.this, getResourceString(R.string.order_create_failed), Toast.LENGTH_SHORT).show();
+                           dialog();
                         }
                     }
 
                     @Override
                     protected void onError(JSONObject response) {
                         //                            canPay = false;
-                        Toast.makeText(OrderConfirmActivity.this, getResourceString(R.string.order_create_failed), Toast.LENGTH_SHORT).show();
+                        dialog();
                     }
 
                     @Override
@@ -153,7 +155,21 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 
     }
 
-
+    protected void dialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        alertDialog = builder.create();
+        View view = View.inflate(this, R.layout.dialog_confirm, null);
+        Button confirm = (Button) view.findViewById(R.id.confirm);
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.show();
+        alertDialog.setContentView(view);
+        alertDialog.getWindow().setLayout(DensityUtils.dp2px(this, 350), ActionBar.LayoutParams.WRAP_CONTENT);
+    }
     public void initView() {
 
         name = (TextView) findViewById(R.id.name);

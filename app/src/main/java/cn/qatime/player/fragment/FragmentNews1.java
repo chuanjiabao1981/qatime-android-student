@@ -6,16 +6,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.text.format.DateUtils;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -215,6 +209,7 @@ public class FragmentNews1 extends BaseFragment {
                     dialog.setContentView(v);
                     dialog.setCanceledOnTouchOutside(true);
                     dialog.show();
+//                    dialog.getWindow().setLayout(DensityUtils.dp2px(getActivity(), 350), ActionBar.LayoutParams.WRAP_CONTENT);
 //                    v.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 //                        @Override
 //                        public void onGlobalLayout() {

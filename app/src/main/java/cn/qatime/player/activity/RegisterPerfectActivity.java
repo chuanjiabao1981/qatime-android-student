@@ -1,6 +1,9 @@
 package cn.qatime.player.activity;
 
+import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -11,13 +14,11 @@ import android.text.Selection;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,11 +51,13 @@ import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.UpLoadUtil;
 import cn.qatime.player.utils.UrlUtils;
+import cn.qatime.player.view.WheelView;
 import libraryextra.bean.GradeBean;
 import libraryextra.bean.ImageItem;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
 import libraryextra.transformation.GlideCircleTransform;
+import libraryextra.utils.DensityUtils;
 import libraryextra.utils.DialogUtils;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
@@ -73,7 +76,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
     RadioButton men;
     RadioButton women;
     RadioGroup radiogroup;
-    Spinner spinner;
+    TextView spinner;
     TextView complete;
     private String imageUrl = "";
     private TextView birthday;
@@ -86,6 +89,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
     private CustomProgressDialog progress;
     private View changeHeadSculpture;
     private Uri captureUri;
+    private AlertDialog alertDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,11 +103,10 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
             gradeBean = JsonUtils.objectFromJson(gradeString, GradeBean.class);
         }
 
-        spinner.setAdapter(new ArrayAdapter<String>(this, R.layout.item_spinner, gradeBean.getData().getGrades()));
-
         changeHeadSculpture.setOnClickListener(this);
         birthday.setOnClickListener(this);
         birthdayView.setOnClickListener(this);
+        spinner.setOnClickListener(this);
         complete.setOnClickListener(this);
         PersonalInformationBean data = (PersonalInformationBean) getIntent().getSerializableExtra("data");
         if (data != null && data.getData() != null) {
@@ -123,7 +126,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
 
         for (int i = 0; i < gradeBean.getData().getGrades().size(); i++) {
             if (data.getData().getGrade().equals(gradeBean.getData().getGrades().get(i))) {
-                spinner.setSelection(i);
+                spinner.setText(data.getData().getGrade());
                 break;
 
             }
@@ -134,6 +137,9 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.spinner://去选择图片
+                showGradePickerDialog();
+                break;
             case R.id.change_head_sculpture://去选择图片
                 final Intent intent = new Intent(RegisterPerfectActivity.this, PictureSelectActivity.class);
                 startActivityForResult(intent, Constant.REQUEST_PICTURE_SELECT);
@@ -250,7 +256,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                     Toast.makeText(this, getResources().getString(R.string.name_can_not_be_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                String grade = gradeBean.getData().getGrades().get(spinner.getSelectedItemPosition());
+                String grade = spinner.getText().toString();
                 if (StringUtils.isNullOrBlanK(grade)) {
                     Toast.makeText(this, getResources().getString(R.string.grade_can_not_be_empty), Toast.LENGTH_SHORT).show();
                     return;
@@ -268,7 +274,28 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                 break;
         }
     }
-
+    private void showGradePickerDialog() {
+        if (alertDialog == null) {
+            final View view = View.inflate(RegisterPerfectActivity.this, R.layout.dialog_grade_picker, null);
+            final WheelView grade = (WheelView) view.findViewById(R.id.grade);
+            grade.setOffset(1);
+            grade.setItems(gradeBean.getData().getGrades());
+            grade.setSeletion(gradeBean.getData().getGrades().indexOf(spinner.getText()));
+            AlertDialog.Builder builder = new AlertDialog.Builder(RegisterPerfectActivity.this);
+            alertDialog = builder.create();
+            alertDialog.show();
+            alertDialog.setContentView(view);
+            alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    spinner.setText(grade.getSeletedItem());
+                }
+            });
+            alertDialog.getWindow().setLayout(DensityUtils.dp2px(RegisterPerfectActivity.this, 350), ActionBar.LayoutParams.WRAP_CONTENT);
+        } else {
+            alertDialog.show();
+        }
+    }
     private void loginAccount() {
         String account = BaseApplication.getAccount();
         String token = BaseApplication.getAccountToken();
@@ -341,7 +368,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
         men = (RadioButton) findViewById(R.id.men);
         women = (RadioButton) findViewById(R.id.women);
         radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
-        spinner = (Spinner) findViewById(R.id.spinner);
+        spinner = (TextView) findViewById(R.id.spinner);
         birthday = (TextView) findViewById(R.id.birthday);
         birthdayView = findViewById(R.id.birthday_view);
         complete = (TextView) findViewById(R.id.complete);

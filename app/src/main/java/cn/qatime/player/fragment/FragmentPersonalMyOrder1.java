@@ -1,6 +1,6 @@
 package cn.qatime.player.fragment;
 
-import android.content.DialogInterface;
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,8 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -41,6 +43,7 @@ import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.OrderConfirmBean;
 import libraryextra.bean.OrderDetailBean;
+import libraryextra.utils.DensityUtils;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -266,21 +269,28 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
 
     protected void dialog(final int position, final String id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("确认取消订单吗？");
-        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+        final AlertDialog alertDialog = builder.create();
+        View view = View.inflate(getActivity(), R.layout.dialog_cancel_or_confirm, null);
+        TextView text = (TextView) view.findViewById(R.id.text);
+        text.setText("是否确认取消此订单？");
+        Button cancel = (Button) view.findViewById(R.id.cancel);
+        Button confirm = (Button) view.findViewById(R.id.confirm);
+        cancel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 CancelOrder(position, id);
-                dialog.dismiss();
+                alertDialog.dismiss();
             }
         });
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.create().show();
+        alertDialog.show();
+        alertDialog.setContentView(view);
+        alertDialog.getWindow().setLayout(DensityUtils.dp2px(getActivity(), 350), ActionBar.LayoutParams.WRAP_CONTENT);
     }
 
     private void CancelOrder(final int position, String id) {

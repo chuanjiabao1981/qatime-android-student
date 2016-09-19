@@ -131,7 +131,7 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
                     textMinute.setText(minutes.getSeletedItem());
                 }
             });
-            alertDialog.getWindow().setLayout(DensityUtils.dp2px(NotifyCourseActivity.this, 300), ActionBar.LayoutParams.WRAP_CONTENT);
+            alertDialog.getWindow().setLayout(DensityUtils.dp2px(NotifyCourseActivity.this, 350), ActionBar.LayoutParams.WRAP_CONTENT);
         } else {
             alertDialog.show();
         }

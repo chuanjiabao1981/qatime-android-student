@@ -1,6 +1,7 @@
 package cn.qatime.player.activity;
 
-import android.content.Context;
+import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -35,21 +36,22 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.config.UserPreferences;
+import cn.qatime.player.fragment.FragmentRemedialClassDetail1;
+import cn.qatime.player.fragment.FragmentRemedialClassDetail2;
+import cn.qatime.player.fragment.FragmentRemedialClassDetail3;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.OrderPayBean;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
 import libraryextra.bean.RemedialClassDetailBean;
-import cn.qatime.player.fragment.FragmentRemedialClassDetail1;
-import cn.qatime.player.fragment.FragmentRemedialClassDetail2;
-import cn.qatime.player.fragment.FragmentRemedialClassDetail3;
-import cn.qatime.player.utils.DaYiJsonObjectRequest;
-import libraryextra.utils.DialogUtils;
+import libraryextra.utils.DensityUtils;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.SPUtils;
 import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.StringUtils;
-import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.SimpleViewPagerIndicator;
@@ -71,6 +73,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     TextView price;
     TextView studentnumber;
     DecimalFormat df = new DecimalFormat("#.00");
+    private AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,24 +224,55 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 joinAudition();
                 break;
             case R.id.pay:
-                Intent intent = new Intent(RemedialClassDetailActivity.this, OrderConfirmActivity.class);
-                intent.putExtra("id", id);
-                OrderPayBean bean = new OrderPayBean();
-                bean.image = data.getData().getPublicize();
-                bean.name = data.getData().getName();
-                bean.subject = data.getData().getSubject();
-                bean.grade = data.getData().getGrade();
-                bean.classnumber = data.getData().getPreset_lesson_count();
-                bean.teacher = data.getData().getTeacher().getName();
-                bean.classendtime = data.getData().getLive_end_time();
-                bean.status = data.getData().getStatus();
-                bean.classstarttime = data.getData().getLive_start_time();
-                bean.price = data.getData().getPrice();
-
-                intent.putExtra("data", bean);
-                startActivity(intent);
+                if("teaching".equals(data.getData().getStatus())){
+                    if (alertDialog == null) {
+                        View view = View.inflate(RemedialClassDetailActivity.this, R.layout.dialog_cancel_or_confirm, null);
+                        Button cancel = (Button) view.findViewById(R.id.cancel);
+                        Button confirm = (Button) view.findViewById(R.id.confirm);
+                        cancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                alertDialog.dismiss();
+                            }
+                        });
+                        confirm.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                payRemedial();
+                            }
+                        });
+                        AlertDialog.Builder builder = new AlertDialog.Builder(RemedialClassDetailActivity.this);
+                        alertDialog = builder.create();
+                        alertDialog.show();
+                        alertDialog.setContentView(view);
+                        alertDialog.getWindow().setLayout(DensityUtils.dp2px(RemedialClassDetailActivity.this, 350), ActionBar.LayoutParams.WRAP_CONTENT);
+                    } else {
+                        alertDialog.show();
+                    }
+                }else{
+                    payRemedial();
+                };
                 break;
         }
+    }
+
+    private void payRemedial() {
+        Intent intent = new Intent(RemedialClassDetailActivity.this, OrderConfirmActivity.class);
+        intent.putExtra("id", id);
+        OrderPayBean bean = new OrderPayBean();
+        bean.image = data.getData().getPublicize();
+        bean.name = data.getData().getName();
+        bean.subject = data.getData().getSubject();
+        bean.grade = data.getData().getGrade();
+        bean.classnumber = data.getData().getPreset_lesson_count();
+        bean.teacher = data.getData().getTeacher().getName();
+        bean.classendtime = data.getData().getLive_end_time();
+        bean.status = data.getData().getStatus();
+        bean.classstarttime = data.getData().getLive_start_time();
+        bean.price = data.getData().getPrice();
+
+        intent.putExtra("data", bean);
+        startActivity(intent);
     }
 
     private void joinAudition() {
@@ -289,7 +323,10 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
                                                         @Override
                                                         public void onFailed(int code) {
-                                                            BaseApplication.clearToken();
+//                                                            BaseApplication.clearToken();
+                                                            Profile profile = BaseApplication.getProfile();
+                                                            profile.getData().setRemember_token("");
+                                                            SPUtils.putObject(RemedialClassDetailActivity.this, "profile", profile);
                                                         }
 
                                                         @Override
