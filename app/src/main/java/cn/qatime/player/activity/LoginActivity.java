@@ -298,7 +298,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 @Override
                 public void onFailed(int code) {
                     DialogUtils.dismissDialog(progress);
-                    BaseApplication.clearToken();
+//                    BaseApplication.clearToken();
                     Logger.e(code + "code");
 //                    if (code == 302 || code == 404) {
 //                        Toast.makeText(LoginActivity.this, R.string.account_or_password_error, Toast.LENGTH_SHORT).show();
