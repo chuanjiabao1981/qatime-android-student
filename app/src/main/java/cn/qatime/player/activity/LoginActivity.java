@@ -194,17 +194,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         BaseApplication.clearToken();
                         login.setClickable(true);
                     }
-                }, volleyError -> {
-            DialogUtils.dismissDialog(progress);
-            BaseApplication.clearToken();
-            Toast.makeText(LoginActivity.this, getResourceString(R.string.after_try_again), Toast.LENGTH_SHORT).show();
-            login.setClickable(true);
-            password.setText("");
-            //当密码错误5次以上，开始使用验证码
-            errornum++;
-            if (errornum >= 5) {
-                checklayout.setVisibility(View.VISIBLE);
-                initCheckNum();
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                DialogUtils.dismissDialog(progress);
+                BaseApplication.clearToken();
+                Toast.makeText(LoginActivity.this, getResourceString(R.string.after_try_again), Toast.LENGTH_SHORT).show();
+                login.setClickable(true);
+                password.setText("");
+                //当密码错误5次以上，开始使用验证码
+                errornum++;
+                if (errornum >= 5) {
+                    checklayout.setVisibility(View.VISIBLE);
+                    initCheckNum();
+                }
             }
         });
         addToRequestQueue(request);

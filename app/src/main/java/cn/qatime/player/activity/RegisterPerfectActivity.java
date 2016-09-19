@@ -1,5 +1,6 @@
 package cn.qatime.player.activity;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -266,6 +268,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                 break;
         }
     }
+
     private void loginAccount() {
         String account = BaseApplication.getAccount();
         String token = BaseApplication.getAccountToken();
@@ -298,6 +301,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                     setResult(Constant.REGIST);
                     finish();
                 }
+
                 @Override
                 public void onFailed(int code) {
                     BaseApplication.clearToken();
@@ -308,6 +312,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                         Toast.makeText(RegisterPerfectActivity.this, getResourceString(R.string.login_failed) + code, Toast.LENGTH_SHORT).show();
                     }
                 }
+
                 @Override
                 public void onException(Throwable throwable) {
                     Logger.e(throwable.getMessage());

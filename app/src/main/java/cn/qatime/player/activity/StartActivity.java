@@ -2,6 +2,7 @@ package cn.qatime.player.activity;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -10,6 +11,7 @@ import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -176,22 +178,25 @@ public class StartActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void startApp() {
-        new Handler().postDelayed(() -> {
-            if (getSharedPreferences("first", MODE_PRIVATE).getBoolean("firstlogin", true)) {
-                Logger.e("第一次登陆");
-                StartActivity.this.startActivity(new Intent(StartActivity.this, GuideActivity.class));
-                StartActivity.this.finish();
-            } else {
-                Logger.e("no第一次登陆");
-                if (!StringUtils.isNullOrBlanK(BaseApplication.getProfile().getToken())) {//token不空  直接自动登录到mianactivity
-                    Logger.e("token----" + BaseApplication.getProfile().getToken());
-                    Intent intent = new Intent(StartActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    Intent intent = new Intent(StartActivity.this, LoginActivity.class);
-                    StartActivity.this.startActivity(intent);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (getSharedPreferences("first", MODE_PRIVATE).getBoolean("firstlogin", true)) {
+                    Logger.e("第一次登陆");
+                    StartActivity.this.startActivity(new Intent(StartActivity.this, GuideActivity.class));
                     StartActivity.this.finish();
+                } else {
+                    Logger.e("no第一次登陆");
+                    if (!StringUtils.isNullOrBlanK(BaseApplication.getProfile().getToken())) {//token不空  直接自动登录到mianactivity
+                        Logger.e("token----" + BaseApplication.getProfile().getToken());
+                        Intent intent = new Intent(StartActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Intent intent = new Intent(StartActivity.this, LoginActivity.class);
+                        StartActivity.this.startActivity(intent);
+                        StartActivity.this.finish();
+                    }
                 }
             }
         }, 2000);

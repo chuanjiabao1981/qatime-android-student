@@ -1,5 +1,6 @@
 package cn.qatime.player.fragment;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -12,8 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -317,10 +320,13 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
         pop.setAnimationStyle(R.style.downDialogstyle);
         pop.showAtLocation(getActivity().findViewById(R.id.fragmentlayout), Gravity.BOTTOM, 0, 0);
         backgroundAlpha(0.7f);
-        pop.setOnDismissListener(() -> {
-            WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
-            lp.alpha = 1f;
-            getActivity().getWindow().setAttributes(lp);
+        pop.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
+                lp.alpha = 1f;
+                getActivity().getWindow().setAttributes(lp);
+            }
         });
     }
 
@@ -352,26 +358,29 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                         }
                     }
                 });
-                listView.setOnItemClickListener((parent, view, position, id) -> {
-                    if (timeList.get(position).equals(getResourceString(R.string.in_price_low_to_high))) {
-                        timetext.setText(getResources().getString(R.string.by_price_up));
-                    } else if (timeList.get(position).equals(getResourceString(R.string.in_price_high_to_low))) {
-                        timetext.setText(getResources().getString(R.string.by_price_down));
-                    } else {
-                        timetext.setText(timeList.get(position));
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if (timeList.get(position).equals(getResourceString(R.string.in_price_low_to_high))) {
+                            timetext.setText(getResources().getString(R.string.by_price_up));
+                        } else if (timeList.get(position).equals(getResourceString(R.string.in_price_high_to_low))) {
+                            timetext.setText(getResources().getString(R.string.by_price_down));
+                        } else {
+                            timetext.setText(timeList.get(position));
+                        }
+                        timesortposition = position;
+                        if (position == 0) {
+                            timesorttype = "";
+                        } else if (position == 1) {
+                            timesorttype = "price.asc";
+                        } else if (position == 2) {
+                            timesorttype = "price.desc";
+                        } else {
+                            timesorttype = "buy_tickets_count.asc";
+                        }
+                        initData(1);
+                        pop.dismiss();
                     }
-                    timesortposition = position;
-                    if (position == 0) {
-                        timesorttype = "";
-                    } else if (position == 1) {
-                        timesorttype = "price.asc";
-                    } else if (position == 2) {
-                        timesorttype = "price.desc";
-                    } else {
-                        timesorttype = "buy_tickets_count.asc";
-                    }
-                    initData(1);
-                    pop.dismiss();
                 });
                 showPop(popView);
                 break;
@@ -407,11 +416,14 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                         }
                     }
                 });
-                listView.setOnItemClickListener((parent, view, position, id) -> {
-                    subjecttext.setText(subjectList.get(position));
-                    initData(1);
-                    subjectsortposition = position;
-                    pop.dismiss();
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        subjecttext.setText(subjectList.get(position));
+                        initData(1);
+                        subjectsortposition = position;
+                        pop.dismiss();
+                    }
                 });
                 showPop(popView);
                 break;
@@ -454,11 +466,14 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                         }
                     }
                 });
-                listView.setOnItemClickListener((parent, view, position, id) -> {
-                    classtext.setText(classList.get(position));
-                    classsortposition = position;
-                    initData(1);
-                    pop.dismiss();
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        classtext.setText(classList.get(position));
+                        classsortposition = position;
+                        initData(1);
+                        pop.dismiss();
+                    }
                 });
                 showPop(popView);
                 break;
@@ -485,17 +500,22 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 showPop(popView);
                 break;
             case R.id.begin_class_time://开课时间
-                MDatePickerDialog dataDialog = new MDatePickerDialog(getActivity(), (view, year, monthOfYear, dayOfMonth) -> {
-
-                    class_date_floor = (year + "-" + ((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1))) + "-" + ((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth))));
-                    beginClassTime.setText(class_date_floor);
+                MDatePickerDialog dataDialog = new MDatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        class_date_floor = (year + "-" + ((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1))) + "-" + ((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth))));
+                        beginClassTime.setText(class_date_floor);
+                    }
                 }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
                 dataDialog.show();
                 break;
             case R.id.end_class_time://开课时间end
-                dataDialog = new MDatePickerDialog(getActivity(), (view, year, monthOfYear, dayOfMonth) -> {
-                    class_date_ceil = (year + "-" + ((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1))) + "-" + ((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth))));
-                    endcLassTime.setText(class_date_ceil);
+                dataDialog = new MDatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        class_date_ceil = (year + "-" + ((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1))) + "-" + ((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth))));
+                        endcLassTime.setText(class_date_ceil);
+                    }
                 }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
                 dataDialog.show();
                 break;
