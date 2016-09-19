@@ -288,17 +288,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     UserInfoCache.getInstance().registerObservers(true);
                     TeamDataCache.getInstance().registerObservers(true);
 //                                                FriendDataCache.getInstance().registerObservers(true);
-
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    DialogUtils.dismissDialog(progress);
-                    finish();
+//
+//                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                    startActivity(intent);
+//                    DialogUtils.dismissDialog(progress);
+//                    finish();
                 }
 
                 @Override
                 public void onFailed(int code) {
                     DialogUtils.dismissDialog(progress);
 //                    BaseApplication.clearToken();
+                    profile.getData().setRemember_token("");
+                    SPUtils.putObject(LoginActivity.this, "profile", profile);
                     Logger.e(code + "code");
 //                    if (code == 302 || code == 404) {
 //                        Toast.makeText(LoginActivity.this, R.string.account_or_password_error, Toast.LENGTH_SHORT).show();

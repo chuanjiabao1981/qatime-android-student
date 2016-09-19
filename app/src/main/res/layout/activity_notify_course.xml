@@ -147,6 +147,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:paddingLeft="10dp"
+                    android:textColor="#a00f"
                     android:text="00小时" />
 
                 <TextView
@@ -155,6 +156,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:paddingLeft="10dp"
+                    android:textColor="#a00f"
                     android:text="00分钟" />
             </LinearLayout>
 

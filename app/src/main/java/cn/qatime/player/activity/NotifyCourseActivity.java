@@ -1,5 +1,8 @@
 package cn.qatime.player.activity;
 
+import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
@@ -13,6 +16,8 @@ import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.view.WheelView;
+import libraryextra.utils.DensityUtils;
 import libraryextra.utils.SPUtils;
 
 /**
@@ -24,13 +29,14 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
     private CheckBox cb2;
     private CheckBox sms;
     private CheckBox sys;
-    private TextView spinnerHours;
-    private TextView spinnerMinute;
+    private TextView textHours;
+    private TextView textMinute;
     private List<String> al_hours;
     private List<String> al_minute;
     private String hour;
     private String minute;
     private View time;
+    private AlertDialog alertDialog;
 
 
     private void assignViews() {
@@ -38,8 +44,8 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
         cb2 = (CheckBox) findViewById(R.id.cb_2);
         sms = (CheckBox) findViewById(R.id.sms);
         sys = (CheckBox) findViewById(R.id.sys);
-        spinnerHours = (TextView) findViewById(R.id.hours);
-        spinnerMinute = (TextView) findViewById(R.id.minute);
+        textHours = (TextView) findViewById(R.id.hours);
+        textMinute = (TextView) findViewById(R.id.minute);
         time = findViewById(R.id.time);
     }
 
@@ -75,41 +81,10 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
             str += getResourceString(R.string.minute);
             al_minute.add(str);
         }
-//        spinnerHours.setAdapter(new ArrayAdapter<>(this, R.layout.item_spinner_time, al_hours));
-//        spinnerMinute.setAdapter(new ArrayAdapter<>(this, R.layout.item_spinner_time, al_minute));
-//        hour = al_hours.get((int) spinnerHours.getSelectedItemId()).replace(getResourceString(R.string.hour), "");
-//        minute = al_minute.get((int) spinnerHours.getSelectedItemId()).replace(getResourceString(R.string.minute), "");
-//        spinnerHours.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                hour = al_hours.get((int) spinnerHours.getSelectedItemId()).replace(getResourceString(R.string.hour), "");
-//                SPUtils.put(NotifyCourseActivity.this, "notify_hour", hour);
-//                Logger.e("hour=" + hour);
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
-//        spinnerMinute.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                minute = al_minute.get((int) spinnerMinute.getSelectedItemId()).replace(getResourceString(R.string.minute), "");
-//                Logger.e("minute=" + minute);
-//                SPUtils.put(NotifyCourseActivity.this, "notify_minute", minute);
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
-//        String notify_hour = (String) SPUtils.get(this, "notify_hour", "00");
-//        String notify_minute = (String) SPUtils.get(this, "notify_minute", "00");
-//
-//        spinnerHours.setSelection(al_hours.indexOf(notify_hour + getResourceString(R.string.hour)));
-//        spinnerMinute.setSelection(al_minute.indexOf(notify_minute + getResourceString(R.string.minute)));
+        hour = (String) SPUtils.get(this, "notify_hour", "00小时");
+        minute = (String) SPUtils.get(this, "notify_minute", "00分钟");
+        textHours.setText(hour);
+        textMinute.setText(minute);
     }
 
     private void initView() {
@@ -129,16 +104,37 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
         time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                TimePickerDialog dialog = new TimePickerDialog(NotifyCourseActivity.this, new TimePickerDialog.OnTimeSetListener() {
-//                    @Override
-//                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-//
-//                    }
-//                },0,0,true);
-//                dialog.show();
-
+                showTimePickerDialog();
             }
         });
+    }
+
+    private void showTimePickerDialog() {
+        if (alertDialog == null) {
+            final View view = View.inflate(NotifyCourseActivity.this, R.layout.dialog_time_picker, null);
+            final WheelView hours = (WheelView) view.findViewById(R.id.hours);
+            hours.setOffset(1);
+            hours.setItems(al_hours);
+            hours.setSeletion(al_hours.indexOf(hour));
+            final WheelView minutes = (WheelView) view.findViewById(R.id.minute);
+            minutes.setOffset(1);
+            minutes.setItems(al_minute);
+            minutes.setSeletion(al_minute.indexOf(minute));
+            AlertDialog.Builder builder = new AlertDialog.Builder(NotifyCourseActivity.this);
+            alertDialog = builder.create();
+            alertDialog.show();
+            alertDialog.setContentView(view);
+            alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    textHours.setText(hours.getSeletedItem());
+                    textMinute.setText(minutes.getSeletedItem());
+                }
+            });
+            alertDialog.getWindow().setLayout(DensityUtils.dp2px(NotifyCourseActivity.this, 300), ActionBar.LayoutParams.WRAP_CONTENT);
+        } else {
+            alertDialog.show();
+        }
     }
 
     @Override
@@ -170,8 +166,11 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
     }
 
     @Override
-    public void backClick(View v) {
-        SPUtils.put(this, "alarm", hour + ":" + minute);
-        super.backClick(v);
+    protected void onStop() {
+        hour = textHours.getText().toString();
+        minute = textMinute.getText().toString();
+        SPUtils.put(this, "notify_hour", hour);
+        SPUtils.put(this, "notify_minute", minute);
+        super.onStop();
     }
 }
