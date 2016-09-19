@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="15dp"
+            android:text="@string/price"
+            android:textColor="#7000" />
+
+        <EditText
+            android:id="@+id/price_low"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/shape_input"
+            android:inputType="number"
+            android:maxLength="5"
+            android:minEms="3"
+            android:paddingBottom="3dp"
+            android:paddingLeft="15dip"
+            android:paddingRight="15dip"
+            android:paddingTop="3dp"
+            android:singleLine="true"
+            android:textColorHint="#ff999999" />
+
+        <TextView
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:gravity="center"
+            android:text="-" />
+
+        <EditText
+            android:id="@+id/price_high"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/shape_input"
+            android:inputType="number"
+            android:maxLength="5"
+            android:minEms="3"
+            android:paddingBottom="3dp"
+            android:paddingLeft="15dip"
+            android:paddingRight="15dip"
+            android:paddingTop="3dp"
+            android:singleLine="true"
+            android:textColorHint="#ff999999" />
+
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:textColor="#a000"
+            android:text="@string/yuan" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="15dp"
+            android:text="@string/class_hours_range"
+            android:textColor="#7000" />
+
+        <EditText
+            android:id="@+id/subject_low"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/shape_input"
+            android:inputType="number"
+            android:maxLength="3"
+            android:minEms="3"
+            android:paddingBottom="3dp"
+            android:paddingLeft="15dip"
+            android:paddingRight="15dip"
+            android:paddingTop="3dp"
+            android:singleLine="true"
+            android:textColorHint="#ff999999" />
+
+        <TextView
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:gravity="center"
+            android:text="-" />
+
+        <EditText
+            android:id="@+id/subject_high"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/shape_input"
+            android:inputType="number"
+            android:maxLength="3"
+            android:minEms="3"
+            android:paddingBottom="3dp"
+            android:paddingLeft="15dip"
+            android:paddingRight="15dip"
+            android:paddingTop="3dp"
+            android:singleLine="true"
+            android:textColorHint="#ff999999" />
+
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="15dp"
+            android:text="@string/starting_range"
+            android:textColor="#7000" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:paddingBottom="3dp"
+            android:paddingTop="3dp">
+
+            <TextView
+                android:id="@+id/begin_class_time"
+                android:layout_width="wrap_content"
+                android:textColor="#a000"
+                android:layout_height="wrap_content"
+                android:text="2016-11-11" />
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:src="@mipmap/calendar_black_32" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:gravity="center"
+            android:text="@string/to"
+            android:textColor="#cacaca" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:paddingBottom="3dp"
+            android:paddingTop="3dp">
+
+            <TextView
+                android:id="@+id/end_class_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#a000"
+                android:layout_marginLeft="10dp"
+                android:text="2016-11-11" />
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:src="@mipmap/calendar_black_32" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="15dp"
+            android:text="@string/state"
+            android:textColor="#7000" />
+
+        <CheckBox
+            android:id="@+id/started"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingBottom="3dp"
+            android:paddingTop="3dp"
+            android:text="@string/started"
+            android:textColor="#a000" />
+
+        <CheckBox
+            android:id="@+id/recruiting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingBottom="3dp"
+            android:paddingTop="3dp"
+            android:text="@string/recruiting"
+            android:textColor="#a000" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_bg_selector_orange"
+            android:text="@string/cancel"
+            android:textColor="@color/gray_dark" />
+
+        <Button
+            android:id="@+id/submit"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_bg_selector_orange"
+            android:text="@string/confirm"
+            android:textColor="@color/gray_dark" />
+    </LinearLayout>
+
+
+</LinearLayout>

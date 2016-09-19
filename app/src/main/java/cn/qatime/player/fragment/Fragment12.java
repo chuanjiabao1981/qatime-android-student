@@ -1,7 +1,7 @@
 package cn.qatime.player.fragment;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,10 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -23,7 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -84,13 +81,12 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
     private EditText priceHigh;
     private EditText subjectLow;
     private EditText subjectHigh;
-    private TextView beginClassYear;
+    private TextView beginClassTime;
     private TextView beginClassMonth;
     private TextView beginClassDay;
-    private TextView endcLassYear;
+    private TextView endcLassTime;
     private TextView endcLassMonth;
     private TextView endClassDay;
-    private Spinner spinner;
     private Button cancel;
     private Button submit;
 
@@ -109,6 +105,11 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     DecimalFormat df = new DecimalFormat("#.00");
     private GradeBean gradeBean;
+    private int timesortposition;
+    private int classsortposition;
+    private int subjectsortposition;
+    private CheckBox started;
+    private CheckBox recruiting;
 
     @Nullable
     @Override
@@ -201,58 +202,6 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
             startActivity(intent);
         });
 
-        //开课时间
-        View beginClassLayout = view.findViewById(R.id.begin_class_layout);
-        //筛选框
-        screenLayout = view.findViewById(R.id.screen_layout);
-        priceLow = (EditText) view.findViewById(R.id.price_low);
-        priceHigh = (EditText) view.findViewById(R.id.price_high);
-
-        subjectLow = (EditText) view.findViewById(R.id.subject_low);
-        subjectHigh = (EditText) view.findViewById(R.id.subject_high);
-
-        beginClassYear = (TextView) view.findViewById(R.id.begin_class_year);
-        beginClassMonth = (TextView) view.findViewById(R.id.begin_class_month);
-        beginClassDay = (TextView) view.findViewById(R.id.begin_class_day);
-        View endClassLayout = view.findViewById(R.id.end_class_layout);
-        endcLassYear = (TextView) view.findViewById(R.id.end_class_year);
-        endcLassMonth = (TextView) view.findViewById(R.id.end_class_month);
-        endClassDay = (TextView) view.findViewById(R.id.end_class_day);
-        spinner = (Spinner) view.findViewById(R.id.spinner);
-        List<String> data = new ArrayList<>();
-        data.add(getResources().getString(R.string.whole));
-        data.add(getResources().getString(R.string.recruiting));
-        data.add(getResources().getString(R.string.started));
-        spinner.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.item_spinner, data));
-        cancel = (Button) view.findViewById(R.id.cancel);
-        submit = (Button) view.findViewById(R.id.submit);
-
-        beginClassLayout.setOnClickListener(this);
-        endClassLayout.setOnClickListener(this);
-        screenLayout.setOnClickListener(this);
-        submit.setOnClickListener(this);
-        cancel.setOnClickListener(this);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        status = "all";
-                        break;
-                    case 1:
-                        status = "preview";
-                        break;
-                    case 2:
-                        status = "teaching";
-                        break;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
     }
 
     /**
@@ -288,10 +237,10 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
             }
         }
 
-        map.put("price_floor", priceLow.getText().toString());
-        map.put("price_ceil", priceHigh.getText().toString());
-        map.put("preset_lesson_count_floor", subjectLow.getText().toString());
-        map.put("preset_lesson_count_ceil", subjectHigh.getText().toString());
+        map.put("price_floor", priceLow == null ? "" : priceLow.getText().toString());
+        map.put("price_ceil", priceHigh == null ? "" : priceHigh.getText().toString());
+        map.put("preset_lesson_count_floor", subjectLow == null ? "" : subjectLow.getText().toString());
+        map.put("preset_lesson_count_ceil", subjectHigh == null ? "" : subjectHigh.getText().toString());
         map.put("status", status);
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass, map), null,
                 new VolleyListener(getActivity()) {
@@ -345,24 +294,26 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
      */
     private void clearScreenData() {
 //        timesorttype = "";
-        priceLow.setText("");
-        priceHigh.setText("");
-        subjectLow.setText("");
-        subjectHigh.setText("");
+        if (priceLow != null)
+            priceLow.setText("");
+        if (priceHigh != null)
+            priceHigh.setText("");
+        if (subjectLow != null)
+            subjectLow.setText("");
+        if (subjectHigh != null)
+            subjectHigh.setText("");
         status = "";
         class_date_floor = "";
         class_date_ceil = "";
     }
 
     public void showPop(View popView) {
-        if (screenLayout.getVisibility() == View.VISIBLE) {
-            screenLayout.setVisibility(View.GONE);
-        }
         pop = new PopupWindow(popView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         pop.setBackgroundDrawable(new ColorDrawable());
         pop.setFocusable(true);
         pop.setAnimationStyle(R.style.downDialogstyle);
         pop.showAtLocation(getActivity().findViewById(R.id.fragmentlayout), Gravity.BOTTOM, 0, 0);
+        backgroundAlpha(0.7f);
         pop.setOnDismissListener(() -> {
             WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
             lp.alpha = 1f;
@@ -377,14 +328,25 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 View popView = View.inflate(getActivity(), R.layout.pop_fragment12, null);
                 ListView listView = (ListView) popView.findViewById(R.id.list);
                 final List<String> timeList = new ArrayList<>();
-                timeList.add(getResourceString(R.string.comprehensive_sort));
+                timeList.add(getResourceString(R.string.by_time));
                 timeList.add(getResourceString(R.string.in_price_low_to_high));
                 timeList.add(getResourceString(R.string.in_price_high_to_low));
                 timeList.add(getResourceString(R.string.in_number));
                 listView.setAdapter(new CommonAdapter<String>(getActivity(), timeList, R.layout.item_pop_fragment12) {
                     @Override
                     public void convert(ViewHolder holder, String item, int position) {
-                        holder.setText(R.id.text, item);
+                        TextView view = holder.getView(R.id.text);
+                        TextView select = holder.getView(R.id.select);
+                        view.setText(item);
+                        if (position == timesortposition) {
+                            view.setTextColor(Color.LTGRAY);
+                            select.setTextColor(Color.LTGRAY);
+                            select.setVisibility(View.VISIBLE);
+                        } else {
+                            view.setTextColor(Color.GRAY);
+                            select.setTextColor(Color.GRAY);
+                            select.setVisibility(View.INVISIBLE);
+                        }
                     }
                 });
                 listView.setOnItemClickListener((parent, view, position, id) -> {
@@ -395,6 +357,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                     } else {
                         timetext.setText(timeList.get(position));
                     }
+                    timesortposition = position;
                     if (position == 0) {
                         timesorttype = "";
                     } else if (position == 1) {
@@ -427,12 +390,24 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 listView.setAdapter(new CommonAdapter<String>(getActivity(), subjectList, R.layout.item_pop_fragment12) {
                     @Override
                     public void convert(ViewHolder holder, String item, int position) {
-                        holder.setText(R.id.text, item);
+                        TextView view = holder.getView(R.id.text);
+                        TextView select = holder.getView(R.id.select);
+                        view.setText(item);
+                        if (position == subjectsortposition) {
+                            view.setTextColor(Color.LTGRAY);
+                            select.setTextColor(Color.LTGRAY);
+                            select.setVisibility(View.VISIBLE);
+                        } else {
+                            view.setTextColor(Color.GRAY);
+                            select.setTextColor(Color.GRAY);
+                            select.setVisibility(View.INVISIBLE);
+                        }
                     }
                 });
                 listView.setOnItemClickListener((parent, view, position, id) -> {
                     subjecttext.setText(subjectList.get(position));
                     initData(1);
+                    subjectsortposition = position;
                     pop.dismiss();
                 });
                 showPop(popView);
@@ -462,11 +437,23 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 listView.setAdapter(new CommonAdapter<String>(getActivity(), classList, R.layout.item_pop_fragment12) {
                     @Override
                     public void convert(ViewHolder holder, String item, int position) {
-                        holder.setText(R.id.text, item);
+                        TextView view = holder.getView(R.id.text);
+                        TextView select = holder.getView(R.id.select);
+                        view.setText(item);
+                        if (position == classsortposition) {
+                            view.setTextColor(Color.LTGRAY);
+                            select.setTextColor(Color.LTGRAY);
+                            select.setVisibility(View.VISIBLE);
+                        } else {
+                            view.setTextColor(Color.GRAY);
+                            select.setTextColor(Color.GRAY);
+                            select.setVisibility(View.INVISIBLE);
+                        }
                     }
                 });
                 listView.setOnItemClickListener((parent, view, position, id) -> {
                     classtext.setText(classList.get(position));
+                    classsortposition = position;
                     initData(1);
                     pop.dismiss();
                 });
@@ -474,44 +461,75 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 break;
 
             case R.id.screen://筛选
-                if (screenLayout.getVisibility() == View.VISIBLE) {
-                    screenLayout.setVisibility(View.GONE);
-                } else {
-                    screenLayout.setVisibility(View.VISIBLE);
-                }
+                popView = View.inflate(getActivity(), R.layout.pop_fragment12_screen, null);
+                //筛选框
+                priceLow = (EditText) popView.findViewById(R.id.price_low);
+                priceHigh = (EditText) popView.findViewById(R.id.price_high);
 
+                subjectLow = (EditText) popView.findViewById(R.id.subject_low);
+                subjectHigh = (EditText) popView.findViewById(R.id.subject_high);
+
+                beginClassTime = (TextView) popView.findViewById(R.id.begin_class_time);
+                endcLassTime = (TextView) popView.findViewById(R.id.end_class_time);
+                started = (CheckBox) popView.findViewById(R.id.started);
+                recruiting = (CheckBox) popView.findViewById(R.id.recruiting);
+                cancel = (Button) popView.findViewById(R.id.cancel);
+                submit = (Button) popView.findViewById(R.id.submit);
+                beginClassTime.setOnClickListener(this);
+                endcLassTime.setOnClickListener(this);
+                submit.setOnClickListener(this);
+                cancel.setOnClickListener(this);
+                showPop(popView);
                 break;
-            case R.id.begin_class_layout://开课时间
+            case R.id.begin_class_time://开课时间
                 MDatePickerDialog dataDialog = new MDatePickerDialog(getActivity(), (view, year, monthOfYear, dayOfMonth) -> {
 
                     class_date_floor = (year + "-" + ((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1))) + "-" + ((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth))));
-                    beginClassYear.setText(String.valueOf(year));
-                    beginClassMonth.setText((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1)));
-                    beginClassDay.setText((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth)));
+                    beginClassTime.setText(class_date_floor);
                 }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
                 dataDialog.show();
                 break;
-            case R.id.end_class_layout://开课时间end
+            case R.id.end_class_time://开课时间end
                 dataDialog = new MDatePickerDialog(getActivity(), (view, year, monthOfYear, dayOfMonth) -> {
-
                     class_date_ceil = (year + "-" + ((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1))) + "-" + ((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth))));
-                    endcLassYear.setText(String.valueOf(year));
-                    endcLassMonth.setText((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1)));
-                    endClassDay.setText((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth)));
+                    endcLassTime.setText(class_date_ceil);
                 }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
                 dataDialog.show();
                 break;
-            case R.id.screen_layout://筛选狂
             case R.id.cancel://取消按钮
-                screenLayout.setVisibility(View.GONE);
+                pop.dismiss();
                 break;
             case R.id.submit://提交
+                setStatus();
                 initData(1);
-                screenLayout.setVisibility(View.GONE);
+                pop.dismiss();
                 KeyBoardUtils.closeKeybord(getActivity());
                 break;
 //            case R.id.class_text:
 //                break;
+        }
+    }
+
+    /**
+     * 设置添加屏幕的背景透明度
+     *
+     * @param bgAlpha
+     */
+    public void backgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        getActivity().getWindow().setAttributes(lp);
+    }
+
+    private void setStatus() {
+        if (started.isChecked() && recruiting.isChecked()) {
+            status = "all";
+        } else if (!started.isChecked() && recruiting.isChecked()) {
+            status = "preview";
+        } else if (started.isChecked() && !recruiting.isChecked()) {
+            status = "teaching";
+        } else {
+            status = "all";
         }
     }
 }

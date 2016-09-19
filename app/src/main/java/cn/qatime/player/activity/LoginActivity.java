@@ -284,6 +284,7 @@ public class LoginActivity extends BaseActivity {
 
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
+                    DialogUtils.dismissDialog(progress);
                     finish();
                 }
 
@@ -310,6 +311,7 @@ public class LoginActivity extends BaseActivity {
             Logger.e("没有云信账号,直接登录");
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
+            DialogUtils.dismissDialog(progress);
             finish();
         }
     }

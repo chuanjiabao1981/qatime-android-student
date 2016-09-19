@@ -137,13 +137,17 @@
 
             <Spinner
                 android:id="@+id/spinner_hours"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:spinnerMode="dialog"
                 android:layout_marginLeft="5dp" />
 
             <Spinner
                 android:id="@+id/spinner_minute"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:spinnerMode="dialog"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp" />
 
