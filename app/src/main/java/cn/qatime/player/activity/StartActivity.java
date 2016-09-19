@@ -15,10 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.RequestCallback;
-import com.netease.nimlib.sdk.auth.AuthService;
-import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.orhanobut.logger.Logger;
 
 import org.json.JSONException;
@@ -31,9 +27,6 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
-import cn.qatime.player.config.UserPreferences;
-import cn.qatime.player.im.cache.TeamDataCache;
-import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.AppUtils;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.DownFileUtil;
@@ -84,9 +77,9 @@ public class StartActivity extends BaseActivity {
             protected void onSuccess(JSONObject response) {
                 if (response.isNull("data")) {
                     startApp();
-                    BaseApplication.newVersion=false;
+                    BaseApplication.newVersion = false;
                 } else {
-                    BaseApplication.newVersion=true;
+                    BaseApplication.newVersion = true;
                     Logger.e(response.toString());
                     AlertDialog.Builder builder = new AlertDialog.Builder(StartActivity.this);
                     final View view = View.inflate(StartActivity.this, R.layout.dialog_check_update, null);
@@ -181,7 +174,9 @@ public class StartActivity extends BaseActivity {
                 Logger.e("no第一次登陆");
                 if (!StringUtils.isNullOrBlanK(BaseApplication.getProfile().getToken())) {//token不空  直接自动登录到mianactivity
                     Logger.e("token----" + BaseApplication.getProfile().getToken());
-                    loginAccount();
+                    Intent intent = new Intent(StartActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
                 } else {
                     Intent intent = new Intent(StartActivity.this, LoginActivity.class);
                     StartActivity.this.startActivity(intent);
@@ -190,59 +185,7 @@ public class StartActivity extends BaseActivity {
             }
         }, 2000);
     }
-    private void loginAccount() {
-        String account = BaseApplication.getAccount();
-        String token = BaseApplication.getAccountToken();
 
-        if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
-            NIMClient.getService(AuthService.class).login(new LoginInfo(account, token)).setCallback(new RequestCallback<LoginInfo>() {
-                @Override
-                public void onSuccess(LoginInfo o) {
-                    Logger.e("云信登录成功" + o.getAccount());
-                    // 初始化消息提醒
-                    NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
-
-                    NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
-                    //缓存
-                    UserInfoCache.getInstance().clear();
-                    TeamDataCache.getInstance().clear();
-                    //                FriendDataCache.getInstance().clear();
-
-                    UserInfoCache.getInstance().buildCache();
-                    TeamDataCache.getInstance().buildCache();
-                    //好友维护,目前不需要
-                    //                FriendDataCache.getInstance().buildCache();
-
-                    UserInfoCache.getInstance().registerObservers(true);
-                    TeamDataCache.getInstance().registerObservers(true);
-//                                                FriendDataCache.getInstance().registerObservers(true);
-
-                    Intent intent = new Intent(StartActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-                @Override
-                public void onFailed(int code) {
-                    BaseApplication.clearToken();
-                    Logger.e(code + "code");
-                    if (code == 302 || code == 404) {
-                        Toast.makeText(StartActivity.this, R.string.account_or_password_error, Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(StartActivity.this, getResourceString(R.string.login_failed) + code, Toast.LENGTH_SHORT).show();
-                    }
-                }
-                @Override
-                public void onException(Throwable throwable) {
-                    Logger.e(throwable.getMessage());
-                    BaseApplication.clearToken();
-                }
-            });
-        } else {//没有云信账号,直接登录
-            Intent intent = new Intent(StartActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
-    }
 
     //年级列表
     public void GetGradeslist() {

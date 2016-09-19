@@ -135,25 +135,33 @@
                 android:layout_height="wrap_content"
                 android:text="@string/advance" />
 
-            <Spinner
-                android:id="@+id/spinner_hours"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:spinnerMode="dialog"
-                android:layout_marginLeft="5dp" />
+            <LinearLayout
+                android:id="@+id/time"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-            <Spinner
-                android:id="@+id/spinner_minute"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:spinnerMode="dialog"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp" />
+                <TextView
+                    android:id="@+id/hours"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:paddingLeft="10dp"
+                    android:text="00小时" />
+
+                <TextView
+                    android:id="@+id/minute"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:paddingLeft="10dp"
+                    android:text="00分钟" />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
                 android:text="@string/remind_me" />
         </LinearLayout>
 
@@ -163,5 +171,4 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#dfdddd" />
-
 </LinearLayout>

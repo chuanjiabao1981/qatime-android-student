@@ -136,7 +136,7 @@ public class LoginActivity extends BaseActivity {
             login.setClickable(true);
             return;
         }
-        progress = DialogUtils.startProgressDialog(progress, LoginActivity.this,  getResourceString(R.string.landing));
+        progress = DialogUtils.startProgressDialog(progress, LoginActivity.this, getResourceString(R.string.landing));
         progress.setCancelable(false);
         progress.setCanceledOnTouchOutside(false);
 
@@ -239,7 +239,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             protected void onError(JSONObject response) {
-                Toast.makeText(LoginActivity.this,  getResourceString(R.string.login_failed), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, getResourceString(R.string.login_failed), Toast.LENGTH_SHORT).show();
                 BaseApplication.clearToken();
             }
         }, new Response.ErrorListener() {
@@ -293,11 +293,11 @@ public class LoginActivity extends BaseActivity {
                     DialogUtils.dismissDialog(progress);
                     BaseApplication.clearToken();
                     Logger.e(code + "code");
-                    if (code == 302 || code == 404) {
-                        Toast.makeText(LoginActivity.this, R.string.account_or_password_error, Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(LoginActivity.this, getResourceString(R.string.login_failed) + code, Toast.LENGTH_SHORT).show();
-                    }
+//                    if (code == 302 || code == 404) {
+//                        Toast.makeText(LoginActivity.this, R.string.account_or_password_error, Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        Toast.makeText(LoginActivity.this, getResourceString(R.string.login_failed) + code, Toast.LENGTH_SHORT).show();
+//                    }
                 }
 
                 @Override
@@ -307,13 +307,11 @@ public class LoginActivity extends BaseActivity {
                     BaseApplication.clearToken();
                 }
             });
-        } else {//没有云信账号,直接登录
-            Logger.e("没有云信账号,直接登录");
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            DialogUtils.dismissDialog(progress);
-            finish();
         }
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        DialogUtils.dismissDialog(progress);
+        finish();
     }
 
     /**

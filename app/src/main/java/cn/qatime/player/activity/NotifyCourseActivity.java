@@ -2,11 +2,9 @@ package cn.qatime.player.activity;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
 
@@ -26,12 +24,13 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
     private CheckBox cb2;
     private CheckBox sms;
     private CheckBox sys;
-    private Spinner spinnerHours;
-    private Spinner spinnerMinute;
+    private TextView spinnerHours;
+    private TextView spinnerMinute;
     private List<String> al_hours;
     private List<String> al_minute;
     private String hour;
     private String minute;
+    private View time;
 
 
     private void assignViews() {
@@ -39,8 +38,9 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
         cb2 = (CheckBox) findViewById(R.id.cb_2);
         sms = (CheckBox) findViewById(R.id.sms);
         sys = (CheckBox) findViewById(R.id.sys);
-        spinnerHours = (Spinner) findViewById(R.id.spinner_hours);
-        spinnerMinute = (Spinner) findViewById(R.id.spinner_minute);
+        spinnerHours = (TextView) findViewById(R.id.hours);
+        spinnerMinute = (TextView) findViewById(R.id.minute);
+        time = findViewById(R.id.time);
     }
 
     @Override
@@ -75,42 +75,41 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
             str += getResourceString(R.string.minute);
             al_minute.add(str);
         }
-        spinnerHours.setAdapter(new ArrayAdapter<>(this, R.layout.item_spinner_time, al_hours));
-        spinnerMinute.setAdapter(new ArrayAdapter<>(this, R.layout.item_spinner_time, al_minute));
-        hour = al_hours.get((int) spinnerHours.getSelectedItemId()).replace(getResourceString(R.string.hour), "");
-        minute = al_minute.get((int) spinnerHours.getSelectedItemId()).replace(getResourceString(R.string.minute), "");
-        spinnerHours.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                hour = al_hours.get((int) spinnerHours.getSelectedItemId()).replace(getResourceString(R.string.hour), "");
-                SPUtils.put(NotifyCourseActivity.this, "notify_hour", hour);
-                Logger.e("hour=" + hour);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        spinnerMinute.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                minute = al_minute.get((int) spinnerMinute.getSelectedItemId()).replace(getResourceString(R.string.minute), "");
-                Logger.e("minute=" + minute);
-                SPUtils.put(NotifyCourseActivity.this, "notify_minute", minute);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        String notify_hour = (String) SPUtils.get(this, "notify_hour", "00");
-        String notify_minute = (String) SPUtils.get(this, "notify_minute", "00");
-
-        spinnerHours.setSelection(al_hours.indexOf(notify_hour + getResourceString(R.string.hour)));
-        spinnerMinute.setSelection(al_minute.indexOf(notify_minute + getResourceString(R.string.minute)));
+//        spinnerHours.setAdapter(new ArrayAdapter<>(this, R.layout.item_spinner_time, al_hours));
+//        spinnerMinute.setAdapter(new ArrayAdapter<>(this, R.layout.item_spinner_time, al_minute));
+//        hour = al_hours.get((int) spinnerHours.getSelectedItemId()).replace(getResourceString(R.string.hour), "");
+//        minute = al_minute.get((int) spinnerHours.getSelectedItemId()).replace(getResourceString(R.string.minute), "");
+//        spinnerHours.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                hour = al_hours.get((int) spinnerHours.getSelectedItemId()).replace(getResourceString(R.string.hour), "");
+//                SPUtils.put(NotifyCourseActivity.this, "notify_hour", hour);
+//                Logger.e("hour=" + hour);
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
+//        spinnerMinute.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                minute = al_minute.get((int) spinnerMinute.getSelectedItemId()).replace(getResourceString(R.string.minute), "");
+//                Logger.e("minute=" + minute);
+//                SPUtils.put(NotifyCourseActivity.this, "notify_minute", minute);
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//
+//            }
+//        });
+//        String notify_hour = (String) SPUtils.get(this, "notify_hour", "00");
+//        String notify_minute = (String) SPUtils.get(this, "notify_minute", "00");
+//
+//        spinnerHours.setSelection(al_hours.indexOf(notify_hour + getResourceString(R.string.hour)));
+//        spinnerMinute.setSelection(al_minute.indexOf(notify_minute + getResourceString(R.string.minute)));
     }
 
     private void initView() {
@@ -127,7 +126,19 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
         cb2.setOnCheckedChangeListener(this);
         sms.setOnCheckedChangeListener(this);
         sys.setOnCheckedChangeListener(this);
+        time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                TimePickerDialog dialog = new TimePickerDialog(NotifyCourseActivity.this, new TimePickerDialog.OnTimeSetListener() {
+//                    @Override
+//                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+//
+//                    }
+//                },0,0,true);
+//                dialog.show();
 
+            }
+        });
     }
 
     @Override
