@@ -76,11 +76,12 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
     RadioButton men;
     RadioButton women;
     RadioGroup radiogroup;
-    TextView spinner;
+    TextView textGrade;
     TextView complete;
     private String imageUrl = "";
     private TextView birthday;
     private View birthdayView;
+    private View textGradeView;
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
     private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
 
@@ -104,9 +105,9 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
         }
 
         changeHeadSculpture.setOnClickListener(this);
-        birthday.setOnClickListener(this);
+        textGradeView.setOnClickListener(this);
         birthdayView.setOnClickListener(this);
-        spinner.setOnClickListener(this);
+        textGrade.setOnClickListener(this);
         complete.setOnClickListener(this);
         PersonalInformationBean data = (PersonalInformationBean) getIntent().getSerializableExtra("data");
         if (data != null && data.getData() != null) {
@@ -126,7 +127,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
 
         for (int i = 0; i < gradeBean.getData().getGrades().size(); i++) {
             if (data.getData().getGrade().equals(gradeBean.getData().getGrades().get(i))) {
-                spinner.setText(data.getData().getGrade());
+                textGrade.setText(data.getData().getGrade());
                 break;
 
             }
@@ -137,14 +138,13 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.spinner://去选择图片
+            case R.id.grade_view:
                 showGradePickerDialog();
                 break;
             case R.id.change_head_sculpture://去选择图片
                 final Intent intent = new Intent(RegisterPerfectActivity.this, PictureSelectActivity.class);
                 startActivityForResult(intent, Constant.REQUEST_PICTURE_SELECT);
                 break;
-            case R.id.birthday://生日
             case R.id.birthday_view://生日
                 try {
                     MDatePickerDialog dataDialog = new MDatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
@@ -256,7 +256,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                     Toast.makeText(this, getResources().getString(R.string.name_can_not_be_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                String grade = spinner.getText().toString();
+                String grade = textGrade.getText().toString();
                 if (StringUtils.isNullOrBlanK(grade)) {
                     Toast.makeText(this, getResources().getString(R.string.grade_can_not_be_empty), Toast.LENGTH_SHORT).show();
                     return;
@@ -280,7 +280,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
             final WheelView grade = (WheelView) view.findViewById(R.id.grade);
             grade.setOffset(1);
             grade.setItems(gradeBean.getData().getGrades());
-            grade.setSeletion(gradeBean.getData().getGrades().indexOf(spinner.getText()));
+            grade.setSeletion(gradeBean.getData().getGrades().indexOf(textGrade.getText()));
             AlertDialog.Builder builder = new AlertDialog.Builder(RegisterPerfectActivity.this);
             alertDialog = builder.create();
             alertDialog.show();
@@ -288,7 +288,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
             alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
-                    spinner.setText(grade.getSeletedItem());
+                    textGrade.setText(grade.getSeletedItem());
                 }
             });
             alertDialog.getWindow().setLayout(DensityUtils.dp2px(RegisterPerfectActivity.this, 350), ActionBar.LayoutParams.WRAP_CONTENT);
@@ -368,8 +368,9 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
         men = (RadioButton) findViewById(R.id.men);
         women = (RadioButton) findViewById(R.id.women);
         radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
-        spinner = (TextView) findViewById(R.id.spinner);
+        textGrade = (TextView) findViewById(R.id.text_grade);
         birthday = (TextView) findViewById(R.id.birthday);
+        textGradeView = findViewById(R.id.grade_view);
         birthdayView = findViewById(R.id.birthday_view);
         complete = (TextView) findViewById(R.id.complete);
     }

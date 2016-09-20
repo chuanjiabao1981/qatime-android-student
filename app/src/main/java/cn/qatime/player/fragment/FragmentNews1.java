@@ -1,5 +1,6 @@
 package cn.qatime.player.fragment;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -54,6 +55,7 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.TutorialClassBean;
+import libraryextra.utils.DensityUtils;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.StringUtils;
@@ -170,8 +172,11 @@ public class FragmentNews1 extends BaseFragment {
         listView.getRefreshableView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                if (NIMClient.getStatus() == StatusCode.LOGINED) {
-                    final Dialog dialog = new Dialog(getActivity(), R.style.Transparent);
+//                if (NIMClient.getStatus() == StatusCode.LOGINED) {
+                if (true) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    final Dialog dialog = builder.create();
+
                     final View v = View.inflate(getActivity(), R.layout.team_notify_alert_dialog, null);
                     ((TextView) v.findViewById(R.id.text)).setText(items.get(position - 1).isMute() ? getResourceString(R.string.resume_alert) : getResourceString(R.string.nolongger_alert));
                     v.findViewById(R.id.text).setOnClickListener(new OnClickListener() {
@@ -208,7 +213,7 @@ public class FragmentNews1 extends BaseFragment {
                     });
                     dialog.setCanceledOnTouchOutside(true);
                     dialog.show();
-//                    dialog.getWindow().setLayout(DensityUtils.dp2px(getActivity(), 350), ViewGroup.LayoutParams.WRAP_CONTENT);
+                    dialog.getWindow().setLayout(DensityUtils.dp2px(getActivity(), 350), ViewGroup.LayoutParams.WRAP_CONTENT);
                     dialog.setContentView(v);
 //                    v.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 //                        @Override

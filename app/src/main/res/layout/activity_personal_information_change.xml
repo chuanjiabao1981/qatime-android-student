@@ -163,8 +163,11 @@
                 android:background="#dfdddd" />
 
             <LinearLayout
+                android:id="@+id/birthday_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clickable="true"
+                android:gravity="center_vertical"
                 android:paddingLeft="10dp">
 
                 <TextView
@@ -181,11 +184,16 @@
 
                 <TextView
                     android:id="@+id/birthday"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="10dp"
                     android:paddingTop="10dp"
                     android:text="0000年00月00日" />
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@mipmap/calendar_black_16"/>
 
             </LinearLayout>
 
@@ -195,8 +203,11 @@
                 android:background="#dfdddd" />
 
             <LinearLayout
+                android:id="@+id/grade_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:clickable="true"
                 android:paddingLeft="10dp">
 
                 <TextView
@@ -213,13 +224,16 @@
 
                 <TextView
                     android:id="@+id/text_grade"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
                     android:text="高一"
                     android:layout_height="wrap_content"
                     android:paddingBottom="5dp"
                     android:paddingTop="5dp" />
-
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@mipmap/down"/>
             </LinearLayout>
 
             <View

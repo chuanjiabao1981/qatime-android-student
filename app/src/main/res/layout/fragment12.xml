@@ -25,12 +25,13 @@
                 android:id="@+id/time_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="#909090"
                 android:text="@string/by_time" />
 
             <ImageView
                 android:background="@mipmap/down"
-                android:layout_width="20dp"
-                android:layout_height="20dp" />
+                android:layout_width="15dp"
+                android:layout_height="15dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -47,12 +48,13 @@
                 android:id="@+id/subject_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="#909090"
                 android:text="@string/by_subject" />
 
             <ImageView
                 android:background="@mipmap/down"
-                android:layout_width="20dp"
-                android:layout_height="20dp" />
+                android:layout_width="15dp"
+                android:layout_height="15dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -69,12 +71,13 @@
                 android:id="@+id/class_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="#909090"
                 android:text="@string/by_grade" />
 
             <ImageView
                 android:background="@mipmap/down"
-                android:layout_width="20dp"
-                android:layout_height="20dp" />
+                android:layout_width="15dp"
+                android:layout_height="15dp" />
         </LinearLayout>
 
         <ImageView

@@ -22,10 +22,11 @@
     <string name="yuan">元</string>
     <string name="class_hours_range">课时范围</string>
     <string name="hours">课时</string>
-    <string name="starting_range">开课范围</string>
+    <string name="starting_range">开课时间</string>
     <string name="to">至</string>
     <string name="state">当前状态</string>
     <string name="cancel">取消</string>
+    <string name="reset">重置</string>
     <string name="confirm">确定</string>//
     <string name="by_price_up">按价格↑</string>
     <string name="by_price_down">按价格↓</string>

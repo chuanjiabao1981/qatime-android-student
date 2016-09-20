@@ -63,6 +63,8 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     private Uri captureUri;
     private EditText describe;
     private TextView birthday;
+    private View birthdayView;
+    private View gradeView;
 
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
     private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
@@ -91,9 +93,9 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
 
 
         replace.setOnClickListener(this);
-        birthday.setOnClickListener(this);
+        birthdayView.setOnClickListener(this);
         complete.setOnClickListener(this);
-        textGrade.setOnClickListener(this);
+        gradeView.setOnClickListener(this);
         PersonalInformationBean data = (PersonalInformationBean) getIntent().getSerializableExtra("data");
         if (data != null && data.getData() != null) {
             initData(data);
@@ -140,14 +142,14 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.text_grade://去选择图片
+            case R.id.grade_view:
                 showGradePickerDialog();
                 break;
             case R.id.replace://去选择图片
                 final Intent intent = new Intent(PersonalInformationChangeActivity.this, PictureSelectActivity.class);
                 startActivityForResult(intent, Constant.REQUEST_PICTURE_SELECT);
                 break;
-            case R.id.birthday://生日
+            case R.id.birthday_view://生日
                 try {
 
                     MDatePickerDialog dataDialog = new MDatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
@@ -272,6 +274,8 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         describe = (EditText) findViewById(R.id.describe);
         describe.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
         birthday = (TextView) findViewById(R.id.birthday);
+        birthdayView = findViewById(R.id.birthday_view);
+        gradeView = findViewById(R.id.grade_view);
         complete = (TextView) findViewById(R.id.complete);
     }
 

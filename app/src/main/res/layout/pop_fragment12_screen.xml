@@ -9,8 +9,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="15dp"
         android:orientation="horizontal"
         android:paddingBottom="5dp"
         android:paddingTop="5dp">
@@ -20,12 +20,12 @@
             android:layout_height="wrap_content"
             android:paddingRight="15dp"
             android:text="@string/price"
-            android:textColor="#a000" />
+            android:textColor="#4000" />
 
         <EditText
             android:id="@+id/price_low"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_weight="1"
             android:background="@drawable/shape_input"
             android:inputType="number"
@@ -49,7 +49,7 @@
         <EditText
             android:id="@+id/price_high"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_weight="1"
             android:background="@drawable/shape_input"
             android:inputType="number"
@@ -72,8 +72,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="15dp"
         android:orientation="horizontal"
         android:paddingBottom="5dp"
         android:paddingTop="5dp">
@@ -83,12 +83,12 @@
             android:layout_height="wrap_content"
             android:paddingRight="15dp"
             android:text="@string/class_hours_range"
-            android:textColor="#a000" />
+            android:textColor="#4000" />
 
         <EditText
             android:id="@+id/subject_low"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_weight="1"
             android:background="@drawable/shape_input"
             android:inputType="number"
@@ -112,7 +112,7 @@
         <EditText
             android:id="@+id/subject_high"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_weight="1"
             android:background="@drawable/shape_input"
             android:inputType="number"
@@ -133,8 +133,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="15dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingBottom="5dp"
@@ -145,14 +145,14 @@
             android:layout_height="wrap_content"
             android:paddingRight="15dp"
             android:text="@string/starting_range"
-            android:textColor="#a000" />
+            android:textColor="#4000" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center"
             android:orientation="horizontal"
+            android:gravity="center_vertical"
             android:paddingBottom="3dp"
             android:paddingTop="3dp">
 
@@ -161,14 +161,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2016-11-11"
-                android:textColor="#7000" />
+                android:textColor="#a000"
+                android:textSize="16sp" />
 
             <ImageView
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:layout_gravity="center"
                 android:layout_marginLeft="5dp"
-                android:src="@mipmap/calendar_black_32" />
+                android:scaleType="centerInside"
+                android:src="@mipmap/down" />
         </LinearLayout>
 
         <TextView
@@ -184,7 +185,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center"
+            android:gravity="right|center_vertical"
             android:orientation="horizontal"
             android:paddingBottom="3dp"
             android:paddingTop="3dp">
@@ -193,16 +194,16 @@
                 android:id="@+id/end_class_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:text="2016-11-11"
-                android:textColor="#7000" />
+                android:textColor="#a000"
+                android:textSize="16sp" />
 
             <ImageView
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:layout_gravity="center"
                 android:layout_marginLeft="5dp"
-                android:src="@mipmap/calendar_black_32" />
+                android:scaleType="centerInside"
+                android:src="@mipmap/down" />
         </LinearLayout>
 
         <TextView
@@ -214,8 +215,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="15dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingBottom="5dp"
@@ -226,75 +227,74 @@
             android:layout_height="wrap_content"
             android:paddingRight="15dp"
             android:text="@string/state"
-            android:textColor="#a000" />
+            android:textColor="#4000" />
 
         <RelativeLayout
-            android:id="@+id/started"
             android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/text_background_select"
-            android:clickable="true"
-            android:orientation="horizontal"
-            android:paddingBottom="3dp"
-            android:paddingTop="3dp">
+            android:orientation="horizontal">
 
-            <CheckedTextView
-                android:id="@+id/started_text"
+            <RelativeLayout
+                android:id="@+id/started"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:checked="true"
+                android:layout_height="25dp"
+                android:orientation="horizontal"
                 android:gravity="center"
-                android:text="@string/started"
-                android:textColor="@drawable/text_selector" />
+                android:background="@drawable/text_background_select"
+                android:clickable="true">
 
-            <TextView
-                android:id="@+id/started_selected"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_marginRight="5dp"
-                android:layout_toLeftOf="@id/started_text"
-                android:gravity="center"
-                android:layout_centerInParent="true"
-                android:text="√" />
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/started_selected"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:layout_centerVertical="true"
+                    android:text="√" />
+                <CheckedTextView
+                    android:id="@+id/started_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_centerVertical="true"
+                    android:checked="true"
+                    android:gravity="center"
+                    android:text="@string/started"
+                    android:textColor="@drawable/text_selector" />
 
-        <RelativeLayout
-            android:id="@+id/recruiting"
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:background="@drawable/text_background_select"
-            android:clickable="true"
-            android:orientation="horizontal"
-            android:paddingBottom="3dp"
-            android:paddingTop="3dp">
+            </RelativeLayout>
 
-            <CheckedTextView
-                android:id="@+id/recruiting_text"
+            <RelativeLayout
+                android:id="@+id/recruiting"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:checked="true"
+                android:layout_height="25dp"
+                android:orientation="horizontal"
                 android:gravity="center"
-                android:text="@string/recruiting"
-                android:textColor="@drawable/text_selector" />
+                android:layout_alignParentRight="true"
+                android:background="@drawable/text_background_select"
+                android:clickable="true">
+                <TextView
+                    android:id="@+id/recruiting_selected"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:layout_centerVertical="true"
+                    android:text="√"  />
+                <CheckedTextView
+                    android:id="@+id/recruiting_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_centerVertical="true"
+                    android:checked="true"
+                    android:gravity="center"
+                    android:text="@string/recruiting"
+                    android:textColor="@drawable/text_selector" />
 
-            <TextView
-                android:id="@+id/recruiting_selected"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_marginRight="5dp"
-                android:layout_toLeftOf="@id/recruiting_text"
-                android:gravity="center"
-                android:layout_centerInParent="true"
-                android:text="√" />
+            </RelativeLayout>
+
         </RelativeLayout>
 
         <TextView
@@ -306,28 +306,29 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:layout_margin="4dp"
+            android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="@drawable/button_bg_selector_orange"
-            android:text="@string/cancel"
-            android:textColor="@color/gray_dark" />
+            android:background="#FF9966"
+            android:text="@string/reset"
+            android:textColor="#fff" />
 
         <Button
             android:id="@+id/submit"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:layout_margin="4dp"
+            android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="@drawable/button_bg_selector_orange"
+            android:background="#FF9966"
             android:text="@string/confirm"
-            android:textColor="@color/gray_dark" />
+            android:textColor="#fff" />
+
     </LinearLayout>
 
 
