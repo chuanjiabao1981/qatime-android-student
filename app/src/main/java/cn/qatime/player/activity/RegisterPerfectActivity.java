@@ -107,7 +107,6 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
         changeHeadSculpture.setOnClickListener(this);
         textGradeView.setOnClickListener(this);
         birthdayView.setOnClickListener(this);
-        textGrade.setOnClickListener(this);
         complete.setOnClickListener(this);
         PersonalInformationBean data = (PersonalInformationBean) getIntent().getSerializableExtra("data");
         if (data != null && data.getData() != null) {

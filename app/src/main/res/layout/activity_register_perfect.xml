@@ -192,10 +192,10 @@
                     android:text="1990年01月01日" />
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
                     android:layout_gravity="center"
-                    android:padding="5dp"
+                    android:layout_marginLeft="2dp"
                     android:src="@mipmap/calendar_black_32" />
             </LinearLayout>
 
@@ -208,6 +208,7 @@
                 android:id="@+id/grade_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_vertical"
                 android:paddingLeft="10dp">
 
                 <TextView
@@ -224,13 +225,16 @@
 
                 <TextView
                     android:id="@+id/text_grade"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
                     android:text="高一"
                     android:layout_height="wrap_content"
                     android:paddingBottom="5dp"
                     android:paddingTop="5dp" />
-
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginLeft="2dp"
+                    android:src="@mipmap/down"/>
             </LinearLayout>
 
             <!--<View-->

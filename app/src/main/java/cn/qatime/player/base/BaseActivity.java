@@ -1,11 +1,13 @@
 package cn.qatime.player.base;
 
-import android.app.Dialog;
+import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +16,7 @@ import com.android.volley.RequestQueue;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
+import libraryextra.utils.DensityUtils;
 import libraryextra.utils.StringUtils;
 
 /**
@@ -21,7 +24,7 @@ import libraryextra.utils.StringUtils;
  */
 public class BaseActivity extends AppCompatActivity {
     private RequestQueue Queue = BaseApplication.getRequestQueue();
-    private Dialog dialog;
+    private AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,27 +70,32 @@ public class BaseActivity extends AppCompatActivity {
      */
     public void tokenOut() {
         BaseApplication.clearToken();
-        if (dialog == null) {
-            dialog = new Dialog(this, R.style.Transparent);
-            View view = View.inflate(this, R.layout.activity_out_alertdialog, null);
-            view.findViewById(R.id.alert_dialog_confirm).setOnClickListener(new View.OnClickListener() {
+        if (alertDialog == null) {
+           AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            alertDialog = builder.create();
+            View view = View.inflate(this, R.layout.dialog_confirm, null);
+            TextView text = (TextView) view.findViewById(R.id.text);
+            text.setText(getResourceString(R.string.login_has_expired));
+            Button confirm = (Button) view.findViewById(R.id.confirm);
+            confirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    dialog.dismiss();
+                    alertDialog.dismiss();
                     out();
                 }
             });
-            dialog.setContentView(view);
-
-            dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {
                     out();
                 }
             });
+            alertDialog.show();
+            alertDialog.setContentView(view);
+            alertDialog.getWindow().setLayout(DensityUtils.dp2px(this, 350), ActionBar.LayoutParams.WRAP_CONTENT);
         }
-        if (!dialog.isShowing()) {
-            dialog.show();
+        if (!alertDialog.isShowing()) {
+            alertDialog.show();
         }
     }
 

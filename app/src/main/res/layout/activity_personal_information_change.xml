@@ -190,9 +190,9 @@
                     android:paddingTop="10dp"
                     android:text="0000年00月00日" />
                 <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_marginLeft="10dp"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginLeft="2dp"
                     android:src="@mipmap/calendar_black_16"/>
 
             </LinearLayout>
@@ -230,9 +230,9 @@
                     android:paddingBottom="5dp"
                     android:paddingTop="5dp" />
                 <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_marginLeft="10dp"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginLeft="2dp"
                     android:src="@mipmap/down"/>
             </LinearLayout>
 

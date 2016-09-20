@@ -172,8 +172,7 @@ public class FragmentNews1 extends BaseFragment {
         listView.getRefreshableView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-//                if (NIMClient.getStatus() == StatusCode.LOGINED) {
-                if (true) {
+                if (NIMClient.getStatus() == StatusCode.LOGINED) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     final Dialog dialog = builder.create();
 
