@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
+import android.widget.CheckedTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -111,8 +111,12 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
     private int timesortposition;
     private int classsortposition;
     private int subjectsortposition;
-    private CheckBox started;
-    private CheckBox recruiting;
+    private View started;
+    private View recruiting;
+    private CheckedTextView startedText;
+    private View startedSelected;
+    private CheckedTextView recruitingText;
+    private View recruitingSelected;
 
     @Nullable
     @Override
@@ -489,10 +493,20 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
 
                 beginClassTime = (TextView) popView.findViewById(R.id.begin_class_time);
                 endcLassTime = (TextView) popView.findViewById(R.id.end_class_time);
-                started = (CheckBox) popView.findViewById(R.id.started);
-                recruiting = (CheckBox) popView.findViewById(R.id.recruiting);
+                started = popView.findViewById(R.id.started);
+                recruiting = popView.findViewById(R.id.recruiting);
+                startedText = (CheckedTextView)popView.findViewById(R.id.started_text);
+                startedSelected = popView.findViewById(R.id.started_selected);
+                recruitingText = (CheckedTextView)popView.findViewById(R.id.recruiting_text);
+                recruitingSelected = popView.findViewById(R.id.recruiting_selected);
+                started.setSelected(true);
+                recruiting.setSelected(true);
+                startedText.setSelected(true);
+                recruitingText.setSelected(true);
                 cancel = (Button) popView.findViewById(R.id.cancel);
                 submit = (Button) popView.findViewById(R.id.submit);
+                started.setOnClickListener(this);
+                recruiting.setOnClickListener(this);
                 beginClassTime.setOnClickListener(this);
                 endcLassTime.setOnClickListener(this);
                 submit.setOnClickListener(this);
@@ -528,8 +542,18 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 pop.dismiss();
                 KeyBoardUtils.closeKeybord(getActivity());
                 break;
-//            case R.id.class_text:
-//                break;
+
+            case R.id.started:
+                startedText.setChecked(!startedText.isChecked());
+                started.setBackgroundResource(startedText.isChecked()?R.drawable.text_background_select:R.drawable.text_background_normal);
+                startedSelected.setVisibility(startedText.isChecked() ? View.VISIBLE : View.INVISIBLE);
+                break;
+            case R.id.recruiting:
+                recruitingText.setChecked(!recruitingText.isChecked());
+                recruiting.setBackgroundResource(recruitingText.isChecked()?R.drawable.text_background_select:R.drawable.text_background_normal);
+                recruitingSelected.setVisibility(recruitingText.isChecked() ? View.VISIBLE : View.INVISIBLE);
+                break;
+
         }
     }
 
@@ -545,11 +569,11 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
     }
 
     private void setStatus() {
-        if (started.isChecked() && recruiting.isChecked()) {
+        if (startedText.isChecked() && recruitingText.isChecked()) {
             status = "all";
-        } else if (!started.isChecked() && recruiting.isChecked()) {
+        } else if (!startedText.isChecked() && recruitingText.isChecked()) {
             status = "preview";
-        } else if (started.isChecked() && !recruiting.isChecked()) {
+        } else if (startedText.isChecked() && !recruitingText.isChecked()) {
             status = "teaching";
         } else {
             status = "all";

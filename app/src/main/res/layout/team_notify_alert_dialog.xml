@@ -5,12 +5,11 @@
     android:fitsSystemWindows="true"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingLeft="60dp"
-    android:paddingRight="60dp">
+    >
 
     <TextView
         android:id="@+id/text"
-        android:layout_width="match_parent"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="#fff"
@@ -18,15 +17,11 @@
         android:paddingBottom="8dp"
         android:paddingTop="8dp"
         android:text="@string/resume_alert" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#cdcdcd" />
+    
 
     <TextView
         android:id="@+id/cancel"
-        android:layout_width="match_parent"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="#fff"

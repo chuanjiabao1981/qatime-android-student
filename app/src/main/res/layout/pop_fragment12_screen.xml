@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:paddingRight="15dp"
             android:text="@string/price"
-            android:textColor="#7000" />
+            android:textColor="#a000" />
 
         <EditText
             android:id="@+id/price_low"
@@ -66,8 +66,8 @@
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:textColor="#a000"
-            android:text="@string/yuan" />
+            android:text="@string/yuan"
+            android:textColor="#a000" />
     </LinearLayout>
 
     <LinearLayout
@@ -83,7 +83,7 @@
             android:layout_height="wrap_content"
             android:paddingRight="15dp"
             android:text="@string/class_hours_range"
-            android:textColor="#7000" />
+            android:textColor="#a000" />
 
         <EditText
             android:id="@+id/subject_low"
@@ -145,12 +145,13 @@
             android:layout_height="wrap_content"
             android:paddingRight="15dp"
             android:text="@string/starting_range"
-            android:textColor="#7000" />
+            android:textColor="#a000" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center"
             android:orientation="horizontal"
             android:paddingBottom="3dp"
             android:paddingTop="3dp">
@@ -158,9 +159,9 @@
             <TextView
                 android:id="@+id/begin_class_time"
                 android:layout_width="wrap_content"
-                android:textColor="#a000"
                 android:layout_height="wrap_content"
-                android:text="2016-11-11" />
+                android:text="2016-11-11"
+                android:textColor="#7000" />
 
             <ImageView
                 android:layout_width="15dp"
@@ -177,12 +178,13 @@
             android:layout_marginRight="5dp"
             android:gravity="center"
             android:text="@string/to"
-            android:textColor="#cacaca" />
+            android:textColor="#3000" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center"
             android:orientation="horizontal"
             android:paddingBottom="3dp"
             android:paddingTop="3dp">
@@ -191,9 +193,9 @@
                 android:id="@+id/end_class_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#a000"
                 android:layout_marginLeft="10dp"
-                android:text="2016-11-11" />
+                android:text="2016-11-11"
+                android:textColor="#7000" />
 
             <ImageView
                 android:layout_width="15dp"
@@ -214,6 +216,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingBottom="5dp"
         android:paddingTop="5dp">
@@ -223,27 +226,81 @@
             android:layout_height="wrap_content"
             android:paddingRight="15dp"
             android:text="@string/state"
-            android:textColor="#7000" />
+            android:textColor="#a000" />
 
-        <CheckBox
+        <RelativeLayout
             android:id="@+id/started"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_weight="1"
+            android:background="@drawable/text_background_select"
+            android:clickable="true"
+            android:orientation="horizontal"
             android:paddingBottom="3dp"
-            android:paddingTop="3dp"
-            android:text="@string/started"
-            android:textColor="#a000" />
+            android:paddingTop="3dp">
 
-        <CheckBox
+            <CheckedTextView
+                android:id="@+id/started_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:checked="true"
+                android:gravity="center"
+                android:text="@string/started"
+                android:textColor="@drawable/text_selector" />
+
+            <TextView
+                android:id="@+id/started_selected"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@id/started_text"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:text="√" />
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/recruiting"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:background="@drawable/text_background_select"
+            android:clickable="true"
+            android:orientation="horizontal"
             android:paddingBottom="3dp"
-            android:paddingTop="3dp"
-            android:text="@string/recruiting"
-            android:textColor="#a000" />
+            android:paddingTop="3dp">
+
+            <CheckedTextView
+                android:id="@+id/recruiting_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:checked="true"
+                android:gravity="center"
+                android:text="@string/recruiting"
+                android:textColor="@drawable/text_selector" />
+
+            <TextView
+                android:id="@+id/recruiting_selected"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@id/recruiting_text"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:text="√" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp" />
     </LinearLayout>
 
 
