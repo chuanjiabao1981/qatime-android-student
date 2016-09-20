@@ -24,6 +24,17 @@ import java.util.List;
  */
 public class WheelView extends ScrollView {
     public static final String TAG = WheelView.class.getSimpleName();
+    private OnItemClickListener onItemClickListener;
+    /**
+     * 暂时只用于dismiss dialog
+     */
+    public void setonItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public interface OnItemClickListener {
+        public void onItemClick();
+    }
 
     public static class OnWheelViewListener {
         public void onSelected(int selectedIndex, String item) {
@@ -177,13 +188,24 @@ public class WheelView extends ScrollView {
 
     int itemHeight = 0;
 
-    private TextView createView(String item) {
+    private TextView createView(final String item) {
         TextView tv = new TextView(context);
         tv.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         tv.setSingleLine(true);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
         tv.setText(item);
         tv.setGravity(Gravity.CENTER);
+        tv.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!"".equals(item)) {
+//                    Logger.e("select_item  " + item);
+//                    Logger.e("select_index  " + getItems().indexOf(item));
+                    setSeletion(getItems().indexOf(item) - offset);
+                    clickItem();
+                }
+            }
+        });
         int padding = dip2px(15);
         tv.setPadding(padding, padding, padding, padding);
         if (0 == itemHeight) {
@@ -195,7 +217,6 @@ public class WheelView extends ScrollView {
         }
         return tv;
     }
-
 
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
@@ -378,6 +399,11 @@ public class WheelView extends ScrollView {
 
     }
 
+    public void clickItem(){
+        if (onItemClickListener != null) {
+            onItemClickListener.onItemClick();
+        }
+    }
     public String getSeletedItem() {
         return items.get(selectedIndex);
     }

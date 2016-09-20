@@ -206,10 +206,10 @@ public class FragmentNews1 extends BaseFragment {
                             dialog.dismiss();
                         }
                     });
-                    dialog.setContentView(v);
                     dialog.setCanceledOnTouchOutside(true);
                     dialog.show();
-//                    dialog.getWindow().setLayout(DensityUtils.dp2px(getActivity(), 350), ActionBar.LayoutParams.WRAP_CONTENT);
+//                    dialog.getWindow().setLayout(DensityUtils.dp2px(getActivity(), 350), ViewGroup.LayoutParams.WRAP_CONTENT);
+                    dialog.setContentView(v);
 //                    v.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 //                        @Override
 //                        public void onGlobalLayout() {

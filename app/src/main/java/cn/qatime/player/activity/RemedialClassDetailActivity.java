@@ -239,6 +239,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                             @Override
                             public void onClick(View v) {
                                 payRemedial();
+                                alertDialog.dismiss();
                             }
                         });
                         AlertDialog.Builder builder = new AlertDialog.Builder(RemedialClassDetailActivity.this);

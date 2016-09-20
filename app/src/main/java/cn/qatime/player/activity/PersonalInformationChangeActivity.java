@@ -58,7 +58,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     RadioButton men;
     RadioButton women;
     RadioGroup radiogroup;
-    TextView spinner;
+    TextView textGrade;
     TextView complete;
     private Uri captureUri;
     private EditText describe;
@@ -93,7 +93,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         replace.setOnClickListener(this);
         birthday.setOnClickListener(this);
         complete.setOnClickListener(this);
-        spinner.setOnClickListener(this);
+        textGrade.setOnClickListener(this);
         PersonalInformationBean data = (PersonalInformationBean) getIntent().getSerializableExtra("data");
         if (data != null && data.getData() != null) {
             initData(data);
@@ -128,7 +128,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         if (!StringUtils.isNullOrBlanK(data.getData().getGrade())) {
             for (int i = 0; i < gradeBean.getData().getGrades().size(); i++) {
                 if (data.getData().getGrade().equals(gradeBean.getData().getGrades().get(i))) {
-                    spinner.setText(data.getData().getGrade());
+                    textGrade.setText(data.getData().getGrade());
                     break;
                 }
             }
@@ -140,7 +140,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.spinner://去选择图片
+            case R.id.text_grade://去选择图片
                 showGradePickerDialog();
                 break;
             case R.id.replace://去选择图片
@@ -204,7 +204,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                     Toast.makeText(this, getResources().getString(R.string.name_can_not_be_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                String grade = spinner.getText().toString();
+                String grade = textGrade.getText().toString();
                 if (StringUtils.isNullOrBlanK(grade)) {
                     Toast.makeText(this, getResources().getString(R.string.grade_can_not_be_empty), Toast.LENGTH_SHORT).show();
                     return;
@@ -232,7 +232,13 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
             final WheelView grade = (WheelView) view.findViewById(R.id.grade);
             grade.setOffset(1);
             grade.setItems(gradeBean.getData().getGrades());
-            grade.setSeletion(gradeBean.getData().getGrades().indexOf(spinner.getText()));
+            grade.setSeletion(gradeBean.getData().getGrades().indexOf(textGrade.getText()));
+            grade.setonItemClickListener(new WheelView.OnItemClickListener(){
+                @Override
+                public void onItemClick() {
+                    alertDialog.dismiss();
+                }
+            });
             AlertDialog.Builder builder = new AlertDialog.Builder(PersonalInformationChangeActivity.this);
             alertDialog = builder.create();
             alertDialog.show();
@@ -240,7 +246,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
             alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
-                    spinner.setText(grade.getSeletedItem());
+                    textGrade.setText(grade.getSeletedItem());
                 }
             });
             alertDialog.getWindow().setLayout(DensityUtils.dp2px(PersonalInformationChangeActivity.this, 350), ActionBar.LayoutParams.WRAP_CONTENT);
@@ -262,7 +268,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         men = (RadioButton) findViewById(R.id.men);
         women = (RadioButton) findViewById(R.id.women);
         radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
-        spinner = (TextView) findViewById(R.id.spinner);
+        textGrade = (TextView) findViewById(R.id.text_grade);
         describe = (EditText) findViewById(R.id.describe);
         describe.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
         birthday = (TextView) findViewById(R.id.birthday);
