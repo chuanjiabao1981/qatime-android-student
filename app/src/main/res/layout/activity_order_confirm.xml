@@ -203,7 +203,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="5dp"
-            android:background="@drawable/button_bg_selector_orange"
+            android:background="@drawable/button_bg_selector_red"
             android:text="@string/pay_now"
             android:textColor="@color/white_normal"/>
 

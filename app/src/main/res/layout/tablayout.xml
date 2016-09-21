@@ -16,8 +16,8 @@
 
         <ImageView
             android:id="@+id/tab_img1"
-            android:layout_width="30dp"
-            android:layout_height="24dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:scaleType="fitCenter"
             android:src="@mipmap/tab_home_1" />
 
@@ -27,8 +27,8 @@
             android:layout_height="18dp"
             android:gravity="center_vertical"
             android:text="@string/home_page"
-            android:textColor="#000000"
-            android:textSize="11sp" />
+            android:textColor="#ff0000"
+            android:textSize="14sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -40,8 +40,8 @@
 
         <ImageView
             android:id="@+id/tab_img2"
-            android:layout_width="30dp"
-            android:layout_height="24dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:scaleType="fitCenter"
             android:src="@mipmap/tab_moments_2" />
 
@@ -51,8 +51,8 @@
             android:layout_height="18dp"
             android:gravity="center_vertical"
             android:text="@string/time_table"
-            android:textColor="#eeeeee"
-            android:textSize="11sp" />
+            android:textColor="#cccccc"
+            android:textSize="14sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -64,10 +64,10 @@
 
         <ImageView
             android:id="@+id/tab_img3"
-            android:layout_width="30dp"
-            android:layout_height="24dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:scaleType="fitCenter"
-            android:src="@mipmap/tab_video_2" />
+            android:src="@mipmap/tab_message_2" />
 
         <TextView
             android:id="@+id/tab_text3"
@@ -75,8 +75,8 @@
             android:layout_height="18dp"
             android:gravity="center_vertical"
             android:text="@string/message"
-            android:textColor="#eeeeee"
-            android:textSize="11sp" />
+            android:textColor="#cccccc"
+            android:textSize="14sp" />
     </LinearLayout>
 
 
@@ -89,10 +89,10 @@
 
         <ImageView
             android:id="@+id/tab_img4"
-            android:layout_width="30dp"
-            android:layout_height="24dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:scaleType="fitCenter"
-            android:src="@mipmap/tab_find_2" />
+            android:src="@mipmap/tab_person_2" />
 
         <TextView
             android:id="@+id/tab_text4"
@@ -100,8 +100,8 @@
             android:layout_height="18dp"
             android:gravity="center_vertical"
             android:text="@string/individual"
-            android:textColor="#eeeeee"
-            android:textSize="12sp" />
+            android:textColor="#cccccc"
+            android:textSize="14sp" />
     </LinearLayout>
 
 </LinearLayout>

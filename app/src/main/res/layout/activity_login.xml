@@ -136,6 +136,7 @@
             android:layout_below="@+id/passwdText"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="10dp"
+            android:background="@drawable/button_bg_selector_red"
             android:layout_weight="1"
             android:text="@string/register" />
 
@@ -144,6 +145,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_above="@+id/login_error"
+            android:background="@drawable/button_bg_selector_red"
             android:layout_marginRight="30dp"
             android:layout_weight="1"
             android:text="@string/login" />

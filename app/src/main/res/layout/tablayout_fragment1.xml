@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimary"
+    android:background="@drawable/shape_main_tab"
     android:gravity="center_horizontal"
     android:orientation="horizontal"
     android:weightSum="4">
@@ -14,7 +14,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="@string/latest"
-        android:textColor="#ffffff"
+        android:textColor="#ff6666"
         android:textSize="16sp" />
 
     <TextView

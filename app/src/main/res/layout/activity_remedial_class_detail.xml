@@ -108,7 +108,7 @@
                 android:layout_height="40dp"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/button_bg_selector_orange"
+                android:background="@drawable/button_bg_selector_red"
                 android:enabled="false"
                 android:textColor="#fff"
                 android:text="已加入试听"/>
@@ -120,7 +120,7 @@
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:textColor="#fff"
-                android:background="@drawable/button_bg_selector_orange"
+                android:background="@drawable/button_bg_selector_red"
                 android:enabled="false"
                 android:text="已购买"/>
         </LinearLayout>

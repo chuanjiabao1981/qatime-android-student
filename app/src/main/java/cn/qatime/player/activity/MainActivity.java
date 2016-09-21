@@ -128,9 +128,9 @@ public class MainActivity extends BaseFragmentActivity {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
                 currentPosition = position;
-                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff858786);
+                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xffcccccc);
                 ((ImageView) lastTabView.findViewById(tab_img[lastPosition])).setImageResource(tabImages[lastPosition][1]);
-                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffeb6a4b);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffff0000);
                 ((ImageView) currentTabView.findViewById(tab_img[position])).setImageResource(tabImages[position][0]);
                 enableMsgNotification(false);
             }

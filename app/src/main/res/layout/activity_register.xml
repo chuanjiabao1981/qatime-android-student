@@ -55,7 +55,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/button_bg_selector_orange"
+                android:background="@drawable/button_bg_selector_red"
                 android:text="@string/get_verification_code"
                 android:textColor="#ffffff"/>
 
@@ -142,7 +142,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_margin="10dp"
-        android:background="@drawable/button_bg_selector_orange"
+        android:background="@drawable/button_bg_selector_red"
         android:text="@string/next"
         android:enabled="false"
         android:textColor="#ffffff"/>

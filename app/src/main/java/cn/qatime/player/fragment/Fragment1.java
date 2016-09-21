@@ -54,7 +54,7 @@ public class Fragment1 extends BaseFragment {
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xffcccccc);
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextSize(14);
-                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffffffff);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffff6666);
                 ((TextView) currentTabView.findViewById(tab_text[position])).setTextSize(16);
             }
         });

@@ -286,7 +286,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:background="@drawable/button_bg_selector_orange"
+        android:background="@drawable/button_bg_selector_red"
         android:gravity="center"
         android:padding="10dp"
         android:text="@string/finish"

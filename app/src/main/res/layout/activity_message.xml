@@ -77,7 +77,7 @@
             android:layout_width="60dp"
             android:layout_height="34dp"
             android:layout_gravity="bottom"
-            android:background="@drawable/button_bg_selector_orange"
+            android:background="@drawable/button_bg_selector_red"
             android:gravity="center"
             android:text="发送"
             android:textColor="#fff" />
