@@ -386,7 +386,7 @@
     <string name="hour">小时</string>
     <string name="minute">分钟</string>
     <string name="cancel_order_name">名称</string>
-    <string name="order_price">价&#160;&#160;&#160;&#160;格</string>
+    <string name="order_price">价&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;格：</string>
     <string name="order_creating">正在生成订单</string>
     <string name="order_create_success">订单生成成功</string>
     <string name="order_create_failed">订单生成失败</string>

@@ -42,6 +42,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,8 +91,6 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
     private TextView endcLassTime;
     private TextView endcLassMonth;
     private TextView endClassDay;
-    private Button cancel;
-    private Button submit;
 
 
     //    //价格开始区间
@@ -119,6 +118,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
     private CheckedTextView recruitingText;
     private View recruitingSelected;
     private MDatePickerDialog dataDialog;
+    private View screenPopView;
 
     @Nullable
     @Override
@@ -217,10 +217,10 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
         dataDialog = new MDatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                if (dataDialog.getDatePicker().getMinDate()!=0) {
+                if (dataDialog.getDatePicker().getMinDate() != 0) {
                     class_date_ceil = (year + "-" + ((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1))) + "-" + ((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth))));
                     endcLassTime.setText(class_date_ceil);
-                }else{
+                } else {
                     class_date_floor = (year + "-" + ((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1))) + "-" + ((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth))));
                     beginClassTime.setText(class_date_floor);
                 }
@@ -287,7 +287,9 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
                         }
-                        clearScreenData();
+                        if (screenPopView != null) {
+                            clearScreenData();
+                        }
                     }
 
                     @Override
@@ -318,17 +320,22 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
      */
     private void clearScreenData() {
 //        timesorttype = "";
-        if (priceLow != null)
-            priceLow.setText("");
-        if (priceHigh != null)
-            priceHigh.setText("");
-        if (subjectLow != null)
-            subjectLow.setText("");
-        if (subjectHigh != null)
-            subjectHigh.setText("");
+        priceLow.setText("");
+        priceHigh.setText("");
+        subjectLow.setText("");
+        subjectHigh.setText("");
         status = "";
         class_date_floor = "";
         class_date_ceil = "";
+        startedText.setChecked(true);
+        recruitingText.setChecked(true);
+        beginClassTime.setText(parseDate.format(new Date()));
+        endcLassTime.setText(parseDate.format(new Date()));
+        started.setBackgroundResource(R.drawable.text_background_select);
+        startedSelected.setVisibility(View.VISIBLE);
+        recruiting.setBackgroundResource(R.drawable.text_background_select);
+        recruitingSelected.setVisibility(View.VISIBLE);
+
     }
 
     public void showPop(View popView) {
@@ -497,35 +504,34 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 break;
 
             case R.id.screen://筛选
-                popView = View.inflate(getActivity(), R.layout.pop_fragment12_screen, null);
-                //筛选框
-                priceLow = (EditText) popView.findViewById(R.id.price_low);
-                priceHigh = (EditText) popView.findViewById(R.id.price_high);
+                if (screenPopView == null) {
+                    screenPopView = View.inflate(getActivity(), R.layout.pop_fragment12_screen, null);
+                    //筛选框
+                    priceLow = (EditText) screenPopView.findViewById(R.id.price_low);
+                    priceHigh = (EditText) screenPopView.findViewById(R.id.price_high);
 
-                subjectLow = (EditText) popView.findViewById(R.id.subject_low);
-                subjectHigh = (EditText) popView.findViewById(R.id.subject_high);
+                    subjectLow = (EditText) screenPopView.findViewById(R.id.subject_low);
+                    subjectHigh = (EditText) screenPopView.findViewById(R.id.subject_high);
 
-                beginClassTime = (TextView) popView.findViewById(R.id.begin_class_time);
-                endcLassTime = (TextView) popView.findViewById(R.id.end_class_time);
-                started = popView.findViewById(R.id.started);
-                recruiting = popView.findViewById(R.id.recruiting);
-                startedText = (CheckedTextView)popView.findViewById(R.id.started_text);
-                startedSelected = popView.findViewById(R.id.started_selected);
-                recruitingText = (CheckedTextView)popView.findViewById(R.id.recruiting_text);
-                recruitingSelected = popView.findViewById(R.id.recruiting_selected);
-                started.setSelected(true);
-                recruiting.setSelected(true);
-                startedText.setSelected(true);
-                recruitingText.setSelected(true);
-                cancel = (Button) popView.findViewById(R.id.cancel);
-                submit = (Button) popView.findViewById(R.id.submit);
-                started.setOnClickListener(this);
-                recruiting.setOnClickListener(this);
-                beginClassTime.setOnClickListener(this);
-                endcLassTime.setOnClickListener(this);
-                submit.setOnClickListener(this);
-                cancel.setOnClickListener(this);
-                showPop(popView);
+                    beginClassTime = (TextView) screenPopView.findViewById(R.id.begin_class_time);
+                    endcLassTime = (TextView) screenPopView.findViewById(R.id.end_class_time);
+                    started = screenPopView.findViewById(R.id.started);
+                    recruiting = screenPopView.findViewById(R.id.recruiting);
+                    startedText = (CheckedTextView) screenPopView.findViewById(R.id.started_text);
+                    startedSelected = screenPopView.findViewById(R.id.started_selected);
+                    recruitingText = (CheckedTextView) screenPopView.findViewById(R.id.recruiting_text);
+                    recruitingSelected = screenPopView.findViewById(R.id.recruiting_selected);
+                    clearScreenData();
+                    Button reset = (Button) screenPopView.findViewById(R.id.reset);
+                    Button submit = (Button) screenPopView.findViewById(R.id.submit);
+                    started.setOnClickListener(this);
+                    recruiting.setOnClickListener(this);
+                    beginClassTime.setOnClickListener(this);
+                    endcLassTime.setOnClickListener(this);
+                    submit.setOnClickListener(this);
+                    reset.setOnClickListener(this);
+                }
+                showPop(screenPopView);
                 break;
             case R.id.begin_class_time://开课时间
                 dataDialog.getDatePicker().setMinDate(0);
@@ -533,14 +539,16 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.end_class_time://开课时间end
                 try {
-                    dataDialog.getDatePicker().setMinDate(parseDate.parse(class_date_floor).getTime());
+                    dataDialog.getDatePicker().setMinDate(parseDate.parse(beginClassTime.getText().toString()).getTime());
                     dataDialog.show();
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
                 break;
-            case R.id.cancel://取消按钮
-                pop.dismiss();
+            case R.id.reset://取消按钮
+//                pop.dismiss();
+                Logger.e("reset *************** screen");
+                clearScreenData();
                 break;
             case R.id.submit://提交
                 setStatus();
@@ -551,12 +559,12 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
 
             case R.id.started:
                 startedText.setChecked(!startedText.isChecked());
-                started.setBackgroundResource(startedText.isChecked()?R.drawable.text_background_select:R.drawable.text_background_normal);
+                started.setBackgroundResource(startedText.isChecked() ? R.drawable.text_background_select : R.drawable.text_background_normal);
                 startedSelected.setVisibility(startedText.isChecked() ? View.VISIBLE : View.INVISIBLE);
                 break;
             case R.id.recruiting:
                 recruitingText.setChecked(!recruitingText.isChecked());
-                recruiting.setBackgroundResource(recruitingText.isChecked()?R.drawable.text_background_select:R.drawable.text_background_normal);
+                recruiting.setBackgroundResource(recruitingText.isChecked() ? R.drawable.text_background_select : R.drawable.text_background_normal);
                 recruitingSelected.setVisibility(recruitingText.isChecked() ? View.VISIBLE : View.INVISIBLE);
                 break;
 

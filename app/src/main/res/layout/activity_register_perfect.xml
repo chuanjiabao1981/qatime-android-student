@@ -17,7 +17,10 @@
             android:layout_margin="10dp"
             android:background="@drawable/text_background"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            >
 
             <LinearLayout
                 android:id="@+id/change_head_sculpture"
@@ -169,6 +172,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:gravity="center_vertical"
                 android:paddingLeft="10dp">
 
                 <TextView
@@ -194,9 +198,8 @@
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="10dp"
-                    android:layout_gravity="center"
                     android:layout_marginLeft="2dp"
-                    android:src="@mipmap/calendar_black_32" />
+                    android:src="@mipmap/down"/>
             </LinearLayout>
 
             <View
@@ -208,8 +211,9 @@
                 android:id="@+id/grade_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:paddingLeft="10dp">
+                android:padding="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -227,9 +231,7 @@
                     android:id="@+id/text_grade"
                     android:layout_width="wrap_content"
                     android:text="高一"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp" />
+                    android:layout_height="wrap_content" />
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="10dp"

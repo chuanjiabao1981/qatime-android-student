@@ -193,7 +193,7 @@
                     android:layout_width="10dp"
                     android:layout_height="10dp"
                     android:layout_marginLeft="2dp"
-                    android:src="@mipmap/calendar_black_16"/>
+                    android:src="@mipmap/down"/>
 
             </LinearLayout>
 
@@ -227,8 +227,8 @@
                     android:layout_width="wrap_content"
                     android:text="高一"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp" />
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp" />
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="10dp"

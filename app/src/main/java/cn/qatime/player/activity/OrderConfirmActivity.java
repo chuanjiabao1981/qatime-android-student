@@ -108,6 +108,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
+        pay.setEnabled(false);
         Map<String, String> map = new HashMap<>();
         map.put("pay_type", payType);
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlPayPrepare + id + "/orders", map), null,
@@ -127,6 +128,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                             startActivity(intent);
                             SPUtils.put(OrderConfirmActivity.this, "orderId", data.getData().getId());
                             SPUtils.put(OrderConfirmActivity.this, "price", priceNumber);
+                            pay.setEnabled(true);
                         } else {
                             //                            canPay = false;
                            dialog();
@@ -156,6 +158,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     }
 
     protected void dialog() {
+        pay.setEnabled(true);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         alertDialog = builder.create();
         View view = View.inflate(this, R.layout.dialog_confirm, null);

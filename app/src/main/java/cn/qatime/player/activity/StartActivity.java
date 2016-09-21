@@ -43,7 +43,8 @@ import libraryextra.utils.VolleyListener;
 /**
  * 起始页
  */
-public class StartActivity extends BaseActivity implements View.OnClickListener {
+public class
+StartActivity extends BaseActivity implements View.OnClickListener {
     private AlertDialog alertDialog;
     private String downLoadLinks;
 

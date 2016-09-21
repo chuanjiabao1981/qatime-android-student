@@ -15,14 +15,13 @@
 
         <ImageView
             android:id="@+id/calendar"
-            android:layout_width="35dp"
-            android:padding="5dp"
+            android:layout_width="40dp"
+            android:padding="10dp"
             android:layout_alignParentRight="true"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
+            android:layout_centerVertical="true"
+            android:layout_height="40dp"
             android:clickable="true"
-            android:src="@mipmap/calendar_black_32" />
+            android:src="@mipmap/calendar" />
 
         <TextView
             android:layout_width="wrap_content"

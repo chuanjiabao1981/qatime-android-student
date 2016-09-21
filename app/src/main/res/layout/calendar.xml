@@ -51,14 +51,6 @@
                 android:textColor="#93C73C"
                 android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/week_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text=""
-                android:textColor="#93C73C"
-                android:textSize="20sp" />
         </LinearLayout>
     </RelativeLayout>
 

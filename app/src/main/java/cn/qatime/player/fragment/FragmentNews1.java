@@ -1,7 +1,7 @@
 package cn.qatime.player.fragment;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -174,14 +174,13 @@ public class FragmentNews1 extends BaseFragment {
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 if (NIMClient.getStatus() == StatusCode.LOGINED) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    final Dialog dialog = builder.create();
-
-                    final View v = View.inflate(getActivity(), R.layout.team_notify_alert_dialog, null);
+                    final AlertDialog alertDialog = builder.create();
+                    View v = View.inflate(getActivity(), R.layout.team_notify_alert_dialog, null);
                     ((TextView) v.findViewById(R.id.text)).setText(items.get(position - 1).isMute() ? getResourceString(R.string.resume_alert) : getResourceString(R.string.nolongger_alert));
                     v.findViewById(R.id.text).setOnClickListener(new OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            dialog.dismiss();
+                            alertDialog.dismiss();
 
                             NIMClient.getService(TeamService.class).muteTeam(items.get(position - 1).getContactId(), !items.get(position - 1).isMute()).setCallback(new RequestCallback<Void>() {
                                 @Override
@@ -207,24 +206,14 @@ public class FragmentNews1 extends BaseFragment {
                     v.findViewById(R.id.cancel).setOnClickListener(new OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            dialog.dismiss();
+                            alertDialog.dismiss();
                         }
                     });
-                    dialog.setCanceledOnTouchOutside(true);
-                    dialog.show();
-                    dialog.getWindow().setLayout(DensityUtils.dp2px(getActivity(), 350), ViewGroup.LayoutParams.WRAP_CONTENT);
-                    dialog.setContentView(v);
-//                    v.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//                        @Override
-//                        public void onGlobalLayout() {
-//                            Window window = dialog.getWindow();
-//                            WindowManager.LayoutParams lp = window.getAttributes();
-//                            lp.gravity = Gravity.CENTER;
-//                            lp.width = v.getWidth();
-//                            lp.height = v.getHeight();
-//                            dialog.getWindow().setAttributes(lp);
-//                        }
-//                    });
+                    alertDialog.setCanceledOnTouchOutside(true);
+                    alertDialog.show();
+                    alertDialog.setContentView(v);
+                    alertDialog.getWindow().setLayout(DensityUtils.dp2px(getActivity(), 350), ActionBar.LayoutParams.WRAP_CONTENT);
+
                     return true;
                 }
                 return false;

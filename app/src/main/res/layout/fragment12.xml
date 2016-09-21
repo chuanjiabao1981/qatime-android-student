@@ -93,8 +93,8 @@
                 android:layout_width="14dp"
                 android:layout_height="14dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="10dp"
                 android:src="@mipmap/screen_funnel" />
         </FrameLayout>
     </LinearLayout>

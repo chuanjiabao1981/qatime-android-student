@@ -188,7 +188,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 break;
             case R.id.clean_cache:
                 //TODO 弹出对话框提示
-
+                Toast.makeText(SystemSettingActivity.this, "成功清理缓存" + cacheSize.getText().toString(), Toast.LENGTH_SHORT).show();
                 DataCleanUtils.clearAllCache(this);
                 setCache();
                 break;
