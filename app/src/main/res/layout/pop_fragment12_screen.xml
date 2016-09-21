@@ -241,25 +241,23 @@
                 android:background="@drawable/text_background_select"
                 android:clickable="true">
 
+                <CheckedTextView
+                    android:id="@+id/started_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginRight="20dp"
+                    android:checked="true"
+                    android:text="@string/started"
+                    android:textColor="@drawable/text_selector" />
                 <TextView
                     android:id="@+id/started_selected"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:gravity="center"
+                    android:layout_toLeftOf="@id/started_text"
                     android:layout_centerVertical="true"
                     android:text="√" />
-                <CheckedTextView
-                    android:id="@+id/started_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_centerVertical="true"
-                    android:checked="true"
-                    android:gravity="center"
-                    android:text="@string/started"
-                    android:textColor="@drawable/text_selector" />
-
             </RelativeLayout>
             <TextView
                 android:layout_width="15dp"
@@ -276,24 +274,24 @@
                 android:layout_alignParentRight="true"
                 android:background="@drawable/text_background_select"
                 android:clickable="true">
+                <CheckedTextView
+                    android:id="@+id/recruiting_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginRight="20dp"
+                    android:checked="true"
+                    android:gravity="center"
+                    android:text="@string/recruiting"
+                    android:textColor="@drawable/text_selector" />
                 <TextView
                     android:id="@+id/recruiting_selected"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:gravity="center"
+                    android:layout_toLeftOf="@id/recruiting_text"
                     android:layout_centerVertical="true"
                     android:text="√"  />
-                <CheckedTextView
-                    android:id="@+id/recruiting_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_centerVertical="true"
-                    android:checked="true"
-                    android:gravity="center"
-                    android:text="@string/recruiting"
-                    android:textColor="@drawable/text_selector" />
 
             </RelativeLayout>
 

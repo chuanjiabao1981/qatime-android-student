@@ -25,13 +25,14 @@
                 android:id="@+id/time_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#909090"
-                android:text="@string/by_time" />
+                android:text="@string/by_time"
+                android:textColor="#909090" />
 
             <ImageView
-                android:background="@mipmap/down"
-                android:layout_width="15dp"
-                android:layout_height="15dp" />
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_margin="2dp"
+                android:background="@mipmap/down" />
         </LinearLayout>
 
         <LinearLayout
@@ -48,13 +49,14 @@
                 android:id="@+id/subject_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#909090"
-                android:text="@string/by_subject" />
+                android:text="@string/by_subject"
+                android:textColor="#909090" />
 
             <ImageView
-                android:background="@mipmap/down"
-                android:layout_width="15dp"
-                android:layout_height="15dp" />
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_margin="2dp"
+                android:background="@mipmap/down" />
         </LinearLayout>
 
         <LinearLayout
@@ -71,22 +73,30 @@
                 android:id="@+id/class_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#909090"
-                android:text="@string/by_grade" />
+                android:text="@string/by_grade"
+                android:textColor="#909090" />
 
             <ImageView
-                android:background="@mipmap/down"
-                android:layout_width="15dp"
-                android:layout_height="15dp" />
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_margin="2dp"
+                android:background="@mipmap/down" />
         </LinearLayout>
 
-        <ImageView
+        <FrameLayout
             android:id="@+id/screen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:clickable="true"
-            android:padding="8dp"
-            android:src="@mipmap/screen_funnel" />
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:src="@mipmap/screen_funnel" />
+        </FrameLayout>
     </LinearLayout>
 
     <RelativeLayout

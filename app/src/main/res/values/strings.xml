@@ -358,7 +358,7 @@
     <string name="check_for_update_failed_check_net">检查更新失败,请检查网络连接</string>
     <string name="start_download">开始下载</string>
     <string name="alert">提示</string>
-    <string name="call_customer_service_phone">是否拨打客服电话：</string>
+    <string name="call_customer_service_phone">是否拨打客服电话</string>
     <string name="call_right_now">立即拨打</string>
     <string name="failed_to_obtain_group_information">获取群组信息失败!</string>
 

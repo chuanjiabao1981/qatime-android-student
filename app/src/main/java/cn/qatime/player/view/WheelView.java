@@ -25,6 +25,7 @@ import java.util.List;
 public class WheelView extends ScrollView {
     public static final String TAG = WheelView.class.getSimpleName();
     private OnItemClickListener onItemClickListener;
+
     /**
      * 暂时只用于dismiss dialog
      */
@@ -192,17 +193,19 @@ public class WheelView extends ScrollView {
         TextView tv = new TextView(context);
         tv.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         tv.setSingleLine(true);
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         tv.setText(item);
         tv.setGravity(Gravity.CENTER);
         tv.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!"".equals(item)) {
+                if (!"".equals(item)) {
 //                    Logger.e("select_item  " + item);
 //                    Logger.e("select_index  " + getItems().indexOf(item));
+                    if (getSeletedItem().equals(item)) {
+                        clickItem();
+                    }
                     setSeletion(getItems().indexOf(item) - offset);
-                    clickItem();
                 }
             }
         });
@@ -399,11 +402,12 @@ public class WheelView extends ScrollView {
 
     }
 
-    public void clickItem(){
+    public void clickItem() {
         if (onItemClickListener != null) {
             onItemClickListener.onItemClick();
         }
     }
+
     public String getSeletedItem() {
         return items.get(selectedIndex);
     }

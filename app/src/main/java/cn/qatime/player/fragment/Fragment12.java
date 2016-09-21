@@ -72,7 +72,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
     TextView subjecttext;
     LinearLayout classsort;
     TextView classtext;
-    ImageView screen;
+    View screen;
     PullToRefreshGridView grid;
     private CommonAdapter<RemedialClassBean.Data> adapter;
     private List<RemedialClassBean.Data> list = new ArrayList<>();
@@ -106,6 +106,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
     private String status = "";
     private int page = 1;
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private SimpleDateFormat parseDate = new SimpleDateFormat("yyyy-MM-dd");
     DecimalFormat df = new DecimalFormat("#.00");
     private GradeBean gradeBean;
     private int timesortposition;
@@ -117,6 +118,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
     private View startedSelected;
     private CheckedTextView recruitingText;
     private View recruitingSelected;
+    private MDatePickerDialog dataDialog;
 
     @Nullable
     @Override
@@ -139,7 +141,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
         subjecttext = (TextView) view.findViewById(R.id.subject_text);
         classsort = (LinearLayout) view.findViewById(R.id.class_sort);
         classtext = (TextView) view.findViewById(R.id.class_text);
-        screen = (ImageView) view.findViewById(R.id.screen);
+        screen = view.findViewById(R.id.screen);
 
         timesort.setOnClickListener(this);
         subjectsort.setOnClickListener(this);
@@ -212,6 +214,18 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
             }
         });
 
+        dataDialog = new MDatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                if (dataDialog.getDatePicker().getMinDate()!=0) {
+                    class_date_ceil = (year + "-" + ((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1))) + "-" + ((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth))));
+                    endcLassTime.setText(class_date_ceil);
+                }else{
+                    class_date_floor = (year + "-" + ((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1))) + "-" + ((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth))));
+                    beginClassTime.setText(class_date_floor);
+                }
+            }
+        }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
     }
 
     /**
@@ -514,24 +528,16 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 showPop(popView);
                 break;
             case R.id.begin_class_time://开课时间
-                MDatePickerDialog dataDialog = new MDatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        class_date_floor = (year + "-" + ((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1))) + "-" + ((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth))));
-                        beginClassTime.setText(class_date_floor);
-                    }
-                }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+                dataDialog.getDatePicker().setMinDate(0);
                 dataDialog.show();
                 break;
             case R.id.end_class_time://开课时间end
-                dataDialog = new MDatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        class_date_ceil = (year + "-" + ((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1))) + "-" + ((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth))));
-                        endcLassTime.setText(class_date_ceil);
-                    }
-                }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
-                dataDialog.show();
+                try {
+                    dataDialog.getDatePicker().setMinDate(parseDate.parse(class_date_floor).getTime());
+                    dataDialog.show();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.cancel://取消按钮
                 pop.dismiss();

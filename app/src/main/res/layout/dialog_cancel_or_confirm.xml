@@ -9,11 +9,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:layout_marginTop="10dp"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp"
+        android:layout_marginTop="15dp"
         android:textSize="14sp"
-        android:text="该辅导班已开课(已上课程不补上,不\n\n退款),是否继续购买此辅导?" />
+        android:text="该辅导班已开课(已上课程不补上,不\n退款),是否继续购买此辅导?" />
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
@@ -32,7 +30,10 @@
             android:id="@+id/confirm"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_margin="15dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp"
             android:textColor="#fff"
             android:text="确定"
             android:textSize="12sp"
