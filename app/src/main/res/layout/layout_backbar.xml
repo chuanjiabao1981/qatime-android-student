@@ -25,7 +25,7 @@
         android:maxEms="6"
         android:singleLine="true"
         android:textColor="#FF6666"
-        android:textSize="16sp"/>
+        android:textSize="14sp"/>
 
     <ImageView
         android:id="@+id/right"

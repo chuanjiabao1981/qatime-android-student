@@ -15,7 +15,7 @@
         android:gravity="center"
         android:text="@string/latest"
         android:textColor="#ff6666"
-        android:textSize="16sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/tab_text2"

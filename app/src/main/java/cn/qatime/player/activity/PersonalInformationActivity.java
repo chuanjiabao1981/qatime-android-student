@@ -71,6 +71,7 @@ public class PersonalInformationActivity extends BaseActivity {
                     setValue(sData);
                     Intent intent = new Intent();
                     BaseApplication.getProfile().getData().getUser().setAvatar_url(sData.getData().getAvatar_url());
+                    BaseApplication.getProfile().getData().getUser().setEx_big_avatar_url(sData.getData().getEx_big_avatar_url());
                     SPUtils.putObject(this, "profile", BaseApplication.getProfile());
                     intent.putExtra("url", sData.getData().getAvatar_url());
                     setResult(Constant.RESPONSE, intent);
