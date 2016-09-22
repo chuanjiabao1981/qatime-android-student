@@ -22,10 +22,10 @@
             android:layout_alignParentRight="true"
             android:ellipsize="middle"
             android:maxLines="1"
-            android:background="#aaff9900"
+            android:background="#9999cc"
             android:text="距开课3天"
             android:textColor="#fff"
-            android:textSize="10sp" />
+            android:textSize="12sp" />
     </RelativeLayout>
 
 

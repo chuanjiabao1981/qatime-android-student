@@ -7,9 +7,10 @@
     android:orientation="horizontal">
 
     <TextView
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:textSize="10sp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:gravity="center"
+        android:textSize="12sp"
         android:text="＞" />
     <cn.qatime.player.view.WheelView
         android:id="@+id/grade"

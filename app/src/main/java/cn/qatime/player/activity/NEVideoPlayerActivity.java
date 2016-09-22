@@ -182,7 +182,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         fragmentLayout.setScorllToNext(true);
         fragmentLayout.setScorll(true);
         fragmentLayout.setWhereTab(1);
-        fragmentLayout.setTabHeight(2,0xffff9999);
+        fragmentLayout.setTabHeight(4,0xffff9999);
         fragmentLayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {

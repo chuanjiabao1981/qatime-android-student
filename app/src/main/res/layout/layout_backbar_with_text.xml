@@ -10,7 +10,7 @@
         android:layout_height="34dp"
         android:onClick="backClick"
         android:layout_centerVertical="true"
-        android:padding="10dp"
+        android:padding="5dp"
         android:src="@mipmap/back_arrow" />
 
     <TextView

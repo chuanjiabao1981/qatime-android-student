@@ -52,7 +52,7 @@
     </style>
 
     <style name="tab_item_height">
-        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_height">32dp</item>
         <item name="android:gravity">center</item>
     </style>
 
