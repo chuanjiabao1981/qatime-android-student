@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:background="#9999cc"
+            android:background="#cc9999"
             android:ellipsize="middle"
             android:maxLines="1"
             android:text="距开课3天"

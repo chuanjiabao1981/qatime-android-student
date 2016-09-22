@@ -3,14 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <include layout="@layout/layout_backbar" />
+
     <EditText
         android:id="@+id/opinion"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:layout_width="match_parent"
         android:layout_height="250dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/shape_input"
         android:gravity="start"
         android:hint="@string/hint_opinion"
@@ -25,9 +27,9 @@
         android:id="@+id/contact"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/shape_input"
         android:gravity="center_vertical"
         android:hint="@string/hint_contact"
@@ -40,13 +42,7 @@
 
     <Button
         android:id="@+id/button_over"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/button_bg_selector_red"
-        android:text="提交"
-        android:textColor="#fff" />
+        android:layout_marginTop="12dp"
+        style="@style/button_full_width_style"
+        android:text="提交" />
 </LinearLayout>

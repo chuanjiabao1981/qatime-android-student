@@ -2,8 +2,6 @@ package cn.qatime.player.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
 
@@ -52,9 +49,7 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
         password = (EditText) findViewById(R.id.password);
         forgetPassword = (TextView) findViewById(R.id.forget_password);
         newPassword = (EditText) findViewById(R.id.new_password);
-        matchPwd1 = (ImageView) findViewById(R.id.match_pwd1);
         confirmNewPassword = (EditText) findViewById(R.id.confirm_new_password);
-        matchPwd2 = (ImageView) findViewById(R.id.match_pwd2);
         buttonOver = (Button) findViewById(R.id.button_over);
     }
 
@@ -74,49 +69,8 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
         confirmNewPassword.setHint(StringUtils.getSpannedString(this, R.string.hint_input_again));
 
 
-        matchPwd1 = (ImageView) findViewById(R.id.match_pwd1);
-        matchPwd2 = (ImageView) findViewById(R.id.match_pwd2);
         forgetPassword.setOnClickListener(this);
         buttonOver.setOnClickListener(this);
-        newPassword.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                password2 = newPassword.getText().toString().trim();
-                matchPwd1.setVisibility(View.VISIBLE);
-                matchPwd1.setImageResource(StringUtils.isGoodPWD(password2) ? R.mipmap.pay_success : R.mipmap.pay_faild);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        confirmNewPassword.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                password3 = confirmNewPassword.getText().toString().trim();
-                matchPwd2.setVisibility(View.VISIBLE);
-                matchPwd2.setImageResource(StringUtils.isGoodPWD(password3) ? R.mipmap.pay_success : R.mipmap.pay_faild);
-                matchPwd2.setImageResource(password3.equals(password2) ? R.mipmap.pay_success : R.mipmap.pay_faild);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-
     }
 
     @Override

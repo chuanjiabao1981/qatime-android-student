@@ -19,9 +19,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="15dp"
+            style="@style/setting_text_style"
             android:text="@string/class_range" />
 
         <View
@@ -65,9 +63,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="15dp"
+            style="@style/setting_text_style"
             android:text="@string/alert_mode" />
 
         <View
@@ -112,9 +108,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="15dp"
+            style="@style/setting_text_style"
             android:text="@string/time_setting" />
 
         <View
@@ -137,7 +131,7 @@
             <LinearLayout
                 android:id="@+id/time"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 

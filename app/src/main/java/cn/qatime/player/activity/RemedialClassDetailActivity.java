@@ -54,6 +54,7 @@ import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
+import libraryextra.view.FragmentLayoutWithLine;
 import libraryextra.view.SimpleViewPagerIndicator;
 
 public class RemedialClassDetailActivity extends BaseFragmentActivity implements View.OnClickListener {
@@ -74,6 +75,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     TextView studentnumber;
     DecimalFormat df = new DecimalFormat("#.00");
     private AlertDialog alertDialog;
+    private FragmentLayoutWithLine fragmentlayout;
+    private int[] tab_text = {R.id.tab_text1, R.id.tab_text2};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +104,24 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         fragBaseFragments.add(new FragmentRemedialClassDetail1());
         fragBaseFragments.add(new FragmentRemedialClassDetail2());
         fragBaseFragments.add(new FragmentRemedialClassDetail3());
+
+
+
+//        fragmentlayout = (FragmentLayoutWithLine)findViewById(R.id.fragmentlayout);
+//
+//        fragmentlayout.setScorllToNext(true);
+//        fragmentlayout.setScorll(true);
+//        fragmentlayout.setWhereTab(1);
+//        fragmentlayout.setTabHeight(4,0xffff9999);
+//        fragmentlayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
+//            @Override
+//            public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
+//                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff666666);
+//                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff333333);
+//            }
+//        });
+//        fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_remedial_class_detail, 0x0911);
+
 
         audition = (Button) findViewById(R.id.audition);
         pay = (Button) findViewById(R.id.pay);

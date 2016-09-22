@@ -6,26 +6,11 @@
 
     <include layout="@layout/layout_backbar" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/text_background"
-        android:gravity="center"
-        android:orientation="vertical">
+    <LinearLayout style="@style/edit_layout_style">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:orientation="horizontal">
+            style="@style/edit_layout_top_style"
+            android:paddingLeft="24dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -35,37 +20,21 @@
 
             <EditText
                 android:id="@+id/input_new_email"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/shape_input"
-                android:gravity="center_vertical"
+                style="@style/activity_edit_text_style"
+                android:layout_marginLeft="24dp"
                 android:hint="@string/hint_input_email"
-                android:inputType="textEmailAddress"
-                android:paddingBottom="8dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="8dp"
-                android:singleLine="true"
-                android:textColorHint="#ff999999" />
+                android:inputType="textEmailAddress" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@mipmap/pay_success"
                 android:visibility="invisible" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:paddingLeft="24dp"
+            style="@style/edit_layout_center_style">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -75,65 +44,37 @@
 
             <EditText
                 android:id="@+id/confirm_new_email"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/shape_input"
-                android:gravity="center_vertical"
+                style="@style/activity_edit_text_style"
+                android:layout_marginLeft="24dp"
                 android:hint="@string/hint_input_again"
-                android:inputType="textEmailAddress"
-                android:paddingBottom="8dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="8dp"
-                android:singleLine="true"
-                android:textColorHint="#ff999999"
-                />
+                android:inputType="textEmailAddress" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@mipmap/pay_success"
                 android:visibility="invisible" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+        android:paddingLeft="24dp"
+        style="@style/edit_layout_bottom_style">
 
             <EditText
                 android:id="@+id/code"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/shape_input"
-                android:inputType="phone"
-                android:paddingBottom="8dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="8dp"
-                android:singleLine="true"
-                android:textColorHint="#ff999999" />
+                style="@style/activity_edit_text_style"
+                android:layout_marginRight="12dp"
+                android:inputType="number" />
 
             <TextView
                 android:id="@+id/text_getcode"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/button_bg_selector_red"
-                android:gravity="center"
-                android:textColor="#fff"
+                style="@style/button_style"
+                android:layout_marginLeft="12dp"
                 android:text="@string/getcode" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@mipmap/pay_success"
                 android:visibility="invisible" />
         </LinearLayout>
@@ -141,10 +82,6 @@
 
     <Button
         android:id="@+id/button_over"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="@drawable/button_bg_selector_red"
-        android:text="@string/over"
-        android:textColor="#fff" />
+        style="@style/button_full_width_style"
+        android:text="@string/over" />
 </LinearLayout>

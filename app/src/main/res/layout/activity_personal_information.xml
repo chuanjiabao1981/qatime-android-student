@@ -31,12 +31,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="15dp">
+                android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/setting_text_style"
                     android:text="@string/name" />
 
                 <View
@@ -46,8 +44,8 @@
 
                 <TextView
                     android:id="@+id/name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_marginRight="24dp"
+                    style="@style/setting_text_style" />
 
             </LinearLayout>
 
@@ -59,12 +57,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="15dp">
+                android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/setting_text_style"
                     android:text="@string/sex" />
 
                 <View
@@ -74,8 +70,8 @@
 
                 <TextView
                     android:id="@+id/sex"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_marginRight="24dp"
+                    style="@style/setting_text_style"
                     android:text="@string/male" />
 
             </LinearLayout>
@@ -88,12 +84,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="15dp">
+                android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_marginRight="24dp"
+                    style="@style/setting_text_style"
                     android:text="@string/birthday" />
 
                 <View
@@ -104,6 +99,7 @@
                 <TextView
                     android:id="@+id/birthday"
                     android:layout_width="wrap_content"
+                    android:layout_marginRight="24dp"
                     android:layout_height="wrap_content"
                     android:text="" />
 
@@ -117,12 +113,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="15dp">
+                android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_marginRight="24dp"
+                    style="@style/setting_text_style"
                     android:text="@string/grade" />
 
                 <View
@@ -132,8 +127,8 @@
 
                 <TextView
                     android:id="@+id/grade"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_marginRight="24dp"
+                    style="@style/setting_text_style"
                     android:text="@string/high3" />
 
             </LinearLayout>
@@ -147,12 +142,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="15dp">
+                android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_marginRight="24dp"
+                    style="@style/setting_text_style"
                     android:text="@string/school" />
 
                 <View
@@ -162,8 +156,8 @@
 
                 <TextView
                     android:id="@+id/school"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_marginRight="24dp"
+                    style="@style/setting_text_style"
                     android:text="" />
 
             </LinearLayout>
@@ -176,13 +170,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="15dp">
+                android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="30dp"
+                    android:layout_marginRight="24dp"
+                    style="@style/setting_text_style"
                     android:text="@string/profiles" />
 
                 <TextView

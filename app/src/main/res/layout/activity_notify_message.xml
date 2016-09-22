@@ -16,12 +16,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="15dp">
+        android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/setting_text_style"
             android:text="@string/voice" />
 
         <View
@@ -36,6 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
+            android:layout_marginRight="24dp"
             android:clickable="false" />
     </LinearLayout>
 
@@ -49,12 +48,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="15dp">
+        android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/setting_text_style"
             android:text="@string/shake" />
 
         <View
@@ -70,6 +67,7 @@
             android:layout_height="wrap_content"
             android:checked="true"
             android:clickable="false"
+            android:layout_marginRight="24dp"
             android:src="@mipmap/pay_success" />
     </LinearLayout>
 

@@ -56,16 +56,92 @@
         <item name="android:gravity">center</item>
     </style>
 
+    <style name="edit_layout_style">//边框
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="activity_edit_text_style">//输入框
+        <item name="android:layout_height">36dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/shape_input</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">2dp</item>
+        <item name="android:paddingRight">2dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#a000</item>
+        <item name="android:textColorHint">#ff999999</item>
+    </style>
+
+    <style name="edit_layout_top_style">//顶部
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="edit_layout_center_style">//中间
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="edit_layout_bottom_style">//底部
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">24dp</item>
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="button_style"> //小按钮
+        <item name="android:layout_height">36dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/button_bg_selector_red</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">#fff</item>
+    </style>
+
+    <style name="button_full_width_style"> //跨整个屏幕的按钮
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">36dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="android:layout_marginLeft">24dp</item>
+        <item name="android:layout_marginRight">24dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/button_bg_selector_red</item>
+        <item name="android:textColor">@color/white_normal</item>
+    </style>
+
+    <style name="setting_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:paddingLeft">24dp</item>
+    </style>
 
 
     <!--<style name="MediaController_SeekBar" parent="android:Widget.SeekBar">-->
-        <!--<item name="android:progressDrawable">@drawable/nemediacontroller_progressbar</item>-->
-        <!--<item name="android:indeterminateDrawable">@drawable/nemediacontroller_progressbar</item>-->
-        <!--<item name="android:minHeight">5dip</item>-->
-        <!--<item name="android:maxHeight">5dip</item>-->
-        <!--<item name="android:thumb">@drawable/nemediacontroller_progressbar_thumb</item>-->
-        <!--<item name="android:thumbOffset">8dip</item>-->
-        <!--<item name="android:paddingLeft">8dip</item>-->
-        <!--<item name="android:paddingRight">8dip</item>-->
+    <!--<item name="android:progressDrawable">@drawable/nemediacontroller_progressbar</item>-->
+    <!--<item name="android:indeterminateDrawable">@drawable/nemediacontroller_progressbar</item>-->
+    <!--<item name="android:minHeight">5dip</item>-->
+    <!--<item name="android:maxHeight">5dip</item>-->
+    <!--<item name="android:thumb">@drawable/nemediacontroller_progressbar_thumb</item>-->
+    <!--<item name="android:thumbOffset">8dip</item>-->
+    <!--<item name="android:paddingLeft">8dip</item>-->
+    <!--<item name="android:paddingRight">8dip</item>-->
     <!--</style>-->
 </resources>

@@ -23,9 +23,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
+                style="@style/setting_text_style"
                 android:text="@string/learning_process" />
 
             <View
@@ -38,7 +36,7 @@
             <ImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="24dp"
                 android:src="@mipmap/personal_enter" />
         </LinearLayout>
 
@@ -56,9 +54,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
+                style="@style/setting_text_style"
                 android:text="@string/notify_setting" />
 
             <View
@@ -71,7 +67,7 @@
             <ImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="24dp"
                 android:src="@mipmap/personal_enter" />
         </LinearLayout>
 
@@ -88,9 +84,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
+                style="@style/setting_text_style"
                 android:text="@string/check_update" />
 
             <View
@@ -108,7 +102,7 @@
             <ImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="24dp"
                 android:src="@mipmap/personal_enter" />
         </LinearLayout>
 
@@ -125,9 +119,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
+                style="@style/setting_text_style"
                 android:text="@string/clean_cache" />
 
             <View
@@ -145,7 +137,7 @@
             <ImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="24dp"
                 android:src="@mipmap/personal_enter" />
         </LinearLayout>
 
@@ -196,10 +188,8 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-                android:text="@string/about_us" />
+                android:text="@string/about_us"
+                style="@style/setting_text_style" />
 
             <View
                 android:layout_width="0dp"
@@ -211,7 +201,7 @@
             <ImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="24dp"
                 android:src="@mipmap/personal_enter" />
         </LinearLayout>
 
@@ -224,13 +214,7 @@
 
     <Button
         android:id="@+id/exit"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="@drawable/button_bg_selector_red"
-        android:text="@string/logout"
-        android:textColor="#fff" />
+        style="@style/button_full_width_style"
+        android:text="@string/logout" />
 </RelativeLayout>
