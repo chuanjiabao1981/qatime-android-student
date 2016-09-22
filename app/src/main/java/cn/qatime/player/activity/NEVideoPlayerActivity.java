@@ -182,12 +182,12 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         fragmentLayout.setScorllToNext(true);
         fragmentLayout.setScorll(true);
         fragmentLayout.setWhereTab(1);
-        fragmentLayout.setTabHeight(1,0xff222222);
+        fragmentLayout.setTabHeight(2,0xffff9999);
         fragmentLayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
-                    ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff858585);
-                    ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff222222);
+                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff666666);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff333333);
                     lastTabView.setBackgroundColor(0xffffffff);
                     currentTabView.setBackgroundColor(0xffeeeeee);
                     if (position == 1) {

@@ -45,6 +45,17 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="top_style"><!--顶部菜单高度-->
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:background">@drawable/shape_main_tab</item>
+    </style>
+
+    <style name="tab_item_height">
+        <item name="android:layout_height">24dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
 
 
     <!--<style name="MediaController_SeekBar" parent="android:Widget.SeekBar">-->
