@@ -5,6 +5,17 @@
               android:orientation="vertical">
 
     <include layout="@layout/layout_backbar"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:background="#000"
+        android:layout_height="12dp"/>
+    <View
+        android:layout_width="320dp"
+        android:background="#000"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="12dp"/>
 
     <libraryextra.view.StickyNavLayout
         android:layout_width="match_parent"
@@ -74,7 +85,6 @@
                 android:layout_height="1px"
                 android:background="#ccdccd"/>
         </LinearLayout>
-
         <!--<libraryextra.view.FragmentLayoutWithLine-->
             <!--android:id="@+id/fragmentlayout"-->
             <!--android:layout_width="match_parent"-->
@@ -107,10 +117,10 @@
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
+            android:layout_marginBottom="9dp"
             android:layout_width="match_parent"
             android:orientation="horizontal"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="9dp"
             android:gravity="center">
 
             <Button

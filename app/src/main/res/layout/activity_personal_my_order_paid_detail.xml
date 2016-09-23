@@ -12,7 +12,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="180dp"
+            android:gravity="center"
             android:background="#bfbdbd"
             android:orientation="vertical"
             android:padding="10dp">
@@ -24,7 +25,7 @@
                 android:layout_gravity="center"
                 android:padding="8dp"
                 android:text="@string/waiting_for_payment"
-                android:textSize="20sp"
+                android:textSize="24sp"
 
                 android:textColor="#ffbc04"/>
 

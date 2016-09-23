@@ -12,9 +12,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="180dp"
             android:background="#bfbdbd"
             android:orientation="vertical"
+            android:gravity="center_vertical"
             android:padding="10dp">
 
             <TextView
@@ -24,7 +25,7 @@
                 android:layout_gravity="center"
                 android:padding="8dp"
                 android:text="@string/waiting_for_payment"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 android:textColor="#ffbc04"/>
 
         </LinearLayout>
@@ -273,6 +274,7 @@
             android:background="@drawable/button_bg_selector_red"
             android:gravity="center"
             android:padding="10dp"
+            android:textColor="#fff"
             android:text="@string/reorder"/>
     </LinearLayout>
 

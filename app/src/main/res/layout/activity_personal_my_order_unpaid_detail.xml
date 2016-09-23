@@ -12,8 +12,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="180dp"
             android:background="#bfbdbd"
+            android:gravity="center"
             android:orientation="vertical"
             android:padding="10dp">
 
@@ -303,7 +304,7 @@
         <TextView
             android:id="@+id/cancel_order"
             style="@style/button_style"
-            android:layout_marginLeft="24dp"
+            android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             android:layout_marginTop="12dp"
             android:text="@string/cancel_order"/>
@@ -311,7 +312,7 @@
         <TextView
             android:id="@+id/pay"
             style="@style/button_style"
-            android:layout_marginRight="24dp"
+            android:layout_marginRight="12dp"
             android:layout_marginLeft="12dp"
             android:layout_marginTop="12dp"
             android:text="@string/pay"/>

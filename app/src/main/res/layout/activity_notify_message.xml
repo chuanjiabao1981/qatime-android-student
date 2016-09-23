@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:layout_marginRight="24dp"
+            style="@style/setting_icon_margin_right"
             android:clickable="false" />
     </LinearLayout>
 
@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:checked="true"
             android:clickable="false"
-            android:layout_marginRight="24dp"
+            style="@style/setting_icon_margin_right"
             android:src="@mipmap/pay_success" />
     </LinearLayout>
 

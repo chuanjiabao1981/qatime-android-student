@@ -10,8 +10,8 @@
         style="@style/edit_layout_style">
 
         <LinearLayout
-            android:paddingLeft="24dp"
-            android:paddingRight="24dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
             style="@style/edit_layout_top_style">
 
             <TextView
@@ -34,8 +34,8 @@
 
 
         <LinearLayout
-            android:paddingLeft="24dp"
-            android:paddingRight="24dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
             style="@style/edit_layout_center_style"
 
             android:gravity="center"
@@ -50,7 +50,7 @@
 
             <EditText
                 android:id="@+id/password"
-                android:layout_marginLeft="24dp"
+                android:layout_marginLeft="12dp"
                 style="@style/activity_edit_text_style"
                 android:maxLength="16"
                 android:inputType="textPassword" />
@@ -58,8 +58,8 @@
         </LinearLayout>
 
         <LinearLayout
-            android:paddingLeft="24dp"
-            android:paddingRight="24dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
             style="@style/edit_layout_center_style">
 
             <TextView
@@ -73,26 +73,24 @@
                 android:id="@+id/new_parent_phone"
                 style="@style/activity_edit_text_style"
                 android:inputType="phone"
-                android:layout_marginLeft="24dp"
+                android:layout_marginLeft="12dp"
                 android:maxLength="11" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:paddingLeft="24dp"
-            android:paddingRight="24dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
             style="@style/edit_layout_bottom_style">
 
             <EditText
                 android:id="@+id/code"
                 style="@style/activity_edit_text_style"
-                android:layout_marginRight="12dp"
                 android:inputType="number" />
 
             <TextView
                 android:id="@+id/text_getcode"
                 style="@style/button_style"
-                android:layout_marginLeft="12dp"
                 android:text="@string/getcode" />
 
         </LinearLayout>

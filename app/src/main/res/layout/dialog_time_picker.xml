@@ -10,7 +10,8 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:gravity="center"
-        android:textSize="14sp"
+        style="@style/dialog_text_style"
+        android:layout_marginTop="0dp"
         android:text="＞" />
     <cn.qatime.player.view.WheelView
         android:id="@+id/hours"

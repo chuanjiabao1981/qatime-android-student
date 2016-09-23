@@ -32,7 +32,7 @@
         <ImageView
             android:layout_width="12dp"
             android:layout_height="12dp"
-            android:layout_marginRight="24dp"
+            style="@style/setting_icon_margin_right"
             android:src="@mipmap/personal_enter" />
     </LinearLayout>
 
@@ -61,8 +61,8 @@
         <ImageView
             android:layout_width="12dp"
             android:layout_height="12dp"
-            android:layout_marginRight="24dp"
-            android:src="@mipmap/personal_enter" />
+            android:src="@mipmap/personal_enter"
+            style="@style/setting_icon_margin_right" />
     </LinearLayout>
 
     <View

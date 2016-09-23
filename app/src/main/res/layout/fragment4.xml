@@ -67,7 +67,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
+                android:padding="12dp"
                 android:text="@string/my_order" />
 
             <View
@@ -184,7 +184,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
+                android:padding="12dp"
                 android:text="@string/my_course" />
 
             <View
@@ -288,7 +288,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="12dp"
                     android:text="@string/security_management" />
 
                 <View
@@ -300,7 +300,7 @@
                 <ImageView
                     android:layout_width="12dp"
                     android:layout_height="12dp"
-                    android:layout_marginRight="5dp"
+                    style="@style/setting_icon_margin_right"
                     android:src="@mipmap/personal_enter" />
             </LinearLayout>
 
@@ -319,9 +319,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingBottom="10dp"
+                    android:paddingTop="12dp"
+                    android:paddingLeft="12dp"
+                    android:paddingBottom="12dp"
                     android:text="@string/setting" />
 
                 <TextView
@@ -329,7 +329,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="top"
-                    android:paddingTop="8dp"
+                    android:paddingTop="9dp"
                     android:text="@string/new_edition"
                     android:textColor="#e20914"
                     android:textSize="10dp" />
@@ -342,7 +342,7 @@
                 <ImageView
                     android:layout_width="12dp"
                     android:layout_height="12dp"
-                    android:layout_marginRight="5dp"
+                    style="@style/setting_icon_margin_right"
                     android:src="@mipmap/personal_enter" />
             </LinearLayout>
 

@@ -14,10 +14,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
+            android:layout_margin="12dp"
             android:background="@drawable/text_background"
             android:orientation="vertical">
 
@@ -72,8 +69,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
             android:text="@string/pay_remind"
             android:textColor="@color/gray_normal_light"/>
 
