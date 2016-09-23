@@ -1,6 +1,5 @@
 package cn.qatime.player.activity;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
@@ -57,7 +56,6 @@ import libraryextra.bean.ImageItem;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
 import libraryextra.transformation.GlideCircleTransform;
-import libraryextra.utils.DensityUtils;
 import libraryextra.utils.DialogUtils;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
@@ -290,7 +288,9 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                     textGrade.setText(grade.getSeletedItem());
                 }
             });
-            alertDialog.getWindow().setLayout(DensityUtils.dp2px(RegisterPerfectActivity.this, 350), ActionBar.LayoutParams.WRAP_CONTENT);
+//            WindowManager.LayoutParams attributes = alertDialog.getWindow().getAttributes();
+//            attributes.width= ScreenUtils.getScreenWidth(getApplicationContext())- DensityUtils.dp2px(getApplicationContext(),20)*2;
+//            alertDialog.getWindow().setAttributes(attributes);
         } else {
             alertDialog.show();
         }

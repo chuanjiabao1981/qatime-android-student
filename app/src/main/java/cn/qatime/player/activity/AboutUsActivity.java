@@ -1,6 +1,5 @@
 package cn.qatime.player.activity;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
-import libraryextra.utils.DensityUtils;
 
 /**
  * @author luntify
@@ -63,7 +61,9 @@ public class AboutUsActivity extends BaseActivity {
                 alertDialog = builder.create();
                 alertDialog.show();
                 alertDialog.setContentView(view);
-                alertDialog.getWindow().setLayout(DensityUtils.dp2px(AboutUsActivity.this, 350), ActionBar.LayoutParams.WRAP_CONTENT);
+//                WindowManager.LayoutParams attributes = alertDialog.getWindow().getAttributes();
+//                attributes.width= ScreenUtils.getScreenWidth(getApplicationContext())- DensityUtils.dp2px(getApplicationContext(),20)*2;
+//                alertDialog.getWindow().setAttributes(attributes);
             }
         });
     }

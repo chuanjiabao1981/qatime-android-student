@@ -1,6 +1,5 @@
 package cn.qatime.player.fragment;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -55,7 +54,6 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.TutorialClassBean;
-import libraryextra.utils.DensityUtils;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.StringUtils;
@@ -173,20 +171,21 @@ public class FragmentNews1 extends BaseFragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 if (NIMClient.getStatus() == StatusCode.LOGINED) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    final AlertDialog alertDialog = builder.create();
-                    View v = View.inflate(getActivity(), R.layout.team_notify_alert_dialog, null);
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//                    final Dialog dialog = new Dialog(getActivity(),R.style.Transparent);
+                    final AlertDialog dialog =new AlertDialog.Builder(getActivity()).create();
+                    View v = View.inflate(getActivity(), R.layout.dialog_team_notify_alert, null);
                     v.findViewById(R.id.root).setOnClickListener(new OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            alertDialog.dismiss();
+                            dialog.dismiss();
                         }
                     });
                     ((TextView) v.findViewById(R.id.text)).setText(items.get(position - 1).isMute() ? getResourceString(R.string.resume_alert) : getResourceString(R.string.nolongger_alert));
                     v.findViewById(R.id.text).setOnClickListener(new OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            alertDialog.dismiss();
+                            dialog.dismiss();
 
                             NIMClient.getService(TeamService.class).muteTeam(items.get(position - 1).getContactId(), !items.get(position - 1).isMute()).setCallback(new RequestCallback<Void>() {
                                 @Override
@@ -212,12 +211,16 @@ public class FragmentNews1 extends BaseFragment {
                     v.findViewById(R.id.cancel).setOnClickListener(new OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            alertDialog.dismiss();
+                            dialog.dismiss();
                         }
                     });
-                    alertDialog.setCanceledOnTouchOutside(true);
-                    alertDialog.setContentView(v);
-                    alertDialog.show();
+                    dialog.setCanceledOnTouchOutside(true);
+                    dialog.show();
+                    dialog.setContentView(v);
+//                    WindowManager.LayoutParams attributes = dialog.getWindow().getAttributes();
+//                    attributes.width= ScreenUtils.getScreenWidth(getActivity())- DensityUtils.dp2px(getActivity(),20)*2;
+//                    dialog.getWindow().setAttributes(attributes);
+//                    dialog.setContentView(v);
 
                     return true;
                 }

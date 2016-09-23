@@ -1,6 +1,5 @@
 package cn.qatime.player.base;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,7 +16,6 @@ import com.android.volley.toolbox.Volley;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
-import libraryextra.utils.DensityUtils;
 import libraryextra.utils.StringUtils;
 
 /**
@@ -92,7 +90,9 @@ public class BaseFragmentActivity extends FragmentActivity {
             });
             alertDialog.show();
             alertDialog.setContentView(view);
-            alertDialog.getWindow().setLayout(DensityUtils.dp2px(this, 350), ActionBar.LayoutParams.WRAP_CONTENT);
+//            WindowManager.LayoutParams attributes = alertDialog.getWindow().getAttributes();
+//            attributes.width= ScreenUtils.getScreenWidth(getApplicationContext())- DensityUtils.dp2px(getApplicationContext(),20)*2;
+//            alertDialog.getWindow().setAttributes(attributes);
         }
         if (!alertDialog.isShowing()) {
             alertDialog.show();

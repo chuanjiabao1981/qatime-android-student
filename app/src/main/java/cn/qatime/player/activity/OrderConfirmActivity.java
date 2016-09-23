@@ -1,10 +1,10 @@
 package cn.qatime.player.activity;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -33,6 +33,7 @@ import libraryextra.bean.OrderPayBean;
 import libraryextra.utils.DensityUtils;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.SPUtils;
+import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -171,7 +172,9 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         });
         alertDialog.show();
         alertDialog.setContentView(view);
-        alertDialog.getWindow().setLayout(DensityUtils.dp2px(this, 350), ActionBar.LayoutParams.WRAP_CONTENT);
+//        WindowManager.LayoutParams attributes = alertDialog.getWindow().getAttributes();
+//        attributes.width= ScreenUtils.getScreenWidth(getApplicationContext())- DensityUtils.dp2px(getApplicationContext(),20)*2;
+//        alertDialog.getWindow().setAttributes(attributes);
     }
     public void initView() {
 

@@ -1,6 +1,5 @@
 package cn.qatime.player.activity;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -47,7 +46,6 @@ import libraryextra.bean.OrderPayBean;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
 import libraryextra.bean.RemedialClassDetailBean;
-import libraryextra.utils.DensityUtils;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.SPUtils;
 import libraryextra.utils.ScreenUtils;
@@ -267,7 +265,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                         alertDialog = builder.create();
                         alertDialog.show();
                         alertDialog.setContentView(view);
-                        alertDialog.getWindow().setLayout(DensityUtils.dp2px(RemedialClassDetailActivity.this, 350), ActionBar.LayoutParams.WRAP_CONTENT);
+//                        WindowManager.LayoutParams attributes = alertDialog.getWindow().getAttributes();
+//                        attributes.width= ScreenUtils.getScreenWidth(getApplicationContext())- DensityUtils.dp2px(getApplicationContext(),20)*2;
+//                        alertDialog.getWindow().setAttributes(attributes);
                     } else {
                         alertDialog.show();
                     }

@@ -1,6 +1,5 @@
 package cn.qatime.player.activity;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -17,7 +16,6 @@ import java.util.List;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.view.WheelView;
-import libraryextra.utils.DensityUtils;
 import libraryextra.utils.SPUtils;
 
 /**
@@ -131,7 +129,9 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
                     textMinute.setText(minutes.getSeletedItem());
                 }
             });
-            alertDialog.getWindow().setLayout(DensityUtils.dp2px(NotifyCourseActivity.this, 350), ActionBar.LayoutParams.WRAP_CONTENT);
+//            WindowManager.LayoutParams attributes = alertDialog.getWindow().getAttributes();
+//            attributes.width= ScreenUtils.getScreenWidth(getApplicationContext())- DensityUtils.dp2px(getApplicationContext(),20)*2;
+//            alertDialog.getWindow().setAttributes(attributes);
         } else {
             alertDialog.show();
         }

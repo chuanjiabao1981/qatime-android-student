@@ -1,6 +1,5 @@
 package cn.qatime.player.fragment;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -43,7 +42,6 @@ import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.OrderConfirmBean;
 import libraryextra.bean.OrderDetailBean;
-import libraryextra.utils.DensityUtils;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -290,7 +288,9 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
         });
         alertDialog.show();
         alertDialog.setContentView(view);
-        alertDialog.getWindow().setLayout(DensityUtils.dp2px(getActivity(), 350), ActionBar.LayoutParams.WRAP_CONTENT);
+//        WindowManager.LayoutParams attributes = alertDialog.getWindow().getAttributes();
+//        attributes.width= ScreenUtils.getScreenWidth(getActivity())- DensityUtils.dp2px(getActivity(),20)*2;
+//        alertDialog.getWindow().setAttributes(attributes);
     }
 
     private void CancelOrder(final int position, String id) {
