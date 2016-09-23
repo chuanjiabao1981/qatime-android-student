@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @date 2016/9/6 19:36
  * @Description: 消息列表数据item
  */
-public class MessageListBean implements Serializable{
+public class MessageListBean implements Serializable {
     private String contactId;
     private SessionTypeEnum sessionType;
     private String recentMessageId;
@@ -19,7 +19,7 @@ public class MessageListBean implements Serializable{
     private long time;
     private int unreadCount;
     private String pull_address;
-    private String content;
+    private String name;
     private int courseId;
     private boolean mute;
 
@@ -79,12 +79,12 @@ public class MessageListBean implements Serializable{
         return unreadCount;
     }
 
-    public String getContent() {
-        return content;
+    public String getName() {
+        return name;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setCourseId(int courseId) {
