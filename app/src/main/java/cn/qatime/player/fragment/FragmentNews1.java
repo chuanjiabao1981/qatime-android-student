@@ -175,7 +175,13 @@ public class FragmentNews1 extends BaseFragment {
                 if (NIMClient.getStatus() == StatusCode.LOGINED) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     final AlertDialog alertDialog = builder.create();
-                    View v = View.inflate(getActivity(), R.layout.dialog_team_notify_alert, null);
+                    View v = View.inflate(getActivity(), R.layout.team_notify_alert_dialog, null);
+                    v.findViewById(R.id.root).setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialog.dismiss();
+                        }
+                    });
                     ((TextView) v.findViewById(R.id.text)).setText(items.get(position - 1).isMute() ? getResourceString(R.string.resume_alert) : getResourceString(R.string.nolongger_alert));
                     v.findViewById(R.id.text).setOnClickListener(new OnClickListener() {
                         @Override
@@ -210,9 +216,8 @@ public class FragmentNews1 extends BaseFragment {
                         }
                     });
                     alertDialog.setCanceledOnTouchOutside(true);
-                    alertDialog.show();
                     alertDialog.setContentView(v);
-                    alertDialog.getWindow().setLayout(DensityUtils.dp2px(getActivity(), 350), ActionBar.LayoutParams.WRAP_CONTENT);
+                    alertDialog.show();
 
                     return true;
                 }
