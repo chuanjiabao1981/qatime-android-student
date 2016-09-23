@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/by_time"
-                android:textColor="#909090" />
+                style="@style/tab_text_color_normal" />
 
             <ImageView
                 android:layout_width="10dp"
@@ -50,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/by_subject"
-                android:textColor="#909090" />
+                style="@style/tab_text_color_normal" />
 
             <ImageView
                 android:layout_width="10dp"
@@ -74,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/by_grade"
-                android:textColor="#909090" />
+                style="@style/tab_text_color_normal" />
 
             <ImageView
                 android:layout_width="10dp"

@@ -51,7 +51,7 @@
         <item name="android:background">@drawable/shape_main_tab</item>
     </style>
 
-    <style name="tab_item_height">
+    <style name="tab_item_height"> //二级导航高度
         <item name="android:layout_height">32dp</item>
         <item name="android:gravity">center</item>
     </style>
@@ -146,6 +146,16 @@
         <item name="android:textColor">#FF6666</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="tab_text_color_select">
+        <item name="android:textColor">#333333</item>
+        <item name="android:textSize">14.0sp</item>
+    </style>
+
+    <style name="tab_text_color_normal">
+        <item name="android:textColor">#666666</item>
+        <item name="android:textSize">14.0sp</item>
     </style>
 
 

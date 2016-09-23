@@ -133,7 +133,7 @@ public class BiaoQingView extends RelativeLayout {
             grid.setBackgroundColor(Color.WHITE);
             grid.setLayoutParams(new GridView.LayoutParams(GridView.LayoutParams.MATCH_PARENT, GridView.LayoutParams.WRAP_CONTENT));
             grid.setGravity(Gravity.CENTER);
-            grid.setAdapter(new CommonAdapter<Map<String, Integer>>(getContext(), listmap.get(i), R.layout.list_emoji_page) {
+            grid.setAdapter(new CommonAdapter<Map<String, Integer>>(getContext(), listmap.get(i), R.layout.item_emoji_page) {
 
                 @Override
                 public void convert(ViewHolder holder, Map<String, Integer> item, int position) {

@@ -25,8 +25,7 @@
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
                 android:text="@string/today"
-                android:textColor="#333333"
-                android:textSize="14.0sp" />
+                style="@style/tab_text_color_select" />
         </LinearLayout>
 
         <LinearLayout
@@ -43,8 +42,7 @@
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
                 android:text="@string/to_start"
-                android:textColor="#666666"
-                android:textSize="14.0sp" />
+                style="@style/tab_text_color_normal" />
         </LinearLayout>
 
         <LinearLayout
@@ -61,8 +59,7 @@
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
                 android:text="@string/started"
-                android:textColor="#666666"
-                android:textSize="14.0sp" />
+                style="@style/tab_text_color_normal" />
         </LinearLayout>
 
         <LinearLayout
@@ -77,8 +74,7 @@
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
                 android:text="@string/done"
-                android:textColor="#666666"
-                android:textSize="14.0sp" />
+                style="@style/tab_text_color_normal" />
         </LinearLayout>
 
         <LinearLayout
@@ -93,8 +89,7 @@
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
                 android:text="@string/audition"
-                android:textColor="#666666"
-                android:textSize="14.0sp" />
+                style="@style/tab_text_color_normal" />
         </LinearLayout>
 
 
