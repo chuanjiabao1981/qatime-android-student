@@ -17,11 +17,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.NimIntent;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
@@ -43,6 +45,7 @@ import cn.qatime.player.fragment.Fragment3;
 import cn.qatime.player.fragment.Fragment4;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
+import cn.qatime.player.utils.AppUtils;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -82,16 +85,14 @@ public class MainActivity extends BaseFragmentActivity {
         refreshMedia();
 
         File file = new File(Constant.CACHEPATH);
-        if (!file.mkdirs())
-
-        {
+        if (!file.mkdirs()) {
             try {
                 file.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
+        parseIntent();
         //        GetGradeslist();
 //        GetProvinceslist();
 //        GetCitieslist();
@@ -177,6 +178,36 @@ public class MainActivity extends BaseFragmentActivity {
             }
             startActivity(start);
             finish();
+        } else {
+            //云信通知消息
+            setIntent(intent);
+            parseIntent();
+        }
+    }
+
+    /**
+     * 解析通知栏发来的云信消息
+     */
+    private void parseIntent() {
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT)) {
+            ArrayList<IMMessage> messages = (ArrayList<IMMessage>) intent.getSerializableExtra(NimIntent.EXTRA_NOTIFY_CONTENT);
+            if (messages != null && messages.size() == 1) {
+                final IMMessage message = messages.get(0);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (message != null) {
+                            if (fragmentlayout != null) {
+                                fragmentlayout.setCurrenItem(2);
+                            }
+                            if (((Fragment3) fragBaseFragments.get(2)) != null) {
+                                ((Fragment3) fragBaseFragments.get(2)).setMessage(message);
+                            }
+                        }
+                    }
+                }, 500);
+            }
         }
     }
 

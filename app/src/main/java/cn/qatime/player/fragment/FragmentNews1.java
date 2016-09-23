@@ -41,6 +41,7 @@ import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.orhanobut.logger.Logger;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -52,6 +53,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.activity.MessageActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.bean.ChatVideoBean;
 import cn.qatime.player.bean.MessageListBean;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.observer.UserInfoObservable;
@@ -83,6 +85,8 @@ public class FragmentNews1 extends BaseFragment {
     private UserInfoObservable.UserInfoObserver userInfoObserver;
     private UserInfoObservable userInfoObservable;
     private TutorialClassBean courses;
+    private boolean shouldPost = false;//是否需要向messageactivity发推流地址
+    private String sessionId;
 
     @Nullable
     @Override
@@ -101,6 +105,19 @@ public class FragmentNews1 extends BaseFragment {
                         try {
                             Logger.e(response.toString());
                             courses = JsonUtils.objectFromJson(response.toString(), TutorialClassBean.class);
+                            if (shouldPost) {
+                                if (!StringUtils.isNullOrBlanK(sessionId)) {
+                                    if (courses != null && courses.getData() != null) {
+                                        for (TutorialClassBean.Data data : courses.getData()) {
+                                            if (sessionId.equals(data.getChat_team_id())) {
+                                                EventBus.getDefault().post(new ChatVideoBean(data.getId(), data.getPull_address(), data.getName()));
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                shouldPost = false;
+                            }
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
                         }
@@ -579,5 +596,35 @@ public class FragmentNews1 extends BaseFragment {
     public void onDestroy() {
         super.onDestroy();
         registerObservers(false);
+    }
+
+    public void setMessage(IMMessage message) {
+        int position = -1;
+        Logger.e("item.size" + items.size());
+        if (items != null && items.size() > 0) {
+            for (int i = 0; i < items.size(); i++) {
+                if (items.get(i).getContactId().equals(message.getSessionId())) {
+                    position = i;
+                    break;
+                }
+            }
+        }
+        if (position > -1) {
+            Intent intent = new Intent(getActivity(), MessageActivity.class);
+            intent.putExtra("sessionId", items.get(position).getContactId());
+            intent.putExtra("sessionType", items.get(position).getSessionType());
+            intent.putExtra("courseId", items.get(position).getCourseId());
+            intent.putExtra("pull_address", items.get(position).getPull_address());
+            intent.putExtra("name", items.get(position).getContent());
+            startActivity(intent);
+        } else {
+            shouldPost = true;
+            this.sessionId = message.getSessionId();
+            Intent intent = new Intent(getActivity(), MessageActivity.class);
+            intent.putExtra("sessionId", message.getSessionId());
+            intent.putExtra("sessionType", message.getSessionType());
+            intent.putExtra("name", message.getContent().replace("讨论组", ""));
+            startActivity(intent);
+        }
     }
 }

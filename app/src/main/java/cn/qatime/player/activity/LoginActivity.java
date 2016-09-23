@@ -57,7 +57,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private EditText checkcode;
     private Button login;
     private CustomProgressDialog progress;
-    private Profile profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,7 +166,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                     DialogUtils.dismissDialog(progress);
                                 }
                             } else {
-                                profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
+//                                profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
                                 Logger.e("登录", response.toString());
                                 SPUtils.put(LoginActivity.this, "username", username.getText().toString());
                                 Profile profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
@@ -227,7 +226,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             @Override
             protected void onSuccess(JSONObject response) {
                 PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
-                Logger.e(bean.toString());
                 String name = bean.getData().getName();
                 String grade = bean.getData().getGrade();
                 if (StringUtils.isNullOrBlanK(name) || StringUtils.isNullOrBlanK(grade)) {
