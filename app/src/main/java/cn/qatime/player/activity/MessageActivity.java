@@ -158,7 +158,7 @@ public class MessageActivity extends BaseActivity {
                     return;
                 }
                 if (isMute) {
-                    Toast.makeText(MessageActivity.this, getResources().getString(R.string.have_muted), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MessageActivity.this, getResourceString(R.string.have_muted), Toast.LENGTH_SHORT).show();
                     content.setText("");
                     return;
                 }
