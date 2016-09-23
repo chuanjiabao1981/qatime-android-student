@@ -175,7 +175,7 @@ public class FragmentNews1 extends BaseFragment {
                 if (NIMClient.getStatus() == StatusCode.LOGINED) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     final AlertDialog alertDialog = builder.create();
-                    View v = View.inflate(getActivity(), R.layout.team_notify_alert_dialog, null);
+                    View v = View.inflate(getActivity(), R.layout.dialog_team_notify_alert, null);
                     ((TextView) v.findViewById(R.id.text)).setText(items.get(position - 1).isMute() ? getResourceString(R.string.resume_alert) : getResourceString(R.string.nolongger_alert));
                     v.findViewById(R.id.text).setOnClickListener(new OnClickListener() {
                         @Override

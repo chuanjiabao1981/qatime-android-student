@@ -206,7 +206,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -300,7 +300,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -309,8 +309,8 @@
             android:layout_width="wrap_content"
             android:layout_height="32dp"
             android:layout_weight="1"
-            android:layout_marginRight="18dp"
-            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginLeft="24dp"
             android:background="@drawable/dialog_button_background_selector"
             android:text="@string/reset"
             android:textColor="#fff" />
@@ -319,8 +319,8 @@
             android:id="@+id/submit"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
-            android:layout_marginRight="12dp"
-            android:layout_marginLeft="18dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginLeft="12dp"
             android:layout_weight="1"
             android:background="@drawable/dialog_button_background_selector"
             android:text="@string/confirm"

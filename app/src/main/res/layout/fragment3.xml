@@ -13,12 +13,9 @@
             android:background="@drawable/shape_main_tab" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/backbar_text_style"
             android:layout_centerInParent="true"
-            android:text="@string/message"
-            android:textColor="#FF6666"
-            android:textSize="16sp" />
+            android:text="@string/message" />
     </RelativeLayout>
 
     <libraryextra.view.FragmentLayoutWithLine

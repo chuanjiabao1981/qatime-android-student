@@ -105,7 +105,7 @@
     </style>
 
     <style name="button_style"> //小按钮
-        <item name="android:layout_height">36dp</item>
+        <item name="android:layout_height">40dp</item>
         <item name="android:clickable">true</item>
         <item name="android:background">@drawable/button_bg_selector_red</item>
         <item name="android:gravity">center</item>
@@ -131,6 +131,21 @@
         <item name="android:paddingTop">14dp</item>
         <item name="android:paddingBottom">14dp</item>
         <item name="android:paddingLeft">24dp</item>
+    </style>
+
+    <style name="backbar_icon_style">//导航栏图标
+        <item name="android:layout_width">34dp</item>
+        <item name="android:layout_height">34dp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:padding">7dp</item>
+    </style>
+
+    <style name="backbar_text_style">//导航栏文字
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textColor">#FF6666</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
 
