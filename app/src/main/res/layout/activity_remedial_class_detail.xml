@@ -5,17 +5,6 @@
               android:orientation="vertical">
 
     <include layout="@layout/layout_backbar"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
-        android:background="#000"
-        android:layout_height="12dp"/>
-    <View
-        android:layout_width="320dp"
-        android:background="#000"
-        android:layout_gravity="center_horizontal"
-        android:layout_height="12dp"/>
 
     <libraryextra.view.StickyNavLayout
         android:layout_width="match_parent"
