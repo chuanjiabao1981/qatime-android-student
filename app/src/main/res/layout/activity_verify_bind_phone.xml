@@ -16,7 +16,7 @@
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="36dp"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/current_phone"
@@ -25,7 +25,7 @@
             <TextView
                 android:id="@+id/current_phone"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="36dp"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:textSize="14sp" />
