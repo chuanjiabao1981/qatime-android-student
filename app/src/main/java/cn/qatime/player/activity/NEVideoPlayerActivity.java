@@ -28,12 +28,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.bean.Announcements;
 import cn.qatime.player.fragment.FragmentNEVideoPlayer1;
 import cn.qatime.player.fragment.FragmentNEVideoPlayer2;
 import cn.qatime.player.fragment.FragmentNEVideoPlayer3;
 import cn.qatime.player.fragment.FragmentNEVideoPlayer4;
+import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.view.BiaoQingView;
@@ -76,6 +78,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     private SessionTypeEnum sessionType = SessionTypeEnum.Team;
     private ImageView emoji;
     private EditText content;
+    private boolean isMute = false;//当前用户 是否被禁言
     //    Runnable runnable = new Runnable() {
 //        @Override
 //        public void run() {
@@ -169,6 +172,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     }
 
     private void initView() {
+        isMute = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount()).isMute();
         bottom = findViewById(R.id.bottom);
 
         inputLayout = findViewById(R.id.input_layout);
@@ -206,6 +210,12 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         fragment2.setChatCallBack(new FragmentNEVideoPlayer2.Callback() {
             @Override
             public void back(List<IMMessage> result) {
+                isMute = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount()).isMute();
+                if (isMute) {
+                    content.setHint(R.string.have_muted);
+                } else {
+                    content.setHint("");
+                }
                 videoPlayer.addDanmaku(result);
             }
         });
@@ -230,6 +240,11 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
                 sendMessage(result, true);
             }
         });
+        if (isMute) {
+            content.setHint(R.string.have_muted);
+        } else {
+            content.setHint("");
+        }
     }
 
     /**
@@ -245,6 +260,12 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         }
         if (StringUtils.isNullOrBlanK(comment)) {
             Toast.makeText(NEVideoPlayerActivity.this, getResourceString(R.string.message_can_not_null), Toast.LENGTH_SHORT).show();
+            return;
+        }
+//        isMute = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount()).isMute();
+        if (isMute) {
+            Toast.makeText(NEVideoPlayerActivity.this, getResources().getString(R.string.have_muted), Toast.LENGTH_SHORT).show();
+            content.setText("");
             return;
         }
         // 创建文本消息

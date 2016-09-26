@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.orhanobut.logger.Logger;
+
 import java.util.ArrayList;
 
 import cn.qatime.player.R;
@@ -56,5 +59,17 @@ public class Fragment3 extends BaseFragment {
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_fragment_news, 0x0912);
 
+    }
+
+    /**
+     * 云信发来的sessionid
+     *
+     * @param message 会话
+     */
+    public void setMessage(IMMessage message) {
+        if (fragBaseFragments != null && fragBaseFragments.size() > 0) {
+            ((FragmentNews1) fragBaseFragments.get(0)).setMessage(message);
+
+        }
     }
 }

@@ -32,6 +32,9 @@ import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.orhanobut.logger.Logger;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,8 +43,10 @@ import java.util.Hashtable;
 import java.util.List;
 
 import cn.qatime.player.R;
+import cn.qatime.player.adapter.MessageAdapter;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.bean.ChatVideoBean;
 import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.utils.ExpressionUtil;
@@ -72,18 +77,23 @@ public class MessageActivity extends BaseActivity {
     private QueryDirectionEnum direction;
     private List<IMMessage> items = new ArrayList<>();
     private int LOAD_MESSAGE_COUNT = 20;//聊天加载条数
-    private CommonAdapter<IMMessage> adapter;
+    //    private CommonAdapter<IMMessage> adapter;
     private Team team;
     private Button send;
     private TextView tipText;
     private ImageView emoji;
     private EditText content;
-    Hashtable<Integer, GifDrawable> cache = new Hashtable<Integer, GifDrawable>();
+
+    private int courseId;
+    private String pull_address;
+    private boolean isMute = false;//当前用户 是否被禁言
+    private MessageAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
+        EventBus.getDefault().register(this);
         String name = getIntent().getStringExtra("name");
         if (!StringUtils.isNullOrBlanK(name)) {
             setTitle(name);
@@ -92,8 +102,8 @@ public class MessageActivity extends BaseActivity {
         }
         sessionId = getIntent().getStringExtra("sessionId");
         sessionType = (SessionTypeEnum) getIntent().getSerializableExtra("sessionType");
-        final int courseId = getIntent().getIntExtra("courseId", 0);
-        final String pull_address = getIntent().getStringExtra("pull_address");
+        courseId = getIntent().getIntExtra("courseId", 0);
+        pull_address = getIntent().getStringExtra("pull_address");
         initView();
         setRightImage(R.mipmap.online_room, new View.OnClickListener() {
             @Override
@@ -109,7 +119,7 @@ public class MessageActivity extends BaseActivity {
     }
 
     private void initView() {
-
+        isMute = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount()).isMute();
         tipText = (TextView) findViewById(R.id.tip);
         listView = (PullToRefreshListView) findViewById(R.id.list);
 
@@ -122,42 +132,15 @@ public class MessageActivity extends BaseActivity {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
 
-        adapter = new CommonAdapter<IMMessage>(this, items, R.layout.item_message) {
-            @Override
-            public void convert(final ViewHolder holder, IMMessage item, int position) {
-
-                if (item.getFromAccount().equals(BaseApplication.getAccount())) {
-                    holder.getView(R.id.right).setVisibility(View.VISIBLE);
-                    holder.getView(R.id.left).setVisibility(View.GONE);
-                    //.transform(new GlideRoundTransform(MessageActivity.this))
-                    Glide.with(MessageActivity.this).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).crossFade().dontAnimate().into((ImageView) holder.getView(R.id.my_head));
-                    holder.setText(R.id.my_time, getTime(item.getTime()));
-                    ((TextView) holder.getView(R.id.my_content)).setText(ExpressionUtil.getExpressionString(
-                            MessageActivity.this, item.getContent(), ExpressionUtil.emoji, cache, new GifDrawable.UpdateListener() {
-                                @Override
-                                public void update() {
-                                    ((TextView) holder.getView(R.id.my_content)).postInvalidate();
-                                }
-                            }));
-//                    ((TextView) holder.getView(R.id.my_content)).setText(ExpressionUtil.getExpressionString(MessageActivity.this,
-//                            item.getContent(), ExpressionUtil.emoji));
-                } else {
-                    holder.getView(R.id.right).setVisibility(View.GONE);
-                    holder.getView(R.id.left).setVisibility(View.VISIBLE);
-                    Glide.with(MessageActivity.this).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_32).crossFade().dontAnimate().into((ImageView) holder.getView(R.id.other_head));
-                    holder.setText(R.id.other_name, item.getFromNick());
-                    ((TextView) holder.getView(R.id.other_content)).setText(ExpressionUtil.getExpressionString(
-                            MessageActivity.this, item.getContent(), ExpressionUtil.emoji, cache, new GifDrawable.UpdateListener() {
-                                @Override
-                                public void update() {
-                                    ((TextView) holder.getView(R.id.other_content)).postInvalidate();
-                                }
-                            }));
-                    holder.setText(R.id.other_time, getTime(item.getTime()));
-                }
-
-            }
-        };
+//        adapter = new CommonAdapter<IMMessage>(this, items, R.layout.item_message) {
+//            @Override
+//            public void convert(final ViewHolder holder, IMMessage item, int position) {
+//
+//
+//
+//            }
+//        };
+        adapter = new MessageAdapter(this, items);
         listView.setAdapter(adapter);
         content = (EditText) findViewById(R.id.content);
         emoji = (ImageView) findViewById(R.id.emoji);
@@ -166,32 +149,37 @@ public class MessageActivity extends BaseActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    if (!isAllowSendMessage()) {
-                        Toast.makeText(MessageActivity.this, getResourceString(R.string.team_send_message_not_allow), Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    if (StringUtils.isNullOrBlanK(content.getText().toString())) {
-                        Toast.makeText(MessageActivity.this, getResourceString(R.string.message_can_not_null), Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    // 创建文本消息
-                    IMMessage message = MessageBuilder.createTextMessage(
-                            sessionId, // 聊天对象的 ID，如果是单聊，为用户帐号，如果是群聊，为群组 ID
-                            sessionType, // 聊天类型，单聊或群组
-                            content.getText().toString() // 文本内容
-                    );
-                    // 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
-                    NIMClient.getService(MsgService.class).sendMessage(message, true);
-
-                    items.add(message);
-                    adapter.notifyDataSetChanged();
-                    listView.getRefreshableView().setSelection(items.size() - 1);
+                if (!isAllowSendMessage()) {
+                    Toast.makeText(MessageActivity.this, getResourceString(R.string.team_send_message_not_allow), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (StringUtils.isNullOrBlanK(content.getText().toString())) {
+                    Toast.makeText(MessageActivity.this, getResourceString(R.string.message_can_not_null), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (isMute) {
+                    Toast.makeText(MessageActivity.this, getResourceString(R.string.have_muted), Toast.LENGTH_SHORT).show();
                     content.setText("");
+                    return;
+                }
+                // 创建文本消息
+                IMMessage message = MessageBuilder.createTextMessage(
+                        sessionId, // 聊天对象的 ID，如果是单聊，为用户帐号，如果是群聊，为群组 ID
+                        sessionType, // 聊天类型，单聊或群组
+                        content.getText().toString() // 文本内容
+                );
+                // 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
+                NIMClient.getService(MsgService.class).sendMessage(message, true);
+
+                items.add(message);
+                adapter.notifyDataSetChanged();
+                listView.getRefreshableView().setSelection(items.size() - 1);
+                content.setText("");
             }
         });
         listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
-            public void onRefresh(PullToRefreshBase<ListView> refreshView)  {
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -206,6 +194,11 @@ public class MessageActivity extends BaseActivity {
 //        loadMessage(false);
         BiaoQingView bq = (BiaoQingView) findViewById(R.id.biaoQingView);
         bq.init(content, emoji);
+        if (isMute) {
+            content.setHint(R.string.have_muted);
+        } else {
+            content.setHint("");
+        }
     }
 
 
@@ -322,7 +315,7 @@ public class MessageActivity extends BaseActivity {
 
         List<IMMessage> result = new ArrayList<>();
         for (IMMessage message : messages) {
-            if (message.getMsgType() == MsgTypeEnum.text) {
+            if (message.getMsgType() == MsgTypeEnum.text || message.getMsgType() == MsgTypeEnum.notification) {
                 result.add(message);
             }
         }
@@ -355,14 +348,24 @@ public class MessageActivity extends BaseActivity {
             List<IMMessage> addedListItems = new ArrayList<>(messages.size());
             for (IMMessage message : messages) {
                 if (isMyMessage(message) && message.getMsgType() == MsgTypeEnum.text) {
-                    items.add(message);
                     addedListItems.add(message);
                     needRefresh = true;
                 }
+                if (isMyMessage(message) && message.getMsgType() == MsgTypeEnum.notification) {
+                    addedListItems.add(message);
+                    isMute = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount()).isMute();
+                    if (isMute) {
+                        content.setHint(R.string.have_muted);
+                    } else {
+                        content.setHint("");
+                    }
+                    needRefresh = true;
+                }
             }
+            items.addAll(addedListItems);
             if (needRefresh) {
                 adapter.notifyDataSetChanged();
-                listView.getRefreshableView().setSelection(adapter.getCount() - 1);
+                listView.getRefreshableView().setSelection(adapter.getCount());
             }
         }
     };
@@ -395,12 +398,12 @@ public class MessageActivity extends BaseActivity {
             TeamDataCache.getInstance().fetchTeamById(sessionId, new SimpleCallback<Team>() {
                 @Override
                 public void onResult(boolean success, Team result) {
-                        if (success && result != null) {
-                            updateTeamInfo(result);
-                        } else {
-                            Toast.makeText(MessageActivity.this, getResourceString(R.string.get_group_failed), Toast.LENGTH_SHORT).show();
-                            finish();
-                        }
+                    if (success && result != null) {
+                        updateTeamInfo(result);
+                    } else {
+                        Toast.makeText(MessageActivity.this, getResourceString(R.string.get_group_failed), Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
                 }
             });
         }
@@ -533,9 +536,23 @@ public class MessageActivity extends BaseActivity {
         NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
     }
 
+    @Subscribe
+    public void onEvent(ChatVideoBean event) {
+        if (event != null) {
+            this.courseId = event.getCourseId();
+            this.pull_address = event.getPull_address();
+            if (!StringUtils.isNullOrBlanK(event.getName())) {
+                setTitle(event.getName());
+            } else {
+                setTitle(getResources().getString(R.string.team));
+            }
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         registerTeamUpdateObserver(false);
+        EventBus.getDefault().unregister(this);
     }
 }

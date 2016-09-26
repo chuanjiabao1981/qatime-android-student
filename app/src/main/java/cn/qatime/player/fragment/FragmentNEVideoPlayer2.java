@@ -7,6 +7,7 @@ import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -36,24 +37,19 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.List;
 
 import cn.qatime.player.R;
-import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.adapter.MessageAdapter;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.FriendDataCache;
 import cn.qatime.player.im.cache.TeamDataCache;
-import cn.qatime.player.utils.ExpressionUtil;
-import cn.qatime.player.view.GifDrawable;
-import libraryextra.adapter.CommonAdapter;
-import libraryextra.adapter.ViewHolder;
 
 public class FragmentNEVideoPlayer2 extends BaseFragment {
     private TextView tipText;
     public PullToRefreshListView listView;
-    public CommonAdapter<IMMessage> adapter;
+    public BaseAdapter adapter;
     public List<IMMessage> items = new ArrayList<>();
 
     public Team team;
@@ -114,40 +110,41 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
 
-        adapter = new CommonAdapter<IMMessage>(getActivity(), items, R.layout.item_message) {
-            @Override
-            public void convert(final ViewHolder holder, IMMessage item, int position) {
-
-                if (item.getFromAccount().equals(BaseApplication.getAccount())) {
-                    holder.getView(R.id.right).setVisibility(View.VISIBLE);
-                    holder.getView(R.id.left).setVisibility(View.GONE);
-                    //.transform(new GlideRoundTransform(MessageActivity.this))
-                    Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).crossFade().dontAnimate().into((ImageView) holder.getView(R.id.my_head));
-                    holder.setText(R.id.my_time, getTime(item.getTime()));
-                    ((TextView) holder.getView(R.id.my_content)).setText(ExpressionUtil.getExpressionString(
-                            getActivity(), item.getContent(), ExpressionUtil.emoji, new Hashtable<Integer, GifDrawable>(), new GifDrawable.UpdateListener() {
-                                @Override
-                                public void update() {
-                                    ((TextView) holder.getView(R.id.my_content)).postInvalidate();
-                                }
-                            }));
-                } else {
-                    holder.getView(R.id.right).setVisibility(View.GONE);
-                    holder.getView(R.id.left).setVisibility(View.VISIBLE);
-                    Glide.with(getActivity()).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_32).crossFade().dontAnimate().into((ImageView) holder.getView(R.id.other_head));
-                    holder.setText(R.id.other_name, item.getFromNick());
-                    ((TextView) holder.getView(R.id.other_content)).setText(ExpressionUtil.getExpressionString(
-                            getActivity(), item.getContent(), ExpressionUtil.emoji, new Hashtable<Integer, GifDrawable>(), new GifDrawable.UpdateListener() {
-                                @Override
-                                public void update() {
-                                    ((TextView) holder.getView(R.id.other_content)).postInvalidate();
-                                }
-                            }));
-                    holder.setText(R.id.other_time, getTime(item.getTime()));
-                }
-
-            }
-        };
+//        adapter = new CommonAdapter<IMMessage>(getActivity(), items, R.layout.item_message) {
+//            @Override
+//            public void convert(final ViewHolder holder, IMMessage item, int position) {
+//
+//                if (item.getFromAccount().equals(BaseApplication.getAccount())) {
+//                    holder.getView(R.id.right).setVisibility(View.VISIBLE);
+//                    holder.getView(R.id.left).setVisibility(View.GONE);
+//                    //.transform(new GlideRoundTransform(MessageActivity.this))
+//                    Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).crossFade().dontAnimate().into((ImageView) holder.getView(R.id.my_head));
+//                    holder.setText(R.id.my_time, getTime(item.getTime()));
+//                    ((TextView) holder.getView(R.id.my_content)).setText(ExpressionUtil.getExpressionString(
+//                            getActivity(), item.getContent(), ExpressionUtil.emoji, new Hashtable<Integer, GifDrawable>(), new GifDrawable.UpdateListener() {
+//                                @Override
+//                                public void update() {
+//                                    ((TextView) holder.getView(R.id.my_content)).postInvalidate();
+//                                }
+//                            }));
+//                } else {
+//                    holder.getView(R.id.right).setVisibility(View.GONE);
+//                    holder.getView(R.id.left).setVisibility(View.VISIBLE);
+//                    Glide.with(getActivity()).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_32).crossFade().dontAnimate().into((ImageView) holder.getView(R.id.other_head));
+//                    holder.setText(R.id.other_name, item.getFromNick());
+//                    ((TextView) holder.getView(R.id.other_content)).setText(ExpressionUtil.getExpressionString(
+//                            getActivity(), item.getContent(), ExpressionUtil.emoji, new Hashtable<Integer, GifDrawable>(), new GifDrawable.UpdateListener() {
+//                                @Override
+//                                public void update() {
+//                                    ((TextView) holder.getView(R.id.other_content)).postInvalidate();
+//                                }
+//                            }));
+//                    holder.setText(R.id.other_time, getTime(item.getTime()));
+//                }
+//
+//            }
+//        };
+        adapter = new MessageAdapter(getActivity(), items);
         listView.setAdapter(adapter);
 
         listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
@@ -283,7 +280,7 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
 
         List<IMMessage> result = new ArrayList<>();
         for (IMMessage message : messages) {
-            if (message.getMsgType() == MsgTypeEnum.text) {
+            if (message.getMsgType() == MsgTypeEnum.text || message.getMsgType() == MsgTypeEnum.notification) {
                 result.add(message);
             }
         }
@@ -317,7 +314,7 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
             boolean needRefresh = false;
             List<IMMessage> addedListItems = new ArrayList<>(messages.size());
             for (IMMessage message : messages) {
-                if (isMyMessage(message) && message.getMsgType() == MsgTypeEnum.text) {
+                if (isMyMessage(message) && (message.getMsgType() == MsgTypeEnum.text || message.getMsgType() == MsgTypeEnum.notification)) {
                     items.add(message);
                     addedListItems.add(message);
                     needRefresh = true;

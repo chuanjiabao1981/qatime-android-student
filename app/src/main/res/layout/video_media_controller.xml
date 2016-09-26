@@ -36,7 +36,7 @@
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:singleLine="true"
-                android:text="視頻名字視頻名字視頻名字視頻名字視頻名字視頻名字"
+                android:text="視頻名字"
                 android:textSize="16sp" />
 
             <TextView
