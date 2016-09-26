@@ -15,7 +15,7 @@
 
         <Button
             android:id="@+id/confirm"
-            android:layout_width="wrap_content"
+            android:layout_width="140dp"
             style="@style/dialog_button_style"
             android:text="确定"
             android:textColor="#fff" />

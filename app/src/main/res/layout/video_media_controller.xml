@@ -7,7 +7,7 @@
     <RelativeLayout
         android:id="@+id/play_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="40dip">
+        android:layout_height="45dip">
 
         <ImageView
             android:id="@+id/player_exit"
@@ -257,7 +257,7 @@
                     android:layout_marginBottom="2dp"
                     android:layout_marginTop="2dp"
                     android:layout_weight="4"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:textColor="#333333"
                     android:background="@drawable/shape_input"
                     android:hint="@string/comment_content"
@@ -271,6 +271,7 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="1"
+                    android:textColor="#fff"
                     android:background="@drawable/button_bg_selector_gray"
                     android:text="@string/send" />
 

@@ -255,19 +255,19 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:padding="7dp"
-                        android:src="@drawable/shape_circle" />
+                        android:src="@drawable/shape_circle_learning" />
 
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:padding="7dp"
-                        android:src="@drawable/shape_circle" />
+                        android:src="@drawable/shape_circle_learning" />
 
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:padding="7dp"
-                        android:src="@drawable/shape_circle" />
+                        android:src="@drawable/shape_circle_learning" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
