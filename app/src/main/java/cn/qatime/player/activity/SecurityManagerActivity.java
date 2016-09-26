@@ -8,7 +8,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
 
@@ -88,7 +87,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
         String parentPhone = bean.getData().getParent_phone();
         if (parentPhone != null) {
             phoneNumberP.setText("" + parentPhone);
-            phoneNumberP.setTextColor(Color.BLACK);
+            phoneNumberP.setTextColor(0xff333333);
         } else {
             phoneNumberP.setText(getResourceString(R.string.not_bind));
             phoneNumberP.setTextColor(Color.RED);
@@ -96,7 +95,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
         String email = bean.getData().getEmail();
         if (email != null) {
             this.email.setText("" + email);
-            this.email.setTextColor(Color.BLACK);
+            this.email.setTextColor(0xff333333);
         } else {
             this.email.setText(getResourceString(R.string.not_bind));
             this.email.setTextColor(Color.RED);
@@ -105,7 +104,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
         String loginMobile = bean.getData().getLogin_mobile();
         if (loginMobile != null) {
             phoneNumberM.setText("" + loginMobile);
-            phoneNumberM.setTextColor(Color.BLACK);
+            phoneNumberM.setTextColor(0xff333333);
         } else {
             phoneNumberM.setText(getResourceString(R.string.not_bind));
             phoneNumberM.setTextColor(Color.RED);

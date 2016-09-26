@@ -34,7 +34,8 @@
             android:id="@+id/phone_number_m"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="15dp" />
+            android:textColor="#333333"
+            android:padding="12dp" />
 
         <ImageView
             android:layout_width="12dp"
@@ -69,7 +70,8 @@
             android:id="@+id/email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="15dp" />
+            android:textColor="#333333"
+            android:padding="12dp" />
 
         <ImageView
             android:layout_width="12dp"
@@ -105,7 +107,8 @@
             android:id="@+id/phone_number_p"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="15dp" />
+            android:textColor="#333333"
+            android:padding="12dp" />
 
         <ImageView
             android:layout_width="12dp"

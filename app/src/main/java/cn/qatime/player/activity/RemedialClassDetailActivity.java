@@ -151,6 +151,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
+                mIndicator.select(position);
             }
 
             @Override

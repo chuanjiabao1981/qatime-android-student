@@ -137,7 +137,7 @@
         <item name="android:layout_width">34dp</item>
         <item name="android:layout_height">34dp</item>
         <item name="android:layout_centerVertical">true</item>
-        <item name="android:padding">7dp</item>
+        <item name="android:padding">8dp</item>
     </style>
 
     <style name="backbar_text_style">//导航栏文字
