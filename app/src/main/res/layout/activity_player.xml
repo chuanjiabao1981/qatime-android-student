@@ -62,7 +62,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="5dp"
-                        android:background="@drawable/shape_input"
+                        android:background="@drawable/shape_input_radius"
                         android:maxLines="3"
                         android:textSize="14sp"
                         android:minHeight="40dp"

@@ -56,7 +56,6 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.TutorialClassBean;
-import libraryextra.utils.DensityUtils;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.StringUtils;
@@ -607,7 +606,7 @@ public class FragmentNews1 extends BaseFragment {
             intent.putExtra("sessionType", items.get(position).getSessionType());
             intent.putExtra("courseId", items.get(position).getCourseId());
             intent.putExtra("pull_address", items.get(position).getPull_address());
-            intent.putExtra("name", items.get(position).getContent());
+            intent.putExtra("name", items.get(position).getName());
             startActivity(intent);
         } else {
             shouldPost = true;
