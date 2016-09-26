@@ -54,6 +54,7 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.TutorialClassBean;
+import libraryextra.utils.DensityUtils;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.StringUtils;
@@ -144,7 +145,7 @@ public class FragmentNews1 extends BaseFragment {
             public void convert(ViewHolder holder, MessageListBean item, int position) {
                 if (item.getSessionType() == SessionTypeEnum.Team) {
                     ((TextView) holder.getView(R.id.name)).setMaxWidth((int) (ScreenUtils.getScreenWidth(getActivity()) * 0.8));
-                    holder.setText(R.id.name, item.getContent().replace("讨论组", ""));
+                    holder.setText(R.id.name, item.getName());
                 }
                 ((ImageView) holder.getView(R.id.notify)).setVisibility(item.isMute() ? View.VISIBLE : View.GONE);
                 holder.getView(R.id.count).setVisibility(item.getUnreadCount() == 0 ? View.GONE : View.VISIBLE);
@@ -162,7 +163,7 @@ public class FragmentNews1 extends BaseFragment {
                 intent.putExtra("sessionType", items.get(position - 1).getSessionType());
                 intent.putExtra("courseId", items.get(position - 1).getCourseId());
                 intent.putExtra("pull_address", items.get(position - 1).getPull_address());
-                intent.putExtra("name", items.get(position - 1).getContent());
+                intent.putExtra("name", items.get(position - 1).getName());
                 startActivity(intent);
             }
         });
@@ -171,21 +172,20 @@ public class FragmentNews1 extends BaseFragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 if (NIMClient.getStatus() == StatusCode.LOGINED) {
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//                    final Dialog dialog = new Dialog(getActivity(),R.style.Transparent);
-                    final AlertDialog dialog =new AlertDialog.Builder(getActivity()).create();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    final AlertDialog alertDialog = builder.create();
                     View v = View.inflate(getActivity(), R.layout.dialog_team_notify_alert, null);
                     v.findViewById(R.id.root).setOnClickListener(new OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            dialog.dismiss();
+                            alertDialog.dismiss();
                         }
                     });
                     ((TextView) v.findViewById(R.id.text)).setText(items.get(position - 1).isMute() ? getResourceString(R.string.resume_alert) : getResourceString(R.string.nolongger_alert));
                     v.findViewById(R.id.text).setOnClickListener(new OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            dialog.dismiss();
+                            alertDialog.dismiss();
 
                             NIMClient.getService(TeamService.class).muteTeam(items.get(position - 1).getContactId(), !items.get(position - 1).isMute()).setCallback(new RequestCallback<Void>() {
                                 @Override
@@ -211,16 +211,12 @@ public class FragmentNews1 extends BaseFragment {
                     v.findViewById(R.id.cancel).setOnClickListener(new OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            dialog.dismiss();
+                            alertDialog.dismiss();
                         }
                     });
-                    dialog.setCanceledOnTouchOutside(true);
-                    dialog.show();
-                    dialog.setContentView(v);
-//                    WindowManager.LayoutParams attributes = dialog.getWindow().getAttributes();
-//                    attributes.width= ScreenUtils.getScreenWidth(getActivity())- DensityUtils.dp2px(getActivity(),20)*2;
-//                    dialog.getWindow().setAttributes(attributes);
-//                    dialog.setContentView(v);
+                    alertDialog.setCanceledOnTouchOutside(true);
+                    alertDialog.show();
+                    alertDialog.setContentView(v);
 
                     return true;
                 }
@@ -273,9 +269,9 @@ public class FragmentNews1 extends BaseFragment {
                         bean.setMute(team.mute());
                         bean.setContactId(item.getContactId());
                         bean.setSessionType(item.getSessionType());
-                        bean.setContent(data.getName());
-                        if (StringUtils.isNullOrBlanK(bean.getContent())) {
-                            bean.setContent(item.getContent().replace("讨论组", ""));
+                        bean.setName(data.getName());
+                        if (StringUtils.isNullOrBlanK(bean.getName())) {
+                            bean.setName(item.getContent().replace("讨论组", ""));
                         }
                         bean.setCourseId(data.getId());
                         bean.setUnreadCount(item.getUnreadCount());
@@ -295,7 +291,7 @@ public class FragmentNews1 extends BaseFragment {
                 bean.setMute(team.mute());
                 bean.setContactId(item.getContactId());
                 bean.setSessionType(item.getSessionType());
-                bean.setContent(item.getContent());
+                bean.setName(TeamDataCache.getInstance().getTeamName(item.getContactId()).replace("讨论组", ""));
                 bean.setUnreadCount(item.getUnreadCount());
                 bean.setRecentMessageId(item.getRecentMessageId());
 //                        bean.setPull_address(data.getPull_address());
@@ -479,7 +475,7 @@ public class FragmentNews1 extends BaseFragment {
                     if (courses != null && courses.getData() != null) {
                         for (TutorialClassBean.Data data : courses.getData()) {
                             if (data.getChat_team_id().equals(msg.getContactId())) {
-                                bean.setContent(data.getName());
+                                bean.setName(data.getName());
                                 bean.setPull_address(data.getPull_address());
                             }
                         }
@@ -491,8 +487,8 @@ public class FragmentNews1 extends BaseFragment {
                 Team team = TeamDataCache.getInstance().getTeamById(bean.getContactId());
                 bean.setMute(team.mute());
                 bean.setSessionType(msg.getSessionType());
-                if (StringUtils.isNullOrBlanK(bean.getContent())) {
-                    bean.setContent(msg.getContent().replace("讨论组", ""));
+                if (StringUtils.isNullOrBlanK(bean.getName())) {
+                    bean.setName(TeamDataCache.getInstance().getTeamName(msg.getContactId()).replace("讨论组", ""));
                 }
                 bean.setUnreadCount(msg.getUnreadCount());
                 bean.setTime(msg.getTime());
