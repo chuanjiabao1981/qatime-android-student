@@ -9,33 +9,46 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.orhanobut.logger.Logger;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DecimalFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.PersonalInformationActivity;
 import cn.qatime.player.activity.PersonalMyOrderActivity;
 import cn.qatime.player.activity.PersonalMyTutorshipActivity;
+import cn.qatime.player.activity.PersonalMyWalletActivity;
 import cn.qatime.player.activity.SecurityManagerActivity;
 import cn.qatime.player.activity.SystemSettingActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.transformation.GlideCircleTransform;
+import libraryextra.utils.VolleyListener;
 
 public class Fragment4 extends BaseFragment implements View.OnClickListener {
     private LinearLayout information;
     private ImageView banner;
     private ImageView headSculpture;
     private LinearLayout order;
-    private LinearLayout ticket;
+    private LinearLayout wallet;
     private LinearLayout course;
     private LinearLayout security;
     private LinearLayout setting;
     private TextView newVersion;
     private TextView name;
-
+    private TextView balance;
+    DecimalFormat df = new DecimalFormat("#.00");
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -46,9 +59,38 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
             Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).placeholder(R.mipmap.personal_information_head).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
         }
         name.setText(BaseApplication.getProfile().getData().getUser().getName());
+        addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.urlpayment + BaseApplication.getUserId() + "/cash", null, new VolleyListener(getActivity()){
 
+            @Override
+            protected void onTokenOut() {
+                tokenOut();
+            }
+
+            @Override
+            protected void onSuccess(JSONObject response) {
+                try {
+                    String price = df.format(Double.valueOf(response.getJSONObject("data").getString("balance")));
+                    if (price.startsWith(".")) {
+                        price = "0" + price;
+                    }
+                    balance.setText(price);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            protected void onError(JSONObject response) {
+                Toast.makeText(getActivity(),  getResourceString(R.string.get_wallet_info_error), Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Toast.makeText(getActivity(), getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
+            }
+        }));
         order.setOnClickListener(this);
-        ticket.setOnClickListener(this);
+        wallet.setOnClickListener(this);
         course.setOnClickListener(this);
         information.setOnClickListener(this);
 
@@ -64,8 +106,8 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
                 Intent intent = new Intent(getActivity(), PersonalInformationActivity.class);
                 startActivityForResult(intent, Constant.REQUEST);
                 break;
-            case R.id.my_ticket:
-                intent = new Intent(getActivity(), PersonalMyOrderActivity.class);
+            case R.id.my_wallet:
+                intent = new Intent(getActivity(), PersonalMyWalletActivity.class);
                 startActivity(intent);
                 break;
             case R.id.my_order:
@@ -102,8 +144,9 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
         banner = (ImageView) view.findViewById(R.id.head_sculpture);
         headSculpture = (ImageView) view.findViewById(R.id.head_sculpture);
         name = (TextView) view.findViewById(R.id.name);
+        balance = (TextView) view.findViewById(R.id.balance);
         order = (LinearLayout) view.findViewById(R.id.my_order);
-        ticket = (LinearLayout) view.findViewById(R.id.my_ticket);
+        wallet = (LinearLayout) view.findViewById(R.id.my_wallet);
         course = (LinearLayout) view.findViewById(R.id.my_course);
         security = (LinearLayout) view.findViewById(R.id.security);
         setting = (LinearLayout) view.findViewById(R.id.setting);

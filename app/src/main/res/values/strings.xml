@@ -127,7 +127,7 @@
     <string name="commodity_name">商品名称</string>
     <string name="commodity_detail">商品详情</string>
     <string name="pay_remind">请您在24小时内完成支付，否则订单会自动取消。</string>
-    <string name="problem_phone">如遇支付问题，请拨打电话</string>
+    <string name="problem_phone">遇到问题请拨打客服电话</string>
     <!--//详情-->
     <string name="information_detail">辅导概况</string>
 
@@ -413,4 +413,13 @@
     <string name="team_allow_anyone_join">允许任何人加入</string>
     <string name="team_not_allow_anyone_join">不允许任何人申请加入</string>
     <string name="have_muted">你已被禁言，暂不能发送消息</string>
+    <string name="get_wallet_info_error">钱包信息获取失败</string>
+    <string name="balance">余额</string>
+    <string name="account_consumption">累计消费￥</string>
+    <string name="recharge_record">充值记录</string>
+    <string name="consumption_record">消费记录</string>
+    <string name="recharge">充值</string>
+    <string name="my_wallet">我的钱包</string>
+    <string name="recharge_now">立即充值</string>
+    <string name="recharge_choice">充值选择</string>
 </resources>
