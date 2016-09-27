@@ -18,7 +18,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.orhanobut.logger.Logger;
 
-
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
@@ -32,12 +31,12 @@ import cn.qatime.player.R;
 import cn.qatime.player.activity.NEVideoPlayerActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.ClassTimeTableBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import cn.qatime.player.base.BaseFragment;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -121,16 +120,16 @@ public class FragmentRemedialClassTimeTable1 extends BaseFragment {
             @Override
             public void convert(ViewHolder helper, final ClassTimeTableBean.DataEntity.LessonsEntity item, int position) {
                 Glide.with(getActivity()).load(item.getCourse_publicize()).centerCrop().crossFade().dontAnimate().into((ImageView) helper.getView(R.id.image));
-                helper.getView(R.id.image).setOnClickListener(
-                        new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                                intent.putExtra("id",  Integer.valueOf(item.getCourse_id()));
-                                intent.putExtra("pager", 2);
-                                startActivity(intent);
-                            }
-                        });
+//                helper.getView(R.id.image).setOnClickListener(
+//                        new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+//                                intent.putExtra("id",  Integer.valueOf(item.getCourse_id()));
+//                                intent.putExtra("pager", 2);
+//                                startActivity(intent);
+//                            }
+//                        });
                 helper.setText(R.id.course, item.getCourse_name());
                 helper.setText(R.id.classname, item.getName());
                 helper.setText(R.id.status, getStatus(item.getStatus()));
@@ -176,7 +175,10 @@ public class FragmentRemedialClassTimeTable1 extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                intent.putExtra("id", Integer.valueOf(itemList.get(position).getCourse_id()));
+                intent.putExtra("pager", 2);
+                startActivity(intent);
             }
         });
     }
