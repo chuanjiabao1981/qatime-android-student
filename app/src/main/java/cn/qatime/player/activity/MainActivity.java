@@ -45,7 +45,6 @@ import cn.qatime.player.fragment.Fragment3;
 import cn.qatime.player.fragment.Fragment4;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
-import cn.qatime.player.utils.AppUtils;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -129,9 +128,9 @@ public class MainActivity extends BaseFragmentActivity {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
                 currentPosition = position;
-                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xffcccccc);
+                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xffafaa9a);
                 ((ImageView) lastTabView.findViewById(tab_img[lastPosition])).setImageResource(tabImages[lastPosition][1]);
-                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffff0000);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xfff45050);
                 ((ImageView) currentTabView.findViewById(tab_img[position])).setImageResource(tabImages[position][0]);
                 enableMsgNotification(false);
             }

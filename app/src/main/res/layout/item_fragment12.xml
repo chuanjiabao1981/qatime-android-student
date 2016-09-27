@@ -10,6 +10,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:scaleType="fitXY"
             android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -22,7 +23,7 @@
             android:layout_alignParentRight="true"
             android:ellipsize="middle"
             android:maxLines="1"
-            android:background="#cc9999"
+            android:background="#ff9900"
             android:text="距开课3天"
             android:textColor="#fff"
             android:textSize="12sp" />
@@ -46,17 +47,16 @@
             android:id="@+id/teacher"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:gravity="center"
             android:text="老师"
-            android:textSize="13sp" />
+            android:textSize="14sp" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
+            android:textColor="#cccccc"
             android:gravity="center"
             android:text="老师"
-            android:textSize="13sp" />
+            android:textSize="14sp" />
 
         <View
             android:layout_width="0dp"
@@ -67,9 +67,8 @@
             android:id="@+id/subject"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:text="科目"
-            android:textSize="13sp" />
+            android:textSize="14sp" />
 
         <View
             android:layout_width="0dp"
@@ -80,11 +79,8 @@
             android:id="@+id/grade"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:layout_marginRight="10dp"
-
             android:text="年级"
-            android:textSize="13sp" />
+            android:textSize="14sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -96,13 +92,9 @@
             android:id="@+id/price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:layout_marginLeft="10dp"
-
             android:text="价格"
             android:textColor="#ff0000"
-            android:textSize="13sp"
-            android:textStyle="bold" />
+            android:textSize="14sp" />
 
         <View
             android:layout_width="0dp"
@@ -119,13 +111,9 @@
             android:id="@+id/student_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:layout_marginRight="10dp"
-
-
             android:gravity="center"
             android:text="人数"
-            android:textSize="13sp" />
+            android:textSize="14sp" />
     </LinearLayout>
 
 </LinearLayout>
