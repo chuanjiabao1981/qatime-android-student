@@ -152,9 +152,9 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_alignParentRight="true"
-
+                        android:scaleType="centerInside"
                         android:layout_gravity="center"
-                        android:layout_margin="5dp"
+                        android:padding="5dp"
                         android:src="@mipmap/shopping32" />
                     />
 
@@ -164,7 +164,8 @@
                         android:layout_height="30dp"
                         android:layout_alignParentRight="true"
                         android:layout_gravity="center"
-                        android:layout_margin="5dp"
+                        android:scaleType="centerInside"
+                        android:padding="5dp"
                         android:src="@mipmap/playing" />
                     />
                 </LinearLayout>

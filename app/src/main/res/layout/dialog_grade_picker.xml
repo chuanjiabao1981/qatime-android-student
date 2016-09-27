@@ -12,10 +12,11 @@
         android:gravity="center"
         style="@style/dialog_text_style"
         android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
         android:text="＞" />
     <cn.qatime.player.view.WheelView
         android:id="@+id/grade"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

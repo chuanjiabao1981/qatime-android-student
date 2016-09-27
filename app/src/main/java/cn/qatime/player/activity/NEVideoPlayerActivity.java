@@ -194,11 +194,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
                 ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff333333);
 //                    lastTabView.setBackgroundColor(0xffffffff);
 //                    currentTabView.setBackgroundColor(0xffeeeeee);
-                    if (position == 1) {
-                        inputLayout.setVisibility(View.VISIBLE);
-                    } else {
+                    if (position != 1) {
                         KeyBoardUtils.closeKeybord(NEVideoPlayerActivity.this);
-                        inputLayout.setVisibility(View.GONE);
                     }
             }
         });

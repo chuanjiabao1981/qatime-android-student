@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="@drawable/shape_main_tab"
+    android:background="@drawable/shape_menu_tab"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     style="@style/tab_menu_height">

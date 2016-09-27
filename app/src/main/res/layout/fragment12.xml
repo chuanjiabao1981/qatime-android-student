@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/by_time"
-                style="@style/tab_text_color_normal" />
+                style="@style/tab_text_color_select" />
 
             <ImageView
                 android:layout_width="10dp"
@@ -50,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/by_subject"
-                style="@style/tab_text_color_normal" />
+                style="@style/tab_text_color_select" />
 
             <ImageView
                 android:layout_width="10dp"
@@ -74,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/by_grade"
-                style="@style/tab_text_color_normal" />
+                style="@style/tab_text_color_select" />
 
             <ImageView
                 android:layout_width="10dp"
@@ -101,18 +101,22 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="#ffffff"
+        android:paddingTop="8dp"
         android:layout_height="match_parent">
 
         <com.handmark.pulltorefresh.library.PullToRefreshGridView
             android:id="@+id/grid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#11000000"
             android:cacheColorHint="@null"
-            android:horizontalSpacing="1px"
+            android:horizontalSpacing="10dp"
+            android:background="#ffffff"
             android:numColumns="2"
             android:scrollbars="none"
-            android:verticalSpacing="1px" />
+            android:verticalSpacing="10dp" />
 
     </RelativeLayout>
 
