@@ -24,7 +24,7 @@ import libraryextra.view.FragmentLayoutWithLine;
  * @date 2016/9/27 17:14
  * @Description:
  */
-public class FundRecordActivity extends BaseFragmentActivity{
+public class RecordFundActivity extends BaseFragmentActivity{
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2};
     FragmentLayoutWithLine fragmentlayout;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
@@ -34,13 +34,13 @@ public class FundRecordActivity extends BaseFragmentActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fund_record);
+        setContentView(R.layout.activity_record_fund);
         setTitle(getResources().getString(R.string.my_order));
         setRightImage(R.mipmap.phone, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (alertDialog == null) {
-                    View view = View.inflate(FundRecordActivity.this, R.layout.dialog_cancel_or_confirm, null);
+                    View view = View.inflate(RecordFundActivity.this, R.layout.dialog_cancel_or_confirm, null);
                     TextView text = (TextView) view.findViewById(R.id.text);
                     text.setText(getResourceString(R.string.call_customer_service_phone) + "0353-2135828?");
                     Button cancel = (Button) view.findViewById(R.id.cancel);
@@ -59,7 +59,7 @@ public class FundRecordActivity extends BaseFragmentActivity{
                             alertDialog.dismiss();
                         }
                     });
-                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(FundRecordActivity.this);
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(RecordFundActivity.this);
                     alertDialog = builder.create();
                     alertDialog.show();
                     alertDialog.setContentView(view);

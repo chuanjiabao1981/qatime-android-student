@@ -14,15 +14,22 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.bean.RechargeRecordBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.adapter.CommonAdapter;
+import libraryextra.adapter.ViewHolder;
+import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyListener;
 
 /**
@@ -32,6 +39,9 @@ import libraryextra.utils.VolleyListener;
  */
 public class FragmentFundRecord1 extends BaseFragment {
     private PullToRefreshListView listView;
+    private List<RechargeRecordBean.DataBean> data = new ArrayList<>();
+    private CommonAdapter<RechargeRecordBean.DataBean> adapter;
+    DecimalFormat df = new DecimalFormat("#.00");
 
     @Nullable
     @Override
@@ -46,7 +56,7 @@ public class FragmentFundRecord1 extends BaseFragment {
         Map<String, String> map = new HashMap<>();
         map.put("start_date", "0");
         map.put("end_date", new Date().getTime() + "");
-        map.put("page", "10");
+        map.put("page", "1");
         addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/recharges", map), null, new VolleyListener(getActivity()) {
 
             @Override
@@ -56,7 +66,9 @@ public class FragmentFundRecord1 extends BaseFragment {
 
             @Override
             protected void onSuccess(JSONObject response) {
-
+                RechargeRecordBean bean = JsonUtils.objectFromJson(response.toString(), RechargeRecordBean.class);
+                data.addAll(bean.getData());
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -82,6 +94,22 @@ public class FragmentFundRecord1 extends BaseFragment {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
 
+        adapter = new CommonAdapter<RechargeRecordBean.DataBean>(getActivity(), data, R.layout.item_fragment_fund_record1) {
+
+            @Override
+            public void convert(ViewHolder helper, RechargeRecordBean.DataBean item, int position) {
+                helper.setText(R.id.id, item.getId());
+                String price = df.format(Double.valueOf(item.getAmount()));
+                if (price.startsWith(".")) {
+                    price = "0" + price;
+                }
+                helper.setText(R.id.money_amount, "+￥" + price);
+                helper.setText(R.id.time, item.getCreated_at().substring(0,19).replace("T"," "));
+                helper.setText(R.id.mode, getPayType(item.getPay_type()));
+                helper.setText(R.id.status, getStatus(item.getStatus()));
+            }
+        };
+        listView.setAdapter(adapter);
 
 //        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
 //            @Override
@@ -104,14 +132,30 @@ public class FragmentFundRecord1 extends BaseFragment {
 //                initData();
 //            }
 //        });
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-//                intent.putExtra("id", Integer.valueOf(itemList.get(position-1).getCourse_id()));
-//                intent.putExtra("pager", 2);
-//                startActivity(intent);
-//            }
-//        });
     }
+
+    private String getPayType(String pay_type) {
+        switch (pay_type) {
+            case "weixin":
+                return "微信支付";
+            case "alipay":
+                return "支付宝";
+            case "offline":
+                return "线下支付";
+        }
+        return "未支付";
+    }
+
+    private String getStatus(String pay_type) {
+        switch (pay_type) {
+            case "unpaid":
+                return "未支付";
+            case "alipay":
+                return "已支付";
+            case "canceled":
+                return "订单取消";
+        }
+        return "未支付";
+    }
+
 }

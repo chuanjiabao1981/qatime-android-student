@@ -92,6 +92,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/recharge_now"
         style="@style/button_full_width_style"
         android:layout_alignParentBottom="true"
         android:text="@string/recharge_now" />

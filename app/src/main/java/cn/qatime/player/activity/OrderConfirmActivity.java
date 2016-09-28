@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -30,10 +29,8 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.OrderConfirmBean;
 import libraryextra.bean.OrderPayBean;
-import libraryextra.utils.DensityUtils;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.SPUtils;
-import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -134,16 +131,19 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                             //                            canPay = false;
                            dialog();
                         }
+                        pay.setEnabled(true);
                     }
 
                     @Override
                     protected void onError(JSONObject response) {
                         //                            canPay = false;
                         dialog();
+                        pay.setEnabled(true);
                     }
 
                     @Override
                     protected void onTokenOut() {
+                        pay.setEnabled(true);
                         tokenOut();
                     }
                 }, new VolleyErrorListener() {
@@ -159,7 +159,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     }
 
     protected void dialog() {
-        pay.setEnabled(true);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         alertDialog = builder.create();
         View view = View.inflate(this, R.layout.dialog_confirm, null);

@@ -59,7 +59,8 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
         setRightText("说明", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 2016/9/27 说明 
+                Intent intent = new Intent(PersonalMyWalletActivity.this, RechargeProcessActivity.class);
+                startActivity(intent);
             }
         });
         assignViews();
@@ -71,7 +72,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
     }
 
     private void initData() {
-        addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.urlpayment + BaseApplication.getUserId() + "/cash", null, new VolleyListener(this){
+        addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.urlpayment + BaseApplication.getUserId() + "/cash", null, new VolleyListener(this) {
 
             @Override
             protected void onTokenOut() {
@@ -98,7 +99,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
 
             @Override
             protected void onError(JSONObject response) {
-                Toast.makeText(PersonalMyWalletActivity.this,  getResourceString(R.string.get_wallet_info_error), Toast.LENGTH_SHORT).show();
+                Toast.makeText(PersonalMyWalletActivity.this, getResourceString(R.string.get_wallet_info_error), Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -143,18 +144,18 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
                 break;
             case R.id.recharge:
                 // TODO: 2016/9/27  充值
-                Intent intent = new Intent(this,RechargeActivity.class);
-                intent.putExtra("page",0);
+                Intent intent = new Intent(this, RechargeActivity.class);
+                intent.putExtra("page", 0);
                 startActivity(intent);
                 break;
             case R.id.recharge_record:
-                intent = new Intent(this,FundRecordActivity.class);
-                intent.putExtra("page",0);
+                intent = new Intent(this, RecordFundActivity.class);
+                intent.putExtra("page", 0);
                 startActivity(intent);
                 break;
             case R.id.consumption_record:
-                intent = new Intent(this,FundRecordActivity.class);
-                intent.putExtra("page",1);
+                intent = new Intent(this, RecordFundActivity.class);
+                intent.putExtra("page", 1);
                 startActivity(intent);
                 break;
         }
