@@ -116,29 +116,29 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                 new VolleyListener(OrderConfirmActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        data = JsonUtils.objectFromJson(response.toString(), OrderConfirmBean.class);
-                        if (data != null) {
-//                            canPay = true;
-                            Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
-                            intent.putExtra("price", priceNumber);
-                            intent.putExtra("id", data.getData().getId());
-                            intent.putExtra("time", data.getData().getCreated_at());
-                            intent.putExtra("type", (data.getData().getPay_type() + "").equals("1") ? getResources().getString(R.string.method_payment) + getResourceString(R.string.pay_wexin) : getResources().getString(R.string.method_payment) + "：支付宝支付");
-                            OrderConfirmBean.App_pay_params app_pay_params = data.getData().getApp_pay_params();
-                            intent.putExtra("data", app_pay_params);
-                            startActivity(intent);
-                            SPUtils.put(OrderConfirmActivity.this, "orderId", data.getData().getId());
-                            SPUtils.put(OrderConfirmActivity.this, "price", priceNumber);
-                            pay.setEnabled(true);
+                        if (payType.equals("1")) {
+                            data = JsonUtils.objectFromJson(response.toString(), OrderConfirmBean.class);
+                            if (data != null) {
+                                Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
+                                intent.putExtra("price", priceNumber);
+                                intent.putExtra("id", data.getData().getId());
+                                intent.putExtra("time", data.getData().getCreated_at());
+                                intent.putExtra("type", data.getData().getPay_type());
+                                OrderConfirmBean.App_pay_params app_pay_params = data.getData().getApp_pay_params();
+                                intent.putExtra("data", app_pay_params);
+                                startActivity(intent);
+                                SPUtils.put(OrderConfirmActivity.this, "orderId", data.getData().getId());
+                                SPUtils.put(OrderConfirmActivity.this, "price", priceNumber);
+                                pay.setEnabled(true);
+                            } else {
+                                dialog();
+                            }
                         } else {
-                            //                            canPay = false;
-                           dialog();
                         }
                     }
 
                     @Override
                     protected void onError(JSONObject response) {
-                        //                            canPay = false;
                         dialog();
                     }
 
@@ -176,6 +176,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 //        attributes.width= ScreenUtils.getScreenWidth(getApplicationContext())- DensityUtils.dp2px(getApplicationContext(),20)*2;
 //        alertDialog.getWindow().setAttributes(attributes);
     }
+
     public void initView() {
 
         name = (TextView) findViewById(R.id.name);
@@ -203,13 +204,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                     payType = "0";
                 }
 
-                //TODO 集成完支付宝后，去掉下面这段
-                if (checkedId == aliPay.getId()) {
-                    Toast.makeText(OrderConfirmActivity.this, getResourceString(R.string.not_support_alipay), Toast.LENGTH_SHORT).show();
-                    wechatPay.setChecked(true);
-                    aliPay.setChecked(false);
-                    payType = "1";
-                }
             }
         });
     }

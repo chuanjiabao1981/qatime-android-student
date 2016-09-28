@@ -35,35 +35,43 @@ public class OrderPayActivity extends BaseActivity {
 
     DecimalFormat df = new DecimalFormat("#.00");
     private OrderConfirmBean.App_pay_params data;
+    private int payType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_pay);
-        setTitle(getResources().getString(R.string.pay_confirm));
+        setTitle(getResourceString(R.string.pay_confirm));
         initView();
+        payType = getIntent().getIntExtra("type", 0);
         api = WXAPIFactory.createWXAPI(this, null);
 
         EventBus.getDefault().register(this);
 
-        // 将该app注册到微信
-        api.registerApp(Constant.APP_ID);
+        if (payType == 1) {
+            // 将该app注册到微信
+            api.registerApp(Constant.APP_ID);
+        } else {
+        }
 
         initData();
     }
 
     private void initData() {
-        //1
         data = (OrderConfirmBean.App_pay_params) getIntent().getSerializableExtra("data");
 
         String price = df.format(getIntent().getIntExtra("price", 0));
         if (price.startsWith(".")) {
             price = "0" + price;
         }
-        code.setText(getResources().getString(R.string.order_number) + "：" + getIntent().getStringExtra("id"));
-        time.setText(getResources().getString(R.string.time_built) + "：" + getIntent().getStringExtra("time"));
-        type.setText(getIntent().getStringExtra("type"));
-        this.price.setText(getResources().getString(R.string.amount_payment) + "：￥" + price);
+        code.setText(getResourceString(R.string.order_number) + "：" + getIntent().getStringExtra("id"));
+        time.setText(getResourceString(R.string.time_built) + "：" + getIntent().getStringExtra("time"));
+        if (payType == 0) {
+            type.setText(getResourceString(R.string.method_payment) + getResourceString(R.string.pay_alipay));
+        } else {
+            type.setText(getResourceString(R.string.method_payment) + getResourceString(R.string.pay_wexin));
+        }
+        this.price.setText(getResourceString(R.string.amount_payment) + "：￥" + price);
     }
 
     public void initView() {
@@ -85,22 +93,25 @@ public class OrderPayActivity extends BaseActivity {
         commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PayReq request = new PayReq();
+                if (payType == 1) {
+                    PayReq request = new PayReq();
 
-                request.appId = data.getAppid();
+                    request.appId = data.getAppid();
 
-                request.partnerId = data.getPartnerid();
+                    request.partnerId = data.getPartnerid();
 
-                request.prepayId = data.getPrepayid();
+                    request.prepayId = data.getPrepayid();
 
-                request.packageValue = data.getPackage();
+                    request.packageValue = data.getPackage();
 
-                request.nonceStr = data.getNoncestr();
+                    request.nonceStr = data.getNoncestr();
 
-                request.timeStamp = data.getTimestamp();
+                    request.timeStamp = data.getTimestamp();
 
-                request.sign = data.getSign();
-                api.sendReq(request);
+                    request.sign = data.getSign();
+                    api.sendReq(request);
+                } else {
+                }
             }
         });
     }
