@@ -8,8 +8,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
+import com.tencent.mm.sdk.modelpay.PayReq;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
+import java.text.DecimalFormat;
+
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.bean.RechargeBean;
+import cn.qatime.player.utils.Constant;
+import libraryextra.utils.StringUtils;
 
 /**
  * @author Tianhaoranly
@@ -24,6 +37,9 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
     private Button rechargeConfirm;
     private TextView phone;
     private AlertDialog alertDialogPhone;
+    DecimalFormat df = new DecimalFormat("#.00");
+    private RechargeBean.DataBean.AppPayParamsBean data;
+    private IWXAPI api;
 
     private void assignViews() {
         id = (TextView) findViewById(R.id.id);
@@ -34,7 +50,6 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
         phone = (TextView) findViewById(R.id.phone);
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,13 +57,25 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
         setTitle(getResourceString(R.string.recharge_confirm));
         assignViews();
 
+        api = WXAPIFactory.createWXAPI(this, null);
+
+        EventBus.getDefault().register(this);
+
+        // 将该app注册到微信
+        api.registerApp(Constant.APP_ID);
+
+
         Intent intent = getIntent();
         id.setText(intent.getStringExtra("id"));
-        time.setText(intent.getStringExtra("time"));
-        mode.setText(intent.getStringExtra("pay_type"));
-        amount.setText(intent.getStringExtra("amount"));
-
-
+        time.setText(intent.getStringExtra("created_at"));
+        mode.setText(getPayType(intent.getStringExtra("pay_type")));
+        String price = df.format(Double.valueOf(intent.getStringExtra("amount")));
+        if (price.startsWith(".")) {
+            price = "0" + price;
+        }
+        price = "￥"+price;
+        amount.setText(price);
+        data = (RechargeBean.DataBean.AppPayParamsBean) intent.getSerializableExtra("app_pay_params");
 
         phone.setOnClickListener(this);
         rechargeConfirm.setOnClickListener(this);
@@ -86,10 +113,58 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
                     alertDialogPhone.show();
                 }
                 break;
-            case R.id.confirm:
+            case R.id.recharge_confirm:
                 // TODO: 2016/9/27  调用api充值
+                if ("weixin".equals(getIntent().getStringExtra("pay_type"))) {//微信支付
+                    Logger.e("微信支付");
+                    PayReq request = new PayReq();
+
+                    request.appId = data.getAppid();
+
+                    request.partnerId = data.getPartnerid();
+
+                    request.prepayId = data.getPrepayid();
+
+                    request.packageValue = data.getPackageX();
+
+                    request.nonceStr = data.getNoncestr();
+
+                    request.timeStamp = data.getTimestamp();
+
+                    request.sign = data.getSign();
+
+                    api.sendReq(request);
+                } else {//支付宝支付
+                    // TODO: 2016/9/28 支付宝
+                    Logger.e("支付宝支付");
+                }
                 break;
 
         }
+    }
+
+    private String getPayType(String pay_type) {
+        switch (pay_type) {
+            case "weixin":
+                return "微信支付";
+            case "alipay":
+                return "支付宝";
+            case "offline":
+                return "线下支付";
+        }
+        return "未支付";
+    }
+
+    @Subscribe
+    public void onEvent(String event) {
+        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
+            finish();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

@@ -34,7 +34,9 @@
                     android:id="@+id/recharge_num"
                     android:layout_margin="5dp"
                     android:layout_width="match_parent"
-                    android:inputType="number"
+                    android:gravity="center_vertical"
+                    android:paddingRight="20dp"
+                    android:inputType="numberDecimal"
                     style="@style/activity_edit_text_style"
                     android:hint="请输入想要充值的金额" />
 
