@@ -84,8 +84,8 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
         } else {
             paytime.setText(getIntent().getStringExtra("pay_at"));
         }
-        int payType = getIntent().getIntExtra("payType", 0);//支付方式
-        if (payType == 1) {
+        String payType = getIntent().getStringExtra("payType");//支付方式
+        if (payType.equals("weixin")) {
             paytype.setText(getResourceString(R.string.wechat_payment));
         } else {
             paytype.setText(getResourceString(R.string.alipay_payment));

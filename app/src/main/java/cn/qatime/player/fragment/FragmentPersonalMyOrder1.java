@@ -115,12 +115,15 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent(getActivity(), OrderPayActivity.class);
-                                OrderConfirmBean.App_pay_params app_pay_params = item.getApp_pay_params();
-                                intent.putExtra("data", app_pay_params);
+                                if (item.getPay_type().equals("weixin")) {
+                                    intent.putExtra("data", item.getApp_pay_params());
+                                } else if (item.getPay_type().equals("alipay")) {
+                                    intent.putExtra("data", item.getApp_pay_str());
+                                }
                                 intent.putExtra("id", item.getId());
                                 intent.putExtra("time", item.getCreated_at());
                                 intent.putExtra("price", item.getProduct().getPrice());
-                                intent.putExtra("type", (item.getPay_type() + "").equals("1") ? getResources().getString(R.string.method_payment) + "：微信支付" : getResources().getString(R.string.method_payment) + "：支付宝支付");
+                                intent.putExtra("type", item.getPay_type().equals("weixin") ? getResources().getString(R.string.method_payment) + "：微信支付" : getResources().getString(R.string.method_payment) + "：支付宝支付");
                                 startActivity(intent);
                                 SPUtils.put(getActivity(), "orderId", item.getId());
                                 SPUtils.put(getActivity(), "price", item.getProduct().getPrice());

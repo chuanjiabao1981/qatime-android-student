@@ -49,14 +49,13 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     TextView payprice;
     private Button pay;
     private RadioButton wechatPay;
-    private RadioButton aliPay;
     private RadioGroup radioGroup;
     private int id;
-    private String payType = "1";
+    private String payType = "weixin";
     private int priceNumber = 0;
-    private OrderConfirmBean data;
     DecimalFormat df = new DecimalFormat("#.00");
     private AlertDialog alertDialog;
+    private RadioButton aliPay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,30 +112,45 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                 new VolleyListener(OrderConfirmActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        data = JsonUtils.objectFromJson(response.toString(), OrderConfirmBean.class);
-                        if (data != null) {
-//                            canPay = true;
-                            Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
-                            intent.putExtra("price", priceNumber);
-                            intent.putExtra("id", data.getData().getId());
-                            intent.putExtra("time", data.getData().getCreated_at());
-                            intent.putExtra("type", (data.getData().getPay_type() + "").equals("1") ? getResources().getString(R.string.method_payment) + getResourceString(R.string.pay_wexin) : getResources().getString(R.string.method_payment) + "：支付宝支付");
-                            OrderConfirmBean.App_pay_params app_pay_params = data.getData().getApp_pay_params();
-                            intent.putExtra("data", app_pay_params);
-                            startActivity(intent);
-                            SPUtils.put(OrderConfirmActivity.this, "orderId", data.getData().getId());
-                            SPUtils.put(OrderConfirmActivity.this, "price", priceNumber);
-                            pay.setEnabled(true);
+                        OrderConfirmBean data = JsonUtils.objectFromJson(response.toString(), OrderConfirmBean.class);
+                        if (payType.equals("weixin")) {
+                            if (data != null) {
+                                Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
+                                intent.putExtra("price", priceNumber);
+                                intent.putExtra("id", data.getData().getId());
+                                intent.putExtra("time", data.getData().getCreated_at());
+                                intent.putExtra("type", payType);
+                                OrderConfirmBean.DataBean.AppPayParamsBean app_pay_params = data.getData().getApp_pay_params();
+                                intent.putExtra("data", app_pay_params);
+                                startActivity(intent);
+                                SPUtils.put(OrderConfirmActivity.this, "orderId", data.getData().getId());
+                                SPUtils.put(OrderConfirmActivity.this, "price", priceNumber);
+                                pay.setEnabled(true);
+                            } else {
+                                dialog();
+                            }
                         } else {
-                            //                            canPay = false;
-                           dialog();
+                            if (data != null) {
+                                Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
+                                intent.putExtra("price", priceNumber);
+                                intent.putExtra("id", data.getData().getId());
+                                intent.putExtra("time", data.getData().getCreated_at());
+                                intent.putExtra("type", payType);
+                                String app_pay_params = data.getData().getApp_pay_str();
+                                intent.putExtra("data", app_pay_params);
+                                startActivity(intent);
+                                SPUtils.put(OrderConfirmActivity.this, "orderId", data.getData().getId());
+                                SPUtils.put(OrderConfirmActivity.this, "price", priceNumber);
+                                pay.setEnabled(true);
+                            } else {
+                                dialog();
+                            }
                         }
                         pay.setEnabled(true);
                     }
 
                     @Override
                     protected void onError(JSONObject response) {
-                        //                            canPay = false;
                         dialog();
                         pay.setEnabled(true);
                     }
@@ -175,6 +189,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 //        attributes.width= ScreenUtils.getScreenWidth(getApplicationContext())- DensityUtils.dp2px(getApplicationContext(),20)*2;
 //        alertDialog.getWindow().setAttributes(attributes);
     }
+
     public void initView() {
 
         name = (TextView) findViewById(R.id.name);
@@ -197,17 +212,16 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == wechatPay.getId()) {
-                    payType = "1";
+                    payType = "weixin";
                 } else {
-                    payType = "0";
+                    payType = "alipay";
                 }
-
                 //TODO 集成完支付宝后，去掉下面这段
                 if (checkedId == aliPay.getId()) {
                     Toast.makeText(OrderConfirmActivity.this, getResourceString(R.string.not_support_alipay), Toast.LENGTH_SHORT).show();
                     wechatPay.setChecked(true);
                     aliPay.setChecked(false);
-                    payType = "1";
+                    payType = "weixin";
                 }
             }
         });
