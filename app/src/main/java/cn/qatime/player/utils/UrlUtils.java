@@ -38,10 +38,12 @@ public class UrlUtils {
     public static String urlUser = baseUrl + "api/v1/users/";
     //检查更新
     public static String urlcheckUpdate = baseUrl + "api/v1/system/check_update";
-    //用户信息
+    //找回密码
     public static String urlfindPassword = baseUrl + "api/v1/password";
     //标记通知已读
     public static String urlNotifications = baseUrl + "/api/v1/notifications/";
+    //账户充值
+    public static String urlpayment = baseUrl + "api/v1/payment/users/";
 
     public static String getUrl(String function, Map<String, String> params) {
         String url;

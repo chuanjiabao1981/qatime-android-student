@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
 import com.orhanobut.logger.Logger;
+import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
@@ -27,7 +28,6 @@ import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.bean.PayResult;
 import cn.qatime.player.utils.Constant;
 import libraryextra.bean.OrderConfirmBean;
-import libraryextra.utils.StringUtils;
 
 public class OrderPayActivity extends BaseActivity {
     TextView code;
@@ -174,10 +174,11 @@ public class OrderPayActivity extends BaseActivity {
     }
 
     @Subscribe
-    public void onEvent(String event) {
-        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
-            finish();
-        }
+    public void onEvent(BaseResp baseResp) {
+        Intent intent = new Intent(this,OrderPayResultActivity.class);
+        intent.putExtra("errCode",baseResp.errCode);
+        startActivity(intent);
+        finish();
     }
 
     @Override
