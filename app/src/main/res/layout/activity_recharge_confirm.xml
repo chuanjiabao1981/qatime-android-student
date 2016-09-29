@@ -113,7 +113,7 @@
         android:id="@+id/recharge_confirm"
         style="@style/button_full_width_style"
         android:layout_alignParentBottom="true"
-        android:text="@string/recharge_now" />
+        android:text="@string/recharge_confirm" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

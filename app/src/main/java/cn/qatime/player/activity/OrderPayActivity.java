@@ -108,6 +108,7 @@ public class OrderPayActivity extends BaseActivity {
     @Subscribe
     public void onEvent(String event) {
         if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
+
             finish();
         }
     }

@@ -1,8 +1,9 @@
 package cn.qatime.player.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+import android.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.ActionMode;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -47,6 +49,8 @@ public class RechargeActivity extends BaseActivity {
     private Button rechargeNow;
     private AlertDialog alertDialog;
     private static final int DECIMAL_DIGITS = 2;//小数的位数
+    private TextView phone;
+    private AlertDialog alertDialogPhone;
 
     private void assignViews() {
         rechargeNum = (EditText) findViewById(R.id.recharge_num);
@@ -54,6 +58,7 @@ public class RechargeActivity extends BaseActivity {
         wechatPay = (RadioButton) findViewById(R.id.wechat_pay);
         alipay = (RadioButton) findViewById(R.id.alipay);
         rechargeNow = (Button) findViewById(R.id.recharge_now);
+        phone = (TextView) findViewById(R.id.phone);
     }
 
 
@@ -67,6 +72,39 @@ public class RechargeActivity extends BaseActivity {
     }
 
     private void initListener() {
+        phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (alertDialogPhone == null) {
+                    View view = View.inflate(RechargeActivity.this, R.layout.dialog_cancel_or_confirm, null);
+                    TextView text = (TextView) view.findViewById(R.id.text);
+                    text.setText(getResourceString(R.string.call_customer_service_phone) + phone.getText() + "?");
+                    Button cancel = (Button) view.findViewById(R.id.cancel);
+                    Button confirm = (Button) view.findViewById(R.id.confirm);
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialogPhone.dismiss();
+                        }
+                    });
+                    confirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
+                            startActivity(intent);
+                            alertDialogPhone.dismiss();
+                        }
+                    });
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(RechargeActivity.this);
+                    alertDialogPhone = builder.create();
+                    alertDialogPhone.show();
+                    alertDialogPhone.setContentView(view);
+                } else {
+                    alertDialogPhone.show();
+                }
+            }
+        });
+
         rechargeNum.setCustomSelectionActionModeCallback(new ActionMode.Callback() {//禁止复制粘贴
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -202,6 +240,8 @@ public class RechargeActivity extends BaseActivity {
             alertDialog = builder.create();
             View view = View.inflate(this, R.layout.dialog_confirm, null);
             Button confirm = (Button) view.findViewById(R.id.confirm);
+            TextView text = (TextView) view.findViewById(R.id.text);
+            text.setText(getResourceString(R.string.recharge_server_basy_please_try_again));
             confirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
