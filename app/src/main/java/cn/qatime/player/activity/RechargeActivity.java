@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -64,6 +67,27 @@ public class RechargeActivity extends BaseActivity {
     }
 
     private void initListener() {
+        rechargeNum.setCustomSelectionActionModeCallback(new ActionMode.Callback() {//禁止复制粘贴
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+
+            }
+        });
         rechargeNum.addTextChangedListener(new TextWatcher() {//输入框输入限制
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -73,22 +97,22 @@ public class RechargeActivity extends BaseActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.toString().contains(".")) {
-                    if (s.length() - 1 - s.toString().indexOf(".") > DECIMAL_DIGITS) {//小数点前5位
+                    if (s.length() - 1 - s.toString().indexOf(".") > DECIMAL_DIGITS) {//小数点后2位
                         s = s.toString().subSequence(0,
                                 s.toString().indexOf(".") + DECIMAL_DIGITS + 1);
                         rechargeNum.setText(s);
-                        rechargeNum.setSelection(start);
+                        rechargeNum.setSelection(s.length());
                     }
-                    if (s.toString().indexOf(".") > 5) {//小数点后2位
+                    if (s.toString().indexOf(".") > 5) {//小数点前5位
                         s = s.toString().substring(0, start) + s.toString().substring(start + count, s.length());
                         rechargeNum.setText(s);
                         rechargeNum.setSelection(5);
                     }
                 } else if (s.length() > 5) {//整数不超过5位
                     s = s.toString().subSequence(0,
-                            s.length() - 1);
+                           5);
                     rechargeNum.setText(s);
-                    rechargeNum.setSelection(s.length());
+                    rechargeNum.setSelection(5);
                 }
 
 
