@@ -20,6 +20,7 @@ import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
@@ -172,7 +173,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     }
 
     private void initView() {
-        isMute = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount()).isMute();
+        TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
+        if (team != null) {
+            isMute = team.isMute();
+        }
         bottom = findViewById(R.id.bottom);
 
         inputLayout = findViewById(R.id.input_layout);
@@ -186,7 +190,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         fragmentLayout.setScorllToNext(true);
         fragmentLayout.setScorll(true);
         fragmentLayout.setWhereTab(1);
-        fragmentLayout.setTabHeight(4,0xffff9999);
+        fragmentLayout.setTabHeight(4, 0xffff9999);
         fragmentLayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
@@ -194,9 +198,12 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
                 ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff333333);
 //                    lastTabView.setBackgroundColor(0xffffffff);
 //                    currentTabView.setBackgroundColor(0xffeeeeee);
-                    if (position != 1) {
-                        KeyBoardUtils.closeKeybord(NEVideoPlayerActivity.this);
-                    }
+                if (position == 1) {
+                    inputLayout.setVisibility(View.VISIBLE);
+                } else {
+                    KeyBoardUtils.closeKeybord(NEVideoPlayerActivity.this);
+                    inputLayout.setVisibility(View.GONE);
+                }
             }
         });
         fragmentLayout.setAdapter(fragBaseFragments, R.layout.tablayout_nevideo_player, 0x0102);
@@ -207,7 +214,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         fragment2.setChatCallBack(new FragmentNEVideoPlayer2.Callback() {
             @Override
             public void back(List<IMMessage> result) {
-                isMute = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount()).isMute();
+                TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
+                if (team != null) {
+                    isMute = team.isMute();
+                }
                 if (isMute) {
                     content.setHint(R.string.have_muted);
                 } else {

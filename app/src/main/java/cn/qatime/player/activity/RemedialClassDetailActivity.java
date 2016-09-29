@@ -73,8 +73,6 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     TextView studentnumber;
     DecimalFormat df = new DecimalFormat("#.00");
     private AlertDialog alertDialog;
-    private FragmentLayoutWithLine fragmentlayout;
-    private int[] tab_text = {R.id.tab_text1, R.id.tab_text2};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

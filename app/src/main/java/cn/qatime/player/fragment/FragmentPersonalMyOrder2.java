@@ -30,8 +30,6 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.PersonalMyOrderPaidDetailActivity;
-import cn.qatime.player.activity.RemedialClassDetailActivity;
-import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.MyOrderBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -39,7 +37,6 @@ import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.bean.OrderDetailBean;
-import libraryextra.bean.TutorialClassBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;

@@ -1,9 +1,11 @@
 package cn.qatime.player.im.model;
 
+import java.io.Serializable;
+
 /**
  * 群公告结构(json)
  */
-public class Announcement {
+public class Announcement implements Serializable{
     private String id;
     private String creator;
     private String title;

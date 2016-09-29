@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by lungtify on 2016/9/5.
  */
-public class Announcements implements Serializable{
+public class Announcements implements Serializable {
 
     /**
      * status : 1
@@ -38,7 +38,7 @@ public class Announcements implements Serializable{
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable {
         private String current_lesson_status;
         /**
          * announcement :
@@ -78,7 +78,7 @@ public class Announcements implements Serializable{
             this.members = members;
         }
 
-        public static class AnnouncementsBean {
+        public static class AnnouncementsBean implements Serializable {
             private String announcement;
             private String edit_at;
 
@@ -99,7 +99,7 @@ public class Announcements implements Serializable{
             }
         }
 
-        public static class MembersBean {
+        public static class MembersBean implements Serializable {
             private String accid;
             private String name;
             private String icon;

@@ -3,10 +3,16 @@ package cn.qatime.player.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.alipay.sdk.app.PayTask;
+import com.orhanobut.logger.Logger;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
@@ -18,6 +24,7 @@ import java.text.DecimalFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.bean.PayResult;
 import cn.qatime.player.utils.Constant;
 import libraryextra.bean.OrderConfirmBean;
 import libraryextra.utils.StringUtils;
@@ -34,36 +41,78 @@ public class OrderPayActivity extends BaseActivity {
 
 
     DecimalFormat df = new DecimalFormat("#.00");
-    private OrderConfirmBean.App_pay_params data;
+    private OrderConfirmBean.DataBean.AppPayParamsBean weixinData;
+    private String payType = "weixin";
+    private String aliPayData;
+    private Handler hd = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == SDK_PAY_FLAG) {
+                PayResult payResult = new PayResult((String) msg.obj);
+                // 支付宝返回此次支付结果及加签，建议对支付宝签名信息拿签约时支付宝提供的公钥做验签
+                String resultInfo = payResult.getResult();
+                Logger.e("resultinfo", resultInfo);
+                String resultStatus = payResult.getResultStatus();
+                Logger.e("resultstatus", resultStatus);
+                // 判断resultStatus 为“9000”则代表支付成功，具体状态码代表含义可参考接口文档
+                if (TextUtils.equals(resultStatus, "9000")) {
+//                    Toast.makeText(AliPayActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
+//                    setResult(Cantent.PAY_SUCCESS);
+                    finish();
+                } else {
+                    // 判断resultStatus 为非“9000”则代表可能支付失败
+                    // “8000”代表支付结果因为支付渠道原因或者系统原因还在等待支付结果确认，最终交易是否成功以服务端异步通知为准（小概率状态）
+                    if (TextUtils.equals(resultStatus, "8000")) {
+//                            Toast.makeText(AliPayActivity.this, "支付结果确认中", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // 其他值就可以判断为支付失败，包括用户主动取消支付，或者系统返回的错误
+//                            Toast.makeText(AliPayActivity.this, "支付失败", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        }
+    };
+    private int SDK_PAY_FLAG = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_pay);
-        setTitle(getResources().getString(R.string.pay_confirm));
+        setTitle(getResourceString(R.string.pay_confirm));
         initView();
+        payType = getIntent().getStringExtra("type");
         api = WXAPIFactory.createWXAPI(this, null);
 
         EventBus.getDefault().register(this);
 
-        // 将该app注册到微信
-        api.registerApp(Constant.APP_ID);
+        if (payType.equals("weixin")) {
+            // 将该app注册到微信
+            api.registerApp(Constant.APP_ID);
+        } else if (payType.equals("alipay")) {
+        }
 
         initData();
     }
 
     private void initData() {
-        //1
-        data = (OrderConfirmBean.App_pay_params) getIntent().getSerializableExtra("data");
+        if (payType.equals("weixin")) {
+            weixinData = (OrderConfirmBean.DataBean.AppPayParamsBean) getIntent().getSerializableExtra("data");
+        } else if (payType.equals("alipay")) {
+            aliPayData = getIntent().getStringExtra("data");
+        }
 
         String price = df.format(getIntent().getIntExtra("price", 0));
         if (price.startsWith(".")) {
             price = "0" + price;
         }
-        code.setText(getResources().getString(R.string.order_number) + "：" + getIntent().getStringExtra("id"));
-        time.setText(getResources().getString(R.string.time_built) + "：" + getIntent().getStringExtra("time"));
-        type.setText(getIntent().getStringExtra("type"));
-        this.price.setText(getResources().getString(R.string.amount_payment) + "：￥" + price);
+        code.setText(getResourceString(R.string.order_number) + "：" + getIntent().getStringExtra("id"));
+        time.setText(getResourceString(R.string.time_built) + "：" + getIntent().getStringExtra("time"));
+        if (payType.equals("alipay")) {
+            type.setText(getResourceString(R.string.method_payment) + getResourceString(R.string.pay_alipay));
+        } else if (payType.equals("weixin")) {
+            type.setText(getResourceString(R.string.method_payment) + getResourceString(R.string.pay_wexin));
+        }
+        this.price.setText(getResourceString(R.string.amount_payment) + "：￥" + price);
     }
 
     public void initView() {
@@ -85,22 +134,41 @@ public class OrderPayActivity extends BaseActivity {
         commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PayReq request = new PayReq();
+                if (payType.equals("weixin")) {
+                    PayReq request = new PayReq();
 
-                request.appId = data.getAppid();
+                    request.appId = weixinData.getAppid();
 
-                request.partnerId = data.getPartnerid();
+                    request.partnerId = weixinData.getPartnerid();
 
-                request.prepayId = data.getPrepayid();
+                    request.prepayId = weixinData.getPrepayid();
 
-                request.packageValue = data.getPackage();
+                    request.packageValue = weixinData.getPackage();
 
-                request.nonceStr = data.getNoncestr();
+                    request.nonceStr = weixinData.getNoncestr();
 
-                request.timeStamp = data.getTimestamp();
+                    request.timeStamp = weixinData.getTimestamp();
 
-                request.sign = data.getSign();
-                api.sendReq(request);
+                    request.sign = weixinData.getSign();
+                    api.sendReq(request);
+                } else if (payType.equals("alipay")) {
+                    Runnable payRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            // 构造PayTask 对象
+                            PayTask alipay = new PayTask(OrderPayActivity.this);
+                            // 调用支付接口，获取支付结果
+                            String result = alipay.pay(aliPayData, true);
+                            Message msg = new Message();
+                            msg.what = SDK_PAY_FLAG;
+                            msg.obj = result;
+                            hd.sendMessage(msg);
+                        }
+                    };
+                    // 必须异步调用
+                    Thread payThread = new Thread(payRunnable);
+                    payThread.start();
+                }
             }
         });
     }

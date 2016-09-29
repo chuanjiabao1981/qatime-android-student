@@ -16,15 +16,58 @@
 #   public *;
 #}
 
+
+-keepattributes Signature
+
+-dontwarn cn.qatime.player.view.**
+-dontwarn com.bumptech.glide.**
+-dontwarn libraryextra.**
+-keep class cn.qatime.player.view.**{*;}
+-keep class cn.qatime.player.view.BiaoQingView {*;}
+-keep class libraryextra.transformation.GlideCircleTransform {*;}
+-keep class libraryextra.transformation.GlideRoundTransform {*;}
+#common
+-keep class libraryextra.cropview.**{*;}
+-keep class libraryextra.view.**{*;}
+-keep class libraryextra.utils.**{*;}
+-dontwarn libraryextra.transformation.**
+-keep class libraryextra.transformation.**{*;}
+-keep class libraryextra.interpolator.**{*;}
+-keep class libraryextra.adapter.**{*;}
+
+# #  ############### volley混淆  ###############
+-keep class com.android.volley.** {*;}
+
+-keep class com.android.volley.toolbox.** {*;}
+
+-keep class com.android.volley.Response$* { *; }
+
+-keep class com.android.volley.Request$* { *; }
+
+-keep class com.android.volley.RequestQueue$* { *; }
+
+-keep class com.android.volley.toolbox.HurlStack$* { *; }
+
+-keep class com.android.volley.toolbox.ImageLoader$* { *; }
+
+#支付宝
+-keep class com.alipay.android.app.IAlixPay{*;}
+-keep class com.alipay.android.app.IAlixPay$Stub{*;}
+-keep class com.alipay.android.app.IRemoteServiceCallback{*;}
+-keep class com.alipay.android.app.IRemoteServiceCallback$Stub{*;}
+-keep class com.alipay.sdk.app.PayTask{ public *;}
+-keep class com.alipay.sdk.app.AuthTask{ public *;}
+
 #彈幕混淆
 -keep class cn.qatime.player.barrage.**{*;}
 
 #eventbus
--keep class de.greenrobot.event.** {*;}
+-keepattributes *Annotation*
 -keepclassmembers class ** {
-    public void onEvent*(**);
-    void onEvent*(**);
+    @org.greenrobot.eventbus.Subscribe <methods>;
 }
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
 
 #网易云信
 -dontwarn com.netease.**

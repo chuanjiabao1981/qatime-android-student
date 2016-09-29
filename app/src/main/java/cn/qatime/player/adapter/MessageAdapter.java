@@ -122,7 +122,6 @@ public class MessageAdapter extends BaseAdapter {
                 textHolder.left.setVisibility(View.VISIBLE);
                 Glide.with(context).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_32).crossFade().dontAnimate().into((ImageView) textHolder.otherhead);
 
-                Logger.e("他人名字**********" + item.getFromNick());
                 textHolder.othername.setText(item.getFromNick());
                 textHolder.othercontent.setText(ExpressionUtil.getExpressionString(
                         context, item.getContent(), ExpressionUtil.emoji, cache, new GifDrawable.UpdateListener() {
