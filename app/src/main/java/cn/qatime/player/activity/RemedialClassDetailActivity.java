@@ -21,7 +21,6 @@ import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.orhanobut.logger.Logger;
-import com.tencent.mm.sdk.modelbase.BaseResp;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -35,6 +34,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
+import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.fragment.FragmentRemedialClassDetail1;
 import cn.qatime.player.fragment.FragmentRemedialClassDetail2;
@@ -53,7 +53,6 @@ import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
-import libraryextra.view.FragmentLayoutWithLine;
 import libraryextra.view.SimpleViewPagerIndicator;
 
 public class RemedialClassDetailActivity extends BaseFragmentActivity implements View.OnClickListener {
@@ -402,7 +401,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     }
 
     @Subscribe
-    public void onEvent(BaseResp baseResp) {
+    public void onEvent(PayResultState code) {
 //        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
 //
 //            finish();

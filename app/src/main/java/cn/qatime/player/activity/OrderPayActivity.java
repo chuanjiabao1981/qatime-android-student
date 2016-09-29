@@ -9,11 +9,9 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
 import com.orhanobut.logger.Logger;
-import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
@@ -26,6 +24,7 @@ import java.text.DecimalFormat;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.bean.PayResult;
+import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.Constant;
 import libraryextra.bean.OrderConfirmBean;
 
@@ -174,9 +173,9 @@ public class OrderPayActivity extends BaseActivity {
     }
 
     @Subscribe
-    public void onEvent(BaseResp baseResp) {
+    public void onEvent(PayResultState state) {
         Intent intent = new Intent(this,OrderPayResultActivity.class);
-        intent.putExtra("errCode",baseResp.errCode);
+        intent.putExtra("state",state);
         startActivity(intent);
         finish();
     }

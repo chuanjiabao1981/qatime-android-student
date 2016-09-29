@@ -1,9 +1,9 @@
 package cn.qatime.player.activity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.ActionMode;
@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.tencent.mm.sdk.modelbase.BaseResp;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -32,6 +31,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.bean.RechargeBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -263,7 +263,7 @@ public class RechargeActivity extends BaseActivity {
     }
 
     @Subscribe
-    public void onEvent(BaseResp baseResp) {
+    public void onEvent(PayResultState state) {
 //        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
 //
 //            finish();

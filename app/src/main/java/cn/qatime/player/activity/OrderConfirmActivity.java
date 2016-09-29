@@ -14,7 +14,6 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
-import com.tencent.mm.sdk.modelbase.BaseResp;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -26,6 +25,7 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.OrderConfirmBean;
@@ -228,7 +228,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     }
 
     @Subscribe
-    public void onEvent(BaseResp baseResp) {
+    public void onEvent(PayResultState code) {
 //        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
 //
 //            finish();

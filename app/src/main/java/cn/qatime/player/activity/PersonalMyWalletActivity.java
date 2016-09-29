@@ -13,6 +13,8 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -21,6 +23,7 @@ import java.text.DecimalFormat;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.VolleyListener;
@@ -65,16 +68,12 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
             }
         });
         assignViews();
+        EventBus.getDefault().register(this);
+        initData();
         recharge.setOnClickListener(this);
         phone.setOnClickListener(this);
         consumptionRecord.setOnClickListener(this);
         rechargeRecord.setOnClickListener(this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        initData();
     }
 
     private void initData() {
@@ -165,5 +164,19 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
                 startActivity(intent);
                 break;
         }
+    }
+
+    @Subscribe
+    public void onEvent(PayResultState state) {
+//        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
+//
+//            finish();
+//        }
+        initData();
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

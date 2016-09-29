@@ -12,6 +12,7 @@ import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import org.greenrobot.eventbus.EventBus;
 
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.Constant;
 
 /**
@@ -46,16 +47,16 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
 
     @Override
     public void onResp(BaseResp baseResp) {
-        EventBus.getDefault().post(baseResp);
         finish();
-//        if (baseResp.errCode == 0) {
-//            EventBus.getDefault().post("pay_success");
-//            initData();
-//        } else if (baseResp.errCode == -2) {//用户取消
-//            finish();
-//        } else {
-//            finish();
-//        }
+        if (baseResp.errCode == 0) {
+            EventBus.getDefault().post(PayResultState.SUCCESS);
+        } else if (baseResp.errCode == -2) {//用户取消
+            EventBus.getDefault().post(PayResultState.CANCEL);
+            finish();
+        } else {
+            EventBus.getDefault().post(PayResultState.ERROR);
+            finish();
+        }
     }
 
 

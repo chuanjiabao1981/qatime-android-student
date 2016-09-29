@@ -22,6 +22,7 @@ import java.text.DecimalFormat;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.SPUtils;
@@ -56,19 +57,29 @@ public class RechargePayResultActivity extends BaseActivity implements View.OnCl
         over = (Button) findViewById(R.id.button_over);
         phone = (TextView) findViewById(R.id.phone);
         // TODO: 2016/9/29 支付方式
-        int errCode = getIntent().getIntExtra("errCode", 0);
-        if (errCode == 0) {//支付成功
-            action1.setVisibility(View.VISIBLE);
-            action2.setVisibility(View.GONE);
-            // TODO: 2016/9/29 应访问网络获取
-            payResult.setText("充值成功");
-            payResultImg.setImageResource(R.mipmap.pay_success);
-            initData();
-        } else {
-            action2.setVisibility(View.VISIBLE);
-            action1.setVisibility(View.GONE);
-            payResult.setText("充值结果未找到");
-            payResultImg.setImageResource(R.mipmap.pay_faild);
+
+        PayResultState state = (PayResultState) getIntent().getSerializableExtra("state");
+        switch (state) {
+            case SUCCESS:
+                action1.setVisibility(View.VISIBLE);
+                action2.setVisibility(View.GONE);
+                // TODO: 2016/9/29 应访问网络获取
+                payResult.setText("充值成功");
+                payResultImg.setImageResource(R.mipmap.pay_success);
+                initData();
+                break;
+            case ERROR:
+                action2.setVisibility(View.VISIBLE);
+                action1.setVisibility(View.GONE);
+                payResult.setText("充值结果未找到");
+                payResultImg.setImageResource(R.mipmap.pay_faild);
+                break;
+            case CANCEL:
+                action2.setVisibility(View.VISIBLE);
+                action1.setVisibility(View.GONE);
+                payResult.setText("用户取消");
+                payResultImg.setImageResource(R.mipmap.pay_faild);
+                break;
         }
         String rechargeId = (String) SPUtils.get(RechargePayResultActivity.this, "RechargeId", "");
         String price = df.format(Double.valueOf((String) SPUtils.get(RechargePayResultActivity.this, "amount", "0")));
@@ -173,7 +184,7 @@ public class RechargePayResultActivity extends BaseActivity implements View.OnCl
             case R.id.action2:
                 // TODO: 2016/9/27  充值记录
                 intent = new Intent(this, RecordFundActivity.class);
-                intent.putExtra("page",0);
+                intent.putExtra("page", 0);
                 startActivity(intent);
                 finish();
                 break;
