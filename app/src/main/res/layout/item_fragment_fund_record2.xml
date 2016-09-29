@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="6dp"
-            android:text="编&#8195;&#8195;号"
+            android:text="消费类型"
             android:textColor="#cccccc" />
 
         <TextView
@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="6dp"
-            android:text="20160928094236123456"
+            android:text="课程"
             android:textColor="#666666" />
 
         <TextView
@@ -82,12 +82,5 @@
             android:singleLine="true"
             android:text="+￥500.00"
             android:textColor="#f00" />
-
-        <TextView
-            android:id="@+id/status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="充值成功"
-            android:textColor="#666666" />
     </LinearLayout>
 </LinearLayout>

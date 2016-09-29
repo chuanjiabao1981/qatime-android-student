@@ -108,7 +108,7 @@ public class FragmentFundRecord1 extends BaseFragment {
                     price = "0" + price;
                 }
                 helper.setText(R.id.money_amount, "+￥" + price);
-                helper.setText(R.id.time, item.getCreated_at().substring(0, 19).replace("T", " "));
+                helper.setText(R.id.time, item.getCreated_at());
                 helper.setText(R.id.mode, getPayType(item.getPay_type()));
                 helper.setText(R.id.status, getStatus(item.getStatus()));
             }

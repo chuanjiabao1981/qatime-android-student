@@ -1,10 +1,13 @@
 package cn.qatime.player.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -14,15 +17,22 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.bean.ConsumptionRecordBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.adapter.CommonAdapter;
+import libraryextra.adapter.ViewHolder;
+import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyListener;
 
 /**
@@ -32,6 +42,9 @@ import libraryextra.utils.VolleyListener;
  */
 public class FragmentFundRecord2 extends BaseFragment {
     private PullToRefreshListView listView;
+    private List<ConsumptionRecordBean.DataBean> data = new ArrayList<>();
+    private CommonAdapter<ConsumptionRecordBean.DataBean> adapter;
+    DecimalFormat df = new DecimalFormat("#.00");
 
     @Nullable
     @Override
@@ -56,7 +69,10 @@ public class FragmentFundRecord2 extends BaseFragment {
 
             @Override
             protected void onSuccess(JSONObject response) {
-
+                ConsumptionRecordBean bean = JsonUtils.objectFromJson(response.toString(), ConsumptionRecordBean.class);
+                data.clear();
+                data.addAll(bean.getData());
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -82,39 +98,68 @@ public class FragmentFundRecord2 extends BaseFragment {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
 
-//        adapter = new CommonAdapter<RechargeRecordBean.DataBean>(getActivity(), data, R.layout.item_fragment_fund_record2) {
-//
-//            @Override
-//            public void convert(ViewHolder helper, RechargeRecordBean.DataBean item, int position) {
-//                helper.setText(R.id.id, item.getId());
-//                helper.setText(R.id.classname, item.getAmount());
-//                helper.setText(R.id.time, item.getCreated_at());
-//                helper.setText(R.id.money_amount, item.getAmount());
-//                helper.setText(R.id.status, item.getStatus());
-//            }
-//        };
-//        listView.setAdapter(adapter);
-//
-//        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
-//            @Override
-//            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        String label = DateUtils.formatDateTime(
-//                                getActivity(),
-//                                System.currentTimeMillis(),
-//                                DateUtils.FORMAT_SHOW_TIME
-//                                        | DateUtils.FORMAT_SHOW_DATE
-//                                        | DateUtils.FORMAT_ABBREV_ALL);
-//                        // Update the LastUpdatedLabel
-//                        listView.getLoadingLayoutProxy(false, true)
-//                                .setLastUpdatedLabel(label);
-//                        listView.onRefreshComplete();
-//                    }
-//                }, 200);
-//                initData();
-//            }
-//        });
+        adapter = new CommonAdapter<ConsumptionRecordBean.DataBean>(getActivity(), data, R.layout.item_fragment_fund_record2) {
+
+            @Override
+            public void convert(ViewHolder helper, ConsumptionRecordBean.DataBean item, int position) {
+                helper.setText(R.id.id, item.getId());
+                String price = df.format(Double.valueOf(item.getAmount()));
+                if (price.startsWith(".")) {
+                    price = "0" + price;
+                }
+                helper.setText(R.id.money_amount, "-￥" + price);
+                helper.setText(R.id.time, item.getCreated_at());
+                helper.setText(R.id.mode, getChangeType(item.getChange_type()));
+                helper.setText(R.id.type, getTargetType(item.getTarget_type()));
+            }
+        };
+        listView.setAdapter(adapter);
+
+        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        String label = DateUtils.formatDateTime(
+                                getActivity(),
+                                System.currentTimeMillis(),
+                                DateUtils.FORMAT_SHOW_TIME
+                                        | DateUtils.FORMAT_SHOW_DATE
+                                        | DateUtils.FORMAT_ABBREV_ALL);
+                        // Update the LastUpdatedLabel
+                        listView.getLoadingLayoutProxy(false, true)
+                                .setLastUpdatedLabel(label);
+                        listView.onRefreshComplete();
+                    }
+                }, 200);
+                initData();
+            }
+        });
     }
+
+    private String getChangeType(String change_type) {
+        switch (change_type) {
+            case "weixin":
+                return "微信支付";
+            case "alipay":
+                return "支付宝";
+            case "offline":
+                return "线下支付";
+        }
+        return "未支付";
+    }
+
+    private String getTargetType(String target_type) {
+        switch (target_type) {
+            case "weixin":
+                return "微信支付";
+            case "alipay":
+                return "支付宝";
+            case "offline":
+                return "线下支付";
+        }
+        return "课程";
+    }
+
 }
