@@ -100,14 +100,13 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         ordernumber.setText(getIntent().getStringExtra("id"));
         //创建时间
         Logger.e(getIntent().getStringExtra("created_at"));
-        Logger.e("" + getIntent().getIntExtra("payType", 0));
         if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("created_at"))) {
             buildtime.setText(getResourceString(R.string.is_null));
         } else {
             buildtime.setText(getIntent().getStringExtra("created_at"));
         }
-        int payType = getIntent().getIntExtra("payType", 0);//支付方式
-        if (payType == 1) {
+        String payType = getIntent().getStringExtra("payType");//支付方式
+        if (payType.equals("weixin")) {
             paytype.setText(getResourceString(R.string.wechat_payment));
         } else {
             paytype.setText(getResourceString(R.string.alipay_payment));

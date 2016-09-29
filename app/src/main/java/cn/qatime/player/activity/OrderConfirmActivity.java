@@ -52,12 +52,10 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     TextView payprice;
     private Button pay;
     private RadioButton wechatPay;
-    private RadioButton aliPay;
     private RadioGroup radioGroup;
     private int id;
-    private String payType = "1";
+    private String payType = "weixin";
     private int priceNumber = 0;
-    private OrderConfirmBean data;
     DecimalFormat df = new DecimalFormat("#.00");
     private AlertDialog alertDialog;
 
@@ -116,15 +114,15 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                 new VolleyListener(OrderConfirmActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        if (payType.equals("1")) {
-                            data = JsonUtils.objectFromJson(response.toString(), OrderConfirmBean.class);
+                        OrderConfirmBean data = JsonUtils.objectFromJson(response.toString(), OrderConfirmBean.class);
+                        if (payType.equals("weixin")) {
                             if (data != null) {
                                 Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
                                 intent.putExtra("price", priceNumber);
                                 intent.putExtra("id", data.getData().getId());
                                 intent.putExtra("time", data.getData().getCreated_at());
-                                intent.putExtra("type", data.getData().getPay_type());
-                                OrderConfirmBean.App_pay_params app_pay_params = data.getData().getApp_pay_params();
+                                intent.putExtra("type", payType);
+                                OrderConfirmBean.DataBean.AppPayParamsBean app_pay_params = data.getData().getApp_pay_params();
                                 intent.putExtra("data", app_pay_params);
                                 startActivity(intent);
                                 SPUtils.put(OrderConfirmActivity.this, "orderId", data.getData().getId());
@@ -134,6 +132,21 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                                 dialog();
                             }
                         } else {
+                            if (data != null) {
+                                Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
+                                intent.putExtra("price", priceNumber);
+                                intent.putExtra("id", data.getData().getId());
+                                intent.putExtra("time", data.getData().getCreated_at());
+                                intent.putExtra("type", payType);
+                                String app_pay_params = data.getData().getApp_pay_str();
+                                intent.putExtra("data", app_pay_params);
+                                startActivity(intent);
+                                SPUtils.put(OrderConfirmActivity.this, "orderId", data.getData().getId());
+                                SPUtils.put(OrderConfirmActivity.this, "price", priceNumber);
+                                pay.setEnabled(true);
+                            } else {
+                                dialog();
+                            }
                         }
                     }
 
@@ -190,7 +203,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 //        status = (TextView) findViewById(R.id.status);
         radioGroup = (RadioGroup) findViewById(R.id.radiogroup);
         wechatPay = (RadioButton) findViewById(R.id.wechat_pay);
-        aliPay = (RadioButton) findViewById(R.id.alipay);
         price = (TextView) findViewById(R.id.price);
         payprice = (TextView) findViewById(R.id.pay_price);
         pay = (Button) findViewById(R.id.pay);
@@ -199,9 +211,9 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == wechatPay.getId()) {
-                    payType = "1";
+                    payType = "weixin";
                 } else {
-                    payType = "0";
+                    payType = "alipay";
                 }
 
             }
