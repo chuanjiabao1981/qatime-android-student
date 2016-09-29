@@ -63,7 +63,7 @@ public class OrderPayResultActivity extends BaseActivity implements  View.OnClic
         loading = (RelativeLayout) findViewById(R.id.loading);
 //        viewOrder.setOnClickListener(this);
         complete.setOnClickListener(this);
-
+        initData();
 
         // TODO: 2016/9/29 支付方式
 //        int errCode = getIntent().getIntExtra("errCode", 0);

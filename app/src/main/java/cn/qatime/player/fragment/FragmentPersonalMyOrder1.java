@@ -40,7 +40,6 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.OrderConfirmBean;
 import libraryextra.bean.OrderDetailBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.SPUtils;
@@ -123,7 +122,7 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
                                 intent.putExtra("id", item.getId());
                                 intent.putExtra("time", item.getCreated_at());
                                 intent.putExtra("price", item.getProduct().getPrice());
-                                intent.putExtra("type", item.getPay_type().equals("weixin") ? getResources().getString(R.string.method_payment) + "：微信支付" : getResources().getString(R.string.method_payment) + "：支付宝支付");
+                                intent.putExtra("type", item.getPay_type());
                                 startActivity(intent);
                                 SPUtils.put(getActivity(), "orderId", item.getId());
                                 SPUtils.put(getActivity(), "price", item.getProduct().getPrice());
