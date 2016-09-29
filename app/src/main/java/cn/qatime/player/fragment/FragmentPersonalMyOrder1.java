@@ -43,6 +43,7 @@ import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.OrderConfirmBean;
 import libraryextra.bean.OrderDetailBean;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -121,6 +122,8 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
                                 intent.putExtra("price", item.getProduct().getPrice());
                                 intent.putExtra("type", (item.getPay_type() + "").equals("1") ? getResources().getString(R.string.method_payment) + "：微信支付" : getResources().getString(R.string.method_payment) + "：支付宝支付");
                                 startActivity(intent);
+                                SPUtils.put(getActivity(), "orderId", item.getId());
+                                SPUtils.put(getActivity(), "price", item.getProduct().getPrice());
                             }
                         });
                 helper.getView(R.id.cancel_order).setOnClickListener(

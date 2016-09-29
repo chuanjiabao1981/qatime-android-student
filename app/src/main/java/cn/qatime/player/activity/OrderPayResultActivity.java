@@ -63,6 +63,18 @@ public class OrderPayResultActivity extends BaseActivity implements  View.OnClic
         loading = (RelativeLayout) findViewById(R.id.loading);
 //        viewOrder.setOnClickListener(this);
         complete.setOnClickListener(this);
+
+
+        // TODO: 2016/9/29 支付方式
+//        int errCode = getIntent().getIntExtra("errCode", 0);
+//        if (errCode == 0) {//支付成功
+//            action1.setVisibility(View.VISIBLE);
+//            action2.setVisibility(View.GONE);
+//        } else {
+//            action2.setVisibility(View.VISIBLE);
+//            action1.setVisibility(View.GONE);
+//        }
+
         orderId.setText((String) SPUtils.get(OrderPayResultActivity.this, "orderId", ""));
         String price = df.format(SPUtils.get(OrderPayResultActivity.this, "price", 0));
         if (price.startsWith(".")) {

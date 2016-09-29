@@ -22,33 +22,37 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="6dp">
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="6dp"
+                    android:paddingBottom="8dp"
                     android:text="编&#8195;&#8195;号"
                     android:textColor="#cccccc" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="6dp"
+                    android:paddingBottom="8dp"
                     android:text="时&#8195;&#8195;间"
                     android:textColor="#cccccc" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="6dp"
+                    android:paddingBottom="8dp"
                     android:text="交易类型"
                     android:textColor="#cccccc" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="6dp"
+                    android:paddingBottom="8dp"
                     android:text="交易方式"
                     android:textColor="#cccccc" />
 
@@ -64,13 +68,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="6dp">
+                android:paddingRight="10dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp">
 
                 <TextView
                     android:id="@+id/id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="6dp"
+                    android:paddingBottom="8dp"
                     android:text="20160928094236123456"
                     android:textColor="#666666" />
 
@@ -78,14 +84,14 @@
                     android:id="@+id/time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="6dp"
+                    android:paddingBottom="8dp"
                     android:text="2011-11-11 11:11:11"
                     android:textColor="#666666" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="6dp"
+                    android:paddingBottom="8dp"
                     android:text="账户储值"
                     android:textColor="#666666" />
 
@@ -93,7 +99,7 @@
                     android:id="@+id/mode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="6dp"
+                    android:paddingBottom="8dp"
                     android:text="线下支付"
                     android:textColor="#666666" />
 

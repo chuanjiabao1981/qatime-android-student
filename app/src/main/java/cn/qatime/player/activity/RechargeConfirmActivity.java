@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
+import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
@@ -22,7 +23,6 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.bean.RechargeBean;
 import cn.qatime.player.utils.Constant;
-import libraryextra.utils.StringUtils;
 
 /**
  * @author Tianhaoranly
@@ -156,10 +156,11 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
     }
 
     @Subscribe
-    public void onEvent(String event) {
-        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
-            finish();
-        }
+    public void onEvent(BaseResp baseResp) {
+        Intent intent = new Intent(this,RechargePayResultActivity.class);
+        intent.putExtra("errCode",baseResp.errCode);
+        startActivity(intent);
+        finish();
     }
 
     @Override

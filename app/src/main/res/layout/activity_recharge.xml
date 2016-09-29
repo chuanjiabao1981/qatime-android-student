@@ -12,8 +12,8 @@
         <include layout="@layout/layout_backbar" />
 
         <LinearLayout
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -26,13 +26,12 @@
                 android:textSize="16sp" />
 
             <RelativeLayout
-                android:padding="6dp"
-                android:layout_width="wrap_content"
+                android:padding="8dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <EditText
                     android:id="@+id/recharge_num"
-                    android:layout_margin="5dp"
                     android:layout_width="match_parent"
                     android:gravity="center_vertical"
                     android:paddingRight="20dp"
@@ -52,8 +51,8 @@
         </LinearLayout>
 
         <LinearLayout
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -62,13 +61,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="充值方式"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="14dp"
                 android:textSize="16sp" />
 
             <RadioGroup
                 android:id="@+id/radio_group"
                 android:layout_width="match_parent"
-                android:padding="6dp"
+                android:padding="8dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
@@ -76,7 +75,7 @@
                     android:id="@+id/wechat_pay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="8dp"
                     android:checked="true"
                     android:drawableLeft="@mipmap/wechat_pay"
                     android:gravity="center_vertical"

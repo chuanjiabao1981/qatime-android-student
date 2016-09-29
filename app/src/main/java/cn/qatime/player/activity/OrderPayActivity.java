@@ -107,19 +107,10 @@ public class OrderPayActivity extends BaseActivity {
 
     @Subscribe
     public void onEvent(BaseResp baseResp) {
-//        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
-//
-//            finish();
-//        }
-        if (baseResp.errCode == 0) {//支付成功
-            Intent intent = new Intent(this,OrderPayResultActivity.class);
-
-            finish();
-        } else if (baseResp.errCode == -2) {//用户取消
-            finish();
-        } else {
-            finish();
-        }
+        Intent intent = new Intent(this,OrderPayResultActivity.class);
+        intent.putExtra("errCode",baseResp.errCode);
+        startActivity(intent);
+        finish();
     }
 
     @Override

@@ -20,7 +20,10 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.tencent.mm.sdk.modelbase.BaseResp;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -33,6 +36,7 @@ import cn.qatime.player.bean.RechargeBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyListener;
 
@@ -67,6 +71,7 @@ public class RechargeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recharge);
         setTitle(getResourceString(R.string.recharge_choice));
+        EventBus.getDefault().register(this);
         assignViews();
         initListener();
     }
@@ -213,6 +218,8 @@ public class RechargeActivity extends BaseActivity {
                             intent.putExtra("created_at", data.getCreated_at());
                             intent.putExtra("app_pay_params", data.getApp_pay_params());
                             startActivity(intent);
+                            SPUtils.put(RechargeActivity.this, "RechargeId", data.getId());
+                            SPUtils.put(RechargeActivity.this, "amount", data.getAmount());
                         } else {
                             dialog();
                         }
@@ -253,5 +260,20 @@ public class RechargeActivity extends BaseActivity {
         } else {
             alertDialog.show();
         }
+    }
+
+    @Subscribe
+    public void onEvent(BaseResp baseResp) {
+//        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
+//
+//            finish();
+//        }
+            finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

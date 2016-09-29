@@ -54,6 +54,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_personal_my_wallet);
         setTitle(getResourceString(R.string.my_wallet));
         setRightText("说明", new View.OnClickListener() {
@@ -64,11 +65,16 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
             }
         });
         assignViews();
-        initData();
         recharge.setOnClickListener(this);
         phone.setOnClickListener(this);
         consumptionRecord.setOnClickListener(this);
         rechargeRecord.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
     }
 
     private void initData() {

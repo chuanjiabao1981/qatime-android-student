@@ -219,13 +219,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 //
 //            finish();
 //        }
-        if (baseResp.errCode == 0) {//支付成功
             finish();
-        } else if (baseResp.errCode == -2) {//用户取消
-            finish();
-        } else {
-            finish();
-        }
     }
 
 

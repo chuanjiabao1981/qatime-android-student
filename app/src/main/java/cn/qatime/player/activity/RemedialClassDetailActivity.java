@@ -409,13 +409,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 //
 //            finish();
 //        }
-        if (baseResp.errCode == 0) {//支付成功
             finish();
-        } else if (baseResp.errCode == -2) {//用户取消
-            finish();
-        } else {
-            finish();
-        }
     }
 
     @Override
