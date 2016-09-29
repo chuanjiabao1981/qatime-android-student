@@ -1,10 +1,13 @@
 package cn.qatime.player.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -67,6 +70,7 @@ public class FragmentFundRecord1 extends BaseFragment {
             @Override
             protected void onSuccess(JSONObject response) {
                 RechargeRecordBean bean = JsonUtils.objectFromJson(response.toString(), RechargeRecordBean.class);
+                data.clear();
                 data.addAll(bean.getData());
                 adapter.notifyDataSetChanged();
             }
@@ -111,27 +115,27 @@ public class FragmentFundRecord1 extends BaseFragment {
         };
         listView.setAdapter(adapter);
 
-//        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
-//            @Override
-//            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        String label = DateUtils.formatDateTime(
-//                                getActivity(),
-//                                System.currentTimeMillis(),
-//                                DateUtils.FORMAT_SHOW_TIME
-//                                        | DateUtils.FORMAT_SHOW_DATE
-//                                        | DateUtils.FORMAT_ABBREV_ALL);
-//                        // Update the LastUpdatedLabel
-//                        listView.getLoadingLayoutProxy(false, true)
-//                                .setLastUpdatedLabel(label);
-//                        listView.onRefreshComplete();
-//                    }
-//                }, 200);
-//                initData();
-//            }
-//        });
+        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        String label = DateUtils.formatDateTime(
+                                getActivity(),
+                                System.currentTimeMillis(),
+                                DateUtils.FORMAT_SHOW_TIME
+                                        | DateUtils.FORMAT_SHOW_DATE
+                                        | DateUtils.FORMAT_ABBREV_ALL);
+                        // Update the LastUpdatedLabel
+                        listView.getLoadingLayoutProxy(false, true)
+                                .setLastUpdatedLabel(label);
+                        listView.onRefreshComplete();
+                    }
+                }, 200);
+                initData();
+            }
+        });
     }
 
     private String getPayType(String pay_type) {

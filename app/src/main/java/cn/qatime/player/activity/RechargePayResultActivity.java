@@ -60,6 +60,7 @@ public class RechargePayResultActivity extends BaseActivity implements View.OnCl
         if (errCode == 0) {//支付成功
             action1.setVisibility(View.VISIBLE);
             action2.setVisibility(View.GONE);
+            // TODO: 2016/9/29 应访问网络获取
             payResult.setText("充值成功");
             payResultImg.setImageResource(R.mipmap.pay_success);
             initData();
