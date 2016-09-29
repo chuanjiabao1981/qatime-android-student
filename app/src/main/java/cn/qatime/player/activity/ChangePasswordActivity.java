@@ -2,8 +2,6 @@ package cn.qatime.player.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
 
@@ -28,6 +25,7 @@ import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.StringUtils;
+import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
 /**
@@ -51,9 +49,7 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
         password = (EditText) findViewById(R.id.password);
         forgetPassword = (TextView) findViewById(R.id.forget_password);
         newPassword = (EditText) findViewById(R.id.new_password);
-        matchPwd1 = (ImageView) findViewById(R.id.match_pwd1);
         confirmNewPassword = (EditText) findViewById(R.id.confirm_new_password);
-        matchPwd2 = (ImageView) findViewById(R.id.match_pwd2);
         buttonOver = (Button) findViewById(R.id.button_over);
     }
 
@@ -73,49 +69,8 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
         confirmNewPassword.setHint(StringUtils.getSpannedString(this, R.string.hint_input_again));
 
 
-        matchPwd1 = (ImageView) findViewById(R.id.match_pwd1);
-        matchPwd2 = (ImageView) findViewById(R.id.match_pwd2);
         forgetPassword.setOnClickListener(this);
         buttonOver.setOnClickListener(this);
-        newPassword.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                password2 = newPassword.getText().toString().trim();
-                matchPwd1.setVisibility(View.VISIBLE);
-                matchPwd1.setImageResource(StringUtils.isGoodPWD(password2) ? R.mipmap.pay_success : R.mipmap.pay_faild);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        confirmNewPassword.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                password3 = confirmNewPassword.getText().toString().trim();
-                matchPwd2.setVisibility(View.VISIBLE);
-                matchPwd2.setImageResource(StringUtils.isGoodPWD(password3) ? R.mipmap.pay_success : R.mipmap.pay_faild);
-                matchPwd2.setImageResource(password3.equals(password2) ? R.mipmap.pay_success : R.mipmap.pay_faild);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-
     }
 
     @Override
@@ -147,13 +102,13 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
                 addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getUserId() + "/password", map), null, new VolleyListener(this) {
                     @Override
                     protected void onTokenOut() {
-
+                        tokenOut();
                     }
 
                     @Override
                     protected void onSuccess(JSONObject response) {
                         Logger.e("验证成功");
-                        Toast.makeText(ChangePasswordActivity.this, "密码修改成功，请用新密码重新登录", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ChangePasswordActivity.this, getResourceString(R.string.change_password_success), Toast.LENGTH_SHORT).show();
                         BaseApplication.clearToken();
                         setResult(Constant.RESPONSE_EXIT_LOGIN);
                         Intent intent = new Intent(ChangePasswordActivity.this, LoginActivity.class);
@@ -164,13 +119,13 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
 
                     @Override
                     protected void onError(JSONObject response) {
-                        Toast.makeText(ChangePasswordActivity.this, "密码错误", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ChangePasswordActivity.this, getResourceString(R.string.password_error), Toast.LENGTH_SHORT).show();
                     }
-                }, new Response.ErrorListener() {
-
+                }, new VolleyErrorListener(){
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        Toast.makeText(getApplicationContext(), "服务器异常，请检查网络", Toast.LENGTH_LONG).show();
+                        super.onErrorResponse(volleyError);
+                        Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show();
                     }
                 }));
                 break;

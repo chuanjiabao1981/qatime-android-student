@@ -49,20 +49,20 @@ public class FragmentRemedialClassDetail2 extends BaseFragment {
     public void setData(RemedialClassDetailBean data) {
         if (data.getData() != null) {
 
-            name.setText(getResources().getString(R.string.teacher_name) + data.getData().getTeacher().getName());
-            subject.setText(getResources().getString(R.string.teacher_subject) + data.getData().getTeacher().getSubject());
+            name.setText(getResourceString(R.string.teacher_name) + data.getData().getTeacher().getName());
+            subject.setText(getResourceString(R.string.teacher_subject) + data.getData().getTeacher().getSubject());
             if (!StringUtils.isNullOrBlanK(data.getData().getTeacher().getTeaching_years())) {
                 if (data.getData().getTeacher().getTeaching_years().equals("within_three_years")) {
-                    teachingyears.setText(getResources().getString(R.string.teacher_years) + getResources().getString(R.string.within_three_years));
+                    teachingyears.setText(getResourceString(R.string.teacher_years) + getResourceString(R.string.within_three_years));
                 } else if (data.getData().getTeacher().getTeaching_years().equals("within_ten_years")) {
-                    teachingyears.setText(getResources().getString(R.string.teacher_years) + getResources().getString(R.string.within_ten_years));
+                    teachingyears.setText(getResourceString(R.string.teacher_years) + getResourceString(R.string.within_ten_years));
                 } else if (data.getData().getTeacher().getTeaching_years().equals("within_twenty_years")) {
-                    teachingyears.setText(getResources().getString(R.string.teacher_years) + getResources().getString(R.string.within_twenty_years));
+                    teachingyears.setText(getResourceString(R.string.teacher_years) + getResourceString(R.string.within_twenty_years));
                 } else {
-                    teachingyears.setText(getResources().getString(R.string.teacher_years) +getResources().getString(R.string.more_than_ten_years));
+                    teachingyears.setText(getResourceString(R.string.teacher_years) +getResourceString(R.string.more_than_ten_years));
                 }
             }
-            gradetype.setText(getResources().getString(R.string.grade_type) + "高中");
+            gradetype.setText(getResourceString(R.string.grade_type) + "高中");
             describe.setText(data.getData().getTeacher().getDesc());
 
             SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getCacheDir() + "/school.txt").toString(), SchoolBean.class);
@@ -70,7 +70,7 @@ public class FragmentRemedialClassDetail2 extends BaseFragment {
             if (schoolBean != null && schoolBean.getData() != null) {
                 for (int i = 0; i < schoolBean.getData().size(); i++) {
                     if (data.getData().getTeacher().getSchool() == schoolBean.getData().get(i).getId()) {
-                        school.setText(getResources().getString(R.string.teacher_school) + schoolBean.getData().get(i).getName());
+                        school.setText(getResourceString(R.string.teacher_school) + schoolBean.getData().get(i).getName());
                         break;
                     }
                 }

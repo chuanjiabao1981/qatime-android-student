@@ -1,6 +1,6 @@
 package cn.qatime.player.activity;
 
-import android.content.Context;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +15,12 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
+import com.netease.nimlib.sdk.AbortableFuture;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -26,19 +32,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
-import libraryextra.bean.OrderPayBean;
-import libraryextra.bean.RemedialClassDetailBean;
+import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.fragment.FragmentRemedialClassDetail1;
 import cn.qatime.player.fragment.FragmentRemedialClassDetail2;
 import cn.qatime.player.fragment.FragmentRemedialClassDetail3;
+import cn.qatime.player.im.cache.TeamDataCache;
+import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
+import libraryextra.bean.OrderPayBean;
+import libraryextra.bean.PersonalInformationBean;
+import libraryextra.bean.Profile;
+import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.SPUtils;
 import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.StringUtils;
-import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
+import libraryextra.view.FragmentLayoutWithLine;
 import libraryextra.view.SimpleViewPagerIndicator;
 
 public class RemedialClassDetailActivity extends BaseFragmentActivity implements View.OnClickListener {
@@ -58,6 +72,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     TextView price;
     TextView studentnumber;
     DecimalFormat df = new DecimalFormat("#.00");
+    private AlertDialog alertDialog;
+    private FragmentLayoutWithLine fragmentlayout;
+    private int[] tab_text = {R.id.tab_text1, R.id.tab_text2};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,12 +96,30 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     public void initView() {
         EventBus.getDefault().register(this);
         image = (ImageView) findViewById(R.id.image);
-        name=(TextView)findViewById(R.id.name);
+        name = (TextView) findViewById(R.id.name);
         image.setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenWidth(this) * 5 / 8));
 
         fragBaseFragments.add(new FragmentRemedialClassDetail1());
         fragBaseFragments.add(new FragmentRemedialClassDetail2());
         fragBaseFragments.add(new FragmentRemedialClassDetail3());
+
+
+
+//        fragmentlayout = (FragmentLayoutWithLine)findViewById(R.id.fragmentlayout);
+//
+//        fragmentlayout.setScorllToNext(true);
+//        fragmentlayout.setScorll(true);
+//        fragmentlayout.setWhereTab(1);
+//        fragmentlayout.setTabHeight(4,0xffff9999);
+//        fragmentlayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
+//            @Override
+//            public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
+//                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff666666);
+//                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff333333);
+//            }
+//        });
+//        fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_remedial_class_detail, 0x0911);
+
 
         audition = (Button) findViewById(R.id.audition);
         pay = (Button) findViewById(R.id.pay);
@@ -116,6 +151,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
+                mIndicator.select(position);
             }
 
             @Override
@@ -208,24 +244,58 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 joinAudition();
                 break;
             case R.id.pay:
-                Intent intent = new Intent(RemedialClassDetailActivity.this, OrderConfirmActivity.class);
-                intent.putExtra("id", id);
-                OrderPayBean bean = new OrderPayBean();
-                bean.image = data.getData().getPublicize();
-                bean.name = data.getData().getName();
-                bean.subject = data.getData().getSubject();
-                bean.grade = data.getData().getGrade();
-                bean.classnumber = data.getData().getPreset_lesson_count();
-                bean.teacher = data.getData().getTeacher().getName();
-                bean.classendtime = data.getData().getLive_end_time();
-                bean.status = data.getData().getStatus();
-                bean.classstarttime = data.getData().getLive_start_time();
-                bean.price = data.getData().getPrice();
-
-                intent.putExtra("data", bean);
-                startActivity(intent);
+                if("teaching".equals(data.getData().getStatus())){
+                    if (alertDialog == null) {
+                        View view = View.inflate(RemedialClassDetailActivity.this, R.layout.dialog_cancel_or_confirm, null);
+                        Button cancel = (Button) view.findViewById(R.id.cancel);
+                        Button confirm = (Button) view.findViewById(R.id.confirm);
+                        cancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                alertDialog.dismiss();
+                            }
+                        });
+                        confirm.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                payRemedial();
+                                alertDialog.dismiss();
+                            }
+                        });
+                        AlertDialog.Builder builder = new AlertDialog.Builder(RemedialClassDetailActivity.this);
+                        alertDialog = builder.create();
+                        alertDialog.show();
+                        alertDialog.setContentView(view);
+//                        WindowManager.LayoutParams attributes = alertDialog.getWindow().getAttributes();
+//                        attributes.width= ScreenUtils.getScreenWidth(getApplicationContext())- DensityUtils.dp2px(getApplicationContext(),20)*2;
+//                        alertDialog.getWindow().setAttributes(attributes);
+                    } else {
+                        alertDialog.show();
+                    }
+                }else{
+                    payRemedial();
+                };
                 break;
         }
+    }
+
+    private void payRemedial() {
+        Intent intent = new Intent(RemedialClassDetailActivity.this, OrderConfirmActivity.class);
+        intent.putExtra("id", id);
+        OrderPayBean bean = new OrderPayBean();
+        bean.image = data.getData().getPublicize();
+        bean.name = data.getData().getName();
+        bean.subject = data.getData().getSubject();
+        bean.grade = data.getData().getGrade();
+        bean.classnumber = data.getData().getPreset_lesson_count();
+        bean.teacher = data.getData().getTeacher().getName();
+        bean.classendtime = data.getData().getLive_end_time();
+        bean.status = data.getData().getStatus();
+        bean.classstarttime = data.getData().getLive_start_time();
+        bean.price = data.getData().getPrice();
+
+        intent.putExtra("data", bean);
+        startActivity(intent);
     }
 
     private void joinAudition() {
@@ -234,12 +304,81 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass + "/" + id + "/taste", map), null,
                 new VolleyListener(RemedialClassDetailActivity.this) {
 
-
                     @Override
                     protected void onSuccess(JSONObject response) {
                         //已加入试听
                         audition.setEnabled(false);
                         audition.setText(getResources().getString(R.string.Joined_the_audition));
+                        if (StringUtils.isNullOrBlanK(BaseApplication.getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getAccountToken())) {
+                            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null,
+                                    new VolleyListener(RemedialClassDetailActivity.this) {
+                                        @Override
+                                        protected void onSuccess(JSONObject response) {
+                                            PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
+                                            if (bean != null && bean.getData() != null && bean.getData().getChat_account() != null) {
+                                                Profile profile = BaseApplication.getProfile();
+                                                profile.getData().getUser().setChat_account(bean.getData().getChat_account());
+                                                BaseApplication.setProfile(profile);
+
+                                                String account = BaseApplication.getAccount();
+                                                String token = BaseApplication.getAccountToken();
+
+                                                if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
+                                                    AbortableFuture<LoginInfo> loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, token));
+                                                    loginRequest.setCallback(new RequestCallback<LoginInfo>() {
+                                                        @Override
+                                                        public void onSuccess(LoginInfo o) {
+                                                            Logger.e("云信登录成功" + o.getAccount());
+                                                            // 初始化消息提醒
+                                                            NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
+
+                                                            NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
+                                                            //缓存
+                                                            UserInfoCache.getInstance().clear();
+                                                            TeamDataCache.getInstance().clear();
+
+                                                            UserInfoCache.getInstance().buildCache();
+                                                            TeamDataCache.getInstance().buildCache();
+
+                                                            UserInfoCache.getInstance().registerObservers(true);
+                                                            TeamDataCache.getInstance().registerObservers(true);
+                                                        }
+
+                                                        @Override
+                                                        public void onFailed(int code) {
+//                                                            BaseApplication.clearToken();
+                                                            Profile profile = BaseApplication.getProfile();
+                                                            profile.getData().setRemember_token("");
+                                                            SPUtils.putObject(RemedialClassDetailActivity.this, "profile", profile);
+                                                        }
+
+                                                        @Override
+                                                        public void onException(Throwable throwable) {
+                                                            Logger.e(throwable.getMessage());
+                                                            BaseApplication.clearToken();
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        protected void onError(JSONObject response) {
+
+                                        }
+
+                                        @Override
+                                        protected void onTokenOut() {
+                                            tokenOut();
+                                        }
+                                    }, new VolleyErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError volleyError) {
+                                    super.onErrorResponse(volleyError);
+                                }
+                            });
+                            addToRequestQueue(request);
+                        }
                     }
 
                     @Override

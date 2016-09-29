@@ -1,5 +1,6 @@
 package cn.qatime.player.fragment;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,23 +8,35 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
+import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.ResponseCode;
+import com.netease.nimlib.sdk.StatusCode;
+import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
+import com.netease.nimlib.sdk.team.TeamService;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
+import com.orhanobut.logger.Logger;
+
+import org.greenrobot.eventbus.EventBus;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,12 +45,22 @@ import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MessageActivity;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.bean.ChatVideoBean;
+import cn.qatime.player.bean.MessageListBean;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.observer.UserInfoObservable;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
+import libraryextra.bean.TutorialClassBean;
+import libraryextra.utils.JsonUtils;
 import libraryextra.utils.ScreenUtils;
+import libraryextra.utils.StringUtils;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 
 /**
  * @author luntify
@@ -48,20 +71,68 @@ public class FragmentNews1 extends BaseFragment {
 
     public static final long RECENT_TAG_STICKY = 1; // 联系人置顶tag
 
-    private ArrayList<RecentContact> items;
-    private CommonAdapter<RecentContact> adapter;
+    private ArrayList<MessageListBean> items;
+    private CommonAdapter<MessageListBean> adapter;
     private PullToRefreshListView listView;
     private boolean msgLoaded = false;
     private List<RecentContact> loadedRecents;
     private UserInfoObservable.UserInfoObserver userInfoObserver;
     private UserInfoObservable userInfoObservable;
+    private TutorialClassBean courses;
+    private boolean shouldPost = false;//是否需要向messageactivity发推流地址
+    private String sessionId;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = View.inflate(getActivity(), R.layout.fragment_news1, null);
         initView(view);
+        getCourses();
         return view;
+    }
+
+    private void getCourses() {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/courses", null,
+                new VolleyListener(getActivity()) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        try {
+                            Logger.e(response.toString());
+                            courses = JsonUtils.objectFromJson(response.toString(), TutorialClassBean.class);
+                            if (shouldPost) {
+                                if (!StringUtils.isNullOrBlanK(sessionId)) {
+                                    if (courses != null && courses.getData() != null) {
+                                        for (TutorialClassBean.Data data : courses.getData()) {
+                                            if (sessionId.equals(data.getChat_team_id())) {
+                                                EventBus.getDefault().post(new ChatVideoBean(data.getId(), data.getPull_address(), data.getName()));
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                shouldPost = false;
+                            }
+                        } catch (JsonSyntaxException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
     }
 
     private void initView(View view) {
@@ -85,13 +156,14 @@ public class FragmentNews1 extends BaseFragment {
     private void initMessageList() {
         items = new ArrayList<>();
 
-        adapter = new CommonAdapter<RecentContact>(getActivity(), items, R.layout.item_fragment_news1) {
+        adapter = new CommonAdapter<MessageListBean>(getActivity(), items, R.layout.item_fragment_news1) {
             @Override
-            public void convert(ViewHolder holder, RecentContact item, int position) {
+            public void convert(ViewHolder holder, MessageListBean item, int position) {
                 if (item.getSessionType() == SessionTypeEnum.Team) {
                     ((TextView) holder.getView(R.id.name)).setMaxWidth((int) (ScreenUtils.getScreenWidth(getActivity()) * 0.8));
-                    holder.setText(R.id.name, TeamDataCache.getInstance().getTeamName(item.getContactId()).replace("讨论组", ""));
+                    holder.setText(R.id.name, item.getName());
                 }
+                ((ImageView) holder.getView(R.id.notify)).setVisibility(item.isMute() ? View.VISIBLE : View.GONE);
                 holder.getView(R.id.count).setVisibility(item.getUnreadCount() == 0 ? View.GONE : View.VISIBLE);
                 holder.setText(R.id.count, String.valueOf(item.getUnreadCount()));
 
@@ -100,21 +172,71 @@ public class FragmentNews1 extends BaseFragment {
 
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
+            @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), MessageActivity.class);
                 intent.putExtra("sessionId", items.get(position - 1).getContactId());
                 intent.putExtra("sessionType", items.get(position - 1).getSessionType());
+                intent.putExtra("courseId", items.get(position - 1).getCourseId());
+                intent.putExtra("pull_address", items.get(position - 1).getPull_address());
+                intent.putExtra("name", items.get(position - 1).getName());
                 startActivity(intent);
             }
         });
 
         listView.getRefreshableView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                if (NIMClient.getStatus() == StatusCode.LOGINED) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    final AlertDialog alertDialog = builder.create();
+                    View v = View.inflate(getActivity(), R.layout.dialog_team_notify_alert, null);
+                    v.findViewById(R.id.root).setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialog.dismiss();
+                        }
+                    });
+                    ((TextView) v.findViewById(R.id.text)).setText(items.get(position - 1).isMute() ? getResourceString(R.string.resume_alert) : getResourceString(R.string.nolongger_alert));
+                    v.findViewById(R.id.text).setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialog.dismiss();
 
-                return true;
+                            NIMClient.getService(TeamService.class).muteTeam(items.get(position - 1).getContactId(), !items.get(position - 1).isMute()).setCallback(new RequestCallback<Void>() {
+                                @Override
+                                public void onSuccess(Void param) {
+                                    Team team = TeamDataCache.getInstance().getTeamById(items.get(position - 1).getContactId());
+                                    items.get(position - 1).setMute(team.mute());
+//                                notificationConfigText.setText(team.mute() ? getString(R.string.close) : getString(R.string.open));
+                                    adapter.notifyDataSetChanged();
+                                }
+
+                                @Override
+                                public void onFailed(int code) {
+                                    Logger.e("muteTeam failed code:" + code);
+                                }
+
+                                @Override
+                                public void onException(Throwable exception) {
+
+                                }
+                            });
+                        }
+                    });
+                    v.findViewById(R.id.cancel).setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialog.dismiss();
+                        }
+                    });
+                    alertDialog.setCanceledOnTouchOutside(true);
+                    alertDialog.show();
+                    alertDialog.setContentView(v);
+
+                    return true;
+                }
+                return false;
             }
         });
     }
@@ -125,7 +247,6 @@ public class FragmentNews1 extends BaseFragment {
             return;
         }
         new Handler().postDelayed(new Runnable() {
-
             @Override
             public void run() {
                 if (msgLoaded) {
@@ -150,13 +271,53 @@ public class FragmentNews1 extends BaseFragment {
                     }
                 });
             }
-        }, delay ? 250 : 0);
+        }, delay ? 1000 : 0);
     }
 
     private void onRecentContactsLoaded() {
         items.clear();
+        if (courses != null && courses.getData() != null) {
+            for (TutorialClassBean.Data data : courses.getData()) {
+                for (RecentContact item : loadedRecents) {
+                    if (data.getChat_team_id().equals(item.getContactId())) {
+                        Team team = TeamDataCache.getInstance().getTeamById(item.getContactId());
+                        MessageListBean bean = new MessageListBean();
+                        bean.setMute(team.mute());
+                        bean.setContactId(item.getContactId());
+                        bean.setSessionType(item.getSessionType());
+                        bean.setName(data.getName());
+                        if (StringUtils.isNullOrBlanK(bean.getName())) {
+                            bean.setName(item.getContent().replace("讨论组", ""));
+                        }
+                        bean.setCourseId(data.getId());
+                        bean.setUnreadCount(item.getUnreadCount());
+                        bean.setPull_address(data.getPull_address());
+                        bean.setTime(item.getTime());
+                        bean.setRecentMessageId(item.getRecentMessageId());
+                        items.add(bean);
+                    }
+                }
+            }
+        } else {
+            getCourses();
+            for (RecentContact item : loadedRecents) {
+//                    if (data.getChat_team_id().equals(item.getContactId())) {
+                Team team = TeamDataCache.getInstance().getTeamById(item.getContactId());
+                MessageListBean bean = new MessageListBean();
+                bean.setMute(team.mute());
+                bean.setContactId(item.getContactId());
+                bean.setSessionType(item.getSessionType());
+                bean.setName(TeamDataCache.getInstance().getTeamName(item.getContactId()).replace("讨论组", ""));
+                bean.setUnreadCount(item.getUnreadCount());
+                bean.setRecentMessageId(item.getRecentMessageId());
+//                        bean.setPull_address(data.getPull_address());
+                bean.setTime(item.getTime());
+                items.add(bean);
+//                    }
+            }
+        }
         if (loadedRecents != null) {
-            items.addAll(loadedRecents);
+//            items.addAll(loadedRecents);
             loadedRecents = null;
         }
         refreshMessages(true);
@@ -188,25 +349,24 @@ public class FragmentNews1 extends BaseFragment {
     /**
      * **************************** 排序 ***********************************
      */
-    private void sortRecentContacts(List<RecentContact> list) {
+    private void sortRecentContacts(List<MessageListBean> list) {
         if (list.size() == 0) {
             return;
         }
         Collections.sort(list, comp);
     }
 
-    private static Comparator<RecentContact> comp = new Comparator<RecentContact>() {
-
+    private static Comparator<MessageListBean> comp = new Comparator<MessageListBean>() {
         @Override
-        public int compare(RecentContact o1, RecentContact o2) {
+        public int compare(MessageListBean lhs, MessageListBean rhs) {
             // 先比较置顶tag
-            long sticky = (o1.getTag() & RECENT_TAG_STICKY) - (o2.getTag() & RECENT_TAG_STICKY);
-            if (sticky != 0) {
-                return sticky > 0 ? -1 : 1;
-            } else {
-                long time = o1.getTime() - o2.getTime();
-                return time == 0 ? 0 : (time > 0 ? -1 : 1);
-            }
+//            long sticky = (o1.getTag() & RECENT_TAG_STICKY) - (o2.getTag() & RECENT_TAG_STICKY);
+//            if (sticky != 0) {
+//                return sticky > 0 ? -1 : 1;
+//            } else {
+            long time = lhs.getTime() - rhs.getTime();
+            return time == 0 ? 0 : (time > 0 ? -1 : 1);
+//            }
         }
     };
 
@@ -215,6 +375,7 @@ public class FragmentNews1 extends BaseFragment {
      * ********************** 收消息，处理状态变化 ************************
      */
     private void registerObservers(boolean register) {
+        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
         MsgServiceObserve service = NIMClient.getService(MsgServiceObserve.class);
         service.observeRecentContact(messageObserver, register);
         service.observeMsgStatus(statusObserver, register);
@@ -252,6 +413,31 @@ public class FragmentNews1 extends BaseFragment {
         }
     }
 
+    /**
+     * 监听用户在线状态
+     */
+    Observer<StatusCode> userStatusObserver = new Observer<StatusCode>() {
+        @Override
+        public void onEvent(StatusCode code) {
+            if (code.wontAutoLogin()) {
+//                kickOut(code);
+                Logger.e("未登录成功");
+            } else {
+                if (code == StatusCode.NET_BROKEN) {
+                    Logger.e("当前网络不可用");
+                } else if (code == StatusCode.UNLOGIN) {
+                    Logger.e("未登录");
+                } else if (code == StatusCode.CONNECTING) {
+                    Logger.e("连接中...");
+                } else if (code == StatusCode.LOGINING) {
+                    Logger.e("登录中...");
+                } else {
+//                    onRecentContactsLoaded();
+                    Logger.e("其他" + code);
+                }
+            }
+        }
+    };
 
     /**
      * 注册群信息&群成员更新监听
@@ -286,11 +472,44 @@ public class FragmentNews1 extends BaseFragment {
                     }
                 }
 
+                MessageListBean bean = new MessageListBean();
                 if (index >= 0) {
+                    bean = items.get(index);
+                    boolean haveData = false;
+                    if (courses != null && courses.getData() != null) {
+                        for (TutorialClassBean.Data data : courses.getData()) {
+                            if (data.getChat_team_id().equals(bean.getContactId())) {
+                                haveData = true;
+                            }
+                        }
+                        if (!haveData) {
+                            getCourses();
+                        }
+                    }
                     items.remove(index);
+                } else {
+                    if (courses != null && courses.getData() != null) {
+                        for (TutorialClassBean.Data data : courses.getData()) {
+                            if (data.getChat_team_id().equals(msg.getContactId())) {
+                                bean.setName(data.getName());
+                                bean.setPull_address(data.getPull_address());
+                            }
+                        }
+                    } else {
+                        getCourses();
+                    }
                 }
-
-                items.add(msg);
+                bean.setContactId(msg.getContactId());
+                Team team = TeamDataCache.getInstance().getTeamById(bean.getContactId());
+                bean.setMute(team.mute());
+                bean.setSessionType(msg.getSessionType());
+                if (StringUtils.isNullOrBlanK(bean.getName())) {
+                    bean.setName(TeamDataCache.getInstance().getTeamName(msg.getContactId()).replace("讨论组", ""));
+                }
+                bean.setUnreadCount(msg.getUnreadCount());
+                bean.setTime(msg.getTime());
+                bean.setRecentMessageId(msg.getRecentMessageId());
+                items.add(bean);
             }
 
             refreshMessages(true);
@@ -302,9 +521,8 @@ public class FragmentNews1 extends BaseFragment {
         public void onEvent(IMMessage message) {
             int index = getItemIndex(message.getUuid());
             if (index >= 0 && index < items.size()) {
-                RecentContact item = items.get(index);
+                MessageListBean item = items.get(index);
                 item.setMsgStatus(message.getStatus());
-                refreshViewHolderByIndex(index);
             }
         }
     };
@@ -313,7 +531,7 @@ public class FragmentNews1 extends BaseFragment {
         @Override
         public void onEvent(RecentContact recentContact) {
             if (recentContact != null) {
-                for (RecentContact item : items) {
+                for (MessageListBean item : items) {
                     if (TextUtils.equals(item.getContactId(), recentContact.getContactId())
                             && item.getSessionType() == recentContact.getSessionType()) {
                         items.remove(item);
@@ -355,7 +573,7 @@ public class FragmentNews1 extends BaseFragment {
 
     private int getItemIndex(String uuid) {
         for (int i = 0; i < items.size(); i++) {
-            RecentContact item = items.get(i);
+            MessageListBean item = items.get(i);
             if (TextUtils.equals(item.getRecentMessageId(), uuid)) {
                 return i;
             }
@@ -364,23 +582,40 @@ public class FragmentNews1 extends BaseFragment {
         return -1;
     }
 
-    protected void refreshViewHolderByIndex(final int index) {
-        getActivity().runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-//                Object tag = ListViewUtil.getViewHolderByIndex(listView, index);
-//                if (tag instanceof RecentViewHolder) {
-//                    RecentViewHolder viewHolder = (RecentViewHolder) tag;
-//                    viewHolder.refreshCurrentItem();
-//                }
-            }
-        });
-    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         registerObservers(false);
+    }
+
+    public void setMessage(IMMessage message) {
+        int position = -1;
+        Logger.e("item.size" + items.size());
+        if (items != null && items.size() > 0) {
+            for (int i = 0; i < items.size(); i++) {
+                if (items.get(i).getContactId().equals(message.getSessionId())) {
+                    position = i;
+                    break;
+                }
+            }
+        }
+        if (position > -1) {
+            Intent intent = new Intent(getActivity(), MessageActivity.class);
+            intent.putExtra("sessionId", items.get(position).getContactId());
+            intent.putExtra("sessionType", items.get(position).getSessionType());
+            intent.putExtra("courseId", items.get(position).getCourseId());
+            intent.putExtra("pull_address", items.get(position).getPull_address());
+            intent.putExtra("name", items.get(position).getName());
+            startActivity(intent);
+        } else {
+            shouldPost = true;
+            this.sessionId = message.getSessionId();
+            Intent intent = new Intent(getActivity(), MessageActivity.class);
+            intent.putExtra("sessionId", message.getSessionId());
+            intent.putExtra("sessionType", message.getSessionType());
+            intent.putExtra("name", message.getContent().replace("讨论组", ""));
+            startActivity(intent);
+        }
     }
 }

@@ -1,11 +1,11 @@
 package cn.qatime.player.activity;
 
-import android.content.DialogInterface;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import cn.qatime.player.R;
@@ -20,6 +20,7 @@ public class AboutUsActivity extends BaseActivity {
 
     private View call;
     private TextView phone;
+    private AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,19 +36,34 @@ public class AboutUsActivity extends BaseActivity {
         call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(AboutUsActivity.this);
-                builder.setTitle("提示");
-                builder.setMessage("是否拨打客服电话：" + phone.getText().toString() + "?");
-                builder.setNegativeButton("立即拨打", new DialogInterface.OnClickListener() {
+
+
+                View view = View.inflate(AboutUsActivity.this, R.layout.dialog_cancel_or_confirm, null);
+                TextView text = (TextView) view.findViewById(R.id.text);
+                text.setText(getResourceString(R.string.call_customer_service_phone) +  phone.getText() + "?");
+                Button cancel = (Button) view.findViewById(R.id.cancel);
+                Button confirm = (Button) view.findViewById(R.id.confirm);
+                cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
-                        startActivity(intent);
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
                     }
                 });
-                builder.setPositiveButton("取消", null);
-                builder.show();
-
+                confirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
+                        startActivity(intent);
+                        alertDialog.dismiss();
+                    }
+                });
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(AboutUsActivity.this);
+                alertDialog = builder.create();
+                alertDialog.show();
+                alertDialog.setContentView(view);
+//                WindowManager.LayoutParams attributes = alertDialog.getWindow().getAttributes();
+//                attributes.width= ScreenUtils.getScreenWidth(getApplicationContext())- DensityUtils.dp2px(getApplicationContext(),20)*2;
+//                alertDialog.getWindow().setAttributes(attributes);
             }
         });
     }

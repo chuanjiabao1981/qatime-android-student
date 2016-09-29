@@ -11,6 +11,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.NimStrings;
 import com.netease.nimlib.sdk.SDKOptions;
@@ -24,11 +26,11 @@ import com.orhanobut.logger.Logger;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.config.UserPreferences;
-import cn.qatime.player.utils.AppUtils;
-import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.im.LoginSyncDataStatusObserver;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
+import cn.qatime.player.utils.AppUtils;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.Profile;
 import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
@@ -37,6 +39,12 @@ public class BaseApplication extends Application {
     private static Profile profile;
     public static UserInfoProvider userInfoProvider;
     private static BaseApplication context;
+    private static RequestQueue Queue;
+    public static boolean newVersion;
+
+    public static RequestQueue getRequestQueue() {
+        return Queue;
+    }
 
     @Override
     public void onCreate() {
@@ -45,8 +53,9 @@ public class BaseApplication extends Application {
         Logger.init("QTA-TIME")               // default tag : PRETTYLOGGER or use just init()
                 .setMethodCount(3)            // default 2
                 .hideThreadInfo()             // default it is shown
-                .setLogLevel(LogLevel.FULL);  // default : LogLevel.FULL
+                .setLogLevel(UrlUtils.isDebug ? LogLevel.FULL : LogLevel.NONE);  // default : LogLevel.FULL
 
+        Queue = Volley.newRequestQueue(getApplicationContext());
 
         profile = SPUtils.getObject(this, "profile", Profile.class);
         /** 云信集成start*/
@@ -184,6 +193,7 @@ public class BaseApplication extends Application {
         String token = getAccountToken();
 
         if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
+            Logger.e("云信初始化有账号****************************" + account + "--------" + token);
             return new LoginInfo(account, token);
         } else {
             return null;
@@ -200,6 +210,7 @@ public class BaseApplication extends Application {
 
     public static void setProfile(Profile profile) {
         BaseApplication.profile = profile;
+        SPUtils.putObject(context, "profile", profile);
     }
 
     public static void clearToken() {

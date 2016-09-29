@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:background="#ffffff"
+                android:paddingTop="8dp"
                 android:layout_height="match_parent">
 
     <com.handmark.pulltorefresh.library.PullToRefreshGridView
         android:id="@+id/grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#11000000"
         android:cacheColorHint="#00000000"
-        android:horizontalSpacing="1dp"
+        android:horizontalSpacing="10dp"
         android:listSelector="#00000000"
+        android:background="#ffffff"
         android:numColumns="2"
         android:scrollbars="none"
-        android:verticalSpacing="1dp"/>
+        android:verticalSpacing="10dp"/>
 
 </RelativeLayout>

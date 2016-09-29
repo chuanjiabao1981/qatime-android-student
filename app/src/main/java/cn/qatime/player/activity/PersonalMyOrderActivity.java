@@ -45,13 +45,13 @@ public class PersonalMyOrderActivity extends BaseFragmentActivity {
         fragmentlayout.setScorllToNext(true);
         fragmentlayout.setScorll(true);
         fragmentlayout.setWhereTab(1);
-        fragmentlayout.setTabHeight(6, 0xff000000);
+        fragmentlayout.setTabHeight(4,0xffff9999);
         fragmentlayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
             @Override
-            public void change(int lastPosition, int positon, View lastTabView, View currentTabView) {
-                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff858585);
-                ((TextView) currentTabView.findViewById(tab_text[positon])).setTextColor(0xff222222);
-                ((BaseFragment) fragBaseFragments.get(positon)).onShow();
+            public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
+                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff999999);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff333333);
+                ((BaseFragment) fragBaseFragments.get(position)).onShow();
             }
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_personal_my_order, 0x0311);

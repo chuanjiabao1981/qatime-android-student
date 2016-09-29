@@ -11,7 +11,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_marginTop="5dp"
         android:background="#dfdddd" />
 
     <LinearLayout
@@ -22,9 +21,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="15dp"
+            style="@style/setting_text_style"
             android:text="@string/bind_phone_number" />
 
         <View
@@ -37,11 +34,13 @@
             android:id="@+id/phone_number_m"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="15dp" />
+            android:textColor="#333333"
+            android:padding="12dp" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            style="@style/setting_icon_margin_right"
             android:src="@mipmap/personal_enter" />
     </LinearLayout>
 
@@ -58,9 +57,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="15dp"
+            style="@style/setting_text_style"
             android:text="@string/bind_email" />
 
         <View
@@ -73,11 +70,13 @@
             android:id="@+id/email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="15dp" />
+            android:textColor="#333333"
+            android:padding="12dp" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            style="@style/setting_icon_margin_right"
             android:src="@mipmap/personal_enter" />
     </LinearLayout>
 
@@ -95,9 +94,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="15dp"
+            style="@style/setting_text_style"
             android:text="@string/parent_phone_number" />
 
         <View
@@ -110,11 +107,13 @@
             android:id="@+id/phone_number_p"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="15dp" />
+            android:textColor="#333333"
+            android:padding="12dp" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            style="@style/setting_icon_margin_right"
             android:src="@mipmap/personal_enter" />
     </LinearLayout>
 
@@ -132,9 +131,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="15dp"
+            style="@style/setting_text_style"
             android:text="@string/change_password" />
 
         <View
@@ -144,8 +141,9 @@
             android:background="#ffffff" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            style="@style/setting_icon_margin_right"
             android:src="@mipmap/personal_enter" />
     </LinearLayout>
 

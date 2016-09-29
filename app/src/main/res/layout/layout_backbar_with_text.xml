@@ -1,36 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="50dp">
+    style="@style/top_style">
 
     <android.support.v7.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary" />
+        style="@style/top_style" />
 
     <ImageView
-        android:layout_width="35dp"
-        android:layout_height="wrap_content"
+        style="@style/backbar_icon_style"
         android:onClick="backClick"
-        android:padding="5dp"
         android:src="@mipmap/back_arrow" />
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:textColor="#fff"
-        android:textSize="18sp" />
+        style="@style/backbar_text_style"
+        android:layout_centerInParent="true" />
 
     <TextView
         android:id="@+id/right_text"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
         android:text="@string/use"
-        android:gravity="center"
-        android:textSize="16sp"
-        android:textColor="#fff"
+        style="@style/backbar_text_style"
+        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:paddingLeft="10dp"
         android:paddingRight="15dp"/>

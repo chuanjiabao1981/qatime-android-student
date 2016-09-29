@@ -45,16 +45,169 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="top_style"><!--顶部菜单高度-->
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:background">@drawable/shape_top_tab</item>
+    </style>
+
+    <style name="tab_item_height"> //二级导航高度
+        <item name="android:layout_height">36dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="edit_layout_style">//边框
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="activity_edit_text_style">//输入框
+        <item name="android:layout_height">36dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/shape_input_radius</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingRight">4dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#a000</item>
+        <item name="android:textColorHint">#ff999999</item>
+    </style>
+
+    <style name="edit_layout_top_style">//顶部
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">6dp</item>
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="edit_layout_center_style">//中间
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">6dp</item>
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="edit_layout_bottom_style">//底部
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="button_style"> //小按钮
+        <item name="android:layout_height">36dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/button_bg_selector_red</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">#fff</item>
+    </style>
+
+    <style name="button_full_width_style"> //跨整个屏幕的按钮
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="android:layout_marginLeft">12dp</item>
+        <item name="android:layout_marginRight">12dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/button_bg_selector_red</item>
+        <item name="android:textColor">@color/white_normal</item>
+    </style>
+
+    <style name="setting_text_style"> //设置文字
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:paddingLeft">12dp</item>
+    </style>
+
+    <style name="backbar_icon_style">//导航栏图标
+        <item name="android:layout_width">34dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
+    <style name="backbar_text_style">//导航栏文字
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="tab_text_color_select">//二级导航选中
+        <item name="android:textColor">#333333</item>
+        <item name="android:textSize">14.0sp</item>
+    </style>
+
+    <style name="tab_text_color_normal">//二级导航未选中
+        <item name="android:textColor">#999999</item>
+        <item name="android:textSize">14.0sp</item>
+    </style>
+
+    <style name="tab_menu_height">  //菜单栏高度
+        <item name="android:layout_height">54dp</item>
+    </style>
+
+    <style name="tab_menu_icon_size">   //菜单栏图片尺寸
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:scaleType">fitCenter</item>
+    </style>
+
+    <style name="tab_menu_text_color_select">//菜单栏文字选中
+        <item name="android:textColor">#fff45050</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="tab_menu_text_color_normal">//菜单栏文字未选中
+        <item name="android:textColor">#ffafaa9a</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="dialog_text_style">//dialog文字
+        <item name="android:textColor">#333333</item>
+        <item name="android:layout_marginTop">18dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="setting_icon_margin_right">
+        <item name="android:layout_marginRight">12dp</item>
+    </style>
+
+    <style name="dialog_button_style">
+        <item name="android:layout_marginLeft">12dp</item>
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="android:layout_marginRight">12dp</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="android:textColor">#fff</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:background">@drawable/dialog_button_background_selector</item>
+        <item name="android:layout_height">36dp</item>
+    </style>
 
 
     <!--<style name="MediaController_SeekBar" parent="android:Widget.SeekBar">-->
-        <!--<item name="android:progressDrawable">@drawable/nemediacontroller_progressbar</item>-->
-        <!--<item name="android:indeterminateDrawable">@drawable/nemediacontroller_progressbar</item>-->
-        <!--<item name="android:minHeight">5dip</item>-->
-        <!--<item name="android:maxHeight">5dip</item>-->
-        <!--<item name="android:thumb">@drawable/nemediacontroller_progressbar_thumb</item>-->
-        <!--<item name="android:thumbOffset">8dip</item>-->
-        <!--<item name="android:paddingLeft">8dip</item>-->
-        <!--<item name="android:paddingRight">8dip</item>-->
+    <!--<item name="android:progressDrawable">@drawable/nemediacontroller_progressbar</item>-->
+    <!--<item name="android:indeterminateDrawable">@drawable/nemediacontroller_progressbar</item>-->
+    <!--<item name="android:minHeight">5dip</item>-->
+    <!--<item name="android:maxHeight">5dip</item>-->
+    <!--<item name="android:thumb">@drawable/nemediacontroller_progressbar_thumb</item>-->
+    <!--<item name="android:thumbOffset">8dip</item>-->
+    <!--<item name="android:paddingLeft">8dip</item>-->
+    <!--<item name="android:paddingRight">8dip</item>-->
     <!--</style>-->
 </resources>

@@ -65,21 +65,21 @@ public class FragmentPersonalMyTutorship3 extends BaseFragment {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
         listView.getRefreshableView().setDividerHeight(1);
         listView.setMode(PullToRefreshBase.Mode.BOTH);
-        listView.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
-        listView.getLoadingLayoutProxy(false, true).setPullLabel(getResources().getString(R.string.pull_to_load));
-        listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResources().getString(R.string.refreshing));
-        listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
-        listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
-        listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
+        listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
+        listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
+        listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResourceString(R.string.refreshing));
+        listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResourceString(R.string.loading));
+        listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
+        listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
 
         adapter = new CommonAdapter<TutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship3) {
             @Override
             public void convert(ViewHolder helper, final TutorialClassBean.Data item, int position) {
 
-                helper.setText(R.id.class_start_time, getResources().getString(R.string.item_class_start_date)+ item.getLive_start_time());
+                helper.setText(R.id.class_start_time, getResourceString(R.string.item_class_start_date) + item.getLive_start_time());
 
 
-                helper.setText(R.id.class_end_time, getResources().getString(R.string.item_class_end_date) + item.getLive_end_time());
+                helper.setText(R.id.class_end_time, getResourceString(R.string.item_class_end_date) + item.getLive_end_time());
                 helper.getView(R.id.video).setVisibility(StringUtils.isNullOrBlanK(item.getPull_address()) ? View.GONE : View.VISIBLE);
                 helper.getView(R.id.enter).setVisibility(item.getIs_bought() ? View.GONE : View.VISIBLE);
                 helper.getView(R.id.video).setOnClickListener(new View.OnClickListener() {
@@ -87,8 +87,8 @@ public class FragmentPersonalMyTutorship3 extends BaseFragment {
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
                         intent.putExtra("url", item.getPull_address());
-                        intent.putExtra("id",item.getId());
-                        intent.putExtra("sessionId",item.getChat_team_id());
+                        intent.putExtra("id", item.getId());
+                        intent.putExtra("sessionId", item.getChat_team_id());
                         startActivity(intent);
                     }
                 });
@@ -96,7 +96,6 @@ public class FragmentPersonalMyTutorship3 extends BaseFragment {
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         Intent intent = new Intent(getActivity(), OrderConfirmActivity.class);
                         intent.putExtra("id", item.getId());
                         OrderPayBean bean = new OrderPayBean();
@@ -117,14 +116,14 @@ public class FragmentPersonalMyTutorship3 extends BaseFragment {
                 });
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
-                helper.setText(R.id.subject,getResources().getString(R.string.item_subject)+ item.getSubject());
-                helper.setText(R.id.teacher,getResources().getString(R.string.item_teacher)+ item.getTeacher_name());
+                helper.setText(R.id.subject, getResourceString(R.string.item_subject) + item.getSubject());
+                helper.setText(R.id.teacher, getResourceString(R.string.item_teacher) + item.getTeacher_name());
                 helper.setText(R.id.progress, item.getCompleted_lesson_count() + "/" + item.getPreset_lesson_count());
                 ((ProgressBar) helper.getView(R.id.progressbar)).setProgress(item.getCompleted_lesson_count());
                 ((ProgressBar) helper.getView(R.id.progressbar)).setMax(item.getPreset_lesson_count());
-                helper.setText(R.id.remain_class, String.valueOf(item.getPreset_lesson_count()-item.getCompleted_lesson_count()));
+                helper.setText(R.id.remain_class, String.valueOf(item.getPreset_lesson_count() - item.getCompleted_lesson_count()));
 
-                helper.setText(R.id.teaching_time, getResources().getString(R.string.item_next_class) + item.getPreview_time());
+                helper.setText(R.id.teaching_time, getResourceString(R.string.item_next_class) + item.getPreview_time());
 
             }
 
@@ -137,6 +136,7 @@ public class FragmentPersonalMyTutorship3 extends BaseFragment {
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page = 1;
                 new Handler().postDelayed(new Runnable() {
+                    @Override
                     public void run() {
                         String label = DateUtils.formatDateTime(
                                 getActivity(),
@@ -157,6 +157,7 @@ public class FragmentPersonalMyTutorship3 extends BaseFragment {
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page++;
                 new Handler().postDelayed(new Runnable() {
+                    @Override
                     public void run() {
                         String label = DateUtils.formatDateTime(
                                 getActivity(),

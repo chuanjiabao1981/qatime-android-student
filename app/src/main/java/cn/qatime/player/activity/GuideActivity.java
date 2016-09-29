@@ -40,12 +40,12 @@ public class GuideActivity extends BaseActivity {
 //        viewPager.setId(1252);
         viewPager.setOnGetView(new TagViewPager.OnGetView() {
             @Override
-            public View getView(ViewGroup container, int position) {
+            public View getView(ViewGroup container, int position){
                 ImageView iv = new ImageView(GuideActivity.this);
                 iv.setClickable(true);
                 iv.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
                 iv.setId(position);
-                iv.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                iv.setScaleType(ImageView.ScaleType.FIT_XY);
 //				iv.setImageResource(imageIds[position]);
                 iv.setImageBitmap(BitmapUtil.decodeBitmapFromResource(getResources(), imageIds[position], width, height));
                 container.addView(iv);

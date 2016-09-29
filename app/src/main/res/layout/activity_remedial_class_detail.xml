@@ -20,6 +20,7 @@
 
             <ImageView
                 android:id="@+id/image"
+                android:scaleType="fitXY"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"/>
 
@@ -34,7 +35,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:paddingLeft="10dp"
                     android:textSize="16sp"
                     android:textColor="@color/black_translucent"
                     android:textStyle="bold"/>
@@ -49,9 +49,7 @@
                         android:id="@+id/price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="10dp"
-                        android:textColor="#fa0000"
-                        android:textStyle="bold"/> <!--价格-->
+                        android:textColor="#fa0000" /> <!--价格-->
 
                     <View
                         android:layout_width="0dp"
@@ -62,7 +60,6 @@
                         android:id="@+id/student_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingRight="10dp"
                         android:textSize="12sp"/>
                     <!--已报人数-->
                 </LinearLayout>
@@ -74,11 +71,15 @@
                 android:layout_height="1px"
                 android:background="#ccdccd"/>
         </LinearLayout>
+        <!--<libraryextra.view.FragmentLayoutWithLine-->
+            <!--android:id="@+id/fragmentlayout"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent" />-->
 
         <libraryextra.view.SimpleViewPagerIndicator
             android:id="@+id/id_stickynavlayout_indicator"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            style="@style/tab_item_height"
             android:background="#ffffff"/>
 
         <android.support.v4.view.ViewPager
@@ -90,6 +91,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="vertical">
 
         <View
@@ -98,27 +100,26 @@
             android:background="#cccccc"/>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginBottom="9dp"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="9dp"
+            android:gravity="center">
 
             <Button
                 android:id="@+id/audition"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/button_bg_selector_orange"
+                style="@style/button_style"
+                android:layout_marginRight="6dp"
                 android:enabled="false"
                 android:text="已加入试听"/>
 
             <Button
                 android:id="@+id/pay"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/button_bg_selector_orange"
+                style="@style/button_style"
+                android:layout_marginLeft="6dp"
                 android:enabled="false"
                 android:text="已购买"/>
         </LinearLayout>

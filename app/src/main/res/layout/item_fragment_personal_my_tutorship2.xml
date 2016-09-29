@@ -116,8 +116,8 @@
                         style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
                         android:layout_width="120dp"
                         android:layout_height="5dp"
-                        android:layout_gravity="center"
-                        android:background="#bfbfbf"/>
+                        android:progressDrawable="@drawable/progress_horizontal"
+                        android:layout_gravity="center" />
 
                     <TextView
                         android:id="@+id/remain_class"
@@ -152,9 +152,9 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_alignParentRight="true"
-
+                        android:scaleType="centerInside"
                         android:layout_gravity="center"
-                        android:layout_margin="5dp"
+                        android:padding="5dp"
                         android:src="@mipmap/shopping32"/>
                 </LinearLayout>
 

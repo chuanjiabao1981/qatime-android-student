@@ -35,6 +35,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <!-- 如果需要实时音视频通话模块，下面的权限也是必须的。否则，可以不加 -->
     <!--<uses-permission android:name="android.permission.BLUETOOTH" />-->
@@ -105,7 +106,8 @@
 
         <!--网易云信  end-->
 
-        <activity android:name=".activity.StartActivity"
+        <activity
+            android:name=".activity.StartActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

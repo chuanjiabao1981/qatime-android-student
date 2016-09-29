@@ -14,10 +14,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
             android:background="@drawable/text_background"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:paddingTop="12dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            >
 
             <LinearLayout
                 android:id="@+id/change_head_sculpture"
@@ -82,7 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:padding="10dp">
+                android:padding="12dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -102,7 +108,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@drawable/shape_input"
+                    android:background="@drawable/shape_input_radius"
                     android:hint="@string/hint_name"
                     android:inputType="text"
                     android:paddingBottom="5dp"
@@ -121,7 +127,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:padding="10dp">
+                android:padding="12dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -169,7 +175,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingLeft="10dp">
+                android:gravity="center_vertical"
+                android:paddingLeft="12dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -192,11 +199,10 @@
                     android:text="1990年01月01日" />
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:padding="5dp"
-                    android:src="@mipmap/calendar_black_32" />
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_marginLeft="2dp"
+                    android:src="@mipmap/down"/>
             </LinearLayout>
 
             <View
@@ -205,9 +211,12 @@
                 android:background="#dfdddd" />
 
             <LinearLayout
+                android:id="@+id/grade_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp">
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="12dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -221,13 +230,16 @@
                     android:layout_marginRight="10dp"
                     android:text="@string/by_grade" />
 
-                <Spinner
-                    android:id="@+id/spinner"
+                <TextView
+                    android:id="@+id/text_grade"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp" />
-
+                    android:text="高一"
+                    android:layout_height="wrap_content" />
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_marginLeft="2dp"
+                    android:src="@mipmap/down"/>
             </LinearLayout>
 
             <!--<View-->
@@ -247,12 +259,6 @@
 
     <TextView
         android:id="@+id/complete"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:background="@drawable/button_bg_selector_orange"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="@string/finish"
-        android:textColor="#fff" />
+        style="@style/button_full_width_style"
+        android:text="@string/finish" />
 </LinearLayout>

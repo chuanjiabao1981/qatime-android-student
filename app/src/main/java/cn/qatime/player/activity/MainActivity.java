@@ -14,14 +14,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.NimIntent;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.MsgService;
-import com.netease.nimlib.sdk.msg.SystemMessageObserver;
-import com.netease.nimlib.sdk.msg.SystemMessageService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.orhanobut.logger.Logger;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
@@ -30,17 +36,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import cn.qatime.player.R;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
+import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.fragment.Fragment1;
 import cn.qatime.player.fragment.Fragment2;
 import cn.qatime.player.fragment.Fragment3;
 import cn.qatime.player.fragment.Fragment4;
-import cn.qatime.player.im.manager.ReminderManager;
-import cn.qatime.player.im.model.ReminderItem;
+import cn.qatime.player.im.cache.TeamDataCache;
+import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.bean.PersonalInformationBean;
+import libraryextra.bean.Profile;
 import libraryextra.utils.FileUtil;
+import libraryextra.utils.JsonUtils;
 import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -69,20 +80,18 @@ public class MainActivity extends BaseFragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
-
+        EventBus.getDefault().register(this);
         refreshMedia();
 
         File file = new File(Constant.CACHEPATH);
-        if (!file.mkdirs())
-
-        {
+        if (!file.mkdirs()) {
             try {
                 file.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
+        parseIntent();
         //        GetGradeslist();
 //        GetProvinceslist();
 //        GetCitieslist();
@@ -119,9 +128,9 @@ public class MainActivity extends BaseFragmentActivity {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
                 currentPosition = position;
-                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff858786);
+                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xffafaa9a);
                 ((ImageView) lastTabView.findViewById(tab_img[lastPosition])).setImageResource(tabImages[lastPosition][1]);
-                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffeb6a4b);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xfff45050);
                 ((ImageView) currentTabView.findViewById(tab_img[position])).setImageResource(tabImages[position][0]);
                 enableMsgNotification(false);
             }
@@ -144,12 +153,12 @@ public class MainActivity extends BaseFragmentActivity {
     @Override
     public void onBackPressed() {
         if (!flag) {
-            setResult(Constant.REGIST);
             Toast toast = Toast.makeText(this, getResources().getString(R.string.press_again_to_exit), Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
             flag = true;
             new Handler().postDelayed(new Runnable() {
+                @Override
                 public void run() {
                     flag = false;
                 }
@@ -168,6 +177,36 @@ public class MainActivity extends BaseFragmentActivity {
             }
             startActivity(start);
             finish();
+        } else {
+            //云信通知消息
+            setIntent(intent);
+            parseIntent();
+        }
+    }
+
+    /**
+     * 解析通知栏发来的云信消息
+     */
+    private void parseIntent() {
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT)) {
+            ArrayList<IMMessage> messages = (ArrayList<IMMessage>) intent.getSerializableExtra(NimIntent.EXTRA_NOTIFY_CONTENT);
+            if (messages != null && messages.size() == 1) {
+                final IMMessage message = messages.get(0);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (message != null) {
+                            if (fragmentlayout != null) {
+                                fragmentlayout.setCurrenItem(2);
+                            }
+                            if (((Fragment3) fragBaseFragments.get(2)) != null) {
+                                ((Fragment3) fragBaseFragments.get(2)).setMessage(message);
+                            }
+                        }
+                    }
+                }, 500);
+            }
         }
     }
 
@@ -280,7 +319,7 @@ public class MainActivity extends BaseFragmentActivity {
     //学校列表
     public void GetSchoolslist() {
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/schools", null,
+        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.urlAppconstantInformation + "/schools", null,
                 new VolleyListener(MainActivity.this) {
 
                     @Override
@@ -323,8 +362,7 @@ public class MainActivity extends BaseFragmentActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        registerMsgUnreadInfoObserver(false);
-//        registerSystemMessageObservers(false);
+        EventBus.getDefault().unregister(this);
     }
 
     /**********************************************
@@ -347,51 +385,87 @@ public class MainActivity extends BaseFragmentActivity {
         }
     }
 
-    /**
-     * 注册未读消息数量观察者
-     */
-//    private void registerMsgUnreadInfoObserver(boolean register) {
-//        if (register) {
-//            ReminderManager.getInstance().registerUnreadNumChangedCallback(this);
-//        } else {
-//            ReminderManager.getInstance().unregisterUnreadNumChangedCallback(this);
-//        }
-//    }
+
+    @Subscribe
+    public void onEvent(String event) {
+        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
+            if (StringUtils.isNullOrBlanK(BaseApplication.getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getAccountToken())) {
+                getAccount();
+            }
+        }
+    }
 
     /**
-     * 注册/注销系统消息未读数变化
-     *
-     * @param register
+     * 当用户没有云信账号,第一次直接购买后,需从后台获取一次云信账号
      */
-//    private void registerSystemMessageObservers(boolean register) {
-//        NIMClient.getService(SystemMessageObserver.class).observeUnreadCountChange(sysMsgUnreadCountChangedObserver, register);
-//    }
-//
-//    private Observer<Integer> sysMsgUnreadCountChangedObserver = new Observer<Integer>() {
-//        @Override
-//        public void onEvent(Integer unreadCount) {
-////            SystemMessageUnreadManager.getInstance().setSysMsgUnreadCount(unreadCount);
-//            ReminderManager.getInstance().updateContactUnreadNum(unreadCount);
-//        }
-//    };
-//
-//    /**
-//     * 查询系统消息未读数
-//     */
-//    private void requestSystemMessageUnreadCount() {
-//        int unread = NIMClient.getService(SystemMessageService.class).querySystemMessageUnreadCountBlock();
-////        SystemMessageUnreadManager.getInstance().setSysMsgUnreadCount(unread);
-//        ReminderManager.getInstance().updateContactUnreadNum(unread);
-//
-//    }
-//
-//    /**
-//     * 未读消息实现
-//     *
-//     * @param item
-//     */
-//    @Override
-//    public void onUnreadNumChanged(ReminderItem item) {
-//        Logger.e(item.getUnread() + "");
-//    }
+    private void getAccount() {
+
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null,
+                new VolleyListener(MainActivity.this) {
+
+
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
+                        if (bean != null && bean.getData() != null && bean.getData().getChat_account() != null) {
+                            Profile profile = BaseApplication.getProfile();
+                            profile.getData().getUser().setChat_account(bean.getData().getChat_account());
+                            BaseApplication.setProfile(profile);
+
+                            String account = BaseApplication.getAccount();
+                            String token = BaseApplication.getAccountToken();
+
+                            if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
+                                AbortableFuture<LoginInfo> loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, token));
+                                loginRequest.setCallback(new RequestCallback<LoginInfo>() {
+                                    @Override
+                                    public void onSuccess(LoginInfo o) {
+                                        Logger.e("云信登录成功" + o.getAccount());
+                                        // 初始化消息提醒
+                                        NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
+
+                                        NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
+                                        //缓存
+                                        UserInfoCache.getInstance().clear();
+                                        TeamDataCache.getInstance().clear();
+
+                                        UserInfoCache.getInstance().buildCache();
+                                        TeamDataCache.getInstance().buildCache();
+
+                                        UserInfoCache.getInstance().registerObservers(true);
+                                        TeamDataCache.getInstance().registerObservers(true);
+                                    }
+
+                                    @Override
+                                    public void onFailed(int code) {
+                                        BaseApplication.clearToken();
+                                    }
+
+                                    @Override
+                                    public void onException(Throwable throwable) {
+                                        Logger.e(throwable.getMessage());
+                                        BaseApplication.clearToken();
+                                    }
+                                });
+                            }
+                        }
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
+    }
 }

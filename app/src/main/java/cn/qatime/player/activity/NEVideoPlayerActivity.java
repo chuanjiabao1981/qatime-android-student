@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,14 +28,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.bean.Announcements;
 import cn.qatime.player.fragment.FragmentNEVideoPlayer1;
 import cn.qatime.player.fragment.FragmentNEVideoPlayer2;
 import cn.qatime.player.fragment.FragmentNEVideoPlayer3;
 import cn.qatime.player.fragment.FragmentNEVideoPlayer4;
+import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
+import cn.qatime.player.view.BiaoQingView;
 import cn.qatime.player.view.QaVideoPlayer;
 import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.JsonUtils;
@@ -72,6 +76,22 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     private FragmentNEVideoPlayer2 fragment2;
     private String sessionId;
     private SessionTypeEnum sessionType = SessionTypeEnum.Team;
+    private ImageView emoji;
+    private EditText content;
+    private boolean isMute = false;//当前用户 是否被禁言
+    //    Runnable runnable = new Runnable() {
+//        @Override
+//        public void run() {
+//            hd.postDelayed(this, 50);
+//            videoPlayer.setData(i + "彈幕");
+//            i++;
+//            if (i>20){
+//                hd.removeCallbacks(this);
+//            }
+//            LogUtils.e(i);
+//        }
+//    };
+//    int flag = Settings.System.getInt(getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +99,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         setContentView(R.layout.activity_player);
         id = getIntent().getIntExtra("id", 0);//从前一页进来的id 获取详情用
         if (id == 0) {
-            Toast.makeText(this, "id不能为0", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResourceString(R.string.no_course_information), Toast.LENGTH_SHORT).show();
         }
         sessionId = getIntent().getStringExtra("sessionId");
         String url = getIntent().getStringExtra("url");
@@ -152,7 +172,9 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     }
 
     private void initView() {
+        isMute = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount()).isMute();
         bottom = findViewById(R.id.bottom);
+
         inputLayout = findViewById(R.id.input_layout);
         fragBaseFragments.add(new FragmentNEVideoPlayer1());
         fragBaseFragments.add(new FragmentNEVideoPlayer2());
@@ -164,20 +186,17 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         fragmentLayout.setScorllToNext(true);
         fragmentLayout.setScorll(true);
         fragmentLayout.setWhereTab(1);
-        fragmentLayout.setTabHeight(6, 0xff000000);
+        fragmentLayout.setTabHeight(4,0xffff9999);
         fragmentLayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
             @Override
-            public void change(int lastPosition, int positon, View lastTabView, View currentTabView) {
-                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff858585);
-                ((TextView) currentTabView.findViewById(tab_text[positon])).setTextColor(0xff222222);
-                lastTabView.setBackgroundColor(0xffffffff);
-                currentTabView.setBackgroundColor(0xffeeeeee);
-                if (positon == 1) {
-                    inputLayout.setVisibility(View.VISIBLE);
-                } else {
-                    KeyBoardUtils.closeKeybord(NEVideoPlayerActivity.this);
-                    inputLayout.setVisibility(View.GONE);
-                }
+            public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
+                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff999999);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff333333);
+//                    lastTabView.setBackgroundColor(0xffffffff);
+//                    currentTabView.setBackgroundColor(0xffeeeeee);
+                    if (position != 1) {
+                        KeyBoardUtils.closeKeybord(NEVideoPlayerActivity.this);
+                    }
             }
         });
         fragmentLayout.setAdapter(fragBaseFragments, R.layout.tablayout_nevideo_player, 0x0102);
@@ -188,11 +207,19 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         fragment2.setChatCallBack(new FragmentNEVideoPlayer2.Callback() {
             @Override
             public void back(List<IMMessage> result) {
+                isMute = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount()).isMute();
+                if (isMute) {
+                    content.setHint(R.string.have_muted);
+                } else {
+                    content.setHint("");
+                }
                 videoPlayer.addDanmaku(result);
             }
         });
 
-        final EditText content = (EditText) findViewById(R.id.content);
+        content = (EditText) findViewById(R.id.content);
+        emoji = (ImageView) findViewById(R.id.emoji);
+
         Button send = (Button) findViewById(R.id.send);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,6 +228,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
                 content.setText("");
             }
         });
+        BiaoQingView bq = (BiaoQingView) findViewById(R.id.biaoQingView);
+        bq.init(content, emoji);
         videoPlayer.setChatCallback(new QaVideoPlayer.ChatCallback() {
             @Override
             public void back(String result) {
@@ -208,6 +237,11 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
                 sendMessage(result, true);
             }
         });
+        if (isMute) {
+            content.setHint(R.string.have_muted);
+        } else {
+            content.setHint("");
+        }
     }
 
     /**
@@ -218,11 +252,17 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
      */
     private void sendMessage(String comment, boolean isSendToDanmu) {
         if (!fragment2.isAllowSendMessage()) {
-            Toast.makeText(NEVideoPlayerActivity.this, "您已不在该群,不能发送消息", Toast.LENGTH_SHORT).show();
+            Toast.makeText(NEVideoPlayerActivity.this, getResourceString(R.string.team_send_message_not_allow), Toast.LENGTH_SHORT).show();
             return;
         }
         if (StringUtils.isNullOrBlanK(comment)) {
-            Toast.makeText(NEVideoPlayerActivity.this, "消息不能为空", Toast.LENGTH_SHORT).show();
+            Toast.makeText(NEVideoPlayerActivity.this, getResourceString(R.string.message_can_not_null), Toast.LENGTH_SHORT).show();
+            return;
+        }
+//        isMute = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount()).isMute();
+        if (isMute) {
+            Toast.makeText(NEVideoPlayerActivity.this, getResources().getString(R.string.have_muted), Toast.LENGTH_SHORT).show();
+            content.setText("");
             return;
         }
         // 创建文本消息
@@ -347,6 +387,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     public void onBackPressed() {
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            return;
+        }
+        if (findViewById(R.id.viewPager) != null && findViewById(R.id.viewPager).getVisibility() == View.VISIBLE) {
+            findViewById(R.id.viewPager).setVisibility(View.GONE);
             return;
         }
         super.onBackPressed();

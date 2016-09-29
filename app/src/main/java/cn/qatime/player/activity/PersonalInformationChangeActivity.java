@@ -1,6 +1,8 @@
 package cn.qatime.player.activity;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -11,13 +13,11 @@ import android.text.InputFilter;
 import android.text.Selection;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +37,7 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.UpLoadUtil;
 import cn.qatime.player.utils.UrlUtils;
+import cn.qatime.player.view.WheelView;
 import libraryextra.bean.GradeBean;
 import libraryextra.bean.ImageItem;
 import libraryextra.bean.PersonalInformationBean;
@@ -55,11 +56,13 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     RadioButton men;
     RadioButton women;
     RadioGroup radiogroup;
-    Spinner spinner;
+    TextView textGrade;
     TextView complete;
     private Uri captureUri;
     private EditText describe;
     private TextView birthday;
+    private View birthdayView;
+    private View gradeView;
 
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
     private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
@@ -67,6 +70,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     private String select = "";//生日所选日期
     private GradeBean gradeBean;
     private CustomProgressDialog progress;
+    private AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,17 +83,17 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
 //        if (!StringUtils.isNullOrBlanK(school)) {
 //            schoolBean = JsonUtils.objectFromJson(school, SchoolBean.class);
 //        }
-        String gradeString = FileUtil.readFile(getCacheDir() + "/grade.txt");
+        String gradeString = FileUtil.readFile(getFilesDir() + "/grade.txt");
 //        LogUtils.e("班级基础信息" + gradeString);
         if (!StringUtils.isNullOrBlanK(gradeString)) {
             gradeBean = JsonUtils.objectFromJson(gradeString, GradeBean.class);
         }
 
-        spinner.setAdapter(new ArrayAdapter<String>(this, R.layout.item_spinner, gradeBean.getData().getGrades()));
 
         replace.setOnClickListener(this);
-        birthday.setOnClickListener(this);
+        birthdayView.setOnClickListener(this);
         complete.setOnClickListener(this);
+        gradeView.setOnClickListener(this);
         PersonalInformationBean data = (PersonalInformationBean) getIntent().getSerializableExtra("data");
         if (data != null && data.getData() != null) {
             initData(data);
@@ -124,7 +128,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         if (!StringUtils.isNullOrBlanK(data.getData().getGrade())) {
             for (int i = 0; i < gradeBean.getData().getGrades().size(); i++) {
                 if (data.getData().getGrade().equals(gradeBean.getData().getGrades().get(i))) {
-                    spinner.setSelection(i);
+                    textGrade.setText(data.getData().getGrade());
                     break;
                 }
             }
@@ -136,17 +140,19 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.grade_view:
+                showGradePickerDialog();
+                break;
             case R.id.replace://去选择图片
                 final Intent intent = new Intent(PersonalInformationChangeActivity.this, PictureSelectActivity.class);
                 startActivityForResult(intent, Constant.REQUEST_PICTURE_SELECT);
                 break;
-            case R.id.birthday://生日
+            case R.id.birthday_view://生日
                 try {
 
                     MDatePickerDialog dataDialog = new MDatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-
                             select = (year + "-" + ((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1))) + "-" + ((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth))));
                             try {
                                 birthday.setText(format.format(parse.parse(select)));
@@ -155,6 +161,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                             }
                         }
                     }, parse.parse(select).getYear() + 1900, parse.parse(select).getMonth() + 1, parse.parse(select).getDay());
+                    dataDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
                     dataDialog.show();
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -183,7 +190,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                     @Override
                     protected void httpFailed(String result) {
                         // TODO: 2016/8/26 ERROR 处理
-                        Toast.makeText(PersonalInformationChangeActivity.this, "服务器异常", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PersonalInformationChangeActivity.this, getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
                         DialogUtils.dismissDialog(progress);
                     }
                 };
@@ -197,7 +204,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                     Toast.makeText(this, getResources().getString(R.string.name_can_not_be_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                String grade = gradeBean.getData().getGrades().get(spinner.getSelectedItemPosition());
+                String grade = textGrade.getText().toString();
                 if (StringUtils.isNullOrBlanK(grade)) {
                     Toast.makeText(this, getResources().getString(R.string.grade_can_not_be_empty), Toast.LENGTH_SHORT).show();
                     return;
@@ -219,6 +226,37 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         }
     }
 
+    private void showGradePickerDialog() {
+        if (alertDialog == null) {
+            final View view = View.inflate(PersonalInformationChangeActivity.this, R.layout.dialog_grade_picker, null);
+            final WheelView grade = (WheelView) view.findViewById(R.id.grade);
+            grade.setOffset(1);
+            grade.setItems(gradeBean.getData().getGrades());
+            grade.setSeletion(gradeBean.getData().getGrades().indexOf(textGrade.getText()));
+            grade.setonItemClickListener(new WheelView.OnItemClickListener(){
+                @Override
+                public void onItemClick() {
+                    alertDialog.dismiss();
+                }
+            });
+            AlertDialog.Builder builder = new AlertDialog.Builder(PersonalInformationChangeActivity.this);
+            alertDialog = builder.create();
+            alertDialog.show();
+            alertDialog.setContentView(view);
+            alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    textGrade.setText(grade.getSeletedItem());
+                }
+            });
+//            WindowManager.LayoutParams attributes = alertDialog.getWindow().getAttributes();
+//            attributes.width= ScreenUtils.getScreenWidth(getApplicationContext())- DensityUtils.dp2px(getApplicationContext(),20)*2;
+//            alertDialog.getWindow().setAttributes(attributes);
+        } else {
+            alertDialog.show();
+        }
+    }
+
     private void initView() {
         headsculpture = (ImageView) findViewById(R.id.head_sculpture);
         replace = (TextView) findViewById(R.id.replace);
@@ -226,16 +264,18 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         name.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                return (event.getKeyCode() == KeyEvent.KEYCODE_ENTER);
+                return event.getKeyCode() == KeyEvent.KEYCODE_ENTER;
             }
         });
         men = (RadioButton) findViewById(R.id.men);
         women = (RadioButton) findViewById(R.id.women);
         radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
-        spinner = (Spinner) findViewById(R.id.spinner);
+        textGrade = (TextView) findViewById(R.id.text_grade);
         describe = (EditText) findViewById(R.id.describe);
         describe.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
         birthday = (TextView) findViewById(R.id.birthday);
+        birthdayView = findViewById(R.id.birthday_view);
+        gradeView = findViewById(R.id.grade_view);
         complete = (TextView) findViewById(R.id.complete);
     }
 

@@ -52,10 +52,8 @@ public class Fragment1 extends BaseFragment {
         root.setOnChangeFragmentListener(new FragmentLayout.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
-                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xffcccccc);
-                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextSize(14);
+                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xffafaa9a);
                 ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffffffff);
-                ((TextView) currentTabView.findViewById(tab_text[position])).setTextSize(16);
             }
         });
         root.setAdapter(fragBaseFragments, R.layout.tablayout_fragment1, 0x1001);

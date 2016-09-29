@@ -8,7 +8,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
 
@@ -22,6 +21,7 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
 public class SecurityManagerActivity extends BaseActivity implements View.OnClickListener {
@@ -59,7 +59,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null, new VolleyListener(this) {
             @Override
             protected void onTokenOut() {
-
+                tokenOut();
             }
 
             @Override
@@ -71,12 +71,12 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
 
             @Override
             protected void onError(JSONObject response) {
-                Toast.makeText(SecurityManagerActivity.this, "网络异常", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SecurityManagerActivity.this, getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
             }
-        }, new Response.ErrorListener() {
+        }, new VolleyErrorListener(){
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                super.onErrorResponse(volleyError);
             }
         });
         addToRequestQueue(request);
@@ -87,26 +87,26 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
         String parentPhone = bean.getData().getParent_phone();
         if (parentPhone != null) {
             phoneNumberP.setText("" + parentPhone);
-            phoneNumberP.setTextColor(Color.BLACK);
+            phoneNumberP.setTextColor(0xff333333);
         } else {
-            phoneNumberP.setText("未绑定");
+            phoneNumberP.setText(getResourceString(R.string.not_bind));
             phoneNumberP.setTextColor(Color.RED);
         }
         String email = bean.getData().getEmail();
         if (email != null) {
             this.email.setText("" + email);
-            this.email.setTextColor(Color.BLACK);
+            this.email.setTextColor(0xff333333);
         } else {
-            this.email.setText("未绑定");
+            this.email.setText(getResourceString(R.string.not_bind));
             this.email.setTextColor(Color.RED);
         }
 
         String loginMobile = bean.getData().getLogin_mobile();
         if (loginMobile != null) {
             phoneNumberM.setText("" + loginMobile);
-            phoneNumberM.setTextColor(Color.BLACK);
+            phoneNumberM.setTextColor(0xff333333);
         } else {
-            phoneNumberM.setText("未绑定");
+            phoneNumberM.setText(getResourceString(R.string.not_bind));
             phoneNumberM.setTextColor(Color.RED);
         }
     }

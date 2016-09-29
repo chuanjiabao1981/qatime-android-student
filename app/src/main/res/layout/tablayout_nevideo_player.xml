@@ -8,14 +8,13 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="#ffffff"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="45dp"
-            android:background="#eee"
             android:layout_weight="1"
-            android:gravity="center"
+            style="@style/tab_item_height"
             android:orientation="horizontal">
 
 
@@ -26,15 +25,13 @@
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
                 android:text="公告"
-                android:textColor="#222222"
-                android:textSize="14.0sp" />
+                style="@style/tab_text_color_select" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="45dp"
+            style="@style/tab_item_height"
             android:layout_weight="1"
-            android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
@@ -43,15 +40,13 @@
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
                 android:text="@string/chat"
-                android:textColor="#858585"
-                android:textSize="14.0sp" />
+                style="@style/tab_text_color_normal" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="45dp"
+            style="@style/tab_item_height"
             android:layout_weight="1"
-            android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
@@ -60,14 +55,12 @@
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
                 android:text="@string/live_details"
-                android:textColor="#858585"
-                android:textSize="14.0sp" />
+                style="@style/tab_text_color_normal" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="45dp"
+            style="@style/tab_item_height"
             android:layout_weight="1"
-            android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
@@ -76,8 +69,7 @@
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
                 android:text="@string/member_list"
-                android:textColor="#858585"
-                android:textSize="14.0sp" />
+                style="@style/tab_text_color_normal" />
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

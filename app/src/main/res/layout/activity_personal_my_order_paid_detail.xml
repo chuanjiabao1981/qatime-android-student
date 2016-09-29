@@ -12,7 +12,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="120dp"
+            android:gravity="center"
             android:background="#bfbdbd"
             android:orientation="vertical"
             android:padding="10dp">
@@ -25,7 +26,6 @@
                 android:padding="8dp"
                 android:text="@string/waiting_for_payment"
                 android:textSize="20sp"
-
                 android:textColor="#ffbc04"/>
 
             <!--<LinearLayout-->
@@ -79,8 +79,9 @@
         android:id="@+id/list_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/text_background"
         android:orientation="horizontal"
+        android:padding="12dp"
+        android:background="#faf6f6"
         android:weightSum="1">
 
         <ImageView
@@ -186,7 +187,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -308,16 +309,7 @@
             <!--android:padding="10dp"-->
             <!--android:text="@string/cancel_order"/>-->
 
-        <!--<TextView-->
-            <!--android:id="@+id/pay"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_margin="2dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:background="@drawable/button_bg_selector_orange"-->
-            <!--android:gravity="center"-->
-            <!--android:padding="10dp"-->
-            <!--android:text="@string/pay"/>-->
+
     </LinearLayout>
 
 

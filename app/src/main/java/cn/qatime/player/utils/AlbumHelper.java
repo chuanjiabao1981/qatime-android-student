@@ -193,9 +193,17 @@ public class AlbumHelper {
             do {
                 String _id = cur.getString(photoIDIndex);
                 String name = cur.getString(photoNameIndex);
+                if(name.endsWith(".gif")){
+                    cur.moveToNext();
+                    continue;
+                }
                 String path = cur.getString(photoPathIndex);
                 String title = cur.getString(photoTitleIndex);
                 String size = cur.getString(photoSizeIndex);
+                if(Integer.valueOf(size)<30720){
+                    cur.moveToNext();
+                    continue;
+                }
                 String bucketName = cur.getString(bucketDisplayNameIndex);
                 String bucketId = cur.getString(bucketIdIndex);
                 String picasaId = cur.getString(picasaIdIndex);

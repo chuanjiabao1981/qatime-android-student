@@ -1,36 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="45dp">
+    style="@style/top_style">
 
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"/>
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_top_tab" />
 
     <ImageView
-        android:layout_width="35dp"
-        android:layout_height="wrap_content"
         android:onClick="backClick"
-        android:padding="5dp"
-        android:src="@mipmap/back_arrow"/>
+        android:src="@mipmap/back_arrow"
+        style="@style/backbar_icon_style" />
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:ellipsize="end"
         android:maxEms="6"
         android:singleLine="true"
-        android:textColor="#fff"
-        android:textSize="18sp"/>
+        style="@style/backbar_text_style" />
 
     <ImageView
         android:id="@+id/right"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        style="@style/backbar_icon_style"
         android:layout_alignParentRight="true"
-        android:paddingLeft="10dp"
-        android:paddingRight="15dp"/>
+        android:layout_centerVertical="true" />
 </RelativeLayout>

@@ -37,7 +37,7 @@ public class FeedBackActivity extends BaseActivity {
 
     private void initView() {
         setContentView(R.layout.activity_feedback);
-        setTitle("意见反馈");
+        setTitle(getResourceString(R.string.feedback));
         assignViews();
         opinion.setHint(StringUtils.getSpannedString(this, R.string.hint_opinion));
         contact.setHint(StringUtils.getSpannedString(this, R.string.hint_contact));

@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.netease.nimlib.sdk.msg.model.IMMessage;
+
 import java.util.ArrayList;
 
 import cn.qatime.player.R;
@@ -46,15 +48,27 @@ public class Fragment3 extends BaseFragment {
         fragmentlayout.setScorllToNext(true);
         fragmentlayout.setScorll(true);
         fragmentlayout.setWhereTab(1);
-        fragmentlayout.setTabHeight(6, 0xff000000);
+        fragmentlayout.setTabHeight(4,0xffff9999);
         fragmentlayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
             @Override
-            public void change(int lastPosition, int positon, View lastTabView, View currentTabView) {
-                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff858585);
-                ((TextView) currentTabView.findViewById(tab_text[positon])).setTextColor(0xff222222);
+            public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
+                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff999999);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff333333);
             }
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_fragment_news, 0x0912);
 
+    }
+
+    /**
+     * 云信发来的sessionid
+     *
+     * @param message 会话
+     */
+    public void setMessage(IMMessage message) {
+        if (fragBaseFragments != null && fragBaseFragments.size() > 0) {
+            ((FragmentNews1) fragBaseFragments.get(0)).setMessage(message);
+
+        }
     }
 }

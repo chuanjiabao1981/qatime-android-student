@@ -27,7 +27,7 @@ public class WeekDayView extends View {
     private int mWeekSize = 14;
     private Paint paint;
     private DisplayMetrics mDisplayMetrics;
-    private String[] weekString = new String[]{"日","一","二","三","四","五","六"};
+    private String[] weekString = new String[]{"一","二","三","四","五","六","日"};
     public WeekDayView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mDisplayMetrics = getResources().getDisplayMetrics();

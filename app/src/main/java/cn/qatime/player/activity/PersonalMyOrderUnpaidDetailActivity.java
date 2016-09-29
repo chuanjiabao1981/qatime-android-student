@@ -15,16 +15,9 @@ import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.orhanobut.logger.Logger;
 
-
 import org.json.JSONObject;
 
-import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
-
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
@@ -61,9 +54,6 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
     private int classid;
     DecimalFormat df = new DecimalFormat("#.00");
 
-//    SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS+xx:oo");
-//    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd THH:mm:ss-www-xx-oo");
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,22 +77,22 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
             status.setText("        ");
         }
         if (StringUtils.isNullOrBlanK(data.name)) {
-            name.setText("    ");
+            name.setText(getResourceString(R.string.cancel_order_name));
         } else {
             name.setText(data.name);
         }
         if (StringUtils.isNullOrBlanK(data.grade)) {
-            grade.setText("年级");
+            grade.setText(getResourceString(R.string.grade));
         } else {
             grade.setText(data.grade);
         }
         if (StringUtils.isNullOrBlanK(data.subject)) {
-            subject.setText("科目");
+            subject.setText(getResourceString(R.string.subject));
         } else {
             subject.setText(data.subject);
         }
         if (StringUtils.isNullOrBlanK(data.teacher)) {
-            teacher.setText("老师");
+            teacher.setText(getResourceString(R.string.cancel_order_teacher));
         } else {
             teacher.setText(data.teacher);
         }
@@ -110,23 +100,17 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         ordernumber.setText(getIntent().getStringExtra("id"));
         //创建时间
         Logger.e(getIntent().getStringExtra("created_at"));
+        Logger.e("" + getIntent().getIntExtra("payType", 0));
         if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("created_at"))) {
-            buildtime.setText("为空");
+            buildtime.setText(getResourceString(R.string.is_null));
         } else {
-            try {
-                DateFormat format = new SimpleDateFormat("EEE MMM dd  yyyy HH:mm:ss z");
-                format.setTimeZone(TimeZone.getTimeZone("GMT"));
-                buildtime.setText(format.parse((getIntent().getStringExtra("created_at"))).toString());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
+            buildtime.setText(getIntent().getStringExtra("created_at"));
         }
         int payType = getIntent().getIntExtra("payType", 0);//支付方式
         if (payType == 1) {
-            paytype.setText("微信支付");
+            paytype.setText(getResourceString(R.string.wechat_payment));
         } else {
-            paytype.setText("支付宝支付");
+            paytype.setText(getResourceString(R.string.alipay_payment));
         }
         progress.setText(data.Completed_lesson_count + "/" + data.Preset_lesson_count);
         String price = df.format(data.price);
@@ -165,7 +149,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 2016/9/1 付款
+                //TODO: 2016/9/1 付款
             }
         });
         cancelorder.setOnClickListener(new View.OnClickListener() {
@@ -179,8 +163,8 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
 
     protected void dialog(final String id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(PersonalMyOrderUnpaidDetailActivity.this);
-        builder.setMessage("确认取消订单吗？");
-        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+        builder.setMessage(getResourceString(R.string.make_sure_cancel_order));
+        builder.setPositiveButton(getResourceString(R.string.sure), new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -189,7 +173,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
                 CancelOrder(id);
             }
         });
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResourceString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -203,13 +187,13 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
                 new VolleyListener(this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        Toast.makeText(PersonalMyOrderUnpaidDetailActivity.this, "订单已成功取消", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PersonalMyOrderUnpaidDetailActivity.this, getResourceString(R.string.order_cancel_success), Toast.LENGTH_SHORT).show();
                         finish();
                     }
 
                     @Override
                     protected void onError(JSONObject response) {
-                        Toast.makeText(PersonalMyOrderUnpaidDetailActivity.this, "取消订单失败，请稍后再试", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PersonalMyOrderUnpaidDetailActivity.this, getResourceString(R.string.order_cancel_failed), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override

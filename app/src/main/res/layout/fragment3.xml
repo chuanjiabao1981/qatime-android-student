@@ -5,21 +5,16 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        style="@style/top_style">
 
         <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="@color/colorPrimary" />
-
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_top_tab" />
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/backbar_text_style"
             android:layout_centerInParent="true"
-            android:text="@string/message"
-            android:textColor="#fff"
-            android:textSize="16sp" />
+            android:text="@string/message" />
     </RelativeLayout>
 
     <libraryextra.view.FragmentLayoutWithLine

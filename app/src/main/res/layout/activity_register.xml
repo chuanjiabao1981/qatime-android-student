@@ -1,150 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/white_translucent"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_translucent"
+    android:orientation="vertical">
 
-    <include layout="@layout/layout_backbar"/>
+    <include layout="@layout/layout_backbar" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="@drawable/text_background"
-        android:orientation="vertical">
-
-
-        <EditText
-            android:id="@+id/phone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="10dp"
-            android:maxLength="11"
-            android:background="@drawable/shape_input"
-            android:inputType="phone"
-            android:paddingBottom="8dp"
-            android:paddingTop="8dp"/>
+    <LinearLayout style="@style/edit_layout_style">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
+            style="@style/edit_layout_center_style"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp">
+
+            <EditText
+                android:id="@+id/phone"
+                style="@style/activity_edit_text_style"
+                android:maxLength="11" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/edit_layout_center_style"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp">
 
 
             <EditText
                 android:id="@+id/code"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:background="@drawable/shape_input"
+                style="@style/activity_edit_text_style"
                 android:ems="10"
-                android:inputType="number"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"/>
+                android:inputType="number" />
 
             <Button
                 android:id="@+id/get_code"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/button_bg_selector_orange"
-                android:text="@string/get_verification_code"
-                android:textColor="#ffffff"/>
+                style="@style/button_style"
+                android:text="@string/get_verification_code" />
 
 
         </LinearLayout>
 
 
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="5dp"
-            android:maxLength="16"
-            android:background="@drawable/shape_input"
-            android:inputType="textPassword"
-            android:paddingBottom="8dp"
-            android:paddingTop="8dp"/>
+        <LinearLayout
+            style="@style/edit_layout_center_style"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp">
 
-        <EditText
-            android:id="@+id/repassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="5dp"
-            android:maxLength="16"
-            android:background="@drawable/shape_input"
-            android:inputType="textPassword"
-            android:paddingBottom="8dp"
-            android:paddingTop="8dp"/>
+            <EditText
+                android:id="@+id/password"
+                style="@style/activity_edit_text_style"
+                android:inputType="textPassword"
+                android:maxLength="16" />
+        </LinearLayout>
 
-        <EditText
-            android:id="@+id/register_code"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/shape_input"
-            android:paddingBottom="8dp"
-            android:paddingTop="8dp"/>
+        <LinearLayout
+            style="@style/edit_layout_center_style"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp">
+
+            <EditText
+                android:id="@+id/repassword"
+                style="@style/activity_edit_text_style"
+                android:inputType="textPassword"
+                android:maxLength="16" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/edit_layout_center_style"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp">
+
+            <EditText
+                android:id="@+id/register_code"
+                style="@style/activity_edit_text_style"
+                android:inputType="textPassword"
+                android:maxLength="16" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:layout_marginRight="12dp"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
             <CheckBox
                 android:id="@+id/checkBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/agree"/>
+                android:text="@string/agree" />
 
             <TextView
                 android:id="@+id/agreement"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="10dp"
                 android:text="@string/agreement"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="#0000ff"/>
+                android:textColor="#0000ff" />
         </LinearLayout>
     </LinearLayout>
 
     <Button
         android:id="@+id/next"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="10dp"
-        android:background="@drawable/button_bg_selector_orange"
-        android:text="@string/next"
+        style="@style/button_full_width_style"
         android:enabled="false"
-        android:textColor="#ffffff"/>
+        android:text="@string/next" />
 
 </LinearLayout>

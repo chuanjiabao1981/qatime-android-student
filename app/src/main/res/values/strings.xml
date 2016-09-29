@@ -7,7 +7,7 @@
     <string name="release_to_load">松开加载</string>
     <string name="release_to_refresh">松开刷新</string>
     <!--//fragment1-->
-    <string name="login_has_expired">登录已过期</string>
+    <string name="login_has_expired">登录已过期，请重新登录！</string>
     <string name="app_name">答疑时间</string>
     <string name="home_page">首页</string>
     <string name="time_table">课程表</string>
@@ -22,10 +22,11 @@
     <string name="yuan">元</string>
     <string name="class_hours_range">课时范围</string>
     <string name="hours">课时</string>
-    <string name="starting_range">开课范围</string>
+    <string name="starting_range">开课时间</string>
     <string name="to">至</string>
     <string name="state">当前状态</string>
     <string name="cancel">取消</string>
+    <string name="reset">重置</string>
     <string name="confirm">确定</string>//
     <string name="by_price_up">按价格↑</string>
     <string name="by_price_down">按价格↓</string>
@@ -344,8 +345,72 @@
     <string name="verify_phone_number">验证手机</string>
     <string name="about_us">关于我们</string>
     <string name="weixin">官方微信</string>
-    <string name="about_us_desc">&#160;&#160;&#160;&#160;北京维幄通达网络科技有限公司，成立于2012年初，主要从事教育科研产品的销售以及教育网络推广。公司实力优越，拥有一批科研技术专业能力强大的研发团队。目前，教育信息化改革的背景下，公司紧紧围绕互联网技术与教育产生信息化这一特点，重点着力于建立独具特色的现代信息化教育模式，公司的研发成果为优化教育资源，推进教育信息改革起到了很大的促进作用。现阶段公司正积极面向全国开展销售推广业务，具有强大的发展潜力和良好的发展前景。现诚邀有志之士加入我们，与我们携手共同实现理想。</string>
-
+    <string name="about_us_desc"><![CDATA[    北京维幄通达网络科技有限公司，成立于2012年初，主要从事教育科研产品的销售以及教育网络推广。公司实力优越，拥有一批科研技术专业能力强大的研发团队。目前，教育信息化改革的背景下，公司紧紧围绕互联网技术与教育产生信息化这一特点，重点着力于建立独具特色的现代信息化教育模式，公司的研发成果为优化教育资源，推进教育信息改革起到了很大的促进作用。现阶段公司正积极面向全国开展销售推广业务，具有强大的发展潜力和良好的发展前景。现诚邀有志之士加入我们，与我们携手共同实现理想。]]></string>
     <string name="team_send_message_not_allow">您已不在该群，不能发送消息</string>
     <string name="team_not_exist">该群不存在</string>
+    <string name="please_update">请升级版本后使用</string>
+    <string name="item_to_start_main">距开课</string>
+    <string name="team">群组</string>
+    <string name="resume_alert">恢复提醒</string>
+    <string name="nolongger_alert">不再提醒</string>
+    <string name="performance_optimization">性能优化</string>
+    <string name="check_for_update_failed">检查更新失败</string>
+    <string name="check_for_update_failed_check_net">检查更新失败,请检查网络连接</string>
+    <string name="start_download">开始下载</string>
+    <string name="alert">提示</string>
+    <string name="call_customer_service_phone">是否拨打客服电话</string>
+    <string name="call_right_now">立即拨打</string>
+    <string name="failed_to_obtain_group_information">获取群组信息失败!</string>
+
+
+    <string name="code_send_success">验证码发送成功，请注意查收</string>
+    <string name="code_send_failed">验证码发送失败,请稍后再试</string>
+    <string name="server_error">服务器异常，请检查网络</string>
+    <string name="bind_email_success">绑定邮箱修改成功</string>
+    <string name="email_already_bind">绑定失败,邮箱已经被绑定</string>
+    <string name="phone_already_bind">绑定失败,手机已经被绑定</string>
+    <string name="code_error">验证码错误</string>
+    <string name="time_after_acquisition">S后重新获取</string>
+    <string name="bind_phone_success">绑定手机修改成功,请重新登陆</string>
+    <string name="bind_parent_phone_success">家长手机修改成功</string>
+    <string name="bind_parent_phone_failed">家长手机已被使用</string>
+    <string name="change_password_success">密码修改成功,请用新密码重新登陆</string>
+    <string name="password_error">密码错误</string>
+    <string name="phone_not_exist">绑定手机不存在</string>
+    <string name="login_failed">登陆失败:&#160;&#160;</string>
+    <string name="after_try_again">请检查您的网络或稍后再试</string>
+    <string name="you_have_quit_the_group">您已退出该群组</string>
+    <string name="message_can_not_null">消息不能为空</string>
+    <string name="get_group_failed">获取群组信息失败!</string>
+    <string name="no_course_information">暂无辅导班信息</string>
+    <string name="hour">小时</string>
+    <string name="minute">分钟</string>
+    <string name="cancel_order_name">名称</string>
+    <string name="order_price">价&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;格：</string>
+    <string name="order_creating">正在生成订单</string>
+    <string name="order_create_success">订单生成成功</string>
+    <string name="order_create_failed">订单生成失败</string>
+    <string name="order_cancel_success">订单取消失败,请稍后再试</string>
+    <string name="order_cancel_failed">订单已成功取消</string>
+    <string name="pay_wexin"> ：微信支付</string>
+    <string name="not_support_alipay">暂不支持支付宝支付</string>
+    <string name="subject">科目</string>
+    <string name="is_null">为空</string>
+    <string name="cancel_order_teacher">老师</string>
+    <string name="make_sure_cancel_order">确认取消订单吗?</string>
+    <string name="sure">确认</string>
+    <string name="please_set_information">请设置个人信息</string>
+    <string name="phone_already_used">手机已经被使用</string>
+    <string name="register_code_error">注册码错误</string>
+    <string name="register_failed">注册失败</string>
+    <string name="regiset_success">注册成功</string>
+    <string name="please_set_head">请选择头像</string>
+    <string name="not_bind">未绑定</string>
+    <string name="is_newest_version">已经是最新版本</string>
+    <string name="landing">登陆中...</string>
+
+    <string name="team_need_authentication">需要身份验证</string>
+    <string name="team_allow_anyone_join">允许任何人加入</string>
+    <string name="team_not_allow_anyone_join">不允许任何人申请加入</string>
+    <string name="have_muted">你已被禁言，暂不能发送消息</string>
 </resources>

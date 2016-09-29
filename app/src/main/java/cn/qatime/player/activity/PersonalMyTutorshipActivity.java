@@ -1,18 +1,17 @@
 package cn.qatime.player.activity;
 
-import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.base.BaseFragmentActivity;
-
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import cn.qatime.player.R;
+import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.fragment.FragmentPersonalMyTutorship1;
 import cn.qatime.player.fragment.FragmentPersonalMyTutorship2;
 import cn.qatime.player.fragment.FragmentPersonalMyTutorship3;
@@ -61,19 +60,19 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
         fragmentlayout.setScorllToNext(true);
         fragmentlayout.setScorll(true);
         fragmentlayout.setWhereTab(1);
-        fragmentlayout.setTabHeight(6, 0xff000000);
+        fragmentlayout.setTabHeight(4,0xffff9999);
         fragmentlayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
             @Override
-            public void change(int lastPosition, int positon, View lastTabView, View currentTabView) {
-                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff858585);
-                ((TextView) currentTabView.findViewById(tab_text[positon])).setTextColor(0xff222222);
+            public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
+                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff999999);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff333333);
 
-                if (positon == 4) {
+                if (position == 4) {
                     findViewById(R.id.right).setVisibility(View.VISIBLE);
                 } else {
                     findViewById(R.id.right).setVisibility(View.GONE);
                 }
-                ((BaseFragment) fragBaseFragments.get(positon)).onShow();
+                ((BaseFragment) fragBaseFragments.get(position)).onShow();
             }
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tableout_personal_my_tutor, 0x0311);

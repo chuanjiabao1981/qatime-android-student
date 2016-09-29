@@ -92,11 +92,11 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
                 }
                 helper.setText(R.id.progress, item.getProduct().getCompleted_lesson_count() + "/" + item.getProduct().getPreset_lesson_count());//进度
                 if (item.getStatus().equals("refunded")) {//交易关闭
-                    helper.setText(R.id.status, getActivity().getResources().getString(R.string.deal_closed));
+                    helper.setText(R.id.status, getResourceString(R.string.deal_closed));
                 } else if (item.getStatus().equals("canceled")) {//交易关闭
-                    helper.setText(R.id.status, getActivity().getResources().getString(R.string.deal_closed));
+                    helper.setText(R.id.status, getResourceString(R.string.deal_closed));
                 } else if (item.getStatus().equals("expired")) {//交易关闭
-                    helper.setText(R.id.status, getActivity().getResources().getString(R.string.deal_closed));
+                    helper.setText(R.id.status, getResourceString(R.string.deal_closed));
                 } else {//已取消
                     helper.setText(R.id.status, "        ");
                 }
@@ -147,6 +147,7 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page = 1;
                 new Handler().postDelayed(new Runnable() {
+                    @Override
                     public void run() {
                         String label = DateUtils.formatDateTime(
                                 getActivity(),
@@ -168,6 +169,7 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page++;
                 new Handler().postDelayed(new Runnable() {
+                    @Override
                     public void run() {
                         String label = DateUtils.formatDateTime(
                                 getActivity(),
@@ -273,17 +275,13 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
                     protected void onTokenOut() {
                         tokenOut();
                     }
-                }
-
-                , new
-
-                VolleyErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        super.onErrorResponse(volleyError);
-                        listView.onRefreshComplete();
-                    }
-                }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+                listView.onRefreshComplete();
+            }
+        }
 
         );
 

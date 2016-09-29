@@ -6,73 +6,33 @@
 
     <include layout="@layout/layout_backbar" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/text_background"
-        android:gravity="center"
-        android:orientation="vertical">
+    <LinearLayout style="@style/edit_layout_style">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            style="@style/edit_layout_top_style">
 
             <EditText
                 android:id="@+id/target_phone"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/shape_input"
+                style="@style/activity_edit_text_style"
                 android:inputType="phone"
-                android:paddingBottom="8dp"
-                android:maxLength="11"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="8dp"
-                android:singleLine="true"
-                android:textColorHint="#ff999999" />
+                android:maxLength="11" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            style="@style/edit_layout_bottom_style">
 
             <EditText
                 android:id="@+id/code"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/shape_input"
-                android:inputType="phone"
-                android:paddingBottom="8dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="8dp"
-                android:singleLine="true"
-                android:textColorHint="#ff999999" />
+                style="@style/activity_edit_text_style"
+                android:inputType="number" />
 
             <TextView
                 android:id="@+id/text_getcode"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/button_bg_selector_orange"
-                android:gravity="center"
-                android:textColor="#fff"
+                style="@style/button_style"
                 android:text="@string/getcode" />
         </LinearLayout>
     </LinearLayout>
@@ -80,10 +40,6 @@
 
     <Button
         android:id="@+id/button_over"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:textColor="#fff"
-        android:background="@drawable/button_bg_selector_orange"
+        style="@style/button_full_width_style"
         android:text="@string/over" />
 </LinearLayout>

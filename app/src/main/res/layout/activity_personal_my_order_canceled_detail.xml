@@ -12,9 +12,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="120dp"
             android:background="#bfbdbd"
             android:orientation="vertical"
+            android:gravity="center_vertical"
             android:padding="10dp">
 
             <TextView
@@ -24,7 +25,7 @@
                 android:layout_gravity="center"
                 android:padding="8dp"
                 android:text="@string/waiting_for_payment"
-                android:textSize="20sp"
+                android:textSize="24sp"
                 android:textColor="#ffbc04"/>
 
         </LinearLayout>
@@ -34,8 +35,9 @@
         android:id="@+id/list_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/text_background"
         android:orientation="horizontal"
+        android:padding="12dp"
+        android:background="#faf6f6"
         android:weightSum="1">
 
         <ImageView
@@ -143,7 +145,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -250,10 +252,8 @@
         android:background="#dfdddd"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="5dp">
+        android:layout_marginTop="12dp"
+        style="@style/button_full_width_style">
 
         <!--<TextView-->
             <!--android:id="@+id/cancel_order"-->
@@ -272,9 +272,10 @@
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
             android:layout_weight="1"
-            android:background="@drawable/button_bg_selector_orange"
+            android:background="@drawable/button_bg_selector_red"
             android:gravity="center"
             android:padding="10dp"
+            android:textColor="#fff"
             android:text="@string/reorder"/>
     </LinearLayout>
 

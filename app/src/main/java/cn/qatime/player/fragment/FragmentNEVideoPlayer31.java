@@ -8,9 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.bean.RemedialClassDetailBean;
@@ -22,7 +19,6 @@ public class FragmentNEVideoPlayer31 extends BaseFragment {
     TextView classstarttime;
     TextView subject;
     TextView grade;
-    TextView timetostart;
     TextView status;
     TextView classendtime;
     TextView teacher;
@@ -36,14 +32,14 @@ public class FragmentNEVideoPlayer31 extends BaseFragment {
         @Override
         public void run() {
             if (getActivity() != null && getActivity().getResources() != null) {
-                name.setText(getActivity().getResources().getString(R.string.class_name) + bean.getName());
-                subject.setText(getActivity().getResources().getString(R.string.subject_type) + bean.getSubject());
-                teacher.setText(getActivity().getResources().getString(R.string.teacher) + bean.getTeacher().getName());
-                progress.setText(getActivity().getResources().getString(R.string.progress) + bean.getCompleted_lesson_count() + "/" + bean.getPreset_lesson_count());
-                classstarttime.setText(getActivity().getResources().getString(R.string.class_start_time) + bean.getLive_start_time());
-                classendtime.setText(getActivity().getResources().getString(R.string.class_end_time) + bean.getLive_end_time());
-                grade.setText(getActivity().getResources().getString(R.string.grade_type) + bean.getGrade());
-                remainclass.setText(getActivity().getResources().getString(R.string.remain_class) + (bean.getPreset_lesson_count() - bean.getCompleted_lesson_count()));
+                name.setText(getResourceString(R.string.class_name) + bean.getName());
+                subject.setText(getResourceString(R.string.subject_type) + bean.getSubject());
+                teacher.setText(getResourceString(R.string.teacher) + bean.getTeacher().getName());
+                progress.setText(getResourceString(R.string.progress) + bean.getCompleted_lesson_count() + "/" + bean.getPreset_lesson_count());
+                classstarttime.setText(getResourceString(R.string.class_start_time) + bean.getLive_start_time());
+                classendtime.setText(getResourceString(R.string.class_end_time) + bean.getLive_end_time());
+                grade.setText(getResourceString(R.string.grade_type) + bean.getGrade());
+                remainclass.setText(getResourceString(R.string.remain_class) + (bean.getPreset_lesson_count() - bean.getCompleted_lesson_count()));
                 describe.setText(bean.getDescription());
             }
         }
@@ -62,7 +58,6 @@ public class FragmentNEVideoPlayer31 extends BaseFragment {
         name = (TextView) view.findViewById(R.id.name);
         subject = (TextView) view.findViewById(R.id.subject);
         classstarttime = (TextView) view.findViewById(R.id.class_start_time);
-        timetostart = (TextView) view.findViewById(R.id.time_to_start);
         grade = (TextView) view.findViewById(R.id.grade);
         status = (TextView) view.findViewById(R.id.status);
         describe = (TextView) view.findViewById(R.id.describe);

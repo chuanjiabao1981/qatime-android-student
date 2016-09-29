@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimary"
+    android:background="@drawable/shape_top_tab"
     android:gravity="center_horizontal"
     android:orientation="horizontal"
     android:weightSum="4">
@@ -10,7 +10,7 @@
     <TextView
         android:id="@+id/tab_text1"
         android:layout_width="0dp"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         android:layout_weight="1"
         android:gravity="center"
         android:text="@string/latest"
@@ -20,10 +20,10 @@
     <TextView
         android:id="@+id/tab_text2"
         android:layout_width="0dp"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         android:layout_weight="1"
         android:gravity="center"
         android:text="@string/whole"
-        android:textColor="#cccccc"
-        android:textSize="14sp" />
+        android:textColor="#afaa9a"
+        android:textSize="16sp" />
 </LinearLayout>

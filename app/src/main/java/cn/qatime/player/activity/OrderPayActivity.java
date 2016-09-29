@@ -33,7 +33,6 @@ public class OrderPayActivity extends BaseActivity {
     private IWXAPI api;
 
 
-
     DecimalFormat df = new DecimalFormat("#.00");
     private OrderConfirmBean.App_pay_params data;
 
@@ -77,7 +76,6 @@ public class OrderPayActivity extends BaseActivity {
         commit = (Button) findViewById(R.id.commit);
         //拨打电话
         phone.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
@@ -87,7 +85,6 @@ public class OrderPayActivity extends BaseActivity {
         commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 PayReq request = new PayReq();
 
                 request.appId = data.getAppid();

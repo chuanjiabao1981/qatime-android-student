@@ -9,10 +9,11 @@ import libraryextra.utils.StringUtils;
  * url类
  */
 public class UrlUtils {
-    private static boolean isDebug = true;
+    public static boolean isDebug = true;
+
     public static String baseUrl = isDebug ? "http://testing.qatime.cn/" : "http://qatime.cn/";
     //云信key
-    public static String appKey = isDebug ? "95055b08a6ec75ca3b1a0b6b77c6b2ff" : "";
+    public static String appKey = isDebug ? "2a24ca70e580cab2bef58b1e62478f9f" : "4fe3a3fba0a40a00daf011049a29d995";
     //登录
     public static String urlLogin = baseUrl + "api/v1/sessions";
     //辅导班
@@ -35,6 +36,8 @@ public class UrlUtils {
     public static String urlGetCode = baseUrl + "api/v1/captcha";
     //用户信息
     public static String urlUser = baseUrl + "api/v1/users/";
+    //检查更新
+    public static String urlcheckUpdate = baseUrl + "api/v1/system/check_update";
     //用户信息
     public static String urlfindPassword = baseUrl + "api/v1/password";
 

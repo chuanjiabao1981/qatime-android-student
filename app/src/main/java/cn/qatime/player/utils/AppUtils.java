@@ -1,10 +1,13 @@
 package cn.qatime.player.utils;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.text.TextUtils;
+
+import java.util.List;
 
 import cn.qatime.player.base.BaseApplication;
 
@@ -93,5 +96,15 @@ public class AppUtils {
                 ex.printStackTrace();
             }
         }
+    }
+
+    public static String getTopActivity(Activity context) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> runningTaskInfos = manager.getRunningTasks(1);
+
+        if (runningTaskInfos != null)
+            return runningTaskInfos.get(0).topActivity.getClassName();
+        else
+            return null;
     }
 }

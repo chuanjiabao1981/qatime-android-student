@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -21,6 +21,8 @@ import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,14 +30,14 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
+import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import cn.qatime.player.base.BaseFragment;
 import libraryextra.bean.RemedialClassBean;
-import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.ScreenUtils;
-import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -44,7 +46,7 @@ public class Fragment11 extends BaseFragment {
     private List<RemedialClassBean.Data> list = new ArrayList<>();
     private CommonAdapter<RemedialClassBean.Data> adapter;
     private int page = 1;
-
+    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     DecimalFormat df = new DecimalFormat("#.00");
 
     @Nullable
@@ -72,10 +74,19 @@ public class Fragment11 extends BaseFragment {
         adapter = new CommonAdapter<RemedialClassBean.Data>(getActivity(), list, R.layout.item_fragment11) {
             @Override
             public void convert(ViewHolder helper, RemedialClassBean.Data item, int position) {
-                ((ImageView) helper.getView(R.id.image)).setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()) / 2, ScreenUtils.getScreenWidth(getActivity()) / 2 * 5 / 8));
+                ((ImageView) helper.getView(R.id.image)).setLayoutParams(new RelativeLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()) / 2, ScreenUtils.getScreenWidth(getActivity()) / 2 * 5 / 8));
 //                Glide.with(getActivity()).load(R.mipmap.four).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.image)));
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.image)));
-                helper.setText(R.id.name, item.getName());
+                try {
+                    long time = System.currentTimeMillis() - parse.parse(item.getPreview_time()).getTime();
+                    int value = 0;
+                    if (time > 0) {
+                        value = (int) (time / (1000 * 3600 * 24));
+                    }
+                    helper.setText(R.id.teaching_time, getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.teacher, item.getTeacher_name());

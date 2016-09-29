@@ -10,7 +10,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_marginTop="5dp"
         android:background="#dfdddd" />
 
     <LinearLayout
@@ -20,9 +19,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="15dp"
+            style="@style/setting_text_style"
             android:text="@string/class_range" />
 
         <View
@@ -43,6 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:checked="true"
+                android:textColor="#333333"
                 android:text="@string/Remedial_classes" />
 
             <CheckBox
@@ -50,6 +48,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textColor="#333333"
                 android:checked="true"
                 android:text="@string/public_course" />
         </LinearLayout>
@@ -66,9 +65,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="15dp"
+            style="@style/setting_text_style"
             android:text="@string/alert_mode" />
 
         <View
@@ -89,6 +86,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textColor="#333333"
                 android:checked="true"
                 android:text="@string/sms_notify" />
 
@@ -97,6 +95,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textColor="#333333"
                 android:checked="true"
                 android:text="@string/sys_notify" />
         </LinearLayout>
@@ -113,9 +112,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="15dp"
+            style="@style/setting_text_style"
             android:text="@string/time_setting" />
 
         <View
@@ -133,23 +130,43 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="#333333"
                 android:text="@string/advance" />
 
-            <Spinner
-                android:id="@+id/spinner_hours"
+            <LinearLayout
+                android:id="@+id/time"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp" />
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <Spinner
-                android:id="@+id/spinner_minute"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp" />
+                <TextView
+                    android:id="@+id/hours"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:text="00小时"
+                    android:textColor="#800f" />
+
+                <TextView
+                    android:id="@+id/minute"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00分钟"
+                    android:textColor="#800f" />
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_margin="2dp"
+                    android:src="@mipmap/down" />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:textColor="#333333"
                 android:text="@string/remind_me" />
         </LinearLayout>
 
@@ -159,5 +176,4 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#dfdddd" />
-
 </LinearLayout>

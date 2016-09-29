@@ -1,6 +1,5 @@
 package cn.qatime.player.fragment;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,8 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -66,12 +67,12 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
 
         listView.setMode(PullToRefreshBase.Mode.BOTH);
-        listView.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
-        listView.getLoadingLayoutProxy(false, true).setPullLabel(getResources().getString(R.string.pull_to_load));
-        listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResources().getString(R.string.refreshing));
-        listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
-        listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
-        listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
+        listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
+        listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
+        listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResourceString(R.string.refreshing));
+        listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResourceString(R.string.loading));
+        listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
+        listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
 
         adapter = new CommonAdapter<MyOrderBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_order1) {
             @Override
@@ -95,11 +96,11 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
                 helper.setText(R.id.progress, item.getProduct().getCompleted_lesson_count() + "/" + item.getProduct().getPreset_lesson_count());//进度
 
                 if (item.getStatus().equals("unpaid")) {//待付款
-                    helper.setText(R.id.status, getActivity().getResources().getString(R.string.waiting_for_payment));
+                    helper.setText(R.id.status, getResourceString(R.string.waiting_for_payment));
                 } else if (item.getStatus().equals("paid")) {//已付款
-                    helper.setText(R.id.status, getActivity().getResources().getString(R.string.deal_done));
+                    helper.setText(R.id.status, getResourceString(R.string.deal_done));
                 } else {//已取消
-                    helper.setText(R.id.status, getActivity().getResources().getString(R.string.deal_closed));
+                    helper.setText(R.id.status, getResourceString(R.string.deal_closed));
                 }
                 String price = df.format(item.getProduct().getPrice());
                 if (price.startsWith(".")) {
@@ -141,6 +142,7 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page = 1;
                 new Handler().postDelayed(new Runnable() {
+                    @Override
                     public void run() {
                         String label = DateUtils.formatDateTime(
                                 getActivity(),
@@ -161,6 +163,7 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page++;
                 new Handler().postDelayed(new Runnable() {
+                    @Override
                     public void run() {
                         String label = DateUtils.formatDateTime(
                                 getActivity(),
@@ -264,22 +267,30 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
 
     protected void dialog(final int position, final String id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("确认取消订单吗？");
-        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-
+        final AlertDialog alertDialog = builder.create();
+        View view = View.inflate(getActivity(), R.layout.dialog_cancel_or_confirm, null);
+        TextView text = (TextView) view.findViewById(R.id.text);
+        text.setText("是否确认取消此订单？");
+        Button cancel = (Button) view.findViewById(R.id.cancel);
+        Button confirm = (Button) view.findViewById(R.id.confirm);
+        cancel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 CancelOrder(position, id);
-                dialog.dismiss();
+                alertDialog.dismiss();
             }
         });
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.create().show();
+        alertDialog.show();
+        alertDialog.setContentView(view);
+//        WindowManager.LayoutParams attributes = alertDialog.getWindow().getAttributes();
+//        attributes.width= ScreenUtils.getScreenWidth(getActivity())- DensityUtils.dp2px(getActivity(),20)*2;
+//        alertDialog.getWindow().setAttributes(attributes);
     }
 
     private void CancelOrder(final int position, String id) {

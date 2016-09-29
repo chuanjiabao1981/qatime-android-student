@@ -1,6 +1,8 @@
 package cn.qatime.player.activity;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -11,13 +13,11 @@ import android.text.Selection;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +25,10 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.orhanobut.logger.Logger;
 
 import org.json.JSONException;
@@ -40,9 +44,13 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.config.UserPreferences;
+import cn.qatime.player.im.cache.TeamDataCache;
+import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.UpLoadUtil;
 import cn.qatime.player.utils.UrlUtils;
+import cn.qatime.player.view.WheelView;
 import libraryextra.bean.GradeBean;
 import libraryextra.bean.ImageItem;
 import libraryextra.bean.PersonalInformationBean;
@@ -66,11 +74,12 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
     RadioButton men;
     RadioButton women;
     RadioGroup radiogroup;
-    Spinner spinner;
+    TextView textGrade;
     TextView complete;
     private String imageUrl = "";
     private TextView birthday;
     private View birthdayView;
+    private View textGradeView;
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
     private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
 
@@ -79,6 +88,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
     private CustomProgressDialog progress;
     private View changeHeadSculpture;
     private Uri captureUri;
+    private AlertDialog alertDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,15 +97,13 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
         setTitle(getResources().getString(R.string.information_perfect));
         initView();
 
-        String gradeString = FileUtil.readFile(getCacheDir() + "/grade.txt");
+        String gradeString = FileUtil.readFile(getFilesDir() + "/grade.txt");
         if (!StringUtils.isNullOrBlanK(gradeString)) {
             gradeBean = JsonUtils.objectFromJson(gradeString, GradeBean.class);
         }
 
-        spinner.setAdapter(new ArrayAdapter<String>(this, R.layout.item_spinner, gradeBean.getData().getGrades()));
-
         changeHeadSculpture.setOnClickListener(this);
-        birthday.setOnClickListener(this);
+        textGradeView.setOnClickListener(this);
         birthdayView.setOnClickListener(this);
         complete.setOnClickListener(this);
         PersonalInformationBean data = (PersonalInformationBean) getIntent().getSerializableExtra("data");
@@ -116,7 +124,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
 
         for (int i = 0; i < gradeBean.getData().getGrades().size(); i++) {
             if (data.getData().getGrade().equals(gradeBean.getData().getGrades().get(i))) {
-                spinner.setSelection(i);
+                textGrade.setText(data.getData().getGrade());
                 break;
 
             }
@@ -127,11 +135,13 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.grade_view:
+                showGradePickerDialog();
+                break;
             case R.id.change_head_sculpture://去选择图片
                 final Intent intent = new Intent(RegisterPerfectActivity.this, PictureSelectActivity.class);
                 startActivityForResult(intent, Constant.REQUEST_PICTURE_SELECT);
                 break;
-            case R.id.birthday://生日
             case R.id.birthday_view://生日
                 try {
                     MDatePickerDialog dataDialog = new MDatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
@@ -146,6 +156,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                             }
                         }
                     }, parse.parse(select).getYear() + 1900, parse.parse(select).getMonth() + 1, parse.parse(select).getDay());
+                    dataDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
                     dataDialog.show();
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -168,9 +179,8 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                     protected void httpSuccess(final String result) {
                         Intent data = new Intent();
                         data.putExtra("data", result);
-                        setResult(Constant.RESPONSE, data);
                         DialogUtils.dismissDialog(progress);
-                        Toast.makeText(RegisterPerfectActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterPerfectActivity.this, getResourceString(R.string.regiset_success), Toast.LENGTH_SHORT).show();
                         Map<String, String> map = new HashMap<>();
                         Intent intent = getIntent();
                         final String username = intent.getStringExtra("username");
@@ -178,11 +188,11 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                         map.put("login_account", username);
                         map.put("password", password);
                         map.put("client_type", "app");
+                        map.put("client_cate", "student_client");
                         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlLogin, map), null,
                                 new VolleyListener(RegisterPerfectActivity.this) {
                                     @Override
                                     protected void onTokenOut() {
-
                                         tokenOut();
                                     }
 
@@ -199,28 +209,20 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                                                 SPUtils.put(RegisterPerfectActivity.this, "username", username);
                                                 Profile profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
                                                 if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
-                                                    SPUtils.putObject(RegisterPerfectActivity.this, "profile", profile);
                                                     BaseApplication.setProfile(profile);
-                                                    Intent intent = new Intent(RegisterPerfectActivity.this, MainActivity.class);
-                                                    startActivity(intent);
-                                                    setResult(Constant.REGIST);
-                                                    finish();
+                                                    loginAccount();
                                                 } else {
                                                     //没有数据或token
                                                 }
                                             }
                                         } catch (JSONException e) {
-
                                             e.printStackTrace();
-//                            LogUtils.e("error"+e.getMessage());
                                         }
-
-
                                     }
 
                                     @Override
                                     protected void onError(JSONObject response) {
-                                        Toast.makeText(RegisterPerfectActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(RegisterPerfectActivity.this, getResourceString(R.string.login_failed), Toast.LENGTH_SHORT).show();
                                     }
                                 }, new VolleyErrorListener() {
                             @Override
@@ -233,13 +235,13 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
 
                     @Override
                     protected void httpFailed(String result) {
-                        Toast.makeText(RegisterPerfectActivity.this, "服务器异常", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterPerfectActivity.this, getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
                         DialogUtils.dismissDialog(progress);
                     }
                 };
 
                 if (StringUtils.isNullOrBlanK(imageUrl) || (!StringUtils.isNullOrBlanK(imageUrl) && !new File(imageUrl).exists())) {
-                    Toast.makeText(this, "请您选择头像", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getResourceString(R.string.please_set_head), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (StringUtils.isNullOrBlanK(BaseApplication.getUserId())) {
@@ -251,7 +253,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                     Toast.makeText(this, getResources().getString(R.string.name_can_not_be_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                String grade = gradeBean.getData().getGrades().get(spinner.getSelectedItemPosition());
+                String grade = textGrade.getText().toString();
                 if (StringUtils.isNullOrBlanK(grade)) {
                     Toast.makeText(this, getResources().getString(R.string.grade_can_not_be_empty), Toast.LENGTH_SHORT).show();
                     return;
@@ -269,7 +271,87 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                 break;
         }
     }
+    private void showGradePickerDialog() {
+        if (alertDialog == null) {
+            final View view = View.inflate(RegisterPerfectActivity.this, R.layout.dialog_grade_picker, null);
+            final WheelView grade = (WheelView) view.findViewById(R.id.grade);
+            grade.setOffset(1);
+            grade.setItems(gradeBean.getData().getGrades());
+            grade.setSeletion(gradeBean.getData().getGrades().indexOf(textGrade.getText()));
+            AlertDialog.Builder builder = new AlertDialog.Builder(RegisterPerfectActivity.this);
+            alertDialog = builder.create();
+            alertDialog.show();
+            alertDialog.setContentView(view);
+            alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    textGrade.setText(grade.getSeletedItem());
+                }
+            });
+//            WindowManager.LayoutParams attributes = alertDialog.getWindow().getAttributes();
+//            attributes.width= ScreenUtils.getScreenWidth(getApplicationContext())- DensityUtils.dp2px(getApplicationContext(),20)*2;
+//            alertDialog.getWindow().setAttributes(attributes);
+        } else {
+            alertDialog.show();
+        }
+    }
+    private void loginAccount() {
+        String account = BaseApplication.getAccount();
+        String token = BaseApplication.getAccountToken();
 
+        if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
+            NIMClient.getService(AuthService.class).login(new LoginInfo(account, token)).setCallback(new RequestCallback<LoginInfo>() {
+                @Override
+                public void onSuccess(LoginInfo o) {
+                    Logger.e("云信登录成功" + o.getAccount());
+                    // 初始化消息提醒
+                    NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
+
+                    NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
+                    //缓存
+                    UserInfoCache.getInstance().clear();
+                    TeamDataCache.getInstance().clear();
+                    //                FriendDataCache.getInstance().clear();
+
+                    UserInfoCache.getInstance().buildCache();
+                    TeamDataCache.getInstance().buildCache();
+                    //好友维护,目前不需要
+                    //                FriendDataCache.getInstance().buildCache();
+
+                    UserInfoCache.getInstance().registerObservers(true);
+                    TeamDataCache.getInstance().registerObservers(true);
+//                                                FriendDataCache.getInstance().registerObservers(true);
+
+                    Intent intent = new Intent(RegisterPerfectActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    setResult(Constant.REGIST);
+                    finish();
+                }
+
+                @Override
+                public void onFailed(int code) {
+                    BaseApplication.clearToken();
+                    Logger.e(code + "code");
+                    if (code == 302 || code == 404) {
+                        Toast.makeText(RegisterPerfectActivity.this, R.string.account_or_password_error, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(RegisterPerfectActivity.this, getResourceString(R.string.login_failed) + code, Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onException(Throwable throwable) {
+                    Logger.e(throwable.getMessage());
+                    BaseApplication.clearToken();
+                }
+            });
+        } else {//没有云信账号,直接登录
+            Intent intent = new Intent(RegisterPerfectActivity.this, MainActivity.class);
+            startActivity(intent);
+            setResult(Constant.REGIST);
+            finish();
+        }
+    }
 
     private void initView() {
         headsculpture = (ImageView) findViewById(R.id.head_sculpture);
@@ -279,14 +361,15 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
         name.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                return (event.getKeyCode() == KeyEvent.KEYCODE_ENTER);
+                return event.getKeyCode() == KeyEvent.KEYCODE_ENTER;
             }
         });
         men = (RadioButton) findViewById(R.id.men);
         women = (RadioButton) findViewById(R.id.women);
         radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
-        spinner = (Spinner) findViewById(R.id.spinner);
+        textGrade = (TextView) findViewById(R.id.text_grade);
         birthday = (TextView) findViewById(R.id.birthday);
+        textGradeView = findViewById(R.id.grade_view);
         birthdayView = findViewById(R.id.birthday_view);
         complete = (TextView) findViewById(R.id.complete);
     }

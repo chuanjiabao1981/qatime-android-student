@@ -7,6 +7,7 @@ import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -39,20 +40,16 @@ import java.util.Date;
 import java.util.List;
 
 import cn.qatime.player.R;
-import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.adapter.MessageAdapter;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.FriendDataCache;
 import cn.qatime.player.im.cache.TeamDataCache;
-import libraryextra.adapter.CommonAdapter;
-import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.Profile;
-import libraryextra.transformation.GlideCircleTransform;
 
 public class FragmentNEVideoPlayer2 extends BaseFragment {
     private TextView tipText;
     public PullToRefreshListView listView;
-    public CommonAdapter<IMMessage> adapter;
+    public BaseAdapter adapter;
     public List<IMMessage> items = new ArrayList<>();
 
     public Team team;
@@ -106,34 +103,48 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
         listView.getRefreshableView().setDividerHeight(0);
         listView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
-        listView.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
-        listView.getLoadingLayoutProxy(false, true).setPullLabel(getResources().getString(R.string.pull_to_load));
-        listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResources().getString(R.string.refreshing));
-        listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
-        listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
-        listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
+        listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
+        listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
+        listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResourceString(R.string.refreshing));
+        listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResourceString(R.string.loading));
+        listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
+        listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
 
-        adapter = new CommonAdapter<IMMessage>(getActivity(), items, R.layout.item_message) {
-            @Override
-            public void convert(ViewHolder holder, IMMessage item, int position) {
-
-                if (item.getFromAccount().equals(BaseApplication.getAccount())) {
-                    holder.getView(R.id.right).setVisibility(View.VISIBLE);
-                    holder.getView(R.id.left).setVisibility(View.GONE);
-                    Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getChat_account().getIcon()).crossFade().dontAnimate().transform(new GlideCircleTransform(getContext())).into((ImageView) holder.getView(R.id.my_head));
-                    holder.setText(R.id.my_time, getTime(item.getTime()));
-                    holder.setText(R.id.my_content, item.getContent());
-                } else {
-                    holder.getView(R.id.right).setVisibility(View.GONE);
-                    holder.getView(R.id.left).setVisibility(View.VISIBLE);
-                    Glide.with(getActivity()).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_32).crossFade().dontAnimate().transform(new GlideCircleTransform(getContext())).into((ImageView) holder.getView(R.id.other_head));
-                    holder.setText(R.id.other_name, item.getFromNick());
-                    holder.setText(R.id.other_content, item.getContent());
-                    holder.setText(R.id.other_time, getTime(item.getTime()));
-                }
-
-            }
-        };
+//        adapter = new CommonAdapter<IMMessage>(getActivity(), items, R.layout.item_message) {
+//            @Override
+//            public void convert(final ViewHolder holder, IMMessage item, int position) {
+//
+//                if (item.getFromAccount().equals(BaseApplication.getAccount())) {
+//                    holder.getView(R.id.right).setVisibility(View.VISIBLE);
+//                    holder.getView(R.id.left).setVisibility(View.GONE);
+//                    //.transform(new GlideRoundTransform(MessageActivity.this))
+//                    Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).crossFade().dontAnimate().into((ImageView) holder.getView(R.id.my_head));
+//                    holder.setText(R.id.my_time, getTime(item.getTime()));
+//                    ((TextView) holder.getView(R.id.my_content)).setText(ExpressionUtil.getExpressionString(
+//                            getActivity(), item.getContent(), ExpressionUtil.emoji, new Hashtable<Integer, GifDrawable>(), new GifDrawable.UpdateListener() {
+//                                @Override
+//                                public void update() {
+//                                    ((TextView) holder.getView(R.id.my_content)).postInvalidate();
+//                                }
+//                            }));
+//                } else {
+//                    holder.getView(R.id.right).setVisibility(View.GONE);
+//                    holder.getView(R.id.left).setVisibility(View.VISIBLE);
+//                    Glide.with(getActivity()).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_32).crossFade().dontAnimate().into((ImageView) holder.getView(R.id.other_head));
+//                    holder.setText(R.id.other_name, item.getFromNick());
+//                    ((TextView) holder.getView(R.id.other_content)).setText(ExpressionUtil.getExpressionString(
+//                            getActivity(), item.getContent(), ExpressionUtil.emoji, new Hashtable<Integer, GifDrawable>(), new GifDrawable.UpdateListener() {
+//                                @Override
+//                                public void update() {
+//                                    ((TextView) holder.getView(R.id.other_content)).postInvalidate();
+//                                }
+//                            }));
+//                    holder.setText(R.id.other_time, getTime(item.getTime()));
+//                }
+//
+//            }
+//        };
+        adapter = new MessageAdapter(getActivity(), items);
         listView.setAdapter(adapter);
 
         listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
@@ -269,7 +280,7 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
 
         List<IMMessage> result = new ArrayList<>();
         for (IMMessage message : messages) {
-            if (message.getMsgType() == MsgTypeEnum.text) {
+            if (message.getMsgType() == MsgTypeEnum.text || message.getMsgType() == MsgTypeEnum.notification) {
                 result.add(message);
             }
         }
@@ -303,8 +314,7 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
             boolean needRefresh = false;
             List<IMMessage> addedListItems = new ArrayList<>(messages.size());
             for (IMMessage message : messages) {
-                Logger.e(message.toString());
-                if (isMyMessage(message) && message.getMsgType() == MsgTypeEnum.text) {
+                if (isMyMessage(message) && (message.getMsgType() == MsgTypeEnum.text || message.getMsgType() == MsgTypeEnum.notification)) {
                     items.add(message);
                     addedListItems.add(message);
                     needRefresh = true;
@@ -324,8 +334,8 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
      */
     Observer<IMMessage> messageStatusObserver = new Observer<IMMessage>() {
         @Override
-        public void onEvent(IMMessage message) {
-            if (isMyMessage(message)) {
+        public void onEvent(IMMessage imMessage) {
+            if (isMyMessage(imMessage)) {
 //                onMessageStatusChange(message);
             }
         }
@@ -352,7 +362,7 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
                     if (success && result != null) {
                         updateTeamInfo(result);
                     } else {
-                        Toast.makeText(getActivity(), "获取群组信息失败!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getResourceString(R.string.failed_to_obtain_group_information), Toast.LENGTH_SHORT).show();
                         getActivity().finish();
                     }
                 }

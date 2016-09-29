@@ -26,6 +26,7 @@ import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.StringUtils;
+import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
 public class ForgetPasswordActivity extends BaseActivity implements View.OnClickListener {
@@ -99,25 +100,24 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
                 addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlGetCode, map), null, new VolleyListener(this) {
                     @Override
                     protected void onTokenOut() {
-
+                        tokenOut();
                     }
 
                     @Override
                     protected void onSuccess(JSONObject response) {
                         Logger.e("验证码发送成功" + phone + "---" + response.toString());
-                        Toast.makeText(getApplicationContext(), "验证码已经发送至" + phone + "，请注意查收", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getResourceString(R.string.code_send_success), Toast.LENGTH_LONG).show();
                     }
 
                     @Override
                     protected void onError(JSONObject response) {
-                        Toast.makeText(getApplicationContext(), "验证码发送失败：" + phone, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getResourceString(R.string.code_send_failed), Toast.LENGTH_LONG).show();
 
                     }
-                }, new Response.ErrorListener() {
-
+                }, new VolleyErrorListener(){
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        Toast.makeText(getApplicationContext(), "服务器异常，请检查网络", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show();
                     }
                 }));
                 time.start();
@@ -155,16 +155,16 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
                 addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.getUrl(UrlUtils.urlfindPassword, map), null, new VolleyListener(this) {
                     @Override
                     protected void onTokenOut() {
-
+                        tokenOut();
                     }
 
                     @Override
                     protected void onSuccess(JSONObject response) {
                         if (response.isNull("data")) {
-                            Toast.makeText(ForgetPasswordActivity.this, "绑定手机不存在", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ForgetPasswordActivity.this, getResourceString(R.string.phone_not_exist), Toast.LENGTH_SHORT).show();
                         } else {
                             Logger.e("找回成功");
-                            Toast.makeText(ForgetPasswordActivity.this, "密码找回成功，请用新密码重新登录", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ForgetPasswordActivity.this, getResourceString(R.string.change_password_success), Toast.LENGTH_SHORT).show();
                             BaseApplication.clearToken();
                             setResult(Constant.RESPONSE_EXIT_LOGIN);
                             Intent intent = new Intent(ForgetPasswordActivity.this, LoginActivity.class);
@@ -176,12 +176,12 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
 
                     @Override
                     protected void onError(JSONObject response) {
-                        Toast.makeText(ForgetPasswordActivity.this, "验证码错误", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ForgetPasswordActivity.this, getResourceString(R.string.code_error), Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        Toast.makeText(getApplicationContext(), "服务器异常，请检查网络", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show();
                     }
                 }));
                 break;
@@ -204,7 +204,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
         @Override
         public void onTick(long millisUntilFinished) {// 计时过程
             getcode.setEnabled(false);//防止重复点击
-            getcode.setText(millisUntilFinished / 1000 + "s");
+            getcode.setText(millisUntilFinished / 1000 + getResourceString(R.string.time_after_acquisition));
         }
     }
 }

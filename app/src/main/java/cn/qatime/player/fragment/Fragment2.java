@@ -45,7 +45,6 @@ public class Fragment2 extends BaseFragment {
                 Intent intent = new Intent(getActivity(), ClassTimeTableActivity.class);
                 startActivity(intent);
             }
-
         });
 
         fragBaseFragments.add(new FragmentRemedialClassTimeTable1());
@@ -57,12 +56,12 @@ public class Fragment2 extends BaseFragment {
         fragmentlayout.setScorllToNext(true);
         fragmentlayout.setScorll(true);
         fragmentlayout.setWhereTab(1);
-        fragmentlayout.setTabHeight(6, 0xff000000);
+        fragmentlayout.setTabHeight(4,0xffff9999);
         fragmentlayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
             @Override
-            public void change(int lastPosition, int positon, View lastTabView, View currentTabView) {
-                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff858585);
-                ((TextView) currentTabView.findViewById(tab_text[positon])).setTextColor(0xff222222);
+            public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
+                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff999999);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff333333);
             }
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_remedial_class_timetable, 0x0911);

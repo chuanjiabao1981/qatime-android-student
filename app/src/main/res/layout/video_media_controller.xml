@@ -7,15 +7,15 @@
     <RelativeLayout
         android:id="@+id/play_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="40dip">
+        android:layout_height="45dip">
 
         <ImageView
             android:id="@+id/player_exit"
-            android:layout_width="wrap_content"
+            android:layout_width="45dp"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:onClick="backClick"
-            android:padding="8dp"
+            android:padding="13dp"
             android:src="@mipmap/ic_play_exit" />
 
         <LinearLayout
@@ -36,7 +36,7 @@
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:singleLine="true"
-                android:text="視頻名字視頻名字視頻名字視頻名字視頻名字視頻名字"
+                android:text="視頻名字"
                 android:textSize="16sp" />
 
             <TextView
@@ -57,11 +57,12 @@
             android:layout_marginRight="10dp"
             android:background="@drawable/shape_circle_bg"
             android:drawableLeft="@mipmap/head_write_32"
-            android:paddingBottom="3dp"
+            android:paddingBottom="2dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:paddingTop="3dp"
+            android:paddingTop="2dp"
             android:singleLine="true"
+            android:textSize="12dp"
             android:text="123"
             android:textColor="#fff" />
     </RelativeLayout>
@@ -223,7 +224,7 @@
             android:layout_width="45dp"
             android:layout_height="match_parent"
             android:clickable="true"
-            android:padding="12dp"
+            android:padding="13dp"
             android:src="@mipmap/nemediacontroller_play" />
 
         <RelativeLayout
@@ -256,6 +257,8 @@
                     android:layout_marginBottom="2dp"
                     android:layout_marginTop="2dp"
                     android:layout_weight="4"
+                    android:textSize="14sp"
+                    android:textColor="#333333"
                     android:background="@drawable/shape_input"
                     android:hint="@string/comment_content"
                     android:imeOptions="flagNoExtractUi" />
@@ -264,8 +267,11 @@
                     android:id="@+id/commit"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="1"
+                    android:textColor="#fff"
                     android:background="@drawable/button_bg_selector_gray"
                     android:text="@string/send" />
 
@@ -305,7 +311,7 @@
                     android:layout_width="45dp"
                     android:layout_height="match_parent"
                     android:clickable="true"
-                    android:padding="10dp"
+                    android:padding="13dp"
                     android:src="@mipmap/nemediacontroller_scale01" />
             </LinearLayout>
         </RelativeLayout>

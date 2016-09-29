@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="fill_parent"
+    android:fitsSystemWindows="true"
+    android:background="#fff"
+    android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+       style="@style/dialog_text_style"
+        android:text="该辅导班已开课(已上课程不补上,不\n退款),是否继续购买此辅导?" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="取消"
+            style="@style/dialog_button_style" />
+        <Button
+            android:id="@+id/confirm"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="确定"
+            style="@style/dialog_button_style" />
+    </LinearLayout>
+</LinearLayout>

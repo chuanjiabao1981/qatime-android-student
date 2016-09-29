@@ -1,14 +1,13 @@
 package cn.qatime.player.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.DateUtils;
 import android.view.View;
-import android.view.ViewStructure;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,31 +26,34 @@ import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
-import com.netease.nimlib.sdk.msg.model.MessageReceipt;
 import com.netease.nimlib.sdk.msg.model.QueryDirectionEnum;
 import com.netease.nimlib.sdk.team.constant.TeamTypeEnum;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
-import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.orhanobut.logger.Logger;
 
-import java.io.Serializable;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.text.SimpleDateFormat;
-import java.util.AbstractSequentialList;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.List;
 
 import cn.qatime.player.R;
+import cn.qatime.player.adapter.MessageAdapter;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.bean.ChatVideoBean;
 import cn.qatime.player.im.SimpleCallback;
-import cn.qatime.player.im.cache.FriendDataCache;
 import cn.qatime.player.im.cache.TeamDataCache;
+import cn.qatime.player.utils.ExpressionUtil;
+import cn.qatime.player.view.BiaoQingView;
+import cn.qatime.player.view.GifDrawable;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.StringUtils;
 
 /**
@@ -75,25 +77,52 @@ public class MessageActivity extends BaseActivity {
     private QueryDirectionEnum direction;
     private List<IMMessage> items = new ArrayList<>();
     private int LOAD_MESSAGE_COUNT = 20;//聊天加载条数
-    private CommonAdapter<IMMessage> adapter;
+    //    private CommonAdapter<IMMessage> adapter;
     private Team team;
     private Button send;
     private TextView tipText;
+    private ImageView emoji;
+    private EditText content;
+
+    private int courseId;
+    private String pull_address;
+    private boolean isMute = false;//当前用户 是否被禁言
+    private MessageAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
+        EventBus.getDefault().register(this);
+        String name = getIntent().getStringExtra("name");
+        if (!StringUtils.isNullOrBlanK(name)) {
+            setTitle(name);
+        } else {
+            setTitle(getResources().getString(R.string.team));
+        }
         sessionId = getIntent().getStringExtra("sessionId");
         sessionType = (SessionTypeEnum) getIntent().getSerializableExtra("sessionType");
+        courseId = getIntent().getIntExtra("courseId", 0);
+        pull_address = getIntent().getStringExtra("pull_address");
         initView();
-
+        setRightImage(R.mipmap.online_room, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MessageActivity.this, NEVideoPlayerActivity.class);
+                intent.putExtra("url", pull_address);
+                intent.putExtra("id", courseId);
+                intent.putExtra("sessionId", sessionId);
+                startActivity(intent);
+            }
+        });
         registerTeamUpdateObserver(true);
     }
 
     private void initView() {
+        isMute = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount()).isMute();
         tipText = (TextView) findViewById(R.id.tip);
         listView = (PullToRefreshListView) findViewById(R.id.list);
+
         listView.getRefreshableView().setDividerHeight(0);
         listView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
@@ -103,39 +132,34 @@ public class MessageActivity extends BaseActivity {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
 
-        adapter = new CommonAdapter<IMMessage>(this, items, R.layout.item_message) {
-            @Override
-            public void convert(ViewHolder holder, IMMessage item, int position) {
-
-                if (item.getFromAccount().equals(BaseApplication.getAccount())) {
-                    holder.getView(R.id.right).setVisibility(View.VISIBLE);
-                    holder.getView(R.id.left).setVisibility(View.GONE);
-                    Glide.with(MessageActivity.this).load(BaseApplication.getProfile().getData().getUser().getChat_account().getIcon()).crossFade().dontAnimate().transform(new GlideCircleTransform(MessageActivity.this)).into((ImageView) holder.getView(R.id.my_head));
-                    holder.setText(R.id.my_time, getTime(item.getTime()));
-                    holder.setText(R.id.my_content, item.getContent());
-                } else {
-                    holder.getView(R.id.right).setVisibility(View.GONE);
-                    holder.getView(R.id.left).setVisibility(View.VISIBLE);
-                    Glide.with(MessageActivity.this).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_32).crossFade().dontAnimate().transform(new GlideCircleTransform(MessageActivity.this)).into((ImageView) holder.getView(R.id.other_head));
-                    holder.setText(R.id.other_name, item.getFromNick());
-                    holder.setText(R.id.other_content, item.getContent());
-                    holder.setText(R.id.other_time, getTime(item.getTime()));
-                }
-
-            }
-        };
+//        adapter = new CommonAdapter<IMMessage>(this, items, R.layout.item_message) {
+//            @Override
+//            public void convert(final ViewHolder holder, IMMessage item, int position) {
+//
+//
+//
+//            }
+//        };
+        adapter = new MessageAdapter(this, items);
         listView.setAdapter(adapter);
-        final EditText content = (EditText) findViewById(R.id.content);
+        content = (EditText) findViewById(R.id.content);
+        emoji = (ImageView) findViewById(R.id.emoji);
+
         send = (Button) findViewById(R.id.send);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!isAllowSendMessage()) {
-                    Toast.makeText(MessageActivity.this, "您已不在该群,不能发送消息", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MessageActivity.this, getResourceString(R.string.team_send_message_not_allow), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (StringUtils.isNullOrBlanK(content.getText().toString())) {
-                    Toast.makeText(MessageActivity.this, "消息不能为空", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MessageActivity.this, getResourceString(R.string.message_can_not_null), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (isMute) {
+                    Toast.makeText(MessageActivity.this, getResourceString(R.string.have_muted), Toast.LENGTH_SHORT).show();
+                    content.setText("");
                     return;
                 }
                 // 创建文本消息
@@ -167,8 +191,16 @@ public class MessageActivity extends BaseActivity {
                 loadFromRemote();
             }
         });
-        loadMessage(false);
+//        loadMessage(false);
+        BiaoQingView bq = (BiaoQingView) findViewById(R.id.biaoQingView);
+        bq.init(content, emoji);
+        if (isMute) {
+            content.setHint(R.string.have_muted);
+        } else {
+            content.setHint("");
+        }
     }
+
 
     /**
      * 将long值转换为时间
@@ -283,7 +315,7 @@ public class MessageActivity extends BaseActivity {
 
         List<IMMessage> result = new ArrayList<>();
         for (IMMessage message : messages) {
-            if (message.getMsgType() == MsgTypeEnum.text) {
+            if (message.getMsgType() == MsgTypeEnum.text || message.getMsgType() == MsgTypeEnum.notification) {
                 result.add(message);
             }
         }
@@ -316,14 +348,24 @@ public class MessageActivity extends BaseActivity {
             List<IMMessage> addedListItems = new ArrayList<>(messages.size());
             for (IMMessage message : messages) {
                 if (isMyMessage(message) && message.getMsgType() == MsgTypeEnum.text) {
-                    items.add(message);
                     addedListItems.add(message);
                     needRefresh = true;
                 }
+                if (isMyMessage(message) && message.getMsgType() == MsgTypeEnum.notification) {
+                    addedListItems.add(message);
+                    isMute = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount()).isMute();
+                    if (isMute) {
+                        content.setHint(R.string.have_muted);
+                    } else {
+                        content.setHint("");
+                    }
+                    needRefresh = true;
+                }
             }
+            items.addAll(addedListItems);
             if (needRefresh) {
                 adapter.notifyDataSetChanged();
-                listView.getRefreshableView().setSelection(adapter.getCount() - 1);
+                listView.getRefreshableView().setSelection(adapter.getCount());
             }
         }
     };
@@ -332,8 +374,8 @@ public class MessageActivity extends BaseActivity {
      */
     Observer<IMMessage> messageStatusObserver = new Observer<IMMessage>() {
         @Override
-        public void onEvent(IMMessage message) {
-            if (isMyMessage(message)) {
+        public void onEvent(IMMessage imMessage) {
+            if (isMyMessage(imMessage)) {
             }
         }
     };
@@ -359,7 +401,7 @@ public class MessageActivity extends BaseActivity {
                     if (success && result != null) {
                         updateTeamInfo(result);
                     } else {
-                        Toast.makeText(MessageActivity.this, "获取群组信息失败!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MessageActivity.this, getResourceString(R.string.get_group_failed), Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 }
@@ -375,7 +417,7 @@ public class MessageActivity extends BaseActivity {
             return;
         }
         team = d;
-        tipText.setText(team.getType() == TeamTypeEnum.Normal ? "您已退出该群组" : "您已退出该群组");
+        tipText.setText(team.getType() == TeamTypeEnum.Normal ? getResourceString(R.string.you_have_quit_the_group) : getResourceString(R.string.you_have_quit_the_group));
         tipText.setVisibility(team.isMyTeam() ? View.GONE : View.VISIBLE);
     }
 
@@ -401,7 +443,7 @@ public class MessageActivity extends BaseActivity {
             TeamDataCache.getInstance().unregisterTeamDataChangedObserver(teamDataChangedObserver);
             TeamDataCache.getInstance().unregisterTeamMemberDataChangedObserver(teamMemberDataChangedObserver);
         }
-        FriendDataCache.getInstance().registerFriendDataChangedObserver(friendDataChangedObserver, register);
+//        FriendDataCache.getInstance().registerFriendDataChangedObserver(friendDataChangedObserver, register);
     }
 
     /**
@@ -447,46 +489,70 @@ public class MessageActivity extends BaseActivity {
         }
     };
 
-    FriendDataCache.FriendDataChangedObserver friendDataChangedObserver = new FriendDataCache.FriendDataChangedObserver() {
-        @Override
-        public void onAddedOrUpdatedFriends(List<String> accounts) {
-            adapter.notifyDataSetChanged();
-        }
-
-        @Override
-        public void onDeletedFriends(List<String> accounts) {
-            adapter.notifyDataSetChanged();
-        }
-
-        @Override
-        public void onAddUserToBlackList(List<String> account) {
-            adapter.notifyDataSetChanged();
-        }
-
-        @Override
-        public void onRemoveUserFromBlackList(List<String> account) {
-            adapter.notifyDataSetChanged();
-        }
-    };
+//    FriendDataCache.FriendDataChangedObserver friendDataChangedObserver = new FriendDataCache.FriendDataChangedObserver() {
+//        @Override
+//        public void onAddedOrUpdatedFriends(List<String> accounts) {
+//            adapter.notifyDataSetChanged();
+//        }
+//
+//        @Override
+//        public void onDeletedFriends(List<String> accounts) {
+//            adapter.notifyDataSetChanged();
+//        }
+//
+//        @Override
+//        public void onAddUserToBlackList(List<String> account) {
+//            adapter.notifyDataSetChanged();
+//        }
+//
+//        @Override
+//        public void onRemoveUserFromBlackList(List<String> account) {
+//            adapter.notifyDataSetChanged();
+//        }
+//    };
 
     @Override
     protected void onResume() {
         super.onResume();
+        loadMessage(false);
         registerObservers(true);
         requestTeamInfo();
         NIMClient.getService(MsgService.class).setChattingAccount(sessionId, sessionType);
     }
 
     @Override
+    public void onBackPressed() {
+        if (findViewById(R.id.viewPager) != null && findViewById(R.id.viewPager).getVisibility() == View.VISIBLE) {
+            findViewById(R.id.viewPager).setVisibility(View.GONE);
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
+        registerObservers(false);
         NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
+    }
+
+    @Subscribe
+    public void onEvent(ChatVideoBean event) {
+        if (event != null) {
+            this.courseId = event.getCourseId();
+            this.pull_address = event.getPull_address();
+            if (!StringUtils.isNullOrBlanK(event.getName())) {
+                setTitle(event.getName());
+            } else {
+                setTitle(getResources().getString(R.string.team));
+            }
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        registerObservers(false);
         registerTeamUpdateObserver(false);
+        EventBus.getDefault().unregister(this);
     }
 }
