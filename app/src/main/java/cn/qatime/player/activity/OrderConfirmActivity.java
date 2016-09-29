@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
+import com.tencent.mm.sdk.modelbase.BaseResp;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -31,7 +32,6 @@ import libraryextra.bean.OrderConfirmBean;
 import libraryextra.bean.OrderPayBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.SPUtils;
-import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -214,11 +214,20 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     }
 
     @Subscribe
-    public void onEvent(String event) {
-        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
+    public void onEvent(BaseResp baseResp) {
+//        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
+//
+//            finish();
+//        }
+        if (baseResp.errCode == 0) {//支付成功
+            finish();
+        } else if (baseResp.errCode == -2) {//用户取消
+            finish();
+        } else {
             finish();
         }
     }
+
 
     @Override
     protected void onDestroy() {

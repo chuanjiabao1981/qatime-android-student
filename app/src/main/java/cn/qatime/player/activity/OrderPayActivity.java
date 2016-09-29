@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
@@ -20,7 +21,6 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.utils.Constant;
 import libraryextra.bean.OrderConfirmBean;
-import libraryextra.utils.StringUtils;
 
 public class OrderPayActivity extends BaseActivity {
     TextView code;
@@ -106,9 +106,18 @@ public class OrderPayActivity extends BaseActivity {
     }
 
     @Subscribe
-    public void onEvent(String event) {
-        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
+    public void onEvent(BaseResp baseResp) {
+//        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
+//
+//            finish();
+//        }
+        if (baseResp.errCode == 0) {//支付成功
+            Intent intent = new Intent(this,OrderPayResultActivity.class);
 
+            finish();
+        } else if (baseResp.errCode == -2) {//用户取消
+            finish();
+        } else {
             finish();
         }
     }

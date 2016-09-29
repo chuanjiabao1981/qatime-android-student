@@ -21,6 +21,7 @@ import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.orhanobut.logger.Logger;
+import com.tencent.mm.sdk.modelbase.BaseResp;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -403,8 +404,16 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     }
 
     @Subscribe
-    public void onEvent(String event) {
-        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
+    public void onEvent(BaseResp baseResp) {
+//        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
+//
+//            finish();
+//        }
+        if (baseResp.errCode == 0) {//支付成功
+            finish();
+        } else if (baseResp.errCode == -2) {//用户取消
+            finish();
+        } else {
             finish();
         }
     }
