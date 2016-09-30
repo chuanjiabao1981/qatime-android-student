@@ -47,16 +47,10 @@ public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandl
 
     @Override
     public void onResp(BaseResp baseResp) {
-        finish();
         if (baseResp.errCode == 0) {
             EventBus.getDefault().post(PayResultState.SUCCESS);
-        } else if (baseResp.errCode == -2) {//用户取消
-            EventBus.getDefault().post(PayResultState.CANCEL);
-            finish();
-        } else {
-            EventBus.getDefault().post(PayResultState.ERROR);
-            finish();
         }
+        finish();
     }
 
 

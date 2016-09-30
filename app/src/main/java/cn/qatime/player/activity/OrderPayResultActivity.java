@@ -29,7 +29,7 @@ import libraryextra.utils.VolleyListener;
  * @date 2016/9/29 10:41
  * @Description:
  */
-public class OrderPayResultActivity extends BaseActivity implements  View.OnClickListener{
+public class OrderPayResultActivity extends BaseActivity implements View.OnClickListener {
     private boolean reLoad = false;
     private ImageView image;
     private TextView status;
@@ -53,7 +53,6 @@ public class OrderPayResultActivity extends BaseActivity implements  View.OnClic
     }
 
     private void assignViews() {
-        successLayout = findViewById(R.id.success_layout);
         faildLayout = findViewById(R.id.faild_layout);
         image = (ImageView) findViewById(R.id.image);
         status = (TextView) findViewById(R.id.status);
@@ -69,10 +68,6 @@ public class OrderPayResultActivity extends BaseActivity implements  View.OnClic
             case SUCCESS:
                 initData();
                 break;
-            case ERROR:
-                break;
-            case CANCEL:
-                break;
         }
         orderId.setText((String) SPUtils.get(OrderPayResultActivity.this, "orderId", ""));
         String price = df.format(SPUtils.get(OrderPayResultActivity.this, "price", 0));
@@ -82,8 +77,6 @@ public class OrderPayResultActivity extends BaseActivity implements  View.OnClic
 
         OrderPayResultActivity.this.price.setText("￥" + price);
     }
-
-
 
 
     //    unpaid: 0, # 未支付
@@ -114,11 +107,7 @@ public class OrderPayResultActivity extends BaseActivity implements  View.OnClic
                                             }
                                         }, 5000);
                                     } else {
-                                        loading.setVisibility(View.GONE);
-                                        image.setImageResource(R.mipmap.pay_faild);
-                                        OrderPayResultActivity.this.status.setText(getResources().getString(R.string.pay_failure));
-                                        faildLayout.setVisibility(View.VISIBLE);
-                                        successLayout.setVisibility(View.GONE);
+                                        payFailed();
                                     }
                                     break;
                                 case "paid":
@@ -129,14 +118,9 @@ public class OrderPayResultActivity extends BaseActivity implements  View.OnClic
                                     image.setImageResource(R.mipmap.pay_success);
                                     OrderPayResultActivity.this.status.setText(getResources().getString(R.string.pay_success));
                                     faildLayout.setVisibility(View.GONE);
-                                    successLayout.setVisibility(View.VISIBLE);
                                     break;
                                 default:
-                                    loading.setVisibility(View.GONE);
-                                    image.setImageResource(R.mipmap.pay_faild);
-                                    OrderPayResultActivity.this.status.setText(getResources().getString(R.string.pay_failure));
-                                    faildLayout.setVisibility(View.VISIBLE);
-                                    successLayout.setVisibility(View.GONE);
+                                    payFailed();
                                     break;
                             }
                         } catch (JSONException e) {
@@ -146,11 +130,7 @@ public class OrderPayResultActivity extends BaseActivity implements  View.OnClic
 
                     @Override
                     protected void onError(JSONObject response) {
-                        loading.setVisibility(View.GONE);
-                        image.setImageResource(R.mipmap.pay_faild);
-                        OrderPayResultActivity.this.status.setText(getResources().getString(R.string.pay_failure));
-                        faildLayout.setVisibility(View.VISIBLE);
-                        successLayout.setVisibility(View.GONE);
+                        payFailed();
                     }
 
                     @Override
@@ -161,14 +141,16 @@ public class OrderPayResultActivity extends BaseActivity implements  View.OnClic
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
-                loading.setVisibility(View.GONE);
-                image.setImageResource(R.mipmap.pay_faild);
-                OrderPayResultActivity.this.status.setText(getResources().getString(R.string.pay_failure));
-                faildLayout.setVisibility(View.VISIBLE);
-                successLayout.setVisibility(View.GONE);
+                payFailed();
             }
         });
         addToRequestQueue(request);
+    }
+
+    private void payFailed() {
+        loading.setVisibility(View.GONE);
+        image.setImageResource(R.mipmap.pay_faild);
+        OrderPayResultActivity.this.status.setText(getResources().getString(R.string.pay_failure));
     }
 
     @Override
