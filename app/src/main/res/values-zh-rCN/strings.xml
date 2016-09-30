@@ -205,7 +205,7 @@
     <string name="use">使用</string>
     <string name="fail_pay">不能支付</string>
     <string name="payment_result">支付结果</string>
-    <string name="pay_failure">支付失败</string>
+    <string name="pay_failure">支付结果未找到</string>
     <string name="pay_success">支付成功</string>
     <string name="button_commit">提交</string>
     <string name="wechat_payment">微信支付</string>
