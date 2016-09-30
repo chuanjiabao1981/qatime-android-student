@@ -7,7 +7,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#fff"
         android:orientation="vertical">
         <include layout="@layout/layout_backbar" />
 
@@ -97,31 +96,32 @@
         style="@style/button_full_width_style"
         android:layout_alignParentBottom="true"
         android:text="@string/recharge_now" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/recharge_now"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="6dp"
-        android:gravity="center"
-        android:orientation="horizontal">
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_above="@id/recharge_now"-->
+        <!--android:layout_marginTop="12dp"-->
+        <!--android:layout_marginBottom="6dp"-->
+        <!--android:gravity="center"-->
+        <!--android:visibility="gone"-->
+        <!--android:orientation="horizontal">-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/problem_phone"
-            android:textColor="#666666"
-            android:textSize="14sp" />
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:gravity="center"-->
+            <!--android:text="@string/problem_phone"-->
+            <!--android:textColor="#666666"-->
+            <!--android:textSize="14sp" />-->
 
-        <TextView
-            android:id="@+id/phone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0353-2135828"
-            android:padding="6dp"
-            android:textColor="#3399FF"
-            android:textSize="16sp" />
+        <!--<TextView-->
+            <!--android:id="@+id/phone"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="0353-2135828"-->
+            <!--android:padding="6dp"-->
+            <!--android:textColor="#3399FF"-->
+            <!--android:textSize="16sp" />-->
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
 </RelativeLayout>
