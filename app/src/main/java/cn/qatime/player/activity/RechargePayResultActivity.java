@@ -39,6 +39,7 @@ public class RechargePayResultActivity extends BaseActivity implements View.OnCl
     private TextView orderId;
     private TextView price;
     private TextView look;
+    private TextView payDsc;
     private TextView viewOrder;//查看订单
     private TextView myOrder;//我的订单
     private Button complete;
@@ -55,6 +56,7 @@ public class RechargePayResultActivity extends BaseActivity implements View.OnCl
         orderId = (TextView) findViewById(R.id.orderId);
         price = (TextView) findViewById(R.id.price);
         look = (TextView) findViewById(R.id.look);
+        payDsc = (TextView) findViewById(R.id.pay_dsc);
         viewOrder = (TextView) findViewById(R.id.view_order);
         complete = (Button) findViewById(R.id.complete);
         loading = (RelativeLayout) findViewById(R.id.loading);
@@ -78,6 +80,7 @@ public class RechargePayResultActivity extends BaseActivity implements View.OnCl
         this.price.setText(price);
         orderId.setText(rechargeId);
         viewOrder.setOnClickListener(this);
+        payDsc.setText("充值金额");
     }
 
     private void payFailed() {
