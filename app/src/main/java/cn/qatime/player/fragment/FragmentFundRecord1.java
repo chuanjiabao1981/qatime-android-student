@@ -147,11 +147,11 @@ public class FragmentFundRecord1 extends BaseFragment {
             case "offline":
                 return "线下支付";
         }
-        return "未支付";
+        return "微信支付";
     }
 
-    private String getStatus(String pay_type) {
-        switch (pay_type) {
+    private String getStatus(String status) {
+        switch (status) {
             case "unpaid":
                 return "未支付";
             case "alipay":

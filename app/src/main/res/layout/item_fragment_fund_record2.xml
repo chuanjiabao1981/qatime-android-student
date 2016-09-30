@@ -46,6 +46,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="6dp"
+
+            android:singleLine="true"
             android:text="课程"
             android:textColor="#666666" />
 
@@ -54,6 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="6dp"
+            android:singleLine="true"
             android:text="线下支付"
             android:textColor="#666666" />
 
@@ -61,6 +64,7 @@
             android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:singleLine="true"
             android:text="2011-11-11 11:11:11"
             android:textColor="#666666" />
 
