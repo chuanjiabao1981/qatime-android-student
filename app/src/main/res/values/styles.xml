@@ -128,9 +128,9 @@
     <style name="setting_text_style"> //设置文字
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingTop">12dp</item>
-        <item name="android:paddingBottom">12dp</item>
-        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:paddingLeft">14dp</item>
     </style>
 
     <style name="backbar_icon_style">//导航栏图标
@@ -185,7 +185,7 @@
     </style>
 
     <style name="setting_icon_margin_right">
-        <item name="android:layout_marginRight">12dp</item>
+        <item name="android:layout_marginRight">14dp</item>
     </style>
 
     <style name="dialog_button_style">

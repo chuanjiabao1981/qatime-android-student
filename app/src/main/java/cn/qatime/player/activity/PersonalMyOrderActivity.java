@@ -58,7 +58,7 @@ public class PersonalMyOrderActivity extends BaseFragmentActivity {
             public void run() {
                 fragmentlayout.setCurrenItem(0);
             }
-        }, 500);
+        }, 200);
 
     }
 }

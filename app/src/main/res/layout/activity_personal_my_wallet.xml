@@ -91,9 +91,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="12dp"
+                style="@style/setting_text_style"
                 android:text="@string/recharge_record" />
 
             <View
@@ -122,9 +120,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="12dp"
+                style="@style/setting_text_style"
                 android:text="@string/consumption_record" />
 
             <View

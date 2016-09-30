@@ -98,7 +98,7 @@ public class RecordFundActivity extends BaseFragmentActivity{
             public void run() {
                 fragmentlayout.setCurrenItem(page);
             }
-        }, 500);
+        }, 200);
 
     }
 }
