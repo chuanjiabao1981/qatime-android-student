@@ -148,7 +148,10 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                                 dialog();
                             }
                         }else  if (payType.equals("account")){
-
+                            //余额支付成功  status---failed交易失败  shipped交易成功
+                            // TODO: 2016/10/8 余额支付
+                            EventBus.getDefault().post(PayResultState.SUCCESS);
+                            finish();
                         }
                         pay.setEnabled(true);
                     }
