@@ -6,8 +6,8 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,14 +48,16 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     TextView price;
     TextView payprice;
     private Button pay;
-    private RadioButton wechatPay;
-    private RadioGroup radioGroup;
+    private ImageView wechatPay;
+    private LinearLayout radioGroup;
     private int id;
     private String payType = "weixin";
     private int priceNumber = 0;
     DecimalFormat df = new DecimalFormat("#.00");
     private AlertDialog alertDialog;
-    private RadioButton aliPay;
+    private ImageView aliPay;
+    private View alipayLayout;
+    private View wechatLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,28 +203,34 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         classstarttime = (TextView) findViewById(R.id.class_start_time);
         classendtime = (TextView) findViewById(R.id.class_end_time);
 //        status = (TextView) findViewById(R.id.status);
-        radioGroup = (RadioGroup) findViewById(R.id.radiogroup);
-        wechatPay = (RadioButton) findViewById(R.id.wechat_pay);
-        aliPay = (RadioButton) findViewById(R.id.alipay);
+        radioGroup = (LinearLayout) findViewById(R.id.radiogroup);
+        wechatLayout = findViewById(R.id.wechat_layout);
+        alipayLayout = findViewById(R.id.alipay_layout);
+        wechatPay = (ImageView) findViewById(R.id.wechat_pay);
+        aliPay = (ImageView) findViewById(R.id.alipay);
         price = (TextView) findViewById(R.id.price);
         payprice = (TextView) findViewById(R.id.pay_price);
         pay = (Button) findViewById(R.id.pay);
-
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        alipayLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == wechatPay.getId()) {
-                    payType = "weixin";
-                } else {
-                    payType = "alipay";
-                }
+            public void onClick(View v) {
+                payType = "alipay";
+                aliPay.setImageResource(R.mipmap.radiobutton_selected);
+                wechatPay.setImageResource(R.mipmap.radiobutton_unselected);
+
                 //TODO 集成完支付宝后，去掉下面这段
-                if (checkedId == aliPay.getId()) {
-                    Toast.makeText(OrderConfirmActivity.this, getResourceString(R.string.not_support_alipay), Toast.LENGTH_SHORT).show();
-                    wechatPay.setChecked(true);
-                    aliPay.setChecked(false);
-                    payType = "weixin";
-                }
+                Toast.makeText(OrderConfirmActivity.this, getResourceString(R.string.not_support_alipay), Toast.LENGTH_SHORT).show();
+                wechatPay.setImageResource(R.mipmap.radiobutton_selected);
+                aliPay.setImageResource(R.mipmap.radiobutton_unselected);
+                payType = "weixin";
+            }
+        });
+        wechatLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                payType = "weixin";
+                wechatPay.setImageResource(R.mipmap.radiobutton_selected);
+                aliPay.setImageResource(R.mipmap.radiobutton_unselected);
             }
         });
     }
@@ -233,7 +241,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 //
 //            finish();
 //        }
-            finish();
+        finish();
     }
 
 
