@@ -161,6 +161,13 @@
                     android:drawableLeft="@mipmap/alipay"
                     android:gravity="center_vertical"
                     android:text="@string/alipay_payment"/>
+                <RadioButton
+                    android:id="@+id/account"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/wallet_32_gray"
+                    android:gravity="center_vertical"
+                    android:text="@string/account_payment"/>
             </RadioGroup>
         </RelativeLayout>
 

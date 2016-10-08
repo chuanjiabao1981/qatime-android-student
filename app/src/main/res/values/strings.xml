@@ -430,4 +430,6 @@
     <string name="recharge_server_basy_please_try_again">充值系统繁忙,请稍后重试</string>
     <string name="recharge_failure">充值结果未找到</string>
     <string name="recharge_success">充值成功</string>
+    <string name="account_payment">余额支付</string>
+    <string name="pay_account">：余额支付</string>
 </resources>

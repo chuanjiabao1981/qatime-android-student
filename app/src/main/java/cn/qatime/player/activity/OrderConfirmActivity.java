@@ -56,6 +56,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     DecimalFormat df = new DecimalFormat("#.00");
     private AlertDialog alertDialog;
     private RadioButton aliPay;
+    private RadioButton account;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +106,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
+        // TODO: 2016/10/8 余额支付验证
         pay.setEnabled(false);
         Map<String, String> map = new HashMap<>();
         map.put("pay_type", payType);
@@ -129,7 +131,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                             } else {
                                 dialog();
                             }
-                        } else {
+                        } else  if (payType.equals("alipay")){
                             if (data != null) {
                                 Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
                                 intent.putExtra("price", priceNumber);
@@ -145,6 +147,8 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                             } else {
                                 dialog();
                             }
+                        }else  if (payType.equals("account")){
+
                         }
                         pay.setEnabled(true);
                     }
@@ -213,8 +217,10 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == wechatPay.getId()) {
                     payType = "weixin";
-                } else {
+                } else if (checkedId == aliPay.getId()) {
                     payType = "alipay";
+                }else{
+                    payType="account";
                 }
                 //TODO 集成完支付宝后，去掉下面这段
                 if (checkedId == aliPay.getId()) {
@@ -233,7 +239,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 //
 //            finish();
 //        }
-            finish();
+        finish();
     }
 
 

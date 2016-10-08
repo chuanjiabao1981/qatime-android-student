@@ -110,6 +110,8 @@ public class OrderPayActivity extends BaseActivity {
             type.setText(getResourceString(R.string.method_payment) + getResourceString(R.string.pay_alipay));
         } else if (payType.equals("weixin")) {
             type.setText(getResourceString(R.string.method_payment) + getResourceString(R.string.pay_wexin));
+        }else {
+            type.setText(getResourceString(R.string.method_payment) + getResourceString(R.string.pay_account));
         }
         this.price.setText(getResourceString(R.string.amount_payment) + "：￥" + price);
     }
@@ -167,6 +169,13 @@ public class OrderPayActivity extends BaseActivity {
                     // 必须异步调用
                     Thread payThread = new Thread(payRunnable);
                     payThread.start();
+                }else if(payType.equals("account")){
+                    Logger.e("钱包支付");
+                    // TODO: 2016/10/8  钱包支付
+//                    Intent intent = new Intent(OrderPayActivity.this,OrderPayResultActivity.class);
+//                    intent.putExtra("state",PayResultState.SUCCESS);
+//                    startActivity(intent);
+//                    finish();
                 }
             }
         });
