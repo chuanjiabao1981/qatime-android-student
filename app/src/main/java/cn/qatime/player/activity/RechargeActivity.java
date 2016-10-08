@@ -11,8 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,22 +45,50 @@ import libraryextra.utils.VolleyListener;
  */
 public class RechargeActivity extends BaseActivity {
     private EditText rechargeNum;
-    private RadioGroup radioGroup;
-    private RadioButton wechatPay;
-    private RadioButton alipay;
+    private ImageView wechatPay;
+    private ImageView alipay;
     private Button rechargeNow;
     private AlertDialog alertDialog;
     private static final int DECIMAL_DIGITS = 2;//小数的位数
+    private View wechatLayout;
+    private View alipayLayout;
+    private String payType = "weixin";
 //    private TextView phone;
 //    private AlertDialog alertDialogPhone;
 
     private void assignViews() {
         rechargeNum = (EditText) findViewById(R.id.recharge_num);
-        radioGroup = (RadioGroup) findViewById(R.id.radio_group);
-        wechatPay = (RadioButton) findViewById(R.id.wechat_pay);
-        alipay = (RadioButton) findViewById(R.id.alipay);
+        wechatLayout = findViewById(R.id.wechat_layout);
+        alipayLayout = findViewById(R.id.alipay_layout);
+        wechatPay = (ImageView) findViewById(R.id.wechat_pay);
+        alipay = (ImageView) findViewById(R.id.alipay);
         rechargeNow = (Button) findViewById(R.id.recharge_now);
 //        phone = (TextView) findViewById(R.id.phone);
+
+
+        alipayLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                payType = "alipay";
+                alipay.setImageResource(R.mipmap.radiobutton_selected);
+                wechatPay.setImageResource(R.mipmap.radiobutton_unselected);
+
+                //TODO 集成完支付宝后，去掉下面这段
+                Toast.makeText(RechargeActivity.this, getResourceString(R.string.not_support_alipay), Toast.LENGTH_SHORT).show();
+                wechatPay.setImageResource(R.mipmap.radiobutton_selected);
+                alipay.setImageResource(R.mipmap.radiobutton_unselected);
+                payType = "weixin";
+            }
+        });
+        wechatLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                payType = "weixin";
+                wechatPay.setImageResource(R.mipmap.radiobutton_selected);
+                alipay.setImageResource(R.mipmap.radiobutton_unselected);
+            }
+        });
+
     }
 
 
@@ -108,18 +135,6 @@ public class RechargeActivity extends BaseActivity {
 //                }
 //            }
 //        });
-
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                //TODO 集成完支付宝后，去掉下面这段
-                if (checkedId == alipay.getId()) {
-                    Toast.makeText(RechargeActivity.this, getResourceString(R.string.not_support_alipay), Toast.LENGTH_SHORT).show();
-                    wechatPay.setChecked(true);
-                    alipay.setChecked(false);
-                }
-            }
-        });
 
         rechargeNum.setCustomSelectionActionModeCallback(new ActionMode.Callback() {//禁止复制粘贴
             @Override
@@ -210,10 +225,9 @@ public class RechargeActivity extends BaseActivity {
 
                 if (amount.endsWith(".")) amount += "0";
                 rechargeNow.setEnabled(false);
-                String pay_type = radioGroup.getCheckedRadioButtonId() == R.id.wechat_pay ? "weixin" : "alipay";
                 Map<String, String> map = new HashMap<>();
                 map.put("amount", amount);
-                map.put("pay_type", pay_type);
+                map.put("pay_type", payType);
                 addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/recharges", map), null, new VolleyListener(RechargeActivity.this) {
 
                     @Override

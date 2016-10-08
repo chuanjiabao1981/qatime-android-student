@@ -8,14 +8,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <include layout="@layout/layout_backbar" />
 
         <LinearLayout
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -25,69 +26,101 @@
                 android:textSize="16sp" />
 
             <RelativeLayout
-                android:padding="8dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:padding="8dp">
 
                 <EditText
                     android:id="@+id/recharge_num"
+                    style="@style/activity_edit_text_style"
                     android:layout_width="match_parent"
                     android:gravity="center_vertical"
-                    android:paddingRight="20dp"
+                    android:hint="请输入想要充值的金额"
                     android:inputType="numberDecimal"
-                    style="@style/activity_edit_text_style"
-                    android:hint="请输入想要充值的金额" />
+                    android:paddingRight="20dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="10dp"
                     android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
                     android:text="元"
                     android:textSize="16sp" />
             </RelativeLayout>
         </LinearLayout>
 
         <LinearLayout
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="充值方式"
                 android:layout_marginTop="14dp"
+                android:text="充值方式"
                 android:textSize="16sp" />
 
-            <RadioGroup
-                android:id="@+id/radio_group"
-                android:layout_width="match_parent"
-                android:padding="8dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="8dp"
                 android:orientation="vertical">
 
-                <RadioButton
-                    android:id="@+id/wechat_pay"
+                <LinearLayout
+                    android:id="@+id/wechat_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
                     android:layout_marginBottom="8dp"
-                    android:checked="true"
-                    android:drawableLeft="@mipmap/wechat_pay"
-                    android:gravity="center_vertical"
-                    android:text="@string/wechat_payment"/>
+                    android:padding="2dp">
 
-                <RadioButton
-                    android:id="@+id/alipay"
+                    <ImageView
+                        android:id="@+id/wechat_pay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/radiobutton_selected" />
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@mipmap/wechat_pay" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/wechat_payment" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/alipay_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@mipmap/alipay"
                     android:gravity="center_vertical"
-                    android:text="@string/alipay_payment"/>
-            </RadioGroup>
+                    android:orientation="horizontal"
+                    android:padding="2dp">
+
+                    <ImageView
+                        android:id="@+id/alipay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/radiobutton_unselected" />
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@mipmap/alipay" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/alipay_payment" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
@@ -97,31 +130,31 @@
         android:layout_alignParentBottom="true"
         android:text="@string/recharge_now" />
     <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_above="@id/recharge_now"-->
-        <!--android:layout_marginTop="12dp"-->
-        <!--android:layout_marginBottom="6dp"-->
-        <!--android:gravity="center"-->
-        <!--android:visibility="gone"-->
-        <!--android:orientation="horizontal">-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_above="@id/recharge_now"-->
+    <!--android:layout_marginTop="12dp"-->
+    <!--android:layout_marginBottom="6dp"-->
+    <!--android:gravity="center"-->
+    <!--android:visibility="gone"-->
+    <!--android:orientation="horizontal">-->
 
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:gravity="center"-->
-            <!--android:text="@string/problem_phone"-->
-            <!--android:textColor="#666666"-->
-            <!--android:textSize="14sp" />-->
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:gravity="center"-->
+    <!--android:text="@string/problem_phone"-->
+    <!--android:textColor="#666666"-->
+    <!--android:textSize="14sp" />-->
 
-        <!--<TextView-->
-            <!--android:id="@+id/phone"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="0353-2135828"-->
-            <!--android:padding="6dp"-->
-            <!--android:textColor="#3399FF"-->
-            <!--android:textSize="16sp" />-->
+    <!--<TextView-->
+    <!--android:id="@+id/phone"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="0353-2135828"-->
+    <!--android:padding="6dp"-->
+    <!--android:textColor="#3399FF"-->
+    <!--android:textSize="16sp" />-->
 
     <!--</LinearLayout>-->
 </RelativeLayout>
