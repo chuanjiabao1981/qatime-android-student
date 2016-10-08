@@ -390,8 +390,8 @@
     <string name="order_creating">正在生成订单</string>
     <string name="order_create_success">订单生成成功</string>
     <string name="order_create_failed">订单生成失败</string>
-    <string name="order_cancel_success">订单取消失败,请稍后再试</string>
-    <string name="order_cancel_failed">订单已成功取消</string>
+    <string name="order_cancel_failed">订单取消失败,请稍后再试</string>
+    <string name="order_cancel_success">订单已成功取消</string>
     <string name="pay_wexin"> ：微信支付</string>
     <string name="pay_alipay"> ：支付宝支付</string>
     <string name="not_support_alipay">暂不支持支付宝支付</string>

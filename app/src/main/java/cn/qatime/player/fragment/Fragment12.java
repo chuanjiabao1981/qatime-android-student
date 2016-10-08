@@ -287,9 +287,6 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
                         }
-                        if (screenPopView != null) {
-                            clearScreenData();
-                        }
                     }
 
                     @Override
