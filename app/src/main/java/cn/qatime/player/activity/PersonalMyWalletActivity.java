@@ -24,6 +24,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.PayResultState;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.SPUtils;
@@ -175,6 +176,8 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
 //            finish();
 //        }
         initData();
+        //接收到充值信息后,设置返回码刷新数据
+        setResult(Constant.RESPONSE);
     }
     @Override
     protected void onDestroy() {
