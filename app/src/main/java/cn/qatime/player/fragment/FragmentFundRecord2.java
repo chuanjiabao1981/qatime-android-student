@@ -159,7 +159,7 @@ public class FragmentFundRecord2 extends BaseFragment {
             case "offline":
                 return "线下支付";
         }
-        return "课程";
+        return "微信支付";
     }
 
 }

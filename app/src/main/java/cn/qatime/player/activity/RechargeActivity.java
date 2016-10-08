@@ -109,6 +109,18 @@ public class RechargeActivity extends BaseActivity {
 //            }
 //        });
 
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                //TODO 集成完支付宝后，去掉下面这段
+                if (checkedId == alipay.getId()) {
+                    Toast.makeText(RechargeActivity.this, getResourceString(R.string.not_support_alipay), Toast.LENGTH_SHORT).show();
+                    wechatPay.setChecked(true);
+                    alipay.setChecked(false);
+                }
+            }
+        });
+
         rechargeNum.setCustomSelectionActionModeCallback(new ActionMode.Callback() {//禁止复制粘贴
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -183,8 +195,12 @@ public class RechargeActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 String amount = rechargeNum.getText().toString();
-                if (StringUtils.isNullOrBlanK(amount) || Double.valueOf(amount) == 0) {
+                if (StringUtils.isNullOrBlanK(amount)) {
                     Toast.makeText(RechargeActivity.this, R.string.amount_can_not_null, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (Double.valueOf(amount) == 0) {
+                    Toast.makeText(RechargeActivity.this, R.string.amount_can_not_zero, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (Double.valueOf(amount) > Math.pow(10, 6)) {

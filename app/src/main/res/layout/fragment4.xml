@@ -93,6 +93,7 @@
                     android:id="@+id/balance"
                     android:layout_width="wrap_content"
                     android:text="0.00"
+                    android:paddingRight="12dp"
                     android:textColor="#333333"
                     android:layout_height="wrap_content" />
                 <ImageView

@@ -154,7 +154,7 @@ public class FragmentFundRecord1 extends BaseFragment {
         switch (status) {
             case "unpaid":
                 return "未支付";
-            case "alipay":
+            case "received":
                 return "已支付";
             case "canceled":
                 return "订单取消";

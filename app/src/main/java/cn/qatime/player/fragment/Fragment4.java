@@ -34,6 +34,7 @@ import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.transformation.GlideCircleTransform;
+import libraryextra.utils.SPUtils;
 import libraryextra.utils.VolleyListener;
 
 public class Fragment4 extends BaseFragment implements View.OnClickListener {
@@ -108,7 +109,7 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.my_wallet:
                 intent = new Intent(getActivity(), PersonalMyWalletActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,Constant.REQUEST);
                 break;
             case R.id.my_order:
                 intent = new Intent(getActivity(), PersonalMyOrderActivity.class);
@@ -136,6 +137,7 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
         if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
             Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
             name.setText(BaseApplication.getProfile().getData().getUser().getName());
+            balance.setText((String)SPUtils.get(getActivity(),"balance","0.00"));
         }
     }
 
