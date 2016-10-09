@@ -138,9 +138,9 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
                     confirm.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            alertDialog.dismiss();
                             Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
                             startActivity(intent);
-                            alertDialog.dismiss();
                         }
                     });
                     android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(PersonalMyWalletActivity.this);

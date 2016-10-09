@@ -100,9 +100,9 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
                     confirm.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            alertDialogPhone.dismiss();
                             Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
                             startActivity(intent);
-                            alertDialogPhone.dismiss();
                         }
                     });
                     android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(RechargeConfirmActivity.this);
