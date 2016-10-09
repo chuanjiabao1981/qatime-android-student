@@ -62,13 +62,13 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
 
         setContentView(R.layout.activity_personal_my_wallet);
         setTitle(getResourceString(R.string.my_wallet));
-        setRightText("说明", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(PersonalMyWalletActivity.this, RechargeProcessActivity.class);
-                startActivity(intent);
-            }
-        });
+//        setRightText("说明", new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(PersonalMyWalletActivity.this, RechargeProcessActivity.class);
+//                startActivity(intent);
+//            }
+//        });
         assignViews();
         EventBus.getDefault().register(this);
         initData();

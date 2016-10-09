@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
@@ -22,13 +21,12 @@ import libraryextra.utils.StringUtils;
  * 基础fragment类
  */
 public class BaseFragmentActivity extends FragmentActivity {
-    private RequestQueue Queue;
+    private RequestQueue Queue= BaseApplication.getRequestQueue();
     private AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Queue = Volley.newRequestQueue(this);
     }
 
     public void setTitle(String text) {

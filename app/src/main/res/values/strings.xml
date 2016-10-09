@@ -432,4 +432,5 @@
     <string name="recharge_success">充值成功</string>
     <string name="account_payment">余额支付</string>
     <string name="pay_account">：余额支付</string>
+    <string name="recharge_num_hint"><font size="14">请输入想要充值的金额</font></string>
 </resources>

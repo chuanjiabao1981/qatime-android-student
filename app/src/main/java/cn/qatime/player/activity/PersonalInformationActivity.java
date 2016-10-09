@@ -27,7 +27,6 @@ import libraryextra.bean.SchoolBean;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -69,6 +68,7 @@ public class PersonalInformationActivity extends BaseActivity {
             if (!StringUtils.isNullOrBlanK(data.getStringExtra("data"))) {
                 PersonalInformationBean sData = JsonUtils.objectFromJson(data.getStringExtra("data"), PersonalInformationBean.class);
                 if (sData != null && sData.getData() != null) {
+                    bean=sData;
                     setValue(sData);
                     BaseApplication.getProfile().getData().getUser().setAvatar_url(sData.getData().getAvatar_url());
                     Profile profile = BaseApplication.getProfile();
