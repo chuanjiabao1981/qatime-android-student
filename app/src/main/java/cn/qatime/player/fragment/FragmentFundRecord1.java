@@ -1,5 +1,6 @@
 package cn.qatime.player.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -7,6 +8,7 @@ import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -25,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.RechargeConfirmActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.RechargeRecordBean;
@@ -33,6 +36,7 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.SPUtils;
 import libraryextra.utils.VolleyListener;
 
 /**
@@ -136,6 +140,27 @@ public class FragmentFundRecord1 extends BaseFragment {
                 initData();
             }
         });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                RechargeRecordBean.DataBean dataBean = data.get(position - 1);
+                String status = dataBean.getStatus();
+                if ("unpaid".equals(status)) {//如果是未支付进行跳转
+                    Intent intent = new Intent(getActivity(), RechargeConfirmActivity.class);
+                    intent.putExtra("id", dataBean.getId());
+                    intent.putExtra("amount", dataBean.getAmount());
+                    intent.putExtra("pay_type", dataBean.getPay_type());
+                    intent.putExtra("created_at", dataBean.getCreated_at());
+                    // TODO: 2016/10/9  判断是微信还是支付宝
+                    intent.putExtra("app_pay_params", dataBean.getApp_pay_params());
+                    startActivity(intent);
+                    SPUtils.put(getActivity(), "RechargeId", dataBean.getId());
+                    SPUtils.put(getActivity(), "amount", dataBean.getAmount());
+                }
+            }
+        });
+
     }
 
     private String getPayType(String pay_type) {
@@ -155,11 +180,10 @@ public class FragmentFundRecord1 extends BaseFragment {
             case "unpaid":
                 return "未支付";
             case "received":
-                return "已支付";
-            case "canceled":
-                return "订单取消";
+                return "充值成功";
+            default:
+                return "交易关闭";
         }
-        return "未支付";
     }
 
 }

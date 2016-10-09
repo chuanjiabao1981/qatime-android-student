@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +27,7 @@ import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.bean.AppPayParamsBean;
 import libraryextra.bean.OrderConfirmBean;
 import libraryextra.bean.OrderPayBean;
 import libraryextra.utils.JsonUtils;
@@ -123,7 +123,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                                 intent.putExtra("id", data.getData().getId());
                                 intent.putExtra("time", data.getData().getCreated_at());
                                 intent.putExtra("type", payType);
-                                OrderConfirmBean.DataBean.AppPayParamsBean app_pay_params = data.getData().getApp_pay_params();
+                                AppPayParamsBean app_pay_params = data.getData().getApp_pay_params();
                                 intent.putExtra("data", app_pay_params);
                                 startActivity(intent);
                                 SPUtils.put(OrderConfirmActivity.this, "orderId", data.getData().getId());

@@ -245,6 +245,7 @@ public class RechargeActivity extends BaseActivity {
                             intent.putExtra("amount", data.getAmount());
                             intent.putExtra("pay_type", data.getPay_type());
                             intent.putExtra("created_at", data.getCreated_at());
+                            // TODO: 2016/10/9  判断是微信还是支付宝
                             intent.putExtra("app_pay_params", data.getApp_pay_params());
                             startActivity(intent);
                             SPUtils.put(RechargeActivity.this, "RechargeId", data.getId());

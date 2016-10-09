@@ -21,8 +21,8 @@ import java.text.DecimalFormat;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.bean.PayResultState;
-import cn.qatime.player.bean.RechargeBean;
 import cn.qatime.player.utils.Constant;
+import libraryextra.bean.AppPayParamsBean;
 
 /**
  * @author Tianhaoranly
@@ -38,7 +38,7 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
     private TextView phone;
     private AlertDialog alertDialogPhone;
     DecimalFormat df = new DecimalFormat("#.00");
-    private RechargeBean.DataBean.AppPayParamsBean data;
+    private AppPayParamsBean data;
     private IWXAPI api;
 
     private void assignViews() {
@@ -75,7 +75,7 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
         }
         price = "￥"+price;
         amount.setText(price);
-        data = (RechargeBean.DataBean.AppPayParamsBean) intent.getSerializableExtra("app_pay_params");
+        data = (AppPayParamsBean) intent.getSerializableExtra("app_pay_params");
 
         phone.setOnClickListener(this);
         rechargeConfirm.setOnClickListener(this);
@@ -125,7 +125,7 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
 
                     request.prepayId = data.getPrepayid();
 
-                    request.packageValue = data.getPackageX();
+                    request.packageValue = data.getPackage();
 
                     request.nonceStr = data.getNoncestr();
 

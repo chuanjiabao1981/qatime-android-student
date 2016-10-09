@@ -147,19 +147,26 @@ public class FragmentFundRecord2 extends BaseFragment {
             case "offline":
                 return "线下支付";
         }
-        return "未支付";
+        return "微信支付";
     }
 
     private String getTargetType(String target_type) {
         switch (target_type) {
             case "weixin":
-                return "微信支付";
+                return "课程";
             case "alipay":
-                return "支付宝";
+                return "家庭作业批改";
             case "offline":
-                return "线下支付";
+                return "随堂作业批改";
+            case "1":
+                return "日常问题解答";
+            case "2":
+                return "随堂问题解答";
+            case "3":
+                return "辅导班";
+
         }
-        return "微信支付";
+        return "课程";
     }
 
 }

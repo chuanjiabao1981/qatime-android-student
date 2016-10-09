@@ -26,7 +26,7 @@ import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.bean.PayResult;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.Constant;
-import libraryextra.bean.OrderConfirmBean;
+import libraryextra.bean.AppPayParamsBean;
 
 public class OrderPayActivity extends BaseActivity {
     TextView code;
@@ -40,7 +40,7 @@ public class OrderPayActivity extends BaseActivity {
 
 
     DecimalFormat df = new DecimalFormat("#.00");
-    private OrderConfirmBean.DataBean.AppPayParamsBean weixinData;
+    private AppPayParamsBean weixinData;
     private String payType = "weixin";
     private String aliPayData;
     private Handler hd = new Handler() {
@@ -95,7 +95,7 @@ public class OrderPayActivity extends BaseActivity {
 
     private void initData() {
         if (payType.equals("weixin")) {
-            weixinData = (OrderConfirmBean.DataBean.AppPayParamsBean) getIntent().getSerializableExtra("data");
+            weixinData = (AppPayParamsBean) getIntent().getSerializableExtra("data");
         } else if (payType.equals("alipay")) {
             aliPayData = getIntent().getStringExtra("data");
         }
