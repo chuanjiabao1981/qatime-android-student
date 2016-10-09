@@ -3,6 +3,7 @@ package cn.qatime.player.activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,19 +81,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     private ImageView emoji;
     private EditText content;
     private boolean isMute = false;//当前用户 是否被禁言
-    //    Runnable runnable = new Runnable() {
-//        @Override
-//        public void run() {
-//            hd.postDelayed(this, 50);
-//            videoPlayer.setData(i + "彈幕");
-//            i++;
-//            if (i>20){
-//                hd.removeCallbacks(this);
-//            }
-//            LogUtils.e(i);
-//        }
-//    };
-//    int flag = Settings.System.getInt(getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0);
+    private String url = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +92,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
             Toast.makeText(this, getResourceString(R.string.no_course_information), Toast.LENGTH_SHORT).show();
         }
         sessionId = getIntent().getStringExtra("sessionId");
-        String url = getIntent().getStringExtra("url");
+        url = getIntent().getStringExtra("url");
 //        Logger.e(url);
         videoPlayer = (QaVideoPlayer) findViewById(R.id.video_player);
         ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenWidth(this) * 9 / 16);
@@ -114,13 +103,12 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
             videoPlayer.setOnControlListener(this);
             videoPlayer.start();
         }
-        final String finalUrl = url;
         videoPlayer.setOnVideoRefreshListener(new QaVideoPlayer.VideoRefreshListener() {
             @Override
             public void onRefresh() {
-                if (!StringUtils.isNullOrBlanK(finalUrl)) {
+                if (!StringUtils.isNullOrBlanK(url)) {
                     videoPlayer.release_resource();
-                    videoPlayer.setVideoPath(finalUrl);
+                    videoPlayer.setVideoPath(url);
                     videoPlayer.setOnControlListener(NEVideoPlayerActivity.this);
                     videoPlayer.start();
                 }
@@ -418,7 +406,17 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
 
     @Override
     public void onCompletion(NELivePlayer neLivePlayer) {
-
+//        if (!StringUtils.isNullOrBlanK(url)) {
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    videoPlayer.release_resource();
+//                    videoPlayer.setVideoPath(url);
+//                    videoPlayer.setOnControlListener(NEVideoPlayerActivity.this);
+//                    videoPlayer.start();
+//                }
+//            }, 500);
+//        }
     }
 
     @Override

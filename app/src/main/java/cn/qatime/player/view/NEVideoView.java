@@ -145,8 +145,7 @@ public class NEVideoView extends SurfaceView {
     }
 
     /**
-     *
-     * @param orientation  true时表示横屏
+     * @param orientation true时表示横屏
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     public void setVideoScalingMode(boolean orientation) {
@@ -173,11 +172,7 @@ public class NEVideoView extends SurfaceView {
                 winWidth = dm.widthPixels;
                 winHeight = dm.heightPixels;
                 e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
+            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 e.printStackTrace();
             }
         }
@@ -314,21 +309,21 @@ public class NEVideoView extends SurfaceView {
                 int ret = mMediaPlayer.setDataSource(mUri.toString());
                 if (ret < 0) {
                     if (getWindowToken() != null && mMediaType.equals("livestream")) {
-                        new AlertDialog.Builder(mContext)
-                                .setTitle("error")
-                                .setMessage("地址非法，请输入网易视频云官方地址！")
-                                .setPositiveButton("OK",
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int whichButton) {
-                                        /* If we get here, there is no onError listener, so
-                                         * at least inform them that the video is over.
-                                         */
-                                                if (mOnCompletionListener != null)
-                                                    mOnCompletionListener.onCompletion(mMediaPlayer);
-                                            }
-                                        })
-                                .setCancelable(false)
-                                .show();
+//                        new AlertDialog.Builder(mContext)
+//                                .setTitle("error")
+//                                .setMessage("地址非法，请输入网易视频云官方地址！")
+//                                .setPositiveButton("OK",
+//                                        new DialogInterface.OnClickListener() {
+//                                            public void onClick(DialogInterface dialog, int whichButton) {
+//                                        /* If we get here, there is no onError listener, so
+//                                         * at least inform them that the video is over.
+//                                         */
+                        if (mOnCompletionListener != null)
+                            mOnCompletionListener.onCompletion(mMediaPlayer);
+//                                            }
+//                                        })
+//                                .setCancelable(false)
+//                                .show();
                     }
                     release_resource();
                     return;
@@ -449,23 +444,23 @@ public class NEVideoView extends SurfaceView {
             if (mOnCompletionListener != null)
                 mOnCompletionListener.onCompletion(mMediaPlayer);
 
-            if (getWindowToken() != null && mMediaType.equals("livestream")) {
-                new AlertDialog.Builder(mContext)
-                        .setTitle("Completed!")
-                        .setMessage("播放结束！")
-                        .setPositiveButton("OK",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-                                        /* If we get here, there is no onError listener, so
-                                         * at least inform them that the video is over.
-                                         */
-                                        if (mOnCompletionListener != null)
-                                            mOnCompletionListener.onCompletion(mMediaPlayer);
-                                    }
-                                })
-                        .setCancelable(false)
-                        .show();
-            }
+//            if (getWindowToken() != null && mMediaType.equals("livestream")) {
+//                new AlertDialog.Builder(mContext)
+//                        .setTitle("Completed!")
+//                        .setMessage("播放结束！")
+//                        .setPositiveButton("OK",
+//                                new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int whichButton) {
+//                                        /* If we get here, there is no onError listener, so
+//                                         * at least inform them that the video is over.
+//                                         */
+//                                        if (mOnCompletionListener != null)
+//                                            mOnCompletionListener.onCompletion(mMediaPlayer);
+//                                    }
+//                                })
+//                        .setCancelable(false)
+//                        .show();
+//            }
         }
     };
 
