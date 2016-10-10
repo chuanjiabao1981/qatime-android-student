@@ -70,7 +70,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
+                android:padding="12dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -88,7 +88,8 @@
                         android:src="@mipmap/radiobutton_selected" />
 
                     <ImageView
-                        android:layout_margin="3dp"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginRight="3dp"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:src="@mipmap/wechat_pay" />
@@ -115,7 +116,8 @@
                         android:src="@mipmap/radiobutton_unselected" />
 
                     <ImageView
-                        android:layout_margin="3dp"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginRight="3dp"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:src="@mipmap/alipay" />

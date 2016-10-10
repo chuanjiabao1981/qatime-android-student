@@ -25,6 +25,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.bean.MyOrderBean;
 import cn.qatime.player.bean.PayResultState;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.SPUtils;
@@ -213,6 +214,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
                     @Override
                     protected void onSuccess(JSONObject response) {
                         Toast.makeText(PersonalMyOrderUnpaidDetailActivity.this, getResourceString(R.string.order_cancel_success), Toast.LENGTH_SHORT).show();
+                        setResult(Constant.RESPONSE);//取消成功刷新订单
                         finish();
                     }
 
@@ -238,6 +240,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         Intent intent = new Intent(this,OrderPayResultActivity.class);
         intent.putExtra("state",state);
         startActivity(intent);
+        setResult(Constant.RESPONSE);//支付成功刷新订单
         finish();
     }
 

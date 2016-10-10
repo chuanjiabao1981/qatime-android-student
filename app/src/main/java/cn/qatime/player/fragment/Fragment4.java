@@ -135,7 +135,7 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Logger.e("图片返回");
         if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
-            Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
+            Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).placeholder(R.mipmap.personal_information_head).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
             name.setText(BaseApplication.getProfile().getData().getUser().getName());
             balance.setText(SPUtils.get(getActivity(),"balance","0.00").toString());
         }

@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -56,8 +57,10 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     DecimalFormat df = new DecimalFormat("#.00");
     private AlertDialog alertDialog;
     private ImageView aliPay;
+    private ImageView account;
     private View alipayLayout;
     private View wechatLayout;
+    private View accountLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +135,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                             } else {
                                 dialog();
                             }
-                        } else  if (payType.equals("alipay")){
+                        } else if (payType.equals("alipay")) {
                             if (data != null) {
                                 Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
                                 intent.putExtra("price", priceNumber);
@@ -148,11 +151,19 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                             } else {
                                 dialog();
                             }
-                        }else  if (payType.equals("account")){
+                        } else if (payType.equals("account")) {
                             //余额支付成功  status---failed交易失败  shipped交易成功
-                            // TODO: 2016/10/8 余额支付
-                            EventBus.getDefault().post(PayResultState.SUCCESS);
-                            finish();
+                            // TODO: 2016/10/8 余额支付  订单?  校验?
+                            try {
+                                if (response.getJSONObject("data").getString("status").equals("shipped")) {
+                                    EventBus.getDefault().post(PayResultState.SUCCESS);
+                                    finish();
+                                } else {
+                                    Toast.makeText(OrderConfirmActivity.this, "余额不足", Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
                         pay.setEnabled(true);
                     }
@@ -212,8 +223,10 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         radioGroup = (LinearLayout) findViewById(R.id.radiogroup);
         wechatLayout = findViewById(R.id.wechat_layout);
         alipayLayout = findViewById(R.id.alipay_layout);
+        accountLayout = findViewById(R.id.account_layout);
         wechatPay = (ImageView) findViewById(R.id.wechat_pay);
         aliPay = (ImageView) findViewById(R.id.alipay);
+        account = (ImageView) findViewById(R.id.account);
         price = (TextView) findViewById(R.id.price);
         payprice = (TextView) findViewById(R.id.pay_price);
         pay = (Button) findViewById(R.id.pay);
@@ -223,6 +236,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                 payType = "alipay";
                 aliPay.setImageResource(R.mipmap.radiobutton_selected);
                 wechatPay.setImageResource(R.mipmap.radiobutton_unselected);
+                account.setImageResource(R.mipmap.radiobutton_unselected);
 
                 //TODO 集成完支付宝后，去掉下面这段
                 Toast.makeText(OrderConfirmActivity.this, getResourceString(R.string.not_support_alipay), Toast.LENGTH_SHORT).show();
@@ -237,6 +251,16 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                 payType = "weixin";
                 wechatPay.setImageResource(R.mipmap.radiobutton_selected);
                 aliPay.setImageResource(R.mipmap.radiobutton_unselected);
+                account.setImageResource(R.mipmap.radiobutton_unselected);
+            }
+        });
+        accountLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                payType = "account";
+                account.setImageResource(R.mipmap.radiobutton_selected);
+                aliPay.setImageResource(R.mipmap.radiobutton_unselected);
+                wechatPay.setImageResource(R.mipmap.radiobutton_unselected);
             }
         });
     }

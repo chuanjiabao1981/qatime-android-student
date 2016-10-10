@@ -27,7 +27,7 @@
                 android:src="@mipmap/photo"/>
 
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="8"
@@ -39,13 +39,22 @@
                     android:id="@+id/classname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxLines="2"
+                    android:singleLine="true"
                     android:ellipsize="end"
                     android:text="高考考前急速高考考前急速高高考考前急速高考考前急速高"/>
-
+                <TextView
+                    android:id="@+id/teacher"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_centerVertical="true"
+                    android:padding="2dp"
+                    android:text="教师"
+                    android:textSize="12sp"/>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
                     android:orientation="horizontal">
 
                     <TextView
@@ -55,7 +64,7 @@
                         android:layout_gravity="bottom"
                         android:padding="2dp"
                         android:text="年级"
-                        android:textSize="13sp"/>
+                        android:textSize="12sp"/>
 
                     <TextView
                         android:id="@+id/subject"
@@ -64,20 +73,13 @@
                         android:layout_gravity="bottom"
                         android:padding="2dp"
                         android:text="科目"
-                        android:textSize="13sp"/>
+                        android:textSize="12sp"/>
 
                     <View
                         android:layout_width="15dp"
                         android:layout_height="match_parent"></View>
 
-                    <TextView
-                        android:id="@+id/teacher"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:padding="2dp"
-                        android:text="教师"
-                        android:textSize="13sp"/>
+
 
                     <View
                         android:layout_width="15dp"
@@ -90,7 +92,7 @@
                         android:layout_gravity="bottom"
                         android:padding="2dp"
                         android:text="1/10"
-                        android:textSize="13sp"/>
+                        android:textSize="12sp"/>
 
                     <View
                         android:layout_width="0dp"
@@ -98,16 +100,7 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="2dp"
-                    android:text="开课20160715  15:30"
-                    android:textSize="13sp"/>
-
-
-            </LinearLayout>
+            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="wrap_content"

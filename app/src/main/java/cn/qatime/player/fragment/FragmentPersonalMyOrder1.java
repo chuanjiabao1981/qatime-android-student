@@ -39,6 +39,7 @@ import cn.qatime.player.activity.PersonalMyOrderUnpaidDetailActivity;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.MyOrderBean;
 import cn.qatime.player.bean.PayResultState;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
@@ -207,10 +208,24 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
                 intent.putExtra("data",  list.get(position-1));
 //                intent.putExtra("payType", list.get(position - 1).getPay_type());
 //                intent.putExtra("created_at", list.get(position - 1).getCreated_at());
-                startActivity(intent);
+                startActivityForResult(intent, Constant.REQUEST);
 
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
+            Logger.e("订单取消返回");
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    listView.onRefreshComplete();
+                }
+            }, 200);
+            initData(1);
+        }
     }
 
     @Override
