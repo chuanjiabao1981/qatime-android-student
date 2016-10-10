@@ -10,13 +10,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <include layout="@layout/layout_backbar_with_text" />
+        <include layout="@layout/layout_backbar" />
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:background="#05000000"
-            android:padding="10dp">
+            android:layout_height="192dp"
+            android:background="#f2f2f2"
+            android:padding="8dp">
 
 
             <TextView
@@ -39,7 +39,7 @@
                 android:paddingTop="6dp"
                 android:text="￥"
                 android:textColor="#333333"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -48,8 +48,8 @@
                 android:layout_toLeftOf="@id/yuan"
                 android:paddingTop="6dp"
                 android:text="@string/balance"
-                android:textColor="#cccccc"
-                android:textSize="18sp" />
+                android:textColor="#999999"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/consumption"
@@ -58,7 +58,8 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:text="0.00"
-                android:textColor="#cccccc" />
+                android:textSize="12sp"
+                android:textColor="#666666" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -66,7 +67,8 @@
                 android:layout_alignParentBottom="true"
                 android:layout_toLeftOf="@id/consumption"
                 android:text="@string/account_consumption"
-                android:textColor="#cccccc" />
+                android:textSize="12sp"
+                android:textColor="#666666" />
         </RelativeLayout>
 
         <View
@@ -77,9 +79,11 @@
         <TextView
             android:id="@+id/recharge"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
             android:background="@drawable/text_button_selector"
             android:gravity="center"
+            android:textSize="16sp"
             android:text="@string/recharge"
             android:textColor="#fff" />
 
@@ -91,9 +95,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="12dp"
+                style="@style/setting_text_style"
                 android:text="@string/recharge_record" />
 
             <View
@@ -122,9 +124,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="12dp"
+                style="@style/setting_text_style"
                 android:text="@string/consumption_record" />
 
             <View
@@ -169,7 +169,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="6dp"
-            android:text="0353-2135828"
+            android:text="@string/customer_service_phone_number"
             android:textColor="#3399FF"
             android:textSize="16sp" />
 

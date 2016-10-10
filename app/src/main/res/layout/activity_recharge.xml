@@ -7,88 +7,129 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#fff"
         android:orientation="vertical">
+
         <include layout="@layout/layout_backbar" />
 
         <LinearLayout
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:textColor="#666666"
                 android:text="充值金额"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <RelativeLayout
-                android:padding="8dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:padding="8dp">
 
                 <EditText
                     android:id="@+id/recharge_num"
+                    style="@style/activity_edit_text_style"
                     android:layout_width="match_parent"
                     android:gravity="center_vertical"
-                    android:paddingRight="20dp"
+                    android:hint="@string/recharge_num_hint"
                     android:inputType="numberDecimal"
-                    style="@style/activity_edit_text_style"
-                    android:hint="请输入想要充值的金额" />
+                    android:paddingRight="20dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="10dp"
                     android:layout_centerVertical="true"
+                    android:textColor="#666666"
+                    android:layout_marginRight="10dp"
                     android:text="元"
                     android:textSize="16sp" />
             </RelativeLayout>
         </LinearLayout>
 
         <LinearLayout
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:textColor="#666666"
                 android:text="充值方式"
-                android:layout_marginTop="14dp"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
-            <RadioGroup
-                android:id="@+id/radio_group"
-                android:layout_width="match_parent"
-                android:padding="8dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="12dp"
                 android:orientation="vertical">
 
-                <RadioButton
-                    android:id="@+id/wechat_pay"
+                <LinearLayout
+                    android:id="@+id/wechat_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:checked="true"
-                    android:drawableLeft="@mipmap/wechat_pay"
                     android:gravity="center_vertical"
-                    android:text="@string/wechat_payment"/>
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp">
 
-                <RadioButton
-                    android:id="@+id/alipay"
+                    <ImageView
+                        android:id="@+id/wechat_pay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/radiobutton_selected" />
+
+                    <ImageView
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@mipmap/wechat_pay" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="#666666"
+                        android:text="@string/wechat_payment" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/alipay_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@mipmap/alipay"
                     android:gravity="center_vertical"
-                    android:text="@string/alipay_payment"/>
-            </RadioGroup>
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/alipay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/radiobutton_unselected" />
+
+                    <ImageView
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@mipmap/alipay" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="#666666"
+                        android:text="@string/alipay_payment" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
@@ -97,31 +138,32 @@
         style="@style/button_full_width_style"
         android:layout_alignParentBottom="true"
         android:text="@string/recharge_now" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/recharge_now"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="6dp"
-        android:gravity="center"
-        android:orientation="horizontal">
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_above="@id/recharge_now"-->
+    <!--android:layout_marginTop="12dp"-->
+    <!--android:layout_marginBottom="6dp"-->
+    <!--android:gravity="center"-->
+    <!--android:visibility="gone"-->
+    <!--android:orientation="horizontal">-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/problem_phone"
-            android:textColor="#666666"
-            android:textSize="14sp" />
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:gravity="center"-->
+    <!--android:text="@string/problem_phone"-->
+    <!--android:textColor="#666666"-->
+    <!--android:textSize="14sp" />-->
 
-        <TextView
-            android:id="@+id/phone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0353-2135828"
-            android:padding="6dp"
-            android:textColor="#3399FF"
-            android:textSize="16sp" />
+    <!--<TextView-->
+    <!--android:id="@+id/phone"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="0353-2135828"-->
+    <!--android:padding="6dp"-->
+    <!--android:textColor="#3399FF"-->
+    <!--android:textSize="16sp" />-->
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
 </RelativeLayout>

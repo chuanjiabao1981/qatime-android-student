@@ -2,10 +2,9 @@ package cn.qatime.player.bean;
 
 
 import java.io.Serializable;
-import java.io.StringReader;
 import java.util.List;
 
-import libraryextra.bean.OrderConfirmBean;
+import libraryextra.bean.AppPayParamsBean;
 
 public class MyOrderBean implements Serializable {
     private int status;
@@ -62,7 +61,7 @@ public class MyOrderBean implements Serializable {
 
         private String app_pay_str;
 
-        private OrderConfirmBean.DataBean.AppPayParamsBean app_pay_params;
+        private AppPayParamsBean app_pay_params;
 
         private Product product;
 
@@ -130,11 +129,11 @@ public class MyOrderBean implements Serializable {
             return this.nonce_str;
         }
 
-        public void setApp_pay_params(OrderConfirmBean.DataBean.AppPayParamsBean app_pay_params) {
+        public void setApp_pay_params(AppPayParamsBean app_pay_params) {
             this.app_pay_params = app_pay_params;
         }
 
-        public OrderConfirmBean.DataBean.AppPayParamsBean getApp_pay_params() {
+        public AppPayParamsBean getApp_pay_params() {
             return this.app_pay_params;
         }
 

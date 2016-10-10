@@ -35,7 +35,7 @@ public class RecordFundActivity extends BaseFragmentActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record_fund);
-        setTitle(getResources().getString(R.string.my_order));
+        setTitle(getResources().getString(R.string.my_record_fund));
         setRightImage(R.mipmap.phone, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,7 +98,7 @@ public class RecordFundActivity extends BaseFragmentActivity{
             public void run() {
                 fragmentlayout.setCurrenItem(page);
             }
-        }, 500);
+        }, 200);
 
     }
 }

@@ -359,6 +359,7 @@
     <string name="start_download">开始下载</string>
     <string name="alert">提示</string>
     <string name="call_customer_service_phone">是否拨打客服电话</string>
+    <string name="customer_service_phone_number">0353-2135828</string>
     <string name="call_right_now">立即拨打</string>
     <string name="failed_to_obtain_group_information">获取群组信息失败!</string>
 
@@ -386,12 +387,12 @@
     <string name="hour">小时</string>
     <string name="minute">分钟</string>
     <string name="cancel_order_name">名称</string>
-    <string name="order_price">价&#8195;&#8195;&#8195;&#8195;格：</string>
+    <string name="order_price">价&#8195;&#8195;格：</string>
     <string name="order_creating">正在生成订单</string>
     <string name="order_create_success">订单生成成功</string>
     <string name="order_create_failed">订单生成失败</string>
-    <string name="order_cancel_success">订单取消失败,请稍后再试</string>
-    <string name="order_cancel_failed">订单已成功取消</string>
+    <string name="order_cancel_failed">订单取消失败,请稍后再试</string>
+    <string name="order_cancel_success">订单已成功取消</string>
     <string name="pay_wexin"> ：微信支付</string>
     <string name="pay_alipay"> ：支付宝支付</string>
     <string name="not_support_alipay">暂不支持支付宝支付</string>
@@ -426,7 +427,12 @@
     <string name="recharge_process">充值说明</string>
     <string name="recharge_confirm">交易确认</string>
     <string name="amount_can_not_null">金额不能为空</string>
+    <string name="amount_can_not_zero">金额不能为0</string>
     <string name="recharge_server_basy_please_try_again">充值系统繁忙,请稍后重试</string>
     <string name="recharge_failure">充值结果未找到</string>
     <string name="recharge_success">充值成功</string>
+    <string name="account_payment">余额支付</string>
+    <string name="pay_account">：余额支付</string>
+    <string name="recharge_num_hint"><font size="14">请输入想要充值的金额</font></string>
+    <string name="my_record_fund">资金记录</string>
 </resources>

@@ -33,7 +33,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp">
+                android:layout_height="192dp">
 
                 <ImageView
                     android:id="@+id/banner"
@@ -76,9 +76,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="12dp"
+                    style="@style/setting_text_style"
                     android:text="@string/my_wallet" />
 
                 <View
@@ -95,6 +93,7 @@
                     android:id="@+id/balance"
                     android:layout_width="wrap_content"
                     android:text="0.00"
+                    android:paddingRight="12dp"
                     android:textColor="#333333"
                     android:layout_height="wrap_content" />
                 <ImageView
@@ -116,9 +115,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="12dp"
+                    style="@style/setting_text_style"
                     android:text="我的订单" />
 
                 <View
@@ -146,9 +143,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="12dp"
+                    style="@style/setting_text_style"
                     android:text="我的辅导" />
 
                 <View
@@ -178,9 +173,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="12dp"
+                    style="@style/setting_text_style"
                     android:text="@string/security_management" />
 
                 <View
@@ -209,11 +202,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="12dp"
-                    android:paddingLeft="12dp"
-                    android:paddingBottom="12dp"
+                    style="@style/setting_text_style"
                     android:text="@string/setting" />
 
                 <TextView
@@ -221,7 +210,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="top"
-                    android:paddingTop="9dp"
+                    android:paddingTop="12dp"
                     android:text="@string/new_edition"
                     android:textColor="#e20914"
                     android:textSize="10dp" />

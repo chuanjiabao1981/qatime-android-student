@@ -12,20 +12,19 @@ import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
 
 public class BaseFragment extends Fragment {
-    private RequestQueue Queue;
+    private RequestQueue Queue = BaseApplication.getRequestQueue();
     protected boolean isLoad = false;
     private AlertDialog alertDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Queue = Volley.newRequestQueue(getActivity());
+//        Queue = Volley.newRequestQueue(getActivity());
     }
 
     public void onShow() {

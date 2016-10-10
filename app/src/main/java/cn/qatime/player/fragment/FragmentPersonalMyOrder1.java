@@ -24,6 +24,8 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.orhanobut.logger.Logger;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -36,11 +38,12 @@ import cn.qatime.player.activity.OrderPayActivity;
 import cn.qatime.player.activity.PersonalMyOrderUnpaidDetailActivity;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.MyOrderBean;
+import cn.qatime.player.bean.PayResultState;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.OrderDetailBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
@@ -58,6 +61,7 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_personal_my_order1, container, false);
+        EventBus.getDefault().register(this);
         initview(view);
         return view;
 
@@ -189,24 +193,39 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), PersonalMyOrderUnpaidDetailActivity.class);
-                intent.putExtra("id", list.get(position - 1).getId());
-                OrderDetailBean bean = new OrderDetailBean();
-                bean.id = list.get(position - 1).getProduct().getId();
-                bean.image = list.get(position - 1).getProduct().getPublicize();
-                bean.name = list.get(position - 1).getProduct().getName();
-                bean.subject = list.get(position - 1).getProduct().getSubject();
-                bean.grade = list.get(position - 1).getProduct().getGrade();
-                bean.status = list.get(position - 1).getStatus();
-                bean.teacher = list.get(position - 1).getProduct().getTeacher_name();
-                bean.Preset_lesson_count = list.get(position - 1).getProduct().getPreset_lesson_count();
-                bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
-                bean.price = list.get(position - 1).getProduct().getPrice();
-                intent.putExtra("data", bean);
-                intent.putExtra("payType", list.get(position - 1).getPay_type());
-                intent.putExtra("created_at", list.get(position - 1).getCreated_at());
-                startActivity(intent);
+//                intent.putExtra("id", list.get(position - 1).getId());
+//                OrderDetailBean bean = new OrderDetailBean();
+//                bean.id = list.get(position - 1).getProduct().getId();
+//                bean.image = list.get(position - 1).getProduct().getPublicize();
+//                bean.name = list.get(position - 1).getProduct().getName();
+//                bean.subject = list.get(position - 1).getProduct().getSubject();
+//                bean.grade = list.get(position - 1).getProduct().getGrade();
+//                bean.status = list.get(position - 1).getStatus();
+//                bean.teacher = list.get(position - 1).getProduct().getTeacher_name();
+//                bean.Preset_lesson_count = list.get(position - 1).getProduct().getPreset_lesson_count();
+//                bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
+//                bean.price = list.get(position - 1).getProduct().getPrice();
+                intent.putExtra("data",  list.get(position-1));
+//                intent.putExtra("payType", list.get(position - 1).getPay_type());
+//                intent.putExtra("created_at", list.get(position - 1).getCreated_at());
+                startActivityForResult(intent, Constant.REQUEST);
+
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
+            Logger.e("订单取消返回");
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    listView.onRefreshComplete();
+                }
+            }, 200);
+            initData(1);
+        }
     }
 
     @Override
@@ -304,13 +323,13 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
                     @Override
                     protected void onSuccess(JSONObject response) {
                         list.remove(position);
-                        Toast.makeText(getActivity(), "订单取消成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getResourceString(R.string.order_cancel_success), Toast.LENGTH_SHORT).show();
                         adapter.notifyDataSetChanged();
                     }
 
                     @Override
                     protected void onError(JSONObject response) {
-                        Toast.makeText(getActivity(), "取消订单失败，请稍后再试", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getResourceString(R.string.order_cancel_failed), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -327,5 +346,21 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
         addToRequestQueue(request);
     }
 
+    @Subscribe
+    public void onEvent(PayResultState code) {
+//        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
+//
+//            finish();
+//        }
+        if (!isLoad) {
+            initData(1);
+        }
+    }
 
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }

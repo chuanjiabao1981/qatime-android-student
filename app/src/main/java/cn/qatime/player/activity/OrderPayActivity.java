@@ -26,7 +26,7 @@ import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.bean.PayResult;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.Constant;
-import libraryextra.bean.OrderConfirmBean;
+import libraryextra.bean.AppPayParamsBean;
 
 public class OrderPayActivity extends BaseActivity {
     TextView code;
@@ -40,7 +40,7 @@ public class OrderPayActivity extends BaseActivity {
 
 
     DecimalFormat df = new DecimalFormat("#.00");
-    private OrderConfirmBean.DataBean.AppPayParamsBean weixinData;
+    private AppPayParamsBean weixinData;
     private String payType = "weixin";
     private String aliPayData;
     private Handler hd = new Handler() {
@@ -95,7 +95,7 @@ public class OrderPayActivity extends BaseActivity {
 
     private void initData() {
         if (payType.equals("weixin")) {
-            weixinData = (OrderConfirmBean.DataBean.AppPayParamsBean) getIntent().getSerializableExtra("data");
+            weixinData = (AppPayParamsBean) getIntent().getSerializableExtra("data");
         } else if (payType.equals("alipay")) {
             aliPayData = getIntent().getStringExtra("data");
         }
@@ -110,6 +110,8 @@ public class OrderPayActivity extends BaseActivity {
             type.setText(getResourceString(R.string.method_payment) + getResourceString(R.string.pay_alipay));
         } else if (payType.equals("weixin")) {
             type.setText(getResourceString(R.string.method_payment) + getResourceString(R.string.pay_wexin));
+        }else {
+            type.setText(getResourceString(R.string.method_payment) + getResourceString(R.string.pay_account));
         }
         this.price.setText(getResourceString(R.string.amount_payment) + "：￥" + price);
     }
@@ -167,6 +169,13 @@ public class OrderPayActivity extends BaseActivity {
                     // 必须异步调用
                     Thread payThread = new Thread(payRunnable);
                     payThread.start();
+                }else if(payType.equals("account")){
+                    Logger.e("钱包支付");
+                    // TODO: 2016/10/8  钱包支付
+//                    Intent intent = new Intent(OrderPayActivity.this,OrderPayResultActivity.class);
+//                    intent.putExtra("state",PayResultState.SUCCESS);
+//                    startActivity(intent);
+//                    finish();
                 }
             }
         });

@@ -2,7 +2,6 @@ package cn.qatime.player.activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,8 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,22 +45,50 @@ import libraryextra.utils.VolleyListener;
  */
 public class RechargeActivity extends BaseActivity {
     private EditText rechargeNum;
-    private RadioGroup radioGroup;
-    private RadioButton wechatPay;
-    private RadioButton alipay;
+    private ImageView wechatPay;
+    private ImageView alipay;
     private Button rechargeNow;
     private AlertDialog alertDialog;
     private static final int DECIMAL_DIGITS = 2;//小数的位数
-    private TextView phone;
-    private AlertDialog alertDialogPhone;
+    private View wechatLayout;
+    private View alipayLayout;
+    private String payType = "weixin";
+//    private TextView phone;
+//    private AlertDialog alertDialogPhone;
 
     private void assignViews() {
         rechargeNum = (EditText) findViewById(R.id.recharge_num);
-        radioGroup = (RadioGroup) findViewById(R.id.radio_group);
-        wechatPay = (RadioButton) findViewById(R.id.wechat_pay);
-        alipay = (RadioButton) findViewById(R.id.alipay);
+        wechatLayout = findViewById(R.id.wechat_layout);
+        alipayLayout = findViewById(R.id.alipay_layout);
+        wechatPay = (ImageView) findViewById(R.id.wechat_pay);
+        alipay = (ImageView) findViewById(R.id.alipay);
         rechargeNow = (Button) findViewById(R.id.recharge_now);
-        phone = (TextView) findViewById(R.id.phone);
+//        phone = (TextView) findViewById(R.id.phone);
+
+
+        alipayLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                payType = "alipay";
+                alipay.setImageResource(R.mipmap.radiobutton_selected);
+                wechatPay.setImageResource(R.mipmap.radiobutton_unselected);
+
+                //TODO 集成完支付宝后，去掉下面这段
+                Toast.makeText(RechargeActivity.this, getResourceString(R.string.not_support_alipay), Toast.LENGTH_SHORT).show();
+                wechatPay.setImageResource(R.mipmap.radiobutton_selected);
+                alipay.setImageResource(R.mipmap.radiobutton_unselected);
+                payType = "weixin";
+            }
+        });
+        wechatLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                payType = "weixin";
+                wechatPay.setImageResource(R.mipmap.radiobutton_selected);
+                alipay.setImageResource(R.mipmap.radiobutton_unselected);
+            }
+        });
+
     }
 
 
@@ -77,38 +103,38 @@ public class RechargeActivity extends BaseActivity {
     }
 
     private void initListener() {
-        phone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (alertDialogPhone == null) {
-                    View view = View.inflate(RechargeActivity.this, R.layout.dialog_cancel_or_confirm, null);
-                    TextView text = (TextView) view.findViewById(R.id.text);
-                    text.setText(getResourceString(R.string.call_customer_service_phone) + phone.getText() + "?");
-                    Button cancel = (Button) view.findViewById(R.id.cancel);
-                    Button confirm = (Button) view.findViewById(R.id.confirm);
-                    cancel.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            alertDialogPhone.dismiss();
-                        }
-                    });
-                    confirm.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
-                            startActivity(intent);
-                            alertDialogPhone.dismiss();
-                        }
-                    });
-                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(RechargeActivity.this);
-                    alertDialogPhone = builder.create();
-                    alertDialogPhone.show();
-                    alertDialogPhone.setContentView(view);
-                } else {
-                    alertDialogPhone.show();
-                }
-            }
-        });
+//        phone.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (alertDialogPhone == null) {
+//                    View view = View.inflate(RechargeActivity.this, R.layout.dialog_cancel_or_confirm, null);
+//                    TextView text = (TextView) view.findViewById(R.id.text);
+//                    text.setText(getResourceString(R.string.call_customer_service_phone) + phone.getText() + "?");
+//                    Button cancel = (Button) view.findViewById(R.id.cancel);
+//                    Button confirm = (Button) view.findViewById(R.id.confirm);
+//                    cancel.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            alertDialogPhone.dismiss();
+//                        }
+//                    });
+//                    confirm.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
+//                            startActivity(intent);
+//                            alertDialogPhone.dismiss();
+//                        }
+//                    });
+//                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(RechargeActivity.this);
+//                    alertDialogPhone = builder.create();
+//                    alertDialogPhone.show();
+//                    alertDialogPhone.setContentView(view);
+//                } else {
+//                    alertDialogPhone.show();
+//                }
+//            }
+//        });
 
         rechargeNum.setCustomSelectionActionModeCallback(new ActionMode.Callback() {//禁止复制粘贴
             @Override
@@ -184,8 +210,12 @@ public class RechargeActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 String amount = rechargeNum.getText().toString();
-                if (StringUtils.isNullOrBlanK(amount) || Double.valueOf(amount) == 0) {
+                if (StringUtils.isNullOrBlanK(amount)) {
                     Toast.makeText(RechargeActivity.this, R.string.amount_can_not_null, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (Double.valueOf(amount) == 0) {
+                    Toast.makeText(RechargeActivity.this, R.string.amount_can_not_zero, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (Double.valueOf(amount) > Math.pow(10, 6)) {
@@ -195,10 +225,9 @@ public class RechargeActivity extends BaseActivity {
 
                 if (amount.endsWith(".")) amount += "0";
                 rechargeNow.setEnabled(false);
-                String pay_type = radioGroup.getCheckedRadioButtonId() == R.id.wechat_pay ? "weixin" : "alipay";
                 Map<String, String> map = new HashMap<>();
                 map.put("amount", amount);
-                map.put("pay_type", pay_type);
+                map.put("pay_type", payType);
                 addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/recharges", map), null, new VolleyListener(RechargeActivity.this) {
 
                     @Override
@@ -216,6 +245,7 @@ public class RechargeActivity extends BaseActivity {
                             intent.putExtra("amount", data.getAmount());
                             intent.putExtra("pay_type", data.getPay_type());
                             intent.putExtra("created_at", data.getCreated_at());
+                            // TODO: 2016/10/9  判断是微信还是支付宝
                             intent.putExtra("app_pay_params", data.getApp_pay_params());
                             startActivity(intent);
                             SPUtils.put(RechargeActivity.this, "RechargeId", data.getId());

@@ -24,8 +24,10 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.PayResultState;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.utils.SPUtils;
 import libraryextra.utils.VolleyListener;
 
 /**
@@ -60,13 +62,13 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
 
         setContentView(R.layout.activity_personal_my_wallet);
         setTitle(getResourceString(R.string.my_wallet));
-        setRightText("说明", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(PersonalMyWalletActivity.this, RechargeProcessActivity.class);
-                startActivity(intent);
-            }
-        });
+//        setRightText("说明", new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(PersonalMyWalletActivity.this, RechargeProcessActivity.class);
+//                startActivity(intent);
+//            }
+//        });
         assignViews();
         EventBus.getDefault().register(this);
         initData();
@@ -74,6 +76,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
         phone.setOnClickListener(this);
         consumptionRecord.setOnClickListener(this);
         rechargeRecord.setOnClickListener(this);
+        SPUtils.put(PersonalMyWalletActivity.this,"balance",balance.getText().toString());
     }
 
     private void initData() {
@@ -92,6 +95,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
                         price = "0" + price;
                     }
                     balance.setText(price);
+                    SPUtils.put(PersonalMyWalletActivity.this,"balance",balance.getText().toString());
                     String price1 = df.format(Double.valueOf(response.getJSONObject("data").getString("total_expenditure")));
                     if (price1.startsWith(".")) {
                         price1 = "0" + price1;
@@ -134,9 +138,9 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
                     confirm.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            alertDialog.dismiss();
                             Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
                             startActivity(intent);
-                            alertDialog.dismiss();
                         }
                     });
                     android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(PersonalMyWalletActivity.this);
@@ -150,7 +154,6 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
             case R.id.recharge:
                 // TODO: 2016/9/27  充值
                 Intent intent = new Intent(this, RechargeActivity.class);
-                intent.putExtra("page", 0);
                 startActivity(intent);
                 break;
             case R.id.recharge_record:
@@ -173,6 +176,8 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
 //            finish();
 //        }
         initData();
+        //接收到充值信息后,设置返回码刷新数据
+        setResult(Constant.RESPONSE);
     }
     @Override
     protected void onDestroy() {
