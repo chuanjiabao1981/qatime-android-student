@@ -102,15 +102,14 @@ public class FragmentFundRecord2 extends BaseFragment {
 
             @Override
             public void convert(ViewHolder helper, ConsumptionRecordBean.DataBean item, int position) {
-                helper.setText(R.id.id, item.getId());
-                String price = df.format(Double.valueOf(item.getAmount()));
+                String price = df.format(0 - Double.valueOf(item.getAmount()));
                 if (price.startsWith(".")) {
                     price = "0" + price;
                 }
                 helper.setText(R.id.money_amount, "-￥" + price);
                 helper.setText(R.id.time, item.getCreated_at());
                 helper.setText(R.id.mode, getChangeType(item.getChange_type()));
-                helper.setText(R.id.type, getTargetType(item.getTarget_type()));
+                helper.setText(R.id.type, item.getTarget_type());
             }
         };
         listView.setAdapter(adapter);
@@ -144,29 +143,11 @@ public class FragmentFundRecord2 extends BaseFragment {
                 return "微信支付";
             case "alipay":
                 return "支付宝";
-            case "offline":
-                return "线下支付";
+            case "account":
+                return "余额支付";
         }
-        return "微信支付";
+        return "余额支付";
     }
 
-    private String getTargetType(String target_type) {
-        switch (target_type) {
-            case "weixin":
-                return "课程";
-            case "alipay":
-                return "家庭作业批改";
-            case "offline":
-                return "随堂作业批改";
-            case "1":
-                return "日常问题解答";
-            case "2":
-                return "随堂问题解答";
-            case "3":
-                return "辅导班";
-
-        }
-        return "课程";
-    }
 
 }

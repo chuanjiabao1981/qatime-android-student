@@ -12,8 +12,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="144dp"
             android:background="#bfbdbd"
+            android:scaleType="centerCrop"
             android:orientation="vertical"
             android:gravity="center_vertical"
             android:padding="10dp">

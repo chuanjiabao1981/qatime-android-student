@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.DateUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.ClassTimeTableBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
@@ -34,7 +36,6 @@ import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.view.MonthDateView;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import cn.qatime.player.base.BaseActivity;
 import libraryextra.utils.DensityUtils;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
@@ -176,7 +177,7 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                 }, 300);
                 initData();
             }
-        } );
+        });
 
         ImageView ivLeft = (ImageView) findViewById(R.id.iv_left);
         ImageView ivRight = (ImageView) findViewById(R.id.iv_right);
@@ -193,6 +194,17 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
             public void onClickOnDate() {
                 getDate();
                 filterList();
+            }
+        });
+        monthDateView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_MOVE:
+                        Logger.e("calander move");
+                        break;
+                }
+                return false;
             }
         });
     }
