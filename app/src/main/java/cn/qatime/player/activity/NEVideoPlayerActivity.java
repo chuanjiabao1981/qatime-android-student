@@ -3,7 +3,6 @@ package cn.qatime.player.activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,12 +105,12 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         videoPlayer.setOnVideoRefreshListener(new QaVideoPlayer.VideoRefreshListener() {
             @Override
             public void onRefresh() {
-                if (!StringUtils.isNullOrBlanK(url)) {
-                    videoPlayer.release_resource();
-                    videoPlayer.setVideoPath(url);
-                    videoPlayer.setOnControlListener(NEVideoPlayerActivity.this);
-                    videoPlayer.start();
-                }
+//                if (!StringUtils.isNullOrBlanK(url)) {
+//                    videoPlayer.release_resource();
+//                    videoPlayer.setVideoPath(url);
+//                    videoPlayer.setOnControlListener(NEVideoPlayerActivity.this);
+//                    videoPlayer.start();
+//                }
             }
         });
         initView();

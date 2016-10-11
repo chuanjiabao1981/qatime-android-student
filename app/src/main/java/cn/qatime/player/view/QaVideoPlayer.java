@@ -452,10 +452,10 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
                 }
                 break;
             case R.id.zoom://横竖屏
-                if (((Activity) getContext()).getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {//
-                    ((Activity) getContext()).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                } else {
+                if (((Activity) getContext()).getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {//
                     ((Activity) getContext()).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                } else {
+                    ((Activity) getContext()).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                 }
 
                 break;
@@ -510,9 +510,11 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
                 }
                 break;
             case R.id.refresh://刷新视频
-                if (videoRefreshListener != null) {
-                    videoRefreshListener.onRefresh();
-                }
+//                if (videoRefreshListener != null) {
+//                    videoRefreshListener.onRefresh();
+//                }
+                int playableDuration = videoView.getPlayableDuration();
+                videoView.seekTo(playableDuration);
                 break;
         }
     }
