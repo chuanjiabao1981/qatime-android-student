@@ -2,10 +2,10 @@ package cn.qatime.player.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.format.DateUtils;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -83,12 +83,17 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                             }
                             monthDateView.setDaysHasThingList(alertList);
                             filterList();
+                            listView.onRefreshComplete();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
 
                     protected void onError(JSONObject response) {
+                        String label = DateUtils.formatDateTime(ClassTimeTableActivity.this, System.currentTimeMillis(),
+                                DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+                        listView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
+                        listView.onRefreshComplete();
                     }
 
                     @Override
@@ -166,15 +171,6 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        String label = DateUtils.formatDateTime(ClassTimeTableActivity.this, System.currentTimeMillis(),
-                                DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
-                        listView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
-                        listView.onRefreshComplete();
-                    }
-                }, 300);
                 initData();
             }
         });
@@ -197,11 +193,27 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
             }
         });
         monthDateView.setOnTouchListener(new View.OnTouchListener() {
+            private float rawX;
+            private float newX;
+
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        rawX = event.getRawX();
+                        break;
                     case MotionEvent.ACTION_MOVE:
-                        Logger.e("calander move");
+                        newX = event.getRawX();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        int scaledTouchSlop = ViewConfiguration.get(getApplicationContext()).getScaledPagingTouchSlop();
+                        if (rawX - newX > scaledTouchSlop) {
+                            monthDateView.onRightClick();
+                        } else if (newX - rawX > scaledTouchSlop) {
+                            monthDateView.onLeftClick();
+                        }
+                        rawX = 0;
+                        newX = 0;
                         break;
                 }
                 return false;
