@@ -127,6 +127,7 @@ public class FragmentPersonalMyOrder2 extends BaseFragment {
                 intent.putExtra("id", list.get(position - 1).getId());
                 OrderDetailBean bean = new OrderDetailBean();
                 bean.image = list.get(position - 1).getProduct().getPublicize();
+                bean.id = list.get(position - 1).getProduct().getId();
                 bean.name = list.get(position - 1).getProduct().getName();
                 bean.subject = list.get(position - 1).getProduct().getSubject();
                 bean.status = list.get(position - 1).getStatus();
