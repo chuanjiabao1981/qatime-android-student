@@ -192,33 +192,6 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                 filterList();
             }
         });
-        monthDateView.setOnTouchListener(new View.OnTouchListener() {
-            private float rawX;
-            private float newX;
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        rawX = event.getRawX();
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        newX = event.getRawX();
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        int scaledTouchSlop = ViewConfiguration.get(getApplicationContext()).getScaledPagingTouchSlop();
-                        if (rawX - newX > scaledTouchSlop) {
-                            monthDateView.onRightClick();
-                        } else if (newX - rawX > scaledTouchSlop) {
-                            monthDateView.onLeftClick();
-                        }
-                        rawX = 0;
-                        newX = 0;
-                        break;
-                }
-                return false;
-            }
-        });
     }
 
     private void getDate() {
