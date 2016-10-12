@@ -4,8 +4,7 @@
 /.idea/workspace.xml
 /.idea/libraries
 .DS_Store
-/build
 /captures
 .idea/
-library_pulltorefresh/build
 *.apk
+build/
