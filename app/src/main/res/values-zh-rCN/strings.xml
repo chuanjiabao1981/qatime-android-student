@@ -200,7 +200,7 @@
     <string name="class_init">未开始</string>
     <string name="class_ready">待上课</string>
     <string name="class_paused_inner">暂停中</string>
-    <string name="class_over">已结束</string>
+    <string name="class_over">已直播</string>
     <!--//订单支付-->
     <string name="use">使用</string>
     <string name="fail_pay">不能支付</string>
