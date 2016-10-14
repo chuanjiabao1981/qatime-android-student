@@ -70,11 +70,11 @@ public class BaseApplication extends Application {
         Queue = Volley.newRequestQueue(getApplicationContext());
 
         profile = SPUtils.getObject(this, "profile", Profile.class);
-        initUmeng();
+        initUmengPush();
         initYunxin();
     }
 
-    private void initUmeng() {
+    private void initUmengPush() {
         final PushAgent mPushAgent = PushAgent.getInstance(this);
         mPushAgent.setDebugMode(UrlUtils.isDebug);
 

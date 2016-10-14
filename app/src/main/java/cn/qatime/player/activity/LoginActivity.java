@@ -17,6 +17,8 @@ import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.orhanobut.logger.Logger;
+import com.umeng.message.PushAgent;
+import com.umeng.message.UTrack;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -171,10 +173,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                 Logger.e("登录", response.toString());
                                 SPUtils.put(LoginActivity.this, "username", username.getText().toString());
                                 profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
+                                if (profile != null && profile.getData() != null && profile.getData().getUser() != null && profile.getData().getUser().getId() != 0) {
+                                    PushAgent.getInstance(LoginActivity.this).addAlias(String.valueOf(profile.getData().getUser().getId()), "student", new UTrack.ICallBack() {
+                                        @Override
+                                        public void onMessage(boolean b, String s) {
+
+                                        }
+                                    });
+                                }
                                 if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
-
                                     BaseApplication.setProfile(profile);
-
                                     checkUserInfo();
                                 } else {
                                     //没有数据或token
