@@ -1,9 +1,9 @@
 package cn.qatime.player.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -148,9 +148,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                             TextView desc = (TextView) view.findViewById(R.id.desc);
                             desc.setMaxHeight(DensityUtils.dp2px(SystemSettingActivity.this, 300));
                             try {
-                                if (!response.getJSONObject("data").getBoolean("enforce")) {
-                                    x.setOnClickListener(SystemSettingActivity.this);
-                                }
+                                x.setOnClickListener(SystemSettingActivity.this);
                                 String descStr = response.getJSONObject("data").getString("description");
                                 desc.setText(StringUtils.isNullOrBlanK(descStr) ? getResourceString(R.string.performance_optimization) : descStr);
                                 downLoadLinks = response.getJSONObject("data").getString("download_links");
@@ -162,16 +160,8 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                             alertDialog = builder.create();
                             alertDialog.show();
                             alertDialog.setContentView(view);
-                            view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                                @Override
-                                public void onGlobalLayout() {
-                                    if (DensityUtils.px2dp(SystemSettingActivity.this, alertDialog.getWindow().getAttributes().height) > 500) {
-                                        alertDialog.getWindow().setLayout(DensityUtils.dp2px(SystemSettingActivity.this, 300), DensityUtils.dp2px(SystemSettingActivity.this, 500));
-                                    } else {
-                                        alertDialog.getWindow().setLayout(DensityUtils.dp2px(SystemSettingActivity.this, 300), alertDialog.getWindow().getAttributes().height);
-                                    }
-                                }
-                            });
+                            alertDialog.setCanceledOnTouchOutside(false);
+                            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable());
                         }
                     }
 
@@ -206,6 +196,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 startActivity(intent);
                 break;
             case R.id.download:
+                alertDialog.dismiss();
                 //TODO 更新版本
                 Toast.makeText(SystemSettingActivity.this, getResourceString(R.string.start_download), Toast.LENGTH_SHORT).show();
                 DownFileUtil downFileUtil = new DownFileUtil(this, downLoadLinks, "qatime.apk", "", "qatime.apk") {
@@ -220,7 +211,6 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                     }
                 };
                 downFileUtil.downFile();
-                alertDialog.dismiss();
                 break;
             case R.id.image_x:
                 alertDialog.dismiss();

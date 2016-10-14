@@ -70,13 +70,13 @@ public class RechargeActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 payType = "alipay";
-                alipay.setImageResource(R.mipmap.radiobutton_selected);
-                wechatPay.setImageResource(R.mipmap.radiobutton_unselected);
+                alipay.setImageResource(R.drawable.shape_select_circle_select);
+                wechatPay.setImageResource(R.drawable.shape_select_circle_normal);
 
                 //TODO 集成完支付宝后，去掉下面这段
                 Toast.makeText(RechargeActivity.this, getResourceString(R.string.not_support_alipay), Toast.LENGTH_SHORT).show();
-                wechatPay.setImageResource(R.mipmap.radiobutton_selected);
-                alipay.setImageResource(R.mipmap.radiobutton_unselected);
+                wechatPay.setImageResource(R.drawable.shape_select_circle_select);
+                alipay.setImageResource(R.drawable.shape_select_circle_normal);
                 payType = "weixin";
             }
         });
@@ -84,8 +84,8 @@ public class RechargeActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 payType = "weixin";
-                wechatPay.setImageResource(R.mipmap.radiobutton_selected);
-                alipay.setImageResource(R.mipmap.radiobutton_unselected);
+                wechatPay.setImageResource(R.drawable.shape_select_circle_select);
+                alipay.setImageResource(R.drawable.shape_select_circle_normal);
             }
         });
 
