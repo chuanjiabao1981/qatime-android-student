@@ -1,6 +1,7 @@
 package cn.qatime.player.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.umeng.message.UTrack;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +34,7 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
+import cn.qatime.player.utils.AppUtils;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -39,9 +42,11 @@ import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
 import libraryextra.utils.CheckUtil;
 import libraryextra.utils.DialogUtils;
+import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
+import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.CheckView;
 import libraryextra.view.CustomProgressDialog;
@@ -180,6 +185,39 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                                         }
                                     });
+                                    String deviceToken = PushAgent.getInstance(LoginActivity.this).getRegistrationId();
+                                    if (!StringUtils.isNullOrBlanK(deviceToken)) {
+                                        Map<String, String> m = new HashMap<>();
+                                        m.put("user_id", String.valueOf(profile.getData().getUser().getId()));
+                                        m.put("device_token", deviceToken);
+                                        m.put("device_model", Build.MODEL);
+                                        m.put("app_name", AppUtils.getAppName(LoginActivity.this));
+                                        m.put("app_version", AppUtils.getVersionName(LoginActivity.this));
+                                        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlDeviceInfo, m), null,
+                                                new VolleyListener(LoginActivity.this) {
+
+                                                    @Override
+                                                    protected void onSuccess(JSONObject response) {
+                                                    }
+
+                                                    @Override
+                                                    protected void onError(JSONObject response) {
+
+                                                    }
+
+                                                    @Override
+                                                    protected void onTokenOut() {
+                                                        tokenOut();
+                                                    }
+
+                                                }, new VolleyErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError volleyError) {
+                                                super.onErrorResponse(volleyError);
+                                            }
+                                        });
+                                        addToRequestQueue(request);
+                                    }
                                 }
                                 if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
                                     BaseApplication.setProfile(profile);
