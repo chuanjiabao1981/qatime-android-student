@@ -1,14 +1,16 @@
 package cn.qatime.player.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -27,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
-import cn.qatime.player.activity.RechargeConfirmActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.PayResultState;
@@ -37,7 +38,6 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.SPUtils;
 import libraryextra.utils.VolleyListener;
 
 /**
@@ -55,7 +55,7 @@ public class FragmentFundRecord2 extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_fund_record1, container, false);
+        View view = inflater.inflate(R.layout.fragment_fund_record2, container, false);
         EventBus.getDefault().register(this);
         initview(view);
         return view;
@@ -126,7 +126,7 @@ public class FragmentFundRecord2 extends BaseFragment {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
 
-        adapter = new CommonAdapter<RechargeRecordBean.DataBean>(getActivity(), data, R.layout.item_fragment_fund_record1) {
+        adapter = new CommonAdapter<RechargeRecordBean.DataBean>(getActivity(), data, R.layout.item_fragment_fund_record2) {
 
             @Override
             public void convert(ViewHolder helper, RechargeRecordBean.DataBean item, int position) {
@@ -159,20 +159,43 @@ public class FragmentFundRecord2 extends BaseFragment {
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View itemView, int position, long id) {
                 RechargeRecordBean.DataBean dataBean = data.get(position - 1);
                 String status = dataBean.getStatus();
                 if ("unpaid".equals(status)) {//如果是未支付进行跳转
-                    Intent intent = new Intent(getActivity(), RechargeConfirmActivity.class);
-                    intent.putExtra("id", dataBean.getId());
-                    intent.putExtra("amount", dataBean.getAmount());
-                    intent.putExtra("pay_type", dataBean.getPay_type());
-                    intent.putExtra("created_at", dataBean.getCreated_at());
-                    // TODO: 2016/10/9  判断是微信还是支付宝
-                    intent.putExtra("app_pay_params", dataBean.getApp_pay_params());
-                    startActivity(intent);
-                    SPUtils.put(getActivity(), "RechargeId", dataBean.getId());
-                    SPUtils.put(getActivity(), "amount", dataBean.getAmount());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    final AlertDialog alertDialog = builder.create();
+                    View view = View.inflate(getActivity(), R.layout.dialog_cancel_or_confirm, null);
+                    TextView text = (TextView) view.findViewById(R.id.text);
+                    text.setText("是否放弃此提现？");
+                    Button cancel = (Button) view.findViewById(R.id.cancel);
+                    Button confirm = (Button) view.findViewById(R.id.confirm);
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialog.dismiss();
+                        }
+                    });
+                    confirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // TODO: 2016/10/17 取消提现
+//                CancelOrder(position, id);
+                            alertDialog.dismiss();
+                        }
+                    });
+                    alertDialog.show();
+                    alertDialog.setContentView(view);
+//                    Intent intent = new Intent(getActivity(), RechargeConfirmActivity.class);
+//                    intent.putExtra("id", dataBean.getId());
+//                    intent.putExtra("amount", dataBean.getAmount());
+//                    intent.putExtra("pay_type", dataBean.getPay_type());
+//                    intent.putExtra("created_at", dataBean.getCreated_at());
+//                    // TODO: 2016/10/9  判断是微信还是支付宝
+//                    intent.putExtra("app_pay_params", dataBean.getApp_pay_params());
+//                    startActivity(intent);
+//                    SPUtils.put(getActivity(), "RechargeId", dataBean.getId());
+//                    SPUtils.put(getActivity(), "amount", dataBean.getAmount());
                 }
             }
         });

@@ -75,7 +75,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginLeft="20dp"
-                                        android:text="订单编号" />
+                                        android:text="编&#8195;&#8195;号" />
 
                                     <TextView
                                         android:id="@+id/orderId"
@@ -96,7 +96,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginLeft="20dp"
-                                        android:text="支付金额" />
+                                        android:text="提现金额" />
 
                                     <TextView
                                         android:id="@+id/price"
@@ -126,28 +126,6 @@
                                     android:textSize="16sp" />
                             </LinearLayout>
                         </RelativeLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:visibility="visible">
-                        <TextView
-                            android:id="@+id/look"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="查看" />
-
-                        <TextView
-                            android:id="@+id/view_order"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="3dp"
-                            android:text="我的订单"
-                            android:textColor="#00e1ff" />
                     </LinearLayout>
                 </LinearLayout>
 

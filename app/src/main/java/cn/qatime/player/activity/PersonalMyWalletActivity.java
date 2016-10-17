@@ -159,7 +159,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
                 startActivity(intent);
                 break;
             case R.id.withdraw_cash:
-                intent = new Intent(this, WithdrawCashActivity.class);
+                intent = new Intent(this, WithdrawCash1Activity.class);
                 startActivity(intent);
                 break;
             case R.id.recharge_record:

@@ -1,6 +1,7 @@
 package cn.qatime.player.activity;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,7 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -20,13 +21,14 @@ import org.greenrobot.eventbus.Subscribe;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.bean.PayResultState;
+import libraryextra.utils.StringUtils;
 
 /**
  * @author Tianhaoranly
  * @date 2016/10/17 9:38
  * @Description:
  */
-public class WithdrawCashActivity extends BaseActivity{
+public class WithdrawCash1Activity extends BaseActivity{
     private EditText rechargeNum;
     private LinearLayout toBankLayout;
     private ImageView toBank;
@@ -65,7 +67,7 @@ public class WithdrawCashActivity extends BaseActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_withdraw_cash);
+        setContentView(R.layout.activity_withdraw1_cash);
         setTitle(getResourceString(R.string.withdraw_cash));
         EventBus.getDefault().register(this);
         assignViews();
@@ -143,90 +145,30 @@ public class WithdrawCashActivity extends BaseActivity{
             }
         });
 
-//        rechargeNow.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                String amount = rechargeNum.getText().toString();
-//                if (StringUtils.isNullOrBlanK(amount)) {
-//                    Toast.makeText(WithdrawCashActivity.this, R.string.amount_can_not_null, Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                if (Double.valueOf(amount) == 0) {
-//                    Toast.makeText(WithdrawCashActivity.this, R.string.amount_can_not_zero, Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                if (Double.valueOf(amount) > Math.pow(10, 6)) {
-//                    Toast.makeText(WithdrawCashActivity.this, "金额不支持", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//
-//                if (amount.endsWith(".")) amount += "0";
-//                rechargeNow.setEnabled(false);
-//                Map<String, String> map = new HashMap<>();
-//                map.put("amount", amount);
-//                map.put("pay_type", payType);
-//                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/recharges", map), null, new VolleyListener(WithdrawCashActivity.this) {
-//
-//                    @Override
-//                    protected void onTokenOut() {
-//                        tokenOut();
-//                        rechargeNow.setEnabled(true);
-//                    }
-//
-//                    @Override
-//                    protected void onSuccess(JSONObject response) {
-//                        if (!response.isNull("data")) {
-//                            Intent intent = new Intent(WithdrawCashActivity.this, RechargeConfirmActivity.class);
-//                            RechargeBean.DataBean data = JsonUtils.objectFromJson(response.toString(), RechargeBean.class).getData();
-//                            intent.putExtra("id", data.getId());
-//                            intent.putExtra("amount", data.getAmount());
-//                            intent.putExtra("pay_type", data.getPay_type());
-//                            intent.putExtra("created_at", data.getCreated_at());
-//                            // TODO: 2016/10/9  判断是微信还是支付宝
-//                            intent.putExtra("app_pay_params", data.getApp_pay_params());
-//                            startActivity(intent);
-//                            SPUtils.put(WithdrawCashActivity.this, "RechargeId", data.getId());
-//                            SPUtils.put(WithdrawCashActivity.this, "amount", data.getAmount());
-//                        } else {
-//                            dialog();
-//                        }
-//                        rechargeNow.setEnabled(true);
-//                    }
-//
-//                    @Override
-//                    protected void onError(JSONObject response) {
-//                        dialog();
-//                        rechargeNow.setEnabled(true);
-//                    }
-//                }, new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError volleyError) {
-//                        rechargeNow.setEnabled(true);
-//                    }
-//                }));
-//            }
-//        });
-    }
-    protected void dialog() {
-        if (alertDialog == null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            alertDialog = builder.create();
-            View view = View.inflate(this, R.layout.dialog_confirm, null);
-            Button confirm = (Button) view.findViewById(R.id.confirm);
-            TextView text = (TextView) view.findViewById(R.id.text);
-            text.setText(getResourceString(R.string.recharge_server_basy_please_try_again));
-            confirm.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    alertDialog.dismiss();
+        rechargeNow.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                String amount = rechargeNum.getText().toString();
+                if (StringUtils.isNullOrBlanK(amount)) {
+                    Toast.makeText(WithdrawCash1Activity.this, R.string.amount_can_not_null, Toast.LENGTH_SHORT).show();
+                    return;
                 }
-            });
-            alertDialog.show();
-            alertDialog.setContentView(view);
-        } else {
-            alertDialog.show();
-        }
+                if (Double.valueOf(amount) == 0) {
+                    Toast.makeText(WithdrawCash1Activity.this, R.string.amount_can_not_zero, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (Double.valueOf(amount) > Math.pow(10, 6)) {
+                    Toast.makeText(WithdrawCash1Activity.this, "金额不支持", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Intent intent = new Intent(WithdrawCash1Activity.this,WithdrawCash2Activity.class);
+                intent.putExtra("type", payType);
+                intent.putExtra("amount",amount);
+                startActivity(intent);
+
+            }
+        });
     }
 
     @Subscribe
