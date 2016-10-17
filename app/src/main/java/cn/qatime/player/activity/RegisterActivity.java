@@ -23,11 +23,9 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
-import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
-import libraryextra.bean.Profile;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -222,17 +220,11 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     Toast.makeText(RegisterActivity.this, getResourceString(R.string.please_set_information), Toast.LENGTH_SHORT).show();
                     Logger.e("注册成功" + response);
                     //下一步跳转
-                    Profile profile = new Profile();
-                    Profile.Data data = new Profile().new Data();
-                    data.setRemember_token(token);
-                    Profile.User user = new Profile().new User();
-                    user.setId(id);
-                    data.setUser(user);
-                    profile.setData(data);
-                    BaseApplication.setProfile(profile);
                     Intent intent = new Intent(RegisterActivity.this, RegisterPerfectActivity.class);
                     intent.putExtra("username", phone.getText().toString().trim());
                     intent.putExtra("password", password.getText().toString().trim());
+                    intent.putExtra("token", token);
+                    intent.putExtra("userId",id);
                     startActivityForResult(intent, Constant.REGIST);
 
                 } catch (JSONException e) {
