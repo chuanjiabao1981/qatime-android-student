@@ -43,6 +43,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
     private LinearLayout consumptionRecord;
     private TextView phone;
     private TextView recharge;
+    private TextView withdrawCash;
     private Dialog alertDialog;
     DecimalFormat df = new DecimalFormat("#.00");
 
@@ -54,6 +55,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
         consumptionRecord = (LinearLayout) findViewById(R.id.consumption_record);
         phone = (TextView) findViewById(R.id.phone);
         recharge = (TextView) findViewById(R.id.recharge);
+        withdrawCash = (TextView) findViewById(R.id.withdraw_cash);
     }
 
     @Override
@@ -76,6 +78,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
         phone.setOnClickListener(this);
         consumptionRecord.setOnClickListener(this);
         rechargeRecord.setOnClickListener(this);
+        withdrawCash.setOnClickListener(this);
         SPUtils.put(PersonalMyWalletActivity.this,"balance",balance.getText().toString());
     }
 
@@ -152,8 +155,11 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
                 }
                 break;
             case R.id.recharge:
-                // TODO: 2016/9/27  充值
                 Intent intent = new Intent(this, RechargeActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.withdraw_cash:
+                intent = new Intent(this, WithdrawCashActivity.class);
                 startActivity(intent);
                 break;
             case R.id.recharge_record:
