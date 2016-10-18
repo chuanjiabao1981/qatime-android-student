@@ -79,7 +79,6 @@
             android:id="@+id/money_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="6dp"
             android:singleLine="true"
             android:text="+￥500.00"
             android:textColor="#f00" />

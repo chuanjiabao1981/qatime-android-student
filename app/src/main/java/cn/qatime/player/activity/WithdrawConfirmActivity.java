@@ -82,6 +82,8 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
             case R.id.withdraw_cash_confirm:
                 // TODO: 2016/9/27  提现提交
                 Intent intent = new Intent(this,WithdrawResultActivity.class);
+                intent.putExtra("orderId",id.getText().toString());
+                intent.putExtra("price",amount.getText().toString());
                 startActivity(intent);
                 break;
 

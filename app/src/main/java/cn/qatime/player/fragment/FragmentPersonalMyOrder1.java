@@ -44,7 +44,6 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -127,8 +126,6 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
                                 intent.putExtra("price", item.getProduct().getPrice());
                                 intent.putExtra("type", item.getPay_type());
                                 startActivity(intent);
-                                SPUtils.put(getActivity(), "orderId", item.getId());
-                                SPUtils.put(getActivity(), "price", item.getProduct().getPrice());
                             }
                         });
                 helper.getView(R.id.cancel_order).setOnClickListener(

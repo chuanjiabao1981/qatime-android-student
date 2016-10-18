@@ -6,7 +6,6 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +31,6 @@ import libraryextra.bean.AppPayParamsBean;
 import libraryextra.bean.OrderConfirmBean;
 import libraryextra.bean.OrderPayBean;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.SPUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -50,7 +48,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     TextView payprice;
     private Button pay;
     private ImageView wechatPay;
-    private LinearLayout radioGroup;
     private int id;
     private String payType = "weixin";
     private int priceNumber = 0;
@@ -129,8 +126,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                                 AppPayParamsBean app_pay_params = data.getData().getApp_pay_params();
                                 intent.putExtra("data", app_pay_params);
                                 startActivity(intent);
-                                SPUtils.put(OrderConfirmActivity.this, "orderId", data.getData().getId());
-                                SPUtils.put(OrderConfirmActivity.this, "price", priceNumber);
                                 pay.setEnabled(true);
                             } else {
                                 dialog();
@@ -145,8 +140,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                                 String app_pay_params = data.getData().getApp_pay_str();
                                 intent.putExtra("data", app_pay_params);
                                 startActivity(intent);
-                                SPUtils.put(OrderConfirmActivity.this, "orderId", data.getData().getId());
-                                SPUtils.put(OrderConfirmActivity.this, "price", priceNumber);
                                 pay.setEnabled(true);
                             } else {
                                 dialog();
@@ -220,7 +213,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         classstarttime = (TextView) findViewById(R.id.class_start_time);
         classendtime = (TextView) findViewById(R.id.class_end_time);
 //        status = (TextView) findViewById(R.id.status);
-        radioGroup = (LinearLayout) findViewById(R.id.radiogroup);
         wechatLayout = findViewById(R.id.wechat_layout);
         alipayLayout = findViewById(R.id.alipay_layout);
         accountLayout = findViewById(R.id.account_layout);

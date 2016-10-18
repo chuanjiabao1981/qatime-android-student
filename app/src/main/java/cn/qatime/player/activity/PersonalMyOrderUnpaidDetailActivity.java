@@ -28,7 +28,6 @@ import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
-import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -38,7 +37,6 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
 
     private TextView subject;
     private TextView progress;
-    private TextView time;
     private TextView ordernumber;
     private TextView buildtime;
     private TextView paytype;
@@ -49,13 +47,8 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
     private LinearLayout listitem;
     private TextView grade;
     private TextView teacher;
-    private TextView classnumber;
     private TextView status;
-    private int id;
-    private TextView price;
     private TextView payprice;
-    private int priceNumber = 0;
-    //    yyyy-MM-dd'T'HH:mm:ss.SSSZ  yyyy年MM月dd日 HH时mm分ss秒 E
     private int classid;
     DecimalFormat df = new DecimalFormat("#.00");
     private MyOrderBean.Data data;
@@ -72,7 +65,6 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         if (data != null) {
             setValue();
         }
-//        pay.setOnClickListener(this);
     }
 
     private void setValue() {
@@ -167,8 +159,6 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
                 intent.putExtra("price", data.getProduct().getPrice());
                 intent.putExtra("type", data.getPay_type());
                 startActivity(intent);
-                SPUtils.put(PersonalMyOrderUnpaidDetailActivity.this, "orderId", data.getId());
-                SPUtils.put(PersonalMyOrderUnpaidDetailActivity.this, "price", data.getProduct().getPrice());
             }
         });
         cancelorder.setOnClickListener(new View.OnClickListener() {
@@ -238,6 +228,8 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
     @Subscribe
     public void onEvent(PayResultState state) {
         Intent intent = new Intent(this,OrderPayResultActivity.class);
+        intent.putExtra("orderId",ordernumber.getText().toString());
+        intent.putExtra("price",payprice.getText().toString());
         intent.putExtra("state",state);
         startActivity(intent);
         setResult(Constant.RESPONSE);//支付成功刷新订单
