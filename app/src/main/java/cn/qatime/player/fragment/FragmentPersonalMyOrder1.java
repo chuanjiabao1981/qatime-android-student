@@ -2,7 +2,6 @@ package cn.qatime.player.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.format.DateUtils;
@@ -24,6 +23,8 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.orhanobut.logger.Logger;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -36,13 +37,14 @@ import cn.qatime.player.activity.OrderPayActivity;
 import cn.qatime.player.activity.PersonalMyOrderUnpaidDetailActivity;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.MyOrderBean;
+import cn.qatime.player.bean.PayResultState;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.OrderConfirmBean;
-import libraryextra.bean.OrderDetailBean;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -58,6 +60,7 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_personal_my_order1, container, false);
+        EventBus.getDefault().register(this);
         initview(view);
         return view;
 
@@ -114,13 +117,18 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent(getActivity(), OrderPayActivity.class);
-                                OrderConfirmBean.App_pay_params app_pay_params = item.getApp_pay_params();
-                                intent.putExtra("data", app_pay_params);
+                                if (item.getPay_type().equals("weixin")) {
+                                    intent.putExtra("data", item.getApp_pay_params());
+                                } else if (item.getPay_type().equals("alipay")) {
+                                    intent.putExtra("data", item.getApp_pay_str());
+                                }
                                 intent.putExtra("id", item.getId());
                                 intent.putExtra("time", item.getCreated_at());
                                 intent.putExtra("price", item.getProduct().getPrice());
-                                intent.putExtra("type", (item.getPay_type() + "").equals("1") ? getResources().getString(R.string.method_payment) + "：微信支付" : getResources().getString(R.string.method_payment) + "：支付宝支付");
+                                intent.putExtra("type", item.getPay_type());
                                 startActivity(intent);
+                                SPUtils.put(getActivity(), "orderId", item.getId());
+                                SPUtils.put(getActivity(), "price", item.getProduct().getPrice());
                             }
                         });
                 helper.getView(R.id.cancel_order).setOnClickListener(
@@ -141,42 +149,12 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page = 1;
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        String label = DateUtils.formatDateTime(
-                                getActivity(),
-                                System.currentTimeMillis(),
-                                DateUtils.FORMAT_SHOW_TIME
-                                        | DateUtils.FORMAT_SHOW_DATE
-                                        | DateUtils.FORMAT_ABBREV_ALL);
-                        // Update the LastUpdatedLabel
-                        listView.getLoadingLayoutProxy(false, true)
-                                .setLastUpdatedLabel(label);
-                        listView.onRefreshComplete();
-                    }
-                }, 200);
                 initData(1);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page++;
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        String label = DateUtils.formatDateTime(
-                                getActivity(),
-                                System.currentTimeMillis(),
-                                DateUtils.FORMAT_SHOW_TIME
-                                        | DateUtils.FORMAT_SHOW_DATE
-                                        | DateUtils.FORMAT_ABBREV_ALL);
-                        // Update the LastUpdatedLabel
-                        listView.getLoadingLayoutProxy(false, true)
-                                .setLastUpdatedLabel(label);
-                        listView.onRefreshComplete();
-                    }
-                }, 200);
                 initData(2);
             }
         });
@@ -184,24 +162,33 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), PersonalMyOrderUnpaidDetailActivity.class);
-                intent.putExtra("id", list.get(position - 1).getId());
-                OrderDetailBean bean = new OrderDetailBean();
-                bean.id = list.get(position - 1).getProduct().getId();
-                bean.image = list.get(position - 1).getProduct().getPublicize();
-                bean.name = list.get(position - 1).getProduct().getName();
-                bean.subject = list.get(position - 1).getProduct().getSubject();
-                bean.grade = list.get(position - 1).getProduct().getGrade();
-                bean.status = list.get(position - 1).getStatus();
-                bean.teacher = list.get(position - 1).getProduct().getTeacher_name();
-                bean.Preset_lesson_count = list.get(position - 1).getProduct().getPreset_lesson_count();
-                bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
-                bean.price = list.get(position - 1).getProduct().getPrice();
-                intent.putExtra("data", bean);
-                intent.putExtra("payType", list.get(position - 1).getPay_type());
-                intent.putExtra("created_at", list.get(position - 1).getCreated_at());
-                startActivity(intent);
+//                intent.putExtra("id", list.get(position - 1).getId());
+//                OrderDetailBean bean = new OrderDetailBean();
+//                bean.id = list.get(position - 1).getProduct().getId();
+//                bean.image = list.get(position - 1).getProduct().getPublicize();
+//                bean.name = list.get(position - 1).getProduct().getName();
+//                bean.subject = list.get(position - 1).getProduct().getSubject();
+//                bean.grade = list.get(position - 1).getProduct().getGrade();
+//                bean.status = list.get(position - 1).getStatus();
+//                bean.teacher = list.get(position - 1).getProduct().getTeacher_name();
+//                bean.Preset_lesson_count = list.get(position - 1).getProduct().getPreset_lesson_count();
+//                bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
+//                bean.price = list.get(position - 1).getProduct().getPrice();
+                intent.putExtra("data",  list.get(position-1));
+//                intent.putExtra("payType", list.get(position - 1).getPay_type());
+//                intent.putExtra("created_at", list.get(position - 1).getCreated_at());
+                startActivityForResult(intent, Constant.REQUEST);
+
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
+            Logger.e("订单取消返回");
+            initData(1);
+        }
     }
 
     @Override
@@ -248,6 +235,16 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
                     @Override
                     protected void onError(JSONObject response) {
                         Toast.makeText(getActivity(), "订单信息获取失败", Toast.LENGTH_SHORT).show();
+                        String label = DateUtils.formatDateTime(
+                                getActivity(),
+                                System.currentTimeMillis(),
+                                DateUtils.FORMAT_SHOW_TIME
+                                        | DateUtils.FORMAT_SHOW_DATE
+                                        | DateUtils.FORMAT_ABBREV_ALL);
+                        // Update the LastUpdatedLabel
+                        listView.getLoadingLayoutProxy(false, true)
+                                .setLastUpdatedLabel(label);
+                        listView.onRefreshComplete();
                     }
 
                     @Override
@@ -299,13 +296,13 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
                     @Override
                     protected void onSuccess(JSONObject response) {
                         list.remove(position);
-                        Toast.makeText(getActivity(), "订单取消成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getResourceString(R.string.order_cancel_success), Toast.LENGTH_SHORT).show();
                         adapter.notifyDataSetChanged();
                     }
 
                     @Override
                     protected void onError(JSONObject response) {
-                        Toast.makeText(getActivity(), "取消订单失败，请稍后再试", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getResourceString(R.string.order_cancel_failed), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -322,5 +319,21 @@ public class FragmentPersonalMyOrder1 extends BaseFragment {
         addToRequestQueue(request);
     }
 
+    @Subscribe
+    public void onEvent(PayResultState code) {
+//        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
+//
+//            finish();
+//        }
+        if (!isLoad) {
+            initData(1);
+        }
+    }
 
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }

@@ -12,20 +12,23 @@ import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
+import com.orhanobut.logger.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
 
 public class BaseFragment extends Fragment {
-    private RequestQueue Queue;
+    private RequestQueue Queue = BaseApplication.getRequestQueue();
     protected boolean isLoad = false;
     private AlertDialog alertDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Queue = Volley.newRequestQueue(getActivity());
+//        Queue = Volley.newRequestQueue(getActivity());
     }
 
     public void onShow() {
@@ -74,10 +77,21 @@ public class BaseFragment extends Fragment {
 //        getActivity().finish();
     }
 
+    private List<Request> requestList = new ArrayList<>();//记录当前页访问的url
+
     public <T> Request<T> addToRequestQueue(Request<T> request) {
+        requestList.add(request);
         return Queue.add(request);
     }
 
+    @Override
+    public void onDestroy() {
+        for (Request request : requestList) {
+            Logger.e("cancel request:" + request.getUrl());
+            request.cancel();
+        }
+        super.onDestroy();
+    }
     public void cancelAll(final Object tag) {
         Queue.cancelAll(tag);
     }
@@ -86,7 +100,7 @@ public class BaseFragment extends Fragment {
         Queue.cancelAll(filter);
     }
 
-    protected String getResourceString(int id){
+    protected String getResourceString(int id) {
         return getResources().getString(id);
     }
 }

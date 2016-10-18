@@ -20,6 +20,7 @@ import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
@@ -79,19 +80,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     private ImageView emoji;
     private EditText content;
     private boolean isMute = false;//当前用户 是否被禁言
-    //    Runnable runnable = new Runnable() {
-//        @Override
-//        public void run() {
-//            hd.postDelayed(this, 50);
-//            videoPlayer.setData(i + "彈幕");
-//            i++;
-//            if (i>20){
-//                hd.removeCallbacks(this);
-//            }
-//            LogUtils.e(i);
-//        }
-//    };
-//    int flag = Settings.System.getInt(getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0);
+    private String url = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +91,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
             Toast.makeText(this, getResourceString(R.string.no_course_information), Toast.LENGTH_SHORT).show();
         }
         sessionId = getIntent().getStringExtra("sessionId");
-        String url = getIntent().getStringExtra("url");
+        url = getIntent().getStringExtra("url");
 //        Logger.e(url);
         videoPlayer = (QaVideoPlayer) findViewById(R.id.video_player);
         ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenWidth(this) * 9 / 16);
@@ -113,16 +102,15 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
             videoPlayer.setOnControlListener(this);
             videoPlayer.start();
         }
-        final String finalUrl = url;
         videoPlayer.setOnVideoRefreshListener(new QaVideoPlayer.VideoRefreshListener() {
             @Override
             public void onRefresh() {
-                if (!StringUtils.isNullOrBlanK(finalUrl)) {
-                    videoPlayer.release_resource();
-                    videoPlayer.setVideoPath(finalUrl);
-                    videoPlayer.setOnControlListener(NEVideoPlayerActivity.this);
-                    videoPlayer.start();
-                }
+//                if (!StringUtils.isNullOrBlanK(url)) {
+//                    videoPlayer.release_resource();
+//                    videoPlayer.setVideoPath(url);
+//                    videoPlayer.setOnControlListener(NEVideoPlayerActivity.this);
+//                    videoPlayer.start();
+//                }
             }
         });
         initView();
@@ -172,7 +160,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     }
 
     private void initView() {
-        isMute = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount()).isMute();
+        TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
+        if (team != null) {
+            isMute = team.isMute();
+        }
         bottom = findViewById(R.id.bottom);
 
         inputLayout = findViewById(R.id.input_layout);
@@ -186,7 +177,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         fragmentLayout.setScorllToNext(true);
         fragmentLayout.setScorll(true);
         fragmentLayout.setWhereTab(1);
-        fragmentLayout.setTabHeight(4,0xffff9999);
+        fragmentLayout.setTabHeight(4, 0xffff9999);
         fragmentLayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
@@ -194,9 +185,12 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
                 ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff333333);
 //                    lastTabView.setBackgroundColor(0xffffffff);
 //                    currentTabView.setBackgroundColor(0xffeeeeee);
-                    if (position != 1) {
-                        KeyBoardUtils.closeKeybord(NEVideoPlayerActivity.this);
-                    }
+                if (position == 1) {
+                    inputLayout.setVisibility(View.VISIBLE);
+                } else {
+                    KeyBoardUtils.closeKeybord(NEVideoPlayerActivity.this);
+                    inputLayout.setVisibility(View.GONE);
+                }
             }
         });
         fragmentLayout.setAdapter(fragBaseFragments, R.layout.tablayout_nevideo_player, 0x0102);
@@ -207,7 +201,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         fragment2.setChatCallBack(new FragmentNEVideoPlayer2.Callback() {
             @Override
             public void back(List<IMMessage> result) {
-                isMute = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount()).isMute();
+                TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
+                if (team != null) {
+                    isMute = team.isMute();
+                }
                 if (isMute) {
                     content.setHint(R.string.have_muted);
                 } else {
@@ -408,7 +405,17 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
 
     @Override
     public void onCompletion(NELivePlayer neLivePlayer) {
-
+//        if (!StringUtils.isNullOrBlanK(url)) {
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    videoPlayer.release_resource();
+//                    videoPlayer.setVideoPath(url);
+//                    videoPlayer.setOnControlListener(NEVideoPlayerActivity.this);
+//                    videoPlayer.start();
+//                }
+//            }, 500);
+//        }
     }
 
     @Override

@@ -31,6 +31,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
+                        android:padding="1dp"
                         android:background="@drawable/stroke_background"
                         android:orientation="vertical">
 
@@ -56,112 +57,98 @@
                                 android:textSize="18sp" />
                         </LinearLayout>
 
-                        <LinearLayout
+                        <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="5dp">
+                            android:layout_height="wrap_content">
 
-                            <TextView
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:text="订单编号" />
+                                android:orientation="vertical">
 
-                            <TextView
-                                android:id="@+id/orderId"
-                                android:layout_width="wrap_content"
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:padding="5dp">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="20dp"
+                                        android:text="订单编号" />
+
+                                    <TextView
+                                        android:id="@+id/orderId"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="30dp"
+                                        android:text="1002841948894" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:padding="5dp">
+
+                                    <TextView
+                                        android:id="@+id/pay_dsc"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="20dp"
+                                        android:text="支付金额" />
+
+                                    <TextView
+                                        android:id="@+id/price"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="30dp"
+                                        android:text="￥0"
+                                        android:textColor="#ff0000"
+                                        android:textSize="16sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/faild_layout"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="30dp"
-                                android:text="1002841948894" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="5dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:text="支付金额" />
-
-                            <TextView
-                                android:id="@+id/price"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="30dp"
-                                android:text="￥0"
-                                android:textColor="#ff0000"
-                                android:textSize="16sp" />
-                        </LinearLayout>
-
+                                android:orientation="vertical"
+                                android:layout_centerInParent="true"
+                                android:background="#fff"
+                                android:visibility="visible">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:lines="2"
+                                    android:padding="5dp"
+                                    android:text="由于当前购买人数较多,需要等待一会儿才能获取支付结果,请稍后进行查询"
+                                    android:textSize="16sp" />
+                            </LinearLayout>
+                        </RelativeLayout>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/success_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
                         android:gravity="center"
                         android:orientation="horizontal"
-                        android:visibility="gone">
-
+                        android:visibility="visible">
                         <TextView
+                            android:id="@+id/look"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="您已成功支付" />
+                            android:text="查看" />
 
                         <TextView
                             android:id="@+id/view_order"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="3dp"
-                            android:text="查看订单"
+                            android:text="我的订单"
                             android:textColor="#00e1ff" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/faild_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="当前人数过多可能需要等待一会才能获取支付结果;" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="您也可以进入" />
-
-                            <TextView
-                                android:id="@+id/myorder"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:padding="3dp"
-                                android:text="我的订单"
-                                android:textColor="#00e1ff" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="查看状态。" />
-                        </LinearLayout>
-
                     </LinearLayout>
                 </LinearLayout>
 
@@ -181,7 +168,8 @@
             android:id="@+id/loading"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#fff">
+            android:background="#fff"
+            android:visibility="visible">
 
             <ImageView
                 android:id="@+id/load"
@@ -189,7 +177,7 @@
                 android:layout_height="50dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="50dp"
-                android:background="@drawable/progress_round" />
+                android:src="@drawable/progress_round" />
 
             <TextView
                 android:layout_width="wrap_content"

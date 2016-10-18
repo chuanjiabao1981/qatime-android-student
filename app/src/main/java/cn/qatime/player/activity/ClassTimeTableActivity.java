@@ -2,9 +2,10 @@ package cn.qatime.player.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.format.DateUtils;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.ClassTimeTableBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
@@ -34,7 +36,6 @@ import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.view.MonthDateView;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import cn.qatime.player.base.BaseActivity;
 import libraryextra.utils.DensityUtils;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
@@ -82,12 +83,17 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                             }
                             monthDateView.setDaysHasThingList(alertList);
                             filterList();
+                            listView.onRefreshComplete();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
 
                     protected void onError(JSONObject response) {
+                        String label = DateUtils.formatDateTime(ClassTimeTableActivity.this, System.currentTimeMillis(),
+                                DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+                        listView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
+                        listView.onRefreshComplete();
                     }
 
                     @Override
@@ -165,18 +171,9 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        String label = DateUtils.formatDateTime(ClassTimeTableActivity.this, System.currentTimeMillis(),
-                                DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
-                        listView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
-                        listView.onRefreshComplete();
-                    }
-                }, 300);
                 initData();
             }
-        } );
+        });
 
         ImageView ivLeft = (ImageView) findViewById(R.id.iv_left);
         ImageView ivRight = (ImageView) findViewById(R.id.iv_right);

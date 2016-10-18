@@ -185,7 +185,7 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                 if (price.startsWith(".")) {
                     price = "0" + price;
                 }
-                helper.setText(R.id.price, "￥" + price);
+                helper.setText(R.id.price,price);
                 helper.setText(R.id.student_number, String.valueOf(item.getBuy_tickets_count()));
             }
         };
@@ -286,9 +286,6 @@ public class Fragment12 extends BaseFragment implements View.OnClickListener {
                             adapter.notifyDataSetChanged();
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
-                        }
-                        if (screenPopView != null) {
-                            clearScreenData();
                         }
                     }
 

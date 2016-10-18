@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class MonthDateView extends View {
     private DateClick dateClick;
     private int mCircleColor = Color.parseColor("#ff0000");
     private List<Integer> daysHasThingList = new ArrayList<>();
+    private boolean pointerMode;//是否多点触摸
 
     public MonthDateView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -129,11 +131,12 @@ public class MonthDateView extends View {
     }
 
     private int downX = 0, downY = 0;
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int eventCode = event.getAction();
-        switch (eventCode) {
+        switch (eventCode & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_POINTER_DOWN:
+                pointerMode = true;//多点触摸
             case MotionEvent.ACTION_DOWN:
                 downX = (int) event.getX();
                 downY = (int) event.getY();
@@ -141,11 +144,20 @@ public class MonthDateView extends View {
             case MotionEvent.ACTION_MOVE:
                 break;
             case MotionEvent.ACTION_UP:
+                if(pointerMode){//多点触摸不处理
+                    pointerMode = false;
+                    break;
+                }
+                int scaledTouchSlop = ViewConfiguration.get(getContext()).getScaledPagingTouchSlop();
                 int upX = (int) event.getX();
                 int upY = (int) event.getY();
                 if (Math.abs(upX - downX) < 10 && Math.abs(upY - downY) < 10) {//点击事件
                     performClick();
                     doClickAction((upX + downX) / 2, (upY + downY) / 2);
+                } else if (downX - upX > scaledTouchSlop) {
+                    onRightClick();
+                } else if (upX - downX > scaledTouchSlop) {
+                    onLeftClick();
                 }
                 break;
         }
