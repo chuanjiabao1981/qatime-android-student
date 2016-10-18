@@ -98,7 +98,6 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
                         price = "0" + price;
                     }
                     balance.setText(price);
-                    SPUtils.put(PersonalMyWalletActivity.this,"balance",balance.getText().toString());
                     String price1 = df.format(Double.valueOf(response.getJSONObject("data").getString("total_expenditure")));
                     if (price1.startsWith(".")) {
                         price1 = "0" + price1;
