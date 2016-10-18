@@ -12,7 +12,10 @@ import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
+import com.orhanobut.logger.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
@@ -22,13 +25,12 @@ import libraryextra.utils.StringUtils;
  * 基础fragment类
  */
 public class BaseFragmentActivity extends FragmentActivity {
-    private RequestQueue Queue;
+    private RequestQueue Queue= BaseApplication.getRequestQueue();
     private AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Queue = Volley.newRequestQueue(this);
     }
 
     public void setTitle(String text) {
@@ -105,8 +107,20 @@ public class BaseFragmentActivity extends FragmentActivity {
         startActivity(intent);
     }
 
+    private List<Request> requestList = new ArrayList<>();//记录当前页访问的url
+
     public <T> Request<T> addToRequestQueue(Request<T> request) {
+        requestList.add(request);
         return Queue.add(request);
+    }
+
+    @Override
+    protected void onDestroy() {
+        for (Request request : requestList) {
+            Logger.e("cancel request:" + request.getUrl());
+            request.cancel();
+        }
+        super.onDestroy();
     }
 
     public void cancelAll(final Object tag) {

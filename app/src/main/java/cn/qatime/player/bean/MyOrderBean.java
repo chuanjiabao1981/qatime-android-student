@@ -2,10 +2,9 @@ package cn.qatime.player.bean;
 
 
 import java.io.Serializable;
-import java.io.StringReader;
 import java.util.List;
 
-import libraryextra.bean.OrderConfirmBean;
+import libraryextra.bean.AppPayParamsBean;
 
 public class MyOrderBean implements Serializable {
     private int status;
@@ -49,7 +48,7 @@ public class MyOrderBean implements Serializable {
     public class Data implements Serializable {
         private String id;
 
-        private int pay_type;
+        private String pay_type;
 
         private String created_at;
         private String pay_at;
@@ -60,9 +59,19 @@ public class MyOrderBean implements Serializable {
 
         private String nonce_str;
 
-        private OrderConfirmBean.App_pay_params app_pay_params;
+        private String app_pay_str;
+
+        private AppPayParamsBean app_pay_params;
 
         private Product product;
+
+        public String getApp_pay_str() {
+            return app_pay_str;
+        }
+
+        public void setApp_pay_str(String app_pay_str) {
+            this.app_pay_str = app_pay_str;
+        }
 
         public String getPay_at() {
             return pay_at;
@@ -72,11 +81,11 @@ public class MyOrderBean implements Serializable {
             this.pay_at = pay_at;
         }
 
-        public int getPay_type() {
+        public String getPay_type() {
             return pay_type;
         }
 
-        public void setPay_type(int pay_type) {
+        public void setPay_type(String pay_type) {
             this.pay_type = pay_type;
         }
 
@@ -120,11 +129,11 @@ public class MyOrderBean implements Serializable {
             return this.nonce_str;
         }
 
-        public void setApp_pay_params(OrderConfirmBean.App_pay_params app_pay_params) {
+        public void setApp_pay_params(AppPayParamsBean app_pay_params) {
             this.app_pay_params = app_pay_params;
         }
 
-        public OrderConfirmBean.App_pay_params getApp_pay_params() {
+        public AppPayParamsBean getApp_pay_params() {
             return this.app_pay_params;
         }
 

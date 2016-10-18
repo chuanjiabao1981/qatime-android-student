@@ -34,6 +34,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
+import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.fragment.FragmentRemedialClassDetail1;
 import cn.qatime.player.fragment.FragmentRemedialClassDetail2;
@@ -52,7 +53,6 @@ import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
-import libraryextra.view.FragmentLayoutWithLine;
 import libraryextra.view.SimpleViewPagerIndicator;
 
 public class RemedialClassDetailActivity extends BaseFragmentActivity implements View.OnClickListener {
@@ -73,8 +73,6 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     TextView studentnumber;
     DecimalFormat df = new DecimalFormat("#.00");
     private AlertDialog alertDialog;
-    private FragmentLayoutWithLine fragmentlayout;
-    private int[] tab_text = {R.id.tab_text1, R.id.tab_text2};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -403,10 +401,12 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     }
 
     @Subscribe
-    public void onEvent(String event) {
-        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
+    public void onEvent(PayResultState code) {
+//        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
+//
+//            finish();
+//        }
             finish();
-        }
     }
 
     @Override

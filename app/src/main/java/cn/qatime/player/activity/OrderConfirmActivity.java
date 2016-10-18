@@ -4,11 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +16,7 @@ import com.bumptech.glide.Glide;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -26,15 +25,14 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.bean.AppPayParamsBean;
 import libraryextra.bean.OrderConfirmBean;
 import libraryextra.bean.OrderPayBean;
-import libraryextra.utils.DensityUtils;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.SPUtils;
-import libraryextra.utils.ScreenUtils;
-import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -51,15 +49,18 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     TextView price;
     TextView payprice;
     private Button pay;
-    private RadioButton wechatPay;
-    private RadioButton aliPay;
-    private RadioGroup radioGroup;
+    private ImageView wechatPay;
+    private LinearLayout radioGroup;
     private int id;
-    private String payType = "1";
+    private String payType = "weixin";
     private int priceNumber = 0;
-    private OrderConfirmBean data;
     DecimalFormat df = new DecimalFormat("#.00");
     private AlertDialog alertDialog;
+    private ImageView aliPay;
+    private ImageView account;
+    private View alipayLayout;
+    private View wechatLayout;
+    private View accountLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +110,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
+        // TODO: 2016/10/8 余额支付验证
         pay.setEnabled(false);
         Map<String, String> map = new HashMap<>();
         map.put("pay_type", payType);
@@ -116,34 +118,65 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                 new VolleyListener(OrderConfirmActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        data = JsonUtils.objectFromJson(response.toString(), OrderConfirmBean.class);
-                        if (data != null) {
-//                            canPay = true;
-                            Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
-                            intent.putExtra("price", priceNumber);
-                            intent.putExtra("id", data.getData().getId());
-                            intent.putExtra("time", data.getData().getCreated_at());
-                            intent.putExtra("type", (data.getData().getPay_type() + "").equals("1") ? getResources().getString(R.string.method_payment) + getResourceString(R.string.pay_wexin) : getResources().getString(R.string.method_payment) + "：支付宝支付");
-                            OrderConfirmBean.App_pay_params app_pay_params = data.getData().getApp_pay_params();
-                            intent.putExtra("data", app_pay_params);
-                            startActivity(intent);
-                            SPUtils.put(OrderConfirmActivity.this, "orderId", data.getData().getId());
-                            SPUtils.put(OrderConfirmActivity.this, "price", priceNumber);
-                            pay.setEnabled(true);
-                        } else {
-                            //                            canPay = false;
-                           dialog();
+                        OrderConfirmBean data = JsonUtils.objectFromJson(response.toString(), OrderConfirmBean.class);
+                        if (payType.equals("weixin")) {
+                            if (data != null) {
+                                Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
+                                intent.putExtra("price", priceNumber);
+                                intent.putExtra("id", data.getData().getId());
+                                intent.putExtra("time", data.getData().getCreated_at());
+                                intent.putExtra("type", payType);
+                                AppPayParamsBean app_pay_params = data.getData().getApp_pay_params();
+                                intent.putExtra("data", app_pay_params);
+                                startActivity(intent);
+                                SPUtils.put(OrderConfirmActivity.this, "orderId", data.getData().getId());
+                                SPUtils.put(OrderConfirmActivity.this, "price", priceNumber);
+                                pay.setEnabled(true);
+                            } else {
+                                dialog();
+                            }
+                        } else if (payType.equals("alipay")) {
+                            if (data != null) {
+                                Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
+                                intent.putExtra("price", priceNumber);
+                                intent.putExtra("id", data.getData().getId());
+                                intent.putExtra("time", data.getData().getCreated_at());
+                                intent.putExtra("type", payType);
+                                String app_pay_params = data.getData().getApp_pay_str();
+                                intent.putExtra("data", app_pay_params);
+                                startActivity(intent);
+                                SPUtils.put(OrderConfirmActivity.this, "orderId", data.getData().getId());
+                                SPUtils.put(OrderConfirmActivity.this, "price", priceNumber);
+                                pay.setEnabled(true);
+                            } else {
+                                dialog();
+                            }
+                        } else if (payType.equals("account")) {
+                            //余额支付成功  status---failed交易失败  shipped交易成功
+                            // TODO: 2016/10/8 余额支付  订单?  校验?
+                            try {
+                                if (response.getJSONObject("data").getString("status").equals("shipped")) {
+                                    EventBus.getDefault().post(PayResultState.SUCCESS);
+                                    finish();
+                                } else {
+                                    Toast.makeText(OrderConfirmActivity.this, "余额不足", Toast.LENGTH_SHORT).show();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
+                        pay.setEnabled(true);
                     }
 
                     @Override
                     protected void onError(JSONObject response) {
-                        //                            canPay = false;
                         dialog();
+                        pay.setEnabled(true);
                     }
 
                     @Override
                     protected void onTokenOut() {
+                        pay.setEnabled(true);
                         tokenOut();
                     }
                 }, new VolleyErrorListener() {
@@ -159,7 +192,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     }
 
     protected void dialog() {
-        pay.setEnabled(true);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         alertDialog = builder.create();
         View view = View.inflate(this, R.layout.dialog_confirm, null);
@@ -176,6 +208,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 //        attributes.width= ScreenUtils.getScreenWidth(getApplicationContext())- DensityUtils.dp2px(getApplicationContext(),20)*2;
 //        alertDialog.getWindow().setAttributes(attributes);
     }
+
     public void initView() {
 
         name = (TextView) findViewById(R.id.name);
@@ -187,39 +220,60 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         classstarttime = (TextView) findViewById(R.id.class_start_time);
         classendtime = (TextView) findViewById(R.id.class_end_time);
 //        status = (TextView) findViewById(R.id.status);
-        radioGroup = (RadioGroup) findViewById(R.id.radiogroup);
-        wechatPay = (RadioButton) findViewById(R.id.wechat_pay);
-        aliPay = (RadioButton) findViewById(R.id.alipay);
+        radioGroup = (LinearLayout) findViewById(R.id.radiogroup);
+        wechatLayout = findViewById(R.id.wechat_layout);
+        alipayLayout = findViewById(R.id.alipay_layout);
+        accountLayout = findViewById(R.id.account_layout);
+        wechatPay = (ImageView) findViewById(R.id.wechat_pay);
+        aliPay = (ImageView) findViewById(R.id.alipay);
+        account = (ImageView) findViewById(R.id.account);
         price = (TextView) findViewById(R.id.price);
         payprice = (TextView) findViewById(R.id.pay_price);
         pay = (Button) findViewById(R.id.pay);
-
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        alipayLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == wechatPay.getId()) {
-                    payType = "1";
-                } else {
-                    payType = "0";
-                }
+            public void onClick(View v) {
+                payType = "alipay";
+                aliPay.setImageResource(R.drawable.shape_select_circle_select);
+                wechatPay.setImageResource(R.drawable.shape_select_circle_normal);
+                account.setImageResource(R.drawable.shape_select_circle_normal);
 
                 //TODO 集成完支付宝后，去掉下面这段
-                if (checkedId == aliPay.getId()) {
-                    Toast.makeText(OrderConfirmActivity.this, getResourceString(R.string.not_support_alipay), Toast.LENGTH_SHORT).show();
-                    wechatPay.setChecked(true);
-                    aliPay.setChecked(false);
-                    payType = "1";
-                }
+                Toast.makeText(OrderConfirmActivity.this, getResourceString(R.string.not_support_alipay), Toast.LENGTH_SHORT).show();
+                wechatPay.setImageResource(R.drawable.shape_select_circle_select);
+                aliPay.setImageResource(R.drawable.shape_select_circle_normal);
+                payType = "weixin";
+            }
+        });
+        wechatLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                payType = "weixin";
+                wechatPay.setImageResource(R.drawable.shape_select_circle_select);
+                aliPay.setImageResource(R.drawable.shape_select_circle_normal);
+                account.setImageResource(R.drawable.shape_select_circle_normal);
+            }
+        });
+        accountLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                payType = "account";
+                account.setImageResource(R.drawable.shape_select_circle_select);
+                aliPay.setImageResource(R.drawable.shape_select_circle_normal);
+                wechatPay.setImageResource(R.drawable.shape_select_circle_normal);
             }
         });
     }
 
     @Subscribe
-    public void onEvent(String event) {
-        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
-            finish();
-        }
+    public void onEvent(PayResultState code) {
+//        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
+//
+//            finish();
+//        }
+        finish();
     }
+
 
     @Override
     protected void onDestroy() {

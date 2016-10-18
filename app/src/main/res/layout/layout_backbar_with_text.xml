@@ -19,6 +19,7 @@
         android:id="@+id/right_text"
         android:text="@string/use"
         style="@style/backbar_text_style"
+        android:textSize="14sp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:paddingLeft="10dp"

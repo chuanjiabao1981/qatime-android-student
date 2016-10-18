@@ -1,14 +1,20 @@
 apply plugin: 'com.android.application'
 
 android {
+//    signingConfigs {
+//        config {
+//            keyAlias 'qatime'
+//            keyPassword '32147896'
+//            storeFile file('C:/Users/lenovo/Desktop/qatime.jks')
+//            storePassword '32147896'
+//        }
+//    }
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
     defaultConfig {
         applicationId "cn.qatime.player"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
     }
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES.txt'
@@ -24,11 +30,12 @@ android {
     }
     buildTypes {
         debug {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            signingConfig signingConfigs.config
         }
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

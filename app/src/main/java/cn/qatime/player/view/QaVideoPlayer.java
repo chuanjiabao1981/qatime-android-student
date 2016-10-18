@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,6 @@ import libraryextra.utils.ScreenUtils;
 
 /**
  * 对播放器进行封装
- * <p/>
  * 需顺序调用
  * setVideoPath(url);
  * start();
@@ -177,8 +177,11 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
 
         brightness.setProgress(ScreenUtils.getScreenBrightness(context));
         this.addView(mMediaController);
-//        mBuffer = View.inflate(this.getContext(), R.layout.video_play_toolbar, null);
-//        this.addView(mBuffer);
+        LayoutParams mBufferLayoutParam = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mBufferLayoutParam.gravity = Gravity.CENTER;
+        mBuffer = View.inflate(this.getContext(), R.layout.media_buffering, null);
+        this.addView(mBuffer);
+        mBuffer.setLayoutParams(mBufferLayoutParam);
 
         videoView.setBufferStrategy(0); //直播低延时
 
@@ -449,10 +452,10 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
                 }
                 break;
             case R.id.zoom://横竖屏
-                if (((Activity) getContext()).getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {//
-                    ((Activity) getContext()).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                } else {
+                if (((Activity) getContext()).getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {//
                     ((Activity) getContext()).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                } else {
+                    ((Activity) getContext()).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                 }
 
                 break;
@@ -507,9 +510,11 @@ public class QaVideoPlayer extends FrameLayout implements NELivePlayer.OnBufferi
                 }
                 break;
             case R.id.refresh://刷新视频
-                if (videoRefreshListener != null) {
-                    videoRefreshListener.onRefresh();
-                }
+//                if (videoRefreshListener != null) {
+//                    videoRefreshListener.onRefresh();
+//                }
+                int playableDuration = videoView.getPlayableDuration();
+                videoView.seekTo(playableDuration);
                 break;
         }
     }

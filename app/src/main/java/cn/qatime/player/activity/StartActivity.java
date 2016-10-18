@@ -5,13 +5,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,7 +33,6 @@ import cn.qatime.player.utils.AppUtils;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.DownFileUtil;
 import cn.qatime.player.utils.UrlUtils;
-import libraryextra.utils.DensityUtils;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
@@ -120,17 +119,9 @@ StartActivity extends BaseActivity implements View.OnClickListener {
                     }
                     down.setOnClickListener(StartActivity.this);
                     alertDialog.show();
-                    view.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                        @Override
-                        public void onGlobalLayout() {
-                            if (DensityUtils.px2dp(StartActivity.this, alertDialog.getWindow().getAttributes().height) > 500) {
-                                alertDialog.getWindow().setLayout(DensityUtils.dp2px(StartActivity.this, 300), DensityUtils.dp2px(StartActivity.this, 500));
-                            } else {
-                                alertDialog.getWindow().setLayout(DensityUtils.dp2px(StartActivity.this, 300), alertDialog.getWindow().getAttributes().height);
-                            }
-                        }
-                    });
                     alertDialog.setContentView(view);
+                    alertDialog.setCanceledOnTouchOutside(false);
+                    alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable());
                 }
             }
 
@@ -154,7 +145,7 @@ StartActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.download:
-                //TODO 更新版本
+                alertDialog.dismiss();
                 Toast.makeText(StartActivity.this, getResourceString(R.string.start_download), Toast.LENGTH_SHORT).show();
                 DownFileUtil downFileUtil = new DownFileUtil(this, downLoadLinks, "qatime.apk", "", "qatime.apk") {
                     @Override
@@ -168,7 +159,6 @@ StartActivity extends BaseActivity implements View.OnClickListener {
                     }
                 };
                 downFileUtil.downFile();
-                alertDialog.dismiss();
 //                startApp();
                 break;
             case R.id.image_x:
