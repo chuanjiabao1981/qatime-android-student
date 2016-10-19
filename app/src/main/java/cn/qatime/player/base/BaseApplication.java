@@ -43,6 +43,9 @@ public class BaseApplication extends Application {
     public static boolean newVersion;
 
     public static RequestQueue getRequestQueue() {
+        if(Queue==null){
+            Queue = Volley.newRequestQueue(context);
+        }
         return Queue;
     }
 
@@ -54,9 +57,6 @@ public class BaseApplication extends Application {
                 .setMethodCount(3)            // default 2
                 .hideThreadInfo()             // default it is shown
                 .setLogLevel(UrlUtils.isDebug ? LogLevel.FULL : LogLevel.NONE);  // default : LogLevel.FULL
-
-        Queue = Volley.newRequestQueue(getApplicationContext());
-
         profile = SPUtils.getObject(this, "profile", Profile.class);
         /** 云信集成start*/
         // SDK初始化（启动后台服务，若已经存在用户登录信息， SDK 将完成自动登录）
