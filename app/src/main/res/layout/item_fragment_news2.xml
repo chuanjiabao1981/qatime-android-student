@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:paddingLeft="5dp"
-              android:paddingTop="5dp"
-              android:layout_marginTop="1dp"
-              android:background="@drawable/text_background"
-              android:paddingBottom="5dp"
-              android:paddingRight="5dp"
-    android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#fff"
+    android:orientation="vertical"
+    android:padding="5dp">
 
     <TextView
+        android:id="@+id/date_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/date_time"
-android:paddingBottom="3dp"
-        android:text="日期"/>
+        android:layout_marginBottom="3dp"
+        android:text="日期" />
+
     <TextView
-        android:layout_width="match_parent"
-        android:text="通知"
         android:id="@+id/details"
-        android:layout_height="wrap_content"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="通知" />
 
 </LinearLayout>

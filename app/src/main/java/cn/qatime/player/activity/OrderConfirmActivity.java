@@ -234,14 +234,14 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onClick(View v) {
                 payType = "alipay";
-                aliPay.setImageResource(R.mipmap.radiobutton_selected);
-                wechatPay.setImageResource(R.mipmap.radiobutton_unselected);
-                account.setImageResource(R.mipmap.radiobutton_unselected);
+                aliPay.setImageResource(R.drawable.shape_select_circle_select);
+                wechatPay.setImageResource(R.drawable.shape_select_circle_normal);
+                account.setImageResource(R.drawable.shape_select_circle_normal);
 
                 //TODO 集成完支付宝后，去掉下面这段
                 Toast.makeText(OrderConfirmActivity.this, getResourceString(R.string.not_support_alipay), Toast.LENGTH_SHORT).show();
-                wechatPay.setImageResource(R.mipmap.radiobutton_selected);
-                aliPay.setImageResource(R.mipmap.radiobutton_unselected);
+                wechatPay.setImageResource(R.drawable.shape_select_circle_select);
+                aliPay.setImageResource(R.drawable.shape_select_circle_normal);
                 payType = "weixin";
             }
         });
@@ -249,18 +249,18 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onClick(View v) {
                 payType = "weixin";
-                wechatPay.setImageResource(R.mipmap.radiobutton_selected);
-                aliPay.setImageResource(R.mipmap.radiobutton_unselected);
-                account.setImageResource(R.mipmap.radiobutton_unselected);
+                wechatPay.setImageResource(R.drawable.shape_select_circle_select);
+                aliPay.setImageResource(R.drawable.shape_select_circle_normal);
+                account.setImageResource(R.drawable.shape_select_circle_normal);
             }
         });
         accountLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 payType = "account";
-                account.setImageResource(R.mipmap.radiobutton_selected);
-                aliPay.setImageResource(R.mipmap.radiobutton_unselected);
-                wechatPay.setImageResource(R.mipmap.radiobutton_unselected);
+                account.setImageResource(R.drawable.shape_select_circle_select);
+                aliPay.setImageResource(R.drawable.shape_select_circle_normal);
+                wechatPay.setImageResource(R.drawable.shape_select_circle_normal);
             }
         });
     }

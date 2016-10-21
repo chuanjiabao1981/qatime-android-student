@@ -2,7 +2,6 @@ package cn.qatime.player.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -11,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -28,15 +26,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
-import cn.qatime.player.activity.OrderConfirmActivity;
 import cn.qatime.player.activity.PersonalMyOrderCanceledDetailActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
+import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.MyOrderBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import cn.qatime.player.base.BaseFragment;
 import libraryextra.bean.OrderDetailBean;
 import libraryextra.bean.OrderPayBean;
 import libraryextra.utils.JsonUtils;
@@ -146,43 +143,12 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page = 1;
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        String label = DateUtils.formatDateTime(
-                                getActivity(),
-                                System.currentTimeMillis(),
-                                DateUtils.FORMAT_SHOW_TIME
-                                        | DateUtils.FORMAT_SHOW_DATE
-                                        | DateUtils.FORMAT_ABBREV_ALL);
-                        // Update the LastUpdatedLabel
-                        listView.getLoadingLayoutProxy(false, true)
-                                .setLastUpdatedLabel(label);
-                        listView.onRefreshComplete();
-                    }
-                }, 200);
-
                 initData(1);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page++;
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        String label = DateUtils.formatDateTime(
-                                getActivity(),
-                                System.currentTimeMillis(),
-                                DateUtils.FORMAT_SHOW_TIME
-                                        | DateUtils.FORMAT_SHOW_DATE
-                                        | DateUtils.FORMAT_ABBREV_ALL);
-                        // Update the LastUpdatedLabel
-                        listView.getLoadingLayoutProxy(false, true)
-                                .setLastUpdatedLabel(label);
-                        listView.onRefreshComplete();
-                    }
-                }, 200);
                 initData(2);
             }
         });
@@ -269,6 +235,16 @@ public class FragmentPersonalMyOrder3 extends BaseFragment {
 
                     @Override
                     protected void onError(JSONObject response) {
+                        String label = DateUtils.formatDateTime(
+                                getActivity(),
+                                System.currentTimeMillis(),
+                                DateUtils.FORMAT_SHOW_TIME
+                                        | DateUtils.FORMAT_SHOW_DATE
+                                        | DateUtils.FORMAT_ABBREV_ALL);
+                        // Update the LastUpdatedLabel
+                        listView.getLoadingLayoutProxy(false, true)
+                                .setLastUpdatedLabel(label);
+                        listView.onRefreshComplete();
                     }
 
                     @Override

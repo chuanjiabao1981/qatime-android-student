@@ -2,7 +2,6 @@ package cn.qatime.player.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -17,11 +16,12 @@ import com.android.volley.VolleyError;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +30,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.activity.RechargeConfirmActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.bean.RechargeRecordBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -49,21 +50,27 @@ public class FragmentFundRecord1 extends BaseFragment {
     private List<RechargeRecordBean.DataBean> data = new ArrayList<>();
     private CommonAdapter<RechargeRecordBean.DataBean> adapter;
     DecimalFormat df = new DecimalFormat("#.00");
+    private int page = 1;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fund_record1, container, false);
+        EventBus.getDefault().register(this);
         initview(view);
-        initData();
         return view;
     }
 
-    private void initData() {
+    @Override
+    public void onShow() {
+        if (!isLoad) {
+            initData(1);
+        }
+    }
+
+    private void initData(final int loadType) {
         Map<String, String> map = new HashMap<>();
-        map.put("start_date", "0");
-        map.put("end_date", new Date().getTime() + "");
-        map.put("page", "1");
+        map.put("page", String.valueOf(page));
         addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/recharges", map), null, new VolleyListener(getActivity()) {
 
             @Override
@@ -74,19 +81,36 @@ public class FragmentFundRecord1 extends BaseFragment {
             @Override
             protected void onSuccess(JSONObject response) {
                 RechargeRecordBean bean = JsonUtils.objectFromJson(response.toString(), RechargeRecordBean.class);
-                data.clear();
+                isLoad = true;
+                if (loadType == 1) {
+                    data.clear();
+                }
                 data.addAll(bean.getData());
                 adapter.notifyDataSetChanged();
+                String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+                listView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
+                listView.onRefreshComplete();
             }
 
             @Override
             protected void onError(JSONObject response) {
                 Toast.makeText(getActivity(), getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
+                String label = DateUtils.formatDateTime(
+                        getActivity(),
+                        System.currentTimeMillis(),
+                        DateUtils.FORMAT_SHOW_TIME
+                                | DateUtils.FORMAT_SHOW_DATE
+                                | DateUtils.FORMAT_ABBREV_ALL);
+                // Update the LastUpdatedLabel
+                listView.getLoadingLayoutProxy(false, true)
+                        .setLastUpdatedLabel(label);
+                listView.onRefreshComplete();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 Toast.makeText(getActivity(), getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
+                listView.onRefreshComplete();
             }
         }));
     }
@@ -94,7 +118,7 @@ public class FragmentFundRecord1 extends BaseFragment {
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
         listView.getRefreshableView().setDividerHeight(2);
-        listView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+        listView.setMode(PullToRefreshBase.Mode.BOTH);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
         listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResourceString(R.string.refreshing));
@@ -119,25 +143,17 @@ public class FragmentFundRecord1 extends BaseFragment {
         };
         listView.setAdapter(adapter);
 
-        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
-            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        String label = DateUtils.formatDateTime(
-                                getActivity(),
-                                System.currentTimeMillis(),
-                                DateUtils.FORMAT_SHOW_TIME
-                                        | DateUtils.FORMAT_SHOW_DATE
-                                        | DateUtils.FORMAT_ABBREV_ALL);
-                        // Update the LastUpdatedLabel
-                        listView.getLoadingLayoutProxy(false, true)
-                                .setLastUpdatedLabel(label);
-                        listView.onRefreshComplete();
-                    }
-                }, 200);
-                initData();
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                page = 1;
+                initData(1);
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                page++;
+                initData(2);
             }
         });
 
@@ -161,6 +177,21 @@ public class FragmentFundRecord1 extends BaseFragment {
             }
         });
 
+    }
+
+    @Subscribe
+    public void onEvent(PayResultState code) {
+        //充值成功刷新订单
+        if (!isLoad) {
+            initData(1);
+        }
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     private String getPayType(String pay_type) {

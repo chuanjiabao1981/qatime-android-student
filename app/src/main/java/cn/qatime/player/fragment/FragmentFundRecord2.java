@@ -1,7 +1,6 @@
 package cn.qatime.player.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -45,17 +44,22 @@ public class FragmentFundRecord2 extends BaseFragment {
     private List<ConsumptionRecordBean.DataBean> data = new ArrayList<>();
     private CommonAdapter<ConsumptionRecordBean.DataBean> adapter;
     DecimalFormat df = new DecimalFormat("#.00");
+    private int page = 1;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fund_record2, container, false);
         initview(view);
-        initData();
         return view;
     }
-
-    private void initData() {
+    @Override
+    public void onShow() {
+        if (!isLoad) {
+            initData(1);
+        }
+    }
+    private void initData(final int loadType) {
         Map<String, String> map = new HashMap<>();
         map.put("start_date", "0");
         map.put("end_date", new Date().getTime() + "");
@@ -70,19 +74,36 @@ public class FragmentFundRecord2 extends BaseFragment {
             @Override
             protected void onSuccess(JSONObject response) {
                 ConsumptionRecordBean bean = JsonUtils.objectFromJson(response.toString(), ConsumptionRecordBean.class);
-                data.clear();
+                isLoad = true;
+                if (loadType == 1) {
+                    data.clear();
+                }
                 data.addAll(bean.getData());
                 adapter.notifyDataSetChanged();
+                String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+                listView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
+                listView.onRefreshComplete();
             }
 
             @Override
             protected void onError(JSONObject response) {
                 Toast.makeText(getActivity(), getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
+                String label = DateUtils.formatDateTime(
+                        getActivity(),
+                        System.currentTimeMillis(),
+                        DateUtils.FORMAT_SHOW_TIME
+                                | DateUtils.FORMAT_SHOW_DATE
+                                | DateUtils.FORMAT_ABBREV_ALL);
+                // Update the LastUpdatedLabel
+                listView.getLoadingLayoutProxy(false, true)
+                        .setLastUpdatedLabel(label);
+                listView.onRefreshComplete();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 Toast.makeText(getActivity(), getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
+                listView.onRefreshComplete();
             }
         }));
     }
@@ -90,7 +111,7 @@ public class FragmentFundRecord2 extends BaseFragment {
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
         listView.getRefreshableView().setDividerHeight(2);
-        listView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+        listView.setMode(PullToRefreshBase.Mode.BOTH);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
         listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResourceString(R.string.refreshing));
@@ -114,25 +135,17 @@ public class FragmentFundRecord2 extends BaseFragment {
         };
         listView.setAdapter(adapter);
 
-        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
-            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        String label = DateUtils.formatDateTime(
-                                getActivity(),
-                                System.currentTimeMillis(),
-                                DateUtils.FORMAT_SHOW_TIME
-                                        | DateUtils.FORMAT_SHOW_DATE
-                                        | DateUtils.FORMAT_ABBREV_ALL);
-                        // Update the LastUpdatedLabel
-                        listView.getLoadingLayoutProxy(false, true)
-                                .setLastUpdatedLabel(label);
-                        listView.onRefreshComplete();
-                    }
-                }, 200);
-                initData();
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                page = 1;
+                initData(1);
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                page++;
+                initData(2);
             }
         });
     }

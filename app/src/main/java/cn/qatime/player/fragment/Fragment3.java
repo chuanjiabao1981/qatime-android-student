@@ -56,6 +56,7 @@ public class Fragment3 extends BaseFragment {
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff999999);
                 ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff333333);
+                ((BaseFragment)fragBaseFragments.get(position)).onShow();
             }
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_fragment_news, 0x0912);
