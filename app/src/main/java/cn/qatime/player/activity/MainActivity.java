@@ -184,11 +184,9 @@ public class MainActivity extends BaseFragmentActivity {
         }
     }
 
-    /**
-     * 解析通知栏发来的云信消息
-     */
     private void parseIntent() {
         Intent intent = getIntent();
+        /**     * 解析通知栏发来的云信消息     */
         if (intent != null && intent.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT)) {
             ArrayList<IMMessage> messages = (ArrayList<IMMessage>) intent.getSerializableExtra(NimIntent.EXTRA_NOTIFY_CONTENT);
             if (messages != null && messages.size() == 1) {
@@ -206,6 +204,14 @@ public class MainActivity extends BaseFragmentActivity {
                         }
                     }
                 }, 500);
+            }
+        } else if (intent != null && intent.hasExtra("type")&&intent.getStringExtra("type").equals("system_message")){//转到系统消息页面
+            if (fragmentlayout != null) {
+                fragmentlayout.setCurrenItem(2);
+            }
+            if (((Fragment3) fragBaseFragments.get(2)) != null) {
+                Logger.e("main转到系统消息");
+                ((Fragment3) fragBaseFragments.get(2)).toSystemMessage();
             }
         }
     }

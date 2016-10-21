@@ -37,6 +37,9 @@ import com.umeng.message.UmengNotificationClickHandler;
 import com.umeng.message.entity.UMessage;
 import com.umeng.message.tag.TagManager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.config.UserPreferences;
@@ -116,13 +119,25 @@ public class BaseApplication extends Application {
         UmengNotificationClickHandler notificationClickHandler = new UmengNotificationClickHandler() {
             @Override
             public void dealWithCustomAction(Context context, UMessage msg) {
-                Toast.makeText(context, msg.custom, Toast.LENGTH_LONG).show();
+                Logger.e("收到custom");
+                if (msg != null && msg.custom != null && !StringUtils.isNullOrBlanK(msg.custom)) {
+                    try {
+                        JSONObject response = new JSONObject(msg.custom);
+                        if (response.has("type") && response.get("type").toString().equals("0")) {
+                            Intent intent = new Intent(BaseApplication.this, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.putExtra("type", "system_message");
+                            startActivity(intent);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         };
         mPushAgent.setNotificationClickHandler(notificationClickHandler);
 
         //注册推送服务，每次调用register方法都会回调该接口
-        Logger.e("register");
         mPushAgent.register(new IUmengRegisterCallback() {
 
             @Override
@@ -139,7 +154,7 @@ public class BaseApplication extends Application {
                 mPushAgent.getTagManager().add(new TagManager.TCallBack() {
                     @Override
                     public void onMessage(boolean b, ITagManager.Result result) {
-                        Logger.e("添加tag"+b);
+                        Logger.e("添加tag" + b);
                     }
                 }, "student");
                 Logger.e("device" + deviceToken);

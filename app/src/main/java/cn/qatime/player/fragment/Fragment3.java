@@ -2,6 +2,7 @@ package cn.qatime.player.fragment;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 
@@ -69,6 +71,24 @@ public class Fragment3 extends BaseFragment {
         if (fragBaseFragments != null && fragBaseFragments.size() > 0) {
             ((FragmentNews1) fragBaseFragments.get(0)).setMessage(message);
 
+        }
+    }
+
+    /**
+     * 转到系统消息页面
+     */
+    public void toSystemMessage() {
+        if (fragmentlayout != null) {
+            fragmentlayout.setCurrenItem(1);
+        }else {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (fragmentlayout != null) {
+                        fragmentlayout.setCurrenItem(1);
+                    }
+                }
+            },800);
         }
     }
 }
