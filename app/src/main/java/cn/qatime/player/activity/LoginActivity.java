@@ -175,7 +175,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                 }
                             } else {
 //                                profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
-                                Logger.e("登录", response.toString());
                                 SPUtils.put(LoginActivity.this, "username", username.getText().toString());
                                 profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
                                 if (profile != null && profile.getData() != null && profile.getData().getUser() != null && profile.getData().getUser().getId() != 0) {

@@ -26,6 +26,7 @@ import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
+import com.umeng.common.inter.ITagManager;
 import com.umeng.message.IUmengCallback;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.MsgConstant;
@@ -34,6 +35,7 @@ import com.umeng.message.UTrack;
 import com.umeng.message.UmengMessageHandler;
 import com.umeng.message.UmengNotificationClickHandler;
 import com.umeng.message.entity.UMessage;
+import com.umeng.message.tag.TagManager;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
@@ -130,10 +132,16 @@ public class BaseApplication extends Application {
                     mPushAgent.addAlias(String.valueOf(getUserId()), "student", new UTrack.ICallBack() {
                         @Override
                         public void onMessage(boolean b, String s) {
-
+                            Logger.e("添加别名" + b);
                         }
                     });
                 }
+                mPushAgent.getTagManager().add(new TagManager.TCallBack() {
+                    @Override
+                    public void onMessage(boolean b, ITagManager.Result result) {
+                        Logger.e("添加tag"+b);
+                    }
+                }, "student");
                 Logger.e("device" + deviceToken);
             }
 
