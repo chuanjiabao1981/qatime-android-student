@@ -51,22 +51,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="8dp"
-                    android:text="交易方式"
+                    android:text="提现方式"
                     android:textColor="#666666" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="8dp"
-                    android:text="交易金额"
+                    android:text="提现金额"
                     android:textColor="#666666" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
-                    android:text="手续扣费"
-                    android:textColor="#666666" />
 
             </LinearLayout>
 
@@ -106,7 +100,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingBottom="8dp"
-                    android:text="支付宝支付"
+                    android:text="支付宝"
                     android:textColor="#333333" />
 
                 <TextView
@@ -117,13 +111,6 @@
                     android:text="￥100"
                     android:textColor="#333333" />
 
-                <TextView
-                    android:id="@+id/commission"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
-                    android:text="￥100"
-                    android:textColor="#333333" />
 
             </LinearLayout>
         </LinearLayout>

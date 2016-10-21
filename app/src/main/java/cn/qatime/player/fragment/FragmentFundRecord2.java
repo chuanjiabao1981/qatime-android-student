@@ -32,7 +32,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.PayResultState;
-import cn.qatime.player.bean.RechargeRecordBean;
+import cn.qatime.player.bean.WithdrawCashRecordBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
@@ -47,8 +47,8 @@ import libraryextra.utils.VolleyListener;
  */
 public class FragmentFundRecord2 extends BaseFragment {
     private PullToRefreshListView listView;
-    private List<RechargeRecordBean.DataBean> data = new ArrayList<>();
-    private CommonAdapter<RechargeRecordBean.DataBean> adapter;
+    private List<WithdrawCashRecordBean.DataBean> data = new ArrayList<>();
+    private CommonAdapter<WithdrawCashRecordBean.DataBean> adapter;
     DecimalFormat df = new DecimalFormat("#.00");
     private int page = 1;
 
@@ -71,7 +71,7 @@ public class FragmentFundRecord2 extends BaseFragment {
     private void initData(final int loadType) {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(page));
-        addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/recharges", map), null, new VolleyListener(getActivity()) {
+        addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/withdraws", map), null, new VolleyListener(getActivity()) {
 
             @Override
             protected void onTokenOut() {
@@ -80,7 +80,7 @@ public class FragmentFundRecord2 extends BaseFragment {
 
             @Override
             protected void onSuccess(JSONObject response) {
-                RechargeRecordBean bean = JsonUtils.objectFromJson(response.toString(), RechargeRecordBean.class);
+                WithdrawCashRecordBean bean = JsonUtils.objectFromJson(response.toString(), WithdrawCashRecordBean.class);
                 isLoad = true;
                 if (loadType == 1) {
                     data.clear();
@@ -126,17 +126,17 @@ public class FragmentFundRecord2 extends BaseFragment {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
 
-        adapter = new CommonAdapter<RechargeRecordBean.DataBean>(getActivity(), data, R.layout.item_fragment_fund_record2) {
+        adapter = new CommonAdapter<WithdrawCashRecordBean.DataBean>(getActivity(), data, R.layout.item_fragment_fund_record2) {
 
             @Override
-            public void convert(ViewHolder helper, RechargeRecordBean.DataBean item, int position) {
-                helper.setText(R.id.id, item.getId());
+            public void convert(ViewHolder helper, WithdrawCashRecordBean.DataBean item, int position) {
+//                helper.setText(R.id.id, item.getId());
                 String price = df.format(Double.valueOf(item.getAmount()));
                 if (price.startsWith(".")) {
                     price = "0" + price;
                 }
-                helper.setText(R.id.money_amount, "+￥" + price);
-                helper.setText(R.id.time, item.getCreated_at());
+                helper.setText(R.id.money_amount, "-￥" + price);
+//                helper.setText(R.id.time, item.getCreated_at());
                 helper.setText(R.id.mode, getPayType(item.getPay_type()));
                 helper.setText(R.id.status, getStatus(item.getStatus()));
             }
@@ -160,9 +160,9 @@ public class FragmentFundRecord2 extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View itemView, int position, long id) {
-                RechargeRecordBean.DataBean dataBean = data.get(position - 1);
+                WithdrawCashRecordBean.DataBean dataBean = data.get(position - 1);
                 String status = dataBean.getStatus();
-                if ("unpaid".equals(status)) {//如果是未支付进行跳转
+                if ("init".equals(status)) {//如果是未支付进行跳转
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     final AlertDialog alertDialog = builder.create();
                     View view = View.inflate(getActivity(), R.layout.dialog_cancel_or_confirm, null);
@@ -219,24 +219,26 @@ public class FragmentFundRecord2 extends BaseFragment {
 
     private String getPayType(String pay_type) {
         switch (pay_type) {
-            case "weixin":
-                return "微信支付";
+            case "bank":
+                return "银行卡";
             case "alipay":
                 return "支付宝";
-            case "offline":
-                return "线下支付";
         }
-        return "微信支付";
+        return "银行卡";
     }
 
     private String getStatus(String status) {
         switch (status) {
-            case "unpaid":
-                return "未支付";
-            case "received":
-                return "充值成功";
+            case "init":
+                return "审核中";
+            case "allowed":
+                return "审核通过";
+            case "refused":
+                return "审核失败";
+            case "cancel  ":
+                return "已取消";
             default:
-                return "交易关闭";
+                return "已取消";
         }
     }
 

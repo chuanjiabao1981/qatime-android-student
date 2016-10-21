@@ -15,12 +15,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
-import cn.qatime.player.bean.PayResultState;
+import cn.qatime.player.utils.Constant;
 import libraryextra.utils.StringUtils;
 
 /**
@@ -28,7 +25,7 @@ import libraryextra.utils.StringUtils;
  * @date 2016/10/17 9:38
  * @Description:
  */
-public class WithdrawCash1Activity extends BaseActivity{
+public class WithdrawCash1Activity extends BaseActivity {
     private EditText rechargeNum;
     private LinearLayout toBankLayout;
     private ImageView toBank;
@@ -36,7 +33,7 @@ public class WithdrawCash1Activity extends BaseActivity{
     private ImageView toAlipay;
     private Button rechargeNow;
     private AlertDialog alertDialog;
-    private String payType;
+    private String payType = "bank";
     private static final int DECIMAL_DIGITS = 2;//小数的位数
 
     private void assignViews() {
@@ -58,18 +55,18 @@ public class WithdrawCash1Activity extends BaseActivity{
         toBankLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                payType = "weixin";
+                payType = "bank";
                 toBank.setImageResource(R.drawable.shape_select_circle_select);
                 toAlipay.setImageResource(R.drawable.shape_select_circle_normal);
             }
         });
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_withdraw1_cash);
         setTitle(getResourceString(R.string.withdraw_cash));
-        EventBus.getDefault().register(this);
         assignViews();
         initListener();
     }
@@ -162,27 +159,24 @@ public class WithdrawCash1Activity extends BaseActivity{
                     Toast.makeText(WithdrawCash1Activity.this, "金额不支持", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Intent intent = new Intent(WithdrawCash1Activity.this,WithdrawCash2Activity.class);
-                intent.putExtra("type", payType);
-                intent.putExtra("amount",amount);
-                startActivity(intent);
+                if (Double.valueOf(amount) > Double.valueOf(getIntent().getStringExtra("balance"))) {
+                    Toast.makeText(WithdrawCash1Activity.this, getResourceString(R.string.amount_not_enough), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Intent intent = new Intent(WithdrawCash1Activity.this, WithdrawConfirmActivity.class);
+                intent.putExtra("pay_type", payType);
+                intent.putExtra("amount", amount);
+                startActivityForResult(intent, Constant.REQUEST);
 
             }
         });
     }
 
-    @Subscribe
-    public void onEvent(PayResultState state) {
-//        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
-//
-//            finish();
-//        }
-        finish();
-    }
-
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constant.REGIST) {
+            setResult(resultCode);
+            finish();
+        }
     }
 }

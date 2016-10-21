@@ -28,10 +28,27 @@
             android:layout_marginRight="12dp"
             android:gravity="center_vertical"
             android:hint="@string/input_real_name" />
+        <LinearLayout
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            style="@style/edit_layout_bottom_style">
+
+            <EditText
+                android:id="@+id/code"
+                style="@style/activity_edit_text_style"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/text_getcode"
+                style="@style/button_style"
+                android:text="@string/getcode" />
+        </LinearLayout>
     </LinearLayout>
+
 
     <Button
         android:id="@+id/withdraw_cash_now"
+        android:enabled="false"
         style="@style/button_full_width_style"
         android:layout_alignParentBottom="true"
         android:text="@string/withdraw_cash_now" />

@@ -41,6 +41,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
     private TextView consumption;
     private LinearLayout rechargeRecord;
     private LinearLayout consumptionRecord;
+    private LinearLayout withdrawRecord;
     private TextView phone;
     private TextView recharge;
     private TextView withdrawCash;
@@ -53,6 +54,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
         consumption = (TextView) findViewById(R.id.consumption);
         rechargeRecord = (LinearLayout) findViewById(R.id.recharge_record);
         consumptionRecord = (LinearLayout) findViewById(R.id.consumption_record);
+        withdrawRecord = (LinearLayout) findViewById(R.id.withdraw_record);
         phone = (TextView) findViewById(R.id.phone);
         recharge = (TextView) findViewById(R.id.recharge);
         withdrawCash = (TextView) findViewById(R.id.withdraw_cash);
@@ -78,8 +80,9 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
         phone.setOnClickListener(this);
         consumptionRecord.setOnClickListener(this);
         rechargeRecord.setOnClickListener(this);
+        withdrawRecord.setOnClickListener(this);
         withdrawCash.setOnClickListener(this);
-        SPUtils.put(PersonalMyWalletActivity.this,"balance",balance.getText().toString());
+        SPUtils.put(PersonalMyWalletActivity.this, "balance", balance.getText().toString());
     }
 
     private void initData() {
@@ -159,6 +162,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
                 break;
             case R.id.withdraw_cash:
                 intent = new Intent(this, WithdrawCash1Activity.class);
+                intent.putExtra("balance",balance.getText().toString());
                 startActivity(intent);
                 break;
             case R.id.recharge_record:
@@ -166,9 +170,14 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
                 intent.putExtra("page", 0);
                 startActivity(intent);
                 break;
-            case R.id.consumption_record:
+            case R.id.withdraw_record:
                 intent = new Intent(this, RecordFundActivity.class);
                 intent.putExtra("page", 1);
+                startActivity(intent);
+                break;
+            case R.id.consumption_record:
+                intent = new Intent(this, RecordFundActivity.class);
+                intent.putExtra("page", 2);
                 startActivity(intent);
                 break;
         }
@@ -184,6 +193,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
         //接收到充值信息后,设置返回码刷新数据
         setResult(Constant.RESPONSE);
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
