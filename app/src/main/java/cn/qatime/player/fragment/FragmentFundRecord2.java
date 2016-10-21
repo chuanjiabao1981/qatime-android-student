@@ -142,7 +142,7 @@ public class FragmentFundRecord2 extends BaseFragment {
                 helper.setText(R.id.mode, getPayType(item.getPay_type()));
                 helper.setText(R.id.status, getStatus(item.getStatus()));
                 helper.setText(R.id.id,item.getTransaction_no());
-                helper.setText(R.id.time,item.getCreate_at());
+                helper.setText(R.id.time,item.getCreated_at());
             }
         };
         listView.setAdapter(adapter);

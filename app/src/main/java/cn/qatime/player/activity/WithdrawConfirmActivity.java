@@ -143,7 +143,7 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
                             intent.putExtra("amount",bean.getData().getAmount());
                             intent.putExtra("pay_type",bean.getData().getPay_type());
                             intent.putExtra("id",bean.getData().getTransaction_no());
-                            intent.putExtra("create_at",bean.getData().getCreate_at());
+                            intent.putExtra("create_at",bean.getData().getCreated_at());
                             startActivityForResult(intent, Constant.REQUEST);
                         } else {
                             onError(response);
