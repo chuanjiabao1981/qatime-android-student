@@ -1,6 +1,7 @@
 package cn.qatime.player.base;
 
 import android.app.Application;
+import android.app.Notification;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +10,10 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.text.TextUtils;
+import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -22,6 +26,19 @@ import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
+import com.umeng.common.inter.ITagManager;
+import com.umeng.message.IUmengCallback;
+import com.umeng.message.IUmengRegisterCallback;
+import com.umeng.message.MsgConstant;
+import com.umeng.message.PushAgent;
+import com.umeng.message.UTrack;
+import com.umeng.message.UmengMessageHandler;
+import com.umeng.message.UmengNotificationClickHandler;
+import com.umeng.message.entity.UMessage;
+import com.umeng.message.tag.TagManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
@@ -58,6 +75,102 @@ public class BaseApplication extends Application {
         Queue = Volley.newRequestQueue(getApplicationContext());
 
         profile = SPUtils.getObject(this, "profile", Profile.class);
+        initUmengPush();
+        initYunxin();
+    }
+
+    private void initUmengPush() {
+        final PushAgent mPushAgent = PushAgent.getInstance(this);
+        mPushAgent.setDebugMode(UrlUtils.isDebug);
+
+        // 通知声音由服务端控制
+        mPushAgent.setNotificationPlaySound(MsgConstant.NOTIFICATION_PLAY_SERVER);
+        mPushAgent.setNotificationPlayLights(MsgConstant.NOTIFICATION_PLAY_SERVER);
+        mPushAgent.setNotificationPlayVibrate(MsgConstant.NOTIFICATION_PLAY_SERVER);
+
+//        UmengMessageHandler messageHandler = new UmengMessageHandler() {
+//            /**
+//             * 自定义通知栏样式的回调方法
+//             * */
+//            @Override
+//            public Notification getNotification(Context context, UMessage msg) {
+//                switch (msg.builder_id) {
+//                    case 1:
+//                        Notification.Builder builder = new Notification.Builder(context);
+//                        RemoteViews myNotificationView = new RemoteViews(context.getPackageName(), R.layout.notification_view);
+//                        myNotificationView.setTextViewText(R.id.notification_title, msg.title);
+//                        myNotificationView.setTextViewText(R.id.notification_text, msg.text);
+//                        myNotificationView.setImageViewBitmap(R.id.notification_large_icon, getLargeIcon(context, msg));
+//                        myNotificationView.setImageViewResource(R.id.notification_small_icon, getSmallIconId(context, msg));
+//                        builder.setContent(myNotificationView)
+//                                .setSmallIcon(getSmallIconId(context, msg))
+//                                .setTicker(msg.ticker)
+//                                .setAutoCancel(true);
+//
+//                        return builder.getNotification();
+//                    default:
+//                        //默认为0，若填写的builder_id并不存在，也使用默认。
+//                        return super.getNotification(context, msg);
+//                }
+//            }
+//        };
+//        mPushAgent.setMessageHandler(messageHandler);
+
+        UmengNotificationClickHandler notificationClickHandler = new UmengNotificationClickHandler() {
+            @Override
+            public void dealWithCustomAction(Context context, UMessage msg) {
+                Logger.e("收到custom");
+                if (msg != null && msg.custom != null && !StringUtils.isNullOrBlanK(msg.custom)) {
+                    try {
+                        JSONObject response = new JSONObject(msg.custom);
+                        if (response.has("type") && response.get("type").toString().equals("0")) {
+                            Intent intent = new Intent(BaseApplication.this, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.putExtra("type", "system_message");
+                            startActivity(intent);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+        mPushAgent.setNotificationClickHandler(notificationClickHandler);
+
+        //注册推送服务，每次调用register方法都会回调该接口
+        mPushAgent.register(new IUmengRegisterCallback() {
+
+            @Override
+            public void onSuccess(String deviceToken) {
+                //注册成功会返回device token
+                if (getUserId() != 0) {
+                    mPushAgent.addAlias(String.valueOf(getUserId()), "student", new UTrack.ICallBack() {
+                        @Override
+                        public void onMessage(boolean b, String s) {
+                            Logger.e("添加别名" + b);
+                        }
+                    });
+                }
+                mPushAgent.getTagManager().add(new TagManager.TCallBack() {
+                    @Override
+                    public void onMessage(boolean b, ITagManager.Result result) {
+                        Logger.e("添加tag" + b);
+                    }
+                }, "student");
+                Logger.e("device" + deviceToken);
+            }
+
+            @Override
+            public void onFailure(String s, String s1) {
+
+            }
+        });
+        //TODO
+//        mPushAgent.setNotificaitonOnForeground(false);
+
+    }
+
+    private void initYunxin() {
         /** 云信集成start*/
         // SDK初始化（启动后台服务，若已经存在用户登录信息， SDK 将完成自动登录）
         SPUtils.setContext(this);

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.umeng.message.PushAgent;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        PushAgent.getInstance(this).onAppStart();
     }
 
     public void setTitle(String text) {
