@@ -44,6 +44,24 @@ public class WithdrawCashBean {
         private String status;
         private String account;
         private String name;
+        private String transaction_no;
+        private String created_at;
+
+        public String getCreated_at() {
+            return created_at;
+        }
+
+        public void setCreated_at(String created_at) {
+            this.created_at = created_at;
+        }
+
+        public String getTransaction_no() {
+            return transaction_no;
+        }
+
+        public void setTransaction_no(String transaction_no) {
+            this.transaction_no = transaction_no;
+        }
 
         public String getAmount() {
             return amount;

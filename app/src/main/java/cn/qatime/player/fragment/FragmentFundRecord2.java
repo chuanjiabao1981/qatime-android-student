@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -38,6 +39,7 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
 /**
@@ -139,6 +141,8 @@ public class FragmentFundRecord2 extends BaseFragment {
 //                helper.setText(R.id.time, item.getCreated_at());
                 helper.setText(R.id.mode, getPayType(item.getPay_type()));
                 helper.setText(R.id.status, getStatus(item.getStatus()));
+                helper.setText(R.id.id,item.getTransaction_no());
+                helper.setText(R.id.time,item.getCreate_at());
             }
         };
         listView.setAdapter(adapter);
@@ -160,7 +164,7 @@ public class FragmentFundRecord2 extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View itemView, int position, long id) {
-                WithdrawCashRecordBean.DataBean dataBean = data.get(position - 1);
+                final WithdrawCashRecordBean.DataBean dataBean = data.get(position - 1);
                 String status = dataBean.getStatus();
                 if ("init".equals(status)) {//如果是未支付进行跳转
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -180,7 +184,7 @@ public class FragmentFundRecord2 extends BaseFragment {
                         @Override
                         public void onClick(View v) {
                             // TODO: 2016/10/17 取消提现
-//                CancelOrder(position, id);
+                         CancelWithDraw(dataBean.getTransaction_no());
                             alertDialog.dismiss();
                         }
                     });
@@ -200,6 +204,35 @@ public class FragmentFundRecord2 extends BaseFragment {
             }
         });
 
+    }
+
+    private void CancelWithDraw(String transaction_no) {
+        addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.PUT,UrlUtils.urlpayment + BaseApplication.getUserId() + "/withdraws/" + transaction_no + "/cancel", null, new VolleyListener(getActivity()) {
+            @Override
+            protected void onTokenOut() {
+                tokenOut();
+            }
+
+            @Override
+            protected void onSuccess(JSONObject response) {
+                if (!response.isNull("data")) {
+                    Toast.makeText(getActivity(), "提现取消成功", Toast.LENGTH_SHORT).show();
+                    initData(1);
+                } else {
+                    onError(response);
+                }
+            }
+
+            @Override
+            protected void onError(JSONObject response) {
+
+            }
+        }, new VolleyErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        }));
     }
 
     @Subscribe

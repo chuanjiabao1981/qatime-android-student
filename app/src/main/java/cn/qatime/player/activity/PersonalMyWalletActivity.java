@@ -163,7 +163,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
             case R.id.withdraw_cash:
                 intent = new Intent(this, WithdrawCash1Activity.class);
                 intent.putExtra("balance",balance.getText().toString());
-                startActivity(intent);
+                startActivityForResult(intent,Constant.REQUEST);
                 break;
             case R.id.recharge_record:
                 intent = new Intent(this, RecordFundActivity.class);
@@ -181,6 +181,11 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
                 startActivity(intent);
                 break;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        initData();
     }
 
     @Subscribe

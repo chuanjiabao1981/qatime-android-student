@@ -35,6 +35,8 @@ public class WithdrawResultActivity extends BaseActivity implements View.OnClick
 //        commission = (TextView) findViewById(R.id.commission);
         amount.setText(getIntent().getStringExtra("amount"));
         mode.setText(getPayType(getIntent().getStringExtra("pay_type")));
+        id.setText(getIntent().getStringExtra("id"));
+        time.setText(getIntent().getStringExtra("create_at"));
 
         withdrawCashConfirm = (Button) findViewById(R.id.withdraw_cash_confirm);
         phone = (TextView) findViewById(R.id.phone);

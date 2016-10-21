@@ -3,6 +3,7 @@ package cn.qatime.player.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -44,6 +45,7 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
     private EditText code;
     private TextView textGetcode;
     private TimeCount time;
+    private AlertDialog alertDialog;
 
     private void assignViews() {
         account = (EditText) findViewById(R.id.account);
@@ -122,11 +124,11 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
 
                 map = new HashMap<>();
                 map.put("send_to", BaseApplication.getProfile().getData().getUser().getLogin_mobile());
-                map.put("captcha", code.getText().toString().trim());
                 map.put("amount", amount);
-                map.put("payType", payType);
+                map.put("pay_type", payType);
                 map.put("account", account.getText().toString().trim());
-                map.put("verify", name.getText().toString().trim());
+                map.put("name", name.getText().toString().trim());
+                map.put("verify", code.getText().toString().trim());
                 addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/withdraws", map), null, new VolleyListener(this) {
                     @Override
                     protected void onTokenOut() {
@@ -140,6 +142,8 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
                             Intent intent = new Intent(WithdrawConfirmActivity.this,WithdrawResultActivity.class);
                             intent.putExtra("amount",bean.getData().getAmount());
                             intent.putExtra("pay_type",bean.getData().getPay_type());
+                            intent.putExtra("id",bean.getData().getTransaction_no());
+                            intent.putExtra("create_at",bean.getData().getCreate_at());
                             startActivityForResult(intent, Constant.REQUEST);
                         } else {
                             onError(response);
@@ -158,7 +162,7 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
                             } else  if (code == 3003) {//  "msg": "APIErrors::WithdrawExisted"
                                 Toast.makeText(WithdrawConfirmActivity.this,getResources().getString(R.string.withdraw_existed),Toast.LENGTH_SHORT).show();
                             } else{
-                                Toast.makeText(WithdrawConfirmActivity.this,getResources().getString(R.string.order_create_failed),Toast.LENGTH_SHORT).show();
+                               dialog();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -168,12 +172,32 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         super.onErrorResponse(volleyError);
+                        dialog();
                         Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show();
                     }
                 }));
         }
     }
 
+    protected void dialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        alertDialog = builder.create();
+        View view = View.inflate(this, R.layout.dialog_confirm, null);
+        TextView tv = (TextView) view.findViewById(R.id.text);
+        tv.setText("提现系统繁忙，请稍候再试。");
+        Button confirm = (Button) view.findViewById(R.id.confirm);
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.show();
+        alertDialog.setContentView(view);
+//        WindowManager.LayoutParams attributes = alertDialog.getWindow().getAttributes();
+//        attributes.width= ScreenUtils.getScreenWidth(getApplicationContext())- DensityUtils.dp2px(getApplicationContext(),20)*2;
+//        alertDialog.getWindow().setAttributes(attributes);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
