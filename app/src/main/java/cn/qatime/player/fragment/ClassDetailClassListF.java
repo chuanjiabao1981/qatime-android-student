@@ -19,7 +19,7 @@ import cn.qatime.player.base.BaseFragment;
 import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.StringUtils;
 
-public class FragmentRemedialClassDetail3 extends BaseFragment {
+public class ClassDetailClassListF extends BaseFragment {
     private CommonAdapter<RemedialClassDetailBean.Lessons> adapter;
     private List<RemedialClassDetailBean.Lessons> list = new ArrayList<>();
 

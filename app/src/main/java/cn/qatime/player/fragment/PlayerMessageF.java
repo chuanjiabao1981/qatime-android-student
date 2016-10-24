@@ -8,12 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.netease.nimlib.sdk.NIMClient;
@@ -46,7 +44,7 @@ import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.FriendDataCache;
 import cn.qatime.player.im.cache.TeamDataCache;
 
-public class FragmentNEVideoPlayer2 extends BaseFragment {
+public class PlayerMessageF extends BaseFragment {
     private TextView tipText;
     public PullToRefreshListView listView;
     public BaseAdapter adapter;
@@ -431,7 +429,7 @@ public class FragmentNEVideoPlayer2 extends BaseFragment {
             if (team == null) {
                 return;
             }
-            if (team.getId().equals(FragmentNEVideoPlayer2.this.team.getId())) {
+            if (team.getId().equals(PlayerMessageF.this.team.getId())) {
                 updateTeamInfo(team);
             }
         }

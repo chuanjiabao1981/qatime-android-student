@@ -41,7 +41,7 @@ import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
-public class Fragment11 extends BaseFragment {
+public class RemedialClassUpToDateF extends BaseFragment {
     private PullToRefreshGridView grid;
     private List<RemedialClassBean.Data> list = new ArrayList<>();
     private CommonAdapter<RemedialClassBean.Data> adapter;

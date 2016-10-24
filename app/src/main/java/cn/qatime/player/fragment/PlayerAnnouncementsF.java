@@ -19,7 +19,7 @@ import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import cn.qatime.player.base.BaseFragment;
 
-public class FragmentNEVideoPlayer1 extends BaseFragment {
+public class PlayerAnnouncementsF extends BaseFragment {
     private PullToRefreshListView listView;
     private CommonAdapter<Announcements.DataBean.AnnouncementsBean> adapter;
     private List<Announcements.DataBean.AnnouncementsBean> items = new ArrayList<>();

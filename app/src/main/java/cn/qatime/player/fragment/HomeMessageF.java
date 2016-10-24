@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.netease.nimlib.sdk.msg.model.IMMessage;
-import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 
@@ -19,7 +18,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.view.FragmentLayoutWithLine;
 
-public class Fragment3 extends BaseFragment {
+public class HomeMessageF extends BaseFragment {
     FragmentLayoutWithLine fragmentlayout;
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2};
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
@@ -41,8 +40,8 @@ public class Fragment3 extends BaseFragment {
 //            }
 //        });
 
-        fragBaseFragments.add(new FragmentNews1());
-        fragBaseFragments.add(new FragmentNews2());
+        fragBaseFragments.add(new MessageChatNewsF());
+        fragBaseFragments.add(new MessageNotifyNewsF());
 
 
         fragmentlayout = (FragmentLayoutWithLine) view.findViewById(R.id.fragmentlayout);
@@ -70,7 +69,7 @@ public class Fragment3 extends BaseFragment {
      */
     public void setMessage(IMMessage message) {
         if (fragBaseFragments != null && fragBaseFragments.size() > 0) {
-            ((FragmentNews1) fragBaseFragments.get(0)).setMessage(message);
+            ((MessageChatNewsF) fragBaseFragments.get(0)).setMessage(message);
 
         }
     }

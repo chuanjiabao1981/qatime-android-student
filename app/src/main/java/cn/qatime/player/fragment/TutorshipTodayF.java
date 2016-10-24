@@ -43,7 +43,7 @@ import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
-public class FragmentPersonalMyTutorship3 extends BaseFragment {
+public class TutorshipTodayF extends BaseFragment {
     private PullToRefreshListView listView;
     private java.util.List<TutorialClassBean.Data> list = new ArrayList<>();
     private CommonAdapter<TutorialClassBean.Data> adapter;
@@ -55,7 +55,7 @@ public class FragmentPersonalMyTutorship3 extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_personal_my_tutorship3, container, false);
+        View view = inflater.inflate(R.layout.fragment_personal_my_tutorship1, container, false);
         initview(view);
         return view;
     }
@@ -71,14 +71,16 @@ public class FragmentPersonalMyTutorship3 extends BaseFragment {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
 
-        adapter = new CommonAdapter<TutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship3) {
+        adapter = new CommonAdapter<TutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship1) {
             @Override
             public void convert(ViewHolder helper, final TutorialClassBean.Data item, int position) {
+
 
                 helper.setText(R.id.class_start_time, getResourceString(R.string.item_class_start_date) + item.getLive_start_time());
 
 
                 helper.setText(R.id.class_end_time, getResourceString(R.string.item_class_end_date) + item.getLive_end_time());
+
                 helper.getView(R.id.video).setVisibility(StringUtils.isNullOrBlanK(item.getPull_address()) ? View.GONE : View.VISIBLE);
                 helper.getView(R.id.enter).setVisibility(item.getIs_bought() ? View.GONE : View.VISIBLE);
                 helper.getView(R.id.video).setOnClickListener(new View.OnClickListener() {
@@ -86,8 +88,8 @@ public class FragmentPersonalMyTutorship3 extends BaseFragment {
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
                         intent.putExtra("url", item.getPull_address());
-                        intent.putExtra("id", item.getId());
-                        intent.putExtra("sessionId", item.getChat_team_id());
+                        intent.putExtra("id",item.getId());
+                        intent.putExtra("sessionId",item.getChat_team_id());
                         startActivity(intent);
                     }
                 });
@@ -113,20 +115,18 @@ public class FragmentPersonalMyTutorship3 extends BaseFragment {
                         startActivity(intent);
                     }
                 });
+
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
-                helper.setText(R.id.subject, getResourceString(R.string.item_subject) + item.getSubject());
+                helper.setText(R.id.subject,getResourceString(R.string.item_subject)  + item.getSubject());
                 helper.setText(R.id.teacher, getResourceString(R.string.item_teacher) + item.getTeacher_name());
                 helper.setText(R.id.progress, item.getCompleted_lesson_count() + "/" + item.getPreset_lesson_count());
                 ((ProgressBar) helper.getView(R.id.progressbar)).setProgress(item.getCompleted_lesson_count());
                 ((ProgressBar) helper.getView(R.id.progressbar)).setMax(item.getPreset_lesson_count());
-                helper.setText(R.id.remain_class, String.valueOf(item.getPreset_lesson_count() - item.getCompleted_lesson_count()));
-
-                helper.setText(R.id.teaching_time, getResourceString(R.string.item_next_class) + item.getPreview_time());
+                helper.setText(R.id.remain_class, String.valueOf(item.getPreset_lesson_count()-item.getCompleted_lesson_count()));
+                helper.setText(R.id.teaching_time, getResourceString(R.string.item_time) + item.getPreview_time());
 
             }
-
-
         };
         listView.setAdapter(adapter);
 
@@ -153,6 +153,7 @@ public class FragmentPersonalMyTutorship3 extends BaseFragment {
         });
     }
 
+    @Override
     public void onShow() {
         if (!isLoad) {
             initData(1);
@@ -167,7 +168,7 @@ public class FragmentPersonalMyTutorship3 extends BaseFragment {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(page));
         map.put("per_page", "10");
-        map.put("status", "teaching");
+        map.put("cate", "today");
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/courses", map), null,
                 new VolleyListener(getActivity()) {
@@ -213,7 +214,6 @@ public class FragmentPersonalMyTutorship3 extends BaseFragment {
                     protected void onTokenOut() {
                         tokenOut();
                     }
-
                 }, new VolleyErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {

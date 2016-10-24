@@ -8,30 +8,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.android.volley.VolleyError;
-import com.bumptech.glide.Glide;
-
-import org.json.JSONObject;
-
 import cn.qatime.player.R;
-import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.utils.DaYiJsonObjectRequest;
-import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.view.VerticalSlide;
 import libraryextra.bean.RemedialClassDetailBean;
-import libraryextra.utils.JsonUtils;
-import libraryextra.utils.VolleyErrorListener;
-import libraryextra.utils.VolleyListener;
 
-public class FragmentNEVideoPlayer3 extends BaseFragment {
+public class PlayerLiveDetailsF extends BaseFragment {
 
     private ImageView point3;
     private ImageView point1;
     private ImageView point2;
-    private FragmentNEVideoPlayer32 player2;
-    private FragmentNEVideoPlayer31 player1;
-    private FragmentNEVideoPlayer33 player3;
+    private LiveTeacherDetailsF player2;
+    private LiveClassDetailsF player1;
+    private LiveClassListF player3;
     private int id; //获取联网的id
 
     @Nullable
@@ -61,9 +50,9 @@ public class FragmentNEVideoPlayer3 extends BaseFragment {
             }
         });
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        player1 = new FragmentNEVideoPlayer31();
-        player2 = new FragmentNEVideoPlayer32();
-        player3 = new FragmentNEVideoPlayer33();
+        player1 = new LiveClassDetailsF();
+        player2 = new LiveTeacherDetailsF();
+        player3 = new LiveClassListF();
         transaction.replace(R.id.first, player1);
         transaction.replace(R.id.second, player2);
         transaction.replace(R.id.three, player3);

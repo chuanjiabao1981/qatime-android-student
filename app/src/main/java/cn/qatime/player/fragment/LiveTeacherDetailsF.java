@@ -19,7 +19,7 @@ import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 
-public class FragmentNEVideoPlayer32 extends BaseFragment {
+public class LiveTeacherDetailsF extends BaseFragment {
     private TextView name;
     private ImageView image;
     private TextView teachingyears;

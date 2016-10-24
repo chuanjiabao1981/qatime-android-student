@@ -21,14 +21,12 @@ import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
-import cn.qatime.player.activity.OrderConfirmActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
@@ -36,24 +34,24 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.OrderPayBean;
 import libraryextra.bean.TutorialClassBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
-public class FragmentPersonalMyTutorship2 extends BaseFragment {
+public class TutorshipOverF extends BaseFragment {
     private PullToRefreshListView listView;
     private java.util.List<TutorialClassBean.Data> list = new ArrayList<>();
     private CommonAdapter<TutorialClassBean.Data> adapter;
     private int page = 1;
+
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_personal_my_tutorship2, container, false);
+        View view = inflater.inflate(R.layout.fragment_personal_my_tutorship4, container, false);
         initview(view);
         return view;
     }
@@ -68,55 +66,26 @@ public class FragmentPersonalMyTutorship2 extends BaseFragment {
         listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResourceString(R.string.loading));
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
-        adapter = new CommonAdapter<TutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship2) {
 
-
+        adapter = new CommonAdapter<TutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship4) {
             @Override
-            public void convert(ViewHolder helper, final TutorialClassBean.Data item, int position) {
+            public void convert(ViewHolder helper, TutorialClassBean.Data item, int position) {
 
-                helper.setText(R.id.class_start_time, getResourceString(R.string.item_class_start_date) + item.getLive_start_time());
-                helper.setText(R.id.class_end_time, getResourceString(R.string.item_class_end_date) + item.getLive_end_time());
-                helper.getView(R.id.enter).setVisibility(item.getIs_bought() ? View.GONE : View.VISIBLE);
-                helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), OrderConfirmActivity.class);
-                        intent.putExtra("id", item.getId());
-                        OrderPayBean bean = new OrderPayBean();
-                        bean.image = item.getPublicize();
-                        bean.name = item.getName();
-                        bean.subject = item.getSubject();
-                        bean.grade = item.getGrade();
-                        bean.classnumber = item.getPreset_lesson_count();
-                        bean.teacher = item.getTeacher_name();
-                        bean.classendtime = item.getLive_end_time();
-                        bean.status = "";
-                        bean.classstarttime = item.getLive_start_time();
-                        bean.price = item.getPrice();
-                        intent.putExtra("data", bean);
-                        startActivity(intent);
-                    }
-                });
+                helper.setText(R.id.class_start_time, getResourceString(R.string.item_class_start_date)+ item.getLive_start_time());
 
+
+                helper.setText(R.id.class_end_time, getResourceString(R.string.item_class_end_date)+ item.getLive_end_time());
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
-                helper.setText(R.id.subject, getResourceString(R.string.item_subject) + item.getSubject());
+                helper.setText(R.id.subject, getResourceString(R.string.item_subject)+ item.getSubject());
                 helper.setText(R.id.teacher, getResourceString(R.string.item_teacher) + item.getTeacher_name());
                 helper.setText(R.id.progress, item.getCompleted_lesson_count() + "/" + item.getPreset_lesson_count());
                 ((ProgressBar) helper.getView(R.id.progressbar)).setProgress(item.getCompleted_lesson_count());
                 ((ProgressBar) helper.getView(R.id.progressbar)).setMax(item.getPreset_lesson_count());
-                helper.setText(R.id.remain_class, String.valueOf(item.getPreset_lesson_count() - item.getCompleted_lesson_count()));
-                try {
-                    long time = System.currentTimeMillis() - parse.parse(item.getPreview_time()).getTime();
-                    int value = 0;
-                    if (time > 0) {
-                        value = (int) (time / (1000 * 3600 * 24));
-                    }
-                    helper.setText(R.id.teaching_time, getResourceString(R.string.item_to_start) + value + getResourceString(R.string.item_day));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                helper.setText(R.id.remain_class, String.valueOf(item.getPreset_lesson_count()-item .getCompleted_lesson_count()));
             }
+
+
         };
         listView.setAdapter(adapter);
 
@@ -157,10 +126,12 @@ public class FragmentPersonalMyTutorship2 extends BaseFragment {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(page));
         map.put("per_page", "10");
-        map.put("status", "preview");
+        map.put("status", "completed");
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/courses", map), null,
                 new VolleyListener(getActivity()) {
+
+
                     @Override
                     protected void onSuccess(JSONObject response) {
                         isLoad = true;
@@ -211,3 +182,4 @@ public class FragmentPersonalMyTutorship2 extends BaseFragment {
         addToRequestQueue(request);
     }
 }
+

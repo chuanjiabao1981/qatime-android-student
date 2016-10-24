@@ -14,7 +14,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.view.FragmentLayout;
 
-public class Fragment1 extends BaseFragment {
+public class HomeRemedialClassF extends BaseFragment {
 
     private FragmentLayout root;
     public ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
@@ -42,8 +42,8 @@ public class Fragment1 extends BaseFragment {
         }
 
         //添加fragment
-        fragBaseFragments.add(new Fragment11());
-        fragBaseFragments.add(new Fragment12());
+        fragBaseFragments.add(new RemedialClassUpToDateF());
+        fragBaseFragments.add(new RemedialClassAllF());
 
         root = (FragmentLayout) view.findViewById(R.id.root);
         root.setScorllToNext(true);

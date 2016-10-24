@@ -45,7 +45,7 @@ import libraryextra.utils.VolleyListener;
  * @date 2016/8/15 20:05
  * @Description
  */
-public class FragmentNews2 extends BaseFragment {
+public class MessageNotifyNewsF extends BaseFragment {
     private PullToRefreshListView listView;
     private CommonAdapter<SystemNotifyBean.DataBean> adapter;
     private List<SystemNotifyBean.DataBean> list = new ArrayList<>();

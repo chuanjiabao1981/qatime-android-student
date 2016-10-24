@@ -18,7 +18,7 @@ import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 
-public class FragmentRemedialClassDetail2 extends BaseFragment {
+public class ClassDetailTeacherInfoF extends BaseFragment {
     private TextView name;
     private ImageView image;
     private TextView teachingyears;

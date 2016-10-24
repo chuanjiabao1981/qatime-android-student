@@ -18,7 +18,7 @@ import cn.qatime.player.activity.ClassTimeTableActivity;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.view.FragmentLayoutWithLine;
 
-public class Fragment2 extends BaseFragment {
+public class HomeClassTableF extends BaseFragment {
 
     ImageView image;
     FragmentLayoutWithLine fragmentlayout;
@@ -47,8 +47,8 @@ public class Fragment2 extends BaseFragment {
             }
         });
 
-        fragBaseFragments.add(new FragmentRemedialClassTimeTable1());
-        fragBaseFragments.add(new FragmentRemedialClassTimeTable2());
+        fragBaseFragments.add(new ClassTableUnclosedF());
+        fragBaseFragments.add(new ClassTableClosedF());
 
 
         fragmentlayout = (FragmentLayoutWithLine) view.findViewById(R.id.fragmentlayout);

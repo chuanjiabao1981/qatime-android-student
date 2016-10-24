@@ -19,7 +19,7 @@ import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.Announcements;
 import libraryextra.utils.StringUtils;
 
-public class FragmentNEVideoPlayer4 extends BaseFragment {
+public class PlayerMembersF extends BaseFragment {
     private ListView listView;
     private List<Announcements.DataBean.MembersBean> list = new ArrayList<>();
     private FragmentNEVideoPlayerAdapter4 adapter;

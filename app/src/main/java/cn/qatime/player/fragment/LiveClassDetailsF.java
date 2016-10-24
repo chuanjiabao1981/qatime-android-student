@@ -12,7 +12,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.bean.RemedialClassDetailBean;
 
-public class FragmentNEVideoPlayer31 extends BaseFragment {
+public class LiveClassDetailsF extends BaseFragment {
 
     TextView describe;
     TextView name;

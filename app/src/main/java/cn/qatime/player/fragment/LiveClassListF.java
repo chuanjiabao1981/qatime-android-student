@@ -17,7 +17,7 @@ import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.StringUtils;
 
-public class FragmentNEVideoPlayer33 extends BaseFragment {
+public class LiveClassListF extends BaseFragment {
     private CommonAdapter<RemedialClassDetailBean.Lessons> adapter;
     private List<RemedialClassDetailBean.Lessons> lists = new ArrayList<>();
     private RemedialClassDetailBean.Data data;

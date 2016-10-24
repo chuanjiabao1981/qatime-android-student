@@ -65,7 +65,7 @@ import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.MDatePickerDialog;
 
-public class Fragment12 extends BaseFragment implements View.OnClickListener {
+public class RemedialClassAllF extends BaseFragment implements View.OnClickListener {
 
     LinearLayout timesort;
     TextView timetext;

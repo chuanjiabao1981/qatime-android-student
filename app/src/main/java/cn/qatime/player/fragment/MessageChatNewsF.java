@@ -67,7 +67,7 @@ import libraryextra.utils.VolleyListener;
  * @date 2016/8/15 20:05
  * @Description 辅导班消息
  */
-public class FragmentNews1 extends BaseFragment {
+public class MessageChatNewsF extends BaseFragment {
 
     public static final long RECENT_TAG_STICKY = 1; // 联系人置顶tag
 

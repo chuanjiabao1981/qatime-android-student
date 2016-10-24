@@ -13,7 +13,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.bean.RemedialClassDetailBean;
 
-public class FragmentRemedialClassDetail1 extends BaseFragment {
+public class ClassDetailClassInfoF extends BaseFragment {
 
     TextView describe;
 //    TextView name;

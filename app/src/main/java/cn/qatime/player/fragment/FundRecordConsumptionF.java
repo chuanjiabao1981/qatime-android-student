@@ -39,7 +39,7 @@ import libraryextra.utils.VolleyListener;
  * @date 2016/9/27 17:17
  * @Description:
  */
-public class FragmentFundRecord3 extends BaseFragment {
+public class FundRecordConsumptionF extends BaseFragment {
     private PullToRefreshListView listView;
     private List<ConsumptionRecordBean.DataBean> data = new ArrayList<>();
     private CommonAdapter<ConsumptionRecordBean.DataBean> adapter;

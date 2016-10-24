@@ -36,7 +36,7 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.VolleyListener;
 
-public class Fragment4 extends BaseFragment implements View.OnClickListener {
+public class HomeUserCenterF extends BaseFragment implements View.OnClickListener {
     private LinearLayout information;
     private ImageView banner;
     private ImageView headSculpture;
