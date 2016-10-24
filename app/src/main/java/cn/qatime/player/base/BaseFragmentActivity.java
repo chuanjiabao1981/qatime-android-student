@@ -13,10 +13,6 @@ import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.umeng.message.PushAgent;
-import com.orhanobut.logger.Logger;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
