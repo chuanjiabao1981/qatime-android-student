@@ -34,7 +34,6 @@ import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.transformation.GlideCircleTransform;
-import libraryextra.utils.SPUtils;
 import libraryextra.utils.VolleyListener;
 
 public class Fragment4 extends BaseFragment implements View.OnClickListener {
@@ -60,6 +59,18 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
             Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).placeholder(R.mipmap.personal_information_head).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
         }
         name.setText(BaseApplication.getProfile().getData().getUser().getName());
+        initData();
+        order.setOnClickListener(this);
+        wallet.setOnClickListener(this);
+        course.setOnClickListener(this);
+        information.setOnClickListener(this);
+
+        security.setOnClickListener(this);
+        setting.setOnClickListener(this);
+        return view;
+    }
+
+    private void initData() {
         addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.urlpayment + BaseApplication.getUserId() + "/cash", null, new VolleyListener(getActivity()){
 
             @Override
@@ -90,14 +101,6 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
                 Toast.makeText(getActivity(), getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
             }
         }));
-        order.setOnClickListener(this);
-        wallet.setOnClickListener(this);
-        course.setOnClickListener(this);
-        information.setOnClickListener(this);
-
-        security.setOnClickListener(this);
-        setting.setOnClickListener(this);
-        return view;
     }
 
     @Override
@@ -137,7 +140,7 @@ public class Fragment4 extends BaseFragment implements View.OnClickListener {
         if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
             Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).placeholder(R.mipmap.personal_information_head).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
             name.setText(BaseApplication.getProfile().getData().getUser().getName());
-            balance.setText(SPUtils.get(getActivity(),"balance","0.00").toString());
+            initData();
         }
     }
 

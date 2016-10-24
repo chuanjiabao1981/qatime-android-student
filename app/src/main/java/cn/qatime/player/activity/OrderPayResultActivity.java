@@ -1,5 +1,6 @@
 package cn.qatime.player.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -13,14 +14,11 @@ import com.android.volley.VolleyError;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
-
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
-import libraryextra.utils.SPUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -36,12 +34,9 @@ public class OrderPayResultActivity extends BaseActivity implements View.OnClick
     private TextView orderId;
     private TextView price;
     private TextView viewOrder;//查看订单
-    private TextView myOrder;//我的订单
     private Button complete;
     private RelativeLayout loading;
-    private View successLayout;
-    private View faildLayout;
-    DecimalFormat df = new DecimalFormat("#.00");
+    private View failedLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +48,7 @@ public class OrderPayResultActivity extends BaseActivity implements View.OnClick
     }
 
     private void assignViews() {
-        faildLayout = findViewById(R.id.faild_layout);
+        failedLayout = findViewById(R.id.failed_layout);
         image = (ImageView) findViewById(R.id.image);
         status = (TextView) findViewById(R.id.status);
         orderId = (TextView) findViewById(R.id.orderId);
@@ -61,7 +56,8 @@ public class OrderPayResultActivity extends BaseActivity implements View.OnClick
         viewOrder = (TextView) findViewById(R.id.view_order);
         complete = (Button) findViewById(R.id.complete);
         loading = (RelativeLayout) findViewById(R.id.loading);
-//        viewOrder.setOnClickListener(this);
+
+        viewOrder.setOnClickListener(this);
         complete.setOnClickListener(this);
         PayResultState state = (PayResultState) getIntent().getSerializableExtra("state");
         switch (state) {
@@ -69,13 +65,8 @@ public class OrderPayResultActivity extends BaseActivity implements View.OnClick
                 initData();
                 break;
         }
-        orderId.setText((String) SPUtils.get(OrderPayResultActivity.this, "orderId", ""));
-        String price = df.format(SPUtils.get(OrderPayResultActivity.this, "price", 0));
-        if (price.startsWith(".")) {
-            price = "0" + price;
-        }
-
-        OrderPayResultActivity.this.price.setText("￥" + price);
+        orderId.setText(getIntent().getStringExtra("orderId"));
+        price.setText(getIntent().getStringExtra("price"));
     }
 
 
@@ -89,7 +80,7 @@ public class OrderPayResultActivity extends BaseActivity implements View.OnClick
 //    waste: 99 # 无效订单
 
     private void initData() {
-        String id = (String) SPUtils.get(this, "orderId", "");
+        String id = getIntent().getStringExtra("orderId");
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPayResult + id + "/result", null,
                 new VolleyListener(this) {
                     @Override
@@ -117,7 +108,7 @@ public class OrderPayResultActivity extends BaseActivity implements View.OnClick
                                     loading.setVisibility(View.GONE);
                                     image.setImageResource(R.mipmap.pay_success);
                                     OrderPayResultActivity.this.status.setText(getResources().getString(R.string.pay_success));
-                                    faildLayout.setVisibility(View.GONE);
+                                    failedLayout.setVisibility(View.GONE);
                                     break;
                                 default:
                                     payFailed();
@@ -156,8 +147,11 @@ public class OrderPayResultActivity extends BaseActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-//            case R.id.view_order://查看订单
-//                break;
+            case R.id.view_order://查看订单
+                Intent intent = new Intent(this,PersonalMyOrderActivity.class);
+                startActivity(intent);
+                finish();
+                break;
             case R.id.complete://完成  关闭
                 finish();
                 break;

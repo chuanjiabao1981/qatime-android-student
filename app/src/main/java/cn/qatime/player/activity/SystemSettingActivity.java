@@ -127,7 +127,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 map.put("platform", "android");
                 map.put("version", AppUtils.getVersionName(this));
 //                map.put("version", "0.0.1");
-                BaseApplication.getRequestQueue().add(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlcheckUpdate, map), null, new VolleyListener(this) {
+                addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlcheckUpdate, map), null, new VolleyListener(this) {
                     @Override
                     protected void onTokenOut() {
                         tokenOut();

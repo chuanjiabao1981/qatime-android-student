@@ -62,7 +62,7 @@ public abstract class UpLoadUtil extends AsyncTask<Map<String, String>, String, 
 
             HttpPut httpPut = new HttpPut(url);
 
-            httpPut.setHeader("Remember-Token", BaseApplication.getProfile().getToken());
+            httpPut.setHeader("Remember-Token", getHttpTokenHeader());
 
             Map<String, String> item = params[0];
             Iterator<Map.Entry<String, String>> iterator = item.entrySet().iterator();
@@ -100,6 +100,14 @@ public abstract class UpLoadUtil extends AsyncTask<Map<String, String>, String, 
             e.printStackTrace();
         }
         return json;
+    }
+
+    /**
+     * 还未登入的话需要重写返回token
+     * @return
+     */
+    public String getHttpTokenHeader() {
+        return BaseApplication.getProfile().getToken();
     }
 
     @Override

@@ -26,13 +26,14 @@ import libraryextra.utils.StringUtils;
  * 基础类
  */
 public class BaseActivity extends AppCompatActivity {
-    private RequestQueue Queue = BaseApplication.getRequestQueue();
+    private RequestQueue Queue;
     private AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PushAgent.getInstance(this).onAppStart();
+        Queue = BaseApplication.getRequestQueue();
     }
 
     public void setTitle(String text) {
@@ -111,21 +112,10 @@ public class BaseActivity extends AppCompatActivity {
 //        this.finish();
     }
 
-    private List<Request> requestList = new ArrayList<>();//记录当前页访问的url
-
     public <T> Request<T> addToRequestQueue(Request<T> request) {
-        requestList.add(request);
         return Queue.add(request);
     }
 
-    @Override
-    protected void onDestroy() {
-        for (Request request : requestList) {
-            Logger.e("cancel request:" + request.getUrl());
-            request.cancel();
-        }
-        super.onDestroy();
-    }
     public void cancelAll(final Object tag) {
         Queue.cancelAll(tag);
     }

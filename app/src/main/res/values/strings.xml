@@ -435,4 +435,22 @@
     <string name="pay_account">：余额支付</string>
     <string name="recharge_num_hint"><font size="14">请输入想要充值的金额</font></string>
     <string name="my_record_fund">资金记录</string>
+    <string name="withdraw_cash">提现</string>
+    <string name="recharge_num">充值金额</string>
+    <string name="withdraw_num">提现金额</string>
+    <string name="withdraw_cash_manner">提现方式</string>
+    <string name="recharge_manner">充值方式</string>
+    <string name="transfer_accounts">转账</string>
+    <string name="withdraw_num_hint">请输入想要提现的金额</string>
+    <string name="withdraw_cash_record">提现记录</string>
+    <string name="hint_input_alipay_account">请输入完整的支付宝账号</string>
+    <string name="hint_input_bank_card_account">请输入完整的银行卡卡号</string>
+    <string name="input_real_name">请输入真实姓名</string>
+    <string name="withdraw_cash_now">立即提现</string>
+    <string name="withdraw_cash_to_alipay">提现到支付宝</string>
+    <string name="withdraw_cash_to_bank">提现到银行卡</string>
+    <string name="withdraw_cash_result">提交结果</string>
+    <string name="amount_not_enough">账户余额不足</string>
+    <string name="code_use_already">验证码已失效</string>
+    <string name="withdraw_existed">存在未完成的提现订单</string>
 </resources>

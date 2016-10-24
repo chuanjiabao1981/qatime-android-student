@@ -41,8 +41,10 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
     private TextView consumption;
     private LinearLayout rechargeRecord;
     private LinearLayout consumptionRecord;
+    private LinearLayout withdrawRecord;
     private TextView phone;
     private TextView recharge;
+    private TextView withdrawCash;
     private Dialog alertDialog;
     DecimalFormat df = new DecimalFormat("#.00");
 
@@ -52,8 +54,10 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
         consumption = (TextView) findViewById(R.id.consumption);
         rechargeRecord = (LinearLayout) findViewById(R.id.recharge_record);
         consumptionRecord = (LinearLayout) findViewById(R.id.consumption_record);
+        withdrawRecord = (LinearLayout) findViewById(R.id.withdraw_record);
         phone = (TextView) findViewById(R.id.phone);
         recharge = (TextView) findViewById(R.id.recharge);
+        withdrawCash = (TextView) findViewById(R.id.withdraw_cash);
     }
 
     @Override
@@ -76,7 +80,9 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
         phone.setOnClickListener(this);
         consumptionRecord.setOnClickListener(this);
         rechargeRecord.setOnClickListener(this);
-        SPUtils.put(PersonalMyWalletActivity.this,"balance",balance.getText().toString());
+        withdrawRecord.setOnClickListener(this);
+        withdrawCash.setOnClickListener(this);
+        SPUtils.put(PersonalMyWalletActivity.this, "balance", balance.getText().toString());
     }
 
     private void initData() {
@@ -95,7 +101,6 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
                         price = "0" + price;
                     }
                     balance.setText(price);
-                    SPUtils.put(PersonalMyWalletActivity.this,"balance",balance.getText().toString());
                     String price1 = df.format(Double.valueOf(response.getJSONObject("data").getString("total_expenditure")));
                     if (price1.startsWith(".")) {
                         price1 = "0" + price1;
@@ -152,21 +157,35 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
                 }
                 break;
             case R.id.recharge:
-                // TODO: 2016/9/27  充值
                 Intent intent = new Intent(this, RechargeActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.withdraw_cash:
+                intent = new Intent(this, WithdrawCash1Activity.class);
+                intent.putExtra("balance",balance.getText().toString());
+                startActivityForResult(intent,Constant.REQUEST);
                 break;
             case R.id.recharge_record:
                 intent = new Intent(this, RecordFundActivity.class);
                 intent.putExtra("page", 0);
                 startActivity(intent);
                 break;
-            case R.id.consumption_record:
+            case R.id.withdraw_record:
                 intent = new Intent(this, RecordFundActivity.class);
                 intent.putExtra("page", 1);
                 startActivity(intent);
                 break;
+            case R.id.consumption_record:
+                intent = new Intent(this, RecordFundActivity.class);
+                intent.putExtra("page", 2);
+                startActivity(intent);
+                break;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        initData();
     }
 
     @Subscribe
@@ -179,6 +198,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
         //接收到充值信息后,设置返回码刷新数据
         setResult(Constant.RESPONSE);
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

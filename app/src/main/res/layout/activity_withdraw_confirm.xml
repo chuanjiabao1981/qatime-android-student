@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <include layout="@layout/layout_backbar" />
+        <EditText
+            android:id="@+id/account"
+            style="@style/activity_edit_text_style"
+            android:layout_width="match_parent"
+            android:layout_margin="12dp"
+            android:gravity="center_vertical"
+            android:hint="@string/hint_input_alipay_account"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/name"
+            style="@style/activity_edit_text_style"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="12dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:gravity="center_vertical"
+            android:hint="@string/input_real_name" />
+        <LinearLayout
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            style="@style/edit_layout_bottom_style">
+
+            <EditText
+                android:id="@+id/code"
+                style="@style/activity_edit_text_style"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/text_getcode"
+                style="@style/button_style"
+                android:text="@string/getcode" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/withdraw_cash_now"
+        android:enabled="false"
+        style="@style/button_full_width_style"
+        android:layout_alignParentBottom="true"
+        android:text="@string/withdraw_cash_now" />
+</RelativeLayout>

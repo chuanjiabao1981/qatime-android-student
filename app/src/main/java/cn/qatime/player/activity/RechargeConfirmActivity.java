@@ -158,6 +158,8 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
     @Subscribe
     public void onEvent(PayResultState state) {
         Intent intent = new Intent(this,RechargePayResultActivity.class);
+        intent.putExtra("orderId",id.getText().toString());
+        intent.putExtra("price",amount.getText().toString());
         intent.putExtra("state",state);
         startActivity(intent);
         finish();

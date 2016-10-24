@@ -259,7 +259,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@drawable/text_background"
+                    android:background="@drawable/shape_input"
                     android:gravity="top"
                     android:textColorHint="#bfbfbf"
                     android:hint="@string/hint_profiles"
