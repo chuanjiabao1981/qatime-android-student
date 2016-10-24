@@ -1,1 +1,1 @@
-include ':app', ':library_pulltorefresh', ':common'
+include ':app', ':library_pulltorefresh', ':common', ':pushSDK'

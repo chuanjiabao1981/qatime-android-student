@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -30,6 +31,8 @@ import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.orhanobut.logger.Logger;
+import com.umeng.message.PushAgent;
+import com.umeng.message.UTrack;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,6 +50,7 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
+import cn.qatime.player.utils.AppUtils;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.UpLoadUtil;
 import cn.qatime.player.utils.UrlUtils;
@@ -215,7 +219,48 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                                             } else {
                                                 Logger.e("登录", response.toString());
                                                 SPUtils.put(RegisterPerfectActivity.this, "username", username);
-                                                profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
+                                                Profile profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
+                                                if (profile != null && profile.getData() != null && profile.getData().getUser() != null && profile.getData().getUser().getId() != 0) {
+                                                    PushAgent.getInstance(RegisterPerfectActivity.this).addAlias(String.valueOf(profile.getData().getUser().getId()), "student", new UTrack.ICallBack() {
+                                                        @Override
+                                                        public void onMessage(boolean b, String s) {
+
+                                                        }
+                                                    });
+                                                    String deviceToken = PushAgent.getInstance(RegisterPerfectActivity.this).getRegistrationId();
+                                                    if (!StringUtils.isNullOrBlanK(deviceToken)) {
+                                                        Map<String, String> m = new HashMap<>();
+                                                        m.put("user_id", String.valueOf(profile.getData().getUser().getId()));
+                                                        m.put("device_token", deviceToken);
+                                                        m.put("device_model", Build.MODEL);
+                                                        m.put("app_name", AppUtils.getAppName(RegisterPerfectActivity.this));
+                                                        m.put("app_version", AppUtils.getVersionName(RegisterPerfectActivity.this));
+                                                        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlDeviceInfo, m), null,
+                                                                new VolleyListener(RegisterPerfectActivity.this) {
+
+                                                                    @Override
+                                                                    protected void onSuccess(JSONObject response) {
+                                                                    }
+
+                                                                    @Override
+                                                                    protected void onError(JSONObject response) {
+
+                                                                    }
+
+                                                                    @Override
+                                                                    protected void onTokenOut() {
+                                                                        tokenOut();
+                                                                    }
+
+                                                                }, new VolleyErrorListener() {
+                                                            @Override
+                                                            public void onErrorResponse(VolleyError volleyError) {
+                                                                super.onErrorResponse(volleyError);
+                                                            }
+                                                        });
+                                                        addToRequestQueue(request);
+                                                    }
+                                                }
                                                 if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
                                                     BaseApplication.setProfile(profile);
                                                     loginAccount();
