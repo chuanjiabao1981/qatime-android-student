@@ -49,7 +49,7 @@ public class ClassTableClosedF extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_remedial_class_timetable2, container, false);
+        View view = inflater.inflate(R.layout.fragment_class_table_closed, container, false);
         initview(view);
         initData();
         return view;

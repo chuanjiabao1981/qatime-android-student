@@ -55,7 +55,7 @@ public class TutorshipTasteF extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_personal_my_tutorship5, container, false);
+        View view = inflater.inflate(R.layout.fragment_tutorship_taste, container, false);
         initview(view);
         return view;
     }

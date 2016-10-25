@@ -17,7 +17,7 @@ import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.StringUtils;
 
-public class LiveClassListF extends BaseFragment {
+public class PlayerLiveClassListF extends BaseFragment {
     private CommonAdapter<RemedialClassDetailBean.Lessons> adapter;
     private List<RemedialClassDetailBean.Lessons> lists = new ArrayList<>();
     private RemedialClassDetailBean.Data data;
@@ -25,7 +25,7 @@ public class LiveClassListF extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = View.inflate(getActivity(), R.layout.fragment_nevideo_player33, null);
+        View view = View.inflate(getActivity(), R.layout.fragment_palyer_live_class_list, null);
         VerticalListView list = (VerticalListView) view.findViewById(R.id.list);
         adapter = new CommonAdapter<RemedialClassDetailBean.Lessons>(getActivity(), lists, R.layout.item_fragment_nevideo_player33) {
             @Override

@@ -12,7 +12,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.bean.RemedialClassDetailBean;
 
-public class LiveClassDetailsF extends BaseFragment {
+public class PlayerLiveClassDetailsF extends BaseFragment {
 
     TextView describe;
     TextView name;
@@ -49,7 +49,7 @@ public class LiveClassDetailsF extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = View.inflate(getActivity(), R.layout.fragment_nevideo_player31, null);
+        View view = View.inflate(getActivity(), R.layout.fragment_palyer_live_class_details, null);
         initview(view);
         return view;
     }

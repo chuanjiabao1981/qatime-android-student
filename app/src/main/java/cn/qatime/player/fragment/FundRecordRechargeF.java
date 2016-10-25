@@ -55,7 +55,7 @@ public class FundRecordRechargeF extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_fund_record1, container, false);
+        View view = inflater.inflate(R.layout.fragment_fund_record_recharge, container, false);
         EventBus.getDefault().register(this);
         initview(view);
         return view;

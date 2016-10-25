@@ -85,7 +85,7 @@ public class MessageChatNewsF extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = View.inflate(getActivity(), R.layout.fragment_news1, null);
+        View view = View.inflate(getActivity(), R.layout.fragment_message_chat_news, null);
         initView(view);
         getCourses();
         return view;

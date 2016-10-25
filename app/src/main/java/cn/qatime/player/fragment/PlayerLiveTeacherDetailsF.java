@@ -19,7 +19,7 @@ import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 
-public class LiveTeacherDetailsF extends BaseFragment {
+public class PlayerLiveTeacherDetailsF extends BaseFragment {
     private TextView name;
     private ImageView image;
     private TextView teachingyears;
@@ -72,7 +72,7 @@ public class LiveTeacherDetailsF extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = View.inflate(getActivity(), R.layout.fragment_nevideo_player32, null);
+        View view = View.inflate(getActivity(), R.layout.fragment_palyer_live_teacher_details, null);
         initview(view);
         return view;
     }

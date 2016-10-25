@@ -41,7 +41,7 @@ import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
-public class OrderCancelF extends BaseFragment {
+public class OrderCanceledF extends BaseFragment {
     private PullToRefreshListView listView;
     private java.util.List<MyOrderBean.Data> list = new ArrayList<>();
     private CommonAdapter<MyOrderBean.Data> adapter;
@@ -52,7 +52,7 @@ public class OrderCancelF extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_personal_my_order3, container, false);
+        View view = inflater.inflate(R.layout.fragment_order_canceled, container, false);
         initview(view);
         return view;
     }

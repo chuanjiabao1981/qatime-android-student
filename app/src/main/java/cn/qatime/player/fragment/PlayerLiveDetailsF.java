@@ -18,9 +18,9 @@ public class PlayerLiveDetailsF extends BaseFragment {
     private ImageView point3;
     private ImageView point1;
     private ImageView point2;
-    private LiveTeacherDetailsF player2;
-    private LiveClassDetailsF player1;
-    private LiveClassListF player3;
+    private PlayerLiveTeacherDetailsF player2;
+    private PlayerLiveClassDetailsF player1;
+    private PlayerLiveClassListF player3;
     private int id; //获取联网的id
 
     @Nullable
@@ -50,9 +50,9 @@ public class PlayerLiveDetailsF extends BaseFragment {
             }
         });
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        player1 = new LiveClassDetailsF();
-        player2 = new LiveTeacherDetailsF();
-        player3 = new LiveClassListF();
+        player1 = new PlayerLiveClassDetailsF();
+        player2 = new PlayerLiveTeacherDetailsF();
+        player3 = new PlayerLiveClassListF();
         transaction.replace(R.id.first, player1);
         transaction.replace(R.id.second, player2);
         transaction.replace(R.id.three, player3);

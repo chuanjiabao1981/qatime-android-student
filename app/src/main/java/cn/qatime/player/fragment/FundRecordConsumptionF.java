@@ -49,7 +49,7 @@ public class FundRecordConsumptionF extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_fund_record3, container, false);
+        View view = inflater.inflate(R.layout.fragment_fund_record_consumption, container, false);
         initview(view);
         return view;
     }

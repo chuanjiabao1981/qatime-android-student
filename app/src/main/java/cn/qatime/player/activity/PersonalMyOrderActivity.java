@@ -13,7 +13,7 @@ import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.fragment.OrderUnpaidF;
 import cn.qatime.player.fragment.OrderPaidF;
-import cn.qatime.player.fragment.OrderCancelF;
+import cn.qatime.player.fragment.OrderCanceledF;
 import libraryextra.view.FragmentLayoutWithLine;
 
 public class PersonalMyOrderActivity extends BaseFragmentActivity {
@@ -35,7 +35,7 @@ public class PersonalMyOrderActivity extends BaseFragmentActivity {
 
         fragBaseFragments.add(new OrderUnpaidF());
         fragBaseFragments.add(new OrderPaidF());
-        fragBaseFragments.add(new OrderCancelF());
+        fragBaseFragments.add(new OrderCanceledF());
 
         fragmentlayout = (FragmentLayoutWithLine) findViewById(R.id.fragmentlayout);
 

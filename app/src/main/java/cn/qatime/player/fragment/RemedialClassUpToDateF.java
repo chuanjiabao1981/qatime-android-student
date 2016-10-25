@@ -52,7 +52,7 @@ public class RemedialClassUpToDateF extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment11, container, false);
+        View view = inflater.inflate(R.layout.fragment_remedial_class_up_to_date, container, false);
         initview(view);
         initData(1);
         return view;

@@ -44,7 +44,7 @@ public class PlayerAnnouncementsF extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = View.inflate(getActivity(), R.layout.fragment_nevideo_player1, null);
+        View view = View.inflate(getActivity(), R.layout.fragment_player_announcements, null);
         initview(view);
         hasLoad = true;
         return view;

@@ -30,7 +30,7 @@ public class HomeClassTableF extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment2, container, false);
+        View view = inflater.inflate(R.layout.fragment_home_class_table, container, false);
         initView(view);
         return view;
     }

@@ -52,7 +52,7 @@ public class HomeUserCenterF extends BaseFragment implements View.OnClickListene
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment4, container, false);
+        View view = inflater.inflate(R.layout.fragment_home_user_center, container, false);
         assignViews(view);
         newVersion.setVisibility(BaseApplication.newVersion ? View.VISIBLE : View.INVISIBLE);
         if (BaseApplication.getProfile().getData() != null && BaseApplication.getProfile().getData().getUser() != null) {

@@ -25,7 +25,7 @@ public class HomeMessageF extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment3, container, false);
+        View view = inflater.inflate(R.layout.fragment_home_message, container, false);
         initview(view);
         return view;
     }

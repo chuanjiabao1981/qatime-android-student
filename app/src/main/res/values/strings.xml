@@ -331,6 +331,7 @@
     <string name="alert_mode">提醒方式</string>
     <string name="time_setting">设置时间</string>
     <string name="Remedial_classes">辅导班课程</string>
+    <string name="Remedial_class">辅导班</string>
     <string name="public_course">公开课课程</string>
     <string name="advance">提前</string>
     <string name="remind_me">提醒我</string>

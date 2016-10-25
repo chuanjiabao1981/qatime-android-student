@@ -43,6 +43,7 @@ import cn.qatime.player.fragment.HomeRemedialClassF;
 import cn.qatime.player.fragment.HomeClassTableF;
 import cn.qatime.player.fragment.HomeMessageF;
 import cn.qatime.player.fragment.HomeUserCenterF;
+import cn.qatime.player.fragment.RemedialClassAllF;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.Constant;
@@ -66,8 +67,8 @@ public class MainActivity extends BaseFragmentActivity {
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3, R.id.tab_text4};
     private int tabImages[][] = {
             {R.mipmap.tab_home_1, R.mipmap.tab_home_2},
-            {R.mipmap.tab_moments_1, R.mipmap.tab_moments_2},
             {R.mipmap.tab_message_1, R.mipmap.tab_message_2},
+            {R.mipmap.tab_moments_1, R.mipmap.tab_moments_2},
             {R.mipmap.tab_person_1, R.mipmap.tab_person_2}};
     private int currentPosition = 0;
 
@@ -116,8 +117,9 @@ public class MainActivity extends BaseFragmentActivity {
 
         //添加fragment
         fragBaseFragments.add(new HomeRemedialClassF());
+        fragBaseFragments.add(new RemedialClassAllF());
         fragBaseFragments.add(new HomeClassTableF());
-        fragBaseFragments.add(new HomeMessageF());
+//        fragBaseFragments.add(new HomeMessageF());
         fragBaseFragments.add(new HomeUserCenterF());
 
         fragmentlayout = (FragmentLayout) findViewById(R.id.fragmentlayout);
@@ -198,8 +200,8 @@ public class MainActivity extends BaseFragmentActivity {
                             if (fragmentlayout != null) {
                                 fragmentlayout.setCurrenItem(2);
                             }
-                            if (((HomeMessageF) fragBaseFragments.get(2)) != null) {
-                                ((HomeMessageF) fragBaseFragments.get(2)).setMessage(message);
+                            if (((HomeMessageF) fragBaseFragments.get(4)) != null) {
+                                ((HomeMessageF) fragBaseFragments.get(4)).setMessage(message);
                             }
                         }
                     }
@@ -209,9 +211,9 @@ public class MainActivity extends BaseFragmentActivity {
             if (fragmentlayout != null) {
                 fragmentlayout.setCurrenItem(2);
             }
-            if (((HomeMessageF) fragBaseFragments.get(2)) != null) {
+            if (((HomeMessageF) fragBaseFragments.get(4)) != null) {
                 Logger.e("main转到系统消息");
-                ((HomeMessageF) fragBaseFragments.get(2)).toSystemMessage();
+                ((HomeMessageF) fragBaseFragments.get(4)).toSystemMessage();
             }
         }
     }

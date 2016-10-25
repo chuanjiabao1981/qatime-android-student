@@ -44,7 +44,7 @@ public class PlayerMembersF extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = View.inflate(getActivity(), R.layout.fragment_nevideo_player4, null);
+        View view = View.inflate(getActivity(), R.layout.fragment_player_members, null);
 
         listView = (ListView) view.findViewById(R.id.listview);
         adapter = new FragmentNEVideoPlayerAdapter4(getActivity(), list, R.layout.item_fragment_nevideo_player4);

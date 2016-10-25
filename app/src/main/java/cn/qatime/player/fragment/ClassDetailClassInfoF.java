@@ -35,7 +35,7 @@ public class ClassDetailClassInfoF extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_remedial_class_detail1, container, false);
+        View view = inflater.inflate(R.layout.fragment_class_detail_class_info, container, false);
         initview(view);
 
         return view;

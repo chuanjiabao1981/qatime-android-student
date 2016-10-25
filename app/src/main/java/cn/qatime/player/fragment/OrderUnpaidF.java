@@ -58,7 +58,7 @@ public class OrderUnpaidF extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_personal_my_order1, container, false);
+        View view = inflater.inflate(R.layout.fragment_order_unpaid, container, false);
         EventBus.getDefault().register(this);
         initview(view);
         return view;
