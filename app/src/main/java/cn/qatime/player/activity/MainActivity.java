@@ -39,8 +39,8 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.config.UserPreferences;
-import cn.qatime.player.fragment.HomeRemedialClassF;
 import cn.qatime.player.fragment.HomeClassTableF;
+import cn.qatime.player.fragment.HomeMainPage;
 import cn.qatime.player.fragment.HomeMessageF;
 import cn.qatime.player.fragment.HomeUserCenterF;
 import cn.qatime.player.fragment.RemedialClassAllF;
@@ -116,7 +116,7 @@ public class MainActivity extends BaseFragmentActivity {
         }
 
         //添加fragment
-        fragBaseFragments.add(new HomeRemedialClassF());
+        fragBaseFragments.add(new HomeMainPage());
         fragBaseFragments.add(new RemedialClassAllF());
         fragBaseFragments.add(new HomeClassTableF());
 //        fragBaseFragments.add(new HomeMessageF());

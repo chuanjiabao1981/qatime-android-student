@@ -410,7 +410,6 @@ public class RemedialClassAllF extends BaseFragment implements View.OnClickListe
                 popView = View.inflate(getActivity(), R.layout.pop_fragment12, null);
                 listView = (ListView) popView.findViewById(R.id.list);
                 final List<String> subjectList = new ArrayList<>();
-                subjectList.add(getResourceString(R.string.whole));
                 subjectList.add(getResourceString(R.string.chinese));
                 subjectList.add(getResourceString(R.string.math));
                 subjectList.add(getResourceString(R.string.english));
