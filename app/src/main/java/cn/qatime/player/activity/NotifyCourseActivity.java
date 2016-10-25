@@ -15,7 +15,7 @@ import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
-import cn.qatime.player.view.WheelView;
+import libraryextra.view.WheelView;
 import libraryextra.utils.SPUtils;
 
 /**

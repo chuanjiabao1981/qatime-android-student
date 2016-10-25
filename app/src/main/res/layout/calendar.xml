@@ -63,11 +63,11 @@
         android:background="#ffffff"
         android:orientation="vertical">
 
-        <cn.qatime.player.view.WeekDayView
+        <libraryextra.view.WeekDayView
             android:layout_width="match_parent"
             android:layout_height="30dp" />
 
-        <cn.qatime.player.view.MonthDateView
+        <libraryextra.view.MonthDateView
             android:id="@+id/monthDateView"
             android:layout_width="fill_parent"
             android:layout_height="160dp" />

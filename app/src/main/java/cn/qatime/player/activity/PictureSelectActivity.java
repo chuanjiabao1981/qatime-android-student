@@ -24,7 +24,7 @@ import java.util.List;
 import cn.qatime.player.R;
 import cn.qatime.player.adapter.PictureSelectAdapter;
 import cn.qatime.player.base.BaseActivity;
-import cn.qatime.player.utils.AlbumHelper;
+import libraryextra.utils.AlbumHelper;
 import cn.qatime.player.utils.Constant;
 import libraryextra.bean.ImageBucket;
 import libraryextra.bean.ImageItem;
