@@ -22,9 +22,9 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
-import cn.qatime.player.utils.AppUtils;
+import libraryextra.utils.AppUtils;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
-import cn.qatime.player.utils.DataCleanUtils;
+import libraryextra.utils.DataCleanUtils;
 import cn.qatime.player.utils.DownFileUtil;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.DensityUtils;
@@ -127,7 +127,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 map.put("platform", "android");
                 map.put("version", AppUtils.getVersionName(this));
 //                map.put("version", "0.0.1");
-                BaseApplication.getRequestQueue().add(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlcheckUpdate, map), null, new VolleyListener(this) {
+                addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlcheckUpdate, map), null, new VolleyListener(this) {
                     @Override
                     protected void onTokenOut() {
                         tokenOut();

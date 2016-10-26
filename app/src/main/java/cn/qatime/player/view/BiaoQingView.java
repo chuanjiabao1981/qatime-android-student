@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
-import cn.qatime.player.utils.GifHelper;
+import libraryextra.utils.GifHelper;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.utils.DensityUtils;

@@ -39,10 +39,11 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.config.UserPreferences;
-import cn.qatime.player.fragment.Fragment1;
-import cn.qatime.player.fragment.Fragment2;
-import cn.qatime.player.fragment.Fragment3;
-import cn.qatime.player.fragment.Fragment4;
+import cn.qatime.player.fragment.HomeClassTableF;
+import cn.qatime.player.fragment.HomeMainPage;
+import cn.qatime.player.fragment.HomeMessageF;
+import cn.qatime.player.fragment.HomeUserCenterF;
+import cn.qatime.player.fragment.RemedialClassAllF;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.Constant;
@@ -66,8 +67,8 @@ public class MainActivity extends BaseFragmentActivity {
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3, R.id.tab_text4};
     private int tabImages[][] = {
             {R.mipmap.tab_home_1, R.mipmap.tab_home_2},
-            {R.mipmap.tab_moments_1, R.mipmap.tab_moments_2},
             {R.mipmap.tab_message_1, R.mipmap.tab_message_2},
+            {R.mipmap.tab_moments_1, R.mipmap.tab_moments_2},
             {R.mipmap.tab_person_1, R.mipmap.tab_person_2}};
     private int currentPosition = 0;
 
@@ -115,10 +116,11 @@ public class MainActivity extends BaseFragmentActivity {
         }
 
         //添加fragment
-        fragBaseFragments.add(new Fragment1());
-        fragBaseFragments.add(new Fragment2());
-        fragBaseFragments.add(new Fragment3());
-        fragBaseFragments.add(new Fragment4());
+        fragBaseFragments.add(new HomeMainPage());
+        fragBaseFragments.add(new RemedialClassAllF());
+        fragBaseFragments.add(new HomeClassTableF());
+//        fragBaseFragments.add(new HomeMessageF());
+        fragBaseFragments.add(new HomeUserCenterF());
 
         fragmentlayout = (FragmentLayout) findViewById(R.id.fragmentlayout);
         fragmentlayout.setScorllToNext(false);
@@ -184,11 +186,9 @@ public class MainActivity extends BaseFragmentActivity {
         }
     }
 
-    /**
-     * 解析通知栏发来的云信消息
-     */
     private void parseIntent() {
         Intent intent = getIntent();
+        /**     * 解析通知栏发来的云信消息     */
         if (intent != null && intent.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT)) {
             ArrayList<IMMessage> messages = (ArrayList<IMMessage>) intent.getSerializableExtra(NimIntent.EXTRA_NOTIFY_CONTENT);
             if (messages != null && messages.size() == 1) {
@@ -200,12 +200,20 @@ public class MainActivity extends BaseFragmentActivity {
                             if (fragmentlayout != null) {
                                 fragmentlayout.setCurrenItem(2);
                             }
-                            if (((Fragment3) fragBaseFragments.get(2)) != null) {
-                                ((Fragment3) fragBaseFragments.get(2)).setMessage(message);
+                            if (((HomeMessageF) fragBaseFragments.get(4)) != null) {
+                                ((HomeMessageF) fragBaseFragments.get(4)).setMessage(message);
                             }
                         }
                     }
                 }, 500);
+            }
+        } else if (intent != null && intent.hasExtra("type") && intent.getStringExtra("type").equals("system_message")) {//转到系统消息页面
+            if (fragmentlayout != null) {
+                fragmentlayout.setCurrenItem(2);
+            }
+            if (((HomeMessageF) fragBaseFragments.get(4)) != null) {
+                Logger.e("main转到系统消息");
+                ((HomeMessageF) fragBaseFragments.get(4)).toSystemMessage();
             }
         }
     }
@@ -467,5 +475,15 @@ public class MainActivity extends BaseFragmentActivity {
             }
         });
         addToRequestQueue(request);
+    }
+
+    public void setCurrentPosition(int currentPosition, String s) {
+        fragmentlayout.setCurrenItem(currentPosition);
+        fragmentlayout.setCurrenItem(currentPosition);
+        if(!StringUtils.isNullOrBlanK(s)){
+            RemedialClassAllF remedialClassAllF = (RemedialClassAllF) fragBaseFragments.get(1);
+            remedialClassAllF.initDataAsSubject(s);
+        }
+        this.currentPosition = currentPosition;
     }
 }

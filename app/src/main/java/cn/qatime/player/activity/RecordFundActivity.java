@@ -15,8 +15,9 @@ import java.util.ArrayList;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.base.BaseFragmentActivity;
-import cn.qatime.player.fragment.FragmentFundRecord1;
-import cn.qatime.player.fragment.FragmentFundRecord2;
+import cn.qatime.player.fragment.FundRecordRechargeF;
+import cn.qatime.player.fragment.FundRecordWithdrawCashF;
+import cn.qatime.player.fragment.FundRecordConsumptionF;
 import libraryextra.view.FragmentLayoutWithLine;
 
 /**
@@ -25,7 +26,7 @@ import libraryextra.view.FragmentLayoutWithLine;
  * @Description:
  */
 public class RecordFundActivity extends BaseFragmentActivity{
-    private int[] tab_text = {R.id.tab_text1, R.id.tab_text2};
+    private int[] tab_text = {R.id.tab_text1, R.id.tab_text2,R.id.tab_text3};
     FragmentLayoutWithLine fragmentlayout;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
     private int page;
@@ -74,8 +75,9 @@ public class RecordFundActivity extends BaseFragmentActivity{
 
 
     private void initView() {
-        fragBaseFragments.add(new FragmentFundRecord1());
-        fragBaseFragments.add(new FragmentFundRecord2());
+        fragBaseFragments.add(new FundRecordRechargeF());
+        fragBaseFragments.add(new FundRecordWithdrawCashF());
+        fragBaseFragments.add(new FundRecordConsumptionF());
 
         fragmentlayout = (FragmentLayoutWithLine) findViewById(R.id.fragmentlayout);
 

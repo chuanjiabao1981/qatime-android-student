@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -30,6 +31,8 @@ import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.orhanobut.logger.Logger;
+import com.umeng.message.PushAgent;
+import com.umeng.message.UTrack;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,10 +50,11 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
+import libraryextra.utils.AppUtils;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.UpLoadUtil;
 import cn.qatime.player.utils.UrlUtils;
-import cn.qatime.player.view.WheelView;
+import libraryextra.view.WheelView;
 import libraryextra.bean.GradeBean;
 import libraryextra.bean.ImageItem;
 import libraryextra.bean.PersonalInformationBean;
@@ -89,6 +93,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
     private View changeHeadSculpture;
     private Uri captureUri;
     private AlertDialog alertDialog;
+    private Profile profile;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -165,9 +170,16 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
 
                 break;
             case R.id.complete://完成
-                String url = UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/profile";
+                int userId = getIntent().getIntExtra("userId",0);
+                final String token = getIntent().getStringExtra("token");
+                String url = UrlUtils.urlPersonalInformation + userId + "/profile";
 
                 UpLoadUtil util = new UpLoadUtil(url) {
+                    @Override
+                    public String getHttpTokenHeader() {
+                        return token;
+                    }
+
                     @Override
                     public void httpStart() {
                         progress = DialogUtils.startProgressDialog(progress, RegisterPerfectActivity.this);
@@ -208,6 +220,47 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                                                 Logger.e("登录", response.toString());
                                                 SPUtils.put(RegisterPerfectActivity.this, "username", username);
                                                 Profile profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
+                                                if (profile != null && profile.getData() != null && profile.getData().getUser() != null && profile.getData().getUser().getId() != 0) {
+                                                    PushAgent.getInstance(RegisterPerfectActivity.this).addAlias(String.valueOf(profile.getData().getUser().getId()), "student", new UTrack.ICallBack() {
+                                                        @Override
+                                                        public void onMessage(boolean b, String s) {
+
+                                                        }
+                                                    });
+                                                    String deviceToken = PushAgent.getInstance(RegisterPerfectActivity.this).getRegistrationId();
+                                                    if (!StringUtils.isNullOrBlanK(deviceToken)) {
+                                                        Map<String, String> m = new HashMap<>();
+                                                        m.put("user_id", String.valueOf(profile.getData().getUser().getId()));
+                                                        m.put("device_token", deviceToken);
+                                                        m.put("device_model", Build.MODEL);
+                                                        m.put("app_name", AppUtils.getAppName(RegisterPerfectActivity.this));
+                                                        m.put("app_version", AppUtils.getVersionName(RegisterPerfectActivity.this));
+                                                        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlDeviceInfo, m), null,
+                                                                new VolleyListener(RegisterPerfectActivity.this) {
+
+                                                                    @Override
+                                                                    protected void onSuccess(JSONObject response) {
+                                                                    }
+
+                                                                    @Override
+                                                                    protected void onError(JSONObject response) {
+
+                                                                    }
+
+                                                                    @Override
+                                                                    protected void onTokenOut() {
+                                                                        tokenOut();
+                                                                    }
+
+                                                                }, new VolleyErrorListener() {
+                                                            @Override
+                                                            public void onErrorResponse(VolleyError volleyError) {
+                                                                super.onErrorResponse(volleyError);
+                                                            }
+                                                        });
+                                                        addToRequestQueue(request);
+                                                    }
+                                                }
                                                 if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
                                                     BaseApplication.setProfile(profile);
                                                     loginAccount();
@@ -271,6 +324,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                 break;
         }
     }
+
     private void showGradePickerDialog() {
         if (alertDialog == null) {
             final View view = View.inflate(RegisterPerfectActivity.this, R.layout.dialog_grade_picker, null);
@@ -295,6 +349,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
             alertDialog.show();
         }
     }
+
     private void loginAccount() {
         String account = BaseApplication.getAccount();
         String token = BaseApplication.getAccountToken();
@@ -321,36 +376,38 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                     UserInfoCache.getInstance().registerObservers(true);
                     TeamDataCache.getInstance().registerObservers(true);
 //                                                FriendDataCache.getInstance().registerObservers(true);
-
-                    Intent intent = new Intent(RegisterPerfectActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    setResult(Constant.REGIST);
-                    finish();
+//
+//                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                    startActivity(intent);
+//                    DialogUtils.dismissDialog(progress);
+//                    finish();
                 }
 
                 @Override
                 public void onFailed(int code) {
-                    BaseApplication.clearToken();
+//                    BaseApplication.clearToken();
+                    profile.getData().setRemember_token("");
+                    SPUtils.putObject(RegisterPerfectActivity.this, "profile", profile);
                     Logger.e(code + "code");
-                    if (code == 302 || code == 404) {
-                        Toast.makeText(RegisterPerfectActivity.this, R.string.account_or_password_error, Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(RegisterPerfectActivity.this, getResourceString(R.string.login_failed) + code, Toast.LENGTH_SHORT).show();
-                    }
+//                    if (code == 302 || code == 404) {
+//                        Toast.makeText(LoginActivity.this, R.string.account_or_password_error, Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        Toast.makeText(LoginActivity.this, getResourceString(R.string.login_failed) + code, Toast.LENGTH_SHORT).show();
+//                    }
                 }
 
                 @Override
                 public void onException(Throwable throwable) {
                     Logger.e(throwable.getMessage());
-                    BaseApplication.clearToken();
+//                    BaseApplication.clearToken();
+                    profile.getData().setRemember_token("");
+                    SPUtils.putObject(RegisterPerfectActivity.this, "profile", profile);
                 }
             });
-        } else {//没有云信账号,直接登录
-            Intent intent = new Intent(RegisterPerfectActivity.this, MainActivity.class);
-            startActivity(intent);
-            setResult(Constant.REGIST);
-            finish();
         }
+        Intent intent = new Intent(RegisterPerfectActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void initView() {

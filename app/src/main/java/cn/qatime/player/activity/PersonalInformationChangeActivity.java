@@ -37,7 +37,7 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.UpLoadUtil;
 import cn.qatime.player.utils.UrlUtils;
-import cn.qatime.player.view.WheelView;
+import libraryextra.view.WheelView;
 import libraryextra.bean.GradeBean;
 import libraryextra.bean.ImageItem;
 import libraryextra.bean.PersonalInformationBean;

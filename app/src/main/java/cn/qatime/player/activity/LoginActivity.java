@@ -1,6 +1,7 @@
 package cn.qatime.player.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -17,6 +19,8 @@ import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.orhanobut.logger.Logger;
+import com.umeng.message.PushAgent;
+import com.umeng.message.UTrack;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,6 +34,7 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
+import libraryextra.utils.AppUtils;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -40,6 +45,7 @@ import libraryextra.utils.DialogUtils;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
+import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.CheckView;
 import libraryextra.view.CustomProgressDialog;
@@ -167,14 +173,53 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                     DialogUtils.dismissDialog(progress);
                                 }
                             } else {
-//                                profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
                                 Logger.e("登录", response.toString());
                                 SPUtils.put(LoginActivity.this, "username", username.getText().toString());
                                 profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
+                                if (profile != null && profile.getData() != null && profile.getData().getUser() != null && profile.getData().getUser().getId() != 0) {
+                                    PushAgent.getInstance(LoginActivity.this).addAlias(String.valueOf(profile.getData().getUser().getId()), "student", new UTrack.ICallBack() {
+                                        @Override
+                                        public void onMessage(boolean b, String s) {
+
+                                        }
+                                    });
+                                    String deviceToken = PushAgent.getInstance(LoginActivity.this).getRegistrationId();
+                                    if (!StringUtils.isNullOrBlanK(deviceToken)) {
+                                        Map<String, String> m = new HashMap<>();
+                                        m.put("user_id", String.valueOf(profile.getData().getUser().getId()));
+                                        m.put("device_token", deviceToken);
+                                        m.put("device_model", Build.MODEL);
+                                        m.put("app_name", AppUtils.getAppName(LoginActivity.this));
+                                        m.put("app_version", AppUtils.getVersionName(LoginActivity.this));
+                                        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlDeviceInfo, m), null,
+                                                new VolleyListener(LoginActivity.this) {
+
+                                                    @Override
+                                                    protected void onSuccess(JSONObject response) {
+                                                    }
+
+                                                    @Override
+                                                    protected void onError(JSONObject response) {
+
+                                                    }
+
+                                                    @Override
+                                                    protected void onTokenOut() {
+                                                        tokenOut();
+                                                    }
+
+                                                }, new VolleyErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError volleyError) {
+                                                super.onErrorResponse(volleyError);
+                                            }
+                                        });
+                                        addToRequestQueue(request);
+                                    }
+                                }
                                 if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
-
-                                    BaseApplication.setProfile(profile);
-
+//                                   跳转mainActivity时再setProfile
+//                                   BaseApplication.setProfile(profile);
                                     checkUserInfo();
                                 } else {
                                     //没有数据或token
@@ -218,7 +263,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
      */
     private void checkUserInfo() {
 
-        DaYiJsonObjectRequest request1 = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null, new VolleyListener(LoginActivity.this) {
+        DaYiJsonObjectRequest request1 = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + profile.getData().getUser().getId() + "/info", null, new VolleyListener(LoginActivity.this) {
             @Override
             protected void onTokenOut() {
                 tokenOut();
@@ -230,13 +275,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 String name = bean.getData().getName();
                 String grade = bean.getData().getGrade();
                 if (StringUtils.isNullOrBlanK(name) || StringUtils.isNullOrBlanK(grade)) {
+                    DialogUtils.dismissDialog(progress);
                     Intent intent = new Intent(LoginActivity.this, RegisterPerfectActivity.class);
                     Toast.makeText(LoginActivity.this, getResourceString(R.string.please_set_information), Toast.LENGTH_SHORT).show();
                     intent.putExtra("username", username.getText().toString().trim());
                     intent.putExtra("password", password.getText().toString().trim());
+                    intent.putExtra("token", profile.getToken());
+                    intent.putExtra("userId",profile.getData().getUser().getId());
                     startActivityForResult(intent, Constant.REGIST);
                 } else {
                     Logger.e("登录", response.toString());
+                    //登录成功且有个人信息  设置profile
+                    BaseApplication.setProfile(profile);
                     SPUtils.put(LoginActivity.this, "username", username.getText().toString());
                     loginAccount();//登陆云信
                 }
@@ -246,14 +296,26 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             @Override
             protected void onError(JSONObject response) {
                 Toast.makeText(LoginActivity.this, getResourceString(R.string.login_failed), Toast.LENGTH_SHORT).show();
-                BaseApplication.clearToken();
+//                BaseApplication.clearToken();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                BaseApplication.clearToken();
+//                BaseApplication.clearToken();
             }
-        });
+        }){
+            /**
+             * 由于没有登陆没有token，重写getHeaders方法 手动设置访问token
+             * @return
+             * @throws AuthFailureError
+             */
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("Remember-Token", profile.getToken());
+                return map;
+            }
+        };
         addToRequestQueue(request1);
     }
 
@@ -312,7 +374,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 public void onException(Throwable throwable) {
                     DialogUtils.dismissDialog(progress);
                     Logger.e(throwable.getMessage());
-                    BaseApplication.clearToken();
+//                    BaseApplication.clearToken();
+                    profile.getData().setRemember_token("");
+                    SPUtils.putObject(LoginActivity.this, "profile", profile);
                 }
             });
         }

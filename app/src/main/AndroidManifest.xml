@@ -10,6 +10,7 @@
 
     <!-- 权限声明 -->
     <!--拨打电话-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <!-- 允许程序打开网络套接字 -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -17,14 +18,10 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!-- 允许程序向外部存储设备写数据 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- 允许程序向外部存储设备读数据 -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!-- 允许程序获取网络相关信息 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- 允许程序获取Wifi网络状态信息 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <!-- 允许程序获得设备信息 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <!-- 权限声明 -->
     <!-- 控制呼吸灯，振动器等，用于新消息提醒 -->
@@ -105,6 +102,20 @@
 
         <!--网易云信  end-->
 
+        <!--友盟推送start-->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="57d2757ae0f55a361200038f">
+        </meta-data>
+        <meta-data
+            android:name="UMENG_MESSAGE_SECRET"
+            android:value="a13a142c1febccd7b16b15ba257d152b">
+        </meta-data>
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="umeng" >
+        </meta-data>
+        <!--友盟推送end-->
         <activity
             android:name=".activity.StartActivity"
             android:screenOrientation="portrait"
@@ -270,12 +281,12 @@
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
-            android:screenOrientation="behind"></activity>
+            android:screenOrientation="behind" />
         <activity
             android:name="com.alipay.sdk.auth.AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
-            android:screenOrientation="behind"></activity>
+            android:screenOrientation="behind" />
 
         <activity
             android:name=".activity.PersonalMyWalletActivity"
@@ -303,6 +314,27 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.RechargePayResultActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.WithdrawCash1Activity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.WithdrawConfirmActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.WithdrawResultActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.TeacherDataActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.MessageFragmentActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
     </application>

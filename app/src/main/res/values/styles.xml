@@ -177,12 +177,7 @@
         <item name="android:textColor">#ffafaa9a</item>
         <item name="android:textSize">14sp</item>
     </style>
-    <style name="dialog_text_style">//dialog文字
-        <item name="android:textColor">#333333</item>
-        <item name="android:layout_marginTop">18dp</item>
-        <item name="android:layout_marginBottom">8dp</item>
-        <item name="android:textSize">14sp</item>
-    </style>
+
 
     <style name="setting_icon_margin_right">
         <item name="android:layout_marginRight">14dp</item>

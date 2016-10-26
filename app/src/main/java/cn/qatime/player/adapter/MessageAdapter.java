@@ -20,7 +20,6 @@ import com.netease.nimlib.sdk.team.model.MemberChangeAttachment;
 import com.netease.nimlib.sdk.team.model.MuteMemberAttachment;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.UpdateTeamAttachment;
-import com.orhanobut.logger.Logger;
 
 import java.util.Hashtable;
 import java.util.List;
@@ -29,7 +28,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.im.cache.TeamDataCache;
-import cn.qatime.player.utils.DateUtils;
+import libraryextra.utils.DateUtils;
 import cn.qatime.player.utils.ExpressionUtil;
 import cn.qatime.player.view.GifDrawable;
 

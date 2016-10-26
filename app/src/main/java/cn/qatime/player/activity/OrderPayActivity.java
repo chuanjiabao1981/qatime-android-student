@@ -185,6 +185,8 @@ public class OrderPayActivity extends BaseActivity {
     public void onEvent(PayResultState state) {
         Intent intent = new Intent(this,OrderPayResultActivity.class);
         intent.putExtra("state",state);
+        intent.putExtra("orderId",code.getText().toString().replace(getResourceString(R.string.order_number) + "：",""));
+        intent.putExtra("price",price.getText().toString().replace(getResourceString(R.string.amount_payment) + "：",""));
         startActivity(intent);
         finish();
     }

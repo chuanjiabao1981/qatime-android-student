@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#e7e7e7"
+    android:background="#fff"
     android:orientation="vertical">
 
     <include layout="@layout/layout_backbar" />
@@ -59,29 +59,33 @@
 
                         <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="60dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
                                 android:orientation="vertical">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:padding="5dp">
+                                    android:paddingLeft="6dp"
+                                    android:paddingRight="6dp"
+                                    android:paddingBottom="3dp"
+                                    android:orientation="horizontal">
 
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginLeft="20dp"
+                                        android:textColor="#666666"
                                         android:text="订单编号" />
 
                                     <TextView
                                         android:id="@+id/orderId"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:textColor="#333333"
                                         android:layout_marginLeft="30dp"
                                         android:text="1002841948894" />
                                 </LinearLayout>
@@ -90,13 +94,15 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:orientation="horizontal"
-                                    android:padding="5dp">
+                                    android:paddingTop="3dp"
+                                    android:paddingLeft="6dp"
+                                    android:paddingRight="6dp">
 
                                     <TextView
                                         android:id="@+id/pay_dsc"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginLeft="20dp"
+                                        android:textColor="#666666"
                                         android:text="支付金额" />
 
                                     <TextView
@@ -105,31 +111,32 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginLeft="30dp"
                                         android:text="￥0"
-                                        android:textColor="#ff0000"
-                                        android:textSize="16sp" />
+                                        android:textColor="#333333"
+                                        android:textSize="14sp" />
                                 </LinearLayout>
                             </LinearLayout>
 
                             <LinearLayout
-                                android:id="@+id/faild_layout"
+                                android:id="@+id/failed_layout"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:orientation="vertical"
-                                android:layout_centerInParent="true"
+                                android:gravity="center_vertical"
                                 android:background="#fff"
                                 android:visibility="visible">
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:lines="2"
-                                    android:padding="5dp"
+                                    android:padding="6dp"
                                     android:text="由于当前购买人数较多,需要等待一会儿才能获取支付结果,请稍后进行查询"
-                                    android:textSize="16sp" />
+                                    android:textSize="14sp" />
                             </LinearLayout>
                         </RelativeLayout>
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/link_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
@@ -160,7 +167,7 @@
                 android:layout_height="40dp"
                 android:layout_margin="15dp"
                 android:background="@drawable/button_bg_selector_red"
-                android:text="关闭"
+                android:text="完成"
                 android:textColor="#fff" />
         </LinearLayout>
 

@@ -22,7 +22,6 @@
         <item>@string/history</item>
         <item>@string/politics</item>
         <item>@string/physics</item>
-
     </string-array>
     <string-array name="grade">
         <item>@string/high3</item>
