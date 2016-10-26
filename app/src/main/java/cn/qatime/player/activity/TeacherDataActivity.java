@@ -55,7 +55,7 @@ public class TeacherDataActivity extends BaseActivity {
         scroll.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ScrollView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
-
+                
             }
         });
     }

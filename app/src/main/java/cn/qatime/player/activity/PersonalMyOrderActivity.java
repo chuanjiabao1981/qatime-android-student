@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.base.BaseFragmentActivity;
-import cn.qatime.player.fragment.FragmentPersonalMyOrder1;
-import cn.qatime.player.fragment.FragmentPersonalMyOrder2;
-import cn.qatime.player.fragment.FragmentPersonalMyOrder3;
+import cn.qatime.player.fragment.OrderUnpaidF;
+import cn.qatime.player.fragment.OrderPaidF;
+import cn.qatime.player.fragment.OrderCanceledF;
 import libraryextra.view.FragmentLayoutWithLine;
 
 public class PersonalMyOrderActivity extends BaseFragmentActivity {
@@ -33,9 +33,9 @@ public class PersonalMyOrderActivity extends BaseFragmentActivity {
     private void initView() {
 
 
-        fragBaseFragments.add(new FragmentPersonalMyOrder1());
-        fragBaseFragments.add(new FragmentPersonalMyOrder2());
-        fragBaseFragments.add(new FragmentPersonalMyOrder3());
+        fragBaseFragments.add(new OrderUnpaidF());
+        fragBaseFragments.add(new OrderPaidF());
+        fragBaseFragments.add(new OrderCanceledF());
 
         fragmentlayout = (FragmentLayoutWithLine) findViewById(R.id.fragmentlayout);
 
