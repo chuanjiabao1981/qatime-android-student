@@ -8,7 +8,6 @@
     <string name="release_to_refresh">松开刷新</string>
     <!--//fragment1-->
     <string name="login_has_expired">登录已过期，请重新登录！</string>
-    <string name="app_name">答疑时间</string>
     <string name="home_page">首页</string>
     <string name="time_table">课程表</string>
     <string name="message">消息</string>
