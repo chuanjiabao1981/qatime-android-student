@@ -30,6 +30,7 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
+import cn.qatime.player.activity.MessageFragmentActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.TeacherDetailsActivity;
 import cn.qatime.player.base.BaseFragment;
@@ -58,6 +59,7 @@ public class HomeMainPage extends BaseFragment implements View.OnClickListener {
     private List<RemedialClassBean.Data> listNews = new ArrayList<>();
     private List<RemedialClassBean.Data> listHots = new ArrayList<>();
     private BaseAdapter adapter;
+    private ImageView message;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -73,6 +75,7 @@ public class HomeMainPage extends BaseFragment implements View.OnClickListener {
         gridviewTeacher = (GridView) view.findViewById(R.id.gridview_teacher);
         allClass = view.findViewById(R.id.all_class);
         gridviewClass = (GridView) view.findViewById(R.id.gridview_class);
+        message = (ImageView) view.findViewById(R.id.message);
 
         initTagImg();
         initTagViewpagerSubject();
@@ -80,6 +83,7 @@ public class HomeMainPage extends BaseFragment implements View.OnClickListener {
         initGridClass();
         refreshTeacher.setOnClickListener(this);
         allClass.setOnClickListener(this);
+        message.setOnClickListener(this);
 
     }
 
@@ -346,6 +350,10 @@ public class HomeMainPage extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.refresh_teacher:
                 initGridTeacher();
+                break;
+            case R.id.message:
+                Intent intent = new Intent(getActivity(), MessageFragmentActivity.class);
+                startActivity(intent);
                 break;
         }
     }
