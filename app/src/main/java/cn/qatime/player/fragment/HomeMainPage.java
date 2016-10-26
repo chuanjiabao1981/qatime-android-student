@@ -1,6 +1,7 @@
 package cn.qatime.player.fragment;
 
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,31 +10,54 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
+import com.google.gson.JsonSyntaxException;
 import com.orhanobut.logger.Logger;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.MainActivity;
+import cn.qatime.player.activity.RemedialClassDetailActivity;
+import cn.qatime.player.activity.TeacherDetailsActivity;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
+import libraryextra.bean.RemedialClassBean;
+import libraryextra.utils.JsonUtils;
+import libraryextra.utils.ScreenUtils;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 import libraryextra.view.TagViewPager;
 
-public class HomeMainPage extends BaseFragment {
+public class HomeMainPage extends BaseFragment implements View.OnClickListener {
 
 
     private TagViewPager tagViewpagerImg;
     private TagViewPager tagViewpagerSubject;
     private ImageView refreshTeacher;
     private GridView gridviewTeacher;
-    private ImageView refreshClass;
+    private View allClass;
     private GridView gridviewClass;
     private List<GridView> gvSub;
+    private int page = 1;
+    private List<RemedialClassBean.Data> listNews = new ArrayList<>();
+    private List<RemedialClassBean.Data> listHots = new ArrayList<>();
+    private BaseAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -47,13 +71,15 @@ public class HomeMainPage extends BaseFragment {
         tagViewpagerSubject = (TagViewPager) view.findViewById(R.id.tag_viewpager_subject);
         refreshTeacher = (ImageView) view.findViewById(R.id.refresh_teacher);
         gridviewTeacher = (GridView) view.findViewById(R.id.gridview_teacher);
-        refreshClass = (ImageView) view.findViewById(R.id.refresh_class);
+        allClass = view.findViewById(R.id.all_class);
         gridviewClass = (GridView) view.findViewById(R.id.gridview_class);
 
         initTagImg();
         initTagViewpagerSubject();
         initGridTeacher();
         initGridClass();
+        refreshTeacher.setOnClickListener(this);
+        allClass.setOnClickListener(this);
 
     }
 
@@ -86,12 +112,7 @@ public class HomeMainPage extends BaseFragment {
         tagViewpagerSubject.setOnGetView(new TagViewPager.OnGetView() {
             @Override
             public View getView(ViewGroup container, final int position) {
-                GridView grid = new GridView(getContext()) {
-                    @Override
-                    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-                        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-                    }
-                };
+                GridView grid = new GridView(getContext());
                 grid.setNumColumns(5);
                 grid.setLayoutParams(new GridView.LayoutParams(GridView.LayoutParams.MATCH_PARENT, GridView.LayoutParams.MATCH_PARENT));
                 grid.setPadding(0, 20, 0, 0);
@@ -105,15 +126,16 @@ public class HomeMainPage extends BaseFragment {
 
                     @Override
                     public void convert(ViewHolder holder, String item, int positionG) {
-                        Logger.e("position" + position);
                         String s = strings.get(position * 10 + positionG);
                         holder.setText(R.id.subject_text, s);
                     }
                 });
                 grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Logger.e("onItemClick");
+                    public void onItemClick(AdapterView<?> parent, View view, int positionG, long id) {
+                        String s = strings.get(position * 10 + positionG);
+                        MainActivity mainActivity = (MainActivity) getActivity();
+                        mainActivity.setCurrentPosition(1, s);
                     }
                 });
                 container.addView(grid);
@@ -141,35 +163,190 @@ public class HomeMainPage extends BaseFragment {
         gridviewTeacher.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Logger.e("onItemClick");
+                Intent intent = new Intent(getActivity(), TeacherDetailsActivity.class);
+                startActivity(intent);
             }
         });
     }
 
     private void initGridClass() {
+        initDataNews(1);
+        initDataHots(1);
+
         final List<String> strings = Arrays.asList(getResources().getStringArray(R.array.subject));
-        gridviewClass.setAdapter(new CommonAdapter<String>(getContext(), strings, R.layout.item_class_recommend) {
+        adapter = new BaseAdapter() {
             @Override
             public int getCount() {
-                return 8;
+                return listNews.size() + listHots.size();
             }
 
             @Override
-            public void convert(ViewHolder holder, String item, int position) {
+            public Object getItem(int position) {
+                if (position % 2 == 0) {
+                    return listNews.get(position / 2);
+                } else {
+                    return listHots.get(position / 2);
+                }
             }
-        });
+
+            @Override
+            public long getItemId(int position) {
+                return position;
+            }
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                ViewHolder helper = ViewHolder.get(getContext(), convertView, parent, R.layout.item_class_recommend, position);
+                ((ImageView) helper.getView(R.id.class_recommend_img)).setLayoutParams(new RelativeLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()) / 2, ScreenUtils.getScreenWidth(getActivity()) / 2 * 5 / 8));
+                if (position % 2 == 0) {
+                    Glide.with(getActivity()).load(listNews.get(position / 2).getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.class_recommend_img)));
+                    helper.setText(R.id.class_recommend_text, "最新");
+                } else {
+                    Glide.with(getActivity()).load(listHots.get(position / 2).getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.class_recommend_img)));
+                    helper.setText(R.id.class_recommend_text, "最热");
+                }
+                return helper.getConvertView();
+            }
+        };
+        gridviewClass.setAdapter(adapter);
         gridviewClass.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Logger.e("onItemClick");
+                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                if (position % 2 == 0) {
+                    intent.putExtra("id", listNews.get(position / 2).getId());
+                } else {
+                    intent.putExtra("id", listHots.get(position / 2).getId());
+                }
+                startActivity(intent);
             }
         });
-        View view = gridviewClass.getAdapter().getView(0, null, gridviewClass);
-        view.measure(0, 0);
-        ViewGroup.LayoutParams layoutParams = gridviewClass.getLayoutParams();
-        layoutParams.height = view.getMeasuredHeight() * 4;
-        gridviewClass.setLayoutParams(layoutParams);
+//        View view = gridviewClass.getAdapter().getView(0, null, gridviewClass);
+//        view.measure(0, 0);
+//        ViewGroup.LayoutParams layoutParams = gridviewClass.getLayoutParams();
+//        layoutParams.height = view.getMeasuredHeight() * 4;
+//        gridviewClass.setLayoutParams(layoutParams);
     }
 
+    private void initDataHots(final int type) {
+        Map<String, String> map = new HashMap<>();
+        map.put("page", String.valueOf(page));
+        map.put("per_page", "4");
+        map.put("sort_by", "buy_tickets_count.asc");
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass, map), null,
+                new VolleyListener(getActivity()) {
 
+
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+//                        if (type == 1) {
+//                            listHots.clear();
+//                        }
+//                        String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(),
+//                                DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+//                        grid.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
+//                        grid.onRefreshComplete();
+
+                        try {
+                            RemedialClassBean data = JsonUtils.objectFromJson(response.toString(), RemedialClassBean.class);
+                            if (data != null) {
+                                listHots.addAll(data.getData());
+                            }
+                            adapter.notifyDataSetChanged();
+                        } catch (JsonSyntaxException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+//                        String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(),
+//                                DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+//                        grid.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
+//                        grid.onRefreshComplete();
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+//                grid.onRefreshComplete();
+            }
+        });
+
+        addToRequestQueue(request);
+    }
+
+    private void initDataNews(final int type) {
+        Map<String, String> map = new HashMap<>();
+        map.put("page", String.valueOf(page));
+        map.put("per_page", "4");
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass, map), null,
+                new VolleyListener(getActivity()) {
+
+
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        if (type == 1) {
+                            listNews.clear();
+                        }
+//                        String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(),
+//                                DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+//                        grid.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
+//                        grid.onRefreshComplete();
+//
+                        try {
+                            RemedialClassBean data = JsonUtils.objectFromJson(response.toString(), RemedialClassBean.class);
+                            if (data != null) {
+                                listNews.addAll(data.getData());
+                            }
+                            adapter.notifyDataSetChanged();
+                        } catch (JsonSyntaxException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+//                        String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(),
+//                                DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+//                        grid.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
+//                        grid.onRefreshComplete();
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+//                grid.onRefreshComplete();
+            }
+        });
+        addToRequestQueue(request);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.all_class:
+                MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.setCurrentPosition(1, "全部");
+                break;
+            case R.id.refresh_teacher:
+                initGridTeacher();
+                break;
+        }
+    }
 }

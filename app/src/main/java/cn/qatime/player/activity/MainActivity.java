@@ -476,4 +476,14 @@ public class MainActivity extends BaseFragmentActivity {
         });
         addToRequestQueue(request);
     }
+
+    public void setCurrentPosition(int currentPosition, String s) {
+        fragmentlayout.setCurrenItem(currentPosition);
+        fragmentlayout.setCurrenItem(currentPosition);
+        if(!StringUtils.isNullOrBlanK(s)){
+            RemedialClassAllF remedialClassAllF = (RemedialClassAllF) fragBaseFragments.get(1);
+            remedialClassAllF.initDataAsSubject(s);
+        }
+        this.currentPosition = currentPosition;
+    }
 }

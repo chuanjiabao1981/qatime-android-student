@@ -2,9 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
+
     <ImageView
+        android:id="@+id/class_recommend_img"
         android:layout_width="wrap_content"
         android:layout_height="120dp"
         android:scaleType="fitXY"
-        android:src="@mipmap/photo"/>
+        android:src="@mipmap/photo" />
+
+    <TextView
+        android:id="@+id/class_recommend_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:background="#ff9966"
+        android:text="最新"
+        android:textColor="#fff" />
 </RelativeLayout>
