@@ -23,13 +23,12 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
-import cn.qatime.player.bean.SystemNotifyBean;
-import libraryextra.bean.SystemNotifyBean;
+import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import cn.qatime.player.base.BaseFragment;
+import libraryextra.bean.SystemNotifyBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
