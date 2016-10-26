@@ -329,9 +329,10 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.LocationChanceActivity"
+            android:name=".activity.TeacherDataActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.TeacherDetailsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
