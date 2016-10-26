@@ -334,10 +334,6 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".activity.TeacherDetailsActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.MessageFragmentActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />

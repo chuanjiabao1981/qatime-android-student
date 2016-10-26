@@ -32,7 +32,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.MessageFragmentActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
-import cn.qatime.player.activity.TeacherDetailsActivity;
+import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -167,7 +167,7 @@ public class HomeMainPage extends BaseFragment implements View.OnClickListener {
         gridviewTeacher.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), TeacherDetailsActivity.class);
+                Intent intent = new Intent(getActivity(), TeacherDataActivity.class);
                 startActivity(intent);
             }
         });
