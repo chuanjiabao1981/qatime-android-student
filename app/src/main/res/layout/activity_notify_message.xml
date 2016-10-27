@@ -67,8 +67,7 @@
             android:layout_height="wrap_content"
             android:checked="true"
             android:clickable="false"
-            style="@style/setting_icon_margin_right"
-            android:src="@mipmap/pay_success" />
+            style="@style/setting_icon_margin_right" />
     </LinearLayout>
 
     <View
