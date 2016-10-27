@@ -29,10 +29,10 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
-import libraryextra.utils.AppUtils;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
-import cn.qatime.player.utils.DownFileUtil;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.utils.AppUtils;
+import libraryextra.utils.DownFileUtil;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
@@ -130,7 +130,7 @@ StartActivity extends BaseActivity implements View.OnClickListener {
                 Toast.makeText(StartActivity.this, getResourceString(R.string.check_for_update_failed), Toast.LENGTH_SHORT).show();
                 startApp();
             }
-        }, new VolleyErrorListener(){
+        }, new VolleyErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);

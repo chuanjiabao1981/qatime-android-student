@@ -22,12 +22,12 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
-import libraryextra.utils.AppUtils;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
-import libraryextra.utils.DataCleanUtils;
-import cn.qatime.player.utils.DownFileUtil;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.utils.AppUtils;
+import libraryextra.utils.DataCleanUtils;
 import libraryextra.utils.DensityUtils;
+import libraryextra.utils.DownFileUtil;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyListener;
 
