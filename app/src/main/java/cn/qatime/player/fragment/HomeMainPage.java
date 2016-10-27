@@ -88,7 +88,7 @@ public class HomeMainPage extends BaseFragment implements View.OnClickListener {
     }
 
     private void initTagImg() {
-        final int imageIds[] = {R.mipmap.photo, R.mipmap.photo, R.mipmap.photo};
+        final int imageIds[] = {R.mipmap.home_ad, R.mipmap.home_ad, R.mipmap.home_ad};
         tagViewpagerImg.init(R.drawable.shape_photo_tag_select, R.drawable.shape_photo_tag_nomal, 16, 8, 2, 40);
         tagViewpagerImg.setAutoNext(true, 4000);
 //        viewPager.setId(1252);
