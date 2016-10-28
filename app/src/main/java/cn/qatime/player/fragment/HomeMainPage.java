@@ -15,18 +15,12 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
-import com.google.gson.JsonSyntaxException;
 import com.orhanobut.logger.Logger;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
@@ -34,15 +28,10 @@ import cn.qatime.player.activity.MessageFragmentActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.utils.DaYiJsonObjectRequest;
-import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.RemedialClassBean;
-import libraryextra.utils.JsonUtils;
 import libraryextra.utils.ScreenUtils;
-import libraryextra.utils.VolleyErrorListener;
-import libraryextra.utils.VolleyListener;
 import libraryextra.view.TagViewPager;
 
 public class HomeMainPage extends BaseFragment implements View.OnClickListener {
@@ -56,8 +45,7 @@ public class HomeMainPage extends BaseFragment implements View.OnClickListener {
     private GridView gridviewClass;
     private List<GridView> gvSub;
     private int page = 1;
-    private List<RemedialClassBean.Data> listNews = new ArrayList<>();
-    private List<RemedialClassBean.Data> listHots = new ArrayList<>();
+    private List<RemedialClassBean.Data> list = new ArrayList<>();
     private BaseAdapter adapter;
     private ImageView message;
 
@@ -174,23 +162,26 @@ public class HomeMainPage extends BaseFragment implements View.OnClickListener {
     }
 
     private void initGridClass() {
-        initDataNews(1);
-        initDataHots(1);
+        list.add(null);
+        list.add(null);
+        list.add(null);
+        list.add(null);
+        list.add(null);
+        list.add(null);
+        list.add(null);
+        list.add(null);
 
         final List<String> strings = Arrays.asList(getResources().getStringArray(R.array.subject));
         adapter = new BaseAdapter() {
             @Override
             public int getCount() {
-                return listNews.size() + listHots.size();
+                return list.size();
             }
 
             @Override
             public Object getItem(int position) {
-                if (position % 2 == 0) {
-                    return listNews.get(position / 2);
-                } else {
-                    return listHots.get(position / 2);
-                }
+                return list.get(position);
+
             }
 
             @Override
@@ -202,11 +193,12 @@ public class HomeMainPage extends BaseFragment implements View.OnClickListener {
             public View getView(int position, View convertView, ViewGroup parent) {
                 ViewHolder helper = ViewHolder.get(getContext(), convertView, parent, R.layout.item_class_recommend, position);
                 ((ImageView) helper.getView(R.id.class_recommend_img)).setLayoutParams(new RelativeLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()) / 2, ScreenUtils.getScreenWidth(getActivity()) / 2 * 5 / 8));
+                if (list.get(position) != null) {
+                    Glide.with(getActivity()).load(list.get(position / 2).getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.class_recommend_img)));
+                }
                 if (position % 2 == 0) {
-                    Glide.with(getActivity()).load(listNews.get(position / 2).getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.class_recommend_img)));
                     helper.setText(R.id.class_recommend_text, "最新");
                 } else {
-                    Glide.with(getActivity()).load(listHots.get(position / 2).getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.class_recommend_img)));
                     helper.setText(R.id.class_recommend_text, "最热");
                 }
                 return helper.getConvertView();
@@ -217,10 +209,8 @@ public class HomeMainPage extends BaseFragment implements View.OnClickListener {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                if (position % 2 == 0) {
-                    intent.putExtra("id", listNews.get(position / 2).getId());
-                } else {
-                    intent.putExtra("id", listHots.get(position / 2).getId());
+                if (list.get(position) != null) {
+                    intent.putExtra("id", list.get(position).getId());
                 }
                 startActivity(intent);
             }
@@ -232,109 +222,6 @@ public class HomeMainPage extends BaseFragment implements View.OnClickListener {
 //        gridviewClass.setLayoutParams(layoutParams);
     }
 
-    private void initDataHots(final int type) {
-        Map<String, String> map = new HashMap<>();
-        map.put("page", String.valueOf(page));
-        map.put("per_page", "4");
-        map.put("sort_by", "buy_tickets_count.asc");
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass, map), null,
-                new VolleyListener(getActivity()) {
-
-
-                    @Override
-                    protected void onSuccess(JSONObject response) {
-//                        if (type == 1) {
-//                            listHots.clear();
-//                        }
-//                        String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(),
-//                                DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
-//                        grid.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
-//                        grid.onRefreshComplete();
-
-                        try {
-                            RemedialClassBean data = JsonUtils.objectFromJson(response.toString(), RemedialClassBean.class);
-                            if (data != null) {
-                                listHots.addAll(data.getData());
-                            }
-                            adapter.notifyDataSetChanged();
-                        } catch (JsonSyntaxException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    protected void onError(JSONObject response) {
-//                        String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(),
-//                                DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
-//                        grid.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
-//                        grid.onRefreshComplete();
-                    }
-
-                    @Override
-                    protected void onTokenOut() {
-                        tokenOut();
-                    }
-                }, new VolleyErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
-//                grid.onRefreshComplete();
-            }
-        });
-
-        addToRequestQueue(request);
-    }
-
-    private void initDataNews(final int type) {
-        Map<String, String> map = new HashMap<>();
-        map.put("page", String.valueOf(page));
-        map.put("per_page", "4");
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass, map), null,
-                new VolleyListener(getActivity()) {
-
-
-                    @Override
-                    protected void onSuccess(JSONObject response) {
-                        if (type == 1) {
-                            listNews.clear();
-                        }
-//                        String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(),
-//                                DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
-//                        grid.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
-//                        grid.onRefreshComplete();
-//
-                        try {
-                            RemedialClassBean data = JsonUtils.objectFromJson(response.toString(), RemedialClassBean.class);
-                            if (data != null) {
-                                listNews.addAll(data.getData());
-                            }
-                            adapter.notifyDataSetChanged();
-                        } catch (JsonSyntaxException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    protected void onError(JSONObject response) {
-//                        String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(),
-//                                DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
-//                        grid.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
-//                        grid.onRefreshComplete();
-                    }
-
-                    @Override
-                    protected void onTokenOut() {
-                        tokenOut();
-                    }
-                }, new VolleyErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
-//                grid.onRefreshComplete();
-            }
-        });
-        addToRequestQueue(request);
-    }
 
     @Override
     public void onDestroy() {

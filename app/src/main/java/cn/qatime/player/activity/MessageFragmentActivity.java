@@ -1,11 +1,13 @@
 package cn.qatime.player.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.TextView;
 
+import com.netease.nimlib.sdk.NimIntent;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 
 import java.util.ArrayList;
@@ -32,6 +34,7 @@ public class MessageFragmentActivity extends BaseFragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_fragment);
         initview();
+        parseIntent();
     }
 
     private void initview() {
@@ -66,33 +69,32 @@ public class MessageFragmentActivity extends BaseFragmentActivity {
 
     }
 
-    /**
-     * 云信发来的sessionid
-     *
-     * @param message 会话
-     */
-    public void setMessage(IMMessage message) {
-        if (fragBaseFragments != null && fragBaseFragments.size() > 0) {
-            ((MessageChatNewsF) fragBaseFragments.get(0)).setMessage(message);
-
-        }
-    }
-
-    /**
-     * 转到系统消息页面
-     */
-    public void toSystemMessage() {
-        if (fragmentlayout != null) {
-            fragmentlayout.setCurrenItem(1);
-        }else {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (fragmentlayout != null) {
-                        fragmentlayout.setCurrenItem(1);
+    private void parseIntent() {
+        Intent intent = getIntent().getParcelableExtra("intent");
+        /**     * 解析通知栏发来的云信消息     */
+        if (intent != null && intent.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT)) {
+            ArrayList<IMMessage> messages = (ArrayList<IMMessage>) intent.getSerializableExtra(NimIntent.EXTRA_NOTIFY_CONTENT);
+            if (messages != null && messages.size() == 1) {
+                final IMMessage message = messages.get(0);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (message != null) {
+                            if (fragmentlayout != null) {
+                                fragmentlayout.setCurrenItem(0);
+                            }
+                            if (((MessageChatNewsF) fragBaseFragments.get(0)) != null) {
+                                ((MessageChatNewsF) fragBaseFragments.get(0)).setMessage(message);
+                            }
+                        }
                     }
-                }
-            },800);
+                }, 500);
+            }
+        } else if (intent != null && intent.hasExtra("type") && intent.getStringExtra("type").equals("system_message")) {//转到系统消息页面
+            if (fragmentlayout != null) {
+                fragmentlayout.setCurrenItem(1);
+            }
         }
     }
+
 }

@@ -23,7 +23,6 @@ import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
-import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
@@ -41,7 +40,6 @@ import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.fragment.HomeClassTableF;
 import cn.qatime.player.fragment.HomeMainPage;
-import cn.qatime.player.fragment.HomeMessageF;
 import cn.qatime.player.fragment.HomeUserCenterF;
 import cn.qatime.player.fragment.RemedialClassAllF;
 import cn.qatime.player.im.cache.TeamDataCache;
@@ -190,31 +188,13 @@ public class MainActivity extends BaseFragmentActivity {
         Intent intent = getIntent();
         /**     * 解析通知栏发来的云信消息     */
         if (intent != null && intent.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT)) {
-            ArrayList<IMMessage> messages = (ArrayList<IMMessage>) intent.getSerializableExtra(NimIntent.EXTRA_NOTIFY_CONTENT);
-            if (messages != null && messages.size() == 1) {
-                final IMMessage message = messages.get(0);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (message != null) {
-                            if (fragmentlayout != null) {
-                                fragmentlayout.setCurrenItem(2);
-                            }
-                            if (((HomeMessageF) fragBaseFragments.get(4)) != null) {
-                                ((HomeMessageF) fragBaseFragments.get(4)).setMessage(message);
-                            }
-                        }
-                    }
-                }, 500);
-            }
+            Intent intent1 = new Intent(this,MessageFragmentActivity.class);
+            intent.putExtra("intent",intent);
+            startActivity(intent1);
         } else if (intent != null && intent.hasExtra("type") && intent.getStringExtra("type").equals("system_message")) {//转到系统消息页面
-            if (fragmentlayout != null) {
-                fragmentlayout.setCurrenItem(2);
-            }
-            if (((HomeMessageF) fragBaseFragments.get(4)) != null) {
-                Logger.e("main转到系统消息");
-                ((HomeMessageF) fragBaseFragments.get(4)).toSystemMessage();
-            }
+            Intent intent1 = new Intent(this,MessageFragmentActivity.class);
+            intent.putExtra("intent",intent);
+            startActivity(intent1);
         }
     }
 
