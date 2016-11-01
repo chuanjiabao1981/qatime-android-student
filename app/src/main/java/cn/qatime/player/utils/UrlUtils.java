@@ -22,6 +22,8 @@ public class UrlUtils {
     public static String urlMyRemedialClass = baseUrl + "api/v1/live_studio/students/";
     //个人信息
     public static String urlPersonalInformation = baseUrl + "api/v1/students/";
+    //教师信息
+    public static String urlTeacherInformation = baseUrl + "api/v1/teachers/";
     //基础信息
     public static String urlAppconstantInformation = baseUrl + "api/v1/app_constant";
     //注册

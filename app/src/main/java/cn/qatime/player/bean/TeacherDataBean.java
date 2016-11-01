@@ -1,0 +1,103 @@
+package cn.qatime.player.bean;
+
+import java.util.List;
+
+import libraryextra.bean.RemedialClassBean;
+
+/**
+ * @author Tianhaoranly
+ * @date 2016/11/1 9:30
+ * @Description:
+ */
+public class TeacherDataBean {
+    /**
+     * status : 1
+     * data : {"name":"张老师","desc":"张老师是测试老师，账号是用来测试的.","teaching_years":"within_three_years","avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/0c8769a3968a5979286710a867766f0f.JPG","school":"阳泉市第一中学校","courses":[]}
+     */
+
+    private int status;
+    /**
+     * name : 张老师
+     * desc : 张老师是测试老师，账号是用来测试的.
+     * teaching_years : within_three_years
+     * avatar_url : http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/0c8769a3968a5979286710a867766f0f.JPG
+     * school : 阳泉市第一中学校
+     * courses : []
+     */
+
+    private DataBean data;
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public DataBean getData() {
+        return data;
+    }
+
+    public void setData(DataBean data) {
+        this.data = data;
+    }
+
+    public static class DataBean {
+        private String name;
+        private String desc;
+        private String teaching_years;
+        private String avatar_url;
+        private String school;
+        private List<RemedialClassBean.Data> courses;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getDesc() {
+            return desc;
+        }
+
+        public void setDesc(String desc) {
+            this.desc = desc;
+        }
+
+        public String getTeaching_years() {
+            return teaching_years;
+        }
+
+        public void setTeaching_years(String teaching_years) {
+            this.teaching_years = teaching_years;
+        }
+
+        public String getAvatar_url() {
+            return avatar_url;
+        }
+
+        public void setAvatar_url(String avatar_url) {
+            this.avatar_url = avatar_url;
+        }
+
+        public String getSchool() {
+            return school;
+        }
+
+        public void setSchool(String school) {
+            this.school = school;
+        }
+
+        public List<RemedialClassBean.Data> getCourses() {
+            return courses;
+        }
+
+        public void setCourses(List<RemedialClassBean.Data> courses) {
+            this.courses = courses;
+        }
+
+    }
+}
