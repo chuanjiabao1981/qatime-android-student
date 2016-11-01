@@ -110,7 +110,7 @@ public class HomeMainPage extends BaseFragment implements View.OnClickListener {
                 grid.setPadding(0, 20, 0, 0);
                 grid.setBackgroundColor(Color.WHITE);
                 grid.setGravity(Gravity.CENTER);
-                grid.setAdapter(new CommonAdapter<String>(getContext(), strings, R.layout.item_subject) {
+                grid.setAdapter(new CommonAdapter<String>(getContext(), strings, R.layout.item_grid_subject) {
                     @Override
                     public int getCount() {
                         return (strings.size() - 10 * position) > 10 ? 10 : (strings.size() - 10 * position);
@@ -139,17 +139,20 @@ public class HomeMainPage extends BaseFragment implements View.OnClickListener {
     }
 
     private void initGridTeacher() {
-        final List<String> strings = Arrays.asList(getResources().getStringArray(R.array.subject));
-        gridviewTeacher.setAdapter(new CommonAdapter<String>(getContext(), strings, R.layout.item_subject) {
+        final List<String> strings = new ArrayList<>();
+        strings.add("");
+        strings.add("");
+        strings.add("");
+        strings.add("");
+        strings.add("");
+        gridviewTeacher.setAdapter(new CommonAdapter<String>(getContext(), strings, R.layout.item_grid_teacher) {
             @Override
             public int getCount() {
-                return 5;
+                return strings.size();
             }
 
             @Override
             public void convert(ViewHolder holder, String item, int position) {
-                String s = strings.get(position);
-                holder.setText(R.id.subject_text, s);
             }
         });
         gridviewTeacher.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -169,10 +172,6 @@ public class HomeMainPage extends BaseFragment implements View.OnClickListener {
         list.add(null);
         list.add(null);
         list.add(null);
-        list.add(null);
-        list.add(null);
-
-        final List<String> strings = Arrays.asList(getResources().getStringArray(R.array.subject));
         adapter = new BaseAdapter() {
             @Override
             public int getCount() {
