@@ -38,6 +38,8 @@ public class UrlUtils {
     public static String urlGetCode = baseUrl + "api/v1/captcha";
     //用户信息
     public static String urlUser = baseUrl + "api/v1/users/";
+    //首页推荐
+    public static String urlRecommend = baseUrl + "api/v1/recommend/positions/";
     //检查更新
     public static String urlcheckUpdate = baseUrl + "api/v1/system/check_update";
     //上传用户设备信息

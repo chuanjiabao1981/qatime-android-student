@@ -39,7 +39,7 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.fragment.HomeClassTableF;
-import cn.qatime.player.fragment.HomeMainPage;
+import cn.qatime.player.fragment.HomeMainPageF;
 import cn.qatime.player.fragment.HomeUserCenterF;
 import cn.qatime.player.fragment.RemedialClassAllF;
 import cn.qatime.player.im.cache.TeamDataCache;
@@ -114,7 +114,7 @@ public class MainActivity extends BaseFragmentActivity {
         }
 
         //添加fragment
-        fragBaseFragments.add(new HomeMainPage());
+        fragBaseFragments.add(new HomeMainPageF());
         fragBaseFragments.add(new RemedialClassAllF());
         fragBaseFragments.add(new HomeClassTableF());
 //        fragBaseFragments.add(new HomeMessageF());

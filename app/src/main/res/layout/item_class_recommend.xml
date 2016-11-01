@@ -19,7 +19,7 @@
             android:src="@mipmap/photo" />
 
         <TextView
-            android:id="@+id/class_recommend_text"
+            android:id="@+id/reason"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -29,7 +29,7 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/course_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:singleLine="true"
