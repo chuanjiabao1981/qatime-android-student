@@ -109,7 +109,10 @@
                 android:id="@+id/describe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="3dp"
+                android:paddingLeft="15dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:paddingRight="15dp"
                 android:text="自我介绍描述..." />
 
             <View
