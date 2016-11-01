@@ -14,6 +14,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -111,7 +112,7 @@ public class HomeMainPageF extends BaseFragment implements View.OnClickListener 
 
     private void initTagViewpagerSubject() {
         String[] subject = getResources().getStringArray(R.array.subject);
-        final int[] icons = {R.mipmap.personal_information_head,R.mipmap.personal_information_head,R.mipmap.personal_information_head,R.mipmap.personal_information_head,R.mipmap.personal_information_head,R.mipmap.personal_information_head,R.mipmap.personal_information_head,R.mipmap.personal_information_head,R.mipmap.personal_information_head,R.mipmap.personal_information_head};
+        final int[] icons = {R.mipmap.personal_information_head, R.mipmap.personal_information_head, R.mipmap.personal_information_head, R.mipmap.personal_information_head, R.mipmap.personal_information_head, R.mipmap.personal_information_head, R.mipmap.personal_information_head, R.mipmap.personal_information_head, R.mipmap.personal_information_head, R.mipmap.personal_information_head};
         final List<String> strings = Arrays.asList(subject);
         tagViewpagerSubject.init(0, 0, 16, 8, 2, 40);
         tagViewpagerSubject.setAutoNext(false, 0);
@@ -134,7 +135,7 @@ public class HomeMainPageF extends BaseFragment implements View.OnClickListener 
                     public void convert(ViewHolder holder, String item, int positionG) {
                         String s = strings.get(position * 10 + positionG);
                         holder.setText(R.id.subject_text, s);
-                        holder.setImageResource(R.id.subject_img,icons[position * 10 + positionG]);
+                        holder.setImageResource(R.id.subject_img, icons[position * 10 + positionG]);
                     }
                 });
                 grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -231,11 +232,11 @@ public class HomeMainPageF extends BaseFragment implements View.OnClickListener 
             @Override
             public void convert(ViewHolder holder, ClassRecommendBean.DataBean item, int position) {
                 Glide.with(getActivity()).load(item.getLive_studio_course().getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) holder.getView(R.id.class_recommend_img)));
-                holder.setText(R.id.title, item.getLive_studio_course().getName());
+                holder.setText(R.id.course_title, item.getLive_studio_course().getName());
                 holder.setText(R.id.grade, item.getLive_studio_course().getGrade());
                 holder.setText(R.id.subject, item.getLive_studio_course().getSubject());
                 holder.setText(R.id.count, item.getLive_studio_course().getBuy_tickets_count() + "人已购");
-
+                ((TextView)holder.getView(R.id.reason)).setText(getReason(item.getReason()));
             }
         };
         gridviewClass.setAdapter(classAdapter);
@@ -249,6 +250,16 @@ public class HomeMainPageF extends BaseFragment implements View.OnClickListener 
                 startActivity(intent);
             }
         });
+    }
+
+    private String getReason(String reason) {
+
+        if ("latest".equals(reason)) {
+            return "最新";
+        } else if ("hottest".equals(reason)) {
+            return "最热";
+        }
+        return "";
     }
 
     private void initClassData() {

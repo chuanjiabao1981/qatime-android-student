@@ -24,15 +24,6 @@ public class TeacherDataBean {
      */
 
     private DataBean data;
-    private String gender;
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getGender() {
-        return this.gender;
-    }
 
     public int getStatus() {
         return status;
@@ -57,6 +48,15 @@ public class TeacherDataBean {
         private String avatar_url;
         private String school;
         private List<Course> courses;
+        private String gender;
+
+        public void setGender(String gender) {
+            this.gender = gender;
+        }
+
+        public String getGender() {
+            return this.gender;
+        }
 
         public String getName() {
             return name;

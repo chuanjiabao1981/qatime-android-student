@@ -15,7 +15,7 @@
         custom:layout_widthPercent="100%w" />
 
       <TextView
-        android:id="@+id/title"
+        android:id="@+id/course_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:singleLine="true"

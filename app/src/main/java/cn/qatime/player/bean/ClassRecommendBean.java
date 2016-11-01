@@ -43,6 +43,17 @@ public class ClassRecommendBean {
         private String title;
         private int index;
         private String type;
+
+        private String reason;
+
+        public String getReason() {
+            return reason;
+        }
+
+        public void setReason(String reason) {
+            this.reason = reason;
+        }
+
         /**
          * id : 38
          * name : 初三化学秋季精品高分班

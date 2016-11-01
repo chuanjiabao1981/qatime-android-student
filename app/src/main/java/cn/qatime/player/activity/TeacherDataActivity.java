@@ -86,7 +86,7 @@ public class TeacherDataActivity extends BaseActivity {
                 }
                 Glide.with(TeacherDataActivity.this).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.image)));
                 helper.setText(R.id.subject, item.getSubject());
-                helper.setText(R.id.title, item.getName());
+                helper.setText(R.id.course_title, item.getName());
                 helper.setText(R.id.count, String.valueOf(item.getBuy_tickets_count()) + "人已购买");
             }
         };
@@ -125,7 +125,7 @@ public class TeacherDataActivity extends BaseActivity {
                                 }
                                 describe.setText(bean.getData().getDesc());
                                 teachAge.setText(getTeachingYear(bean.getData().getTeaching_years()));
-                                sex.setText(getSex(bean.getGender()));
+                                sex.setText(getSex(bean.getData().getGender()));
                                 Glide.with(TeacherDataActivity.this).load(bean.getData().getAvatar_url()).placeholder(R.mipmap.personal_information_head).transform(new GlideCircleTransform(TeacherDataActivity.this)).crossFade().into(headSculpture);
                                 school.setText(bean.getData().getSchool());
                                 list.addAll(bean.getData().getCourses());
