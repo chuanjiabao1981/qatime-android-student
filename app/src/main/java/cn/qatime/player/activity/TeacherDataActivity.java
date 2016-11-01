@@ -74,7 +74,6 @@ public class TeacherDataActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_data);
-        getIntent().getStringExtra("teacherId");
         assignViews();
         initData(1);
         adapter = new CommonAdapter<TeacherDataBean.DataBean.Course>(this, list, R.layout.item_teacher_data) {
@@ -87,8 +86,8 @@ public class TeacherDataActivity extends BaseActivity {
                 }
                 Glide.with(TeacherDataActivity.this).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.image)));
                 helper.setText(R.id.subject, item.getSubject());
-                helper.setText(R.id.title, item.getName());
-                helper.setText(R.id.count, String.valueOf(item.getBuy_tickets_count())+"人已购买");
+                helper.setText(R.id.course_title, item.getName());
+                helper.setText(R.id.count, String.valueOf(item.getBuy_tickets_count()) + "人已购买");
             }
         };
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -108,7 +107,7 @@ public class TeacherDataActivity extends BaseActivity {
      */
     private void initData(final int type) {
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlTeacherInformation + getIntent().getStringExtra("teacherId") + "/profile", null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlTeacherInformation + getIntent().getIntExtra("teacherId", 0) + "/profile", null,
                 new VolleyListener(this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -119,11 +118,14 @@ public class TeacherDataActivity extends BaseActivity {
                         try {
                             TeacherDataBean bean = JsonUtils.objectFromJson(response.toString(), TeacherDataBean.class);
                             if (bean != null && bean.getData() != null) {
-                                setTitle(bean.getData().getName());
-                                name.setText(bean.getData().getName());
+                                String name = bean.getData().getName();
+                                if (name != null) {
+                                    setTitle(name);
+                                    TeacherDataActivity.this.name.setText(name);
+                                }
                                 describe.setText(bean.getData().getDesc());
                                 teachAge.setText(getTeachingYear(bean.getData().getTeaching_years()));
-                                sex.setText(getSex(bean.getGender()));
+                                sex.setText(getSex(bean.getData().getGender()));
                                 Glide.with(TeacherDataActivity.this).load(bean.getData().getAvatar_url()).placeholder(R.mipmap.personal_information_head).transform(new GlideCircleTransform(TeacherDataActivity.this)).crossFade().into(headSculpture);
                                 school.setText(bean.getData().getSchool());
                                 list.addAll(bean.getData().getCourses());

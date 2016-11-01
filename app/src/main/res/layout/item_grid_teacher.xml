@@ -6,8 +6,8 @@
     <ImageView
         android:id="@+id/teacher_img"
         android:src="@mipmap/personal_information_head"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
 
     <TextView
         android:id="@+id/teacher_text"
