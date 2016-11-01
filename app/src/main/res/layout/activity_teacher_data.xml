@@ -52,8 +52,8 @@
                             android:layout_width="0dp"
                             android:layout_height="0dp"
                             android:src="@mipmap/personal_information_head"
-                            custom:layout_heightPercent="20%w"
-                            custom:layout_widthPercent="20%w" />
+                            custom:layout_heightPercent="40%w"
+                            custom:layout_widthPercent="40%w" />
 
                         <TextView
                             android:id="@+id/sex"
@@ -62,7 +62,7 @@
                             android:layout_gravity="bottom"
                             android:text="♂"
                             android:textColor="#00ff00"
-                            android:textSize="25dp" />
+                            android:textSize="20sp" />
                     </com.zhy.android.percent.support.PercentLinearLayout>
 
                     <LinearLayout
