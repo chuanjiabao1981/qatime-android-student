@@ -102,17 +102,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:drawableLeft="@mipmap/self_introduction"
-                android:paddingLeft="15dp"
+                android:paddingLeft="10dp"
                 android:text="  自我介绍" />
 
             <TextView
                 android:id="@+id/describe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="15dp"
+                android:paddingLeft="10dp"
                 android:paddingTop="3dp"
                 android:paddingBottom="3dp"
-                android:paddingRight="15dp"
+                android:paddingRight="10dp"
                 android:text="自我介绍描述..." />
 
             <View
@@ -126,7 +126,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@mipmap/self_introduction"
-                android:paddingLeft="15dp"
+                android:paddingLeft="10dp"
                 android:text="  TA的课程" />
 
             <libraryextra.view.GridViewForScrollView
