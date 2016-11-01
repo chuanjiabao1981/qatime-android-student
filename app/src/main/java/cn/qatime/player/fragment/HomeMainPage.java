@@ -156,6 +156,7 @@ public class HomeMainPage extends BaseFragment implements View.OnClickListener {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), TeacherDataActivity.class);
+                intent.putExtra("teacherId", 66 + "");
                 startActivity(intent);
             }
         });
