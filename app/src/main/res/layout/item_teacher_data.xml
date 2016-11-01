@@ -3,10 +3,7 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp"
-    android:paddingTop="10dp">
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/image"
@@ -17,18 +14,17 @@
         custom:layout_heightPercent="60%w"
         custom:layout_widthPercent="100%w" />
 
-    <TextView
+      <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:text="北京高三作文北京高三作文北京高三作文"
+        android:singleLine="true"
+        android:text="北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文"
         android:textColor="#000" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:orientation="horizontal">
 
         <TextView

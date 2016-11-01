@@ -27,7 +27,6 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.RemedialClassBean;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -46,15 +45,15 @@ public class TeacherDataActivity extends BaseActivity {
     private TextView name;
     private TextView describe;
     private GridViewForScrollView grid;
-    private List<RemedialClassBean.Data> list = new ArrayList<>();
+    private List<TeacherDataBean.DataBean.Course> list = new ArrayList<>();
     private TextView teachAge;
     private TextView school;
     private int page = 0;
-    private CommonAdapter<RemedialClassBean.Data> adapter;
+    private CommonAdapter<TeacherDataBean.DataBean.Course> adapter;
 
     private void assignViews() {
         PullToRefreshScrollView scroll = (PullToRefreshScrollView) findViewById(R.id.scroll);
-        scroll.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
+        scroll.setMode(PullToRefreshBase.Mode.DISABLED);
         banner = (ImageView) findViewById(R.id.banner);
         headSculpture = (ImageView) findViewById(R.id.head_sculpture);
         sex = (TextView) findViewById(R.id.sex);
@@ -78,18 +77,18 @@ public class TeacherDataActivity extends BaseActivity {
         getIntent().getStringExtra("teacherId");
         assignViews();
         initData(1);
-        adapter = new CommonAdapter<RemedialClassBean.Data>(this, list, R.layout.item_teacher_data) {
+        adapter = new CommonAdapter<TeacherDataBean.DataBean.Course>(this, list, R.layout.item_teacher_data) {
 
             @Override
-            public void convert(ViewHolder helper, RemedialClassBean.Data item, int position) {
+            public void convert(ViewHolder helper, TeacherDataBean.DataBean.Course item, int position) {
                 if (item == null) {
                     Logger.e("item數據空");
                     return;
                 }
                 Glide.with(TeacherDataActivity.this).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.image)));
                 helper.setText(R.id.subject, item.getSubject());
-                helper.setText(R.id.title,item.getName());
-                helper.setText(R.id.count, String.valueOf(item.getBuy_tickets_count()));
+                helper.setText(R.id.title, item.getName());
+                helper.setText(R.id.count, String.valueOf(item.getBuy_tickets_count())+"人已购买");
             }
         };
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -124,6 +123,7 @@ public class TeacherDataActivity extends BaseActivity {
                                 name.setText(bean.getData().getName());
                                 describe.setText(bean.getData().getDesc());
                                 teachAge.setText(getTeachingYear(bean.getData().getTeaching_years()));
+                                sex.setText(getSex(bean.getGender()));
                                 Glide.with(TeacherDataActivity.this).load(bean.getData().getAvatar_url()).placeholder(R.mipmap.personal_information_head).transform(new GlideCircleTransform(TeacherDataActivity.this)).crossFade().into(headSculpture);
                                 school.setText(bean.getData().getSchool());
                                 list.addAll(bean.getData().getCourses());
@@ -149,6 +149,15 @@ public class TeacherDataActivity extends BaseActivity {
             }
         });
         addToRequestQueue(request);
+    }
+
+    private String getSex(String gender) {
+        if ("male".equals(gender)) {
+            return "♂";
+        } else if ("female".equals(gender)) {
+            return "♀";
+        }
+        return "";
     }
 
     private String getTeachingYear(String teaching_years) {

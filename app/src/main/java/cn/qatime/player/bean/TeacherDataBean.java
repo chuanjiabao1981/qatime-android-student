@@ -2,8 +2,6 @@ package cn.qatime.player.bean;
 
 import java.util.List;
 
-import libraryextra.bean.RemedialClassBean;
-
 /**
  * @author Tianhaoranly
  * @date 2016/11/1 9:30
@@ -26,6 +24,15 @@ public class TeacherDataBean {
      */
 
     private DataBean data;
+    private String gender;
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getGender() {
+        return this.gender;
+    }
 
     public int getStatus() {
         return status;
@@ -49,7 +56,7 @@ public class TeacherDataBean {
         private String teaching_years;
         private String avatar_url;
         private String school;
-        private List<RemedialClassBean.Data> courses;
+        private List<Course> courses;
 
         public String getName() {
             return name;
@@ -91,13 +98,62 @@ public class TeacherDataBean {
             this.school = school;
         }
 
-        public List<RemedialClassBean.Data> getCourses() {
+        public List<Course> getCourses() {
             return courses;
         }
 
-        public void setCourses(List<RemedialClassBean.Data> courses) {
+        public void setCourses(List<Course> courses) {
             this.courses = courses;
         }
+        public static class Course{
+            private int id;
 
+            private String name;
+
+            private String subject;
+            private int buy_tickets_count;
+
+            private String publicize;
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public String getSubject() {
+                return subject;
+            }
+
+            public void setSubject(String subject) {
+                this.subject = subject;
+            }
+
+            public int getBuy_tickets_count() {
+                return buy_tickets_count;
+            }
+
+            public void setBuy_tickets_count(int buy_tickets_count) {
+                this.buy_tickets_count = buy_tickets_count;
+            }
+
+            public String getPublicize() {
+                return publicize;
+            }
+
+            public void setPublicize(String publicize) {
+                this.publicize = publicize;
+            }
+        }
     }
 }
