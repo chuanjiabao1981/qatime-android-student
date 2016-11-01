@@ -1,21 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+<com.zhy.android.percent.support.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/class_recommend_img"
-        android:layout_width="wrap_content"
-        android:layout_height="120dp"
-        android:scaleType="fitXY"
-        android:src="@mipmap/photo" />
-
-    <TextView
-        android:id="@+id/class_recommend_text"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:background="#ff9966"
-        android:text="最新"
-        android:textColor="#fff" />
-</RelativeLayout>
+        custom:layout_heightPercent="60%w"
+        custom:layout_widthPercent="100%w">
+
+        <ImageView
+            android:id="@+id/class_recommend_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@mipmap/photo" />
+
+        <TextView
+            android:id="@+id/class_recommend_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="#ff9966"
+            android:text="最新"
+            android:textColor="#fff" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:text="北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文"
+        android:textColor="#000" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/grade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/subject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="英语" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1px"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1003已购买" />
+    </LinearLayout>
+</com.zhy.android.percent.support.PercentLinearLayout>
