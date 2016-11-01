@@ -110,10 +110,11 @@ public class HomeMainPageF extends BaseFragment implements View.OnClickListener 
     }
 
     private void initTagViewpagerSubject() {
-        final List<String> strings = Arrays.asList(getResources().getStringArray(R.array.subject));
+        String[] subject = getResources().getStringArray(R.array.subject);
+        final int[] icons = {R.mipmap.personal_information_head,R.mipmap.personal_information_head,R.mipmap.personal_information_head,R.mipmap.personal_information_head,R.mipmap.personal_information_head,R.mipmap.personal_information_head,R.mipmap.personal_information_head,R.mipmap.personal_information_head,R.mipmap.personal_information_head,R.mipmap.personal_information_head};
+        final List<String> strings = Arrays.asList(subject);
         tagViewpagerSubject.init(0, 0, 16, 8, 2, 40);
         tagViewpagerSubject.setAutoNext(false, 0);
-//        viewPager.setId(1252);
         tagViewpagerSubject.setOnGetView(new TagViewPager.OnGetView() {
             @Override
             public View getView(ViewGroup container, final int position) {
@@ -133,6 +134,7 @@ public class HomeMainPageF extends BaseFragment implements View.OnClickListener 
                     public void convert(ViewHolder holder, String item, int positionG) {
                         String s = strings.get(position * 10 + positionG);
                         holder.setText(R.id.subject_text, s);
+                        holder.setImageResource(R.id.subject_img,icons[position * 10 + positionG]);
                     }
                 });
                 grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {

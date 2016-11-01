@@ -12,16 +12,16 @@
         <item>@string/in_number</item>
     </string-array>
     <string-array name="subject">
-        <item>@string/chinese</item>
         <item>@string/math</item>
+        <item>@string/chinese</item>
         <item>@string/english</item>
+        <item>@string/physics</item>
         <item>@string/chemistry</item>
-        <item>@string/science</item>
-        <item>@string/geography</item>
         <item>@string/biology</item>
         <item>@string/history</item>
+        <item>@string/geography</item>
         <item>@string/politics</item>
-        <item>@string/physics</item>
+        <item>@string/science</item>
     </string-array>
     <string-array name="grade">
         <item>@string/high3</item>
