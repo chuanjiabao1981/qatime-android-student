@@ -70,10 +70,6 @@ public class MainActivity extends BaseFragmentActivity {
             {R.mipmap.tab_person_1, R.mipmap.tab_person_2}};
     private int currentPosition = 0;
 
-    /**
-     * 当前用户信息
-     */
-//    public Profile profile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,11 +92,6 @@ public class MainActivity extends BaseFragmentActivity {
 //        GetCitieslist();
         GetSchoolslist();
 
-
-//        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
-//        registerMsgUnreadInfoObserver(true);
-//        registerSystemMessageObservers(true);
-//        requestSystemMessageUnreadCount();
     }
 
     /**
@@ -148,7 +139,7 @@ public class MainActivity extends BaseFragmentActivity {
     }
 
 
-    boolean flag = false;
+    private boolean flag = false;
 
     @Override
     public void onBackPressed() {
@@ -188,12 +179,12 @@ public class MainActivity extends BaseFragmentActivity {
         Intent intent = getIntent();
         /**     * 解析通知栏发来的云信消息     */
         if (intent != null && intent.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT)) {
-            Intent intent1 = new Intent(this,MessageFragmentActivity.class);
-            intent.putExtra("intent",intent);
+            Intent intent1 = new Intent(this, MessageFragmentActivity.class);
+            intent.putExtra("intent", intent);
             startActivity(intent1);
         } else if (intent != null && intent.hasExtra("type") && intent.getStringExtra("type").equals("system_message")) {//转到系统消息页面
-            Intent intent1 = new Intent(this,MessageFragmentActivity.class);
-            intent.putExtra("intent",intent);
+            Intent intent1 = new Intent(this, MessageFragmentActivity.class);
+            intent.putExtra("intent", intent);
             startActivity(intent1);
         }
     }
@@ -460,7 +451,7 @@ public class MainActivity extends BaseFragmentActivity {
     public void setCurrentPosition(int currentPosition, String s) {
         fragmentlayout.setCurrenItem(currentPosition);
         fragmentlayout.setCurrenItem(currentPosition);
-        if(!StringUtils.isNullOrBlanK(s)){
+        if (!StringUtils.isNullOrBlanK(s)) {
             RemedialClassAllF remedialClassAllF = (RemedialClassAllF) fragBaseFragments.get(1);
             remedialClassAllF.initDataAsSubject(s);
         }

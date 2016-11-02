@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/controller"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:background="#adadff">
 
     <RelativeLayout
         android:id="@+id/play_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="45dip">
+        android:layout_height="45dip"
+        android:background="@drawable/shape_video_toolbar">
 
         <ImageView
             android:id="@+id/player_exit"
@@ -62,9 +63,9 @@
             android:paddingRight="5dp"
             android:paddingTop="2dp"
             android:singleLine="true"
-            android:textSize="12dp"
             android:text="123"
-            android:textColor="#fff" />
+            android:textColor="#fff"
+            android:textSize="12dp" />
     </RelativeLayout>
 
     <RadioGroup
@@ -94,129 +95,13 @@
         <!--普清（PDTV）、标清（SDTV）、高清（HDTV）-->
     </RadioGroup>
 
-    <LinearLayout
-        android:id="@+id/barrage_setting_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_marginBottom="45dp"
-        android:background="#999"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:layout_marginTop="3dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/viewing_mode" />
-
-            <SeekBar
-                android:id="@+id/brightness"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:max="255"
-                android:progress="0" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:layout_marginTop="2dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/barrage_transparent" />
-
-            <SeekBar
-                android:id="@+id/barrage_transparent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:layout_marginTop="2dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/barrage_size" />
-
-            <SeekBar
-                android:id="@+id/barrage_size"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:layout_marginTop="2dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/barrage_speed" />
-
-            <SeekBar
-                android:id="@+id/barrage_speed"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/barrage_position" />
-
-            <RadioGroup
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/position_top" />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/position_bottom" />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/full_screen" />
-            </RadioGroup>
-        </LinearLayout>
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/bottom_layout"
         android:layout_width="fill_parent"
         android:layout_height="45dp"
         android:layout_gravity="bottom"
+        android:background="#bf000000"
         android:orientation="horizontal">
 
         <ImageView
@@ -227,17 +112,22 @@
             android:padding="13dp"
             android:src="@mipmap/nemediacontroller_play" />
 
-        <RelativeLayout
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
 
             <LinearLayout
                 android:id="@+id/comment_layout"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
                 android:layout_weight="1"
                 android:orientation="horizontal"
                 android:visibility="gone">
@@ -257,63 +147,65 @@
                     android:layout_marginBottom="2dp"
                     android:layout_marginTop="2dp"
                     android:layout_weight="4"
-                    android:textSize="14sp"
-                    android:textColor="#333333"
                     android:background="@drawable/shape_input"
                     android:hint="@string/comment_content"
-                    android:imeOptions="flagNoExtractUi" />
+                    android:imeOptions="flagNoExtractUi"
+                    android:textColor="#333333"
+                    android:textSize="14sp" />
 
                 <Button
                     android:id="@+id/commit"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="2dp"
-                    android:layout_marginTop="2dp"
                     android:layout_marginLeft="5dp"
+                    android:layout_marginTop="2dp"
                     android:layout_weight="1"
-                    android:textColor="#fff"
                     android:background="@drawable/button_bg_selector_gray"
-                    android:text="@string/send" />
-
-                <TextView
-                    android:id="@+id/barrage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="5dp"
-                    android:gravity="center"
-                    android:text="@string/barrage_open"
+                    android:text="@string/send"
                     android:textColor="#fff" />
-
-                <ImageView
-                    android:id="@+id/barrage_setting"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:src="@mipmap/setting"
-                    android:visibility="gone" />
-
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/zoom_layout"
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/danmu_switch"
+                android:layout_width="50dp"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:clickable="true"
+                android:padding="13dp"
+                android:src="@mipmap/danmu_off" />
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1" />
+            <ImageView
+                android:id="@+id/view_change"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:padding="13dp"
+                android:src="@mipmap/float_change_big" />
 
-                <ImageView
-                    android:id="@+id/zoom"
-                    android:layout_width="45dp"
-                    android:layout_height="match_parent"
-                    android:clickable="true"
-                    android:padding="13dp"
-                    android:src="@mipmap/nemediacontroller_scale01" />
-            </LinearLayout>
-        </RelativeLayout>
+            <ImageView
+                android:id="@+id/iv_switch"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:padding="13dp"
+                android:src="@mipmap/float_switchup" />
+
+            <ImageView
+                android:id="@+id/zoom"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:padding="13dp"
+                android:src="@mipmap/nemediacontroller_scale01" />
+
+        </LinearLayout>
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/sub_switch"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center_vertical|right"
+        android:layout_margin="5dp"
+        android:background="#fff" />
 </FrameLayout>

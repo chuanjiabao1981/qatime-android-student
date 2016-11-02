@@ -97,7 +97,7 @@ public class NEVideoView extends SurfaceView {
     private boolean mPauseInBackground = false;
     private static Context mContext;
     public static String mVersion = null;
-    private String mMediaType;
+    private String mMediaType = "livestream";//直播livestream  点播videoondemand
     private boolean mMute = false;
 
 

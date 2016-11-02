@@ -65,7 +65,7 @@ public class PlayerMessageF extends BaseFragment {
     private int LOAD_MESSAGE_COUNT = 20;//聊天加载条数
 
     private SessionTypeEnum sessionType = SessionTypeEnum.Team;
-    private String sessionId;
+    private String sessionId = "";
     private Callback chatCallback;
 
     private Handler hd = new Handler();

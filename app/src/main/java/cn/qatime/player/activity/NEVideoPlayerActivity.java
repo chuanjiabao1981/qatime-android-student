@@ -5,72 +5,52 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
-import com.netease.neliveplayer.NELivePlayer;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
-import com.netease.nimlib.sdk.team.model.TeamMember;
-import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import cn.qatime.player.R;
-import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.barrage.DanmakuView;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.bean.Announcements;
 import cn.qatime.player.fragment.PlayerAnnouncementsF;
 import cn.qatime.player.fragment.PlayerMessageF;
 import cn.qatime.player.fragment.PlayerLiveDetailsF;
 import cn.qatime.player.fragment.PlayerMembersF;
-import cn.qatime.player.im.cache.TeamDataCache;
+import cn.qatime.player.fragment.VideoFloatFragment;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
-import cn.qatime.player.view.BiaoQingView;
-import cn.qatime.player.view.QaVideoPlayer;
+import cn.qatime.player.view.VideoLayout;
 import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.KeyBoardUtils;
-import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.FragmentLayoutWithLine;
 
-public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVideoPlayer.ControlListener {
+public class NEVideoPlayerActivity extends BaseFragmentActivity {
 //    public NEVideoView mVideoView;  //用于画面显示
 //    private View mBuffer; //用于指示缓冲状态
 //    private NEMediaController mMediaController; //用于控制播放
 
-    public static final int NELP_LOG_UNKNOWN = 0; //!< log输出模式：输出详细
-    public static final int NELP_LOG_DEFAULT = 1; //!< log输出模式：输出详细
-    public static final int NELP_LOG_VERBOSE = 2; //!< log输出模式：输出详细
-    public static final int NELP_LOG_DEBUG = 3; //!< log输出模式：输出调试信息
-    public static final int NELP_LOG_INFO = 4; //!< log输出模式：输出标准信息
-    public static final int NELP_LOG_WARN = 5; //!< log输出模式：输出警告
-    public static final int NELP_LOG_ERROR = 6; //!< log输出模式：输出错误
-    public static final int NELP_LOG_FATAL = 7; //!< log输出模式：一些错误信息，如头文件找不到，非法参数使用
-    public static final int NELP_LOG_SILENT = 8; //!< log输出模式：不输出
-
-    private QaVideoPlayer videoPlayer;
     private View bottom;
 
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3, R.id.tab_text4};
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
-    private FragmentLayoutWithLine fragmentLayout;
     private View inputLayout;
 
     private int id;
@@ -82,41 +62,53 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     private boolean isMute = false;//当前用户 是否被禁言
     private String url = "";
 
+
+    private RelativeLayout mainVideo;
+    private RelativeLayout mainView;
+//    private RelativeLayout control;
+    private DanmakuView danmuView;
+    private VideoLayout floatingWindow;
+    private RelativeLayout subVideo;
+
+    private void assignViews() {
+        mainVideo = (RelativeLayout) findViewById(R.id.main_video);
+        mainView = (RelativeLayout) findViewById(R.id.main_view);
+//        control = (RelativeLayout) findViewById(R.id.control);
+        danmuView = (DanmakuView) findViewById(R.id.danmuView);
+        floatingWindow = (VideoLayout) findViewById(R.id.floating_window);
+        subVideo = (RelativeLayout) findViewById(R.id.sub_video);
+        //控制框
+        VideoFloatFragment floatFragment = new VideoFloatFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.control,floatFragment).commit();
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
-        id = getIntent().getIntExtra("id", 0);//从前一页进来的id 获取详情用
-        if (id == 0) {
-            Toast.makeText(this, getResourceString(R.string.no_course_information), Toast.LENGTH_SHORT).show();
-        }
-        sessionId = getIntent().getStringExtra("sessionId");
-        url = getIntent().getStringExtra("url");
-//        Logger.e(url);
-        videoPlayer = (QaVideoPlayer) findViewById(R.id.video_player);
-        ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenWidth(this) * 9 / 16);
-        videoPlayer.setLayoutParams(params);
-
-        if (!StringUtils.isNullOrBlanK(url)) {
-            videoPlayer.setVideoPath(url);
-            videoPlayer.setOnControlListener(this);
-            videoPlayer.start();
-        }
-        videoPlayer.setOnVideoRefreshListener(new QaVideoPlayer.VideoRefreshListener() {
-            @Override
-            public void onRefresh() {
-//                if (!StringUtils.isNullOrBlanK(url)) {
-//                    videoPlayer.release_resource();
-//                    videoPlayer.setVideoPath(url);
-//                    videoPlayer.setOnControlListener(NEVideoPlayerActivity.this);
-//                    videoPlayer.start();
-//                }
-            }
-        });
+//        id = getIntent().getIntExtra("id", 0);//从前一页进来的id 获取详情用
+//        if (id == 0) {
+//            Toast.makeText(this, getResourceString(R.string.no_course_information), Toast.LENGTH_SHORT).show();
+//        }
+//        sessionId = getIntent().getStringExtra("sessionId");
+//        url = getIntent().getStringExtra("url");
+////        Logger.e(url);
+//        videoPlayer = (QaVideoPlayer) findViewById(R.id.video_player);
+//        ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenWidth(this) * 9 / 16);
+//        videoPlayer.setLayoutParams(params);
+//
+//        if (!StringUtils.isNullOrBlanK(url)) {
+//            videoPlayer.setVideoPath(url);
+//            videoPlayer.setOnControlListener(this);
+//            videoPlayer.start();
+//        }
+        assignViews();
         initView();
-        getAnnouncementsData();
-        initData();
+//        getAnnouncementsData();
+//        initData();
     }
+
 
     private void getAnnouncementsData() {
         if (id != 0) {
@@ -134,22 +126,18 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
                                         ((PlayerAnnouncementsF) fragBaseFragments.get(0)).setData(data.getData().getAnnouncements());
                                     }
                                 }
-
                             }
                         }
 
                         @Override
                         protected void onError(JSONObject response) {
-
                         }
 
                         @Override
                         protected void onTokenOut() {
                             tokenOut();
                         }
-                    }
-
-                    , new VolleyErrorListener() {
+                    }, new VolleyErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
                     super.onErrorResponse(volleyError);
@@ -160,10 +148,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     }
 
     private void initView() {
-        TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
-        if (team != null) {
-            isMute = team.isMute();
-        }
+//        TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
+//        if (team != null) {
+//            isMute = team.isMute();
+//        }
         bottom = findViewById(R.id.bottom);
 
         inputLayout = findViewById(R.id.input_layout);
@@ -172,7 +160,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         fragBaseFragments.add(new PlayerLiveDetailsF());
         fragBaseFragments.add(new PlayerMembersF());
 
-        fragmentLayout = (FragmentLayoutWithLine) findViewById(R.id.fragmentlayout);
+        FragmentLayoutWithLine fragmentLayout = (FragmentLayoutWithLine) findViewById(R.id.fragmentlayout);
 
         fragmentLayout.setScorllToNext(true);
         fragmentLayout.setScorll(true);
@@ -183,8 +171,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff999999);
                 ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff333333);
-//                    lastTabView.setBackgroundColor(0xffffffff);
-//                    currentTabView.setBackgroundColor(0xffeeeeee);
                 if (position == 1) {
                     inputLayout.setVisibility(View.VISIBLE);
                 } else {
@@ -195,50 +181,50 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         });
         fragmentLayout.setAdapter(fragBaseFragments, R.layout.tablayout_nevideo_player, 0x0102);
         fragmentLayout.getViewPager().setOffscreenPageLimit(3);
-        fragment2 = (PlayerMessageF) fragBaseFragments.get(1);
-        fragment2.setSessionId(sessionId);
-        fragment2.requestTeamInfo();
-        fragment2.setChatCallBack(new PlayerMessageF.Callback() {
-            @Override
-            public void back(List<IMMessage> result) {
-                TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
-                if (team != null) {
-                    isMute = team.isMute();
-                }
-                if (isMute) {
-                    content.setHint(R.string.have_muted);
-                } else {
-                    content.setHint("");
-                }
-                videoPlayer.addDanmaku(result);
-            }
-        });
+//        fragment2 = (PlayerMessageF) fragBaseFragments.get(1);
+//        fragment2.setSessionId(sessionId);
+//        fragment2.requestTeamInfo();
+//        fragment2.setChatCallBack(new PlayerMessageF.Callback() {
+//            @Override
+//            public void back(List<IMMessage> result) {
+//                TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
+//                if (team != null) {
+//                    isMute = team.isMute();
+//                }
+//                if (isMute) {
+//                    content.setHint(R.string.have_muted);
+//                } else {
+//                    content.setHint("");
+//                }
+////                videoPlayer.addDanmaku(result);
+//            }
+//        });
 
-        content = (EditText) findViewById(R.id.content);
-        emoji = (ImageView) findViewById(R.id.emoji);
-
-        Button send = (Button) findViewById(R.id.send);
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendMessage(content.getText().toString().trim(), false);
-                content.setText("");
-            }
-        });
-        BiaoQingView bq = (BiaoQingView) findViewById(R.id.biaoQingView);
-        bq.init(content, emoji);
-        videoPlayer.setChatCallback(new QaVideoPlayer.ChatCallback() {
-            @Override
-            public void back(String result) {
-                Logger.e(result + "result");
-                sendMessage(result, true);
-            }
-        });
-        if (isMute) {
-            content.setHint(R.string.have_muted);
-        } else {
-            content.setHint("");
-        }
+//        content = (EditText) findViewById(R.id.content);
+//        emoji = (ImageView) findViewById(R.id.emoji);
+//
+//        Button send = (Button) findViewById(R.id.send);
+//        send.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                sendMessage(content.getText().toString().trim(), false);
+//                content.setText("");
+//            }
+//        });
+//        BiaoQingView bq = (BiaoQingView) findViewById(R.id.biaoQingView);
+//        bq.init(content, emoji);
+//        videoPlayer.setChatCallback(new QaVideoPlayer.ChatCallback() {
+//            @Override
+//            public void back(String result) {
+//                Logger.e(result + "result");
+//                sendMessage(result, true);
+//            }
+//        });
+//        if (isMute) {
+//            content.setHint(R.string.have_muted);
+//        } else {
+//            content.setHint("");
+//        }
     }
 
     /**
@@ -271,9 +257,9 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         // 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
         NIMClient.getService(MsgService.class).sendMessage(message, true);
         //横屏状态下,将发送的消息展示到弹幕去
-        if (isSendToDanmu) {
-            videoPlayer.addDanmaku(message, 0);
-        }
+//        if (isSendToDanmu) {
+//            videoPlayer.addDanmaku(message, 0);
+//        }
         fragment2.items.add(message);
         fragment2.adapter.notifyDataSetChanged();
         fragment2.listView.getRefreshableView().setSelection(fragment2.items.size() - 1);
@@ -318,53 +304,50 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
 
     @Override
     protected void onResume() {
-        if (videoPlayer.isPauseInBackgroud() && !videoPlayer.isPaused()) {
-            videoPlayer.start(); //锁屏打开后恢复播放
-        }
+//        if (videoPlayer.isPauseInBackgroud() && !videoPlayer.isPaused()) {
+//            videoPlayer.start(); //锁屏打开后恢复播放
+//        }
         super.onResume();
-        videoPlayer.BarrageResume();
-        fragment2.registerObservers(true);
+//        videoPlayer.BarrageResume();
+//        fragment2.registerObservers(true);
         NIMClient.getService(MsgService.class).setChattingAccount(sessionId, sessionType);
     }
 
 
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) { // 横屏
-            bottom.setVisibility(View.GONE);
-            ViewGroup.LayoutParams params = videoPlayer.getLayoutParams();
-            params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-            params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-            videoPlayer.setLayoutParams(params);
-        } else {
-            bottom.setVisibility(View.VISIBLE);
-            ViewGroup.LayoutParams params = videoPlayer.getLayoutParams();
-            params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-            params.height = ScreenUtils.getScreenWidth(this) * 9 / 16;
-            videoPlayer.setLayoutParams(params);
-        }
-//        videoPlayer.release_resource();
-//        videoPlayer.start();
+//        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) { // 横屏
+//            bottom.setVisibility(View.GONE);
+//            ViewGroup.LayoutParams params = videoPlayer.getLayoutParams();
+//            params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+//            params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+//            videoPlayer.setLayoutParams(params);
+//        } else {
+//            bottom.setVisibility(View.VISIBLE);
+//            ViewGroup.LayoutParams params = videoPlayer.getLayoutParams();
+//            params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+//            params.height = ScreenUtils.getScreenWidth(this) * 9 / 16;
+//            videoPlayer.setLayoutParams(params);
+//        }
     }
 
 
     @Override
     protected void onPause() {
-        videoPlayer.pause(); //锁屏时暂停
+//        videoPlayer.pause(); //锁屏时暂停
         super.onPause();
-        videoPlayer.BarragePause();
+//        videoPlayer.BarragePause();
         NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
     }
 
 
     @Override
     protected void onDestroy() {
-        videoPlayer.release_resource();
-        if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
-        videoPlayer.BarrageDestory();
-//        hd.removeCallbacks(runnable);
+//        videoPlayer.release_resource();
+//        if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        }
+//        videoPlayer.BarrageDestory();
         super.onDestroy();
         fragment2.registerObservers(false);
         fragment2.registerTeamUpdateObserver(false);
@@ -393,38 +376,4 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         super.onBackPressed();
     }
 
-//    @Override
-//    public void onVideoSizeChanged(NELivePlayer mp, int width, int height, int sarNum, int sarDen) {
-////        videoPlayer.setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(NEVideoPlayerActivity.this), (ScreenUtils.getScreenWidth(NEVideoPlayerActivity.this)-ScreenUtils.getStatusHeight(NEVideoPlayerActivity.this)) * 3 / 5));
-//    }
-
-    @Override
-    public void onBufferingUpdate(NELivePlayer neLivePlayer, int i) {
-
-    }
-
-    @Override
-    public void onCompletion(NELivePlayer neLivePlayer) {
-//        if (!StringUtils.isNullOrBlanK(url)) {
-//            new Handler().postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    videoPlayer.release_resource();
-//                    videoPlayer.setVideoPath(url);
-//                    videoPlayer.setOnControlListener(NEVideoPlayerActivity.this);
-//                    videoPlayer.start();
-//                }
-//            }, 500);
-//        }
-    }
-
-    @Override
-    public void onPrepared(NELivePlayer neLivePlayer) {
-
-    }
-
-    @Override
-    public boolean onError(NELivePlayer neLivePlayer, int i, int i1) {
-        return false;
-    }
 }
