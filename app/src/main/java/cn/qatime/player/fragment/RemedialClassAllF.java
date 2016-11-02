@@ -109,8 +109,6 @@ public class RemedialClassAllF extends BaseFragment implements View.OnClickListe
     DecimalFormat df = new DecimalFormat("#.00");
     private GradeBean gradeBean;
     private int timesortposition;
-    private int classsortposition;
-    private int subjectsortposition;
     private View started;
     private View recruiting;
     private CheckedTextView startedText;
@@ -185,7 +183,7 @@ public class RemedialClassAllF extends BaseFragment implements View.OnClickListe
                 if (price.startsWith(".")) {
                     price = "0" + price;
                 }
-                helper.setText(R.id.price,price);
+                helper.setText(R.id.price, price);
                 helper.setText(R.id.student_number, String.valueOf(item.getBuy_tickets_count()));
             }
         };
@@ -427,7 +425,7 @@ public class RemedialClassAllF extends BaseFragment implements View.OnClickListe
                         TextView view = holder.getView(R.id.text);
                         TextView select = holder.getView(R.id.select);
                         view.setText(item);
-                        if (position == subjectsortposition) {
+                        if (subjecttext.getText().toString().equals(item) || (subjecttext.getText().toString().equals(getResourceString(R.string.by_subject)) && position == 0)) {
                             view.setTextColor(Color.LTGRAY);
                             select.setTextColor(Color.LTGRAY);
                             select.setVisibility(View.VISIBLE);
@@ -441,9 +439,12 @@ public class RemedialClassAllF extends BaseFragment implements View.OnClickListe
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        subjecttext.setText(subjectList.get(position));
+                        if (getResourceString(R.string.whole).equals(subjectList.get(position))) {
+                            subjecttext.setText(getResourceString(R.string.by_subject));
+                        } else {
+                            subjecttext.setText(subjectList.get(position));
+                        }
                         initData(1);
-                        subjectsortposition = position;
                         pop.dismiss();
                     }
                 });
@@ -477,7 +478,7 @@ public class RemedialClassAllF extends BaseFragment implements View.OnClickListe
                         TextView view = holder.getView(R.id.text);
                         TextView select = holder.getView(R.id.select);
                         view.setText(item);
-                        if (position == classsortposition) {
+                        if (classtext.getText().toString().equals(item) || (classtext.getText().toString().equals(getResourceString(R.string.by_grade)) && position == 0)) {
                             view.setTextColor(Color.LTGRAY);
                             select.setTextColor(Color.LTGRAY);
                             select.setVisibility(View.VISIBLE);
@@ -491,8 +492,11 @@ public class RemedialClassAllF extends BaseFragment implements View.OnClickListe
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        classtext.setText(classList.get(position));
-                        classsortposition = position;
+                        if (getResourceString(R.string.whole).equals(classList.get(position))) {
+                            classtext.setText(getResourceString(R.string.by_grade));
+                        } else {
+                            classtext.setText(classList.get(position));
+                        }
                         initData(1);
                         pop.dismiss();
                     }
@@ -592,6 +596,10 @@ public class RemedialClassAllF extends BaseFragment implements View.OnClickListe
     }
 
     public void initDataAsSubject(String s) {
+        //全部设置字体为科目
+        if (s == null || getResourceString(R.string.whole).equals(s)) {
+            s = getResourceString(R.string.subject);
+        }
         subjecttext.setText(s);
         initData(1);
     }

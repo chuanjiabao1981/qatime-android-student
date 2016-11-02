@@ -45,7 +45,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="horizontal"
-                        android:paddingLeft="5dp">
+                        android:paddingLeft="10dp">
 
                         <ImageView
                             android:id="@+id/head_sculpture"
@@ -61,7 +61,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
                             android:text="♂"
-                            android:textColor="#00ff00"
+                            android:textColor="#00ccff"
                             android:textSize="20sp" />
                     </com.zhy.android.percent.support.PercentLinearLayout>
 
@@ -97,37 +97,75 @@
             </RelativeLayout>
 
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:drawableLeft="@mipmap/self_introduction"
-                android:paddingLeft="10dp"
-                android:text="  自我介绍" />
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:paddingBottom="6dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="3dp"
+                    android:paddingTop="6dp"
+                    android:src="@mipmap/teacher_recommend" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="入住名师"
+                    android:textColor="#333" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/describe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:paddingTop="3dp"
                 android:paddingBottom="3dp"
+                android:paddingLeft="10dp"
                 android:paddingRight="10dp"
+                android:paddingTop="3dp"
                 android:text="自我介绍描述..." />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
                 android:background="#cdcdcd" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@mipmap/self_introduction"
-                android:paddingLeft="10dp"
-                android:text="  TA的课程" />
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:paddingBottom="6dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="3dp"
+                    android:paddingTop="6dp"
+                    android:src="@mipmap/tutorship_recommend" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TA的课程"
+                    android:textColor="#333" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
 
             <libraryextra.view.GridViewForScrollView
                 android:id="@+id/grid"
@@ -138,7 +176,6 @@
                 android:numColumns="2"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:paddingTop="10dp"
                 android:scrollbars="none"
                 android:verticalSpacing="10dp" />
         </com.zhy.android.percent.support.PercentLinearLayout>

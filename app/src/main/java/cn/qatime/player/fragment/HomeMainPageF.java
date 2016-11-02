@@ -238,6 +238,7 @@ public class HomeMainPageF extends BaseFragment implements View.OnClickListener 
                 holder.setText(R.id.subject, item.getLive_studio_course().getSubject());
                 holder.setText(R.id.count, item.getLive_studio_course().getBuy_tickets_count() + "人已购");
                 ((TextView)holder.getView(R.id.reason)).setText(getReason(item.getReason()));
+                ((TextView)holder.getView(R.id.reason)).setBackgroundColor(getReasonBackground(item.getReason()));
             }
         };
         gridviewClass.setAdapter(classAdapter);
@@ -261,6 +262,15 @@ public class HomeMainPageF extends BaseFragment implements View.OnClickListener 
             return "最热";
         }
         return "";
+    }
+    private int getReasonBackground(String reason) {
+
+        if ("latest".equals(reason)) {
+            return 0x66cccc;
+        } else if ("hottest".equals(reason)) {
+            return 0xff9999;
+        }
+        return 0x00000000;
     }
 
     private void initClassData() {
@@ -306,7 +316,7 @@ public class HomeMainPageF extends BaseFragment implements View.OnClickListener 
         switch (v.getId()) {
             case R.id.all_class:
                 MainActivity mainActivity = (MainActivity) getActivity();
-                mainActivity.setCurrentPosition(1, "全部");
+                mainActivity.setCurrentPosition(1, getResourceString(R.string.whole));
                 break;
             case R.id.refresh_teacher:
                 initTeacherData();
