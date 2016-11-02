@@ -36,7 +36,7 @@
         <ImageView
             android:id="@+id/tab_img2"
             style="@style/tab_menu_icon_size"
-            android:src="@mipmap/tab_message_2" />
+            android:src="@mipmap/tab_tutorship_2" />
 
         <TextView
             android:id="@+id/tab_text2"

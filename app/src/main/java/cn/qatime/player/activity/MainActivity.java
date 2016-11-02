@@ -65,7 +65,7 @@ public class MainActivity extends BaseFragmentActivity {
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3, R.id.tab_text4};
     private int tabImages[][] = {
             {R.mipmap.tab_home_1, R.mipmap.tab_home_2},
-            {R.mipmap.tab_message_1, R.mipmap.tab_message_2},
+            {R.mipmap.tab_tutorship_1, R.mipmap.tab_tutorship_2},
             {R.mipmap.tab_moments_1, R.mipmap.tab_moments_2},
             {R.mipmap.tab_person_1, R.mipmap.tab_person_2}};
     private int currentPosition = 0;

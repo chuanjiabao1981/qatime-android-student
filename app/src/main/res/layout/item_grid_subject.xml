@@ -6,6 +6,7 @@
     <ImageView
         android:id="@+id/subject_img"
         android:src="@mipmap/personal_information_head"
+        android:padding="5dp"
         android:layout_width="40dp"
         android:layout_height="40dp" />
 
