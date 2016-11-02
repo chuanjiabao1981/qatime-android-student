@@ -41,6 +41,7 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
+import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -112,7 +113,7 @@ public class HomeMainPageF extends BaseFragment implements View.OnClickListener 
 
     private void initTagViewpagerSubject() {
         String[] subject = getResources().getStringArray(R.array.subject);
-        final int[] icons = {R.mipmap.personal_information_head, R.mipmap.personal_information_head, R.mipmap.personal_information_head, R.mipmap.personal_information_head, R.mipmap.personal_information_head, R.mipmap.personal_information_head, R.mipmap.personal_information_head, R.mipmap.personal_information_head, R.mipmap.personal_information_head, R.mipmap.personal_information_head};
+        final int[] icons = {R.mipmap.chinese, R.mipmap.math, R.mipmap.english, R.mipmap.physics, R.mipmap.chemistry, R.mipmap.biology, R.mipmap.history, R.mipmap.geography, R.mipmap.politics, R.mipmap.science};
         final List<String> strings = Arrays.asList(subject);
         tagViewpagerSubject.init(0, 0, 16, 8, 2, 40);
         tagViewpagerSubject.setAutoNext(false, 0);
@@ -122,7 +123,7 @@ public class HomeMainPageF extends BaseFragment implements View.OnClickListener 
                 GridView grid = new GridView(getContext());
                 grid.setNumColumns(5);
                 grid.setLayoutParams(new GridView.LayoutParams(GridView.LayoutParams.MATCH_PARENT, GridView.LayoutParams.MATCH_PARENT));
-                grid.setPadding(0, 20, 0, 0);
+                grid.setPadding(0, 0, 0, 0);
                 grid.setBackgroundColor(Color.WHITE);
                 grid.setGravity(Gravity.CENTER);
                 grid.setAdapter(new CommonAdapter<String>(getContext(), strings, R.layout.item_grid_subject) {
@@ -164,8 +165,8 @@ public class HomeMainPageF extends BaseFragment implements View.OnClickListener 
 
             @Override
             public void convert(ViewHolder holder, TeacherRecommendBean.DataBean item, int position) {
-                Glide.with(getActivity()).load(item.getTeacher().getAvatar_url()).placeholder(R.mipmap.personal_information_head).centerCrop().crossFade().dontAnimate().into(((ImageView) holder.getView(R.id.teacher_img)));
-                holder.setText(R.id.teacher_text, item.getTeacher().getName());// TODO: 2016/11/1 getName为空 复用之前的item显示之前的名称
+                Glide.with(getActivity()).load(item.getTeacher().getAvatar_url()).placeholder(R.mipmap.error_header).centerCrop().bitmapTransform(new GlideCircleTransform(getActivity())).crossFade().dontAnimate().into(((ImageView) holder.getView(R.id.teacher_img)));
+                holder.setText(R.id.teacher_text, item.getTeacher().getName());
             }
         };
         gridviewTeacher.setAdapter(teacherAdapter);

@@ -11,17 +11,41 @@
             android:layout_height="match_parent"
             android:background="@drawable/shape_top_tab" />
 
+        <LinearLayout
+            android:id="@+id/area"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:visibility="invisible"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/backbar_text_style"
+                android:text="北京" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/down" />
+        </LinearLayout>
+
         <ImageView
             android:id="@+id/message"
             style="@style/backbar_icon_style"
             android:layout_alignParentRight="true"
             android:clickable="true"
-            android:src="@mipmap/tab_message_2" />
+            android:src="@mipmap/message" />
 
-        <TextView
-            style="@style/backbar_text_style"
+        <!--<TextView-->
+        <!--style="@style/backbar_text_style"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:text="答疑时间" />-->
+        <ImageView
+            android:layout_width="140dp"
+            android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:text="答疑时间" />
+            android:src="@mipmap/qat_time_logo" />
 
     </RelativeLayout>
 
@@ -44,13 +68,15 @@
             <libraryextra.view.TagViewPager
                 android:id="@+id/tag_viewpager_subject"
                 android:layout_width="match_parent"
-                android:layout_height="140dp"
-                android:background="#fff" />
+                android:layout_height="130dp"
+                android:background="#fff"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="1px"
                 android:background="#fff"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -58,6 +84,7 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:padding="6dp"
                     android:src="@mipmap/head_32" />
 
                 <TextView
@@ -74,6 +101,7 @@
                     android:id="@+id/refresh_teacher"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:padding="8dp"
                     android:src="@mipmap/refresh" />
             </LinearLayout>
 
@@ -87,7 +115,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="1px"
                 android:background="#fff"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -95,6 +123,7 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:padding="6dp"
                     android:src="@mipmap/head_32" />
 
                 <TextView
@@ -120,8 +149,9 @@
                         android:text="全部" />
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:padding="6dp"
                         android:src="@mipmap/right_arrow" />
                 </LinearLayout>
             </LinearLayout>
@@ -136,8 +166,8 @@
                 android:listSelector="#00000000"
                 android:numColumns="2"
                 android:paddingLeft="10dp"
-                android:paddingTop="10dp"
                 android:paddingRight="10dp"
+                android:paddingTop="10dp"
                 android:scrollbars="none"
                 android:verticalSpacing="10dp" />
         </LinearLayout>
