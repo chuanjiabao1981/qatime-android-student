@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.base.BaseFragmentActivity;
-import cn.qatime.player.fragment.TutorshipTodayF;
-import cn.qatime.player.fragment.TutorshipPreviewF;
-import cn.qatime.player.fragment.TutorshipTeachingF;
-import cn.qatime.player.fragment.TutorshipOverF;
-import cn.qatime.player.fragment.TutorshipTasteF;
+import cn.qatime.player.fragment.FragmentTutorshipToday;
+import cn.qatime.player.fragment.FragmentTutorshipPreview;
+import cn.qatime.player.fragment.FragmentTutorshipTeaching;
+import cn.qatime.player.fragment.FragmentTutorshipOver;
+import cn.qatime.player.fragment.FragmentTutorshipTaste;
 import libraryextra.view.FragmentLayoutWithLine;
 
 /**
@@ -47,11 +47,11 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
     private void initView() {
         findViewById(R.id.right).setVisibility(View.GONE);
 
-        fragBaseFragments.add(new TutorshipTodayF());
-        fragBaseFragments.add(new TutorshipPreviewF());
-        fragBaseFragments.add(new TutorshipTeachingF());
-        fragBaseFragments.add(new TutorshipOverF());
-        fragBaseFragments.add(new TutorshipTasteF());
+        fragBaseFragments.add(new FragmentTutorshipToday());
+        fragBaseFragments.add(new FragmentTutorshipPreview());
+        fragBaseFragments.add(new FragmentTutorshipTeaching());
+        fragBaseFragments.add(new FragmentTutorshipOver());
+        fragBaseFragments.add(new FragmentTutorshipTaste());
 
         fragmentlayout = (FragmentLayoutWithLine) findViewById(R.id.fragmentlayout);
 

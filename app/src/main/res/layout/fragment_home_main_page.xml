@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#e8e8e8"
     android:orientation="vertical">
 
     <RelativeLayout style="@style/top_style">
@@ -13,12 +14,12 @@
 
         <LinearLayout
             android:id="@+id/area"
-            android:padding="10dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:visibility="invisible"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:visibility="invisible">
 
             <TextView
                 style="@style/backbar_text_style"
@@ -42,10 +43,10 @@
         <!--android:layout_centerInParent="true"-->
         <!--android:text="答疑时间" />-->
         <ImageView
-            android:layout_width="140dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:src="@mipmap/qat_time_logo" />
+            android:src="@mipmap/home_logo" />
 
     </RelativeLayout>
 
@@ -65,32 +66,43 @@
                 android:layout_height="119dp"
                 android:background="#fff" />
 
-            <libraryextra.view.TagViewPager
-                android:id="@+id/tag_viewpager_subject"
+            <libraryextra.view.GridViewForScrollView
+                android:id="@+id/gridview_subject"
                 android:layout_width="match_parent"
-                android:layout_height="130dp"
+                android:layout_height="match_parent"
                 android:background="#fff"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp" />
+                android:gravity="center"
+                android:numColumns="5"
+                android:verticalSpacing="6dp"
+                android:paddingBottom="9dp"
+                android:paddingLeft="9dp"
+                android:paddingRight="9dp"
+                android:paddingTop="10dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1px"
+                android:layout_marginTop="1dp"
                 android:background="#fff"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingBottom="8dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:padding="6dp"
-                    android:src="@mipmap/head_32" />
+                    android:layout_width="14dp"
+                    android:layout_height="16dp"
+                    android:src="@mipmap/teacher_recommend" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="入住名师" />
+                    android:layout_gravity="bottom"
+                    android:text="推荐名师"
+                    android:textColor="#000"
+                    android:textSize="15sp" />
 
                 <View
                     android:layout_width="0dp"
@@ -99,37 +111,47 @@
 
                 <ImageView
                     android:id="@+id/refresh_teacher"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:padding="8dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:padding="3dp"
                     android:src="@mipmap/refresh" />
             </LinearLayout>
 
             <libraryextra.view.GridViewForScrollView
                 android:id="@+id/gridview_teacher"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:background="#fff"
-                android:numColumns="5" />
+                android:gravity="center"
+                android:numColumns="5"
+                android:paddingBottom="9dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1px"
+                android:layout_marginTop="1dp"
                 android:background="#fff"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingBottom="8dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:padding="6dp"
-                    android:src="@mipmap/head_32" />
+                    android:layout_width="16dp"
+                    android:layout_height="10dp"
+                    android:src="@mipmap/tutorship_recommend" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="辅导推荐" />
+                    android:layout_gravity="bottom"
+                    android:text="辅导推荐"
+                    android:textColor="#000"
+                    android:textSize="15sp" />
 
                 <View
                     android:layout_width="0dp"
@@ -146,13 +168,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="全部" />
+                        android:text="全部"
+                        android:textColor="#999" />
 
                     <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:padding="6dp"
-                        android:src="@mipmap/right_arrow" />
+                        android:layout_width="13dp"
+                        android:layout_height="16dp"
+                        android:padding="3dp"
+                        android:src="@mipmap/home_right_arrow" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -162,12 +185,12 @@
                 android:layout_height="match_parent"
                 android:background="#ffffff"
                 android:cacheColorHint="#00000000"
+                android:gravity="center"
                 android:horizontalSpacing="10dp"
                 android:listSelector="#00000000"
                 android:numColumns="2"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:paddingTop="10dp"
                 android:scrollbars="none"
                 android:verticalSpacing="10dp" />
         </LinearLayout>
