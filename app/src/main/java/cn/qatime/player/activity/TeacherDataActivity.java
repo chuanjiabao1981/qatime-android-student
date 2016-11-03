@@ -27,7 +27,6 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -126,7 +125,7 @@ public class TeacherDataActivity extends BaseActivity {
                                 describe.setText(bean.getData().getDesc());
                                 teachAge.setText(getTeachingYear(bean.getData().getTeaching_years()));
                                 sex.setText(getSex(bean.getData().getGender()));
-                                Glide.with(TeacherDataActivity.this).load(bean.getData().getAvatar_url()).placeholder(R.mipmap.error_header).transform(new GlideCircleTransform(TeacherDataActivity.this)).crossFade().into(headSculpture);
+                                Glide.with(TeacherDataActivity.this).load(bean.getData().getAvatar_url()).placeholder(R.mipmap.error_header).crossFade().into(headSculpture);
                                 school.setText(bean.getData().getSchool());
                                 list.addAll(bean.getData().getCourses());
                             }

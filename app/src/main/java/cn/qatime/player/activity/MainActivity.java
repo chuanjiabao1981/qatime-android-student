@@ -38,10 +38,10 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.config.UserPreferences;
-import cn.qatime.player.fragment.HomeClassTableF;
-import cn.qatime.player.fragment.HomeMainPageF;
-import cn.qatime.player.fragment.HomeUserCenterF;
-import cn.qatime.player.fragment.RemedialClassAllF;
+import cn.qatime.player.fragment.FragmentHomeClassTable;
+import cn.qatime.player.fragment.FragmentHomeMainPage;
+import cn.qatime.player.fragment.FragmentHomeUserCenter;
+import cn.qatime.player.fragment.FragmentRemedialClassAll;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.Constant;
@@ -114,11 +114,11 @@ public class MainActivity extends BaseFragmentActivity {
         }
 
         //添加fragment
-        fragBaseFragments.add(new HomeMainPageF());
-        fragBaseFragments.add(new RemedialClassAllF());
-        fragBaseFragments.add(new HomeClassTableF());
-//        fragBaseFragments.add(new HomeMessageF());
-        fragBaseFragments.add(new HomeUserCenterF());
+        fragBaseFragments.add(new FragmentHomeMainPage());
+        fragBaseFragments.add(new FragmentRemedialClassAll());
+        fragBaseFragments.add(new FragmentHomeClassTable());
+//        fragBaseFragments.add(new FragmentHomeMessage());
+        fragBaseFragments.add(new FragmentHomeUserCenter());
 
         fragmentlayout = (FragmentLayout) findViewById(R.id.fragmentlayout);
         fragmentlayout.setScorllToNext(false);
@@ -461,8 +461,8 @@ public class MainActivity extends BaseFragmentActivity {
         fragmentlayout.setCurrenItem(currentPosition);
         fragmentlayout.setCurrenItem(currentPosition);
         if(!StringUtils.isNullOrBlanK(s)){
-            RemedialClassAllF remedialClassAllF = (RemedialClassAllF) fragBaseFragments.get(1);
-            remedialClassAllF.initDataAsSubject(s);
+            FragmentRemedialClassAll fragmentRemedialClassAll = (FragmentRemedialClassAll) fragBaseFragments.get(1);
+            fragmentRemedialClassAll.initDataAsSubject(s);
         }
         this.currentPosition = currentPosition;
     }

@@ -32,10 +32,10 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.bean.Announcements;
-import cn.qatime.player.fragment.PlayerAnnouncementsF;
-import cn.qatime.player.fragment.PlayerMessageF;
-import cn.qatime.player.fragment.PlayerLiveDetailsF;
-import cn.qatime.player.fragment.PlayerMembersF;
+import cn.qatime.player.fragment.FragmentPlayerAnnouncements;
+import cn.qatime.player.fragment.FragmentPlayerMessage;
+import cn.qatime.player.fragment.FragmentPlayerLiveDetails;
+import cn.qatime.player.fragment.FragmentPlayerMembers;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -74,7 +74,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     private View inputLayout;
 
     private int id;
-    private PlayerMessageF fragment2;
+    private FragmentPlayerMessage fragment2;
     private String sessionId;
     private SessionTypeEnum sessionType = SessionTypeEnum.Team;
     private ImageView emoji;
@@ -128,10 +128,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
                             if (data != null) {
                                 if (data.getData() != null) {
                                     if (data.getData().getMembers() != null) {
-                                        ((PlayerMembersF) fragBaseFragments.get(3)).setData(data.getData().getMembers());
+                                        ((FragmentPlayerMembers) fragBaseFragments.get(3)).setData(data.getData().getMembers());
                                     }
                                     if (data.getData().getAnnouncements() != null) {
-                                        ((PlayerAnnouncementsF) fragBaseFragments.get(0)).setData(data.getData().getAnnouncements());
+                                        ((FragmentPlayerAnnouncements) fragBaseFragments.get(0)).setData(data.getData().getAnnouncements());
                                     }
                                 }
 
@@ -167,10 +167,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         bottom = findViewById(R.id.bottom);
 
         inputLayout = findViewById(R.id.input_layout);
-        fragBaseFragments.add(new PlayerAnnouncementsF());
-        fragBaseFragments.add(new PlayerMessageF());
-        fragBaseFragments.add(new PlayerLiveDetailsF());
-        fragBaseFragments.add(new PlayerMembersF());
+        fragBaseFragments.add(new FragmentPlayerAnnouncements());
+        fragBaseFragments.add(new FragmentPlayerMessage());
+        fragBaseFragments.add(new FragmentPlayerLiveDetails());
+        fragBaseFragments.add(new FragmentPlayerMembers());
 
         fragmentLayout = (FragmentLayoutWithLine) findViewById(R.id.fragmentlayout);
 
@@ -195,10 +195,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
         });
         fragmentLayout.setAdapter(fragBaseFragments, R.layout.tablayout_nevideo_player, 0x0102);
         fragmentLayout.getViewPager().setOffscreenPageLimit(3);
-        fragment2 = (PlayerMessageF) fragBaseFragments.get(1);
+        fragment2 = (FragmentPlayerMessage) fragBaseFragments.get(1);
         fragment2.setSessionId(sessionId);
         fragment2.requestTeamInfo();
-        fragment2.setChatCallBack(new PlayerMessageF.Callback() {
+        fragment2.setChatCallBack(new FragmentPlayerMessage.Callback() {
             @Override
             public void back(List<IMMessage> result) {
                 TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
@@ -287,11 +287,11 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
                         protected void onSuccess(JSONObject response) {
                             RemedialClassDetailBean data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
                             if (data != null) {
-                                ((PlayerLiveDetailsF) fragBaseFragments.get(2)).setData(data);
+                                ((FragmentPlayerLiveDetails) fragBaseFragments.get(2)).setData(data);
 //                                if (data.getData() != null && data.getData().getChat_team() != null && data.getData().getChat_team().getAccounts() != null) {
-//                                    ((PlayerMembersF) fragBaseFragments.get(3)).setData(data.getData().getChat_team().getAccounts());
+//                                    ((FragmentPlayerMembers) fragBaseFragments.get(3)).setData(data.getData().getChat_team().getAccounts());
 //                                }
-//                                ((PlayerAnnouncementsF) fragBaseFragments.get(0)).setTeamId(data.getData().getChat_team_id());
+//                                ((FragmentPlayerAnnouncements) fragBaseFragments.get(0)).setTeamId(data.getData().getChat_team_id());
                             }
                         }
 

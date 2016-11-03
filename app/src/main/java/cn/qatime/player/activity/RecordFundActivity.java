@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.base.BaseFragmentActivity;
-import cn.qatime.player.fragment.FundRecordRechargeF;
-import cn.qatime.player.fragment.FundRecordWithdrawCashF;
-import cn.qatime.player.fragment.FundRecordConsumptionF;
+import cn.qatime.player.fragment.FragmentFundRecordRecharge;
+import cn.qatime.player.fragment.FragmentFundRecordWithdrawCash;
+import cn.qatime.player.fragment.FragmentFundRecordConsumption;
 import libraryextra.view.FragmentLayoutWithLine;
 
 /**
@@ -75,9 +75,9 @@ public class RecordFundActivity extends BaseFragmentActivity{
 
 
     private void initView() {
-        fragBaseFragments.add(new FundRecordRechargeF());
-        fragBaseFragments.add(new FundRecordWithdrawCashF());
-        fragBaseFragments.add(new FundRecordConsumptionF());
+        fragBaseFragments.add(new FragmentFundRecordRecharge());
+        fragBaseFragments.add(new FragmentFundRecordWithdrawCash());
+        fragBaseFragments.add(new FragmentFundRecordConsumption());
 
         fragmentlayout = (FragmentLayoutWithLine) findViewById(R.id.fragmentlayout);
 
