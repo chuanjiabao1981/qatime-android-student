@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_control"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#adadff">
+    android:background="#00000000">
 
     <RelativeLayout
         android:id="@+id/play_toolbar"
@@ -72,8 +73,8 @@
         android:id="@+id/radiogroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginTop="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/play_toolbar"
         android:background="#999"
         android:orientation="horizontal"
         android:paddingBottom="5dp"
@@ -100,8 +101,8 @@
         android:id="@+id/bottom_layout"
         android:layout_width="fill_parent"
         android:layout_height="45dp"
-        android:layout_gravity="bottom"
         android:background="#bf000000"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
         <ImageView
@@ -204,8 +205,8 @@
     <ImageView
         android:id="@+id/sub_switch"
         android:layout_width="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:layout_height="30dp"
-        android:layout_gravity="center_vertical|right"
-        android:layout_margin="5dp"
         android:background="#fff" />
-</FrameLayout>
+</RelativeLayout>

@@ -1,10 +1,12 @@
 package cn.qatime.player.activity;
 
+import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -17,6 +19,7 @@ import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
@@ -31,10 +34,13 @@ import cn.qatime.player.fragment.PlayerMessageF;
 import cn.qatime.player.fragment.PlayerLiveDetailsF;
 import cn.qatime.player.fragment.PlayerMembersF;
 import cn.qatime.player.fragment.VideoFloatFragment;
+import cn.qatime.player.presenter.VideoControlPresenter;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
+import cn.qatime.player.utils.VideoActivityInterface;
 import cn.qatime.player.view.VideoLayout;
 import libraryextra.bean.RemedialClassDetailBean;
+import libraryextra.utils.DensityUtils;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.KeyBoardUtils;
 import libraryextra.utils.StringUtils;
@@ -42,7 +48,7 @@ import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.FragmentLayoutWithLine;
 
-public class NEVideoPlayerActivity extends BaseFragmentActivity {
+public class NEVideoPlayerActivity extends BaseFragmentActivity implements VideoActivityInterface {
 //    public NEVideoView mVideoView;  //用于画面显示
 //    private View mBuffer; //用于指示缓冲状态
 //    private NEMediaController mMediaController; //用于控制播放
@@ -65,12 +71,16 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity {
 
     private RelativeLayout mainVideo;
     private RelativeLayout mainView;
-//    private RelativeLayout control;
+    //    private RelativeLayout control;
     private DanmakuView danmuView;
     private VideoLayout floatingWindow;
     private RelativeLayout subVideo;
+    private VideoControlPresenter controlPresenter;
+    private VideoFloatFragment floatFragment;
+    private RelativeLayout whole;
 
     private void assignViews() {
+        whole = (RelativeLayout) findViewById(R.id.whole);
         mainVideo = (RelativeLayout) findViewById(R.id.main_video);
         mainView = (RelativeLayout) findViewById(R.id.main_view);
 //        control = (RelativeLayout) findViewById(R.id.control);
@@ -78,8 +88,11 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity {
         floatingWindow = (VideoLayout) findViewById(R.id.floating_window);
         subVideo = (RelativeLayout) findViewById(R.id.sub_video);
         //控制框
-        VideoFloatFragment floatFragment = new VideoFloatFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.control,floatFragment).commit();
+        controlPresenter = new VideoControlPresenter(this);
+        floatFragment = new VideoFloatFragment();
+        floatFragment.setCallback(controlPresenter);
+        getSupportFragmentManager().beginTransaction().replace(R.id.control, floatFragment).commit();
+
 
     }
 
@@ -316,19 +329,26 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity {
 
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-//        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) { // 横屏
-//            bottom.setVisibility(View.GONE);
-//            ViewGroup.LayoutParams params = videoPlayer.getLayoutParams();
-//            params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-//            params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-//            videoPlayer.setLayoutParams(params);
-//        } else {
-//            bottom.setVisibility(View.VISIBLE);
-//            ViewGroup.LayoutParams params = videoPlayer.getLayoutParams();
-//            params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-//            params.height = ScreenUtils.getScreenWidth(this) * 9 / 16;
-//            videoPlayer.setLayoutParams(params);
-//        }
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) { // 横屏
+            ViewGroup.LayoutParams param = mainVideo.getLayoutParams();
+            param.width = -1;
+            param.height = -1;
+            mainVideo.setLayoutParams(param);
+            whole.removeView(danmuView);
+
+            mainVideo.addView(danmuView, 1);
+            danmuView.setLayoutParams(param);
+        } else {
+            ViewGroup.LayoutParams param = mainVideo.getLayoutParams();
+            param.width = -1;
+            param.height = DensityUtils.dp2px(NEVideoPlayerActivity.this, 260);
+            mainVideo.setLayoutParams(param);
+            mainVideo.removeView(danmuView);
+            whole.addView(danmuView);
+            RelativeLayout.LayoutParams danmuParam = new RelativeLayout.LayoutParams(param.width, param.height);
+            danmuParam.addRule(RelativeLayout.BELOW, R.id.main_video);
+            danmuView.setLayoutParams(danmuParam);
+        }
     }
 
 
@@ -349,8 +369,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity {
 //        }
 //        videoPlayer.BarrageDestory();
         super.onDestroy();
-        fragment2.registerObservers(false);
-        fragment2.registerTeamUpdateObserver(false);
+//        fragment2.registerObservers(false);
+//        fragment2.registerTeamUpdateObserver(false);
     }
 
 
@@ -358,6 +378,9 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity {
     public void backClick(View v) {
         if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            if (floatFragment != null) {
+                floatFragment.setOrientation(Configuration.ORIENTATION_PORTRAIT);
+            }
             return;
         }
         super.backClick(v);
@@ -375,5 +398,44 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity {
         }
         super.onBackPressed();
     }
+
+
+    /**************************
+     * VideoActivityInterface *
+     **************************/
+    @Override
+    public void showDanmaku() {
+        Logger.e("弹幕开启");
+    }
+
+    @Override
+    public void shutDanmaku() {
+        Logger.e("弹幕关闭");
+    }
+
+    @Override
+    public void refresh() {
+
+    }
+
+    @Override
+    public void setOrientation(int orientation) {
+        setRequestedOrientation(orientation);
+    }
+
+    @Override
+    public void changeSubSmall() {
+        floatingWindow.setVisibility(View.VISIBLE);
+        subVideo.setVisibility(View.GONE);
+        shutDanmaku();
+    }
+
+    @Override
+    public void changeSubBig() {
+        floatingWindow.setVisibility(View.GONE);
+        subVideo.setVisibility(View.VISIBLE);
+        showDanmaku();
+    }
+
 
 }

@@ -6,27 +6,18 @@ package cn.qatime.player.utils;
  * @Describe
  */
 public interface VideoActivityInterface {
-    void changeSubViewBig();
-
-    void changeSubViewSmall();
-
-    void startVideo();
-
-    void pauseVideo();
-
-    void switchMainFloat();
-
-    void setOrientation();
-
     void showDanmaku();
 
     void shutDanmaku();
-
-    void switchMainSub();
 
     /**
      * 刷新按钮
      */
     void refresh();
 
+    void setOrientation(int orientation);
+
+    void changeSubSmall();
+
+    void changeSubBig();
 }

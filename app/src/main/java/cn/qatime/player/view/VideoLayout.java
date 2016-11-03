@@ -8,6 +8,8 @@ import android.widget.RelativeLayout;
 
 import com.orhanobut.logger.Logger;
 
+import libraryextra.utils.ScreenUtils;
+
 /**
  * @author lungtify
  * @Time 2016/11/1 15:26
@@ -41,6 +43,10 @@ public class VideoLayout extends RelativeLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
+        int screenW = ScreenUtils.getScreenWidth(getContext());
+        int screenH = ScreenUtils.getScreenHeight(getContext());
+
         float rawX = event.getRawX();
         float rawY = event.getRawY();
         switch (MotionEventCompat.getActionMasked(event)) {
@@ -51,8 +57,20 @@ public class VideoLayout extends RelativeLayout {
             case MotionEvent.ACTION_MOVE:
                 float dx = rawX - lastX;
                 float dy = rawY - lastY;
-                setX(getX() + dx);
-                setY(getY() + dy);
+                float resultX = getX() + dx;
+                float resultY = getY() + dy;
+                if (resultX < 0) {
+                    resultX = 0;
+                } else if (resultX >= screenW - getWidth()) {
+                    resultX = screenW - getWidth();
+                }
+                if (resultY < 0) {
+                    resultY = 0;
+                } else if (resultY >= screenH - getHeight()) {
+                    resultY = screenH - getHeight();
+                }
+                setX(resultX);
+                setY(resultY);
                 this.lastX = rawX;
                 this.lastY = rawY;
                 break;
