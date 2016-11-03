@@ -47,6 +47,8 @@ public class TeacherDataActivity extends BaseActivity {
     private List<TeacherDataBean.DataBean.Course> list = new ArrayList<>();
     private TextView teachAge;
     private TextView school;
+    private TextView grade;
+    private TextView subject;
     private int page = 0;
     private CommonAdapter<TeacherDataBean.DataBean.Course> adapter;
 
@@ -59,6 +61,8 @@ public class TeacherDataActivity extends BaseActivity {
         name = (TextView) findViewById(R.id.name);
         teachAge = (TextView) findViewById(R.id.teach_age);
         school = (TextView) findViewById(R.id.school);
+        grade = (TextView) findViewById(R.id.grade);
+        subject = (TextView) findViewById(R.id.subject);
         describe = (TextView) findViewById(R.id.describe);
         grid = (GridViewForScrollView) findViewById(R.id.grid);
         scroll.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ScrollView>() {
@@ -124,6 +128,8 @@ public class TeacherDataActivity extends BaseActivity {
                                 }
                                 describe.setText(bean.getData().getDesc());
                                 teachAge.setText(getTeachingYear(bean.getData().getTeaching_years()));
+                                grade.setText(bean.getData().getGrade());
+                                subject.setText(bean.getData().getSubject());
                                 sex.setText(getSex(bean.getData().getGender()));
                                 Glide.with(TeacherDataActivity.this).load(bean.getData().getAvatar_url()).placeholder(R.mipmap.error_header_rect).crossFade().into(headSculpture);
                                 school.setText(bean.getData().getSchool());

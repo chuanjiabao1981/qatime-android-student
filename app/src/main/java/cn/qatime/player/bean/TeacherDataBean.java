@@ -49,6 +49,13 @@ public class TeacherDataBean {
         private String school;
         private List<Course> courses;
         private String gender;
+        /**
+         * grade : null
+         * subject : 数学
+         */
+
+        private String grade;
+        private String subject;
 
         public void setGender(String gender) {
             this.gender = gender;
@@ -105,6 +112,23 @@ public class TeacherDataBean {
         public void setCourses(List<Course> courses) {
             this.courses = courses;
         }
+
+        public String getGrade() {
+            return grade;
+        }
+
+        public void setGrade(String grade) {
+            this.grade = grade;
+        }
+
+        public String getSubject() {
+            return subject;
+        }
+
+        public void setSubject(String subject) {
+            this.subject = subject;
+        }
+
         public static class Course{
             private int id;
 
