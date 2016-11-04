@@ -14,7 +14,7 @@
         custom:layout_heightPercent="60%w"
         custom:layout_widthPercent="100%w" />
 
-      <TextView
+    <TextView
         android:id="@+id/course_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,20 +25,24 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="-4dp"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/grade"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text=""
             android:textColor="#999"
-            android:text="" />
+            android:textSize="12sp" />
+
         <TextView
             android:id="@+id/subject"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="英语"
             android:textColor="#999"
-            android:text="英语" />
+            android:textSize="12sp" />
 
         <View
             android:layout_width="0dp"
@@ -49,7 +53,8 @@
             android:id="@+id/count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="1003已购买"
             android:textColor="#999"
-            android:text="1003已购买" />
+            android:textSize="12sp" />
     </LinearLayout>
 </com.zhy.android.percent.support.PercentLinearLayout>

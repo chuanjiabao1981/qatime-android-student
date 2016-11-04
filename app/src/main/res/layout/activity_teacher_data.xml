@@ -192,6 +192,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="16sp"
                     android:text="自我介绍"
                     android:textColor="#333" />
 
@@ -236,6 +237,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TA的课程"
+                    android:textSize="16sp"
                     android:textColor="#333" />
 
                 <View
@@ -254,7 +256,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:scrollbars="none"
-                android:verticalSpacing="10dp" />
+                android:verticalSpacing="20dp" />
         </com.zhy.android.percent.support.PercentLinearLayout>
     </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
 </LinearLayout>
