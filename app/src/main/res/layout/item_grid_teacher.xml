@@ -16,6 +16,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="高玉明"
-        android:textSize="12sp"
+        android:textSize="14sp"
         android:textColor="#333" />
 </LinearLayout>

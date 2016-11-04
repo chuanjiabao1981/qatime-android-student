@@ -47,7 +47,7 @@ public class TeacherDataActivity extends BaseActivity {
     private List<TeacherDataBean.DataBean.Course> list = new ArrayList<>();
     private TextView teachAge;
     private TextView school;
-    private TextView grade;
+    private TextView category;
     private TextView subject;
     private TextView province;
     private TextView city;
@@ -64,7 +64,7 @@ public class TeacherDataActivity extends BaseActivity {
         name = (TextView) findViewById(R.id.name);
         teachAge = (TextView) findViewById(R.id.teach_age);
         school = (TextView) findViewById(R.id.school);
-        grade = (TextView) findViewById(R.id.grade);
+        category = (TextView) findViewById(R.id.category);
         subject = (TextView) findViewById(R.id.subject);
         province = (TextView) findViewById(R.id.province);
         city = (TextView) findViewById(R.id.city);
@@ -134,12 +134,13 @@ public class TeacherDataActivity extends BaseActivity {
                                 }
                                 describe.setText(bean.getData().getDesc());
                                 teachAge.setText(getTeachingYear(bean.getData().getTeaching_years()));
-                                grade.setText(bean.getData().getGrade());
+                                category.setText(bean.getData().getCategory());
                                 subject.setText(bean.getData().getSubject());
                                 province.setText(bean.getData().getProvince());
                                 city.setText(bean.getData().getCity());
                                 town.setText(bean.getData().getTown());
                                 sex.setText(getSex(bean.getData().getGender()));
+                                sex.setTextColor(getSexColor(bean.getData().getGender()));
                                 Glide.with(TeacherDataActivity.this).load(bean.getData().getAvatar_url()).placeholder(R.mipmap.error_header_rect).crossFade().into(headSculpture);
                                 school.setText(bean.getData().getSchool());
                                 list.addAll(bean.getData().getCourses());
@@ -165,6 +166,15 @@ public class TeacherDataActivity extends BaseActivity {
             }
         });
         addToRequestQueue(request);
+    }
+
+    private int getSexColor(String gender) {
+        if ("male".equals(gender)) {
+            return 0xff00ccff;
+        } else if ("female".equals(gender)) {
+            return 0xffff9966;
+        }
+        return 0xffff9966;
     }
 
     private String getSex(String gender) {

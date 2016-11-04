@@ -216,7 +216,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 holder.setText(R.id.course_title, item.getLive_studio_course().getName());
                 holder.setText(R.id.grade, item.getLive_studio_course().getGrade());
                 holder.setText(R.id.subject, item.getLive_studio_course().getSubject());
-                holder.setText(R.id.count, item.getLive_studio_course().getBuy_tickets_count() + "人已购");
+                holder.setText(R.id.count, item.getLive_studio_course().getBuy_tickets_count() + "人报名");
                 ((TextView) holder.getView(R.id.reason)).setText(getReason(item.getReason()));
                 ((TextView) holder.getView(R.id.reason)).setBackgroundColor(getReasonBackground(item.getReason()));
             }
