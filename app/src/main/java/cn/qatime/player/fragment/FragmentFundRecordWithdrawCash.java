@@ -166,7 +166,7 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View itemView, int position, long id) {
                 final WithdrawCashRecordBean.DataBean dataBean = data.get(position - 1);
                 String status = dataBean.getStatus();
-                if ("init".equals(status)) {//如果是未支付进行跳转
+                if ("init".equals(status)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     final AlertDialog alertDialog = builder.create();
                     View view = View.inflate(getActivity(), R.layout.dialog_cancel_or_confirm, null);
