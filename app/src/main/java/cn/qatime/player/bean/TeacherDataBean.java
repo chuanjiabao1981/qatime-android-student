@@ -49,6 +49,40 @@ public class TeacherDataBean {
         private String school;
         private List<Course> courses;
         private String gender;
+        /**
+         * grade : null
+         * subject : 数学
+         */
+
+        private String grade;
+        private String subject;
+        private String province;
+        private String city;
+        private String town;
+
+        public String getProvince() {
+            return province;
+        }
+
+        public void setProvince(String province) {
+            this.province = province;
+        }
+
+        public String getCity() {
+            return city;
+        }
+
+        public void setCity(String city) {
+            this.city = city;
+        }
+
+        public String getTown() {
+            return town;
+        }
+
+        public void setTown(String town) {
+            this.town = town;
+        }
 
         public void setGender(String gender) {
             this.gender = gender;
@@ -105,6 +139,23 @@ public class TeacherDataBean {
         public void setCourses(List<Course> courses) {
             this.courses = courses;
         }
+
+        public String getGrade() {
+            return grade;
+        }
+
+        public void setGrade(String grade) {
+            this.grade = grade;
+        }
+
+        public String getSubject() {
+            return subject;
+        }
+
+        public void setSubject(String subject) {
+            this.subject = subject;
+        }
+
         public static class Course{
             private int id;
 
