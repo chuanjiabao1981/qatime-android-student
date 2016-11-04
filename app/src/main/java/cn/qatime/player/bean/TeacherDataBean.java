@@ -49,12 +49,21 @@ public class TeacherDataBean {
         private String school;
         private List<Course> courses;
         private String gender;
+
+        public String getCategory() {
+            return category;
+        }
+
+        public void setCategory(String category) {
+            this.category = category;
+        }
+
         /**
          * grade : null
          * subject : 数学
          */
 
-        private String grade;
+        private String category;
         private String subject;
         private String province;
         private String city;
@@ -140,13 +149,7 @@ public class TeacherDataBean {
             this.courses = courses;
         }
 
-        public String getGrade() {
-            return grade;
-        }
 
-        public void setGrade(String grade) {
-            this.grade = grade;
-        }
 
         public String getSubject() {
             return subject;
