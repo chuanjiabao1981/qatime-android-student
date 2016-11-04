@@ -96,15 +96,12 @@ public class NEVideoView extends SurfaceView {
     private boolean mHardwareDecoder = false;
     private boolean mPauseInBackground = false;
     private static Context mContext;
-    public static String mVersion = null;
     private String mMediaType = "livestream";//直播livestream  点播videoondemand
     private boolean mMute = false;
 
 
     private boolean isBackground;
     private boolean manualPause = false;
-    private String mLogPath = null;
-    private int mLogLevel = 0;
 
     public NEVideoView(Context context) {
         super(context);
@@ -289,7 +286,7 @@ public class NEVideoView extends SurfaceView {
             NEMediaPlayer neMediaPlayer = null;
             if (mUri != null) {
                 neMediaPlayer = new NEMediaPlayer();
-//            	neMediaPlayer.setHardwareDecoder(mHardwareDecoder);
+            	neMediaPlayer.setHardwareDecoder(mHardwareDecoder);
             }
             mMediaPlayer = neMediaPlayer;
 //            getLogPath();
@@ -906,7 +903,6 @@ public class NEVideoView extends SurfaceView {
             Toast.makeText(mContext, "截图成功", Toast.LENGTH_SHORT).show();
         }
     }
-
     public String getVersion() {
         if (mMediaPlayer == null)
             return null;
@@ -922,22 +918,5 @@ public class NEVideoView extends SurfaceView {
         }
     }
 
-    public void setLogLevel(int logLevel) {
-        mLogLevel = logLevel;
-        if (mMediaPlayer == null)
-            return;
-        mMediaPlayer.setLogLevel(logLevel);
-    }
-
-    //获取日志文件路径
-    public void getLogPath() {
-        try {
-            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                mLogPath = Environment.getExternalStorageDirectory() + "/log/";
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "an error occured while writing file...", e);
-        }
-    }
 }
 

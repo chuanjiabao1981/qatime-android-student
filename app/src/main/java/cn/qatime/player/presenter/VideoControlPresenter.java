@@ -56,4 +56,28 @@ public class VideoControlPresenter implements VideoFloatFragment.CallBack {
     public void fullScreen() {
         vai.setOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
+
+
+
+    @Override
+    public void changeMain2Sub() {
+        assert vai != null;
+        vai.changeMain2Sub();
+    }
+
+    @Override
+    public void changeMain2Floating() {
+        assert vai != null;
+        vai.changeMain2Floating();
+    }
+
+    @Override
+    public void changeSub2Main() {
+        assert vai != null;vai.changeSub2Main();
+    }
+
+    @Override
+    public void changeFloating2Main() {
+        assert vai != null;vai.changeFloating2Main();
+    }
 }

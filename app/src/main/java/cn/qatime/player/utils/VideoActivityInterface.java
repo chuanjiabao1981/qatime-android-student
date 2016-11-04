@@ -20,4 +20,15 @@ public interface VideoActivityInterface {
     void changeSubSmall();
 
     void changeSubBig();
+
+    //切换视频
+    void changeFloating2Main();
+
+    void changeMain2Sub();
+
+    void changeMain2Floating();
+
+    void changeSub2Main();
+    /***********************************************************/
+
 }

@@ -21,6 +21,8 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
+
 import cn.qatime.player.R;
 
 
@@ -33,6 +35,8 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
     private boolean showState = true;//是否是显示状态
     private boolean isDanmuOn = true;//弹幕默认开启
     private boolean isSubBig = true;//副窗口默认大
+    private boolean ismain = true;//video1 是否在主显示view上
+
     private int orientation = Configuration.ORIENTATION_PORTRAIT;
 
     private Activity act;
@@ -57,7 +61,7 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
     private ImageView viewChange;
     private ImageView ivSwitch;
     private ImageView zoom;
-    private ImageView subSwitch;
+    private TextView subSwitch;
 
     private Handler hd = new Handler();
     private Runnable runnable = new Runnable() {
@@ -90,7 +94,7 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
         viewChange = (ImageView) view.findViewById(R.id.view_change);
         ivSwitch = (ImageView) view.findViewById(R.id.iv_switch);
         zoom = (ImageView) view.findViewById(R.id.zoom);
-        subSwitch = (ImageView) view.findViewById(R.id.sub_switch);
+        subSwitch = (TextView) view.findViewById(R.id.sub_switch);
         startVanishTimer();
     }
 
@@ -103,6 +107,14 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
         ivSwitch.setOnClickListener(this);
         zoom.setOnClickListener(this);
         subSwitch.setOnClickListener(this);
+        comment.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    hd.removeCallbacks(runnable);
+                }
+            }
+        });
     }
 
     @Nullable
@@ -164,6 +176,21 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
                 changeBigOrSmall();
                 break;
             case R.id.iv_switch://切换视频
+                if (ismain) {
+                    ismain = false;
+                    if (isSubBig) {
+                        callback.changeMain2Sub();
+                    } else {
+                        callback.changeMain2Floating();
+                    }
+                } else {
+                    ismain = true;
+                    if (isSubBig) {
+                        callback.changeSub2Main();
+                    } else {
+                        callback.changeFloating2Main();
+                    }
+                }
                 break;
             case R.id.zoom:
                 if (callback != null) {
@@ -171,6 +198,12 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
                         orientation = Configuration.ORIENTATION_LANDSCAPE;
                         callback.fullScreen();
                         zoom.setVisibility(View.GONE);
+                        danmuSwitch.setEnabled(true);//当横屏时   弹幕开关可用
+                        //横平时 评论框出现
+                        commentLayout.setVisibility(View.VISIBLE);
+                        viewChange.setVisibility(View.GONE);
+                        toolbarLayout.setVisibility(View.VISIBLE);
+                        viewCount.setVisibility(View.GONE);
                     }
                 }
                 break;
@@ -180,31 +213,52 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
     }
 
     /**
+     * 当前屏幕横竖屏状态
+     */
+    public void setPortrait() {
+        this.orientation = Configuration.ORIENTATION_PORTRAIT;
+        if (zoom != null) {
+            zoom.setVisibility(View.VISIBLE);
+        }
+        if (isSubBig) {
+            danmuSwitch.setEnabled(true);
+        } else {
+            isDanmuOn = false;
+            callback.shutDanmaku();
+            danmuSwitch.setImageResource(R.mipmap.danmu_off);
+            danmuSwitch.setEnabled(false);
+        }
+        commentLayout.setVisibility(View.GONE);
+        viewChange.setVisibility(View.VISIBLE);
+        toolbarLayout.setVisibility(View.GONE);
+        viewCount.setVisibility(View.VISIBLE);
+    }
+
+    /**
      * 副窗口变大还是变小
      */
     private void changeBigOrSmall() {
         if (callback == null) {
             return;
         }
-        if (isSubBig) {//小窗口出现   弹幕关闭 弹幕开关不可点击
+        if (isSubBig) {//小窗口出现
             isSubBig = false;
             callback.changeSubSmall();
-            setDanmakuVisibleOn(true);
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {//横屏时弹幕开关可用
+                danmuSwitch.setEnabled(true);
+            } else {//转为小窗口竖屏时  弹幕关闭,并不可用
+                danmuSwitch.setEnabled(false);
+                danmuSwitch.setImageResource(R.mipmap.danmu_off);
+                isDanmuOn = false;
+                callback.shutDanmaku();
+            }
         } else {
             isSubBig = true;
             callback.changeSubBig();
-            setDanmakuVisibleOn(false);
+            danmuSwitch.setEnabled(true);
         }
     }
 
-    private void setDanmakuVisibleOn(boolean state) {
-        danmuSwitch.setEnabled(!state);
-        if (state) {
-            danmuSwitch.setImageResource(R.mipmap.danmu_off);
-        } else {
-            danmuSwitch.setImageResource(R.mipmap.danmu_on);
-        }
-    }
 
     public void startVanishTimer() {
         if (!showState) {
@@ -297,17 +351,19 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
         this.callback = callback;
     }
 
-    /**
-     * 当前屏幕横竖屏状态
-     *
-     * @param orientation
-     */
-    public void setOrientation(int orientation) {
-        this.orientation = orientation;
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            if (zoom != null) {
-                zoom.setVisibility(View.VISIBLE);
+    public void setSubBig(boolean subBig) {
+        isSubBig = subBig;
+        if (!isSubBig) {//小窗口出现
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {//横屏时弹幕开关可用
+                danmuSwitch.setEnabled(true);
+            } else {//转为小窗口竖屏时  弹幕关闭,并不可用
+                danmuSwitch.setEnabled(false);
+                danmuSwitch.setImageResource(R.mipmap.danmu_off);
+                isDanmuOn = false;
+                callback.shutDanmaku();
             }
+        } else {
+            danmuSwitch.setEnabled(true);
         }
     }
 
@@ -325,5 +381,13 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
         void shutDanmaku();
 
         void fullScreen();
+
+        void changeMain2Sub();
+
+        void changeMain2Floating();
+
+        void changeSub2Main();
+
+        void changeFloating2Main();
     }
 }

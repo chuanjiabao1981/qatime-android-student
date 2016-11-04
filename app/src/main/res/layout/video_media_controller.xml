@@ -101,8 +101,8 @@
         android:id="@+id/bottom_layout"
         android:layout_width="fill_parent"
         android:layout_height="45dp"
-        android:background="#bf000000"
         android:layout_alignParentBottom="true"
+        android:background="#bf000000"
         android:orientation="horizontal">
 
         <ImageView
@@ -171,9 +171,8 @@
                 android:id="@+id/danmu_switch"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
-                android:clickable="true"
                 android:padding="13dp"
-                android:src="@mipmap/danmu_off" />
+                android:src="@mipmap/danmu_on" />
 
             <ImageView
                 android:id="@+id/view_change"
@@ -202,11 +201,14 @@
         </LinearLayout>
     </LinearLayout>
 
-    <ImageView
+    <TextView
         android:id="@+id/sub_switch"
         android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_height="30dp"
-        android:background="#fff" />
+        android:background="#fff"
+        android:gravity="center"
+        android:text="开"
+        android:textColor="#000" />
 </RelativeLayout>

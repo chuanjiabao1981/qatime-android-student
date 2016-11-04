@@ -4,11 +4,6 @@
     android:layout_height="match_parent"
     android:background="#fff0f0f0">
 
-    <!--<cn.qatime.player.view.QaVideoPlayer-->
-    <!--android:id="@+id/video_player"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="#fff" />-->
     <RelativeLayout
         android:id="@+id/main_video"
         android:layout_width="match_parent"
@@ -26,11 +21,19 @@
             android:background="#00000000" />
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/sub_video"
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+        android:layout_below="@id/main_video"
+        android:background="#00000000"
+        android:visibility="visible" />
+
     <cn.qatime.player.barrage.DanmakuView
         android:id="@+id/danmuView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_alignBottom="@+id/sub_video"
+        android:layout_alignBottom="@id/sub_video"
         android:layout_alignTop="@id/sub_video" />
 
     <LinearLayout
@@ -43,7 +46,8 @@
         <libraryextra.view.FragmentLayoutWithLine
             android:id="@+id/fragmentlayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <LinearLayout
             android:id="@+id/input_layout"
@@ -113,15 +117,7 @@
         android:id="@+id/floating_window"
         android:layout_width="120dip"
         android:layout_height="70dip"
-        android:background="#000fff"
-        android:visibility="gone" />
-
-    <RelativeLayout
-        android:id="@id/sub_video"
-        android:layout_width="match_parent"
-        android:layout_height="260dp"
-        android:layout_below="@id/main_video"
         android:background="#00000000"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
 </RelativeLayout>
