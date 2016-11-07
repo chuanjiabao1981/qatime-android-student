@@ -31,4 +31,14 @@ public interface VideoActivityInterface {
     void changeSub2Main();
     /***********************************************************/
 
+    void pause();
+
+    void exit();//返回
+
+    void changeSubOpen(boolean open);//副窗口开关
+
+    void sendMessage(String message);//发送消息
+
+    void play();
+
 }

@@ -125,19 +125,6 @@ public class NEVideoView extends SurfaceView {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = getDefaultSize(mVideoWidth, widthMeasureSpec);
         int height = getDefaultSize(mVideoHeight, heightMeasureSpec);
-        if (mVideoWidth > 0 && mVideoHeight > 0) {
-            if (mVideoWidth * height > width * mVideoHeight) {
-                //Log.i("@@@", "image too tall, correcting");
-                //height = width * mVideoHeight / mVideoWidth;
-            } else if (mVideoWidth * height < width * mVideoHeight) {
-                //Log.i("@@@", "image too wide, correcting");
-                //width = height * mVideoWidth / mVideoHeight;
-            } else {
-                //Log.i("@@@", "aspect ratio is correct: " +
-                //width+"/"+height+"="+
-                //mVideoWidth+"/"+mVideoHeight);
-            }
-        }
         setMeasuredDimension(width, height);
     }
 
@@ -218,7 +205,7 @@ public class NEVideoView extends SurfaceView {
                 layPara.width = winWidth;
             }
             setLayoutParams(layPara);
-            getHolder().setFixedSize(mSurfaceWidth, mSurfaceHeight);
+            getHolder().setFixedSize(layPara.width, layPara.height);
             Logger.e(TAG, "Video: width = " + mVideoWidth + ", height = " + mVideoHeight);
             Logger.e(TAG, "Surface: width = " + mSurfaceWidth + ", height = " + mSurfaceHeight);
             Logger.e(TAG, "Window:width = " + winWidth + ", height = " + winHeight);
@@ -463,7 +450,7 @@ public class NEVideoView extends SurfaceView {
 
     private OnErrorListener mErrorListener = new OnErrorListener() {
         public boolean onError(NELivePlayer mp, int a, int b) {
-            Logger.e(TAG, "Error: " + a + "," + b);
+//            Logger.e(TAG, "Error: " + a + "," + b);
             mCurrState = ERROR;
 //            if (mMediaController != null) {
 //                mMediaController.hide();

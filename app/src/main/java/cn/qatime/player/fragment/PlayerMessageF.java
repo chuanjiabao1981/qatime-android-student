@@ -301,7 +301,6 @@ public class PlayerMessageF extends BaseFragment {
 
     public void registerObservers(boolean register) {
         MsgServiceObserve service = NIMClient.getService(MsgServiceObserve.class);
-        service.observeMsgStatus(messageStatusObserver, register);
         service.observeReceiveMessage(receiveMessageObserver, register);
     }
 
@@ -324,17 +323,6 @@ public class PlayerMessageF extends BaseFragment {
             if (needRefresh) {
                 adapter.notifyDataSetChanged();
                 listView.getRefreshableView().setSelection(adapter.getCount() - 1);
-            }
-        }
-    };
-    /**
-     * 消息状态变化观察者
-     */
-    Observer<IMMessage> messageStatusObserver = new Observer<IMMessage>() {
-        @Override
-        public void onEvent(IMMessage imMessage) {
-            if (isMyMessage(imMessage)) {
-//                onMessageStatusChange(message);
             }
         }
     };

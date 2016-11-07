@@ -36,11 +36,6 @@ public class VideoControlPresenter implements VideoFloatFragment.CallBack {
     }
 
     @Override
-    public void playOrPause() {
-
-    }
-
-    @Override
     public void showDanmaku() {
         assert vai != null;
         vai.showDanmaku();
@@ -58,7 +53,6 @@ public class VideoControlPresenter implements VideoFloatFragment.CallBack {
     }
 
 
-
     @Override
     public void changeMain2Sub() {
         assert vai != null;
@@ -73,11 +67,48 @@ public class VideoControlPresenter implements VideoFloatFragment.CallBack {
 
     @Override
     public void changeSub2Main() {
-        assert vai != null;vai.changeSub2Main();
+        assert vai != null;
+        vai.changeSub2Main();
     }
 
     @Override
     public void changeFloating2Main() {
-        assert vai != null;vai.changeFloating2Main();
+        assert vai != null;
+        vai.changeFloating2Main();
+    }
+
+    @Override
+    public void exit() {
+        assert vai != null;
+        vai.exit();
+    }
+
+    /**
+     * 副窗口开关
+     *
+     * @param open true 开   false 关
+     */
+    @Override
+    public void changeSubOpen(boolean open) {
+        assert vai != null;
+        vai.changeSubOpen(open);
+    }
+
+    @Override
+    public void sendMessage(String message) {
+        assert vai != null;
+        vai.sendMessage(message);
+    }
+
+    @Override
+    public void pause() {
+        assert vai != null;
+        vai.pause();
+    }
+
+    @Override
+    public void play() {
+        assert vai != null;
+        vai.play();
     }
 }

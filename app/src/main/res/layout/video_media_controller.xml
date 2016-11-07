@@ -16,7 +16,6 @@
             android:layout_width="45dp"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
-            android:onClick="backClick"
             android:padding="13dp"
             android:src="@mipmap/ic_play_exit" />
 
@@ -111,7 +110,7 @@
             android:layout_height="match_parent"
             android:clickable="true"
             android:padding="13dp"
-            android:src="@mipmap/nemediacontroller_play" />
+            android:src="@mipmap/nemediacontroller_pause" />
 
 
         <LinearLayout
@@ -209,6 +208,6 @@
         android:layout_centerVertical="true"
         android:background="#fff"
         android:gravity="center"
-        android:text="开"
+        android:text="关"
         android:textColor="#000" />
 </RelativeLayout>

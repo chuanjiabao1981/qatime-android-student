@@ -33,10 +33,6 @@ public class DanmuControl {
     //弹幕显示的时间(如果是list的话，会 * i)，记得加上mDanmakuView.getCurrentTime()
     private static final long ADD_DANMU_TIME = 2000;
 
-    private static final int ORANGE_COLOR = 0xffff815a;
-    private final Context context;
-
-    private int BITMAP_HEIGHT = 18;
     private float DANMU_TEXT_SIZE = 12f;//弹幕字体的大小
 
     //这两个用来控制两行弹幕之间的间距
@@ -48,7 +44,6 @@ public class DanmuControl {
     private DanmakuContext mDanmakuContext;
 
     public DanmuControl(Context context) {
-        this.context = context;
         setSize(context);
         initDanmuConfig();
     }
@@ -57,7 +52,6 @@ public class DanmuControl {
      * 对数值进行转换，适配手机，必须在初始化之前，否则有些数据不会起作用
      */
     private void setSize(Context context) {
-        BITMAP_HEIGHT = DensityUtils.dp2px(context, BITMAP_HEIGHT);
         DANMU_PADDING = DensityUtils.dp2px(context, DANMU_PADDING);
         DANMU_PADDING_INNER = DensityUtils.dp2px(context, DANMU_PADDING_INNER);
         DANMU_RADIUS = DensityUtils.dp2px(context, DANMU_RADIUS);

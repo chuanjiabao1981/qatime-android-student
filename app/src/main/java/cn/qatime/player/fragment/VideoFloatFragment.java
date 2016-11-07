@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +22,12 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
 
 import cn.qatime.player.R;
+import libraryextra.utils.StringUtils;
 
 
 /**
@@ -36,6 +40,10 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
     private boolean isDanmuOn = true;//弹幕默认开启
     private boolean isSubBig = true;//副窗口默认大
     private boolean ismain = true;//video1 是否在主显示view上
+    private boolean isSubOpen = true;//副窗口开关
+    private boolean isMute = false;//被禁言
+    private boolean isPlaying = false;//正在播放
+
 
     private int orientation = Configuration.ORIENTATION_PORTRAIT;
 
@@ -72,9 +80,11 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
     };
     private CallBack callback;
     private ImageView danmuSwitch;
+    private View exit;
 
 
     private void assignViews(View view) {
+        exit = view.findViewById(R.id.player_exit);
         mainControl = view.findViewById(R.id.main_control);
         playToolbar = (RelativeLayout) view.findViewById(R.id.play_toolbar);
         toolbarLayout = (LinearLayout) view.findViewById(R.id.toolbar_layout);
@@ -99,6 +109,7 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
     }
 
     private void registerListener() {
+        exit.setOnClickListener(this);
         mainControl.setOnClickListener(this);
         play.setOnClickListener(this);
         refresh.setOnClickListener(this);
@@ -115,6 +126,26 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
                 }
             }
         });
+        comment.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (isMute) {
+                    Toast.makeText(act, R.string.team_send_message_not_allow, Toast.LENGTH_SHORT).show();
+                    comment.setText("");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        commit.setOnClickListener(this);
     }
 
     @Nullable
@@ -133,6 +164,10 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.player_exit://返回键
+                assert callback != null;
+                callback.exit();
+                break;
             case R.id.main_control:
                 if (showState) {
                     new Runnable() {
@@ -152,7 +187,14 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
                 }
                 break;
             case R.id.play:
-
+                if (callback == null) {
+                    return;
+                }
+                if (isPlaying) {
+                    callback.pause();
+                } else {
+                    callback.play();
+                }
                 break;
             case R.id.refresh://刷新按钮
                 if (callback != null) {
@@ -207,7 +249,38 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
                     }
                 }
                 break;
-            case R.id.sub_switch:
+            case R.id.sub_switch://副窗口开关
+                if (callback == null) return;
+                if (isSubOpen) {
+                    isSubOpen = false;
+                    callback.changeSubOpen(false);
+                    subSwitch.setText("开");
+                    viewChange.setVisibility(View.GONE);
+                    ivSwitch.setVisibility(View.GONE);
+                } else {
+                    isSubOpen = true;
+                    callback.changeSubOpen(true);
+                    subSwitch.setText("关");
+                    if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                        viewChange.setVisibility(View.GONE);
+                    } else {
+                        viewChange.setVisibility(View.VISIBLE);
+                    }
+                    ivSwitch.setVisibility(View.VISIBLE);
+                }
+                break;
+            case R.id.commit://发送
+                if (callback == null) return;
+                if (StringUtils.isNullOrBlanK(comment.getText().toString().trim())) {
+                    return;
+                }
+//                if (isMute) {
+//                    Toast.makeText(act, R.string.team_send_message_not_allow, Toast.LENGTH_SHORT).show();
+//                    comment.setText("");
+//                    return;
+//                }
+                callback.sendMessage(comment.getText().toString().trim());
+                comment.setText("");
                 break;
         }
     }
@@ -367,14 +440,33 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
         }
     }
 
+    public void setPlaying(boolean playing) {
+        isPlaying = playing;
+        if (isPlaying) {
+            play.setImageResource(R.mipmap.nemediacontroller_play);
+        } else {
+            play.setImageResource(R.mipmap.nemediacontroller_pause);
+        }
+    }
+
+    public void setMute(boolean mute) {
+        isMute = mute;
+        if (comment == null) {
+            return;
+        }
+        if (isMute) {
+            comment.setHint(R.string.have_muted);
+        } else {
+            comment.setHint("");
+        }
+    }
+
     public interface CallBack {
         void refresh();
 
         void changeSubBig();
 
         void changeSubSmall();
-
-        void playOrPause();
 
         void showDanmaku();
 
@@ -389,5 +481,15 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
         void changeSub2Main();
 
         void changeFloating2Main();
+
+        void exit();
+
+        void changeSubOpen(boolean open);
+
+        void sendMessage(String message);
+
+        void pause();
+
+        void play();
     }
 }

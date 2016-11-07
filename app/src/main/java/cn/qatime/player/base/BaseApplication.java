@@ -54,7 +54,7 @@ public class BaseApplication extends Application {
     public static boolean newVersion;
 
     public static RequestQueue getRequestQueue() {
-        if(Queue==null){
+        if (Queue == null) {
             Queue = Volley.newRequestQueue(context);
         }
         return Queue;

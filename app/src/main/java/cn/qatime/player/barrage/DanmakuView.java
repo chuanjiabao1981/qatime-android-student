@@ -442,8 +442,6 @@ public class DanmakuView extends View implements IDanmakuView, IDanmakuViewContr
 
     @Override
     public void show() {
-        //TODO
-        showFPS(true);
         showAndResumeDrawTask(null);
     }
 
@@ -459,8 +457,6 @@ public class DanmakuView extends View implements IDanmakuView, IDanmakuViewContr
 
     @Override
     public void hide() {
-        //TODO
-        showFPS(false);
         mDanmakuVisible = false;
         if (handler == null) {
             return;
