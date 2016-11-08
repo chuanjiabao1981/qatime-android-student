@@ -2,9 +2,7 @@ package cn.qatime.player.view;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -63,12 +61,14 @@ public class NEVideoView extends SurfaceView {
     private int mCurrState = IDLE;
     private int mNextState = IDLE;
 
-//    private int mVideoScalingMode = VIDEO_SCALING_MODE_FIT;
+    //    private int mVideoScalingMode = VIDEO_SCALING_MODE_FIT;
 //    public static final int VIDEO_SCALING_MODE_NONE = 0;
 //    public static final int VIDEO_SCALING_MODE_FIT = 1;
 //    public static final int VIDEO_SCALING_MODE_FILL = 2;
 //    public static final int VIDEO_SCALING_MODE_FULL = 3;
 
+    private String mLogPath = null;
+    private int mLogLevel = 3;
 
     private Uri mUri;
     private long mDuration = 0;
@@ -273,11 +273,11 @@ public class NEVideoView extends SurfaceView {
             NEMediaPlayer neMediaPlayer = null;
             if (mUri != null) {
                 neMediaPlayer = new NEMediaPlayer();
-            	neMediaPlayer.setHardwareDecoder(mHardwareDecoder);
+                neMediaPlayer.setHardwareDecoder(mHardwareDecoder);
             }
             mMediaPlayer = neMediaPlayer;
-//            getLogPath();
-//            mMediaPlayer.setLogPath(mLogLevel, mLogPath);
+            getLogPath();
+            mMediaPlayer.setLogPath(mLogLevel, mLogPath);
             mMediaPlayer.setBufferStrategy(mBufferStrategy);//设置缓冲策略，0为直播低延时，1为点播抗抖动
             mMediaPlayer.setHardwareDecoder(mHardwareDecoder);//设置是否开启硬件解码，0为软解，1为硬解
             mMediaPlayer.setOnPreparedListener(mPreparedListener);
@@ -518,8 +518,6 @@ public class NEVideoView extends SurfaceView {
                     Logger.e(TAG, "onInfo: NELP_FIRST_VIDEO_RENDERED");
                 } else if (what == NELivePlayer.NELP_FIRST_AUDIO_RENDERED) {
                     Logger.e(TAG, "onInfo: NELP_FIRST_AUDIO_RENDERED");
-                } else if (what == NELivePlayer.NELP_RELEASE_SUCCESS) {
-                    Logger.e(TAG, "onInfo: NELP_RELEASE_SUCCESS");
                 }
             }
 
@@ -890,10 +888,24 @@ public class NEVideoView extends SurfaceView {
             Toast.makeText(mContext, "截图成功", Toast.LENGTH_SHORT).show();
         }
     }
+
     public String getVersion() {
         if (mMediaPlayer == null)
             return null;
         return mMediaPlayer.getVersion();
+    }
+
+    //获取日志文件路径
+    public void getLogPath() {
+        try {
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                mLogPath = Environment.getExternalStorageDirectory() + "/qatime/video/";
+            }else {
+                Logger.e("lognonono");
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "an error occured while writing file...", e);
+        }
     }
 
     public void release_resource() {

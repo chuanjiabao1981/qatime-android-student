@@ -101,7 +101,7 @@
         android:layout_width="fill_parent"
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
-        android:background="#bf000000"
+        android:background="#b3000000"
         android:orientation="horizontal">
 
         <ImageView
@@ -110,7 +110,7 @@
             android:layout_height="match_parent"
             android:clickable="true"
             android:padding="13dp"
-            android:src="@mipmap/nemediacontroller_pause" />
+            android:src="@mipmap/nemediacontroller_play" />
 
 
         <LinearLayout

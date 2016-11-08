@@ -190,10 +190,14 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
                 if (callback == null) {
                     return;
                 }
-                if (isPlaying) {
+                if (callback.isPlaying()) {
+                    isPlaying = false;
                     callback.pause();
+                    play.setImageResource(R.mipmap.nemediacontroller_pause);
                 } else {
+                    isPlaying = true;
                     callback.play();
+                    play.setImageResource(R.mipmap.nemediacontroller_play);
                 }
                 break;
             case R.id.refresh://刷新按钮
@@ -491,5 +495,7 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
         void pause();
 
         void play();
+
+        boolean isPlaying();
     }
 }

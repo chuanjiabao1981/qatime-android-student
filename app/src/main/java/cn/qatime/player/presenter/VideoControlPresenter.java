@@ -111,4 +111,9 @@ public class VideoControlPresenter implements VideoFloatFragment.CallBack {
         assert vai != null;
         vai.play();
     }
+
+    @Override
+    public boolean isPlaying() {
+        return vai != null && vai.isPlaying();
+    }
 }

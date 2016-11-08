@@ -41,4 +41,5 @@ public interface VideoActivityInterface {
 
     void play();
 
+    boolean isPlaying();
 }
