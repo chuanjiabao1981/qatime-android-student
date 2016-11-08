@@ -10,10 +10,10 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:scaleType="fitXY"
             android:id="@+id/image"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY" />
 
         <TextView
             android:id="@+id/teaching_time"
@@ -21,9 +21,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
+            android:background="#ff9900"
             android:ellipsize="middle"
             android:maxLines="1"
-            android:background="#ff9900"
             android:text="距开课3天"
             android:textColor="#fff"
             android:textSize="12sp" />
@@ -36,26 +36,25 @@
         android:orientation="horizontal">
 
         <!--<ImageView-->
-            <!--android:layout_width="20dp"-->
-            <!--android:layout_height="20dp"-->
+        <!--android:layout_width="20dp"-->
+        <!--android:layout_height="20dp"-->
 
-            <!--android:layout_gravity="center"-->
-            <!--android:layout_marginLeft="10dp"-->
-            <!--android:src="@mipmap/teacher_1" />-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:src="@mipmap/teacher_1" />-->
 
         <TextView
-            android:id="@+id/teacher"
+            android:id="@+id/grade"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="老师"
+            android:text="年级"
             android:textSize="14sp" />
+
         <TextView
+            android:id="@+id/subject"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#cccccc"
-            android:gravity="center"
-            android:text="老师"
+            android:text="科目"
             android:textSize="14sp" />
 
         <View
@@ -64,29 +63,27 @@
             android:layout_weight="1" />
 
         <TextView
-            android:id="@+id/grade"
+            android:id="@+id/teacher"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="年级"
+            android:gravity="center"
+            android:text="老师"
             android:textSize="14sp" />
-        <TextView
-            android:id="@+id/subject"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="科目"
-            android:textSize="14sp" />
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="￥"
             android:textColor="#ff0000"
             android:textSize="12sp" />
+
         <TextView
             android:id="@+id/price"
             android:layout_width="wrap_content"
