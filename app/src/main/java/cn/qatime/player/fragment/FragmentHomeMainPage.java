@@ -88,9 +88,9 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     }
 
     private void initTagImg() {
-        final int imageIds[] = {R.mipmap.banner,R.mipmap.banner2};
-        tagViewpagerImg.init(0, 0, 16, 8, 2, 40);
-        tagViewpagerImg.setAutoNext(true, 4000);
+        final int imageIds[] = {R.mipmap.banner,R.mipmap.banner2,R.mipmap.banner3};
+        tagViewpagerImg.init(R.drawable.shape_photo_tag_select, R.drawable.shape_photo_tag_nomal, 16, 8, 4, 30);
+        tagViewpagerImg.setAutoNext(true, 7000);
 //        viewPager.setId(1252);
         tagViewpagerImg.setOnGetView(new TagViewPager.OnGetView() {
             @Override
@@ -216,7 +216,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 holder.setText(R.id.course_title, item.getLive_studio_course().getName());
                 holder.setText(R.id.grade, item.getLive_studio_course().getGrade());
                 holder.setText(R.id.subject, item.getLive_studio_course().getSubject());
-                holder.setText(R.id.count, item.getLive_studio_course().getBuy_tickets_count() + "人已购");
+                holder.setText(R.id.count, item.getLive_studio_course().getBuy_tickets_count() + "人报名");
                 ((TextView) holder.getView(R.id.reason)).setText(getReason(item.getReason()));
                 ((TextView) holder.getView(R.id.reason)).setBackgroundColor(getReasonBackground(item.getReason()));
             }

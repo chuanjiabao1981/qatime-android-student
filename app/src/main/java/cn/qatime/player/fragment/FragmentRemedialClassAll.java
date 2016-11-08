@@ -187,7 +187,7 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
                 helper.setText(R.id.student_number, String.valueOf(item.getBuy_tickets_count()));
             }
         };
-
+        grid.setEmptyView(View.inflate(getActivity(),R.layout.empty_view,null));
         grid.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<GridView> refreshView) {
