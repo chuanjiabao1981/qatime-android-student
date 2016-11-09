@@ -170,7 +170,7 @@
                 android:id="@+id/danmu_switch"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
-                android:padding="13dp"
+                android:padding="8dp"
                 android:src="@mipmap/danmu_on" />
 
             <ImageView
@@ -178,7 +178,7 @@
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:clickable="true"
-                android:padding="13dp"
+                android:padding="8dp"
                 android:src="@mipmap/float_change_big" />
 
             <ImageView
@@ -186,7 +186,7 @@
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:clickable="true"
-                android:padding="13dp"
+                android:padding="8dp"
                 android:src="@mipmap/float_switchup" />
 
             <ImageView
@@ -194,19 +194,20 @@
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:clickable="true"
-                android:padding="13dp"
-                android:src="@mipmap/nemediacontroller_scale01" />
+                android:padding="8dp"
+                android:src="@mipmap/zoom_big" />
 
         </LinearLayout>
     </LinearLayout>
 
     <TextView
         android:id="@+id/sub_switch"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:background="#fff"
+        android:textSize="16sp"
         android:gravity="center"
         android:text="关"
         android:textColor="#000" />

@@ -12,7 +12,13 @@
         <RelativeLayout
             android:id="@+id/main_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+
+            <cn.qatime.player.view.NEVideoView
+                android:id="@+id/video1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/control"
@@ -27,7 +33,13 @@
         android:layout_height="260dp"
         android:layout_below="@id/main_video"
         android:background="#00000000"
-        android:visibility="visible" />
+        android:visibility="visible">
+
+        <cn.qatime.player.view.NEVideoView
+            android:id="@+id/video2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
 
     <cn.qatime.player.barrage.DanmakuView
         android:id="@+id/danmuView"

@@ -3,7 +3,6 @@ package cn.qatime.player.activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -18,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
-import com.netease.neliveplayer.NELivePlayer;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
@@ -29,7 +27,6 @@ import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,11 +92,11 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     private void assignViews() {
         int width = ScreenUtils.getScreenWidth(this);
-        video1 = new NEVideoView(this);
-        video2 = new NEVideoView(this);
-        ViewGroup.LayoutParams videoLayoutParam = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        video1.setLayoutParams(videoLayoutParam);
-        video2.setLayoutParams(videoLayoutParam);
+        video1 = (NEVideoView) findViewById(R.id.video1);
+        video2 = (NEVideoView) findViewById(R.id.video2);
+//        RelativeLayout.LayoutParams videoLayoutParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+//        video1.setLayoutParams(videoLayoutParam);
+//        video2.setLayoutParams(videoLayoutParam);
 
         whole = (RelativeLayout) findViewById(R.id.whole);
         mainVideo = (RelativeLayout) findViewById(R.id.main_video);
@@ -128,9 +125,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         subVideoParam.width = -1;
         subVideoParam.height = width * 9 / 16;
         subVideo.setLayoutParams(subVideoParam);
-
-        mainView.addView(video1);
-        subVideo.addView(video2);
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -364,13 +358,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) { // 横屏
             orientation = Configuration.ORIENTATION_LANDSCAPE;
-            // 全屏
-//            if (Build.VERSION.SDK_INT >= 11) {
-//                try {
-//                    getActionBar().hide();
-//                } catch (Exception e) {
-//                }
-//            }
+
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
             if (isSubBig) {
@@ -388,21 +376,17 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 video2.setVideoScalingMode(true);
             }
 
-            whole.removeView(danmuView);
-            mainVideo.addView(danmuView, 1);
-
+            if (ismain) {
+                whole.removeView(danmuView);
+                mainVideo.addView(danmuView, 1);
+            }
             danmuView.setLayoutParams(param);
+
             if (danmuView.getVisibility() == View.GONE) {
                 danmuView.setVisibility(View.VISIBLE);
             }
         } else {
             orientation = Configuration.ORIENTATION_PORTRAIT;
-//            if (Build.VERSION.SDK_INT >= 11) {
-//                try {
-//                    getActionBar().show();
-//                } catch (Exception e) {
-//                }
-//            }
             WindowManager.LayoutParams attrs = getWindow().getAttributes();
             attrs.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
             getWindow().setAttributes(attrs);
@@ -414,11 +398,14 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             param.height = ScreenUtils.getScreenWidth(NEVideoPlayerActivity.this) * 9 / 16;
             mainView.setLayoutParams(param);
             mainVideo.setLayoutParams(param);
-            mainVideo.removeView(danmuView);
-            whole.addView(danmuView);
-            RelativeLayout.LayoutParams danmuParam = new RelativeLayout.LayoutParams(param.width, param.height);
-            danmuParam.addRule(RelativeLayout.BELOW, R.id.main_video);
-            danmuView.setLayoutParams(danmuParam);
+            if (ismain) {
+                RelativeLayout.LayoutParams danmuParam = null;
+                mainVideo.removeView(danmuView);
+                whole.addView(danmuView);
+                danmuParam = new RelativeLayout.LayoutParams(param.width, param.height);
+                danmuParam.addRule(RelativeLayout.BELOW, R.id.main_video);
+                danmuView.setLayoutParams(danmuParam);
+            }
             danmuView.setVisibility(isSubBig ? View.VISIBLE : View.GONE);
         }
 
@@ -552,11 +539,20 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         floatingWindow.removeView(video1);
         video1.setZOrderOnTop(false);
         mainView.addView(video1);
-        if (orientation==Configuration.ORIENTATION_LANDSCAPE) {
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             video1.setVideoScalingMode(true);
         }
         video2.setZOrderOnTop(true);
         floatingWindow.addView(video2);
+
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            mainVideo.removeView(danmuView);
+            whole.addView(danmuView);
+            RelativeLayout.LayoutParams danmuParam = new RelativeLayout.LayoutParams(-1, ScreenUtils.getScreenWidth(NEVideoPlayerActivity.this) * 9 / 16);
+            danmuParam.addRule(RelativeLayout.BELOW, R.id.main_video);
+            danmuView.setLayoutParams(danmuParam);
+            danmuView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -566,6 +562,9 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         subVideo.removeView(video2);
         video1.setZOrderOnTop(false);
         video2.setZOrderOnTop(false);
+
+        whole.removeView(danmuView);
+        mainVideo.addView(danmuView, 1);
         mainView.addView(video2);
         subVideo.addView(video1);
     }
@@ -576,8 +575,14 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         mainView.removeView(video1);
         floatingWindow.removeView(video2);
         video2.setZOrderOnTop(false);
+
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            whole.removeView(danmuView);
+            mainVideo.addView(danmuView, 1);
+        }
+
         mainView.addView(video2);
-        if (orientation==Configuration.ORIENTATION_LANDSCAPE) {
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             video2.setVideoScalingMode(true);
         }
         video1.setZOrderOnTop(true);
@@ -591,6 +596,13 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         subVideo.removeView(video1);
         video1.setZOrderOnTop(false);
         video2.setZOrderOnTop(false);
+
+        mainVideo.removeView(danmuView);
+        whole.addView(danmuView);
+        RelativeLayout.LayoutParams danmuParam = new RelativeLayout.LayoutParams(-1, ScreenUtils.getScreenWidth(NEVideoPlayerActivity.this) * 9 / 16);
+        danmuParam.addRule(RelativeLayout.BELOW, R.id.main_video);
+        danmuView.setLayoutParams(danmuParam);
+        danmuView.setVisibility(View.VISIBLE);
         mainView.addView(video1);
         subVideo.addView(video2);
     }
