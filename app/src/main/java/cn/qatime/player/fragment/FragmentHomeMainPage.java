@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.CitySelectActivity;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.MessageFragmentActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
@@ -34,6 +35,7 @@ import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.ClassRecommendBean;
 import cn.qatime.player.bean.TeacherRecommendBean;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
@@ -60,6 +62,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private ArrayList<TeacherRecommendBean.DataBean> listRecommendTeacher = new ArrayList<>();
     private CommonAdapter<TeacherRecommendBean.DataBean> teacherAdapter;
     private GridView gridviewSubject;
+    private View citySelect;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -74,6 +77,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         gridviewTeacher = (GridView) view.findViewById(R.id.gridview_teacher);
         gridviewSubject = (GridView) view.findViewById(R.id.gridview_subject);
         allClass = view.findViewById(R.id.all_class);
+        citySelect = view.findViewById(R.id.city_select);
         gridviewClass = (GridView) view.findViewById(R.id.gridview_class);
         message = (ImageView) view.findViewById(R.id.message);
 
@@ -84,7 +88,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         refreshTeacher.setOnClickListener(this);
         allClass.setOnClickListener(this);
         message.setOnClickListener(this);
-
+        citySelect.setOnClickListener(this);
     }
 
     private void initTagImg() {
@@ -305,6 +309,10 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             case R.id.message:
                 Intent intent = new Intent(getActivity(), MessageFragmentActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.city_select:
+                intent = new Intent(getActivity(), CitySelectActivity.class);
+                startActivityForResult(intent, Constant.REQUEST);
                 break;
         }
     }

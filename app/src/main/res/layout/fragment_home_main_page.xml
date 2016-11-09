@@ -13,13 +13,12 @@
             android:background="@drawable/shape_top_tab" />
 
         <LinearLayout
-            android:id="@+id/area"
+            android:id="@+id/city_select"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="10dp"
-            android:visibility="invisible">
+            android:padding="10dp">
 
             <TextView
                 style="@style/backbar_text_style"

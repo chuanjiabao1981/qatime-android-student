@@ -104,7 +104,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                                     if (courses != null && courses.getData() != null) {
                                         for (TutorialClassBean.Data data : courses.getData()) {
                                             if (sessionId.equals(data.getChat_team_id())) {
-                                                EventBus.getDefault().post(new ChatVideoBean(data.getId(), data.getPull_address(), data.getName()));
+                                                EventBus.getDefault().post(new ChatVideoBean(data.getId(), data.getBoard(), data.getName()));
                                                 break;
                                             }
                                         }
@@ -291,7 +291,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                         }
                         bean.setCourseId(data.getId());
                         bean.setUnreadCount(item.getUnreadCount());
-                        bean.setPull_address(data.getPull_address());
+                        bean.setPull_address(data.getBoard());
                         bean.setTime(item.getTime());
                         bean.setRecentMessageId(item.getRecentMessageId());
                         items.add(bean);
@@ -492,7 +492,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                         for (TutorialClassBean.Data data : courses.getData()) {
                             if (data.getChat_team_id().equals(msg.getContactId())) {
                                 bean.setName(data.getName());
-                                bean.setPull_address(data.getPull_address());
+                                bean.setPull_address(data.getBoard());
                             }
                         }
                     } else {
