@@ -10,10 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
-import cn.qatime.player.bean.Announcements;
+import libraryextra.bean.Announcements;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.StringUtils;
 
