@@ -642,7 +642,7 @@ public class CacheManagingDrawTask extends DrawTask {
                 }
                 float level = getPoolPercent();
                 BaseDanmaku firstCache = mCaches.first();
-                //TODO 如果firstcache大于当前时间超过半屏并且水位在0.5f以下,
+                //如果firstcache大于当前时间超过半屏并且水位在0.5f以下,
                 long gapTime = firstCache != null ? firstCache.time - mTimer.currMillisecond : 0;
                 long doubleScreenDuration = mContext.mDanmakuFactory.MAX_DANMAKU_DURATION * 2;
                 if (level < 0.6f && gapTime > mContext.mDanmakuFactory.MAX_DANMAKU_DURATION) {

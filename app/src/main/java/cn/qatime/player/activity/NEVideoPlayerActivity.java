@@ -2,9 +2,7 @@ package cn.qatime.player.activity;
 
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,7 +73,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     private SessionTypeEnum sessionType = SessionTypeEnum.Team;
     private EditText content;
     private boolean isMute = false;//当前用户 是否被禁言
-    private String url = "";
 
 
     private RelativeLayout mainVideo;
@@ -94,9 +91,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         int width = ScreenUtils.getScreenWidth(this);
         video1 = (NEVideoView) findViewById(R.id.video1);
         video2 = (NEVideoView) findViewById(R.id.video2);
-//        RelativeLayout.LayoutParams videoLayoutParam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-//        video1.setLayoutParams(videoLayoutParam);
-//        video2.setLayoutParams(videoLayoutParam);
 
         whole = (RelativeLayout) findViewById(R.id.whole);
         mainVideo = (RelativeLayout) findViewById(R.id.main_video);
@@ -125,16 +119,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         subVideoParam.width = -1;
         subVideoParam.height = width * 9 / 16;
         subVideo.setLayoutParams(subVideoParam);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                video1.setVideoURI(Uri.parse("rtmp://va0a19f55.live.126.net/live/834c6312006e4ffe927795a11fd317af"));
-                video1.start();
-                video2.setVideoURI(Uri.parse("rtmp://va0a19f55.live.126.net/live/3d8d1d438b554741944ea809f1704a5e"));
-                video2.start();
-            }
-        }, 5000);
     }
 
     @Override
@@ -142,16 +126,22 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
         id = getIntent().getIntExtra("id", 0);//从前一页进来的id 获取详情用
-        //TODO
-        id = 18;
         if (id == 0) {
             Toast.makeText(this, getResourceString(R.string.no_course_information), Toast.LENGTH_SHORT).show();
+            return;
         }
         sessionId = getIntent().getStringExtra("sessionId");
-        //TODO
-        sessionId = "7964473";
-        url = getIntent().getStringExtra("url");
 
+        String camera = getIntent().getStringExtra("camera");
+        String board = getIntent().getStringExtra("board");
+        if (!StringUtils.isNullOrBlanK(camera)) {
+            video2.setVideoPath(camera);
+            video2.start();
+        }
+        if (!StringUtils.isNullOrBlanK(board)) {
+            video1.setVideoPath(board);
+            video1.start();
+        }
         assignViews();
         initView();
         getAnnouncementsData();

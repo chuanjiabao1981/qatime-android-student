@@ -37,7 +37,7 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.OrderPayBean;
-import libraryextra.bean.TutorialClassBean;
+import cn.qatime.player.bean.TutorialClassBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -49,8 +49,6 @@ public class TutorshipTeachingF extends BaseFragment {
     private CommonAdapter<TutorialClassBean.Data> adapter;
     private int page = 1;
 
-    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
 
     @Nullable
     @Override
@@ -79,13 +77,14 @@ public class TutorshipTeachingF extends BaseFragment {
 
 
                 helper.setText(R.id.class_end_time, getResourceString(R.string.item_class_end_date) + item.getLive_end_time());
-                helper.getView(R.id.video).setVisibility(StringUtils.isNullOrBlanK(item.getBoard()) ? View.GONE : View.VISIBLE);
-                helper.getView(R.id.enter).setVisibility(item.getIs_bought() ? View.GONE : View.VISIBLE);
+                helper.getView(R.id.video).setVisibility((StringUtils.isNullOrBlanK(item.getBoard())&&StringUtils.isNullOrBlanK(item.getCamera())) ? View.GONE : View.VISIBLE);
+                helper.getView(R.id.enter).setVisibility(item.isIs_bought() ? View.GONE : View.VISIBLE);
                 helper.getView(R.id.video).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
-                        intent.putExtra("url", item.getBoard());
+                        intent.putExtra("camera", item.getCamera());
+                        intent.putExtra("board", item.getBoard());
                         intent.putExtra("id", item.getId());
                         intent.putExtra("sessionId", item.getChat_team_id());
                         startActivity(intent);

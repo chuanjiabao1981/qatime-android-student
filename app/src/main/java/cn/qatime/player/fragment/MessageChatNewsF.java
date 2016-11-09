@@ -55,7 +55,7 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.TutorialClassBean;
+import cn.qatime.player.bean.TutorialClassBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.StringUtils;
@@ -104,7 +104,7 @@ public class MessageChatNewsF extends BaseFragment {
                                     if (courses != null && courses.getData() != null) {
                                         for (TutorialClassBean.Data data : courses.getData()) {
                                             if (sessionId.equals(data.getChat_team_id())) {
-                                                EventBus.getDefault().post(new ChatVideoBean(data.getId(), data.getBoard(), data.getName()));
+                                                EventBus.getDefault().post(new ChatVideoBean(data.getId(), data.getCamera(),data.getBoard(), data.getName()));
                                                 break;
                                             }
                                         }
@@ -178,7 +178,8 @@ public class MessageChatNewsF extends BaseFragment {
                 intent.putExtra("sessionId", items.get(position - 1).getContactId());
                 intent.putExtra("sessionType", items.get(position - 1).getSessionType());
                 intent.putExtra("courseId", items.get(position - 1).getCourseId());
-                intent.putExtra("pull_address", items.get(position - 1).getPull_address());
+                intent.putExtra("camera", items.get(position - 1).getCamera());
+                intent.putExtra("board", items.get(position - 1).getBoard());
                 intent.putExtra("name", items.get(position - 1).getName());
                 startActivity(intent);
             }
@@ -291,7 +292,8 @@ public class MessageChatNewsF extends BaseFragment {
                         }
                         bean.setCourseId(data.getId());
                         bean.setUnreadCount(item.getUnreadCount());
-                        bean.setPull_address(data.getBoard());
+                        bean.setCamera(data.getCamera());
+                        bean.setBoard(data.getBoard());
                         bean.setTime(item.getTime());
                         bean.setRecentMessageId(item.getRecentMessageId());
                         items.add(bean);
@@ -310,7 +312,6 @@ public class MessageChatNewsF extends BaseFragment {
                 bean.setName(TeamDataCache.getInstance().getTeamName(item.getContactId()).replace("讨论组", ""));
                 bean.setUnreadCount(item.getUnreadCount());
                 bean.setRecentMessageId(item.getRecentMessageId());
-//                        bean.setPull_address(data.getPull_address());
                 bean.setTime(item.getTime());
                 items.add(bean);
 //                    }
@@ -492,7 +493,8 @@ public class MessageChatNewsF extends BaseFragment {
                         for (TutorialClassBean.Data data : courses.getData()) {
                             if (data.getChat_team_id().equals(msg.getContactId())) {
                                 bean.setName(data.getName());
-                                bean.setPull_address(data.getBoard());
+                                bean.setBoard(data.getBoard());
+                                bean.setCamera(data.getCamera());
                             }
                         }
                     } else {
@@ -605,7 +607,8 @@ public class MessageChatNewsF extends BaseFragment {
             intent.putExtra("sessionId", items.get(position).getContactId());
             intent.putExtra("sessionType", items.get(position).getSessionType());
             intent.putExtra("courseId", items.get(position).getCourseId());
-            intent.putExtra("pull_address", items.get(position).getPull_address());
+            intent.putExtra("camera", items.get(position - 1).getCamera());
+            intent.putExtra("board", items.get(position - 1).getBoard());
             intent.putExtra("name", items.get(position).getName());
             startActivity(intent);
         } else {
