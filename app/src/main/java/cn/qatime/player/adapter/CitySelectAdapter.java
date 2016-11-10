@@ -7,6 +7,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,20 +26,23 @@ import libraryextra.view.GridViewForScrollView;
  */
 public abstract class CitySelectAdapter extends BaseAdapter {
 
-    private final int VIEW_TYPE_COUNT;
-    private final List<CityBean.Data> mDatas;
-    private final int[] itemLayoutId;
-    private final Context context;
+    private int VIEW_TYPE_COUNT;
+    private List<CityBean.Data> list;
+    private int[] itemLayoutId;
+    private Context context;
+    private ArrayList<String> listLately;
     private Map<String, Integer> letterMap = new HashMap<String, Integer>();
 
     /**
      * @param context
-     * @param mDatas
+     * @param listLately   最近
+     * @param list         全部
      * @param itemLayoutId 最近 全国 城市
      */
-    public CitySelectAdapter(Context context, List<CityBean.Data> mDatas, int... itemLayoutId) {
+    public CitySelectAdapter(Context context, ArrayList<String> listLately, ArrayList<CityBean.Data> list, int... itemLayoutId) {
         VIEW_TYPE_COUNT = itemLayoutId.length;
-        this.mDatas = mDatas;
+        this.listLately = listLately;
+        this.list = list;
         this.itemLayoutId = itemLayoutId;
         this.context = context;
     }
@@ -51,7 +55,7 @@ public abstract class CitySelectAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return mDatas.size() + 2;
+        return list.size() + 2;
     }
 
     @Override
@@ -61,7 +65,7 @@ public abstract class CitySelectAdapter extends BaseAdapter {
         } else if (position == 1) {
             return null;
         } else {
-            return mDatas.get(position - 2);
+            return list.get(position - 2);
         }
     }
 
@@ -76,20 +80,19 @@ public abstract class CitySelectAdapter extends BaseAdapter {
         int viewType = getItemViewType(position);
         if (viewType == 0) {//最近
             viewHolder = ViewHolder.get(context, convertView, parent, itemLayoutId[0], position);
-            GridViewForScrollView grid = viewHolder.getView(R.id.grid_city_lately);
-            grid.setAdapter(new CommonAdapter<CityBean.Data>(context, mDatas, R.layout.item_city_single) {
-                @Override
-                public void convert(ViewHolder holder, CityBean.Data item, int position) {
-                    holder.setText(R.id.city_name, item.getName());
-                }
-            });
-            grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    setCityName(mDatas.get(position).getName());
-                }
-            });
-
+                GridViewForScrollView grid = viewHolder.getView(R.id.grid_city_lately);
+                grid.setAdapter(new CommonAdapter<String>(context, listLately, R.layout.item_city_single) {
+                    @Override
+                    public void convert(ViewHolder holder, String item, int position) {
+                        holder.setText(R.id.city_name, item);
+                    }
+                });
+                grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        setCityName(listLately.get(position));
+                    }
+                });
         } else if (viewType == 1) {//全国
             viewHolder = ViewHolder.get(context, convertView, parent, itemLayoutId[1], position);
             viewHolder.getView(R.id.city_name).setOnClickListener(new View.OnClickListener() {
@@ -100,14 +103,14 @@ public abstract class CitySelectAdapter extends BaseAdapter {
             });
         } else {//城市
             viewHolder = ViewHolder.get(context, convertView, parent, itemLayoutId[2], position);
-            CityBean.Data item = mDatas.get(position - 2);
+            CityBean.Data item = list.get(position - 2);
             viewHolder.setText(R.id.city_latter, item.getFirstLetter());
             viewHolder.setText(R.id.city_name, item.getName());
             if (!letterMap.containsKey(item.getFirstLetter())) {
                 letterMap.put(item.getFirstLetter(), position);
             }
             if (position > 3) {
-                if (mDatas.get(position - 3).getFirstLetter().equals(item.getFirstLetter())) {
+                if (list.get(position - 3).getFirstLetter().equals(item.getFirstLetter())) {
                     viewHolder.getView(R.id.city_latter).setVisibility(View.GONE);
                 } else {
                     viewHolder.getView(R.id.city_latter).setVisibility(View.VISIBLE);
@@ -144,7 +147,7 @@ public abstract class CitySelectAdapter extends BaseAdapter {
         } else if (position == 1) {
             return "全国";
         } else {
-            return mDatas.get(position - 2).getFirstLetter();
+            return list.get(position - 2).getFirstLetter();
         }
     }
 

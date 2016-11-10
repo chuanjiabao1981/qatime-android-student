@@ -1,6 +1,7 @@
 package cn.qatime.player.activity;
 
 import android.os.Bundle;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.CityBean;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -36,6 +38,7 @@ public class CitySelectActivity extends BaseActivity {
     private SideBar sidebar;
     private ArrayList<CityBean.Data> list;
     private CitySelectAdapter adapter;
+    private ArrayList<String> listLately;
 
     private void assignViews() {
         currentCity = (TextView) findViewById(R.id.current_city);
@@ -48,6 +51,7 @@ public class CitySelectActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_select);
+        setTitle("切换城市");
         assignViews();
         initView();
         initData();
@@ -60,42 +64,42 @@ public class CitySelectActivity extends BaseActivity {
                     protected void onSuccess(JSONObject response) {
                         CityBean cityBean = JsonUtils.objectFromJson(response.toString(), CityBean.class);
                         if (cityBean != null && cityBean.getData() != null) {
-//                            list.clear();
-                            list.add(new CityBean.Data("去"));
-                            list.add(new CityBean.Data("我"));
-                            list.add(new CityBean.Data("额"));
-                            list.add(new CityBean.Data("人"));
-                            list.add(new CityBean.Data("人"));
-                            list.add(new CityBean.Data("天"));
-                            list.add(new CityBean.Data("有"));
-                            list.add(new CityBean.Data("u"));
-                            list.add(new CityBean.Data("i"));
-                            list.add(new CityBean.Data("哦"));
-                            list.add(new CityBean.Data("哦"));
-                            list.add(new CityBean.Data("哦"));
-                            list.add(new CityBean.Data("票"));
-                            list.add(new CityBean.Data("啊"));
-                            list.add(new CityBean.Data("是"));
-                            list.add(new CityBean.Data("的"));
-                            list.add(new CityBean.Data("的"));
-                            list.add(new CityBean.Data("的"));
-                            list.add(new CityBean.Data("发"));
-                            list.add(new CityBean.Data("给"));
-                            list.add(new CityBean.Data("胡"));
-                            list.add(new CityBean.Data("就"));
-                            list.add(new CityBean.Data("卡"));
-                            list.add(new CityBean.Data("了"));
-                            list.add(new CityBean.Data("了"));
-                            list.add(new CityBean.Data("中"));
-                            list.add(new CityBean.Data("下"));
-                            list.add(new CityBean.Data("才"));
-                            list.add(new CityBean.Data("才"));
-                            list.add(new CityBean.Data("v"));
-                            list.add(new CityBean.Data("v"));
-                            list.add(new CityBean.Data("不"));
-                            list.add(new CityBean.Data("能"));
-                            list.add(new CityBean.Data("能"));
-                            list.add(new CityBean.Data("没"));
+                            list.clear();
+//                            list.add(new CityBean.Data("去"));
+//                            list.add(new CityBean.Data("我"));
+//                            list.add(new CityBean.Data("额"));
+//                            list.add(new CityBean.Data("人"));
+//                            list.add(new CityBean.Data("人"));
+//                            list.add(new CityBean.Data("天"));
+//                            list.add(new CityBean.Data("有"));
+//                            list.add(new CityBean.Data("u"));
+//                            list.add(new CityBean.Data("i"));
+//                            list.add(new CityBean.Data("哦"));
+//                            list.add(new CityBean.Data("哦"));
+//                            list.add(new CityBean.Data("哦"));
+//                            list.add(new CityBean.Data("票"));
+//                            list.add(new CityBean.Data("啊"));
+//                            list.add(new CityBean.Data("是"));
+//                            list.add(new CityBean.Data("的"));
+//                            list.add(new CityBean.Data("的"));
+//                            list.add(new CityBean.Data("的"));
+//                            list.add(new CityBean.Data("发"));
+//                            list.add(new CityBean.Data("给"));
+//                            list.add(new CityBean.Data("胡"));
+//                            list.add(new CityBean.Data("就"));
+//                            list.add(new CityBean.Data("卡"));
+//                            list.add(new CityBean.Data("了"));
+//                            list.add(new CityBean.Data("了"));
+//                            list.add(new CityBean.Data("中"));
+//                            list.add(new CityBean.Data("下"));
+//                            list.add(new CityBean.Data("才"));
+//                            list.add(new CityBean.Data("才"));
+//                            list.add(new CityBean.Data("v"));
+//                            list.add(new CityBean.Data("v"));
+//                            list.add(new CityBean.Data("不"));
+//                            list.add(new CityBean.Data("能"));
+//                            list.add(new CityBean.Data("能"));
+//                            list.add(new CityBean.Data("没"));
                             list.addAll(cityBean.getData());
                             for (CityBean.Data item : list) {
                                 if (StringUtils.isNullOrBlanK(item.getName())) {
@@ -134,10 +138,27 @@ public class CitySelectActivity extends BaseActivity {
 
     private void initView() {
         list = new ArrayList<>();
-        adapter = new CitySelectAdapter(this, list, R.layout.item_city_lately, R.layout.item_city_all, R.layout.item_city_list) {
+        ArrayList<String> lately = SPUtils.getObject(this, "listLately", ArrayList.class);
+        if (lately == null || lately.size() == 0) {
+            listLately = new ArrayList<>();
+            listLately.add("全国");//默认选择
+        } else {
+            listLately = lately;
+        }
+        adapter = new CitySelectAdapter(this, listLately, list, R.layout.item_city_lately, R.layout.item_city_all, R.layout.item_city_list) {
             @Override
             public void setCityName(String s) {
                 currentCity.setText(s);
+                if (listLately.contains(s)) {
+                    listLately.remove(s);
+                    listLately.add(0, s);
+                } else {
+                    listLately.add(0, s);
+                    if (listLately.size() > 8) {
+                        listLately.remove(8);
+                    }
+                }
+                adapter.notifyDataSetChanged();
             }
         };
         listView.setAdapter(adapter);
@@ -158,17 +179,23 @@ public class CitySelectActivity extends BaseActivity {
                 }
             }
         });
-//        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(AbsListView view, int scrollState) {
-//
-//            }
-//
-//            @Override
-//            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-//                String s = adapter.getLetterByPosition(firstVisibleItem);
-//                sidebar.setChooseText(s);
-//            }
-//        });
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                String s = adapter.getLetterByPosition(firstVisibleItem);
+                sidebar.setChooseText(s);
+            }
+        });
+    }
+
+    @Override
+    public void finish() {
+        SPUtils.putObject(this, "listLately", listLately);
+        super.finish();
     }
 }
