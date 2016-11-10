@@ -1,5 +1,6 @@
 package cn.qatime.player.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.AbsListView;
 import android.widget.ListView;
@@ -16,6 +17,7 @@ import java.util.Comparator;
 import cn.qatime.player.R;
 import cn.qatime.player.adapter.CitySelectAdapter;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.CityBean;
@@ -147,18 +149,22 @@ public class CitySelectActivity extends BaseActivity {
         }
         adapter = new CitySelectAdapter(this, listLately, list, R.layout.item_city_lately, R.layout.item_city_all, R.layout.item_city_list) {
             @Override
-            public void setCityName(String s) {
-                currentCity.setText(s);
-                if (listLately.contains(s)) {
-                    listLately.remove(s);
-                    listLately.add(0, s);
+            public void setCityName(CityBean.Data data) {
+                currentCity.setText(data.getName());
+                if (listLately.contains(data.getName())) {
+                    listLately.remove(data.getName());
+                    listLately.add(0, data.getName());
                 } else {
-                    listLately.add(0, s);
+                    listLately.add(0, data.getName());
                     if (listLately.size() > 8) {
                         listLately.remove(8);
                     }
                 }
-                adapter.notifyDataSetChanged();
+//                adapter.notifyDataSetChanged();
+                Intent intent = new Intent();
+                intent.putExtra("city", data);
+                setResult(Constant.RESPONSE_CITY_SELECT, intent);
+                finish();
             }
         };
         listView.setAdapter(adapter);
@@ -182,7 +188,8 @@ public class CitySelectActivity extends BaseActivity {
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
-
+                String s = adapter.getLetterByPosition(listView.getFirstVisiblePosition());
+                sidebar.setChooseText(s);
             }
 
             @Override

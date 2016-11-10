@@ -40,6 +40,7 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
+import libraryextra.bean.CityBean;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -63,6 +64,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private CommonAdapter<TeacherRecommendBean.DataBean> teacherAdapter;
     private GridView gridviewSubject;
     private View citySelect;
+    private TextView cityName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -76,6 +78,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         refreshTeacher = (ImageView) view.findViewById(R.id.refresh_teacher);
         gridviewTeacher = (GridView) view.findViewById(R.id.gridview_teacher);
         gridviewSubject = (GridView) view.findViewById(R.id.gridview_subject);
+        cityName = (TextView) view.findViewById(R.id.city_name);
         allClass = view.findViewById(R.id.all_class);
         citySelect = view.findViewById(R.id.city_select);
         gridviewClass = (GridView) view.findViewById(R.id.gridview_class);
@@ -92,7 +95,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     }
 
     private void initTagImg() {
-        final int imageIds[] = {R.mipmap.banner,R.mipmap.banner2,R.mipmap.banner3};
+        final int imageIds[] = {R.mipmap.banner, R.mipmap.banner2, R.mipmap.banner3};
         tagViewpagerImg.init(R.drawable.shape_photo_tag_select, R.drawable.shape_photo_tag_nomal, 16, 8, 4, 30);
         tagViewpagerImg.setAutoNext(true, 7000);
 //        viewPager.setId(1252);
@@ -314,6 +317,14 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 intent = new Intent(getActivity(), CitySelectActivity.class);
                 startActivityForResult(intent, Constant.REQUEST);
                 break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Constant.RESPONSE_CITY_SELECT) {
+            CityBean.Data city = (CityBean.Data) data.getSerializableExtra("city");
+            cityName.setText(city.getName());
         }
     }
 }

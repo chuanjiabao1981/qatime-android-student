@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -75,7 +74,7 @@ public abstract class CitySelectAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
         int viewType = getItemViewType(position);
         if (viewType == 0) {//最近
@@ -90,7 +89,7 @@ public abstract class CitySelectAdapter extends BaseAdapter {
                 grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        setCityName(listLately.get(position));
+                        setCityName(new CityBean.Data(listLately.get(position)));
                     }
                 });
         } else if (viewType == 1) {//全国
@@ -98,7 +97,7 @@ public abstract class CitySelectAdapter extends BaseAdapter {
             viewHolder.getView(R.id.city_name).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setCityName("全国");
+                    setCityName(new CityBean.Data("全国"));
                 }
             });
         } else {//城市
@@ -120,7 +119,7 @@ public abstract class CitySelectAdapter extends BaseAdapter {
             viewHolder.getView(R.id.city_name).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setCityName(((TextView) v).getText().toString());
+                    setCityName(list.get(position - 2));
                 }
             });
         }
@@ -151,5 +150,5 @@ public abstract class CitySelectAdapter extends BaseAdapter {
         }
     }
 
-    public abstract void setCityName(String s);
+    public abstract void setCityName(CityBean.Data data);
 }

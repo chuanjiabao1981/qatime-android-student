@@ -21,13 +21,14 @@
             android:padding="10dp">
 
             <TextView
+                android:id="@+id/city_name"
                 style="@style/backbar_text_style"
                 android:text="北京" />
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@mipmap/down" />
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@mipmap/city_select" />
         </LinearLayout>
 
         <ImageView
