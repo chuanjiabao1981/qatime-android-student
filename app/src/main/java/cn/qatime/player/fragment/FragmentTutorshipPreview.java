@@ -76,7 +76,7 @@ public class FragmentTutorshipPreview extends BaseFragment {
 
                 helper.setText(R.id.class_start_time, getResourceString(R.string.item_class_start_date) + item.getLive_start_time());
                 helper.setText(R.id.class_end_time, getResourceString(R.string.item_class_end_date) + item.getLive_end_time());
-                helper.getView(R.id.enter).setVisibility(item.getIs_bought() ? View.GONE : View.VISIBLE);
+                helper.getView(R.id.enter).setVisibility(item.isIs_bought() ? View.GONE : View.VISIBLE);
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
