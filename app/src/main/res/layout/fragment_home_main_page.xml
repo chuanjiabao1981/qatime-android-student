@@ -20,15 +20,15 @@
             android:orientation="horizontal"
             android:padding="10dp">
 
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@mipmap/city_select" />
             <TextView
                 android:id="@+id/city_name"
                 style="@style/backbar_text_style"
-                android:text="北京" />
+                android:text="全国" />
 
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:src="@mipmap/city_select" />
         </LinearLayout>
 
         <ImageView
