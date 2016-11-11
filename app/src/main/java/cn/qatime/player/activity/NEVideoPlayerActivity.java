@@ -31,7 +31,7 @@ import java.util.List;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
-import cn.qatime.player.bean.Announcements;
+import libraryextra.bean.Announcements;
 import cn.qatime.player.fragment.FragmentPlayerAnnouncements;
 import cn.qatime.player.fragment.FragmentPlayerMessage;
 import cn.qatime.player.fragment.FragmentPlayerLiveDetails;

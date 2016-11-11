@@ -16,7 +16,7 @@ import java.util.List;
 import cn.qatime.player.R;
 import cn.qatime.player.adapter.FragmentNEVideoPlayerAdapter4;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.bean.Announcements;
+import libraryextra.bean.Announcements;
 import libraryextra.utils.StringUtils;
 
 public class FragmentPlayerMembers extends BaseFragment {
