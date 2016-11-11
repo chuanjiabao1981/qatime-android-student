@@ -32,6 +32,7 @@ import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.MessageFragmentActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.ClassRecommendBean;
 import cn.qatime.player.bean.TeacherRecommendBean;
@@ -40,7 +41,6 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.CityBean;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -83,6 +83,8 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         citySelect = view.findViewById(R.id.city_select);
         gridviewClass = (GridView) view.findViewById(R.id.gridview_class);
         message = (ImageView) view.findViewById(R.id.message);
+
+        cityName.setText(BaseApplication.getCurrentCity().getName());
 
         initTagImg();
         initTagViewpagerSubject();
@@ -323,8 +325,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Constant.RESPONSE_CITY_SELECT) {
-            CityBean.Data city = (CityBean.Data) data.getSerializableExtra("city");
-            cityName.setText(city.getName());
+            cityName.setText(BaseApplication.getCurrentCity().getName());
         }
     }
 }

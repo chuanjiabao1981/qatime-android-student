@@ -17,6 +17,7 @@ import java.util.Comparator;
 import cn.qatime.player.R;
 import cn.qatime.player.adapter.CitySelectAdapter;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -139,6 +140,8 @@ public class CitySelectActivity extends BaseActivity {
     }
 
     private void initView() {
+        currentCity.setText(BaseApplication.getCurrentCity().getName());
+
         list = new ArrayList<>();
         ArrayList<String> lately = SPUtils.getObject(this, "listLately", ArrayList.class);
         if (lately == null || lately.size() == 0) {
@@ -161,8 +164,8 @@ public class CitySelectActivity extends BaseActivity {
                     }
                 }
 //                adapter.notifyDataSetChanged();
+                BaseApplication.setCurrentCity(data);
                 Intent intent = new Intent();
-                intent.putExtra("city", data);
                 setResult(Constant.RESPONSE_CITY_SELECT, intent);
                 finish();
             }
