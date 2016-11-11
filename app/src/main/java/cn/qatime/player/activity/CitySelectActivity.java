@@ -18,8 +18,8 @@ import java.util.Comparator;
 import cn.qatime.player.R;
 import cn.qatime.player.adapter.CitySelectAdapter;
 import cn.qatime.player.base.BaseActivity;
-import cn.qatime.player.utils.AMapLocationUtils;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.utils.AMapLocationUtils;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -44,19 +44,13 @@ public class CitySelectActivity extends BaseActivity {
     private ArrayList<CityBean.Data> list;
     private CitySelectAdapter adapter;
     private ArrayList<String> listLately;
+    private CityBean.Data locationCity;
 
     private void assignViews() {
         currentCity = (TextView) findViewById(R.id.current_city);
         textDialog = (TextView) findViewById(R.id.text_dialog);
         listView = (ListView) findViewById(R.id.listView);
         sidebar = (SideBar) findViewById(R.id.sidebar);
-        final AMapLocationUtils location = new AMapLocationUtils(getApplicationContext(), new AMapLocationUtils.LocationListener() {
-            @Override
-            public void onLocationBack(String result) {
-                Logger.e(result);
-            }
-        });
-        location.startLocation();
     }
 
     @Override
@@ -70,14 +64,14 @@ public class CitySelectActivity extends BaseActivity {
     }
 
     private void initData() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,
+        final DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,
                 new VolleyListener(this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
                         CityBean cityBean = JsonUtils.objectFromJson(response.toString(), CityBean.class);
                         if (cityBean != null && cityBean.getData() != null) {
                             list.clear();
-//                            list.add(new CityBean.Data("去"));
+//                            list.add(new CityBean.Data("北京"));
 //                            list.add(new CityBean.Data("我"));
 //                            list.add(new CityBean.Data("额"));
 //                            list.add(new CityBean.Data("人"));
@@ -120,6 +114,27 @@ public class CitySelectActivity extends BaseActivity {
                                     item.setFirstLetter(StringUtils.getPYIndexStr(item.getName().substring(0, 1)));
                                 }
                             }
+                            AMapLocationUtils utils = new AMapLocationUtils(getApplicationContext(), new AMapLocationUtils.LocationListener() {
+                                @Override
+                                public void onLocationBack(String result) {
+                                    if (result.length() > 0 && result.endsWith("市")) {
+                                        result = result.substring(0, result.length() - 1);
+                                    }
+                                    for (CityBean.Data item : list) {
+                                        if (result.equals(item.getName())) {
+                                            locationCity = item;
+                                        }
+                                    }
+                                    if (locationCity == null) {//如果没有被赋值，则默认全国
+                                        locationCity = new CityBean.Data("全国");
+                                    }
+
+                                    Logger.e("location", result);
+                                    Logger.e("locationCity", locationCity.getName());
+                                }
+                            });
+                            utils.startLocation();
+
                             Collections.sort(list, new Comparator<CityBean.Data>() {
                                 @Override
                                 public int compare(CityBean.Data lhs, CityBean.Data rhs) {
@@ -193,6 +208,8 @@ public class CitySelectActivity extends BaseActivity {
                     int position = adapter.getPositionByLetter(s);
                     if (position >= 0) {
                         listView.setSelection(position);
+                    } else {
+                        listView.setSelection(listView.getFirstVisiblePosition());
                     }
                 }
             }
