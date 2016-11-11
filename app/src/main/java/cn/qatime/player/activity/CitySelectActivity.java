@@ -7,6 +7,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
@@ -17,6 +18,7 @@ import java.util.Comparator;
 import cn.qatime.player.R;
 import cn.qatime.player.adapter.CitySelectAdapter;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.utils.AMapLocationUtils;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -47,6 +49,13 @@ public class CitySelectActivity extends BaseActivity {
         textDialog = (TextView) findViewById(R.id.text_dialog);
         listView = (ListView) findViewById(R.id.listView);
         sidebar = (SideBar) findViewById(R.id.sidebar);
+        final AMapLocationUtils location = new AMapLocationUtils(getApplicationContext(), new AMapLocationUtils.LocationListener() {
+            @Override
+            public void onLocationBack(String result) {
+                Logger.e(result);
+            }
+        });
+        location.startLocation();
     }
 
     @Override
