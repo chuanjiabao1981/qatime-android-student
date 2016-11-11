@@ -64,7 +64,7 @@ public class CitySelectActivity extends BaseActivity {
     }
 
     private void initData() {
-        final DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,
                 new VolleyListener(this) {
                     @Override
                     protected void onSuccess(JSONObject response) {

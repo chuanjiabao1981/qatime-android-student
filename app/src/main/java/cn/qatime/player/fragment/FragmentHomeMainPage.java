@@ -4,11 +4,13 @@ package cn.qatime.player.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -36,13 +38,16 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.ClassRecommendBean;
 import cn.qatime.player.bean.TeacherRecommendBean;
+import cn.qatime.player.utils.AMapLocationUtils;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
+import libraryextra.bean.CityBean;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.SPUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.TagViewPager;
@@ -65,6 +70,9 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private GridView gridviewSubject;
     private View citySelect;
     private TextView cityName;
+    private List<CityBean.Data> list = new ArrayList<>();
+    private List<CityBean.Data> listCity;
+    private CityBean.Data locationCity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -86,6 +94,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
         cityName.setText(BaseApplication.getCurrentCity().getName());
 
+        initLocationData();
         initTagImg();
         initTagViewpagerSubject();
         initGridTeacher();
@@ -327,5 +336,95 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         if (resultCode == Constant.RESPONSE_CITY_SELECT) {
             cityName.setText(BaseApplication.getCurrentCity().getName());
         }
+    }
+
+
+    private void initLocationData() {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,
+                new VolleyListener(getActivity()) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        CityBean cityBean = JsonUtils.objectFromJson(response.toString(), CityBean.class);
+                        if (cityBean != null && cityBean.getData() != null) {
+                            listCity = cityBean.getData();
+                            new Thread(){
+                                @Override
+                                public void run() {
+                                    AMapLocationUtils utils = new AMapLocationUtils(getActivity(), new AMapLocationUtils.LocationListener() {
+                                        @Override
+                                        public void onLocationBack(String result) {
+                                            if (result.length() > 0 && result.endsWith("市")) {
+                                                result = result.substring(0, result.length() - 1);
+                                            }
+                                            listCity.add(new CityBean.Data("北京"));
+                                            for (CityBean.Data item : listCity) {
+                                                if (result.equals(item.getName())) {
+                                                    locationCity = item;
+                                                }
+                                            }
+                                            CityBean.Data currentCity = SPUtils.getObject(getActivity(), "current_city", CityBean.Data.class);
+                                            if (currentCity == null) {
+                                                if (locationCity == null) {//如果没有被赋值，则默认全国
+                                                    locationCity = new CityBean.Data("全国");
+                                                    BaseApplication.setCurrentCity(locationCity);
+                                                    cityName.setText(BaseApplication.getCurrentCity().getName());
+                                                } else {
+                                                    dialogCity();
+                                                }
+                                            }
+                                        }
+                                    });
+                                    utils.startLocation();
+                                }
+                            }.start();
+                        }
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
+    }
+
+    private void dialogCity() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        View view = View.inflate(getActivity(), R.layout.dialog_cancel_or_confirm, null);
+        TextView text = (TextView) view.findViewById(R.id.text);
+        text.setText("答疑时间已开通本地工作站，是否\n切换城市为" + locationCity.getName() + "？");
+        Button cancel = (Button) view.findViewById(R.id.cancel);
+        Button confirm = (Button) view.findViewById(R.id.confirm);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                // TODO: 2016/11/11 切换为全国
+                locationCity = new CityBean.Data("全国");
+                BaseApplication.setCurrentCity(locationCity);
+                cityName.setText(BaseApplication.getCurrentCity().getName());
+            }
+        });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                BaseApplication.setCurrentCity(locationCity);
+                cityName.setText(BaseApplication.getCurrentCity().getName());
+            }
+        });
+        alertDialog.show();
+        alertDialog.setContentView(view);
     }
 }
