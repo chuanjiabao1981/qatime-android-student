@@ -95,6 +95,7 @@ public class FragmentClassTableClosed extends BaseFragment {
                     e.printStackTrace();
                 }
                 helper.setText(R.id.live_time, item.getLive_time());
+                helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
                 helper.getView(R.id.enter).setVisibility(StringUtils.isNullOrBlanK(item.getPull_address()) ? View.GONE : View.VISIBLE);

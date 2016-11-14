@@ -82,9 +82,18 @@ public class ClassTimeTableBean implements Serializable {
             private String course_name;
             private String course_publicize;
             private String subject;
+            private String grade;
             private String pull_address;
             private String teacher_name;
             private String course_id;
+
+            public String getGrade() {
+                return grade;
+            }
+
+            public void setGrade(String grade) {
+                this.grade = grade;
+            }
 
             public String getCourse_id() {
                 return course_id;
