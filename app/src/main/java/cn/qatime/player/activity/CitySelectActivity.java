@@ -2,9 +2,11 @@ package cn.qatime.player.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
@@ -36,7 +38,7 @@ import libraryextra.view.SideBar;
  * @date 2016/11/9 19:54
  * @Description:
  */
-public class CitySelectActivity extends BaseActivity {
+public class CitySelectActivity extends BaseActivity implements View.OnClickListener {
     private TextView currentCity;
     private TextView textDialog;
     private ListView listView;
@@ -46,12 +48,16 @@ public class CitySelectActivity extends BaseActivity {
     private ArrayList<String> listLately;
     private CityBean.Data locationCity;
     private AMapLocationUtils utils;
+    private View locationView;
 
     private void assignViews() {
         currentCity = (TextView) findViewById(R.id.current_city);
         textDialog = (TextView) findViewById(R.id.text_dialog);
         listView = (ListView) findViewById(R.id.listView);
         sidebar = (SideBar) findViewById(R.id.sidebar);
+        locationView = findViewById(R.id.location);
+
+        locationView.setOnClickListener(this);
     }
 
     @Override
@@ -72,41 +78,6 @@ public class CitySelectActivity extends BaseActivity {
                         CityBean cityBean = JsonUtils.objectFromJson(response.toString(), CityBean.class);
                         if (cityBean != null && cityBean.getData() != null) {
                             list.clear();
-//                            list.add(new CityBean.Data("北京"));
-//                            list.add(new CityBean.Data("我"));
-//                            list.add(new CityBean.Data("额"));
-//                            list.add(new CityBean.Data("人"));
-//                            list.add(new CityBean.Data("人"));
-//                            list.add(new CityBean.Data("天"));
-//                            list.add(new CityBean.Data("有"));
-//                            list.add(new CityBean.Data("u"));
-//                            list.add(new CityBean.Data("i"));
-//                            list.add(new CityBean.Data("哦"));
-//                            list.add(new CityBean.Data("哦"));
-//                            list.add(new CityBean.Data("哦"));
-//                            list.add(new CityBean.Data("票"));
-//                            list.add(new CityBean.Data("啊"));
-//                            list.add(new CityBean.Data("是"));
-//                            list.add(new CityBean.Data("的"));
-//                            list.add(new CityBean.Data("的"));
-//                            list.add(new CityBean.Data("的"));
-//                            list.add(new CityBean.Data("发"));
-//                            list.add(new CityBean.Data("给"));
-//                            list.add(new CityBean.Data("胡"));
-//                            list.add(new CityBean.Data("就"));
-//                            list.add(new CityBean.Data("卡"));
-//                            list.add(new CityBean.Data("了"));
-//                            list.add(new CityBean.Data("了"));
-//                            list.add(new CityBean.Data("中"));
-//                            list.add(new CityBean.Data("下"));
-//                            list.add(new CityBean.Data("才"));
-//                            list.add(new CityBean.Data("才"));
-//                            list.add(new CityBean.Data("v"));
-//                            list.add(new CityBean.Data("v"));
-//                            list.add(new CityBean.Data("不"));
-//                            list.add(new CityBean.Data("能"));
-//                            list.add(new CityBean.Data("能"));
-//                            list.add(new CityBean.Data("没"));
                             list.addAll(cityBean.getData());
                             for (CityBean.Data item : list) {
                                 if (StringUtils.isNullOrBlanK(item.getName())) {
@@ -115,29 +86,6 @@ public class CitySelectActivity extends BaseActivity {
                                     item.setFirstLetter(StringUtils.getPYIndexStr(item.getName().substring(0, 1)));
                                 }
                             }
-                            //如果没有被赋值，则默认全国
-                            utils = new AMapLocationUtils(getApplicationContext(), new AMapLocationUtils.LocationListener() {
-                                @Override
-                                public void onLocationBack(String result) {
-                                    utils.stopLocation();
-                                    if (result.length() > 0 && result.endsWith("市")) {
-                                        result = result.substring(0, result.length() - 1);
-                                    }
-                                    for (CityBean.Data item : list) {
-                                        if (result.equals(item.getName())) {
-                                            locationCity = item;
-                                        }
-                                    }
-                                    if (locationCity == null) {//如果没有被赋值，则默认全国
-                                        locationCity = new CityBean.Data("全国");
-                                    }
-
-                                    Logger.e("location", result);
-                                    Logger.e("locationCity", locationCity.getName());
-                                }
-                            });
-                            utils.startLocation();
-
                             Collections.sort(list, new Comparator<CityBean.Data>() {
                                 @Override
                                 public int compare(CityBean.Data lhs, CityBean.Data rhs) {
@@ -166,6 +114,33 @@ public class CitySelectActivity extends BaseActivity {
         addToRequestQueue(request);
     }
 
+    private void initLocation() {
+        //如果没有被赋值，则默认全国
+        utils = new AMapLocationUtils(getApplicationContext(), new AMapLocationUtils.LocationListener() {
+            @Override
+            public void onLocationBack(String result) {
+                utils.stopLocation();
+                if (result.length() > 0 && result.endsWith("市")) {
+                    result = result.substring(0, result.length() - 1);
+                }
+                for (CityBean.Data item : list) {
+                    if (result.equals(item.getName())) {
+                        locationCity = item;
+                    }
+                }
+                if (locationCity == null) {//如果没有被赋值，则默认全国
+                    locationCity = new CityBean.Data("全国");
+                    Toast.makeText(CitySelectActivity.this, "您所在的地区尚未加盟，已为您切换至全国", Toast.LENGTH_SHORT).show();
+                }
+
+                setCityAndHistory(locationCity);
+                Logger.e("location", result);
+                Logger.e("locationCity", locationCity.getName());
+            }
+        });
+        utils.startLocation();
+    }
+
     private void initView() {
         currentCity.setText(BaseApplication.getCurrentCity().getName());
 
@@ -180,21 +155,7 @@ public class CitySelectActivity extends BaseActivity {
         adapter = new CitySelectAdapter(this, listLately, list, R.layout.item_city_lately, R.layout.item_city_all, R.layout.item_city_list) {
             @Override
             public void setCityName(CityBean.Data data) {
-                currentCity.setText(data.getName());
-                if (listLately.contains(data.getName())) {
-                    listLately.remove(data.getName());
-                    listLately.add(0, data.getName());
-                } else {
-                    listLately.add(0, data.getName());
-                    if (listLately.size() > 8) {
-                        listLately.remove(8);
-                    }
-                }
-//                adapter.notifyDataSetChanged();
-                BaseApplication.setCurrentCity(data);
-                Intent intent = new Intent();
-                setResult(Constant.RESPONSE_CITY_SELECT, intent);
-                finish();
+                setCityAndHistory(data);
             }
         };
         listView.setAdapter(adapter);
@@ -232,9 +193,36 @@ public class CitySelectActivity extends BaseActivity {
         });
     }
 
+    private void setCityAndHistory(CityBean.Data data) {
+        currentCity.setText(data.getName());
+        if (listLately.contains(data.getName())) {
+            listLately.remove(data.getName());
+            listLately.add(0, data.getName());
+        } else {
+            listLately.add(0, data.getName());
+            if (listLately.size() > 8) {
+                listLately.remove(8);
+            }
+        }
+//                adapter.notifyDataSetChanged();
+        BaseApplication.setCurrentCity(data);
+        Intent intent = new Intent();
+        setResult(Constant.RESPONSE_CITY_SELECT, intent);
+        finish();
+    }
+
     @Override
     public void finish() {
         SPUtils.putObject(this, "listLately", listLately);
         super.finish();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.location:
+                initLocation();
+                break;
+        }
     }
 }

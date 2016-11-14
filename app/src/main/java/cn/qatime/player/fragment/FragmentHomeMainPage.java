@@ -357,7 +357,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                                             if (result.length() > 0 && result.endsWith("市")) {
                                                 result = result.substring(0, result.length() - 1);
                                             }
-                                            listCity.add(new CityBean.Data("北京"));
                                             for (CityBean.Data item : listCity) {
                                                 if (result.equals(item.getName())) {
                                                     locationCity = item;
