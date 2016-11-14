@@ -45,6 +45,7 @@ public class CitySelectActivity extends BaseActivity {
     private CitySelectAdapter adapter;
     private ArrayList<String> listLately;
     private CityBean.Data locationCity;
+    private AMapLocationUtils utils;
 
     private void assignViews() {
         currentCity = (TextView) findViewById(R.id.current_city);
@@ -114,9 +115,11 @@ public class CitySelectActivity extends BaseActivity {
                                     item.setFirstLetter(StringUtils.getPYIndexStr(item.getName().substring(0, 1)));
                                 }
                             }
-                            AMapLocationUtils utils = new AMapLocationUtils(getApplicationContext(), new AMapLocationUtils.LocationListener() {
+                            //如果没有被赋值，则默认全国
+                            utils = new AMapLocationUtils(getApplicationContext(), new AMapLocationUtils.LocationListener() {
                                 @Override
                                 public void onLocationBack(String result) {
+                                    utils.stopLocation();
                                     if (result.length() > 0 && result.endsWith("市")) {
                                         result = result.substring(0, result.length() - 1);
                                     }

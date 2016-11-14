@@ -73,6 +73,8 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private List<CityBean.Data> list = new ArrayList<>();
     private List<CityBean.Data> listCity;
     private CityBean.Data locationCity;
+    private AMapLocationUtils locationUtils;
+    private AMapLocationUtils utils;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -94,11 +96,11 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
         cityName.setText(BaseApplication.getCurrentCity().getName());
 
-        initLocationData();
         initTagImg();
         initTagViewpagerSubject();
         initGridTeacher();
         initGridClass();
+        initLocationData();
         refreshTeacher.setOnClickListener(this);
         allClass.setOnClickListener(this);
         message.setOnClickListener(this);
@@ -347,12 +349,11 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                         CityBean cityBean = JsonUtils.objectFromJson(response.toString(), CityBean.class);
                         if (cityBean != null && cityBean.getData() != null) {
                             listCity = cityBean.getData();
-                            new Thread(){
-                                @Override
-                                public void run() {
-                                    AMapLocationUtils utils = new AMapLocationUtils(getActivity(), new AMapLocationUtils.LocationListener() {
+//                                    如果没有被赋值，则默认全国
+                                    utils = new AMapLocationUtils(getActivity(), new AMapLocationUtils.LocationListener() {
                                         @Override
                                         public void onLocationBack(String result) {
+                                            utils.stopLocation();
                                             if (result.length() > 0 && result.endsWith("市")) {
                                                 result = result.substring(0, result.length() - 1);
                                             }
@@ -375,8 +376,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                                         }
                                     });
                                     utils.startLocation();
-                                }
-                            }.start();
                         }
                     }
 
