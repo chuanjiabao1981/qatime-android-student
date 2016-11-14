@@ -19,6 +19,7 @@ import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -141,13 +142,18 @@ public class FragmentClassTableUnclosed extends BaseFragment {
 //                                startActivity(intent);
 //                            }
 //                        });
-                helper.setText(R.id.course, item.getCourse_name());
-                helper.setText(R.id.classname, item.getName());
+//                helper.setText(R.id.course, item.getCourse_name());
+                helper.setText(R.id.classname, item.getName()+" "+item.getCourse_name());
                 helper.setText(R.id.status, getStatus(item.getStatus()));
-                helper.setText(R.id.class_date, item.getClass_date() + " ");
+                try {
+                    Date date = parse.parse(item.getClass_date());
+                    helper.setText(R.id.class_date, date.getMonth() + "-" + date.getDay() + "  ");
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 helper.setText(R.id.live_time, item.getLive_time());
-                helper.setText(R.id.subject, getResourceString(R.string.item_subject) + item.getSubject());
-                helper.setText(R.id.teacher, getResourceString(R.string.item_teacher) + item.getTeacher_name());
+                helper.setText(R.id.subject, item.getSubject());
+                helper.setText(R.id.teacher, "/" + item.getTeacher_name());
                 helper.getView(R.id.enter).setVisibility(StringUtils.isNullOrBlanK(item.getPull_address()) ? View.GONE : View.VISIBLE);
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
