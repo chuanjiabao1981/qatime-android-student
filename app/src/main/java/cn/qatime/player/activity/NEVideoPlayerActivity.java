@@ -126,14 +126,25 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
         id = getIntent().getIntExtra("id", 0);//从前一页进来的id 获取详情用
+        id = 5;
         if (id == 0) {
             Toast.makeText(this, getResourceString(R.string.no_course_information), Toast.LENGTH_SHORT).show();
-            return;
         }
         sessionId = getIntent().getStringExtra("sessionId");
-
+        //TODO
+        sessionId = "7964470";
         String camera = getIntent().getStringExtra("camera");
         String board = getIntent().getStringExtra("board");
+
+        assignViews();
+        initView();
+        getAnnouncementsData();
+        initData();
+
+
+        camera = "http://pullhlsa0a19f55.live.126.net/live/834c6312006e4ffe927795a11fd317af/playlist.m3u8";
+        board = "http://pullhlsa0a19f55.live.126.net/live/834c6312006e4ffe927795a11fd317af/playlist.m3u8";
+//        board = "rtmp://va0a19f55.live.126.net/live/3d8d1d438b554741944ea809f1704a5e";
         if (!StringUtils.isNullOrBlanK(camera)) {
             video2.setVideoPath(camera);
             video2.start();
@@ -142,10 +153,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             video1.setVideoPath(board);
             video1.start();
         }
-        assignViews();
-        initView();
-        getAnnouncementsData();
-        initData();
     }
 
 
@@ -187,10 +194,12 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     }
 
     private void initView() {
-        TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
-        if (team != null) {
-            isMute = team.isMute();
-            floatFragment.setMute(isMute);
+        if (!StringUtils.isNullOrBlanK(sessionId)) {
+            TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
+            if (team != null) {
+                isMute = team.isMute();
+                floatFragment.setMute(isMute);
+            }
         }
 
         inputLayout = findViewById(R.id.input_layout);
@@ -335,6 +344,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     @Override
     protected void onResume() {
         super.onResume();
+        assert danMuController != null;
         danMuController.resume();
         fragment2.registerObservers(true);
         NIMClient.getService(MsgService.class).setChattingAccount(sessionId, sessionType);

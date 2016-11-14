@@ -36,7 +36,7 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.OrderPayBean;
-import cn.qatime.player.bean.TutorialClassBean;
+import libraryextra.bean.TutorialClassBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;

@@ -73,8 +73,8 @@ public class ClassTimeTableBean implements Serializable {
             private String course_publicize;
             private String subject;
             private String chat_team_id;
-            private String board;
-            private String camera;
+            private String board_pull_stream;
+            private String camera_pull_stream;
             private String teacher_name;
             private String course_id;
 
@@ -159,11 +159,11 @@ public class ClassTimeTableBean implements Serializable {
             }
 
             public String getBoard() {
-                return board;
+                return board_pull_stream;
             }
 
             public String getCamera() {
-                return camera;
+                return camera_pull_stream;
             }
 
             public String getTeacher_name() {
