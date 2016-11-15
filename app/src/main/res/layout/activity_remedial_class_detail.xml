@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <include layout="@layout/layout_backbar"/>
+    <include layout="@layout/layout_backbar" />
 
     <libraryextra.view.StickyNavLayout
         android:layout_width="match_parent"
@@ -20,9 +20,9 @@
 
             <ImageView
                 android:id="@+id/image"
-                android:scaleType="fitXY"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"/>
+                android:layout_height="200dp"
+                android:scaleType="fitXY" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -35,9 +35,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:textSize="16sp"
                     android:textColor="@color/black_translucent"
-                    android:textStyle="bold"/>
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
 
                 <LinearLayout
@@ -54,13 +54,13 @@
                     <View
                         android:layout_width="0dp"
                         android:layout_height="1dp"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1" />
 
                     <TextView
                         android:id="@+id/student_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="12sp"/>
+                        android:textSize="12sp" />
                     <!--已报人数-->
                 </LinearLayout>
 
@@ -69,60 +69,76 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="#ccdccd"/>
+                android:background="#ccdccd" />
         </LinearLayout>
         <!--<libraryextra.view.FragmentLayoutWithLine-->
-            <!--android:id="@+id/fragmentlayout"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent" />-->
+        <!--android:id="@+id/fragmentlayout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
 
         <libraryextra.view.SimpleViewPagerIndicator
             android:id="@+id/id_stickynavlayout_indicator"
-            android:layout_width="match_parent"
             style="@style/tab_item_height"
-            android:background="#ffffff"/>
+            android:layout_width="match_parent"
+            android:background="#ffffff" />
 
         <android.support.v4.view.ViewPager
             android:id="@id/id_stickynavlayout_viewpager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
     </libraryextra.view.StickyNavLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#cccccc"/>
+            android:background="#cccccc" />
 
         <LinearLayout
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="9dp"
-            android:layout_width="match_parent"
-            android:orientation="horizontal"
             android:layout_marginTop="9dp"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp">
 
             <Button
                 android:id="@+id/audition"
                 style="@style/button_style"
                 android:layout_marginRight="6dp"
                 android:enabled="false"
-                android:text="已加入试听"/>
+                android:text="已加入试听" />
 
             <Button
                 android:id="@+id/pay"
                 style="@style/button_style"
                 android:layout_marginLeft="6dp"
                 android:enabled="false"
-                android:text="已购买"/>
+                android:text="立即报名" />
         </LinearLayout>
-    </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/start_study_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="9dp"
+            android:layout_marginTop="9dp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:orientation="horizontal"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp">
+
+            <Button
+                android:id="@+id/start_study"
+                style="@style/button_style"
+                android:text="开始学习" />
+        </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

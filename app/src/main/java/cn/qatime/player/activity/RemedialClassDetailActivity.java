@@ -73,6 +73,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     TextView studentnumber;
     DecimalFormat df = new DecimalFormat("#.00");
     private AlertDialog alertDialog;
+    private Button startStudy;
+    private View startStudyView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,11 +123,14 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
         audition = (Button) findViewById(R.id.audition);
         pay = (Button) findViewById(R.id.pay);
+        startStudy = (Button) findViewById(R.id.start_study);
+        startStudyView =findViewById(R.id.start_study_view);
         title = (TextView) findViewById(R.id.title);
         price = (TextView) findViewById(R.id.price);
         studentnumber = (TextView) findViewById(R.id.student_number);
         audition.setOnClickListener(this);
         pay.setOnClickListener(this);
+        startStudy.setOnClickListener(this);
 
         mIndicator = (SimpleViewPagerIndicator) findViewById(R.id.id_stickynavlayout_indicator);
         mViewPager = (ViewPager) findViewById(R.id.id_stickynavlayout_viewpager);
@@ -188,7 +193,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                             name.setText(data.getData().getName());
                             title.setText(data.getData().getName());
                             RemedialClassDetailActivity.this.price.setText("￥" + price);
-                            studentnumber.setText("已购人数 " + data.getData().getBuy_tickets_count());
+                            studentnumber.setText("报名人数 " + data.getData().getBuy_tickets_count());
                         }
                         if (data != null) {
                             ((FragmentClassDetailClassInfo) fragBaseFragments.get(0)).setData(data);
@@ -207,6 +212,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                                     pay.setEnabled(false);
                                     pay.setText(getResources().getString(R.string.purchased));
                                     audition.setEnabled(false);
+                                    startStudyView.setVisibility(View.VISIBLE);
                                 } else {
                                     pay.setEnabled(true);
                                     pay.setText(getResources().getString(R.string.purchase_now));
@@ -240,6 +246,13 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         switch (v.getId()) {
             case R.id.audition:
                 joinAudition();
+                break;
+            case R.id.start_study:
+                Intent intent = new Intent(RemedialClassDetailActivity.this, NEVideoPlayerActivity.class);
+                intent.putExtra("url", data.getData().getBoard());
+                intent.putExtra("id", data.getData().getId());
+                intent.putExtra("sessionId", data.getData().getChat_team_id());
+                startActivity(intent);
                 break;
             case R.id.pay:
                 if("teaching".equals(data.getData().getStatus())){
