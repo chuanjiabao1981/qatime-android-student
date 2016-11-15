@@ -32,10 +32,8 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.MessageFragmentActivity;
-import cn.qatime.player.activity.NEVideoPlayerActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
-import cn.qatime.player.activity.VideoTest;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.ClassRecommendBean;
 import cn.qatime.player.bean.TeacherRecommendBean;
@@ -313,9 +311,9 @@ public class HomeMainPageF extends BaseFragment implements View.OnClickListener 
                 initTeacherData();
                 break;
             case R.id.message:
-                startActivity(new Intent(getActivity(), NEVideoPlayerActivity.class));
-//                Intent intent = new Intent(getActivity(), MessageFragmentActivity.class);
-//                startActivity(intent);
+//                startActivity(new Intent(getActivity(), NEVideoPlayerActivity.class));
+                Intent intent = new Intent(getActivity(), MessageFragmentActivity.class);
+                startActivity(intent);
                 break;
         }
     }
