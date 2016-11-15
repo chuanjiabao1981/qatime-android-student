@@ -229,7 +229,7 @@
     <string name="item_class_start_date">开课</string>
     <string name="item_class_end_date">结课</string>
     <string name="item_next_class">下一课</string>
-    <string name="item_to_start">距离开课还有</string>
+    <string name="item_to_start">距离开课</string>
     <string name="item_day">天</string>
     <string name="item_subject">科目：</string>
     <string name="item_time">时间</string>

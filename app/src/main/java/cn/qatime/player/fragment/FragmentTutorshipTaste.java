@@ -86,7 +86,7 @@ public class FragmentTutorshipTaste extends BaseFragment {
                 helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
-                helper.getView(R.id.taste).setVisibility(item.isIs_tasting() ? View.VISIBLE : View.GONE);
+                helper.getView(R.id.taste).setVisibility(item.isIs_bought() ? View.GONE:View.VISIBLE);
                 helper.setText(R.id.grade, item.getGrade());
                 String status = item.getStatus();// TODO: 2016/11/15 接口status
                 if ("preview".equals(status)) {

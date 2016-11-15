@@ -83,7 +83,7 @@ public class FragmentTutorshipPreview extends BaseFragment {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                helper.getView(R.id.taste).setVisibility(item.isIs_tasting()?View.VISIBLE:View.GONE);
+                helper.getView(R.id.taste).setVisibility(item.isIs_bought()?View.GONE:View.VISIBLE);
                 helper.setText(R.id.grade, item.getGrade());
             }
         };
