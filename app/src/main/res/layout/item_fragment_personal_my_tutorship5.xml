@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -10,170 +11,151 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/class_start_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="2dp"
-                android:text="开课时间：2017-9-23 15:00"
-                android:textColor="#8e8e8e"
-                android:textSize="13sp"/>
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1"></View>
-
-            <TextView
-                android:id="@+id/class_end_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="2dp"
-                android:text="结课时间：2017-9-23 15:00"
-                android:textColor="#8e8e8e"
-                android:textSize="13sp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/text_background"
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/image"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/photo"/>
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_margin="1px"
+                android:scaleType="fitXY"
+                android:src="@mipmap/photo" />
 
-
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#faf6f6"
-                android:orientation="vertical"
-                android:padding="2dp">
+                android:background="@drawable/text_background">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/taste"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="#ccc"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="试听"
+                            android:textColor="#fff" />
+
+                        <TextView
+                            android:id="@+id/name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="高考考前急速冲刺班相学练班"
+                            android:textColor="#333" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/grade"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="年级"
+                            android:textColor="#666" />
+
+                        <TextView
+                            android:id="@+id/subject"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="科目"
+                            android:textColor="#666" />
+
+                        <TextView
+                            android:id="@+id/teacher"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="/老师"
+                            android:textColor="#666" />
+
+                        <!--<View-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:layout_weight="1" />-->
+
+                        <!--<TextView-->
+                        <!--android:id="@+id/status"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="待上课"-->
+                        <!--android:textColor="#ccc" />-->
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/class_over"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="全部课程已完成"
+                            android:visibility="gone"
+                            android:textColor="#999" />
+
+                        <TextView
+                            android:id="@+id/progress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            android:text="进度0/0" />
+
+                        <TextView
+                            android:id="@+id/teaching_time"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:maxLines="1"
+                            android:visibility="gone"
+                            android:text="距开课还有15天"
+                            android:textSize="13sp" />
+
+                    </LinearLayout>
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:paddingBottom="5dp"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-
-                        android:id="@+id/subject"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="2dp"
-                        android:text="科目："
-                        android:textSize="13sp"/>
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:layout_weight="1"></View>
-
-                    <TextView
-
-                        android:id="@+id/teacher"
-                        android:layout_width="wrap_content"
-
-                        android:layout_height="wrap_content"
-                        android:padding="2dp"
-                        android:text="老师："
-                        android:textSize="13sp"/>
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:layout_weight="1"></View>
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/progress"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="5dp"
-                        android:text="12/99"/>
-
-                    <ProgressBar
-                        android:id="@+id/progressbar"
-                        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
-                        android:layout_width="120dp"
-                        android:progressDrawable="@drawable/progress_horizontal"
-                        android:layout_height="5dp"
-                        android:layout_gravity="center" />
-
-                    <TextView
-                        android:id="@+id/remain_class"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="5dp"
-                        android:text="87"/>
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/next_teaching_time"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:padding="2dp"
-                        android:text="下一课"
-                        android:textColor="#05effc"
-                        android:textSize="13sp"/>
-
-
-                    <ImageView
-                        android:id="@+id/enter"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center"
-                        android:scaleType="centerInside"
-                        android:padding="5dp"
-                        android:src="@mipmap/shopping32"/>
-
-                    <ImageView
-                        android:id="@+id/video"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_gravity="center"
-                        android:scaleType="centerInside"
-                        android:padding="5dp"
-                        android:src="@mipmap/playing"/>
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-
+                    android:id="@+id/enter"
+                    android:layout_width="60dp"
+                    android:layout_height="25dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/shape_text_enter_background"
+                    android:gravity="center"
+                    android:text="进入"
+                    android:textColor="#ff6a00" />
+            </RelativeLayout>
         </LinearLayout>
-
     </LinearLayout>
 </LinearLayout>

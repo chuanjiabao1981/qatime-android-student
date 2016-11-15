@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -70,19 +69,12 @@ public class FragmentTutorshipOver extends BaseFragment {
         adapter = new CommonAdapter<TutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship4) {
             @Override
             public void convert(ViewHolder helper, TutorialClassBean.Data item, int position) {
-
-                helper.setText(R.id.class_start_time, getResourceString(R.string.item_class_start_date)+ item.getLive_start_time());
-
-
-                helper.setText(R.id.class_end_time, getResourceString(R.string.item_class_end_date)+ item.getLive_end_time());
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
-                helper.setText(R.id.subject, getResourceString(R.string.item_subject)+ item.getSubject());
-                helper.setText(R.id.teacher, getResourceString(R.string.item_teacher) + item.getTeacher_name());
-                helper.setText(R.id.progress, item.getCompleted_lesson_count() + "/" + item.getPreset_lesson_count());
-                ((ProgressBar) helper.getView(R.id.progressbar)).setProgress(item.getCompleted_lesson_count());
-                ((ProgressBar) helper.getView(R.id.progressbar)).setMax(item.getPreset_lesson_count());
-                helper.setText(R.id.remain_class, String.valueOf(item.getPreset_lesson_count()-item .getCompleted_lesson_count()));
+                helper.getView(R.id.taste).setVisibility(item.isIs_tasting()?View.VISIBLE:View.GONE);
+                helper.setText(R.id.grade, item.getGrade());
+                helper.setText(R.id.subject,item.getSubject());
+                helper.setText(R.id.teacher,"/"+ item.getTeacher_name());
             }
 
 
