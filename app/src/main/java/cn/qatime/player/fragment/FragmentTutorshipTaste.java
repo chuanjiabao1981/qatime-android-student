@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.NEVideoPlayerActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
@@ -58,7 +59,6 @@ public class FragmentTutorshipTaste extends BaseFragment {
 
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
-        listView.getRefreshableView().setDividerHeight(1);
         listView.setMode(PullToRefreshBase.Mode.BOTH);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
@@ -70,6 +70,18 @@ public class FragmentTutorshipTaste extends BaseFragment {
         adapter = new CommonAdapter<TutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship5) {
             @Override
             public void convert(ViewHolder helper, final TutorialClassBean.Data item, int position) {
+                helper.getView(R.id.enter).setVisibility((item.isIs_bought()||item.isIs_tasting() )? View.GONE : View.VISIBLE);
+                helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
+                        intent.putExtra("url", item.getBoard());
+                        intent.putExtra("id", item.getId());
+                        intent.putExtra("sessionId", item.getChat_team_id());
+                        startActivity(intent);
+                    }
+                });
+
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.subject, item.getSubject());

@@ -57,7 +57,6 @@ public class FragmentTutorshipPreview extends BaseFragment {
 
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
-        listView.getRefreshableView().setDividerHeight(1);
         listView.setMode(PullToRefreshBase.Mode.BOTH);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));

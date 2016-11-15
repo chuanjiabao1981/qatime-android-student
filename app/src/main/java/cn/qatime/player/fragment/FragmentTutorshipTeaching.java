@@ -58,7 +58,6 @@ public class FragmentTutorshipTeaching extends BaseFragment {
 
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
-        listView.getRefreshableView().setDividerHeight(1);
         listView.setMode(PullToRefreshBase.Mode.BOTH);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
@@ -70,7 +69,7 @@ public class FragmentTutorshipTeaching extends BaseFragment {
         adapter = new CommonAdapter<TutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship3) {
             @Override
             public void convert(ViewHolder helper, final TutorialClassBean.Data item, int position) {
-                helper.getView(R.id.enter).setVisibility(item.isIs_bought() ? View.GONE : View.VISIBLE);
+//                helper.getView(R.id.enter).setVisibility(item.isIs_bought() ? View.GONE : View.VISIBLE);
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
