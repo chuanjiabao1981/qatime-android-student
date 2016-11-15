@@ -167,7 +167,7 @@ public class TeacherDataActivity extends BaseActivity {
         map.put("sort_by", "");
         try {
             map.put("subject", URLEncoder.encode(subject.getText().toString(), "UTF-8"));
-            map.put("grade", URLEncoder.encode(category.getText().toString(), "UTF-8"));
+//            map.put("grade", URLEncoder.encode(category.getText().toString(), "UTF-8"));
             // TODO: 2016/11/15 等待接口 通过category查询辅导班
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
