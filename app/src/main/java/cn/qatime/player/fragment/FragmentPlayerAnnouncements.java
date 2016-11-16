@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
-import cn.qatime.player.bean.Announcements;
+import libraryextra.bean.Announcements;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import cn.qatime.player.base.BaseFragment;
