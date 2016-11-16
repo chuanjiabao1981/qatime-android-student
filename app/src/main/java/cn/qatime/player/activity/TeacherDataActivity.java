@@ -17,6 +17,7 @@ import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -63,6 +64,8 @@ public class TeacherDataActivity extends BaseActivity {
     private GridViewForScrollView gridSame;
     private CommonAdapter<RemedialClassBean.Data> adapter2;
     private PullToRefreshScrollView scroll;
+    private CommonAdapter<TeacherDataBean.DataBean.Course> adapter;
+    private DecimalFormat df = new DecimalFormat("#.00");
 
     private void assignViews() {
         scroll = (PullToRefreshScrollView) findViewById(R.id.scroll);
@@ -114,9 +117,14 @@ public class TeacherDataActivity extends BaseActivity {
                     return;
                 }
                 Glide.with(TeacherDataActivity.this).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.image)));
+                helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.course_title, item.getName());
-                helper.setText(R.id.count, String.valueOf(item.getBuy_tickets_count()) + "人已购买");
+                String price = df.format(item.getPrice());
+                if (price.startsWith(".")) {
+                    price = "0" + price;
+                }
+                helper.setText(R.id.price, "￥" + price);
             }
         };
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
