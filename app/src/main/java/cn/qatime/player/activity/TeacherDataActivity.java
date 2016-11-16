@@ -146,9 +146,14 @@ public class TeacherDataActivity extends BaseActivity {
                     return;
                 }
                 Glide.with(TeacherDataActivity.this).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.image)));
+                helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.course_title, item.getName());
-                helper.setText(R.id.count, String.valueOf(item.getBuy_tickets_count()) + "人已购买");
+                String price = df.format(item.getPrice());
+                if (price.startsWith(".")) {
+                    price = "0" + price;
+                }
+                helper.setText(R.id.price, "￥" + price);
             }
         };
         gridSame.setOnItemClickListener(new AdapterView.OnItemClickListener() {
