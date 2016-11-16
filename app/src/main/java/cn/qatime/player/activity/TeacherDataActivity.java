@@ -17,6 +17,7 @@ import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +55,7 @@ public class TeacherDataActivity extends BaseActivity {
     private TextView town;
     private int page = 0;
     private CommonAdapter<TeacherDataBean.DataBean.Course> adapter;
+    private DecimalFormat df = new DecimalFormat("#.00");
 
     private void assignViews() {
         PullToRefreshScrollView scroll = (PullToRefreshScrollView) findViewById(R.id.scroll);
@@ -94,9 +96,14 @@ public class TeacherDataActivity extends BaseActivity {
                     return;
                 }
                 Glide.with(TeacherDataActivity.this).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.image)));
+                helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.course_title, item.getName());
-                helper.setText(R.id.count, String.valueOf(item.getBuy_tickets_count()) + "人已购买");
+                String price = df.format(item.getPrice());
+                if (price.startsWith(".")) {
+                    price = "0" + price;
+                }
+                helper.setText(R.id.price, "￥" + price);
             }
         };
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -189,11 +196,11 @@ public class TeacherDataActivity extends BaseActivity {
     private String getTeachingYear(String teaching_years) {
         switch (teaching_years) {
             case "within_three_years":
-                return getResourceString(R.string.within_three_years)+"教龄";
+                return getResourceString(R.string.within_three_years) + "教龄";
             case "within_ten_years":
-                return getResourceString(R.string.within_ten_years)+"教龄";
+                return getResourceString(R.string.within_ten_years) + "教龄";
             case "within_twenty_years":
-                return getResourceString(R.string.within_twenty_years)+"教龄";
+                return getResourceString(R.string.within_twenty_years) + "教龄";
         }
         return "";
     }

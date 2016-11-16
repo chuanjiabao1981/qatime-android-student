@@ -166,8 +166,25 @@ public class TeacherDataBean {
 
             private String subject;
             private int buy_tickets_count;
-
+            private String grade;
             private String publicize;
+            private double price;
+
+            public double getPrice() {
+                return price;
+            }
+
+            public void setPrice(double price) {
+                this.price = price;
+            }
+
+            public String getGrade() {
+                return grade;
+            }
+
+            public void setGrade(String grade) {
+                this.grade = grade;
+            }
 
             public int getId() {
                 return id;
