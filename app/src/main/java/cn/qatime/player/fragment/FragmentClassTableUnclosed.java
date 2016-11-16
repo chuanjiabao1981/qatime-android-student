@@ -118,7 +118,6 @@ public class FragmentClassTableUnclosed extends BaseFragment {
 
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
-        listView.getRefreshableView().setDividerHeight(2);
         listView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
@@ -152,6 +151,7 @@ public class FragmentClassTableUnclosed extends BaseFragment {
                     e.printStackTrace();
                 }
                 helper.setText(R.id.live_time, item.getLive_time());
+                // TODO: 2016/11/16 接口暂无年级 
                 helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
