@@ -70,7 +70,6 @@ public class FragmentTutorshipToday extends BaseFragment {
         listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResourceString(R.string.loading));
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
-
         adapter = new CommonAdapter<TutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship1) {
             @Override
             public void convert(ViewHolder helper, final TutorialClassBean.Data item, int position) {

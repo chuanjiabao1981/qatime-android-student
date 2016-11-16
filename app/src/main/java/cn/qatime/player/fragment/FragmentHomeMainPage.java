@@ -110,7 +110,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private void initTagImg() {
         final int imageIds[] = {R.mipmap.banner, R.mipmap.banner2, R.mipmap.banner3};
         tagViewpagerImg.init(R.drawable.shape_photo_tag_select, R.drawable.shape_photo_tag_nomal, 16, 8, 4, 30);
-        tagViewpagerImg.setAutoNext(true, 7000);
+        tagViewpagerImg.setAutoNext(true, 3000);
 //        viewPager.setId(1252);
         tagViewpagerImg.setOnGetView(new TagViewPager.OnGetView() {
             @Override

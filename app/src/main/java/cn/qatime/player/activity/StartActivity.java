@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -150,7 +151,7 @@ StartActivity extends BaseActivity implements View.OnClickListener {
                 DownFileUtil downFileUtil = new DownFileUtil(this, downLoadLinks, "qatime.apk", "", "qatime.apk") {
                     @Override
                     public void downOK() {
-                        DownFileUtil.insertAPK("", getApplicationContext());
+                        DownFileUtil.insertAPK(Environment.getExternalStorageDirectory() + "/qatime.apk", getApplicationContext());
                     }
 
                     @Override
