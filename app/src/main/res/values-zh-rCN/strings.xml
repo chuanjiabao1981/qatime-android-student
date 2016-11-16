@@ -186,13 +186,13 @@
     <string name="grade_type">授课类型：</string>
     <!--//课程详情2-->
     <string name="teacher_name">老师姓名：</string>
-    <string name="teacher_years">执教年龄：</string>
+    <string name="teacher_years">◇ 执教年龄 </string>
     <string name="within_three_years">3年以内</string>
     <string name="within_ten_years">3-10年</string>
     <string name="more_than_ten_years">20年以上</string>
     <string name="within_twenty_years">10-20年</string>
     <string name="teacher_subject">授课科目：</string>
-    <string name="teacher_school">所在学校：</string>
+    <string name="teacher_school">◇ 所在学校 </string>
     <string name="teacher_introduction">自我介绍：</string>
     <!--课程状态-->
     <string name="class_teaching">直播中</string>

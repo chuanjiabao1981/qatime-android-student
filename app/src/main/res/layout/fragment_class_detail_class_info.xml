@@ -19,14 +19,15 @@
 
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
 
@@ -34,111 +35,97 @@
                     android:id="@+id/subject"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="3dp"
-
-                    android:text="科目类型：" />
-
-                <TextView
-                    android:id="@+id/teacher"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="3dp"
-                    android:text="授课老师：" />
+                    android:padding="6dp"
+                    android:text="◇ 地理" />
 
                 <TextView
-                    android:id="@+id/progress"
+                    android:id="@+id/total_class"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="3dp"
-                    android:text="课程进度：" />
+                    android:padding="6dp"
+                    android:text="◇ 共14课" />
+
 
             </LinearLayout>
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/grade"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="3dp"
-                    android:text="年级类型：" />
+                    android:padding="6dp"
+                    android:text="◇ 高一" />
+
 
                 <TextView
-                    android:id="@+id/total_class"
+                    android:id="@+id/class_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="3dp"
-                    android:text="课时总数：" />
-
-                <TextView
-                    android:id="@+id/remain_class"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="3dp"
-                    android:text="剩余课时：" />
+                    android:padding="6dp"
+                    android:text="◇ 在线直播" />
 
             </LinearLayout>
 
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="6dp"
+                android:text="◇ " />
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/clock"
+                android:layout_height="14dp" />
             <TextView
                 android:id="@+id/class_start_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="3dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:paddingRight="6dp"
+                android:text="2016-05-03" />
 
-                android:text="开课时间：" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="至" />
 
             <TextView
                 android:id="@+id/class_end_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="3dp"
-                android:text="结课时间：" />
-
-            <!--<TextView-->
-            <!--android:id="@+id/teach_way"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:padding="3dp"-->
-            <!--android:text="授课方式：" />-->
-
+                android:padding="6dp"
+                android:text="2016-08-08" />
         </LinearLayout>
-
-
         <TextView
-            android:id="@+id/status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="3dp"
-            android:text="当前状态：" />
-
-
+            android:paddingTop="6dp"
+            android:paddingLeft="6dp"
+            android:text="◇ 课程简介：" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:padding="3dp">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
-                android:text="@string/profiles_class" />
+                android:visibility="invisible"
+                android:paddingLeft="6dp"
+                android:text="◇ " />
 
             <TextView
                 android:id="@+id/describe"

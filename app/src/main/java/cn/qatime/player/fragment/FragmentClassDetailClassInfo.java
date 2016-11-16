@@ -7,29 +7,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.bean.RemedialClassDetailBean;
+import libraryextra.utils.StringUtils;
 
 public class FragmentClassDetailClassInfo extends BaseFragment {
 
-    TextView describe;
-//    TextView name;
-    TextView classstarttime;
-    TextView subject;
-    TextView grade;
-    TextView status;
-    TextView classendtime;
-    TextView teacher;
-    TextView totalclass;
-    TextView remainclass;
-    //    TextView teachway;
-    TextView progress;
-    RemedialClassDetailBean data;
-    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
+        TextView describe;
+        TextView classStartTime;
+        TextView classEndTime;
+        TextView subject;
+        TextView grade;
+        TextView totalclass;
+        TextView classType;
+        TextView progress;
+        RemedialClassDetailBean data;
+        private SimpleDateFormat parse1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        private SimpleDateFormat parse2 = new SimpleDateFormat("yyyy-MM-dd");
+        private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
 
 
     @Nullable
@@ -44,41 +43,26 @@ public class FragmentClassDetailClassInfo extends BaseFragment {
 
     private void initview(View view) {
         subject = (TextView) view.findViewById(R.id.subject);
-        classstarttime = (TextView) view.findViewById(R.id.class_start_time);
         grade = (TextView) view.findViewById(R.id.grade);
-        status = (TextView) view.findViewById(R.id.status);
-        describe = (TextView) view.findViewById(R.id.describe);
-        classendtime = (TextView) view.findViewById(R.id.class_end_time);
-        teacher = (TextView) view.findViewById(R.id.teacher);
-        progress = (TextView) view.findViewById(R.id.progress);
+        classStartTime = (TextView) view.findViewById(R.id.class_start_time);
+        classEndTime = (TextView) view.findViewById(R.id.class_end_time);
         totalclass = (TextView) view.findViewById(R.id.total_class);
-        remainclass = (TextView) view.findViewById(R.id.remain_class);
+        describe = (TextView) view.findViewById(R.id.describe);
+        classType = (TextView) view.findViewById(R.id.class_type);
     }
 
-    public void setData(RemedialClassDetailBean data) {
-        RemedialClassDetailBean.Data bean = data.getData();
-        if (bean != null) {
-
-//            name.setText(getResourceString(R.string.class_name) + bean.getName());
-            subject.setText(getResourceString(R.string.subject_type) + bean.getSubject());
-            teacher.setText(getResourceString(R.string.teacher) + bean.getTeacher().getName());
-            progress.setText(getResourceString(R.string.progress) + bean.getCompleted_lesson_count() + "/" + bean.getPreset_lesson_count());
-            classstarttime.setText(getResourceString(R.string.class_start_time) + bean.getLive_start_time());
-            classendtime.setText(getResourceString(R.string.class_end_time) + bean.getLive_end_time());
-
-//            teachway.setText(getResourceString(R.string.teach_way));
-            grade.setText(getResourceString(R.string.grade_type) + bean.getGrade());
-            totalclass.setText(getResourceString(R.string.total_class_hours) + bean.getPreset_lesson_count());
-            remainclass.setText(getResourceString(R.string.remain_class) + (bean.getPreset_lesson_count() - bean.getCompleted_lesson_count()));
-            if (bean.getStatus().equals("preview")) {
-                status.setText(getResourceString(R.string.status_preview));
-            } else if (bean.getStatus().equals("teaching")) {
-                status.setText(getResourceString(R.string.status_teaching));
-            } else {
-                status.setText(getResourceString(R.string.status_over));
+    public void setData(RemedialClassDetailBean bean) {
+        if (bean != null && bean.getData()!=null) {
+            subject.setText("◇ " + (bean.getData().getSubject() == null ? "" : bean.getData().getSubject()));
+            try {
+                classStartTime.setText((bean.getData().getLive_start_time() == null ? "" : parse2.format(parse1.parse(bean.getData().getLive_start_time()))));
+                classEndTime.setText(parse2.format(parse1.parse(bean.getData().getLive_end_time())));
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-
-            describe.setText(bean.getDescription());
+            grade.setText("◇ " + (bean.getData().getGrade() == null ? "" : bean.getData().getGrade()));
+            totalclass.setText("◇ 共" + bean.getData().getPreset_lesson_count() + "课");
+            describe.setText(StringUtils.isNullOrBlanK(bean.getData().getDescription())?"暂无简介":bean.getData().getDescription());
         }
     }
 }

@@ -13,11 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
+import cn.qatime.player.base.BaseFragment;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import cn.qatime.player.base.BaseFragment;
 import libraryextra.bean.RemedialClassDetailBean;
-import libraryextra.utils.StringUtils;
 
 public class FragmentClassDetailClassList extends BaseFragment {
     private CommonAdapter<RemedialClassDetailBean.Lessons> adapter;
@@ -38,11 +37,11 @@ public class FragmentClassDetailClassList extends BaseFragment {
     private void initview(View view) {
         ListView listView = (ListView) view.findViewById(R.id.id_stickynavlayout_innerscrollview);
         listView.setDividerHeight(0);
+        listView.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
         adapter = new CommonAdapter<RemedialClassDetailBean.Lessons>(getActivity(), list, R.layout.item_fragment_remedial_class_detail3) {
 
             @Override
             public void convert(ViewHolder holder, RemedialClassDetailBean.Lessons item, int position) {
-                holder.setText(R.id.number, StringUtils.Int2String(position + 1));
                 holder.setText(R.id.name, item.getName());
                 holder.setText(R.id.live_time, item.getLive_time());
                 if (item.getStatus().equals("teaching")) {//直播中
