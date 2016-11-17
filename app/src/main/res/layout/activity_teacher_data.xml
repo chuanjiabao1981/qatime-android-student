@@ -213,11 +213,10 @@
                 android:id="@+id/describe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="3dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:paddingTop="3dp"
-                android:text="自我介绍描述..." />
+                android:text="自我介绍描述..."
+                android:textColor="#999" />
 
             <View
                 android:layout_width="match_parent"
@@ -260,19 +259,21 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="140dp"
+                    android:paddingLeft="10dp"
                     android:gravity="center"
+                    android:paddingRight="10dp"
                     android:text="暂无课程"
-                    android:textColor="#000" />
+                    android:textColor="#999" />
 
                 <libraryextra.view.GridViewForScrollView
                     android:id="@+id/grid"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="#fff"
                     android:cacheColorHint="@null"
                     android:horizontalSpacing="10dp"
                     android:numColumns="2"
-                    android:background="#fff"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:scrollbars="none"
@@ -321,19 +322,22 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="140dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
                     android:gravity="center"
+                    android:layout_marginBottom="10dp"
                     android:text="暂无相似课程"
-                    android:textColor="#000" />
+                    android:textColor="#999" />
 
                 <libraryextra.view.GridViewForScrollView
                     android:id="@+id/grid_same"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="#fff"
                     android:cacheColorHint="@null"
                     android:horizontalSpacing="10dp"
                     android:numColumns="2"
-                    android:background="#fff"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:scrollbars="none"

@@ -34,6 +34,7 @@ import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.RemedialClassBean;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.GridViewForScrollView;
@@ -247,7 +248,8 @@ public class TeacherDataActivity extends BaseActivity {
                                     setTitle(name);
                                     TeacherDataActivity.this.name.setText(name);
                                 }
-                                describe.setText(bean.getData().getDesc());
+                                String desc = bean.getData().getDesc();
+                                describe.setText(StringUtils.isNullOrBlanK(desc)?"暂无":desc);
                                 teachAge.setText(getTeachingYear(bean.getData().getTeaching_years()));
                                 category.setText(bean.getData().getCategory());
                                 subject.setText(bean.getData().getSubject());
