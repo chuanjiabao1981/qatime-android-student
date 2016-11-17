@@ -60,7 +60,7 @@ import libraryextra.view.SimpleViewPagerIndicator;
 public class RemedialClassDetailActivity extends BaseFragmentActivity implements View.OnClickListener {
     ImageView image;
     private int id;
-    private String[] mTitles = new String[]{"辅导概况", "教师资料", "课程列表"};
+    private String[] mTitles = new String[]{"辅导概况", "教师资料", "课程安排"};
     private SimpleViewPagerIndicator mIndicator;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
     private Button audition;
@@ -216,6 +216,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                                     timeToStart.setVisibility(View.GONE);
                                     layoutView.setBackgroundColor(0xff66cccc);
                                     progress.setText("[进度" + data.getData().getCompleted_lesson_count() + "/" + data.getData().getPreset_lesson_count() + "]");
+                                }else{
+                                    layoutView.setVisibility(View.GONE);
                                 }
                             } catch (ParseException e) {
                                 e.printStackTrace();
