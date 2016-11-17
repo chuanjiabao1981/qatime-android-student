@@ -94,7 +94,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         gridviewClass = (GridView) view.findViewById(R.id.gridview_class);
         message = (ImageView) view.findViewById(R.id.message);
 
-        cityName.setText(BaseApplication.getCurrentCity().getName());
+        setCity();
 
         initTagImg();
         initTagViewpagerSubject();
@@ -105,6 +105,13 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         allClass.setOnClickListener(this);
         message.setOnClickListener(this);
         citySelect.setOnClickListener(this);
+    }
+
+    private void setCity() {
+        cityName.setText(BaseApplication.getCurrentCity().getName());
+        page = 1;//重置为第一页
+        initTeacherData();
+        initClassData();
     }
 
     private void initTagImg() {
@@ -156,7 +163,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     }
 
     private void initGridTeacher() {
-        initTeacherData();
         teacherAdapter = new CommonAdapter<TeacherRecommendBean.DataBean>(getContext(), listRecommendTeacher, R.layout.item_grid_teacher) {
             @Override
             public int getCount() {
@@ -183,6 +189,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private void initTeacherData() {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(page));
+        map.put("city_id", BaseApplication.getCurrentCity().getId() + "");
         map.put("per_page", String.valueOf(5));
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecommend + "index_teacher_recommend" + "/items", map), null,
                 new VolleyListener(getActivity()) {
@@ -197,7 +204,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                         } else {
                             if (page != 1) {
                                 page = 1;
-                                initGridTeacher();
+                                initTeacherData();
                             } else {
                                 Toast.makeText(getActivity(), "没有更多推荐信息", Toast.LENGTH_SHORT).show();
                             }
@@ -223,7 +230,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     }
 
     private void initGridClass() {
-        initClassData();
         classAdapter = new CommonAdapter<ClassRecommendBean.DataBean>(getContext(), listRecommendClass, R.layout.item_class_recommend) {
             @Override
             public int getCount() {
@@ -277,6 +283,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private void initClassData() {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(1));
+        map.put("city_id", BaseApplication.getCurrentCity().getId() + "");
         map.put("per_page", String.valueOf(6));
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecommend + "index_live_studio_course_recommend" + "/items", map), null,
                 new VolleyListener(getActivity()) {
@@ -284,6 +291,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     protected void onSuccess(JSONObject response) {
                         ClassRecommendBean classRecommendBean = JsonUtils.objectFromJson(response.toString(), ClassRecommendBean.class);
                         if (classRecommendBean != null && classRecommendBean.getData() != null) {
+                            listRecommendClass.clear();
                             listRecommendClass.addAll(classRecommendBean.getData());
                             classAdapter.notifyDataSetChanged();
                         }
@@ -336,7 +344,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Constant.RESPONSE_CITY_SELECT) {
-            cityName.setText(BaseApplication.getCurrentCity().getName());
+            setCity();
         }
     }
 
@@ -350,31 +358,31 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                         if (cityBean != null && cityBean.getData() != null) {
                             listCity = cityBean.getData();
 //                                    如果没有被赋值，则默认全国
-                                    utils = new AMapLocationUtils(getActivity(), new AMapLocationUtils.LocationListener() {
-                                        @Override
-                                        public void onLocationBack(String result) {
-                                            utils.stopLocation();
-                                            if (result.length() > 0 && result.endsWith("市")) {
-                                                result = result.substring(0, result.length() - 1);
-                                            }
-                                            for (CityBean.Data item : listCity) {
-                                                if (result.equals(item.getName())) {
-                                                    locationCity = item;
-                                                }
-                                            }
-                                            CityBean.Data currentCity = SPUtils.getObject(getActivity(), "current_city", CityBean.Data.class);
-                                            if (currentCity == null) {
-                                                if (locationCity == null) {//如果没有被赋值，则默认全国
-                                                    locationCity = new CityBean.Data("全国");
-                                                    BaseApplication.setCurrentCity(locationCity);
-                                                    cityName.setText(BaseApplication.getCurrentCity().getName());
-                                                } else {
-                                                    dialogCity();
-                                                }
-                                            }
+                            utils = new AMapLocationUtils(getActivity(), new AMapLocationUtils.LocationListener() {
+                                @Override
+                                public void onLocationBack(String result) {
+                                    utils.stopLocation();
+                                    if (result.length() > 0 && result.endsWith("市")) {
+                                        result = result.substring(0, result.length() - 1);
+                                    }
+                                    for (CityBean.Data item : listCity) {
+                                        if (result.equals(item.getName())) {
+                                            locationCity = item;
                                         }
-                                    });
-                                    utils.startLocation();
+                                    }
+                                    CityBean.Data currentCity = SPUtils.getObject(getActivity(), "current_city", CityBean.Data.class);
+                                    if (currentCity == null) {
+                                        if (locationCity == null) {//如果没有被赋值，则默认全国
+                                            locationCity = new CityBean.Data("全国");
+                                            BaseApplication.setCurrentCity(locationCity);
+                                            setCity();
+                                        } else {
+                                            dialogCity();
+                                        }
+                                    }
+                                }
+                            });
+                            utils.startLocation();
                         }
                     }
 
@@ -411,7 +419,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 // TODO: 2016/11/11 切换为全国
                 locationCity = new CityBean.Data("全国");
                 BaseApplication.setCurrentCity(locationCity);
-                cityName.setText(BaseApplication.getCurrentCity().getName());
+                setCity();
             }
         });
         confirm.setOnClickListener(new View.OnClickListener() {
@@ -419,7 +427,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             public void onClick(View v) {
                 alertDialog.dismiss();
                 BaseApplication.setCurrentCity(locationCity);
-                cityName.setText(BaseApplication.getCurrentCity().getName());
+                setCity();
             }
         });
         alertDialog.show();
