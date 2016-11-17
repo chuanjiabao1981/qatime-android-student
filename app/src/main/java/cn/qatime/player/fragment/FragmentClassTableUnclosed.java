@@ -148,13 +148,13 @@ public class FragmentClassTableUnclosed extends BaseFragment {
                 helper.setText(R.id.live_time, item.getLive_time());
                 helper.setText(R.id.subject, getResourceString(R.string.item_subject) + item.getSubject());
                 helper.setText(R.id.teacher, getResourceString(R.string.item_teacher) + item.getTeacher_name());
-                helper.getView(R.id.enter).setVisibility(StringUtils.isNullOrBlanK(item.getPull_address()) ? View.GONE : View.VISIBLE);
+                helper.getView(R.id.enter).setVisibility(StringUtils.isNullOrBlanK(item.getBoard()) ? View.GONE : View.VISIBLE);
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
                         intent.putExtra("id", item.getId());
-                        intent.putExtra("url", item.getPull_address());
+                        intent.putExtra("board", item.getBoard());
                         startActivity(intent);
                     }
                 });

@@ -4,11 +4,13 @@ package cn.qatime.player.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -27,19 +29,25 @@ import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.CitySelectActivity;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.MessageFragmentActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.ClassRecommendBean;
 import cn.qatime.player.bean.TeacherRecommendBean;
+import cn.qatime.player.utils.AMapLocationUtils;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
+import libraryextra.bean.CityBean;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.SPUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.TagViewPager;
@@ -60,6 +68,13 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private ArrayList<TeacherRecommendBean.DataBean> listRecommendTeacher = new ArrayList<>();
     private CommonAdapter<TeacherRecommendBean.DataBean> teacherAdapter;
     private GridView gridviewSubject;
+    private View citySelect;
+    private TextView cityName;
+    private List<CityBean.Data> list = new ArrayList<>();
+    private List<CityBean.Data> listCity;
+    private CityBean.Data locationCity;
+    private AMapLocationUtils locationUtils;
+    private AMapLocationUtils utils;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -73,18 +88,30 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         refreshTeacher = (ImageView) view.findViewById(R.id.refresh_teacher);
         gridviewTeacher = (GridView) view.findViewById(R.id.gridview_teacher);
         gridviewSubject = (GridView) view.findViewById(R.id.gridview_subject);
+        cityName = (TextView) view.findViewById(R.id.city_name);
         allClass = view.findViewById(R.id.all_class);
+        citySelect = view.findViewById(R.id.city_select);
         gridviewClass = (GridView) view.findViewById(R.id.gridview_class);
         message = (ImageView) view.findViewById(R.id.message);
+
+        setCity();
 
         initTagImg();
         initTagViewpagerSubject();
         initGridTeacher();
         initGridClass();
+        initLocationData();
         refreshTeacher.setOnClickListener(this);
         allClass.setOnClickListener(this);
         message.setOnClickListener(this);
+        citySelect.setOnClickListener(this);
+    }
 
+    private void setCity() {
+        cityName.setText(BaseApplication.getCurrentCity().getName());
+        page = 1;//重置为第一页
+        initTeacherData();
+        initClassData();
     }
 
     private void initTagImg() {
@@ -136,7 +163,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     }
 
     private void initGridTeacher() {
-        initTeacherData();
         teacherAdapter = new CommonAdapter<TeacherRecommendBean.DataBean>(getContext(), listRecommendTeacher, R.layout.item_grid_teacher) {
             @Override
             public int getCount() {
@@ -163,6 +189,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private void initTeacherData() {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(page));
+        map.put("city_id", BaseApplication.getCurrentCity().getId() + "");
         map.put("per_page", String.valueOf(5));
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecommend + "index_teacher_recommend" + "/items", map), null,
                 new VolleyListener(getActivity()) {
@@ -177,7 +204,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                         } else {
                             if (page != 1) {
                                 page = 1;
-                                initGridTeacher();
+                                initTeacherData();
                             } else {
                                 Toast.makeText(getActivity(), "没有更多推荐信息", Toast.LENGTH_SHORT).show();
                             }
@@ -203,7 +230,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     }
 
     private void initGridClass() {
-        initClassData();
         classAdapter = new CommonAdapter<ClassRecommendBean.DataBean>(getContext(), listRecommendClass, R.layout.item_class_recommend) {
             @Override
             public int getCount() {
@@ -257,6 +283,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private void initClassData() {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(1));
+        map.put("city_id", BaseApplication.getCurrentCity().getId() + "");
         map.put("per_page", String.valueOf(6));
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecommend + "index_live_studio_course_recommend" + "/items", map), null,
                 new VolleyListener(getActivity()) {
@@ -264,6 +291,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     protected void onSuccess(JSONObject response) {
                         ClassRecommendBean classRecommendBean = JsonUtils.objectFromJson(response.toString(), ClassRecommendBean.class);
                         if (classRecommendBean != null && classRecommendBean.getData() != null) {
+                            listRecommendClass.clear();
                             listRecommendClass.addAll(classRecommendBean.getData());
                             classAdapter.notifyDataSetChanged();
                         }
@@ -306,6 +334,103 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 Intent intent = new Intent(getActivity(), MessageFragmentActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.city_select:
+                intent = new Intent(getActivity(), CitySelectActivity.class);
+                startActivityForResult(intent, Constant.REQUEST);
+                break;
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Constant.RESPONSE_CITY_SELECT) {
+            setCity();
+        }
+    }
+
+
+    private void initLocationData() {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,
+                new VolleyListener(getActivity()) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        CityBean cityBean = JsonUtils.objectFromJson(response.toString(), CityBean.class);
+                        if (cityBean != null && cityBean.getData() != null) {
+                            listCity = cityBean.getData();
+//                                    如果没有被赋值，则默认全国
+                            utils = new AMapLocationUtils(getActivity(), new AMapLocationUtils.LocationListener() {
+                                @Override
+                                public void onLocationBack(String result) {
+                                    utils.stopLocation();
+                                    if (result.length() > 0 && result.endsWith("市")) {
+                                        result = result.substring(0, result.length() - 1);
+                                    }
+                                    for (CityBean.Data item : listCity) {
+                                        if (result.equals(item.getName())) {
+                                            locationCity = item;
+                                        }
+                                    }
+                                    CityBean.Data currentCity = SPUtils.getObject(getActivity(), "current_city", CityBean.Data.class);
+                                    if (currentCity == null) {
+                                        if (locationCity == null) {//如果没有被赋值，则默认全国
+                                            locationCity = new CityBean.Data("全国");
+                                            BaseApplication.setCurrentCity(locationCity);
+                                            setCity();
+                                        } else {
+                                            dialogCity();
+                                        }
+                                    }
+                                }
+                            });
+                            utils.startLocation();
+                        }
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
+    }
+
+    private void dialogCity() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        View view = View.inflate(getActivity(), R.layout.dialog_cancel_or_confirm, null);
+        TextView text = (TextView) view.findViewById(R.id.text);
+        text.setText("答疑时间已开通本地工作站，是否\n切换城市为" + locationCity.getName() + "？");
+        Button cancel = (Button) view.findViewById(R.id.cancel);
+        Button confirm = (Button) view.findViewById(R.id.confirm);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                // TODO: 2016/11/11 切换为全国
+                locationCity = new CityBean.Data("全国");
+                BaseApplication.setCurrentCity(locationCity);
+                setCity();
+            }
+        });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                BaseApplication.setCurrentCity(locationCity);
+                setCity();
+            }
+        });
+        alertDialog.show();
+        alertDialog.setContentView(view);
     }
 }
