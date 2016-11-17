@@ -23,46 +23,43 @@ public class FragmentPlayerLiveTeacherDetails extends BaseFragment {
     private TextView name;
     private ImageView image;
     private TextView teachingyears;
-    private TextView subject;
-    private TextView gradetype;
     private TextView school;
     private TextView describe;
-
+    private TextView sex;
     private Handler hd = new Handler();
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
             if (getActivity() != null && getActivity().getResources() != null) {
-                name.setText(getResourceString(R.string.teacher_name) + data.getTeacher().getName());
-                subject.setText(getResourceString(R.string.teacher_subject) + data.getTeacher().getSubject());
+                sex.setText(getSex(data.getTeacher().getGender()));
+                sex.setTextColor(getSexColor(data.getTeacher().getGender()));
+                name.setText(data.getTeacher().getName());
                 if (!StringUtils.isNullOrBlanK(data.getTeacher().getTeaching_years())) {
                     if (data.getTeacher().getTeaching_years().equals("within_three_years")) {
-                        teachingyears.setText(getResourceString(R.string.teacher_years) + getResourceString(R.string.within_three_years));
+                        teachingyears.setText(getResourceString(R.string.teacher_years) + " " + getResourceString(R.string.within_three_years));
                     } else if (data.getTeacher().getTeaching_years().equals("within_ten_years")) {
-                        teachingyears.setText(getResourceString(R.string.teacher_years) + getResourceString(R.string.within_ten_years));
+                        teachingyears.setText(getResourceString(R.string.teacher_years) + " " + getResourceString(R.string.within_ten_years));
                     } else if (data.getTeacher().getTeaching_years().equals("within_twenty_years")) {
-                        teachingyears.setText(getResourceString(R.string.teacher_years) + getResourceString(R.string.within_twenty_years));
+                        teachingyears.setText(getResourceString(R.string.teacher_years) + " " + getResourceString(R.string.within_twenty_years));
                     } else {
-                        teachingyears.setText(getResourceString(R.string.teacher_years) + getResourceString(R.string.more_than_ten_years));
+                        teachingyears.setText(getResourceString(R.string.teacher_years) + " " + getResourceString(R.string.more_than_ten_years));
                     }
                 }
-                gradetype.setText(getResourceString(R.string.grade_type) + "高中");
-                describe.setText(data.getTeacher().getDesc());
+                describe.setText(StringUtils.isNullOrBlanK(data.getTeacher().getDesc()) ? "暂无简介" : data.getTeacher().getDesc());
 
                 SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getCacheDir() + "/school.txt").toString(), SchoolBean.class);
-
                 if (schoolBean != null && schoolBean.getData() != null) {
                     for (int i = 0; i < schoolBean.getData().size(); i++) {
                         if (data.getTeacher().getSchool() == schoolBean.getData().get(i).getId()) {
-                            school.setText(getResourceString(R.string.teacher_school) + schoolBean.getData().get(i).getName());
+                            school.setText(getResourceString(R.string.teacher_school) + " " + schoolBean.getData().get(i).getName());
                             break;
                         }
                     }
                 } else {
-                    school.setText("");
+                    school.setText(getResourceString(R.string.teacher_school) + " 暂无");
                 }
 
-                Glide.with(getActivity()).load(data.getTeacher().getAvatar_url()).placeholder(R.mipmap.ic_launcher).crossFade().into(image);
+                Glide.with(getActivity()).load(data.getTeacher().getAvatar_url()).placeholder(R.mipmap.error_header_rect).crossFade().into(image);
 
             }
         }
@@ -80,11 +77,10 @@ public class FragmentPlayerLiveTeacherDetails extends BaseFragment {
     private void initview(View view) {
         name = (TextView) view.findViewById(R.id.name);
         image = (ImageView) view.findViewById(R.id.image);
-        gradetype = (TextView) view.findViewById(R.id.grade_type);
-        subject = (TextView) view.findViewById(R.id.subject);
         teachingyears = (TextView) view.findViewById(R.id.teaching_years);
         school = (TextView) view.findViewById(R.id.school);
         describe = (TextView) view.findViewById(R.id.describe);
+        sex = (TextView) view.findViewById(R.id.sex);
     }
 
     public void setData(RemedialClassDetailBean.Data data) {
@@ -92,5 +88,23 @@ public class FragmentPlayerLiveTeacherDetails extends BaseFragment {
             this.data = data;
             hd.postDelayed(runnable, 1000);
         }
+    }
+
+    private int getSexColor(String gender) {
+        if ("male".equals(gender)) {
+            return 0xff00ccff;
+        } else if ("female".equals(gender)) {
+            return 0xffff9966;
+        }
+        return 0xffff9966;
+    }
+
+    private String getSex(String gender) {
+        if ("male".equals(gender)) {
+            return "♂";
+        } else if ("female".equals(gender)) {
+            return "♀";
+        }
+        return "";
     }
 }
