@@ -115,6 +115,8 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
     }
 
     private void initLocation() {
+        locationView.setEnabled(false);
+        Toast.makeText(CitySelectActivity.this, "正在获取您的位置...", Toast.LENGTH_SHORT).show();
         //如果没有被赋值，则默认全国
         utils = new AMapLocationUtils(getApplicationContext(), new AMapLocationUtils.LocationListener() {
             @Override
@@ -130,7 +132,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
                 }
                 if (locationCity == null) {//如果没有被赋值，则默认全国
                     locationCity = new CityBean.Data("全国");
-                    Toast.makeText(CitySelectActivity.this, "您所在的地区尚未加盟，已为您切换至全国", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CitySelectActivity.this, "您所在的地区尚未加盟，\n已为您切换至全国", Toast.LENGTH_SHORT).show();
                 }
 
                 setCityAndHistory(locationCity);

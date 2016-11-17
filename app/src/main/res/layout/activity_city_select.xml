@@ -24,10 +24,9 @@
             android:id="@+id/current_city"
             android:layout_width="80dp"
             android:layout_height="30dp"
-            android:background="#ccc"
+            android:background="@drawable/text_background"
             android:gravity="center"
             android:text="全国"
-            android:textColor="#fff"
             android:textSize="16sp" />
 
         <View
@@ -41,17 +40,19 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="horizontal"
-            android:paddingRight="3dp">
+            android:paddingLeft="18dp"
+            android:paddingRight="6dp">
 
             <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:src="@mipmap/location" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#333"
+                android:visibility="gone"
                 android:text="定位" />
         </LinearLayout>
     </LinearLayout>
