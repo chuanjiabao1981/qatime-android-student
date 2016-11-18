@@ -60,7 +60,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private GridView gridviewTeacher;
     private View allClass;
     private GridView gridviewClass;
-    private List<GridView> gvSub;
     private int page = 1;
     private List<ClassRecommendBean.DataBean> listRecommendClass = new ArrayList<>();
     private BaseAdapter classAdapter;
@@ -331,6 +330,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 initTeacherData();
                 break;
             case R.id.message:
+//                startActivity(new Intent(getActivity(), NEVideoPlayerActivity.class));
                 Intent intent = new Intent(getActivity(), MessageFragmentActivity.class);
                 startActivity(intent);
                 break;

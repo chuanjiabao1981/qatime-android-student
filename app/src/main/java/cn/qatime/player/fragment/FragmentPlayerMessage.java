@@ -65,7 +65,7 @@ public class FragmentPlayerMessage extends BaseFragment {
     private int LOAD_MESSAGE_COUNT = 20;//聊天加载条数
 
     private SessionTypeEnum sessionType = SessionTypeEnum.Team;
-    private String sessionId;
+    private String sessionId = "";
     private Callback chatCallback;
 
     private Handler hd = new Handler();
@@ -108,40 +108,6 @@ public class FragmentPlayerMessage extends BaseFragment {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
 
-//        adapter = new CommonAdapter<IMMessage>(getActivity(), items, R.layout.item_message) {
-//            @Override
-//            public void convert(final ViewHolder holder, IMMessage item, int position) {
-//
-//                if (item.getFromAccount().equals(BaseApplication.getAccount())) {
-//                    holder.getView(R.id.right).setVisibility(View.VISIBLE);
-//                    holder.getView(R.id.left).setVisibility(View.GONE);
-//                    //.transform(new GlideRoundTransform(MessageActivity.this))
-//                    Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).crossFade().dontAnimate().into((ImageView) holder.getView(R.id.my_head));
-//                    holder.setText(R.id.my_time, getTime(item.getTime()));
-//                    ((TextView) holder.getView(R.id.my_content)).setText(ExpressionUtil.getExpressionString(
-//                            getActivity(), item.getContent(), ExpressionUtil.emoji, new Hashtable<Integer, GifDrawable>(), new GifDrawable.UpdateListener() {
-//                                @Override
-//                                public void update() {
-//                                    ((TextView) holder.getView(R.id.my_content)).postInvalidate();
-//                                }
-//                            }));
-//                } else {
-//                    holder.getView(R.id.right).setVisibility(View.GONE);
-//                    holder.getView(R.id.left).setVisibility(View.VISIBLE);
-//                    Glide.with(getActivity()).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_32).crossFade().dontAnimate().into((ImageView) holder.getView(R.id.other_head));
-//                    holder.setText(R.id.other_name, item.getFromNick());
-//                    ((TextView) holder.getView(R.id.other_content)).setText(ExpressionUtil.getExpressionString(
-//                            getActivity(), item.getContent(), ExpressionUtil.emoji, new Hashtable<Integer, GifDrawable>(), new GifDrawable.UpdateListener() {
-//                                @Override
-//                                public void update() {
-//                                    ((TextView) holder.getView(R.id.other_content)).postInvalidate();
-//                                }
-//                            }));
-//                    holder.setText(R.id.other_time, getTime(item.getTime()));
-//                }
-//
-//            }
-//        };
         adapter = new MessageAdapter(getActivity(), items);
         listView.setAdapter(adapter);
 
@@ -301,7 +267,6 @@ public class FragmentPlayerMessage extends BaseFragment {
 
     public void registerObservers(boolean register) {
         MsgServiceObserve service = NIMClient.getService(MsgServiceObserve.class);
-        service.observeMsgStatus(messageStatusObserver, register);
         service.observeReceiveMessage(receiveMessageObserver, register);
     }
 
@@ -324,17 +289,6 @@ public class FragmentPlayerMessage extends BaseFragment {
             if (needRefresh) {
                 adapter.notifyDataSetChanged();
                 listView.getRefreshableView().setSelection(adapter.getCount() - 1);
-            }
-        }
-    };
-    /**
-     * 消息状态变化观察者
-     */
-    Observer<IMMessage> messageStatusObserver = new Observer<IMMessage>() {
-        @Override
-        public void onEvent(IMMessage imMessage) {
-            if (isMyMessage(imMessage)) {
-//                onMessageStatusChange(message);
             }
         }
     };

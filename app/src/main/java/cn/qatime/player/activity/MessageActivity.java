@@ -79,10 +79,10 @@ public class MessageActivity extends BaseActivity {
     private EditText content;
 
     private int courseId;
-    private String camera;
-    private String board;
     private boolean isMute = false;//当前用户 是否被禁言
     private MessageAdapter adapter;
+    private String board;
+    private String camera;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +105,7 @@ public class MessageActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MessageActivity.this, NEVideoPlayerActivity.class);
-                //TODO
+                intent.putExtra("camera", camera);
                 intent.putExtra("board", board);
                 intent.putExtra("id", courseId);
                 intent.putExtra("sessionId", sessionId);
@@ -537,6 +537,7 @@ public class MessageActivity extends BaseActivity {
     public void onEvent(ChatVideoBean event) {
         if (event != null) {
             this.courseId = event.getCourseId();
+            this.camera = event.getCamera();
             this.board = event.getBoard();
             if (!StringUtils.isNullOrBlanK(event.getName())) {
                 setTitle(event.getName());

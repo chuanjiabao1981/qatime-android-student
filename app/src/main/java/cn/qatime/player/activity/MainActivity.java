@@ -70,10 +70,6 @@ public class MainActivity extends BaseFragmentActivity {
             {R.mipmap.tab_person_1, R.mipmap.tab_person_2}};
     private int currentPosition = 0;
 
-    /**
-     * 当前用户信息
-     */
-//    public Profile profile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,11 +92,6 @@ public class MainActivity extends BaseFragmentActivity {
 //        GetCitieslist();
         GetSchoolslist();
 
-
-//        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
-//        registerMsgUnreadInfoObserver(true);
-//        registerSystemMessageObservers(true);
-//        requestSystemMessageUnreadCount();
     }
 
     /**
@@ -148,7 +139,7 @@ public class MainActivity extends BaseFragmentActivity {
     }
 
 
-    boolean flag = false;
+    private boolean flag = false;
 
     @Override
     public void onBackPressed() {

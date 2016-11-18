@@ -139,25 +139,25 @@ public class MessageAdapter extends BaseAdapter {
         public final TextView notify;
         public final View root;
 
-        public NotifyHolder(View root) {
+        NotifyHolder(View root) {
             notify = (TextView) root.findViewById(R.id.notify);
             this.root = root;
         }
     }
 
     private class TextHolder {
-        public final ImageView otherhead;
-        public final TextView othername;
-        public final TextView othertime;
-        public final TextView othercontent;
+        final ImageView otherhead;
+        final TextView othername;
+        final TextView othertime;
+        final TextView othercontent;
         public final LinearLayout left;
-        public final TextView mytime;
-        public final TextView mycontent;
-        public final ImageView myhead;
+        final TextView mytime;
+        final TextView mycontent;
+        final ImageView myhead;
         public final LinearLayout right;
         public final View root;
 
-        public TextHolder(View root) {
+        TextHolder(View root) {
             otherhead = (ImageView) root.findViewById(R.id.other_head);
             othername = (TextView) root.findViewById(R.id.other_name);
             othertime = (TextView) root.findViewById(R.id.other_time);

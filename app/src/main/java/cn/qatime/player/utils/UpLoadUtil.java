@@ -120,7 +120,6 @@ public abstract class UpLoadUtil extends AsyncTask<Map<String, String>, String, 
         try {
             if (!StringUtils.isNullOrBlanK(result)) {
                 if (new JSONObject(result).getInt("status") == 0) {
-                    // TODO: 2016/8/26 int == 500  Internal Server Error?
                     httpFailed(result);
                 } else {
                     httpSuccess(result);

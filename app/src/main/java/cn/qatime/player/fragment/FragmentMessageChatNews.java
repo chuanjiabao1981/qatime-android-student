@@ -104,7 +104,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                                     if (courses != null && courses.getData() != null) {
                                         for (TutorialClassBean.Data data : courses.getData()) {
                                             if (sessionId.equals(data.getChat_team_id())) {
-                                                EventBus.getDefault().post(new ChatVideoBean(data.getId(),data.getCamera(), data.getBoard(), data.getName()));
+                                                EventBus.getDefault().post(new ChatVideoBean(data.getId(), data.getCamera(),data.getBoard(), data.getName()));
                                                 break;
                                             }
                                         }
@@ -312,7 +312,6 @@ public class FragmentMessageChatNews extends BaseFragment {
                 bean.setName(TeamDataCache.getInstance().getTeamName(item.getContactId()).replace("讨论组", ""));
                 bean.setUnreadCount(item.getUnreadCount());
                 bean.setRecentMessageId(item.getRecentMessageId());
-//                        bean.setPull_address(data.getPull_address());
                 bean.setTime(item.getTime());
                 items.add(bean);
 //                    }

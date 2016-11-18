@@ -148,13 +148,15 @@ public class FragmentClassTableUnclosed extends BaseFragment {
                 helper.setText(R.id.live_time, item.getLive_time());
                 helper.setText(R.id.subject, getResourceString(R.string.item_subject) + item.getSubject());
                 helper.setText(R.id.teacher, getResourceString(R.string.item_teacher) + item.getTeacher_name());
-                helper.getView(R.id.enter).setVisibility(StringUtils.isNullOrBlanK(item.getBoard()) ? View.GONE : View.VISIBLE);
+                helper.getView(R.id.enter).setVisibility((!StringUtils.isNullOrBlanK(item.getCamera()) && !StringUtils.isNullOrBlanK(item.getBoard())) ? View.VISIBLE : View.GONE);
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
-                        intent.putExtra("id", item.getId());
+                        intent.putExtra("camera", item.getCamera());
                         intent.putExtra("board", item.getBoard());
+                        intent.putExtra("id", item.getId());
+                        intent.putExtra("sessionId", item.getChat_team_id());
                         startActivity(intent);
                     }
                 });
@@ -172,7 +174,7 @@ public class FragmentClassTableUnclosed extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                intent.putExtra("id", Integer.valueOf(itemList.get(position-1).getCourse_id()));
+                intent.putExtra("id", Integer.valueOf(itemList.get(position - 1).getCourse_id()));
                 intent.putExtra("pager", 2);
                 startActivity(intent);
             }

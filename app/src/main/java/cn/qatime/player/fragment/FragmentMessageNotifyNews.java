@@ -93,6 +93,7 @@ public class FragmentMessageNotifyNews extends BaseFragment {
                         listView.onRefreshComplete();
                     }
                 }, 200);
+                initData(1);
             }
 
             @Override
@@ -113,6 +114,7 @@ public class FragmentMessageNotifyNews extends BaseFragment {
                         listView.onRefreshComplete();
                     }
                 }, 200);
+                initData(2);
             }
         });
 //        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -134,7 +136,7 @@ public class FragmentMessageNotifyNews extends BaseFragment {
 
     private void initData(final int type) {
         Map<String, String> map = new HashMap<>();
-        map.put("user_id",String.valueOf(BaseApplication.getUserId()));
+        map.put("user_id", String.valueOf(BaseApplication.getUserId()));
         map.put("page", String.valueOf(page));
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getUserId() + "/notifications", map), null,
                 new VolleyListener(getActivity()) {
