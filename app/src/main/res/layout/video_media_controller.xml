@@ -8,56 +8,41 @@
     <RelativeLayout
         android:id="@+id/play_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="45dip"
+        android:layout_height="45dp"
         android:background="@drawable/shape_video_toolbar">
 
         <ImageView
             android:id="@+id/player_exit"
             android:layout_width="45dp"
             android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
+            android:clickable="true"
             android:padding="13dp"
             android:src="@mipmap/ic_play_exit" />
 
-        <LinearLayout
-            android:id="@+id/toolbar_layout"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/video_name"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/player_exit"
+            android:ellipsize="marquee"
+            android:focusable="true"
             android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/video_name"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:ellipsize="marquee"
-                android:focusable="true"
-                android:gravity="center_vertical"
-                android:singleLine="true"
-                android:text="視頻名字"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/definition"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/hd"
-                android:textColor="#fff" />
-        </LinearLayout>
+            android:singleLine="true"
+            android:text="視頻名字"
+            android:layout_toLeftOf="@+id/view_count"
+            android:textColor="#fff"
+            android:textSize="16sp"
+            android:visibility="gone" />
 
         <TextView
-            android:id="@+id/view_count"
+            android:id="@id/view_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="3dp"
             android:background="@drawable/shape_circle_bg"
-            android:drawableLeft="@mipmap/head_write_32"
+            android:drawableLeft="@mipmap/eyes"
             android:paddingBottom="2dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
@@ -65,36 +50,8 @@
             android:singleLine="true"
             android:text="123"
             android:textColor="#fff"
-            android:textSize="12dp" />
+            android:textSize="13sp" />
     </RelativeLayout>
-
-    <RadioGroup
-        android:id="@+id/radiogroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/play_toolbar"
-        android:background="#999"
-        android:orientation="horizontal"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
-        android:visibility="gone">
-
-        <RadioButton
-            android:id="@+id/radio1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/hd" />
-
-        <RadioButton
-            android:id="@+id/radio2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/pd" />
-        <!--普清（PDTV）、标清（SDTV）、高清（HDTV）-->
-    </RadioGroup>
-
 
     <LinearLayout
         android:id="@+id/bottom_layout"
@@ -112,6 +69,12 @@
             android:padding="13dp"
             android:src="@mipmap/nemediacontroller_play" />
 
+        <ImageView
+            android:id="@+id/refresh"
+            android:layout_width="22dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:src="@mipmap/refresh" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -120,9 +83,7 @@
             android:layout_marginTop="5dp"
             android:layout_weight="1"
             android:gravity="right"
-            android:orientation="horizontal"
-            android:visibility="visible">
-
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/comment_layout"
@@ -131,14 +92,6 @@
                 android:layout_weight="1"
                 android:orientation="horizontal"
                 android:visibility="gone">
-
-                <ImageView
-                    android:id="@+id/refresh"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:src="@mipmap/refresh" />
 
                 <EditText
                     android:id="@+id/comment"
@@ -168,9 +121,9 @@
 
             <ImageView
                 android:id="@+id/danmu_switch"
-                android:layout_width="50dp"
+                android:layout_width="40dp"
                 android:layout_height="match_parent"
-                android:padding="8dp"
+                android:padding="6dp"
                 android:src="@mipmap/danmu_on" />
 
             <ImageView
@@ -200,15 +153,11 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
+    <ImageView
         android:id="@+id/sub_switch"
-        android:layout_width="32dp"
+        android:layout_width="45dp"
         android:layout_height="32dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:background="#fff"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:text="关"
-        android:textColor="#000" />
+        android:src="@mipmap/float_subvideo_close" />
 </RelativeLayout>

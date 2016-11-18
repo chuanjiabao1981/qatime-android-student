@@ -23,6 +23,7 @@ import cn.qatime.player.barrage.model.DanmakuTimer;
 import cn.qatime.player.barrage.model.Danmakus;
 import cn.qatime.player.barrage.model.IDisplayer;
 import cn.qatime.player.barrage.model.SpannedCacheStuffer;
+import cn.qatime.player.barrage.model.Status;
 import cn.qatime.player.barrage.parser.BaseDanmakuParser;
 import cn.qatime.player.utils.ExpressionUtil;
 import libraryextra.utils.DensityUtils;
@@ -42,6 +43,7 @@ public class DanmuControl {
 
     private IDanmakuView mDanmakuView;
     private DanmakuContext mDanmakuContext;
+    private Status status = Status.SHOW;
 
     public DanmuControl(Context context) {
         setSize(context);
@@ -175,12 +177,14 @@ public class DanmuControl {
     public void hide() {
         if (mDanmakuView != null) {
             mDanmakuView.hide();
+            status = Status.HIDE;
         }
     }
 
     public void show() {
         if (mDanmakuView != null) {
             mDanmakuView.show();
+            status = Status.SHOW;
         }
     }
 
@@ -225,5 +229,9 @@ public class DanmuControl {
             danmaku.textShadowColor = 0; // 重要：如果有图文混排，最好不要设置描边(设textShadowColor=0)，否则会进行两次复杂的绘制导致运行效率降低
             mDanmakuView.addDanmaku(danmaku);
         }
+    }
+
+    public Status getStatus() {
+        return status;
     }
 }
