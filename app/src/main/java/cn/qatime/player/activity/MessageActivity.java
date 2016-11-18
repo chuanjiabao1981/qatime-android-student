@@ -12,7 +12,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.netease.nimlib.sdk.NIMClient;
@@ -39,7 +38,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.List;
 
 import cn.qatime.player.R;
@@ -49,11 +47,7 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.ChatVideoBean;
 import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.TeamDataCache;
-import cn.qatime.player.utils.ExpressionUtil;
 import cn.qatime.player.view.BiaoQingView;
-import cn.qatime.player.view.GifDrawable;
-import libraryextra.adapter.CommonAdapter;
-import libraryextra.adapter.ViewHolder;
 import libraryextra.utils.StringUtils;
 
 /**
@@ -85,7 +79,8 @@ public class MessageActivity extends BaseActivity {
     private EditText content;
 
     private int courseId;
-    private String pull_address;
+    private String camera;
+    private String board;
     private boolean isMute = false;//当前用户 是否被禁言
     private MessageAdapter adapter;
 
@@ -103,13 +98,15 @@ public class MessageActivity extends BaseActivity {
         sessionId = getIntent().getStringExtra("sessionId");
         sessionType = (SessionTypeEnum) getIntent().getSerializableExtra("sessionType");
         courseId = getIntent().getIntExtra("courseId", 0);
-        pull_address = getIntent().getStringExtra("pull_address");
+        camera = getIntent().getStringExtra("camera");
+        board = getIntent().getStringExtra("board");
         initView();
         setRightImage(R.mipmap.online_room, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MessageActivity.this, NEVideoPlayerActivity.class);
-                intent.putExtra("url", pull_address);
+                //TODO
+                intent.putExtra("board", board);
                 intent.putExtra("id", courseId);
                 intent.putExtra("sessionId", sessionId);
                 startActivity(intent);
@@ -540,7 +537,7 @@ public class MessageActivity extends BaseActivity {
     public void onEvent(ChatVideoBean event) {
         if (event != null) {
             this.courseId = event.getCourseId();
-            this.pull_address = event.getPull_address();
+            this.board = event.getBoard();
             if (!StringUtils.isNullOrBlanK(event.getName())) {
                 setTitle(event.getName());
             } else {

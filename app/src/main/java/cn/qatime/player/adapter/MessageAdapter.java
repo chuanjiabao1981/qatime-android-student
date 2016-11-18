@@ -28,9 +28,9 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.im.cache.TeamDataCache;
-import libraryextra.utils.DateUtils;
 import cn.qatime.player.utils.ExpressionUtil;
 import cn.qatime.player.view.GifDrawable;
+import libraryextra.utils.DateUtils;
 
 /**
  * @author lungtify

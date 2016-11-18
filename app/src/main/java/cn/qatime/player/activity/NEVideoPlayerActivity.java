@@ -80,7 +80,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
     private ImageView emoji;
     private EditText content;
     private boolean isMute = false;//当前用户 是否被禁言
-    private String url = "";
+    private String board = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,14 +91,14 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements QaVid
             Toast.makeText(this, getResourceString(R.string.no_course_information), Toast.LENGTH_SHORT).show();
         }
         sessionId = getIntent().getStringExtra("sessionId");
-        url = getIntent().getStringExtra("url");
+        board = getIntent().getStringExtra("board");
 //        Logger.e(url);
         videoPlayer = (QaVideoPlayer) findViewById(R.id.video_player);
         ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenWidth(this) * 9 / 16);
         videoPlayer.setLayoutParams(params);
 
-        if (!StringUtils.isNullOrBlanK(url)) {
-            videoPlayer.setVideoPath(url);
+        if (!StringUtils.isNullOrBlanK(board)) {
+            videoPlayer.setVideoPath(board);
             videoPlayer.setOnControlListener(this);
             videoPlayer.start();
         }

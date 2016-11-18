@@ -188,12 +188,12 @@ public class MainActivity extends BaseFragmentActivity {
         Intent intent = getIntent();
         /**     * 解析通知栏发来的云信消息     */
         if (intent != null && intent.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT)) {
-            Intent intent1 = new Intent(this,MessageFragmentActivity.class);
-            intent.putExtra("intent",intent);
+            Intent intent1 = new Intent(this, MessageFragmentActivity.class);
+            intent.putExtra("intent", intent);
             startActivity(intent1);
         } else if (intent != null && intent.hasExtra("type") && intent.getStringExtra("type").equals("system_message")) {//转到系统消息页面
-            Intent intent1 = new Intent(this,MessageFragmentActivity.class);
-            intent.putExtra("intent",intent);
+            Intent intent1 = new Intent(this, MessageFragmentActivity.class);
+            intent.putExtra("intent", intent);
             startActivity(intent1);
         }
     }
@@ -460,10 +460,11 @@ public class MainActivity extends BaseFragmentActivity {
     public void setCurrentPosition(int currentPosition, String s) {
         fragmentlayout.setCurrenItem(currentPosition);
         fragmentlayout.setCurrenItem(currentPosition);
-        if(!StringUtils.isNullOrBlanK(s)){
+        if (!StringUtils.isNullOrBlanK(s)) {
             FragmentRemedialClassAll fragmentRemedialClassAll = (FragmentRemedialClassAll) fragBaseFragments.get(1);
             fragmentRemedialClassAll.initDataAsSubject(s);
         }
         this.currentPosition = currentPosition;
     }
+
 }

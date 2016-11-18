@@ -13,22 +13,22 @@
             android:background="@drawable/shape_top_tab" />
 
         <LinearLayout
-            android:id="@+id/area"
+            android:id="@+id/city_select"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="10dp"
-            android:visibility="invisible">
-
-            <TextView
-                style="@style/backbar_text_style"
-                android:text="北京" />
+            android:padding="10dp">
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@mipmap/down" />
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@mipmap/city_select" />
+            <TextView
+                android:id="@+id/city_name"
+                style="@style/backbar_text_style"
+                android:text="全国" />
+
         </LinearLayout>
 
         <ImageView

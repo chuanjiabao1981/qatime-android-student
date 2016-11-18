@@ -40,9 +40,10 @@ import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.im.LoginSyncDataStatusObserver;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
-import libraryextra.utils.AppUtils;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.bean.CityBean;
 import libraryextra.bean.Profile;
+import libraryextra.utils.AppUtils;
 import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
 
@@ -52,12 +53,22 @@ public class BaseApplication extends Application {
     private static BaseApplication context;
     private static RequestQueue Queue;
     public static boolean newVersion;
+    private static CityBean.Data currentCity;
 
     public static RequestQueue getRequestQueue() {
-        if(Queue==null){
+        if (Queue == null) {
             Queue = Volley.newRequestQueue(context);
         }
         return Queue;
+    }
+
+    public static CityBean.Data getCurrentCity() {
+        return currentCity == null ? new CityBean.Data("全国") : currentCity;
+    }
+
+    public static void setCurrentCity(CityBean.Data currentCity) {
+        BaseApplication.currentCity = currentCity;
+        SPUtils.putObject(context, "current_city", currentCity);
     }
 
     @Override
@@ -69,6 +80,7 @@ public class BaseApplication extends Application {
                 .hideThreadInfo()             // default it is shown
                 .setLogLevel(UrlUtils.isDebug ? LogLevel.FULL : LogLevel.NONE);  // default : LogLevel.FULL
         profile = SPUtils.getObject(this, "profile", Profile.class);
+        currentCity = SPUtils.getObject(this, "current_city", CityBean.Data.class);
         initUmengPush();
         initYunxin();
     }
