@@ -190,6 +190,13 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                 filterList();
             }
         });
+        monthDateView.setOnCalendarPageChangeListener(new MonthDateView.OnCalendarPageChangeListener() {
+            @Override
+            public void onPageChange(int type) {
+                getDate();
+                initData();
+            }
+        });
     }
 
     private void getDate() {
@@ -202,13 +209,11 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         switch (v.getId()) {
             case R.id.iv_left:
                 monthDateView.onLeftClick();
-                getDate();
-                initData();
+
                 break;
             case R.id.iv_right:
                 monthDateView.onRightClick();
-                getDate();
-                initData();
+
                 break;
             case R.id.date_operator_ll:
                 monthDateView.setTodayToView();
