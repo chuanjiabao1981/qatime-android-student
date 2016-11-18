@@ -184,7 +184,7 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
                     price = "0" + price;
                 }
                 helper.setText(R.id.price, price);
-                helper.setText(R.id.student_number, String.valueOf(item.getBuy_tickets_count()));
+                helper.setText(R.id.student_number, String.valueOf(item.getBuy_tickets_count())+"人报名");
             }
         };
         grid.setEmptyView(View.inflate(getActivity(),R.layout.empty_view,null));

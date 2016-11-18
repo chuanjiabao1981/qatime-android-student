@@ -97,18 +97,13 @@
             android:layout_height="1dp"
             android:layout_weight="1" />
 
-        <ImageView
-            android:layout_width="16sp"
-            android:layout_height="16sp"
-            android:layout_gravity="center"
-            android:src="@mipmap/student_item" />
 
         <TextView
             android:id="@+id/student_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="人数"
+            android:text="0人报名"
             android:textSize="14sp" />
     </LinearLayout>
 
