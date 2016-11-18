@@ -36,9 +36,9 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.config.UserPreferences;
-import cn.qatime.player.fragment.ClassDetailClassInfoF;
-import cn.qatime.player.fragment.ClassDetailTeacherInfoF;
-import cn.qatime.player.fragment.ClassDetailClassListF;
+import cn.qatime.player.fragment.FragmentClassDetailClassInfo;
+import cn.qatime.player.fragment.FragmentClassDetailTeacherInfo;
+import cn.qatime.player.fragment.FragmentClassDetailClassList;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
@@ -97,9 +97,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         name = (TextView) findViewById(R.id.name);
         image.setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenWidth(this) * 5 / 8));
 
-        fragBaseFragments.add(new ClassDetailClassInfoF());
-        fragBaseFragments.add(new ClassDetailTeacherInfoF());
-        fragBaseFragments.add(new ClassDetailClassListF());
+        fragBaseFragments.add(new FragmentClassDetailClassInfo());
+        fragBaseFragments.add(new FragmentClassDetailTeacherInfo());
+        fragBaseFragments.add(new FragmentClassDetailClassList());
 
 
 
@@ -191,9 +191,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                             studentnumber.setText("已购人数 " + data.getData().getBuy_tickets_count());
                         }
                         if (data != null) {
-                            ((ClassDetailClassInfoF) fragBaseFragments.get(0)).setData(data);
-                            ((ClassDetailTeacherInfoF) fragBaseFragments.get(1)).setData(data);
-                            ((ClassDetailClassListF) fragBaseFragments.get(2)).setData(data);
+                            ((FragmentClassDetailClassInfo) fragBaseFragments.get(0)).setData(data);
+                            ((FragmentClassDetailTeacherInfo) fragBaseFragments.get(1)).setData(data);
+                            ((FragmentClassDetailClassList) fragBaseFragments.get(2)).setData(data);
                             if (data.getData() != null) {
                                 if (data.getData().getIs_tasting()) {
                                     audition.setEnabled(false);

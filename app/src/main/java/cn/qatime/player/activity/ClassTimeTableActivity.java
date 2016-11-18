@@ -152,7 +152,7 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                 helper.setText(R.id.live_time, item.getLive_time());
                 helper.setText(R.id.subject, getResources().getString(R.string.item_subject) + item.getSubject());
                 helper.setText(R.id.teacher, getResources().getString(R.string.item_teacher) + item.getTeacher_name());
-                helper.getView(R.id.enter).setVisibility((StringUtils.isNullOrBlanK(item.getCamera()) && StringUtils.isNullOrBlanK(item.getBoard())) ? View.GONE : View.VISIBLE);
+                helper.getView(R.id.enter).setVisibility((!StringUtils.isNullOrBlanK(item.getCamera()) && !StringUtils.isNullOrBlanK(item.getBoard())) ? View.VISIBLE : View.GONE);
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -192,6 +192,13 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                 filterList();
             }
         });
+        monthDateView.setOnCalendarPageChangeListener(new MonthDateView.OnCalendarPageChangeListener() {
+            @Override
+            public void onPageChange(int type) {
+                getDate();
+                initData();
+            }
+        });
     }
 
     private void getDate() {
@@ -204,13 +211,11 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         switch (v.getId()) {
             case R.id.iv_left:
                 monthDateView.onLeftClick();
-                getDate();
-                initData();
+
                 break;
             case R.id.iv_right:
                 monthDateView.onRightClick();
-                getDate();
-                initData();
+
                 break;
             case R.id.date_operator_ll:
                 monthDateView.setTodayToView();

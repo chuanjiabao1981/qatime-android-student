@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:gravity="center"
-    android:layout_height="match_parent">
+    android:orientation="vertical">
+
     <ImageView
         android:id="@+id/subject_img"
-        android:src="@mipmap/personal_information_head"
-        android:padding="5dp"
-        android:layout_width="40dp"
-        android:layout_height="40dp" />
+        android:layout_width="41dp"
+        android:layout_height="41dp"
+        android:src="@mipmap/personal_information_head" />
 
     <TextView
         android:id="@+id/subject_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/chinese"
-        />
+        android:textColor="#000" />
 </LinearLayout>

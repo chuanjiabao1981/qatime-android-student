@@ -35,12 +35,12 @@ import cn.qatime.player.barrage.DanmuControl;
 import cn.qatime.player.barrage.model.Status;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
-import cn.qatime.player.bean.Announcements;
-import cn.qatime.player.fragment.PlayerAnnouncementsF;
-import cn.qatime.player.fragment.PlayerMessageF;
-import cn.qatime.player.fragment.PlayerLiveDetailsF;
-import cn.qatime.player.fragment.PlayerMembersF;
 import cn.qatime.player.fragment.VideoFloatFragment;
+import libraryextra.bean.Announcements;
+import cn.qatime.player.fragment.FragmentPlayerAnnouncements;
+import cn.qatime.player.fragment.FragmentPlayerMessage;
+import cn.qatime.player.fragment.FragmentPlayerLiveDetails;
+import cn.qatime.player.fragment.FragmentPlayerMembers;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.presenter.VideoControlPresenter;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
@@ -71,12 +71,11 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     private View inputLayout;
 
     private int id;
-    private PlayerMessageF fragment2;
+    private FragmentPlayerMessage fragment2;
     private String sessionId;
     private SessionTypeEnum sessionType = SessionTypeEnum.Team;
     private EditText content;
     private boolean isMute = false;//当前用户 是否被禁言
-
 
     private RelativeLayout mainVideo;
     private RelativeLayout mainView;
@@ -132,6 +131,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             Toast.makeText(this, getResourceString(R.string.no_course_information), Toast.LENGTH_SHORT).show();
         }
         sessionId = getIntent().getStringExtra("sessionId");
+
         String camera = getIntent().getStringExtra("camera");
         String board = getIntent().getStringExtra("board");
 
@@ -163,10 +163,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                             if (data != null) {
                                 if (data.getData() != null) {
                                     if (data.getData().getMembers() != null) {
-                                        ((PlayerMembersF) fragBaseFragments.get(3)).setData(data.getData().getMembers());
+                                        ((FragmentPlayerMembers) fragBaseFragments.get(3)).setData(data.getData().getMembers());
                                     }
                                     if (data.getData().getAnnouncements() != null) {
-                                        ((PlayerAnnouncementsF) fragBaseFragments.get(0)).setData(data.getData().getAnnouncements());
+                                        ((FragmentPlayerAnnouncements) fragBaseFragments.get(0)).setData(data.getData().getAnnouncements());
                                     }
                                 }
                             }
@@ -200,10 +200,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         }
 
         inputLayout = findViewById(R.id.input_layout);
-        fragBaseFragments.add(new PlayerAnnouncementsF());
-        fragBaseFragments.add(new PlayerMessageF());
-        fragBaseFragments.add(new PlayerLiveDetailsF());
-        fragBaseFragments.add(new PlayerMembersF());
+        fragBaseFragments.add(new FragmentPlayerAnnouncements());
+        fragBaseFragments.add(new FragmentPlayerMessage());
+        fragBaseFragments.add(new FragmentPlayerLiveDetails());
+        fragBaseFragments.add(new FragmentPlayerMembers());
 
         FragmentLayoutWithLine fragmentLayout = (FragmentLayoutWithLine) findViewById(R.id.fragmentlayout);
 
@@ -230,10 +230,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         });
         fragmentLayout.setAdapter(fragBaseFragments, R.layout.tablayout_nevideo_player, 0x0102);
         fragmentLayout.getViewPager().setOffscreenPageLimit(3);
-        fragment2 = (PlayerMessageF) fragBaseFragments.get(1);
+        fragment2 = (FragmentPlayerMessage) fragBaseFragments.get(1);
         fragment2.setSessionId(sessionId);
         fragment2.requestTeamInfo();
-        fragment2.setChatCallBack(new PlayerMessageF.Callback() {
+        fragment2.setChatCallBack(new FragmentPlayerMessage.Callback() {
             @Override
             public void back(List<IMMessage> result) {
                 TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
@@ -319,7 +319,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                         protected void onSuccess(JSONObject response) {
                             RemedialClassDetailBean data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
                             if (data != null) {
-                                ((PlayerLiveDetailsF) fragBaseFragments.get(2)).setData(data);
+                                ((FragmentPlayerLiveDetails) fragBaseFragments.get(2)).setData(data);
                             }
                         }
 

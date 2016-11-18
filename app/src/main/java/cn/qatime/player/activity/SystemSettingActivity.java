@@ -3,6 +3,7 @@ package cn.qatime.player.activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -202,7 +203,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 DownFileUtil downFileUtil = new DownFileUtil(this, downLoadLinks, "qatime.apk", "", "qatime.apk") {
                     @Override
                     public void downOK() {
-                        DownFileUtil.insertAPK("", getApplicationContext());
+                        DownFileUtil.insertAPK(Environment.getExternalStorageDirectory() + "/qatime.apk", getApplicationContext());
                     }
 
                     @Override

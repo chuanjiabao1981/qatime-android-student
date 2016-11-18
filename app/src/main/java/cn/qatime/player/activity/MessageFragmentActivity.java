@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.base.BaseFragmentActivity;
-import cn.qatime.player.fragment.MessageChatNewsF;
-import cn.qatime.player.fragment.MessageNotifyNewsF;
+import cn.qatime.player.fragment.FragmentMessageChatNews;
+import cn.qatime.player.fragment.FragmentMessageNotifyNews;
 import libraryextra.view.FragmentLayoutWithLine;
 
 /**
@@ -48,8 +48,8 @@ public class MessageFragmentActivity extends BaseFragmentActivity {
 //            }
 //        });
 
-        fragBaseFragments.add(new MessageChatNewsF());
-        fragBaseFragments.add(new MessageNotifyNewsF());
+        fragBaseFragments.add(new FragmentMessageChatNews());
+        fragBaseFragments.add(new FragmentMessageNotifyNews());
 
 
         fragmentlayout = (FragmentLayoutWithLine)findViewById(R.id.fragmentlayout);
@@ -84,8 +84,8 @@ public class MessageFragmentActivity extends BaseFragmentActivity {
                             if (fragmentlayout != null) {
                                 fragmentlayout.setCurrenItem(0);
                             }
-                            if (((MessageChatNewsF) fragBaseFragments.get(0)) != null) {
-                                ((MessageChatNewsF) fragBaseFragments.get(0)).setMessage(message);
+                            if (((FragmentMessageChatNews) fragBaseFragments.get(0)) != null) {
+                                ((FragmentMessageChatNews) fragBaseFragments.get(0)).setMessage(message);
                             }
                         }
                     }

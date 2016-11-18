@@ -14,29 +14,35 @@
         custom:layout_heightPercent="60%w"
         custom:layout_widthPercent="100%w" />
 
-      <TextView
+    <TextView
         android:id="@+id/course_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:singleLine="true"
         android:text="北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文"
-        android:textColor="#000" />
+        android:textColor="#333" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="-4dp"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/grade"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="" />
+            android:text=""
+            android:textColor="#999"
+            android:textSize="12sp" />
+
         <TextView
             android:id="@+id/subject"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="英语" />
+            android:text="英语"
+            android:textColor="#999"
+            android:textSize="12sp" />
 
         <View
             android:layout_width="0dp"
@@ -44,9 +50,11 @@
             android:layout_weight="1" />
 
         <TextView
-            android:id="@+id/count"
+            android:id="@+id/price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1003已购买" />
+            android:text="￥0.00"
+            android:textColor="#f00"
+            android:textSize="12sp" />
     </LinearLayout>
 </com.zhy.android.percent.support.PercentLinearLayout>

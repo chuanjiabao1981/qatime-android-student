@@ -17,6 +17,7 @@ import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,6 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -48,8 +48,14 @@ public class TeacherDataActivity extends BaseActivity {
     private List<TeacherDataBean.DataBean.Course> list = new ArrayList<>();
     private TextView teachAge;
     private TextView school;
+    private TextView category;
+    private TextView subject;
+    private TextView province;
+    private TextView city;
+    private TextView town;
     private int page = 0;
     private CommonAdapter<TeacherDataBean.DataBean.Course> adapter;
+    private DecimalFormat df = new DecimalFormat("#.00");
 
     private void assignViews() {
         PullToRefreshScrollView scroll = (PullToRefreshScrollView) findViewById(R.id.scroll);
@@ -60,6 +66,11 @@ public class TeacherDataActivity extends BaseActivity {
         name = (TextView) findViewById(R.id.name);
         teachAge = (TextView) findViewById(R.id.teach_age);
         school = (TextView) findViewById(R.id.school);
+        category = (TextView) findViewById(R.id.category);
+        subject = (TextView) findViewById(R.id.subject);
+        province = (TextView) findViewById(R.id.province);
+        city = (TextView) findViewById(R.id.city);
+        town = (TextView) findViewById(R.id.town);
         describe = (TextView) findViewById(R.id.describe);
         grid = (GridViewForScrollView) findViewById(R.id.grid);
         scroll.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ScrollView>() {
@@ -85,9 +96,14 @@ public class TeacherDataActivity extends BaseActivity {
                     return;
                 }
                 Glide.with(TeacherDataActivity.this).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.image)));
+                helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.course_title, item.getName());
-                helper.setText(R.id.count, String.valueOf(item.getBuy_tickets_count()) + "人已购买");
+                String price = df.format(item.getPrice());
+                if (price.startsWith(".")) {
+                    price = "0" + price;
+                }
+                helper.setText(R.id.price, "￥" + price);
             }
         };
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -125,8 +141,14 @@ public class TeacherDataActivity extends BaseActivity {
                                 }
                                 describe.setText(bean.getData().getDesc());
                                 teachAge.setText(getTeachingYear(bean.getData().getTeaching_years()));
+                                category.setText(bean.getData().getCategory());
+                                subject.setText(bean.getData().getSubject());
+                                province.setText(bean.getData().getProvince());
+                                city.setText(bean.getData().getCity());
+                                town.setText(bean.getData().getTown());
                                 sex.setText(getSex(bean.getData().getGender()));
-                                Glide.with(TeacherDataActivity.this).load(bean.getData().getAvatar_url()).placeholder(R.mipmap.personal_information_head).transform(new GlideCircleTransform(TeacherDataActivity.this)).crossFade().into(headSculpture);
+                                sex.setTextColor(getSexColor(bean.getData().getGender()));
+                                Glide.with(TeacherDataActivity.this).load(bean.getData().getAvatar_url()).placeholder(R.mipmap.error_header_rect).crossFade().into(headSculpture);
                                 school.setText(bean.getData().getSchool());
                                 list.addAll(bean.getData().getCourses());
                             }
@@ -153,6 +175,15 @@ public class TeacherDataActivity extends BaseActivity {
         addToRequestQueue(request);
     }
 
+    private int getSexColor(String gender) {
+        if ("male".equals(gender)) {
+            return 0xff00ccff;
+        } else if ("female".equals(gender)) {
+            return 0xffff9966;
+        }
+        return 0xffff9966;
+    }
+
     private String getSex(String gender) {
         if ("male".equals(gender)) {
             return "♂";
@@ -165,11 +196,11 @@ public class TeacherDataActivity extends BaseActivity {
     private String getTeachingYear(String teaching_years) {
         switch (teaching_years) {
             case "within_three_years":
-                return getResourceString(R.string.within_three_years);
+                return getResourceString(R.string.within_three_years) + "教龄";
             case "within_ten_years":
-                return getResourceString(R.string.within_ten_years);
+                return getResourceString(R.string.within_ten_years) + "教龄";
             case "within_twenty_years":
-                return getResourceString(R.string.within_twenty_years);
+                return getResourceString(R.string.within_twenty_years) + "教龄";
         }
         return "";
     }
