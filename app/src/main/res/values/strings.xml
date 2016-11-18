@@ -447,4 +447,5 @@
     <string name="amount_not_enough">账户余额不足</string>
     <string name="code_use_already">验证码已失效</string>
     <string name="withdraw_existed">存在未完成的提现订单</string>
+    <string name="class_missed">待补课</string>
 </resources>

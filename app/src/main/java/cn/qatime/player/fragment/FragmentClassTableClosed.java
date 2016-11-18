@@ -85,11 +85,11 @@ public class FragmentClassTableClosed extends BaseFragment {
                         });
 ////                helper.setText(R.id.course, item.getCourse_name());
                 helper.setText(R.id.classname,  item.getName()+" "+item.getCourse_name());
-                helper.setText(R.id.status, getStatus(item.getStatus()));
 
                 try {
                     Date date = parse.parse(item.getClass_date());
                     helper.setText(R.id.class_date, date.getMonth() + "-" + date.getDay() + "  ");
+                    helper.setText(R.id.status, getStatus(item.getStatus(),date));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -128,19 +128,24 @@ public class FragmentClassTableClosed extends BaseFragment {
         });
     }
 
-    private String getStatus(String status) {
+    private String getStatus(String status, Date date) {
         if (status.equals("teaching")) {//直播中
-            return getResourceString(R.string.class_teaching);
+            return getResources().getString(R.string.class_teaching);
         } else if (status.equals("paused")) {
-            return getResourceString(R.string.class_teaching);
+            return getResources().getString(R.string.class_teaching);
         } else if (status.equals("init")) {//未开始
-            return getResourceString(R.string.class_init);
+            return getResources().getString(R.string.class_init);
         } else if (status.equals("ready")) {//待开课
-            return getResourceString(R.string.class_ready);
+            Date today = new Date();
+            if(date.before(today)){
+                return   getResources().getString(R.string.class_missed);
+            }else{
+                return getResources().getString(R.string.class_ready);
+            }
         } else if (status.equals("paused_inner")) {//暂停中
-            return getResourceString(R.string.class_paused_inner);
+            return getResources().getString(R.string.class_paused_inner);
         } else {
-            return getResourceString(R.string.class_over);//已结束
+            return getResources().getString(R.string.class_over);//已结束
         }
     }
 

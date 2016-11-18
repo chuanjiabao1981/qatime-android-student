@@ -148,10 +148,10 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                         });
 //                helper.setText(R.id.course, item.getCourse_name());
                 helper.setText(R.id.classname,  item.getName()+" "+item.getCourse_name());
-                helper.setText(R.id.status, getStatus(item.getStatus()));
                 try {
                     Date date = parse.parse(item.getClass_date());
                     helper.setText(R.id.class_date, date.getMonth() + "-" + date.getDay() + "  ");
+                    helper.setText(R.id.status, getStatus(item.getStatus(),date));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -183,7 +183,7 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         ImageView ivLeft = (ImageView) findViewById(R.id.iv_left);
         ImageView ivRight = (ImageView) findViewById(R.id.iv_right);
         monthDateView = (MonthDateView) findViewById(R.id.monthDateView);
-        monthDateView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, DensityUtils.dp2px(this, 25) * 7));
+        monthDateView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, DensityUtils.dp2px(this, 22) * 7));
         TextView tvDate = (TextView) findViewById(R.id.date_text);
         View tvToday = findViewById(R.id.date_operator_ll);
         monthDateView.setTextView(tvDate, null);
@@ -225,7 +225,7 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         }
     }
 
-    private String getStatus(String status) {
+    private String getStatus(String status, Date date) {
         if (status.equals("teaching")) {//直播中
             return getResources().getString(R.string.class_teaching);
         } else if (status.equals("paused")) {
@@ -233,7 +233,12 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         } else if (status.equals("init")) {//未开始
             return getResources().getString(R.string.class_init);
         } else if (status.equals("ready")) {//待开课
-            return getResources().getString(R.string.class_ready);
+            Date today = new Date();
+            if(date.before(today)){
+                return   getResources().getString(R.string.class_missed);
+            }else{
+                return getResources().getString(R.string.class_ready);
+            }
         } else if (status.equals("paused_inner")) {//暂停中
             return getResources().getString(R.string.class_paused_inner);
         } else {
