@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:singleLine="true"
         android:text="北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文北京高三作文"
-        android:textColor="#666" />
+        android:textColor="#333" />
 
     <LinearLayout
         android:layout_width="match_parent"
