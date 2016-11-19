@@ -43,7 +43,9 @@ public class FragmentPlayerLiveClassList extends BaseFragment {
                     holder.setText(R.id.status, getResourceString(R.string.class_ready));
                 } else if (item.getStatus().equals("paused_inner")) {//暂停中
                     holder.setText(R.id.status, getResourceString(R.string.class_paused_inner));
-                } else {
+                } else if (item.getStatus().equals("missed")) {//待补课
+                    holder.setText(R.id.status, getResourceString(R.string.class_wait));
+                }else {
                     holder.setText(R.id.status, getResourceString(R.string.class_over));//已结束
                 }
             }
