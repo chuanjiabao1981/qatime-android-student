@@ -47,19 +47,17 @@ public class UrlUtils {
     //找回密码
     public static String urlfindPassword = baseUrl + "api/v1/password";
     //标记通知已读
-    public static String urlNotifications = baseUrl + "/api/v1/notifications/";
+    public static String urlNotifications = baseUrl + "api/v1/notifications/";
     //账户充值
     public static String urlpayment = baseUrl + "api/v1/payment/users/";
 
     public static String getUrl(String function, Map<String, String> params) {
-        String url;
-        url = function + "?" + Map2String(params);
-        url.trim();
+        String url = function + "?" + Map2String(params);
+//        if (url.endsWith("&quot")) {
+//            url= url.trim().substring(0, url.length() - 5);
+//        }
         if (url.endsWith("&")) {
-            url.trim().substring(0, url.length() - 1);
-        }
-        if (url.endsWith("&")) {
-            url.substring(0, url.length() - 1);
+            url = url.substring(0, url.length() - 1);
         }
 //        LogUtils.e("请求地址------    " + url);
         return url;

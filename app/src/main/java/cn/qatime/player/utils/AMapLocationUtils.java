@@ -97,7 +97,7 @@ public class AMapLocationUtils {
         if (null == location) {
             return null;
         }
-        StringBuffer sb = new StringBuffer();
+//        StringBuilder sb = new StringBuilder();
         //errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
         if (location.getErrorCode() == 0) {
 //            sb.append("定位成功" + "\n");
@@ -117,29 +117,29 @@ public class AMapLocationUtils {
 //                        + location.getSatellites() + "\n");
             } else {
                 // 提供者是GPS时是没有以下信息的
-                sb.append("国    家    : " + location.getCountry() + "\n");
-                sb.append("省            : " + location.getProvince() + "\n");
-                sb.append("市            : " + location.getCity() + "\n");
-                sb.append("城市编码 : " + location.getCityCode() + "\n");
-                sb.append("区            : " + location.getDistrict() + "\n");
-                sb.append("区域 码   : " + location.getAdCode() + "\n");
-                sb.append("地    址    : " + location.getAddress() + "\n");
-                sb.append("兴趣点    : " + location.getPoiName() + "\n");
+//                sb.append("国    家    : " + location.getCountry() + "\n");
+//                sb.append("省            : " + location.getProvince() + "\n");
+//                sb.append("市            : " + location.getCity() + "\n");
+//                sb.append("城市编码 : " + location.getCityCode() + "\n");
+//                sb.append("区            : " + location.getDistrict() + "\n");
+//                sb.append("区域 码   : " + location.getAdCode() + "\n");
+//                sb.append("地    址    : " + location.getAddress() + "\n");
+//                sb.append("兴趣点    : " + location.getPoiName() + "\n");
 //                定位完成的时间
-                sb.append("定位时间: " + location.getTime() + "\n");
-                Logger.e(sb.toString());
+//                sb.append("定位时间: " + location.getTime() + "\n");
+//                Logger.e(sb.toString());
                 return location.getCity();
             }
         } else {
 //            定位失败
-            sb.append("定位失败" + "\n");
-            sb.append("错误码:" + location.getErrorCode() + "\n");
-            sb.append("错误信息:" + location.getErrorInfo() + "\n");
-            sb.append("错误描述:" + location.getLocationDetail() + "\n");
-            Logger.e(sb.toString());
+//            sb.append("定位失败" + "\n");
+//            sb.append("错误码:" + location.getErrorCode() + "\n");
+//            sb.append("错误信息:" + location.getErrorInfo() + "\n");
+//            sb.append("错误描述:" + location.getLocationDetail() + "\n");
+//            Logger.e(sb.toString());
             return "未查询到定位结果";
         }
-        Logger.e(sb.toString());
+//        Logger.e(sb.toString());
         return "未查询到定位结果";
     }
 

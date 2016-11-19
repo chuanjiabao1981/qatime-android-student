@@ -272,9 +272,9 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private int getReasonBackground(String reason) {
 
         if ("latest".equals(reason)) {
-            return 0x66cccc;
+            return 0xff66cccc;
         } else if ("hottest".equals(reason)) {
-            return 0xff9999;
+            return 0xffff9999;
         }
         return 0x00000000;
     }
