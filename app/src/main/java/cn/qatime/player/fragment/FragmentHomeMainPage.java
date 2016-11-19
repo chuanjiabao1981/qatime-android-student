@@ -1,6 +1,7 @@
 package cn.qatime.player.fragment;
 
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -69,10 +71,8 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private GridView gridviewSubject;
     private View citySelect;
     private TextView cityName;
-    private List<CityBean.Data> list = new ArrayList<>();
     private List<CityBean.Data> listCity;
     private CityBean.Data locationCity;
-    private AMapLocationUtils locationUtils;
     private AMapLocationUtils utils;
 
     @Override
@@ -327,6 +327,10 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 mainActivity.setCurrentPosition(1, getResourceString(R.string.whole));
                 break;
             case R.id.refresh_teacher:
+                ObjectAnimator animator = ObjectAnimator.ofFloat(refreshTeacher, "rotation", 0F, 360F).setDuration(300L);
+                animator.setRepeatCount(2);
+                animator.setInterpolator(new AccelerateDecelerateInterpolator());
+                animator.start();
                 initTeacherData();
                 break;
             case R.id.message:

@@ -9,7 +9,7 @@ import libraryextra.utils.StringUtils;
  * url类
  */
 public class UrlUtils {
-    public static boolean isDebug = true;
+    public static boolean isDebug = false;
 
     private static String baseUrl = isDebug ? "http://testing.qatime.cn/" : "http://qatime.cn/";
     //云信key
