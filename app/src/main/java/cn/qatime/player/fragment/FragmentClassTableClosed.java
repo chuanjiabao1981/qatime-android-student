@@ -121,7 +121,9 @@ public class FragmentClassTableClosed extends BaseFragment {
             return getResourceString(R.string.class_ready);
         } else if (status.equals("paused_inner")) {//暂停中
             return getResourceString(R.string.class_paused_inner);
-        } else {
+        } else if (status.equals("missed")) {//待补课
+            return getResourceString(R.string.class_wait);
+        }else {
             return getResourceString(R.string.class_over);//已结束
         }
     }

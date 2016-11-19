@@ -236,7 +236,9 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
             return getResources().getString(R.string.class_ready);
         } else if (status.equals("paused_inner")) {//暂停中
             return getResources().getString(R.string.class_paused_inner);
-        } else {
+        } else if (status.equals("missed")) {//待补课
+           return getResourceString(R.string.class_wait);
+        }else {
             return getResources().getString(R.string.class_over);//已结束
         }
     }

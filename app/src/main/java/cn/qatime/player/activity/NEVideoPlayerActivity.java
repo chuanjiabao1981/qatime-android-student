@@ -57,7 +57,7 @@ import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.FragmentLayoutWithLine;
 
-public class NEVideoPlayerActivity extends BaseFragmentActivity implements VideoActivityInterface {
+public class NEVideoPlayerActivity extends BaseFragmentActivity implements VideoActivityInterface, VideoLayout.OnDoubleClickListener {
 //    private View mBuffer; //用于指示缓冲状态
 
     private boolean isSubBig = true;//副窗口是否是大的
@@ -86,9 +86,14 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     private NEVideoView video1;
     private NEVideoView video2;
     private DanmuControl danMuController;
+    private int screenH;
+    private int screenW;
+
 
     private void assignViews() {
-        int width = ScreenUtils.getScreenWidth(this);
+        screenW = ScreenUtils.getScreenWidth(NEVideoPlayerActivity.this);
+        screenH = ScreenUtils.getScreenHeight(NEVideoPlayerActivity.this);
+
         video1 = (NEVideoView) findViewById(R.id.video1);
         video2 = (NEVideoView) findViewById(R.id.video2);
 
@@ -109,16 +114,21 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
         ViewGroup.LayoutParams mainVideoParam = mainVideo.getLayoutParams();
         mainVideoParam.width = -1;
-        mainVideoParam.height = width * 9 / 16;
+        mainVideoParam.height = screenW * 9 / 16;
         mainVideo.setLayoutParams(mainVideoParam);
         ViewGroup.LayoutParams danmuViewParam = danmuView.getLayoutParams();
         danmuViewParam.width = -1;
-        danmuViewParam.height = width * 9 / 16;
+        danmuViewParam.height = screenW * 9 / 16;
         danmuView.setLayoutParams(danmuViewParam);
         ViewGroup.LayoutParams subVideoParam = subVideo.getLayoutParams();
         subVideoParam.width = -1;
-        subVideoParam.height = width * 9 / 16;
+        subVideoParam.height = screenW * 9 / 16;
         subVideo.setLayoutParams(subVideoParam);
+        ViewGroup.LayoutParams floatingWindowParam = floatingWindow.getLayoutParams();
+        floatingWindowParam.width = screenW * 2 / 5;
+        floatingWindowParam.height = floatingWindowParam.width * 9 / 16;
+        floatingWindow.setLayoutParams(floatingWindowParam);
+        floatingWindow.setOnDoubleClickListener(this);
     }
 
     @Override
@@ -353,8 +363,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        int screenW = ScreenUtils.getScreenWidth(NEVideoPlayerActivity.this);
-        int screenH = ScreenUtils.getScreenHeight(NEVideoPlayerActivity.this);
 
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) { // 横屏
             orientation = Configuration.ORIENTATION_LANDSCAPE;
@@ -675,5 +683,16 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     public void pause() {
         video1.pause();
         video2.pause();
+    }
+
+    /**
+     * 悬浮窗双击效果
+     */
+    @Override
+    public void onDoubleClick() {
+        if (floatFragment == null) {
+            return;
+        }
+        floatFragment.switchVideo();
     }
 }

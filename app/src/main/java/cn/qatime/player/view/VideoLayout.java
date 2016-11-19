@@ -3,10 +3,13 @@ package cn.qatime.player.view;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
 
@@ -22,6 +25,11 @@ public class VideoLayout extends RelativeLayout {
     private float lastY;
     private float resultX;
     private float resultY;
+    private final long DOUBLE_CLICK_TIME = 350;//双击等待时间
+    private long firstClick;
+    private int count;
+    private long lastClick;
+
 
     public VideoLayout(Context context) {
         super(context);
@@ -55,6 +63,21 @@ public class VideoLayout extends RelativeLayout {
         float rawY = event.getRawY();
         switch (MotionEventCompat.getActionMasked(event)) {
             case MotionEvent.ACTION_DOWN:
+                if (firstClick != 0 && System.currentTimeMillis() - firstClick > DOUBLE_CLICK_TIME) {
+                    count = 0;
+                }
+                count++;
+                if (count == 1) {
+                    firstClick = System.currentTimeMillis();
+                } else if (count == 2) {
+                    lastClick = System.currentTimeMillis();
+                    // 两次点击小于300ms 也就是连续点击
+                    if (lastClick - firstClick < DOUBLE_CLICK_TIME) {// 判断是否是执行了双击事件
+                        if (mOnDoubleClickListener != null) {
+                            mOnDoubleClickListener.onDoubleClick();
+                        }
+                    }
+                }
                 this.lastX = rawX;
                 this.lastY = rawY;
                 break;
@@ -95,4 +118,16 @@ public class VideoLayout extends RelativeLayout {
         }
         return true;
     }
+
+
+    public interface OnDoubleClickListener {
+        void onDoubleClick();
+    }
+
+    private OnDoubleClickListener mOnDoubleClickListener;
+
+    public void setOnDoubleClickListener(OnDoubleClickListener l) {
+        mOnDoubleClickListener = l;
+    }
+
 }
