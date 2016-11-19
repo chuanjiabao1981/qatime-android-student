@@ -145,8 +145,8 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                                 startActivity(intent);
                             }
                         });
-                helper.setText(R.id.course, item.getCourse_name());
-                helper.setText(R.id.classname, item.getName());
+                helper.setText(R.id.course, item.getName());
+                helper.setText(R.id.classname, item.getCourse_name());
                 helper.setText(R.id.status, getStatus(item.getStatus()));
                 helper.setText(R.id.class_date, item.getClass_date() + " ");
                 helper.setText(R.id.live_time, item.getLive_time());

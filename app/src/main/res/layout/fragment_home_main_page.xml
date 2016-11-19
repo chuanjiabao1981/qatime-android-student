@@ -81,15 +81,12 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginTop="6dp"
                 android:background="#fff"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:paddingBottom="8dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="10dp">
+                android:paddingLeft="10dp">
 
                 <ImageView
                     android:layout_width="14dp"
@@ -99,7 +96,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
+                    android:layout_gravity="center_vertical"
                     android:text="名师推荐"
                     android:textColor="#000"
                     android:textSize="16sp" />
@@ -111,10 +108,10 @@
 
                 <ImageView
                     android:id="@+id/refresh_teacher"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:padding="4dp"
-                    android:src="@mipmap/refresh" />
+                    android:layout_width="40dp"
+                    android:padding="12dp"
+                    android:layout_height="match_parent"
+                    android:src="@mipmap/home_main_page_refresh" />
             </LinearLayout>
 
             <libraryextra.view.GridViewForScrollView
