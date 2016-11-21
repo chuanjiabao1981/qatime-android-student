@@ -123,7 +123,7 @@ public class MainActivity extends BaseFragmentActivity {
                 ((ImageView) lastTabView.findViewById(tab_img[lastPosition])).setImageResource(tabImages[lastPosition][1]);
                 ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xfff45050);
                 ((ImageView) currentTabView.findViewById(tab_img[position])).setImageResource(tabImages[position][0]);
-                enableMsgNotification(false);
+//                enableMsgNotification(false);
             }
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout, 0x1000);
@@ -176,16 +176,16 @@ public class MainActivity extends BaseFragmentActivity {
     }
 
     private void parseIntent() {
-        Intent intent = getIntent();
+        Intent data = getIntent();
         /**     * 解析通知栏发来的云信消息     */
-        if (intent != null && intent.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT)) {
-            Intent intent1 = new Intent(this, MessageFragmentActivity.class);
-            intent.putExtra("intent", intent);
-            startActivity(intent1);
-        } else if (intent != null && intent.hasExtra("type") && intent.getStringExtra("type").equals("system_message")) {//转到系统消息页面
-            Intent intent1 = new Intent(this, MessageFragmentActivity.class);
-            intent.putExtra("intent", intent);
-            startActivity(intent1);
+        if (data != null && data.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT)) {
+            Intent intent = new Intent(this, MessageFragmentActivity.class);
+            intent.putExtra("intent", data);
+            startActivity(intent);
+        } else if (data != null && data.hasExtra("type") && data.getStringExtra("type").equals("system_message")) {//转到系统消息页面
+            Intent intent = new Intent(this, MessageFragmentActivity.class);
+            intent.putExtra("intent", data);
+            startActivity(intent);
         }
     }
 
@@ -329,39 +329,25 @@ public class MainActivity extends BaseFragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        enableMsgNotification(false);
+        /**
+         * 设置最近联系人的消息为已读
+         *
+         * @param account,    聊天对象帐号，或者以下两个值：
+         *                    {@link #MSG_CHATTING_ACCOUNT_ALL} 目前没有与任何人对话，但能看到消息提醒（比如在消息列表界面），不需要在状态栏做消息通知
+         *                    {@link #MSG_CHATTING_ACCOUNT_NONE} 目前没有与任何人对话，需要状态栏消息通知
+         */
+        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        enableMsgNotification(true);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-    }
-
-    /**********************************************
-     * 云信
-     *******************************************************/
-
-    private void enableMsgNotification(boolean enable) {
-        boolean msg = (currentPosition != 2);
-        if (enable | msg) {
-            /**
-             * 设置最近联系人的消息为已读
-             *
-             * @param account,    聊天对象帐号，或者以下两个值：
-             *                    {@link #MSG_CHATTING_ACCOUNT_ALL} 目前没有与任何人对话，但能看到消息提醒（比如在消息列表界面），不需要在状态栏做消息通知
-             *                    {@link #MSG_CHATTING_ACCOUNT_NONE} 目前没有与任何人对话，需要状态栏消息通知
-             */
-            NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
-        } else {
-            NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
-        }
     }
 
 
