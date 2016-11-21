@@ -19,7 +19,7 @@
     <string name="by_grade">年级</string>
     <string name="price">价格范围</string>
     <string name="yuan">元</string>
-    <string name="class_hours_range">课时范围</string>
+    <string name="class_hours_range">课时总数</string>
     <string name="hours">课时</string>
     <string name="starting_range">开课时间</string>
     <string name="to">至</string>

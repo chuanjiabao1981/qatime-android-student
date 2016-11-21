@@ -205,7 +205,6 @@
                 android:id="@+id/begin_class_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2016-11-11"
                 android:textColor="#a000"
                 android:textSize="16sp" />
 
@@ -237,7 +236,6 @@
                 android:id="@+id/end_class_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2016-11-11"
                 android:textColor="#a000"
                 android:textSize="16sp" />
 
