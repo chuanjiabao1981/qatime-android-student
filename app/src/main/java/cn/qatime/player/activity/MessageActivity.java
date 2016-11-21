@@ -530,7 +530,7 @@ public class MessageActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         registerObservers(false);
-        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
+        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
     }
 
     @Subscribe
