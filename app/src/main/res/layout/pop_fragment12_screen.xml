@@ -205,8 +205,10 @@
                 android:id="@+id/begin_class_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#a000"
-                android:textSize="16sp" />
+                android:textColor="#3000"
+                android:hint="请选择开始时间"
+                android:textColorHint="#3000"
+                android:textSize="14sp" />
 
             <ImageView
                 android:layout_width="10dp"
@@ -236,8 +238,10 @@
                 android:id="@+id/end_class_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:hint="请选择结束时间"
+                android:textColorHint="#3000"
                 android:textColor="#a000"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <ImageView
                 android:layout_width="10dp"
@@ -297,6 +301,7 @@
                     android:layout_height="20dp"
                     android:layout_centerVertical="true"
                     android:layout_toLeftOf="@id/started_text"
+                    android:textColor="#a000"
                     android:gravity="center"
                     android:text="√" />
             </RelativeLayout>
@@ -333,6 +338,7 @@
                     android:id="@+id/recruiting_selected"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
+                    android:textColor="#a000"
                     android:layout_centerVertical="true"
                     android:layout_toLeftOf="@id/recruiting_text"
                     android:gravity="center"

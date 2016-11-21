@@ -348,8 +348,8 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
         recruitingText.setChecked(true);
         beginClassTime.setText("");
         endcLassTime.setText("");
-        beginClassTime.setHint("开始时间");
-        endcLassTime.setHint("结束时间");
+        beginClassTime.setHint("请选择开始时间");
+        endcLassTime.setHint("请选择结束时间");
         started.setBackgroundResource(R.drawable.text_background_select);
         startedSelected.setVisibility(View.VISIBLE);
         recruiting.setBackgroundResource(R.drawable.text_background_select);
