@@ -42,7 +42,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,8 +82,8 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
     private View screenLayout;
     private EditText priceLow;
     private EditText priceHigh;
-    private EditText subjectLow;
-    private EditText subjectHigh;
+//    private EditText subjectLow;
+//    private EditText subjectHigh;
     private TextView beginClassTime;
     private TextView beginClassMonth;
     private TextView beginClassDay;
@@ -184,10 +183,10 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
                     price = "0" + price;
                 }
                 helper.setText(R.id.price, price);
-                helper.setText(R.id.student_number, String.valueOf(item.getBuy_tickets_count())+"人报名");
+                helper.setText(R.id.student_number, String.valueOf(item.getBuy_tickets_count()) + "人报名");
             }
         };
-        grid.setEmptyView(View.inflate(getActivity(),R.layout.empty_view,null));
+        grid.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
         grid.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<GridView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<GridView> refreshView) {
@@ -211,19 +210,6 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
                 startActivity(intent);
             }
         });
-
-        dataDialog = new MDatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                if (dataDialog.getDatePicker().getMinDate() != 0) {
-                    class_date_ceil = (year + "-" + ((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1))) + "-" + ((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth))));
-                    endcLassTime.setText(class_date_ceil);
-                } else {
-                    class_date_floor = (year + "-" + ((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1))) + "-" + ((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth))));
-                    beginClassTime.setText(class_date_floor);
-                }
-            }
-        }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
     }
 
     /**
@@ -258,11 +244,47 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
                 e.printStackTrace();
             }
         }
-
-        map.put("price_floor", priceLow == null ? "" : priceLow.getText().toString());
-        map.put("price_ceil", priceHigh == null ? "" : priceHigh.getText().toString());
-        map.put("preset_lesson_count_floor", subjectLow == null ? "" : subjectLow.getText().toString());
-        map.put("preset_lesson_count_ceil", subjectHigh == null ? "" : subjectHigh.getText().toString());
+        String lowPrice = priceLow == null ? "" : priceLow.getText().toString();
+        String highPrice = priceHigh == null ? "" : priceHigh.getText().toString();
+        if (!StringUtils.isNullOrBlanK(lowPrice) && !StringUtils.isNullOrBlanK(highPrice)) {//两个都不为空再比较
+            if (Integer.valueOf(lowPrice) > Integer.valueOf(highPrice)) {
+                String temp = lowPrice;
+                lowPrice = highPrice;
+                highPrice = temp;
+                priceHigh.setText(highPrice);
+                priceLow.setText(lowPrice);
+            }
+        }
+        map.put("price_floor", lowPrice);
+        map.put("price_ceil", highPrice);
+//        String lowSubject = subjectLow == null ? "" : subjectLow.getText().toString();
+//        String highSubject = subjectHigh == null ? "" : subjectHigh.getText().toString();
+//        if (!StringUtils.isNullOrBlanK(lowSubject) && !StringUtils.isNullOrBlanK(highSubject)) {
+//            if (Integer.valueOf(lowSubject) > Integer.valueOf(highSubject)) {
+//                String temp = lowSubject;
+//                lowSubject = highSubject;
+//                highSubject = temp;
+//                subjectHigh.setText(highSubject);
+//                subjectLow.setText(lowSubject);
+//            }
+//        }
+//        map.put("preset_lesson_count_floor", lowSubject);
+//        map.put("preset_lesson_count_ceil", highSubject);
+        if (!StringUtils.isNullOrBlanK(class_date_floor) && !StringUtils.isNullOrBlanK(class_date_ceil)) {
+            try {
+                if (parseDate.parse(class_date_ceil).before(parseDate.parse(class_date_floor))) {
+                    String temp = class_date_floor;
+                    class_date_floor = class_date_ceil;
+                    class_date_ceil = temp;
+                    endcLassTime.setText(class_date_ceil);
+                    beginClassTime.setText(class_date_floor);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        map.put("class_date_floor",class_date_floor);
+        map.put("class_date_ceil", class_date_ceil);
         map.put("status", status);
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass, map), null,
                 new VolleyListener(getActivity()) {
@@ -317,15 +339,17 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
 //        timesorttype = "";
         priceLow.setText("");
         priceHigh.setText("");
-        subjectLow.setText("");
-        subjectHigh.setText("");
+//        subjectLow.setText("");
+//        subjectHigh.setText("");
         status = "";
         class_date_floor = "";
         class_date_ceil = "";
         startedText.setChecked(true);
         recruitingText.setChecked(true);
-        beginClassTime.setText(parseDate.format(new Date()));
-        endcLassTime.setText(parseDate.format(new Date()));
+        beginClassTime.setText("");
+        endcLassTime.setText("");
+        beginClassTime.setHint("开始时间");
+        endcLassTime.setHint("结束时间");
         started.setBackgroundResource(R.drawable.text_background_select);
         startedSelected.setVisibility(View.VISIBLE);
         recruiting.setBackgroundResource(R.drawable.text_background_select);
@@ -511,8 +535,8 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
                     priceLow = (EditText) screenPopView.findViewById(R.id.price_low);
                     priceHigh = (EditText) screenPopView.findViewById(R.id.price_high);
 
-                    subjectLow = (EditText) screenPopView.findViewById(R.id.subject_low);
-                    subjectHigh = (EditText) screenPopView.findViewById(R.id.subject_high);
+//                    subjectLow = (EditText) screenPopView.findViewById(R.id.subject_low);
+//                    subjectHigh = (EditText) screenPopView.findViewById(R.id.subject_high);
 
                     beginClassTime = (TextView) screenPopView.findViewById(R.id.begin_class_time);
                     endcLassTime = (TextView) screenPopView.findViewById(R.id.end_class_time);
@@ -535,20 +559,24 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
                 showPop(screenPopView);
                 break;
             case R.id.begin_class_time://开课时间
-                try {
-                    dataDialog.getDatePicker().setMinDate(parseDate.parse(beginClassTime.getText().toString()).getTime());
-                    dataDialog.show();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                MDatePickerDialog beginPickerDialog = new MDatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                            class_date_floor = (year + "-" + ((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1))) + "-" + ((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth))));
+                            beginClassTime.setText(class_date_floor);
+                    }
+                }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+                beginPickerDialog.show();
                 break;
             case R.id.end_class_time://开课时间end
-                try {
-                    dataDialog.getDatePicker().setMinDate(parseDate.parse(endcLassTime.getText().toString()).getTime());
-                    dataDialog.show();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                MDatePickerDialog endPickerDialog = new MDatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                            class_date_ceil = (year + "-" + ((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1))) + "-" + ((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth))));
+                            endcLassTime.setText(class_date_ceil);
+                    }
+                }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+                endPickerDialog.show();
                 break;
             case R.id.reset://取消按钮
 //                pop.dismiss();
