@@ -9,12 +9,14 @@ import java.io.Serializable;
  */
 public class ChatVideoBean implements Serializable {
     private int courseId;
-    private String pull_address;
+    private String board;
+    private String camera;
     private String name;
 
-    public ChatVideoBean(int courseId, String pull_address, String name) {
+    public ChatVideoBean(int courseId, String camera, String board, String name) {
         this.courseId = courseId;
-        this.pull_address = pull_address;
+        this.camera = camera;
+        this.board = board;
         this.name = name;
     }
 
@@ -22,8 +24,12 @@ public class ChatVideoBean implements Serializable {
         return courseId;
     }
 
-    public String getPull_address() {
-        return pull_address;
+    public String getBoard() {
+        return board;
+    }
+
+    public String getCamera() {
+        return camera;
     }
 
     public String getName() {

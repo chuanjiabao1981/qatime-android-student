@@ -128,24 +128,21 @@ public class FragmentClassTableClosed extends BaseFragment {
         });
     }
 
-    private String getStatus(String status, Date date) {
+    private String getStatus(String status) {
         if (status.equals("teaching")) {//直播中
-            return getResources().getString(R.string.class_teaching);
+            return getResourceString(R.string.class_teaching);
         } else if (status.equals("paused")) {
-            return getResources().getString(R.string.class_teaching);
+            return getResourceString(R.string.class_teaching);
         } else if (status.equals("init")) {//未开始
-            return getResources().getString(R.string.class_init);
+            return getResourceString(R.string.class_init);
         } else if (status.equals("ready")) {//待开课
-            Date today = new Date();
-            if(date.before(today)){
-                return   getResources().getString(R.string.class_missed);
-            }else{
-                return getResources().getString(R.string.class_ready);
-            }
+            return getResourceString(R.string.class_ready);
         } else if (status.equals("paused_inner")) {//暂停中
-            return getResources().getString(R.string.class_paused_inner);
-        } else {
-            return getResources().getString(R.string.class_over);//已结束
+            return getResourceString(R.string.class_paused_inner);
+        } else if (status.equals("missed")) {//待补课
+            return getResourceString(R.string.class_wait);
+        }else {
+            return getResourceString(R.string.class_over);//已结束
         }
     }
 

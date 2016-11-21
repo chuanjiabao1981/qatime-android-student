@@ -159,13 +159,15 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                 helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
-                helper.getView(R.id.enter).setVisibility(StringUtils.isNullOrBlanK(item.getPull_address()) ? View.GONE : View.VISIBLE);
+                helper.getView(R.id.enter).setVisibility((!StringUtils.isNullOrBlanK(item.getCamera()) && !StringUtils.isNullOrBlanK(item.getBoard())) ? View.VISIBLE : View.GONE);
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(ClassTimeTableActivity.this, NEVideoPlayerActivity.class);
+                        intent.putExtra("camera", item.getCamera());
+                        intent.putExtra("board", item.getBoard());
                         intent.putExtra("id", item.getId());
-                        intent.putExtra("url", item.getPull_address());
+                        intent.putExtra("sessionId", item.getChat_team_id());
                         startActivity(intent);
                     }
                 });
@@ -197,6 +199,13 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                 filterList();
             }
         });
+        monthDateView.setOnCalendarPageChangeListener(new MonthDateView.OnCalendarPageChangeListener() {
+            @Override
+            public void onPageChange(int type) {
+                getDate();
+                initData();
+            }
+        });
     }
 
     private void getDate() {
@@ -209,13 +218,11 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         switch (v.getId()) {
             case R.id.iv_left:
                 monthDateView.onLeftClick();
-                getDate();
-                initData();
+
                 break;
             case R.id.iv_right:
                 monthDateView.onRightClick();
-                getDate();
-                initData();
+
                 break;
             case R.id.date_operator_ll:
                 monthDateView.setTodayToView();
@@ -225,7 +232,7 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         }
     }
 
-    private String getStatus(String status, Date date) {
+    private String getStatus(String status) {
         if (status.equals("teaching")) {//直播中
             return getResources().getString(R.string.class_teaching);
         } else if (status.equals("paused")) {
@@ -233,15 +240,12 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         } else if (status.equals("init")) {//未开始
             return getResources().getString(R.string.class_init);
         } else if (status.equals("ready")) {//待开课
-            Date today = new Date();
-            if(date.before(today)){
-                return   getResources().getString(R.string.class_missed);
-            }else{
-                return getResources().getString(R.string.class_ready);
-            }
+            return getResources().getString(R.string.class_ready);
         } else if (status.equals("paused_inner")) {//暂停中
             return getResources().getString(R.string.class_paused_inner);
-        } else {
+        } else if (status.equals("missed")) {//待补课
+           return getResourceString(R.string.class_wait);
+        }else {
             return getResources().getString(R.string.class_over);//已结束
         }
     }

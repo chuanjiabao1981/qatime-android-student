@@ -115,7 +115,7 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:background="#ffffff"
-        android:paddingTop="8dp"
+        android:paddingTop="10dp"
         android:layout_height="match_parent">
 
         <com.handmark.pulltorefresh.library.PullToRefreshGridView
@@ -127,7 +127,7 @@
             android:background="#ffffff"
             android:numColumns="2"
             android:scrollbars="none"
-            android:verticalSpacing="10dp" />
+            android:verticalSpacing="16dp" />
 
     </RelativeLayout>
 

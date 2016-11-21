@@ -7,7 +7,10 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.TextView;
 
+import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.NimIntent;
+import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 
 import java.util.ArrayList;
@@ -52,18 +55,18 @@ public class MessageFragmentActivity extends BaseFragmentActivity {
         fragBaseFragments.add(new FragmentMessageNotifyNews());
 
 
-        fragmentlayout = (FragmentLayoutWithLine)findViewById(R.id.fragmentlayout);
+        fragmentlayout = (FragmentLayoutWithLine) findViewById(R.id.fragmentlayout);
 
         fragmentlayout.setScorllToNext(true);
         fragmentlayout.setScorll(true);
         fragmentlayout.setWhereTab(1);
-        fragmentlayout.setTabHeight(4,0xffff9999);
+        fragmentlayout.setTabHeight(4, 0xffff9999);
         fragmentlayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff999999);
                 ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff333333);
-                ((BaseFragment)fragBaseFragments.get(position)).onShow();
+                ((BaseFragment) fragBaseFragments.get(position)).onShow();
             }
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_fragment_news, 0x0912);
@@ -98,4 +101,16 @@ public class MessageFragmentActivity extends BaseFragmentActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        /**
+         * 设置最近联系人的消息为已读
+         *
+         * @param account,    聊天对象帐号，或者以下两个值：
+         *                    {@link #MSG_CHATTING_ACCOUNT_ALL} 目前没有与任何人对话，但能看到消息提醒（比如在消息列表界面），不需要在状态栏做消息通知
+         *                    {@link #MSG_CHATTING_ACCOUNT_NONE} 目前没有与任何人对话，需要状态栏消息通知
+         */
+        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
+    }
 }

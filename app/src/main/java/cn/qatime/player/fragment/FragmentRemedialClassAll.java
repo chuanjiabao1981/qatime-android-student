@@ -184,7 +184,7 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
                     price = "0" + price;
                 }
                 helper.setText(R.id.price, price);
-                helper.setText(R.id.student_number, String.valueOf(item.getBuy_tickets_count()));
+                helper.setText(R.id.student_number, String.valueOf(item.getBuy_tickets_count())+"人报名");
             }
         };
         grid.setEmptyView(View.inflate(getActivity(),R.layout.empty_view,null));
@@ -535,12 +535,16 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
                 showPop(screenPopView);
                 break;
             case R.id.begin_class_time://开课时间
-                dataDialog.getDatePicker().setMinDate(0);
-                dataDialog.show();
+                try {
+                    dataDialog.getDatePicker().setMinDate(parseDate.parse(beginClassTime.getText().toString()).getTime());
+                    dataDialog.show();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.end_class_time://开课时间end
                 try {
-                    dataDialog.getDatePicker().setMinDate(parseDate.parse(beginClassTime.getText().toString()).getTime());
+                    dataDialog.getDatePicker().setMinDate(parseDate.parse(endcLassTime.getText().toString()).getTime());
                     dataDialog.show();
                 } catch (ParseException e) {
                     e.printStackTrace();

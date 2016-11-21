@@ -109,20 +109,35 @@
             android:text="@string/class_hours_range"
             android:textColor="#4000" />
 
-        <EditText
-            android:id="@+id/subject_low"
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="32dp"
-            android:layout_weight="1"
-            android:background="@drawable/shape_input_radius"
-            android:gravity="center"
-            android:inputType="number"
-            android:maxLength="3"
-            android:minEms="3"
-            android:singleLine="true"
-            android:textColor="#a000"
-            android:textColorHint="#ff999999"
-            android:textSize="16sp" />
+            android:layout_weight="1">
+
+            <EditText
+                android:id="@+id/subject_low"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/shape_input_radius"
+                android:gravity="center"
+                android:inputType="number"
+                android:maxLength="3"
+                android:minEms="3"
+                android:singleLine="true"
+                android:textColor="#a000"
+                android:textColorHint="#ff999999"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="6dp"
+                android:text="@string/hours"
+                android:textColor="#a000" />
+        </RelativeLayout>
+
 
         <TextView
             android:layout_width="15dp"
@@ -132,20 +147,34 @@
             android:gravity="center"
             android:text="-" />
 
-        <EditText
-            android:id="@+id/subject_high"
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="32dp"
-            android:layout_weight="1"
-            android:background="@drawable/shape_input_radius"
-            android:gravity="center"
-            android:inputType="number"
-            android:maxLength="3"
-            android:minEms="3"
-            android:singleLine="true"
-            android:textColor="#a000"
-            android:textColorHint="#ff999999"
-            android:textSize="16sp" />
+            android:layout_weight="1">
+
+            <EditText
+                android:id="@+id/subject_high"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/shape_input_radius"
+                android:gravity="center"
+                android:inputType="number"
+                android:maxLength="3"
+                android:minEms="3"
+                android:singleLine="true"
+                android:textColor="#a000"
+                android:textColorHint="#ff999999"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="6dp"
+                android:text="@string/hours"
+                android:textColor="#a000" />
+        </RelativeLayout>
 
     </LinearLayout>
 
@@ -153,8 +182,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="18dp"
-        android:layout_marginRight="12dp"
         android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 

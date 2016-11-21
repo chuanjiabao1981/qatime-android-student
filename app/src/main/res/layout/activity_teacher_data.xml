@@ -72,7 +72,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="高玉明"
-                                    android:textColor="#333"
+                                    android:textColor="#000"
                                     android:textSize="18sp" />
 
                                 <TextView
@@ -194,7 +194,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
                     android:text="自我介绍"
-                    android:textColor="#333" />
+                    android:textColor="#000" />
 
                 <View
                     android:layout_width="0dp"
@@ -238,7 +238,7 @@
                     android:layout_height="wrap_content"
                     android:text="TA的课程"
                     android:textSize="16sp"
-                    android:textColor="#333" />
+                    android:textColor="#000" />
 
                 <View
                     android:layout_width="0dp"
