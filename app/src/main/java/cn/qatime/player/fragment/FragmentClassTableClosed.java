@@ -67,6 +67,7 @@ public class FragmentClassTableClosed extends BaseFragment {
         listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResourceString(R.string.loading));
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
+        listView.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
 
 
         adapter = new CommonAdapter<ClassTimeTableBean.DataEntity.LessonsEntity>(getActivity(), itemList, R.layout.item_fragment_remedial_class_time_table2) {
@@ -84,12 +85,12 @@ public class FragmentClassTableClosed extends BaseFragment {
                             }
                         });
 ////                helper.setText(R.id.course, item.getCourse_name());
-                helper.setText(R.id.classname,  item.getName()+" "+item.getCourse_name());
+                helper.setText(R.id.classname, item.getName() + " " + item.getCourse_name());
 
                 try {
                     Date date = parse.parse(item.getClass_date());
                     helper.setText(R.id.class_date, date.getMonth() + "-" + date.getDay() + "  ");
-                    helper.setText(R.id.status, getStatus(item.getStatus(),date));
+                    helper.setText(R.id.status, getStatus(item.getStatus()));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -97,13 +98,15 @@ public class FragmentClassTableClosed extends BaseFragment {
                 helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
-                helper.getView(R.id.enter).setVisibility(StringUtils.isNullOrBlanK(item.getPull_address()) ? View.GONE : View.VISIBLE);
+                helper.getView(R.id.enter).setVisibility((!StringUtils.isNullOrBlanK(item.getCamera()) && !StringUtils.isNullOrBlanK(item.getBoard())) ? View.VISIBLE : View.GONE);
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
+                        intent.putExtra("camera", item.getCamera());
+                        intent.putExtra("board", item.getBoard());
                         intent.putExtra("id", item.getId());
-                        intent.putExtra("url", item.getPull_address());
+                        intent.putExtra("sessionId", item.getChat_team_id());
                         startActivity(intent);
                     }
                 });
@@ -121,7 +124,7 @@ public class FragmentClassTableClosed extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                intent.putExtra("id", Integer.valueOf(itemList.get(position-1).getCourse_id()));
+                intent.putExtra("id", Integer.valueOf(itemList.get(position - 1).getCourse_id()));
                 intent.putExtra("pager", 2);
                 startActivity(intent);
             }
@@ -141,7 +144,7 @@ public class FragmentClassTableClosed extends BaseFragment {
             return getResourceString(R.string.class_paused_inner);
         } else if (status.equals("missed")) {//待补课
             return getResourceString(R.string.class_wait);
-        }else {
+        } else {
             return getResourceString(R.string.class_over);//已结束
         }
     }

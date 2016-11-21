@@ -125,7 +125,7 @@ public class FragmentClassTableUnclosed extends BaseFragment {
         listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResourceString(R.string.loading));
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
-
+        listView.setEmptyView(View.inflate(getActivity(),R.layout.empty_view,null));
 
         adapter = new CommonAdapter<ClassTimeTableBean.DataEntity.LessonsEntity>(getActivity(), itemList, R.layout.item_fragment_remedial_class_time_table1) {
             @Override
@@ -142,11 +142,11 @@ public class FragmentClassTableUnclosed extends BaseFragment {
 //                            }
 //                        });
 //                helper.setText(R.id.course, item.getCourse_name());
-                helper.setText(R.id.classname, item.getName()+" "+item.getCourse_name());
+                helper.setText(R.id.classname, item.getName() + " " + item.getCourse_name());
                 try {
                     Date date = parse.parse(item.getClass_date());
                     helper.setText(R.id.class_date, date.getMonth() + "-" + date.getDay() + "  ");
-                    helper.setText(R.id.status, getStatus(item.getStatus(),date));
+                    helper.setText(R.id.status, getStatus(item.getStatus()));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

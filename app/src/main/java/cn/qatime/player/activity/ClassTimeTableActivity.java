@@ -131,6 +131,7 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
+        listView.setEmptyView(View.inflate(ClassTimeTableActivity.this,R.layout.empty_view,null));
 
         adapter = new CommonAdapter<ClassTimeTableBean.DataEntity.LessonsEntity>(this, itemList, R.layout.item_activity_class_time_table) {
             @Override
@@ -151,7 +152,7 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                 try {
                     Date date = parse.parse(item.getClass_date());
                     helper.setText(R.id.class_date, date.getMonth() + "-" + date.getDay() + "  ");
-                    helper.setText(R.id.status, getStatus(item.getStatus(),date));
+                    helper.setText(R.id.status, getStatus(item.getStatus()));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
