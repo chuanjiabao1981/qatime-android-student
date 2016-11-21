@@ -82,8 +82,8 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
     private View screenLayout;
     private EditText priceLow;
     private EditText priceHigh;
-    private EditText subjectLow;
-    private EditText subjectHigh;
+//    private EditText subjectLow;
+//    private EditText subjectHigh;
     private TextView beginClassTime;
     private TextView beginClassMonth;
     private TextView beginClassDay;
@@ -257,19 +257,19 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
         }
         map.put("price_floor", lowPrice);
         map.put("price_ceil", highPrice);
-        String lowSubject = subjectLow == null ? "" : subjectLow.getText().toString();
-        String highSubject = subjectHigh == null ? "" : subjectHigh.getText().toString();
-        if (!StringUtils.isNullOrBlanK(lowSubject) && !StringUtils.isNullOrBlanK(highSubject)) {
-            if (Integer.valueOf(lowSubject) > Integer.valueOf(highSubject)) {
-                String temp = lowSubject;
-                lowSubject = highSubject;
-                highSubject = temp;
-                subjectHigh.setText(highSubject);
-                subjectLow.setText(lowSubject);
-            }
-        }
-        map.put("preset_lesson_count_floor", lowSubject);
-        map.put("preset_lesson_count_ceil", highSubject);
+//        String lowSubject = subjectLow == null ? "" : subjectLow.getText().toString();
+//        String highSubject = subjectHigh == null ? "" : subjectHigh.getText().toString();
+//        if (!StringUtils.isNullOrBlanK(lowSubject) && !StringUtils.isNullOrBlanK(highSubject)) {
+//            if (Integer.valueOf(lowSubject) > Integer.valueOf(highSubject)) {
+//                String temp = lowSubject;
+//                lowSubject = highSubject;
+//                highSubject = temp;
+//                subjectHigh.setText(highSubject);
+//                subjectLow.setText(lowSubject);
+//            }
+//        }
+//        map.put("preset_lesson_count_floor", lowSubject);
+//        map.put("preset_lesson_count_ceil", highSubject);
         if (!StringUtils.isNullOrBlanK(class_date_floor) && !StringUtils.isNullOrBlanK(class_date_ceil)) {
             try {
                 if (parseDate.parse(class_date_ceil).before(parseDate.parse(class_date_floor))) {
@@ -339,8 +339,8 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
 //        timesorttype = "";
         priceLow.setText("");
         priceHigh.setText("");
-        subjectLow.setText("");
-        subjectHigh.setText("");
+//        subjectLow.setText("");
+//        subjectHigh.setText("");
         status = "";
         class_date_floor = "";
         class_date_ceil = "";
@@ -535,8 +535,8 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
                     priceLow = (EditText) screenPopView.findViewById(R.id.price_low);
                     priceHigh = (EditText) screenPopView.findViewById(R.id.price_high);
 
-                    subjectLow = (EditText) screenPopView.findViewById(R.id.subject_low);
-                    subjectHigh = (EditText) screenPopView.findViewById(R.id.subject_high);
+//                    subjectLow = (EditText) screenPopView.findViewById(R.id.subject_low);
+//                    subjectHigh = (EditText) screenPopView.findViewById(R.id.subject_high);
 
                     beginClassTime = (TextView) screenPopView.findViewById(R.id.begin_class_time);
                     endcLassTime = (TextView) screenPopView.findViewById(R.id.end_class_time);
