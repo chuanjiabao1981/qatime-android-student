@@ -449,4 +449,5 @@
     <string name="withdraw_existed">存在未完成的提现订单</string>
     <string name="start_audition">开始试听</string>
     <string name="course_arrangement">课程安排</string>
+    <string name="audition_over">试听结束</string>
 </resources>

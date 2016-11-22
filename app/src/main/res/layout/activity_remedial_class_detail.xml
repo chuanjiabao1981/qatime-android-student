@@ -151,7 +151,7 @@
                 android:id="@+id/audition"
                 style="@style/button_style"
                 android:layout_marginRight="6dp"
-                android:text="已加入试听" />
+                android:text="加入试听" />
 
             <Button
                 android:id="@+id/pay"

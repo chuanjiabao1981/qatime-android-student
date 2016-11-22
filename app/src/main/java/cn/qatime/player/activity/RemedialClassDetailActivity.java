@@ -238,8 +238,15 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                             ((FragmentClassDetailTeacherInfo) fragBaseFragments.get(1)).setData(data);
                             ((FragmentClassDetailClassList) fragBaseFragments.get(2)).setData(data);
                             if (data.getData() != null) {
+                                // TODO: 2016/11/22 重写底部按钮显示逻辑
                                 if (data.getData().getIs_tasting()) {
-                                    audition.setText(getResources().getString(R.string.start_audition));
+                                    boolean hasPullAddress = !StringUtils.isNullOrBlanK(data.getData().getCamera()) && !StringUtils.isNullOrBlanK(data.getData().getBoard());//是否有拉流地址（本页代表已试听到期）
+                                    if(hasPullAddress){
+                                        audition.setText(getResources().getString(R.string.start_audition));
+                                    }else{
+                                        audition.setText(getResourceString(R.string.audition_over));
+                                        audition.setEnabled(false);
+                                    }
                                 } else {
                                     audition.setText(getResources().getString(R.string.Join_the_audition));
                                 }
