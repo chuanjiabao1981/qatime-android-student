@@ -70,7 +70,6 @@ public class FragmentTutorshipOver extends BaseFragment {
             public void convert(ViewHolder helper, TutorialClassBean.Data item, int position) {
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
-                helper.getView(R.id.taste).setVisibility(item.isIs_tasting()?View.VISIBLE:View.GONE);
                 helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.subject,item.getSubject());
                 helper.setText(R.id.teacher,"/"+ item.getTeacher_name());
@@ -137,7 +136,11 @@ public class FragmentTutorshipOver extends BaseFragment {
                         try {
                             TutorialClassBean data = JsonUtils.objectFromJson(response.toString(), TutorialClassBean.class);
                             if (data != null) {
-                                list.addAll(data.getData());
+                                for(TutorialClassBean.Data item : data.getData()){
+                                    if(item.isIs_bought()){//只显示已购买
+                                        list.add(item);
+                                    }
+                                }
                             }
                             adapter.notifyDataSetChanged();
                         } catch (JsonSyntaxException e) {

@@ -154,10 +154,10 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginBottom="10dp"
                     android:layout_marginRight="10dp"
-                    android:background="@drawable/shape_text_enter_background"
+                    android:background="@drawable/shape_text_enter_background_selector"
+                    android:textColor="@drawable/enter_text_selector"
                     android:gravity="center"
-                    android:text="进入"
-                    android:textColor="#ff6a00" />
+                    android:text="进入" />
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
