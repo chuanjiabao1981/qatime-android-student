@@ -46,7 +46,7 @@
                             android:background="#ccc"
                             android:ellipsize="end"
                             android:maxLines="1"
-                            android:text="试听"
+                            android:text="已试听"
                             android:textColor="#fff" />
 
                         <TextView

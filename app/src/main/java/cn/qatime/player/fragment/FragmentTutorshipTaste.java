@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -37,6 +38,7 @@ import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.TutorialClassBean;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -70,7 +72,17 @@ public class FragmentTutorshipTaste extends BaseFragment {
         adapter = new CommonAdapter<TutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship5) {
             @Override
             public void convert(ViewHolder helper, final TutorialClassBean.Data item, int position) {
-                helper.getView(R.id.enter).setVisibility((item.isIs_bought()||item.isIs_tasting() )? View.GONE : View.VISIBLE);
+                /**
+                 * 已购买的已在获取数据时候排除，当前只填充试听的课程（已试听。试听中）
+                 */
+                String status = item.getStatus();// TODO: 2016/11/15 接口status
+
+                boolean isTeaching = "teaching".equals(status);//是否是开课中
+                boolean hasPullAddress = !StringUtils.isNullOrBlanK(item.getCamera()) && !StringUtils.isNullOrBlanK(item.getBoard());//是否有拉流地址（本页代表已试听到期）
+
+                //进入状态
+                helper.getView(R.id.enter).setVisibility(isTeaching ? View.VISIBLE : View.GONE);//进入播放器按钮显示或隐藏
+                helper.getView(R.id.enter).setEnabled(hasPullAddress);//按钮是否能被点击
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -82,13 +94,24 @@ public class FragmentTutorshipTaste extends BaseFragment {
                     }
                 });
 
+                //试听状态
+                TextView taste = helper.getView(R.id.taste);
+                if (hasPullAddress) {//有拉流地址说明试听没过期
+                    taste.setText("试听中");
+                    taste.setBackgroundColor(0xffff9966);
+                } else {
+                    taste.setText("已试听");
+                    taste.setBackgroundColor(0xffcccccc);
+                }
+
+
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
-                helper.getView(R.id.taste).setVisibility(item.isIs_bought() ? View.GONE:View.VISIBLE);
                 helper.setText(R.id.grade, item.getGrade());
-                String status = item.getStatus();// TODO: 2016/11/15 接口status
+
+
                 if ("preview".equals(status)) {
                     helper.getView(R.id.teaching_time).setVisibility(View.VISIBLE);
                     try {
@@ -105,7 +128,7 @@ public class FragmentTutorshipTaste extends BaseFragment {
                     helper.getView(R.id.progress).setVisibility(View.VISIBLE);
                     helper.setText(R.id.progress, "进度" + item.getCompleted_lesson_count() + "/" + item.getPreset_lesson_count());
 
-                } else if ("completed".equals(status)) {
+                } else if ("completed".equals(status)) {// TODO: 2016/11/22 completed还是finish?
                     helper.getView(R.id.class_over).setVisibility(View.VISIBLE);
                 }
             }
@@ -175,7 +198,11 @@ public class FragmentTutorshipTaste extends BaseFragment {
                         try {
                             TutorialClassBean data = JsonUtils.objectFromJson(response.toString(), TutorialClassBean.class);
                             if (data != null) {
-                                list.addAll(data.getData());
+                                for(TutorialClassBean.Data item : data.getData()){
+                                    if(item.isIs_tasting()){//只显示试听
+                                        list.add(item);
+                                    }
+                                }
                             }
                             adapter.notifyDataSetChanged();
                         } catch (JsonSyntaxException e) {

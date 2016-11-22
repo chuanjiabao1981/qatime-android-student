@@ -43,10 +43,10 @@
                             android:id="@+id/taste"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="#ccc"
+                            android:background="#f96"
                             android:ellipsize="end"
                             android:maxLines="1"
-                            android:text="试听"
+                            android:text="试听中"
                             android:textColor="#fff" />
 
                         <TextView

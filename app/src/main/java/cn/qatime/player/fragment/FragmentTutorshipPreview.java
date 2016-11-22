@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -36,6 +37,7 @@ import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.TutorialClassBean;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -69,6 +71,23 @@ public class FragmentTutorshipPreview extends BaseFragment {
 
             @Override
             public void convert(ViewHolder helper, final TutorialClassBean.Data item, int position) {
+                /**
+                 * 当前页hasPullAddress一定为true
+                 */
+                boolean isBought = item.isIs_bought();//已经购买
+                boolean hasPullAddress = !StringUtils.isNullOrBlanK(item.getCamera()) && !StringUtils.isNullOrBlanK(item.getBoard());//是否有拉流地址
+                //试听状态
+                TextView taste = helper.getView(R.id.taste);
+                if (hasPullAddress) {//有拉流地址说明试听没过期
+                    taste.setText("试听中");
+                    taste.setBackgroundColor(0xffff9966);
+                } else {
+                    taste.setText("已试听");
+                    taste.setBackgroundColor(0xffcccccc);
+                }
+
+                taste.setVisibility(isBought ? View.GONE : View.VISIBLE);//已购买不显示
+
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.subject,item.getSubject());
@@ -83,7 +102,6 @@ public class FragmentTutorshipPreview extends BaseFragment {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                helper.getView(R.id.taste).setVisibility(item.isIs_bought()?View.GONE:View.VISIBLE);
                 helper.setText(R.id.grade, item.getGrade());
             }
         };
