@@ -1,5 +1,6 @@
 package cn.qatime.player.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.bean.SchoolBean;
@@ -44,7 +46,7 @@ public class FragmentClassDetailTeacherInfo extends BaseFragment {
         sex = (TextView) view.findViewById(R.id.sex);
     }
 
-    public void setData(RemedialClassDetailBean data) {
+    public void setData(final RemedialClassDetailBean data) {
         if (data.getData() != null && data.getData().getTeacher() != null) {
             sex.setText(getSex(data.getData().getTeacher().getGender()));
             sex.setTextColor(getSexColor(data.getData().getTeacher().getGender()));
@@ -75,7 +77,14 @@ public class FragmentClassDetailTeacherInfo extends BaseFragment {
             }
 
             Glide.with(this).load(data.getData().getTeacher().getAvatar_url()).placeholder(R.mipmap.error_header_rect).crossFade().into(image);
-
+            image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), TeacherDataActivity.class);
+                    intent.putExtra("teacherId",data.getData().getTeacher().getId());
+                    startActivity(intent);
+                }
+            });
         }
 
     }

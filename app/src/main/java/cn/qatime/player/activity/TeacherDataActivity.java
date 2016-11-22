@@ -28,6 +28,7 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.GridViewForScrollView;
@@ -54,6 +55,7 @@ public class TeacherDataActivity extends BaseActivity {
     private TextView town;
     private int page = 0;
     private CommonAdapter<TeacherDataBean.DataBean.Course> adapter;
+    private int teacherId;
 
     private void assignViews() {
         PullToRefreshScrollView scroll = (PullToRefreshScrollView) findViewById(R.id.scroll);
@@ -84,6 +86,9 @@ public class TeacherDataActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_data);
         assignViews();
+
+        teacherId = getIntent().getIntExtra("teacherId", 0);
+
         initData(1);
         adapter = new CommonAdapter<TeacherDataBean.DataBean.Course>(this, list, R.layout.item_teacher_data) {
 
@@ -99,6 +104,7 @@ public class TeacherDataActivity extends BaseActivity {
                 helper.setText(R.id.count, String.valueOf(item.getBuy_tickets_count()) + "人已购买");
             }
         };
+        grid.setEmptyView(View.inflate(this, R.layout.empty_view, null));
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -110,13 +116,23 @@ public class TeacherDataActivity extends BaseActivity {
         grid.setAdapter(adapter);
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        int newTeacherId = intent.getIntExtra("teacherId", 0);
+        if (newTeacherId != teacherId) {
+            teacherId = newTeacherId;
+            initData(1);
+        }
+    }
+
     /**
      * @param type 1刷新
      *             2加载更多
      */
     private void initData(final int type) {
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlTeacherInformation + getIntent().getIntExtra("teacherId", 0) + "/profile", null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlTeacherInformation + teacherId + "/profile", null,
                 new VolleyListener(this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -132,7 +148,7 @@ public class TeacherDataActivity extends BaseActivity {
                                     setTitle(name);
                                     TeacherDataActivity.this.name.setText(name);
                                 }
-                                describe.setText(bean.getData().getDesc());
+                                describe.setText(StringUtils.isNullOrBlanK(bean.getData().getDesc()) ? "暂无" : bean.getData().getDesc());
                                 teachAge.setText(getTeachingYear(bean.getData().getTeaching_years()));
                                 category.setText(bean.getData().getCategory());
                                 subject.setText(bean.getData().getSubject());
@@ -189,11 +205,11 @@ public class TeacherDataActivity extends BaseActivity {
     private String getTeachingYear(String teaching_years) {
         switch (teaching_years) {
             case "within_three_years":
-                return getResourceString(R.string.within_three_years)+"教龄";
+                return getResourceString(R.string.within_three_years) + "教龄";
             case "within_ten_years":
-                return getResourceString(R.string.within_ten_years)+"教龄";
+                return getResourceString(R.string.within_ten_years) + "教龄";
             case "within_twenty_years":
-                return getResourceString(R.string.within_twenty_years)+"教龄";
+                return getResourceString(R.string.within_twenty_years) + "教龄";
         }
         return "";
     }
