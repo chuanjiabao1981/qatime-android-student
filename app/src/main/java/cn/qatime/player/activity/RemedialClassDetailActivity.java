@@ -308,6 +308,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                         View view = View.inflate(RemedialClassDetailActivity.this, R.layout.dialog_cancel_or_confirm, null);
                         Button cancel = (Button) view.findViewById(R.id.cancel);
                         Button confirm = (Button) view.findViewById(R.id.confirm);
+                        TextView text = (TextView) view.findViewById(R.id.text);
+                        text.setText("该辅导班已开课("+ data.getData().getCompleted_lesson_count() + "/" + data.getData().getPreset_lesson_count()+")购买仅支付\n未上课课时费，是否继续？");
                         cancel.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
