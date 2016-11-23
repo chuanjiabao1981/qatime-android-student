@@ -95,6 +95,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     private View window1;
     private ImageView videoNoData1;
     private ImageView videoNoData2;
+    private AnimationDrawable bufferAnimation1;
+    private AnimationDrawable bufferAnimation2;
+    private PercentRelativeLayout buffering1;
+    private PercentRelativeLayout buffering2;
 
 
     private void assignViews() {
@@ -104,15 +108,15 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         window1 = findViewById(R.id.window1);
         window2 = findViewById(R.id.window2);
 
-        final PercentRelativeLayout buffering1 = (PercentRelativeLayout) findViewById(R.id.buffering1);
-        final PercentRelativeLayout buffering2 = (PercentRelativeLayout) findViewById(R.id.buffering2);
+         buffering1 = (PercentRelativeLayout) findViewById(R.id.buffering1);
+         buffering2 = (PercentRelativeLayout) findViewById(R.id.buffering2);
 
         ImageView bufferImage1 = (ImageView) findViewById(R.id.buffer_image1);
         ImageView bufferImage2 = (ImageView) findViewById(R.id.buffer_image2);
 
-        final AnimationDrawable bufferAnimation1 = (AnimationDrawable) bufferImage1.getBackground();
+         bufferAnimation1 = (AnimationDrawable) bufferImage1.getBackground();
         bufferAnimation1.start();
-        final AnimationDrawable bufferAnimation2 = (AnimationDrawable) bufferImage2.getBackground();
+         bufferAnimation2 = (AnimationDrawable) bufferImage2.getBackground();
         bufferAnimation2.start();
 
         videoNoData1 = (ImageView) findViewById(R.id.video_no_data1);
@@ -199,10 +203,18 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         if (!StringUtils.isNullOrBlanK(camera)) {
             video2.setVideoPath(camera);
             video2.start();
+        } else {
+            buffering2.setVisibility(View.GONE);
+            bufferAnimation2.stop();
+            videoNoData2.setVisibility(View.VISIBLE);
         }
         if (!StringUtils.isNullOrBlanK(board)) {
             video1.setVideoPath(board);
             video1.start();
+        } else {
+            buffering1.setVisibility(View.GONE);
+            bufferAnimation1.stop();
+            videoNoData1.setVisibility(View.VISIBLE);
         }
     }
 
