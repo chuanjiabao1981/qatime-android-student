@@ -253,6 +253,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
                                 if (data.getData().getIs_bought()) {
                                     startStudyView.setVisibility(View.VISIBLE);
+                                    if(data.getData().getStatus().equals("completed")){
+                                        startStudy.setEnabled(false);
+                                    }
                                 }
                             }
                         }

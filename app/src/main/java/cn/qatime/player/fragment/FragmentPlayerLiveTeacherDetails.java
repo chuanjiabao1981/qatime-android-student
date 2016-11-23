@@ -1,5 +1,6 @@
 package cn.qatime.player.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.bean.SchoolBean;
@@ -60,7 +62,14 @@ public class FragmentPlayerLiveTeacherDetails extends BaseFragment {
                 }
 
                 Glide.with(getActivity()).load(data.getTeacher().getAvatar_url()).placeholder(R.mipmap.error_header_rect).crossFade().into(image);
-
+                image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), TeacherDataActivity.class);
+                        intent.putExtra("teacherId",data.getTeacher().getId());
+                        startActivity(intent);
+                    }
+                });
             }
         }
     };
