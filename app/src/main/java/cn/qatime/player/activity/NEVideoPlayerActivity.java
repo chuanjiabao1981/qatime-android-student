@@ -108,15 +108,15 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         window1 = findViewById(R.id.window1);
         window2 = findViewById(R.id.window2);
 
-         buffering1 = (PercentRelativeLayout) findViewById(R.id.buffering1);
-         buffering2 = (PercentRelativeLayout) findViewById(R.id.buffering2);
+        buffering1 = (PercentRelativeLayout) findViewById(R.id.buffering1);
+        buffering2 = (PercentRelativeLayout) findViewById(R.id.buffering2);
 
         ImageView bufferImage1 = (ImageView) findViewById(R.id.buffer_image1);
         ImageView bufferImage2 = (ImageView) findViewById(R.id.buffer_image2);
 
-         bufferAnimation1 = (AnimationDrawable) bufferImage1.getBackground();
+        bufferAnimation1 = (AnimationDrawable) bufferImage1.getBackground();
         bufferAnimation1.start();
-         bufferAnimation2 = (AnimationDrawable) bufferImage2.getBackground();
+        bufferAnimation2 = (AnimationDrawable) bufferImage2.getBackground();
         bufferAnimation2.start();
 
         videoNoData1 = (ImageView) findViewById(R.id.video_no_data1);
