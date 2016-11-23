@@ -79,17 +79,12 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
     private PopupWindow pop;
     //按时间排列方式
     private String timesorttype = "";
-    private View screenLayout;
     private EditText priceLow;
     private EditText priceHigh;
 //    private EditText subjectLow;
 //    private EditText subjectHigh;
     private TextView beginClassTime;
-    private TextView beginClassMonth;
-    private TextView beginClassDay;
     private TextView endcLassTime;
-    private TextView endcLassMonth;
-    private TextView endClassDay;
 
 
     //    //价格开始区间
@@ -114,7 +109,6 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
     private View startedSelected;
     private CheckedTextView recruitingText;
     private View recruitingSelected;
-    private MDatePickerDialog dataDialog;
     private View screenPopView;
 
     @Nullable
@@ -619,7 +613,7 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
         if (startedText.isChecked() && recruitingText.isChecked()) {
             status = "all";
         } else if (!startedText.isChecked() && recruitingText.isChecked()) {
-            status = "preview";
+            status = "published";
         } else if (startedText.isChecked() && !recruitingText.isChecked()) {
             status = "teaching";
         } else {

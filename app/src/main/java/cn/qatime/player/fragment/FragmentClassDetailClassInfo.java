@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.utils.Constant;
 import libraryextra.bean.RemedialClassDetailBean;
 
 public class FragmentClassDetailClassInfo extends BaseFragment {
@@ -28,8 +29,6 @@ public class FragmentClassDetailClassInfo extends BaseFragment {
     //    TextView teachway;
     TextView progress;
     RemedialClassDetailBean data;
-    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
 
 
     @Nullable
@@ -70,9 +69,10 @@ public class FragmentClassDetailClassInfo extends BaseFragment {
             grade.setText(getResourceString(R.string.grade_type) + bean.getGrade());
             totalclass.setText(getResourceString(R.string.total_class_hours) + bean.getPreset_lesson_count());
             remainclass.setText(getResourceString(R.string.remain_class) + (bean.getPreset_lesson_count() - bean.getCompleted_lesson_count()));
-            if (bean.getStatus().equals("preview")) {
+
+            if (bean.getStatus().equals(Constant.CourseStatus.published)) {
                 status.setText(getResourceString(R.string.status_preview));
-            } else if (bean.getStatus().equals("teaching")) {
+            } else if (bean.getStatus().equals(Constant.CourseStatus.teaching)) {
                 status.setText(getResourceString(R.string.status_teaching));
             } else {
                 status.setText(getResourceString(R.string.status_over));

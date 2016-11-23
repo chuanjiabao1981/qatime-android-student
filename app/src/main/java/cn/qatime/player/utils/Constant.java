@@ -25,4 +25,9 @@ public class Constant {
     public static int RESPONSE_HEAD_SCULPTURE = 0x1008;
     public static int REGIST = 0x1009;
     public static int RESPONSE_CITY_SELECT = 0x1010;
+
+    public static class CourseStatus {
+        public static String published = "published";//招生中
+        public static String teaching = "teaching";//已开课
+    }
 }
