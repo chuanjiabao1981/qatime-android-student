@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:id="@+id/whole"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,10 +15,41 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <cn.qatime.player.view.NEVideoView
-                android:id="@+id/video1"
+            <RelativeLayout
+                android:id="@+id/window1"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent">
+
+                <cn.qatime.player.view.NEVideoView
+                    android:id="@+id/video1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:id="@+id/video_no_data1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/video_no_data"
+                    android:visibility="gone" />
+
+                <com.zhy.android.percent.support.PercentRelativeLayout
+                    android:id="@+id/buffering1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#666666"
+                    android:gravity="center"
+                    android:visibility="visible">
+
+                    <ImageView
+                        android:id="@+id/buffer_image1"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="@drawable/progress_round"
+                        custom:layout_heightPercent="12%w"
+                        custom:layout_widthPercent="12%" />
+                </com.zhy.android.percent.support.PercentRelativeLayout>
+            </RelativeLayout>
         </RelativeLayout>
 
         <RelativeLayout
@@ -35,10 +67,41 @@
         android:background="#00000000"
         android:visibility="visible">
 
-        <cn.qatime.player.view.NEVideoView
-            android:id="@+id/video2"
+        <RelativeLayout
+            android:id="@+id/window2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+
+            <cn.qatime.player.view.NEVideoView
+                android:id="@+id/video2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/video_no_data2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@mipmap/video_no_data"
+                android:visibility="gone" />
+
+            <com.zhy.android.percent.support.PercentRelativeLayout
+                android:id="@+id/buffering2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#666666"
+                android:gravity="center"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/buffer_image2"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@drawable/progress_round"
+                    custom:layout_heightPercent="12%w"
+                    custom:layout_widthPercent="12%" />
+            </com.zhy.android.percent.support.PercentRelativeLayout>
+        </RelativeLayout>
     </RelativeLayout>
 
     <cn.qatime.player.barrage.DanmakuView

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Rect;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -21,6 +22,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import com.netease.neliveplayer.NELivePlayer;
 import com.netease.neliveplayer.NELivePlayer.OnBufferingUpdateListener;
@@ -36,6 +38,8 @@ import com.orhanobut.logger.Logger;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
+import cn.qatime.player.R;
 
 
 public class NEVideoView extends SurfaceView {
@@ -321,8 +325,9 @@ public class NEVideoView extends SurfaceView {
 
 
     public void setBufferPrompt(View buffer) {
-        if (mBuffer != null)
+        if (mBuffer != null) {
             mBuffer.setVisibility(View.GONE);
+        }
         mBuffer = buffer;
     }
 
@@ -454,17 +459,47 @@ public class NEVideoView extends SurfaceView {
             }
 
             if (mMediaPlayer != null) {
+                ImageView image1 = (ImageView) mBuffer.findViewById(R.id.buffer_image1);
+
                 if (what == NELivePlayer.NELP_BUFFERING_START) {
                     Logger.e(TAG, "onInfo: NELP_BUFFERING_START");
-                    if (mBuffer != null)
+                    if (mBuffer != null) {
                         mBuffer.setVisibility(View.VISIBLE);
+                        if (image1 != null) {
+                            ((AnimationDrawable) image1.getBackground()).start();
+                        } else {
+                            ((AnimationDrawable) (mBuffer.findViewById(R.id.buffer_image2)).getBackground()).start();
+                        }
+                    }
                 } else if (what == NELivePlayer.NELP_BUFFERING_END) {
                     Logger.e(TAG, "onInfo: NELP_BUFFERING_END");
-                    if (mBuffer != null)
+                    if (mBuffer != null) {
                         mBuffer.setVisibility(View.GONE);
+                        if (image1 != null) {
+                            ((AnimationDrawable) image1.getBackground()).stop();
+                        } else {
+                            ((AnimationDrawable) (mBuffer.findViewById(R.id.buffer_image2)).getBackground()).stop();
+                        }
+                    }
                 } else if (what == NELivePlayer.NELP_FIRST_VIDEO_RENDERED) {
                     Logger.e(TAG, "onInfo: NELP_FIRST_VIDEO_RENDERED");
+                    if (mBuffer != null) {
+                        mBuffer.setVisibility(View.GONE);
+                        if (image1 != null) {
+                            ((AnimationDrawable) image1.getBackground()).stop();
+                        } else {
+                            ((AnimationDrawable) (mBuffer.findViewById(R.id.buffer_image2)).getBackground()).stop();
+                        }
+                    }
                 } else if (what == NELivePlayer.NELP_FIRST_AUDIO_RENDERED) {
+                    if (mBuffer != null) {
+                        mBuffer.setVisibility(View.GONE);
+                        if (image1 != null) {
+                            ((AnimationDrawable) image1.getBackground()).stop();
+                        } else {
+                            ((AnimationDrawable) (mBuffer.findViewById(R.id.buffer_image2)).getBackground()).stop();
+                        }
+                    }
                     Logger.e(TAG, "onInfo: NELP_FIRST_AUDIO_RENDERED");
                 }
             }
