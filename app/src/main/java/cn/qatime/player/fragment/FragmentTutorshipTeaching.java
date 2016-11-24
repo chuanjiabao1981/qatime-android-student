@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -75,10 +74,10 @@ public class FragmentTutorshipTeaching extends BaseFragment {
                 /**
                  * 当前页hasPullAddress一定为true
                  */
-                boolean isBought = item.isIs_bought();//已经购买
-                boolean hasPullAddress = !StringUtils.isNullOrBlanK(item.getCamera()) && !StringUtils.isNullOrBlanK(item.getBoard());//是否有拉流地址
+//                boolean isBought = item.isIs_bought();//已经购买
+//                boolean hasPullAddress = !StringUtils.isNullOrBlanK(item.getCamera()) && !StringUtils.isNullOrBlanK(item.getBoard());//是否有拉流地址
 
-                helper.getView(R.id.enter).setEnabled(hasPullAddress);//按钮是否能被点击
+
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -90,17 +89,19 @@ public class FragmentTutorshipTeaching extends BaseFragment {
                     }
                 });
 
-                //试听状态
-                TextView taste = helper.getView(R.id.taste);
-                if (hasPullAddress) {//(肯定有拉流地址)
-                    taste.setText("试听中");
-                    taste.setBackgroundColor(0xffff9966);
-                } else {
-                    taste.setText("已试听");
-                    taste.setBackgroundColor(0xffcccccc);
-                }
+//                //试听状态
+//                TextView taste = helper.getView(R.id.taste);
+//                if (hasPullAddress) {//(肯定有拉流地址)
+//                    taste.setText("试听中");
+//                    taste.setBackgroundColor(0xffff9966);
+//                    helper.getView(R.id.enter).setEnabled(true);//按钮是否能被点击
+//                } else {
+//                    taste.setText("已试听");
+//                    taste.setBackgroundColor(0xffcccccc);
+//                    helper.getView(R.id.enter).setEnabled(false);//按钮是否能被点击
+//                }
 
-                taste.setVisibility(isBought ? View.GONE : View.VISIBLE);//已购买不显示试听状态
+//                taste.setVisibility(isBought ? View.GONE : View.VISIBLE);//已购买不显示试听状态
 
 
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
@@ -172,7 +173,11 @@ public class FragmentTutorshipTeaching extends BaseFragment {
                         try {
                             TutorialClassBean data = JsonUtils.objectFromJson(response.toString(), TutorialClassBean.class);
                             if (data != null) {
-                                list.addAll(data.getData());
+                                for(TutorialClassBean.Data item : data.getData()){
+                                    if(!StringUtils.isNullOrBlanK(item.getCamera()) && !StringUtils.isNullOrBlanK(item.getBoard())){//只显示试听未过期或已购买
+                                        list.add(item);
+                                    }
+                                }
                             }
                             adapter.notifyDataSetChanged();
                         } catch (JsonSyntaxException e) {

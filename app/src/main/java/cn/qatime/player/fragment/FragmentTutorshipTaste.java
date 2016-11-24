@@ -76,14 +76,13 @@ public class FragmentTutorshipTaste extends BaseFragment {
                 /**
                  * 已购买的已在获取数据时候排除，当前只填充试听的课程（已试听。试听中）
                  */
-                String status = item.getStatus();// TODO: 2016/11/15 接口status
+                String status = item.getStatus();
 
                 boolean isTeaching = "teaching".equals(status);//是否是开课中
                 boolean hasPullAddress = !StringUtils.isNullOrBlanK(item.getCamera()) && !StringUtils.isNullOrBlanK(item.getBoard());//是否有拉流地址（本页代表已试听到期）
 
                 //进入状态
                 helper.getView(R.id.enter).setVisibility(isTeaching ? View.VISIBLE : View.GONE);//进入播放器按钮显示或隐藏
-                helper.getView(R.id.enter).setEnabled(hasPullAddress);//按钮是否能被点击
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -100,9 +99,11 @@ public class FragmentTutorshipTaste extends BaseFragment {
                 if (hasPullAddress) {//有拉流地址说明试听没过期
                     taste.setText("试听中");
                     taste.setBackgroundColor(0xffff9966);
+                    helper.getView(R.id.enter).setEnabled(true);//按钮是否能被点击
                 } else {
                     taste.setText("已试听");
                     taste.setBackgroundColor(0xffcccccc);
+                    helper.getView(R.id.enter).setEnabled(false);//按钮是否能被点击
                 }
 
 
@@ -112,9 +113,10 @@ public class FragmentTutorshipTaste extends BaseFragment {
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
                 helper.setText(R.id.grade, item.getGrade());
 
-
-                if ("preview".equals(status)) {
+                if ("preview".equals(status)||"published".equals(status)||"init".equals(status)||"ready".equals(status)) {
                     helper.getView(R.id.teaching_time).setVisibility(View.VISIBLE);
+                    helper.getView(R.id.class_over).setVisibility(View.GONE);
+                    helper.getView(R.id.progress).setVisibility(View.GONE);
                     try {
                         long time = System.currentTimeMillis() - parse.parse(item.getPreview_time()).getTime();
                         int value = 0;
@@ -125,12 +127,15 @@ public class FragmentTutorshipTaste extends BaseFragment {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                } else if ("teaching".equals(status)) {
-                    helper.getView(R.id.progress).setVisibility(View.VISIBLE);
-                    helper.setText(R.id.progress, "进度" + item.getCompleted_lesson_count() + "/" + item.getPreset_lesson_count());
-
-                } else if ("completed".equals(status)) {// TODO: 2016/11/22 completed还是finish?
+                }  else if ("completed".equals(status)||"finished".equals(status)) {
                     helper.getView(R.id.class_over).setVisibility(View.VISIBLE);
+                    helper.getView(R.id.teaching_time).setVisibility(View.GONE);
+                    helper.getView(R.id.progress).setVisibility(View.GONE);
+                }else {
+                    helper.getView(R.id.progress).setVisibility(View.VISIBLE);
+                    helper.getView(R.id.teaching_time).setVisibility(View.GONE);
+                    helper.getView(R.id.class_over).setVisibility(View.GONE);
+                    helper.setText(R.id.progress, "进度" + item.getCompleted_lesson_count() + "/" + item.getPreset_lesson_count());
                 }
             }
         };
