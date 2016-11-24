@@ -52,6 +52,7 @@ StartActivity extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+        ((TextView) findViewById(R.id.version)).setText("V " + AppUtils.getVersionName(this));
         GetGradeslist();//加载年纪列表
         checkUpdate();
 
