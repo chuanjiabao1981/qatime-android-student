@@ -2,15 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="2dp"
+    android:orientation="horizontal"
     android:paddingBottom="2dp"
-    android:orientation="horizontal">
+    android:paddingTop="2dp">
 
     <ImageView
+        android:id="@+id/notify"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_margin="5dp"
-
         android:src="@mipmap/notify" />
 
     <LinearLayout
@@ -28,9 +28,9 @@
             <TextView
                 android:id="@+id/time"
                 android:layout_width="wrap_content"
-                android:textColor="#151515"
                 android:layout_height="wrap_content"
-                android:text="2016-00-00 00:00:00" />
+                android:text="2016-00-00 00:00:00"
+                android:textColor="#151515" />
 
             <TextView
                 android:id="@+id/late"
@@ -45,8 +45,8 @@
         <TextView
             android:id="@+id/describe"
             android:layout_width="wrap_content"
-            android:textColor="#151515"
             android:layout_height="wrap_content"
-            android:text="本节课需要大家提前预习内容，以免手忙脚乱听不懂！" />
+            android:text="本节课需要大家提前预习内容，以免手忙脚乱听不懂！"
+            android:textColor="#151515" />
     </LinearLayout>
 </LinearLayout>
