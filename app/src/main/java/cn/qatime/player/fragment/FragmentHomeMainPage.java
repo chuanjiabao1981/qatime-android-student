@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +41,7 @@ import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.TagViewPager;
@@ -89,6 +91,8 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
     private void initTagImg() {
         final int imageIds[] = {R.mipmap.banner,R.mipmap.banner2,R.mipmap.banner3};
+        ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()), ScreenUtils.getScreenWidth(getActivity())/3);
+        tagViewpagerImg.setLayoutParams(params);
         tagViewpagerImg.init(R.drawable.shape_photo_tag_select, R.drawable.shape_photo_tag_nomal, 16, 8, 4, 30);
         tagViewpagerImg.setAutoNext(true, 7000);
 //        viewPager.setId(1252);
