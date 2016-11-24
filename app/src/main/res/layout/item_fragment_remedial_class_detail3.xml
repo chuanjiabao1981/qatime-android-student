@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="5dp"
                 android:text="2016年00月00日"
-                android:textColor="#666"
+                android:textColor="#999"
                 android:textSize="12sp" />
 
             <TextView
@@ -75,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="xx:xx"
-                android:textColor="#666"
+                android:textColor="#999"
                 android:textSize="12sp" />
 
 
