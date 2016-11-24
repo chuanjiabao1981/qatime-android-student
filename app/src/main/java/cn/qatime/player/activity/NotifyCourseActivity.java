@@ -58,7 +58,6 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
     private void initData() {
         al_hours = new ArrayList<>();
         al_minute = new ArrayList<>();
-        int j = 0;
         String str;
         for (int i = 0; i <= 24; i++) {
             str = String.valueOf(i);

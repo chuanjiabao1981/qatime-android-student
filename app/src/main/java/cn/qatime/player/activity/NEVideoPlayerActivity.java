@@ -576,20 +576,35 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     @Override
     public void changeSubSmall() {
         isSubBig = false;
+        boolean needReStart = false;
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             danmuView.setVisibility(View.GONE);
         } else {
             danmuView.setVisibility(View.VISIBLE);
         }
         if (ismain) {
+            if (buffering2.getVisibility() == View.VISIBLE && bufferAnimation2.isRunning()) {
+                needReStart = true;
+                bufferAnimation2.stop();
+            }
             subVideo.removeView(window2);
             video2.setZOrderOnTop(true);
             floatingWindow.addView(window2);
             video2.setVideoScalingMode(true);
+            if (needReStart) {
+                bufferAnimation2.start();
+            }
         } else {
+            if (buffering1.getVisibility() == View.VISIBLE && bufferAnimation1.isRunning()) {
+                needReStart = true;
+                bufferAnimation1.stop();
+            }
             subVideo.removeView(window1);
             video1.setZOrderOnTop(true);
             floatingWindow.addView(window1);
+            if (needReStart) {
+                bufferAnimation1.start();
+            }
         }
         floatingWindow.setVisibility(View.VISIBLE);
         subVideo.setVisibility(View.GONE);
