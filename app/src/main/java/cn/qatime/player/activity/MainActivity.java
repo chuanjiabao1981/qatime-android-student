@@ -68,7 +68,6 @@ public class MainActivity extends BaseFragmentActivity {
             {R.mipmap.tab_tutorship_1, R.mipmap.tab_tutorship_2},
             {R.mipmap.tab_moments_1, R.mipmap.tab_moments_2},
             {R.mipmap.tab_person_1, R.mipmap.tab_person_2}};
-    private int currentPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +117,6 @@ public class MainActivity extends BaseFragmentActivity {
         fragmentlayout.setOnChangeFragmentListener(new FragmentLayout.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
-                currentPosition = position;
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xffafaa9a);
                 ((ImageView) lastTabView.findViewById(tab_img[lastPosition])).setImageResource(tabImages[lastPosition][1]);
                 ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xfff45050);
@@ -441,7 +439,6 @@ public class MainActivity extends BaseFragmentActivity {
             FragmentRemedialClassAll fragmentRemedialClassAll = (FragmentRemedialClassAll) fragBaseFragments.get(1);
             fragmentRemedialClassAll.initDataAsSubject(s);
         }
-        this.currentPosition = currentPosition;
     }
 
 }
