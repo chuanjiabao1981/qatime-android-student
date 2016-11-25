@@ -19,6 +19,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,6 +54,8 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     private String payType = "weixin";
     private int priceNumber = 0;
     DecimalFormat df = new DecimalFormat("#.00");
+    private SimpleDateFormat parse1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private SimpleDateFormat parse2 = new SimpleDateFormat("yyyy-MM-dd");
     private AlertDialog alertDialog;
     private ImageView aliPay;
     private ImageView account;
@@ -87,8 +91,12 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         grade.setText(getResources().getString(R.string.grade_type) + data.grade);
         classnumber.setText(getResources().getString(R.string.total_class_hours) + data.classnumber);
         teacher.setText(getResources().getString(R.string.teacher) + data.teacher);
-        classstarttime.setText(getResources().getString(R.string.class_start_time) + data.classstarttime);
-        classendtime.setText(getResources().getString(R.string.class_end_time) + data.classendtime);
+        try {
+            classstarttime.setText(getResources().getString(R.string.class_start_time) + parse2.format(parse1.parse(data.classstarttime)));
+            classendtime.setText(getResources().getString(R.string.class_end_time) + parse2.format(parse1.parse(data.classendtime)));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 //        if (data.status.equals("preview")) {
 //            status.setText(getResources().getString(R.string.status_preview));
 //        } else if (data.status.equals("teaching")) {

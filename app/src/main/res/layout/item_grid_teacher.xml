@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zhy.android.percent.support.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
@@ -7,8 +8,10 @@
 
     <ImageView
         android:id="@+id/teacher_img"
-        android:layout_width="53dp"
-        android:layout_height="53dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        custom:layout_heightPercent="80%w"
+        custom:layout_widthPercent="80%w"
         android:src="@mipmap/error_header" />
 
     <TextView
@@ -18,4 +21,4 @@
         android:text="高玉明"
         android:textSize="14sp"
         android:textColor="#333" />
-</LinearLayout>
+</com.zhy.android.percent.support.PercentLinearLayout>

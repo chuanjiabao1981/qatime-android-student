@@ -1,6 +1,5 @@
 package cn.qatime.player.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -12,18 +11,17 @@ import java.util.ArrayList;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.base.BaseFragmentActivity;
-import cn.qatime.player.fragment.FragmentTutorshipToday;
-import cn.qatime.player.fragment.FragmentTutorshipPreview;
-import cn.qatime.player.fragment.FragmentTutorshipTeaching;
 import cn.qatime.player.fragment.FragmentTutorshipOver;
+import cn.qatime.player.fragment.FragmentTutorshipPreview;
 import cn.qatime.player.fragment.FragmentTutorshipTaste;
+import cn.qatime.player.fragment.FragmentTutorshipTeaching;
 import libraryextra.view.FragmentLayoutWithLine;
 
 /**
  * 我的辅导
  */
 public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
-    private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3, R.id.tab_text4, R.id.tab_text5};
+    private int[] tab_text = { R.id.tab_text2, R.id.tab_text3, R.id.tab_text4, R.id.tab_text5};
     FragmentLayoutWithLine fragmentlayout;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
 
@@ -33,13 +31,13 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
         setContentView(R.layout.activity_personal_my_tutorship);
         setTitle(getResources().getString(R.string.my_course));
 
-        setRightImage(R.mipmap.audition_records, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(PersonalMyTutorshipActivity.this, AuditionRecordsActivity.class);
-                startActivity(intent);
-            }
-        });
+//        setRightImage(R.mipmap.audition_records, new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(PersonalMyTutorshipActivity.this, AuditionRecordsActivity.class);
+//                startActivity(intent);
+//            }
+//        });
         initView();
     }
 
@@ -47,7 +45,7 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
     private void initView() {
         findViewById(R.id.right).setVisibility(View.GONE);
 
-        fragBaseFragments.add(new FragmentTutorshipToday());
+//        fragBaseFragments.add(new FragmentTutorshipToday());
         fragBaseFragments.add(new FragmentTutorshipPreview());
         fragBaseFragments.add(new FragmentTutorshipTeaching());
         fragBaseFragments.add(new FragmentTutorshipOver());
@@ -65,11 +63,11 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff999999);
                 ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff333333);
 
-                if (position == 4) {
-                    findViewById(R.id.right).setVisibility(View.VISIBLE);
-                } else {
-                    findViewById(R.id.right).setVisibility(View.GONE);
-                }
+//                if (position == 4) {
+//                    findViewById(R.id.right).setVisibility(View.VISIBLE);
+//                } else {
+//                    findViewById(R.id.right).setVisibility(View.GONE);
+//                }
                 ((BaseFragment) fragBaseFragments.get(position)).onShow();
             }
         });

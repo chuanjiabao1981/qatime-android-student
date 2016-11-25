@@ -8,43 +8,46 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.bean.RemedialClassDetailBean;
+import libraryextra.utils.StringUtils;
 
 public class FragmentPlayerLiveClassDetails extends BaseFragment {
-
     TextView describe;
-    TextView name;
-    TextView classstarttime;
+    TextView classStartTime;
+    TextView classEndTime;
     TextView subject;
     TextView grade;
-    TextView status;
-    TextView classendtime;
-    TextView teacher;
     TextView totalclass;
-    TextView remainclass;
-    //    TextView teachway;
+    TextView classType;
     TextView progress;
     RemedialClassDetailBean data;
+    private SimpleDateFormat parse1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private SimpleDateFormat parse2 = new SimpleDateFormat("yyyy-MM-dd");
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
     private Handler hd = new Handler();
+    private RemedialClassDetailBean.Data bean;
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
             if (getActivity() != null && getActivity().getResources() != null) {
-                name.setText(getResourceString(R.string.class_name) + bean.getName());
-                subject.setText(getResourceString(R.string.subject_type) + bean.getSubject());
-                teacher.setText(getResourceString(R.string.teacher) + bean.getTeacher().getName());
-                progress.setText(getResourceString(R.string.progress) + bean.getCompleted_lesson_count() + "/" + bean.getPreset_lesson_count());
-                classstarttime.setText(getResourceString(R.string.class_start_time) + bean.getLive_start_time());
-                classendtime.setText(getResourceString(R.string.class_end_time) + bean.getLive_end_time());
-                grade.setText(getResourceString(R.string.grade_type) + bean.getGrade());
-                remainclass.setText(getResourceString(R.string.remain_class) + (bean.getPreset_lesson_count() - bean.getCompleted_lesson_count()));
-                describe.setText(bean.getDescription());
+                subject.setText("◇ " + (bean.getSubject() == null ? "" : bean.getSubject()));
+                try {
+                    classStartTime.setText((bean.getLive_start_time() == null ? "" : parse2.format(parse1.parse(bean.getLive_start_time()))));
+                    classEndTime.setText(parse2.format(parse1.parse(bean.getLive_end_time())));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                grade.setText("◇ " + (bean.getGrade() == null ? "" : bean.getGrade()));
+                totalclass.setText("◇ 共" + bean.getPreset_lesson_count() + "课");
+                describe.setText(StringUtils.isNullOrBlanK(bean.getDescription())?"暂无简介":bean.getDescription());
             }
         }
     };
-    private RemedialClassDetailBean.Data bean;
 
     @Nullable
     @Override
@@ -55,17 +58,13 @@ public class FragmentPlayerLiveClassDetails extends BaseFragment {
     }
 
     private void initview(View view) {
-        name = (TextView) view.findViewById(R.id.name);
         subject = (TextView) view.findViewById(R.id.subject);
-        classstarttime = (TextView) view.findViewById(R.id.class_start_time);
         grade = (TextView) view.findViewById(R.id.grade);
-        status = (TextView) view.findViewById(R.id.status);
-        describe = (TextView) view.findViewById(R.id.describe);
-        classendtime = (TextView) view.findViewById(R.id.class_end_time);
-        teacher = (TextView) view.findViewById(R.id.teacher);
-        progress = (TextView) view.findViewById(R.id.progress);
+        classStartTime = (TextView) view.findViewById(R.id.class_start_time);
+        classEndTime = (TextView) view.findViewById(R.id.class_end_time);
         totalclass = (TextView) view.findViewById(R.id.total_class);
-        remainclass = (TextView) view.findViewById(R.id.remain_class);
+        describe = (TextView) view.findViewById(R.id.describe);
+        classType = (TextView) view.findViewById(R.id.class_type);
     }
 
     public void setData(RemedialClassDetailBean.Data bean) {
