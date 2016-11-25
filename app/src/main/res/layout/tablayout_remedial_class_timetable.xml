@@ -7,7 +7,7 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="#ffffff"
+        android:background="@mipmap/tab_with_bottom_line"
         android:gravity="center"
         android:orientation="horizontal">
 
