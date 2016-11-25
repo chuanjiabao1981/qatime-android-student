@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 import cn.qatime.player.R;
 import cn.qatime.player.adapter.CitySelectAdapter;
@@ -49,6 +50,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
     private CityBean.Data locationCity;
     private AMapLocationUtils utils;
     private View locationView;
+    private HashMap<String,Integer> letterMap = new HashMap<>();
 
     private void assignViews() {
         currentCity = (TextView) findViewById(R.id.current_city);
@@ -92,6 +94,13 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
                                     return lhs.getFirstLetter().compareTo(rhs.getFirstLetter());
                                 }
                             });
+                            int position = 2;
+                            for (CityBean.Data item : list) {
+                                if (!letterMap.containsKey(item.getFirstLetter())) {
+                                    letterMap.put(item.getFirstLetter(), position);
+                                }
+                                position++;
+                            }
                             adapter.notifyDataSetChanged();
                         }
                     }
@@ -154,7 +163,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
         } else {
             listLately = lately;
         }
-        adapter = new CitySelectAdapter(this, listLately, list, R.layout.item_city_lately, R.layout.item_city_all, R.layout.item_city_list) {
+        adapter = new CitySelectAdapter(this,letterMap, listLately, list, R.layout.item_city_lately, R.layout.item_city_all, R.layout.item_city_list) {
             @Override
             public void setCityName(CityBean.Data data) {
                 setCityAndHistory(data);
