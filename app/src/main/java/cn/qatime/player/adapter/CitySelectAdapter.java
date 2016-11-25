@@ -107,7 +107,7 @@ public abstract class CitySelectAdapter extends BaseAdapter {
             viewHolder.setText(R.id.city_name, item.getName());
             if (!letterMap.containsKey(item.getFirstLetter())) {
                 letterMap.put(item.getFirstLetter(), position);
-            }
+            }// TODO: 2016/11/25 letterMap
             if (position > 3) {
                 if (list.get(position - 3).getFirstLetter().equals(item.getFirstLetter())) {
                     viewHolder.getView(R.id.city_latter).setVisibility(View.GONE);

@@ -23,9 +23,9 @@
         android:layout_marginRight="12dp"
         android:background="#fff"
         android:gravity="center"
-        android:horizontalSpacing="8dp"
+        android:horizontalSpacing="12dp"
         android:numColumns="4"
-        android:verticalSpacing="8dp" />
+        android:verticalSpacing="12dp" />
     <View
         android:layout_width="match_parent"
         android:layout_height="4dp"

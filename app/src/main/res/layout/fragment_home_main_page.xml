@@ -26,8 +26,15 @@
                 android:src="@mipmap/city_select" />
             <TextView
                 android:id="@+id/city_name"
-                style="@style/backbar_text_style"
-                android:text="全国" />
+                android:ellipsize="end"
+                android:maxWidth="56dp"
+                android:singleLine="true"
+                android:textSize="14sp"
+                android:text="全国"
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:textColor="#fff"
+                android:gravity="center" />
 
         </LinearLayout>
 
