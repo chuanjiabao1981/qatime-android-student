@@ -145,7 +145,7 @@ public class FragmentTutorshipPreview extends BaseFragment {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(page));
         map.put("per_page", "10");
-        map.put("status", "preview");
+        map.put("status", "published");
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/courses", map), null,
                 new VolleyListener(getActivity()) {

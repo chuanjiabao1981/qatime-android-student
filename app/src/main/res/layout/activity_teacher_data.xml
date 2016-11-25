@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:descendantFocusability="blocksDescendants"
+        android:fillViewport="true"
         android:scrollbars="none">
 
         <com.zhy.android.percent.support.PercentLinearLayout
@@ -136,6 +137,7 @@
                             android:layout_width="0dp"
                             android:layout_height="0dp"
                             android:layout_weight="1" />
+
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -145,26 +147,31 @@
                                 android:layout_width="0dp"
                                 android:layout_height="0dp"
                                 android:layout_weight="1" />
+
                             <TextView
                                 android:id="@+id/province"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="河北" />
+
                             <TextView
                                 android:id="@+id/city"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="保定" />
+
                             <TextView
                                 android:id="@+id/town"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="保定市" />
                         </LinearLayout>
+
                         <View
                             android:layout_width="0dp"
                             android:layout_height="0dp"
                             android:layout_weight="1" />
+
                         <TextView
                             android:id="@+id/school"
                             android:layout_width="wrap_content"
@@ -176,7 +183,7 @@
 
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -193,14 +200,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
                     android:text="自我介绍"
-                    android:textColor="#333" />
+                    android:textColor="#333"
+                    android:textSize="16sp" />
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
             </LinearLayout>
 
             <TextView
@@ -220,7 +223,7 @@
                 android:background="#cdcdcd" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -238,28 +241,25 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TA的课程"
-                    android:textSize="16sp"
-                    android:textColor="#333" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:textColor="#333"
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:gravity="center">
 
                 <TextView
+                    android:id="@+id/rel_empty"
                     android:layout_width="match_parent"
-                    android:layout_height="140dp"
-                    android:paddingLeft="10dp"
+                    android:layout_height="match_parent"
                     android:gravity="center"
+                    android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:text="暂无课程"
-                    android:textColor="#999" />
+                    android:textColor="#999"
+                    android:visibility="invisible" />
 
                 <libraryextra.view.GridViewForScrollView
                     android:id="@+id/grid"

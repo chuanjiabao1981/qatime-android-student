@@ -56,6 +56,7 @@ public class TeacherDataActivity extends BaseActivity {
     private int page = 0;
     private CommonAdapter<TeacherDataBean.DataBean.Course> adapter;
     private int teacherId;
+    private View relEmpty;
 
     private void assignViews() {
         PullToRefreshScrollView scroll = (PullToRefreshScrollView) findViewById(R.id.scroll);
@@ -71,6 +72,7 @@ public class TeacherDataActivity extends BaseActivity {
         province = (TextView) findViewById(R.id.province);
         city = (TextView) findViewById(R.id.city);
         town = (TextView) findViewById(R.id.town);
+        relEmpty = findViewById(R.id.rel_empty);
         describe = (TextView) findViewById(R.id.describe);
         grid = (GridViewForScrollView) findViewById(R.id.grid);
         scroll.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ScrollView>() {
@@ -96,15 +98,14 @@ public class TeacherDataActivity extends BaseActivity {
             public void convert(ViewHolder helper, TeacherDataBean.DataBean.Course item, int position) {
                 if (item == null) {
                     Logger.e("item數據空");
-                    return;
+                }else {
+                    Glide.with(TeacherDataActivity.this).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.image)));
+                    helper.setText(R.id.subject, item.getSubject());
+                    helper.setText(R.id.course_title, item.getName());
+                    helper.setText(R.id.count, String.valueOf(item.getBuy_tickets_count()) + "人已购买");
                 }
-                Glide.with(TeacherDataActivity.this).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.image)));
-                helper.setText(R.id.subject, item.getSubject());
-                helper.setText(R.id.course_title, item.getName());
-                helper.setText(R.id.count, String.valueOf(item.getBuy_tickets_count()) + "人已购买");
             }
         };
-        grid.setEmptyView(View.inflate(this, R.layout.empty_view, null));
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -159,7 +160,11 @@ public class TeacherDataActivity extends BaseActivity {
                                 sex.setTextColor(getSexColor(bean.getData().getGender()));
                                 Glide.with(TeacherDataActivity.this).load(bean.getData().getAvatar_url()).placeholder(R.mipmap.error_header_rect).crossFade().into(headSculpture);
                                 school.setText(bean.getData().getSchool());
-                                list.addAll(bean.getData().getCourses());
+                                if(bean.getData().getCourses()!=null&&bean.getData().getCourses().size()>0){
+                                    list.addAll(bean.getData().getCourses());
+                                }else{
+                                    relEmpty.setVisibility(View.VISIBLE);
+                                }
                             }
                             adapter.notifyDataSetChanged();
                         } catch (JsonSyntaxException e) {
