@@ -77,6 +77,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="年级"
+                            android:textSize="12sp"
                             android:textColor="#666" />
 
                         <TextView
@@ -84,6 +85,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="科目"
+                            android:textSize="12sp"
                             android:textColor="#666" />
 
                         <TextView
@@ -91,6 +93,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="/老师"
+                            android:textSize="12sp"
                             android:textColor="#666" />
 
                         <!--<View-->
@@ -124,8 +127,8 @@
                             android:layout_weight="1"
                             android:maxLines="1"
                             android:text="距开课15天"
-                            android:textColor="#333"
-                            android:textSize="13sp" />
+                            android:textColor="#666"
+                            android:textSize="12sp" />
 
                     </LinearLayout>
                 </LinearLayout>

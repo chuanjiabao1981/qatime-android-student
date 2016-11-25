@@ -66,6 +66,7 @@
                             android:id="@+id/grade"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textSize="12sp"
                             android:text="年级"
                             android:textColor="#666" />
 
@@ -73,7 +74,8 @@
                             android:id="@+id/subject"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="科目"
+                            android:text="科目" android:textSize="12sp"
+
                             android:textColor="#666" />
 
                         <TextView
@@ -81,6 +83,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="/老师"
+                            android:textSize="12sp"
                             android:textColor="#666" />
 
                         <!--<View-->
@@ -109,9 +112,10 @@
                         <TextView
                             android:id="@+id/class_over"
                             android:layout_width="wrap_content"
+                            android:textSize="12sp"
                             android:layout_height="wrap_content"
                             android:text="全部课程已完成"
-                            android:textColor="#333" />
+                            android:textColor="#666" />
                     </LinearLayout>
                 </LinearLayout>
             </RelativeLayout>

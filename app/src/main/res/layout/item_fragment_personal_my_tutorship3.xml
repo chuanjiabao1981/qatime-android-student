@@ -51,7 +51,7 @@
                             android:text="试听中"
                             android:textColor="#fff" />
 
-                        <TextView
+                         <TextView
                             android:id="@+id/name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -77,6 +77,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="年级"
+                            android:textSize="12sp"
                             android:textColor="#666" />
 
                         <TextView
@@ -84,6 +85,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="科目"
+                            android:textSize="12sp"
                             android:textColor="#666" />
 
                         <TextView
@@ -91,6 +93,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="/老师"
+                            android:textSize="12sp"
                             android:textColor="#666" />
 
                         <!--<View-->
@@ -121,7 +124,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="进度0/0"
-                            android:textColor="#333" />
+                            android:textSize="12sp"
+                            android:textColor="#666" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -136,6 +140,7 @@
                     android:background="@drawable/shape_text_enter_background_selector"
                     android:gravity="center"
                     android:text="进入"
+                    android:textSize="12sp"
                     android:textColor="@drawable/enter_text_selector" />
             </RelativeLayout>
         </LinearLayout>
