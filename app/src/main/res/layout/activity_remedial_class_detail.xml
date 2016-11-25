@@ -145,7 +145,6 @@
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:paddingLeft="12dp"
                 android:layout_weight="1">
 
                 <Button
@@ -153,6 +152,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="36dp"
                     android:layout_centerVertical="true"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="6dp"
                     android:background="@drawable/button_bg_selector_white_with_stork"
                     android:clickable="true"
                     android:text="加入试听"
@@ -162,6 +163,8 @@
                     android:id="@+id/audition_start"
                     android:layout_width="match_parent"
                     android:layout_height="36dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="6dp"
                     android:layout_centerVertical="true"
                     android:background="@drawable/button_bg_selector_red"
                     android:clickable="true"
@@ -171,18 +174,24 @@
                     android:visibility="gone" />
             </RelativeLayout>
 
-            <Button
-                android:id="@+id/pay"
+            <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="36dp"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="12dp"
-                android:layout_weight="1"
-                android:background="@drawable/button_bg_selector_white_with_stork"
-                android:clickable="true"
-                android:gravity="center"
-                android:text="立即报名"
-                android:textColor="#f96" />
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/pay"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="12dp"
+                    android:background="@drawable/button_bg_selector_white_with_stork"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:text="立即报名"
+                    android:textColor="#f96" />
+            </RelativeLayout>
         </LinearLayout>
 
         <LinearLayout

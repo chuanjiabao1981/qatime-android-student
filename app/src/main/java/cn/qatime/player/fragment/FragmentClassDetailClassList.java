@@ -44,14 +44,16 @@ public class FragmentClassDetailClassList extends BaseFragment {
             public void convert(ViewHolder holder, RemedialClassDetailBean.Lessons item, int position) {
                 holder.setText(R.id.name, item.getName());
                 holder.setText(R.id.live_time, item.getLive_time());
-                if (item.getStatus().equals("teaching")) {//直播中
-                    holder.setText(R.id.status, getResourceString(R.string.class_teaching));
-                } else if (item.getStatus().equals("paused")) {
-                    holder.setText(R.id.status, getResourceString(R.string.class_teaching));
+                if (item.getStatus().equals("missed")) {
+                    holder.setText(R.id.status, getResourceString(R.string.class_missed));
                 } else if (item.getStatus().equals("init")) {//未开始
                     holder.setText(R.id.status, getResourceString(R.string.class_init));
                 } else if (item.getStatus().equals("ready")) {//待开课
                     holder.setText(R.id.status, getResourceString(R.string.class_ready));
+                } else if (item.getStatus().equals("teaching")) {//直播中
+                    holder.setText(R.id.status, getResourceString(R.string.class_teaching));
+                } else if (item.getStatus().equals("paused")) {
+                    holder.setText(R.id.status, getResourceString(R.string.class_teaching));
                 } else if (item.getStatus().equals("paused_inner")) {//暂停中
                     holder.setText(R.id.status, getResourceString(R.string.class_teaching));
                 } else {

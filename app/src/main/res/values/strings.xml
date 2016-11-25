@@ -123,8 +123,8 @@
     <string name="deal_closed">交易关闭</string>//
     <string name="order_confirm">订单确认</string>
     <string name="pay_confirm">支付确认</string>
-    <string name="commodity_name">商品名称</string>
-    <string name="commodity_detail">商品详情</string>
+    <string name="commodity_name">课程名称</string>
+    <string name="commodity_detail">课程详情</string>
     <string name="pay_remind">请您在24小时内完成支付，否则订单会自动取消。</string>
     <string name="problem_phone">遇到问题请拨打客服电话</string>
     <!--//详情-->
@@ -254,8 +254,8 @@
     <string name="send">发送</string>
     <string name="notice">公告</string>
     <string name="chat">聊天</string>
-    <string name="live_details">直播详情</string>
-    <string name="member_list">成员列表</string>
+    <string name="live_details">详情</string>
+    <string name="member_list">成员</string>
     <string name="buffering">缓冲中</string>
     <string name="hd">高清</string>
     <string name="pd">普清</string>
@@ -450,4 +450,5 @@
     <string name="start_audition">开始试听</string>
     <string name="course_arrangement">课程安排</string>
     <string name="audition_over">试听结束</string>
+    <string name="class_missed">待补课</string>
 </resources>

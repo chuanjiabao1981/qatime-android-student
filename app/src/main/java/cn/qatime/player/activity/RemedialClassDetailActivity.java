@@ -203,7 +203,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                         status.setText(getStatus(data.getData().getStatus()));
                         if (data.getData() != null && data.getData().getLive_start_time() != null) {
                             try {
-                                if ("preview".equals(data.getData().getStatus())) {
+                                if ("init".equals(data.getData().getStatus())||"published".equals(data.getData().getStatus())) {
                                     long time = System.currentTimeMillis() - parse.parse(data.getData().getLive_start_time()).getTime();
                                     int value = 0;
                                     if (time > 0) {
@@ -240,7 +240,6 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                             ((FragmentClassDetailTeacherInfo) fragBaseFragments.get(1)).setData(data);
                             ((FragmentClassDetailClassList) fragBaseFragments.get(2)).setData(data);
                             if (data.getData() != null) {
-                                // TODO: 2016/11/22 重写底部按钮显示逻辑
                                 if (data.getData().getIs_tasting()) {
                                     boolean hasPullAddress = !StringUtils.isNullOrBlanK(data.getData().getCamera()) && !StringUtils.isNullOrBlanK(data.getData().getBoard());//是否有拉流地址（本页代表已试听到期）
                                     if (hasPullAddress) {
@@ -469,18 +468,19 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     }
 
     private String getStatus(String status) {
-        // TODO: 2016/11/9 状态待确定
         if (status == null) {
-            return "招生中";
+            return "待开课";
         }
-        if (status.equals("preview")) {//直播中
+        if (status.equals("published")) {//直播中
             return "招生中";
-        } else if (status.equals("teaching")) {
+        } else if(status.equals("init")){
+            return "待开课";
+        }else if (status.equals("teaching")) {
             return "已开课";
         } else if (status.equals("completed")) {//未开始
             return "已结束";
         }
-        return "";
+        return "待开课";
     }
 
     @Subscribe
