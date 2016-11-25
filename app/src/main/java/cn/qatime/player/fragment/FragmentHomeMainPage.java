@@ -117,7 +117,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
     private void initTagImg() {
         final int imageIds[] = {R.mipmap.banner, R.mipmap.banner2, R.mipmap.banner3};
-        final int imageIds[] = {R.mipmap.banner,R.mipmap.banner2,R.mipmap.banner3};
         ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()), ScreenUtils.getScreenWidth(getActivity())/3);
         tagViewpagerImg.setLayoutParams(params);
         tagViewpagerImg.init(R.drawable.shape_photo_tag_select, R.drawable.shape_photo_tag_nomal, 16, 8, 4, 30);

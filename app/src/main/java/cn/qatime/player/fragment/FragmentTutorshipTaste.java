@@ -47,6 +47,7 @@ public class FragmentTutorshipTaste extends BaseFragment {
     private java.util.List<TutorialClassBean.Data> list = new ArrayList<>();
     private CommonAdapter<TutorialClassBean.Data> adapter;
     private int page = 1;
+    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     @Nullable
     @Override
