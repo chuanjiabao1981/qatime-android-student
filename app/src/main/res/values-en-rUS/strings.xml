@@ -349,5 +349,6 @@
     <string name="class_n">Lesson N</string>
     <string name="class_range">Course range</string>
     <string name="clean_cache">Clear cache</string>
+    <string name="course_arrangement">course arrangement</string>
 </resources>
 

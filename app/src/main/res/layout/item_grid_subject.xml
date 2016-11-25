@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zhy.android.percent.support.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
@@ -7,8 +8,10 @@
 
     <ImageView
         android:id="@+id/subject_img"
-        android:layout_width="41dp"
-        android:layout_height="41dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        custom:layout_heightPercent="70%w"
+        custom:layout_widthPercent="70%w"
         android:src="@mipmap/personal_information_head" />
 
     <TextView
@@ -17,4 +20,4 @@
         android:layout_height="wrap_content"
         android:text="@string/chinese"
         android:textColor="#000" />
-</LinearLayout>
+</com.zhy.android.percent.support.PercentLinearLayout>

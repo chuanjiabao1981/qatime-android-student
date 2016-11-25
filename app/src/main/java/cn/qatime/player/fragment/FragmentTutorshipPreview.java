@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
-import cn.qatime.player.activity.OrderConfirmActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
@@ -36,9 +35,9 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.OrderPayBean;
 import libraryextra.bean.TutorialClassBean;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -60,8 +59,8 @@ public class FragmentTutorshipPreview extends BaseFragment {
 
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
-        listView.getRefreshableView().setDividerHeight(1);
         listView.setMode(PullToRefreshBase.Mode.BOTH);
+        listView.setEmptyView(View.inflate(getActivity(),R.layout.empty_view,null));
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
         listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResourceString(R.string.refreshing));
@@ -73,39 +72,27 @@ public class FragmentTutorshipPreview extends BaseFragment {
 
             @Override
             public void convert(ViewHolder helper, final TutorialClassBean.Data item, int position) {
+                /**
+                 * 当前页hasPullAddress一定为true
+                 */
+                boolean isBought = item.isIs_bought();//已经购买
+//                boolean hasPullAddress = !StringUtils.isNullOrBlanK(item.getCamera()) && !StringUtils.isNullOrBlanK(item.getBoard());//是否有拉流地址
+                //试听状态
+                TextView taste = helper.getView(R.id.taste);
+//                if (hasPullAddress) {//有拉流地址说明试听没过期
+//                    taste.setText("试听中");
+//                    taste.setBackgroundColor(0xffff9966);
+//                } else {
+//                    taste.setText("已试听");
+//                    taste.setBackgroundColor(0xffcccccc);
+//                }
 
-                helper.setText(R.id.class_start_time, getResourceString(R.string.item_class_start_date) + item.getLive_start_time());
-                helper.setText(R.id.class_end_time, getResourceString(R.string.item_class_end_date) + item.getLive_end_time());
-                helper.getView(R.id.enter).setVisibility(item.isIs_bought() ? View.GONE : View.VISIBLE);
-                helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), OrderConfirmActivity.class);
-                        intent.putExtra("id", item.getId());
-                        OrderPayBean bean = new OrderPayBean();
-                        bean.image = item.getPublicize();
-                        bean.name = item.getName();
-                        bean.subject = item.getSubject();
-                        bean.grade = item.getGrade();
-                        bean.classnumber = item.getPreset_lesson_count();
-                        bean.teacher = item.getTeacher_name();
-                        bean.classendtime = item.getLive_end_time();
-                        bean.status = "";
-                        bean.classstarttime = item.getLive_start_time();
-                        bean.price = item.getPrice();
-                        intent.putExtra("data", bean);
-                        startActivity(intent);
-                    }
-                });
+                taste.setVisibility(isBought ? View.GONE : View.VISIBLE);//已购买不显示
 
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
-                helper.setText(R.id.subject, getResourceString(R.string.item_subject) + item.getSubject());
-                helper.setText(R.id.teacher, getResourceString(R.string.item_teacher) + item.getTeacher_name());
-                helper.setText(R.id.progress, item.getCompleted_lesson_count() + "/" + item.getPreset_lesson_count());
-                ((ProgressBar) helper.getView(R.id.progressbar)).setProgress(item.getCompleted_lesson_count());
-                ((ProgressBar) helper.getView(R.id.progressbar)).setMax(item.getPreset_lesson_count());
-                helper.setText(R.id.remain_class, String.valueOf(item.getPreset_lesson_count() - item.getCompleted_lesson_count()));
+                helper.setText(R.id.subject,item.getSubject());
+                helper.setText(R.id.teacher,"/"+ item.getTeacher_name());
                 try {
                     long time = System.currentTimeMillis() - parse.parse(item.getPreview_time()).getTime();
                     int value = 0;
@@ -116,6 +103,7 @@ public class FragmentTutorshipPreview extends BaseFragment {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                helper.setText(R.id.grade, item.getGrade());
             }
         };
         listView.setAdapter(adapter);
@@ -175,7 +163,11 @@ public class FragmentTutorshipPreview extends BaseFragment {
                         try {
                             TutorialClassBean data = JsonUtils.objectFromJson(response.toString(), TutorialClassBean.class);
                             if (data != null) {
-                                list.addAll(data.getData());
+                                for(TutorialClassBean.Data item : data.getData()){
+                                    if(!StringUtils.isNullOrBlanK(item.getCamera()) && !StringUtils.isNullOrBlanK(item.getBoard())){//只显示试听未过期或已购买
+                                        list.add(item);
+                                    }
+                                }
                             }
                             adapter.notifyDataSetChanged();
                         } catch (JsonSyntaxException e) {

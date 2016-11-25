@@ -29,6 +29,7 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.GridViewForScrollView;
@@ -56,6 +57,8 @@ public class TeacherDataActivity extends BaseActivity {
     private int page = 0;
     private CommonAdapter<TeacherDataBean.DataBean.Course> adapter;
     private DecimalFormat df = new DecimalFormat("#.00");
+    private int teacherId;
+    private View relEmpty;
 
     private void assignViews() {
         PullToRefreshScrollView scroll = (PullToRefreshScrollView) findViewById(R.id.scroll);
@@ -71,6 +74,7 @@ public class TeacherDataActivity extends BaseActivity {
         province = (TextView) findViewById(R.id.province);
         city = (TextView) findViewById(R.id.city);
         town = (TextView) findViewById(R.id.town);
+        relEmpty = findViewById(R.id.rel_empty);
         describe = (TextView) findViewById(R.id.describe);
         grid = (GridViewForScrollView) findViewById(R.id.grid);
         scroll.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ScrollView>() {
@@ -86,6 +90,9 @@ public class TeacherDataActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_data);
         assignViews();
+
+        teacherId = getIntent().getIntExtra("teacherId", 0);
+
         initData(1);
         adapter = new CommonAdapter<TeacherDataBean.DataBean.Course>(this, list, R.layout.item_teacher_data) {
 
@@ -117,13 +124,23 @@ public class TeacherDataActivity extends BaseActivity {
         grid.setAdapter(adapter);
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        int newTeacherId = intent.getIntExtra("teacherId", 0);
+        if (newTeacherId != teacherId) {
+            teacherId = newTeacherId;
+            initData(1);
+        }
+    }
+
     /**
      * @param type 1刷新
      *             2加载更多
      */
     private void initData(final int type) {
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlTeacherInformation + getIntent().getIntExtra("teacherId", 0) + "/profile", null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlTeacherInformation + teacherId + "/profile", null,
                 new VolleyListener(this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -139,7 +156,7 @@ public class TeacherDataActivity extends BaseActivity {
                                     setTitle(name);
                                     TeacherDataActivity.this.name.setText(name);
                                 }
-                                describe.setText(bean.getData().getDesc());
+                                describe.setText(StringUtils.isNullOrBlanK(bean.getData().getDesc()) ? "暂无" : bean.getData().getDesc());
                                 teachAge.setText(getTeachingYear(bean.getData().getTeaching_years()));
                                 category.setText(bean.getData().getCategory());
                                 subject.setText(bean.getData().getSubject());
@@ -150,7 +167,11 @@ public class TeacherDataActivity extends BaseActivity {
                                 sex.setTextColor(getSexColor(bean.getData().getGender()));
                                 Glide.with(TeacherDataActivity.this).load(bean.getData().getAvatar_url()).placeholder(R.mipmap.error_header_rect).crossFade().into(headSculpture);
                                 school.setText(bean.getData().getSchool());
-                                list.addAll(bean.getData().getCourses());
+                                if(bean.getData().getCourses()!=null&&bean.getData().getCourses().size()>0){
+                                    list.addAll(bean.getData().getCourses());
+                                }else{
+                                    relEmpty.setVisibility(View.VISIBLE);
+                                }
                             }
                             adapter.notifyDataSetChanged();
                         } catch (JsonSyntaxException e) {

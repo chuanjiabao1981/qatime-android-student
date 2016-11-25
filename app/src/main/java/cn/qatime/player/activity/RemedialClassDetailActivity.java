@@ -27,6 +27,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,8 +39,8 @@ import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.fragment.FragmentClassDetailClassInfo;
-import cn.qatime.player.fragment.FragmentClassDetailTeacherInfo;
 import cn.qatime.player.fragment.FragmentClassDetailClassList;
+import cn.qatime.player.fragment.FragmentClassDetailTeacherInfo;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
@@ -58,7 +60,7 @@ import libraryextra.view.SimpleViewPagerIndicator;
 public class RemedialClassDetailActivity extends BaseFragmentActivity implements View.OnClickListener {
     ImageView image;
     private int id;
-    private String[] mTitles = new String[]{"辅导概况", "教师资料", "课程列表"};
+    private String[] mTitles = new String[]{"辅导概况", "教师资料", "课程安排"};
     private SimpleViewPagerIndicator mIndicator;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
     private Button audition;
@@ -71,8 +73,17 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     private int pager = 0;
     TextView price;
     TextView studentnumber;
+    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     DecimalFormat df = new DecimalFormat("#.00");
     private AlertDialog alertDialog;
+    private Button startStudy;
+    private View startStudyView;
+    private View rlImage;
+    private TextView progress;
+    private TextView status;
+    private TextView timeToStart;
+    private View layoutView;
+    private Button auditionStart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,13 +105,13 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     public void initView() {
         EventBus.getDefault().register(this);
         image = (ImageView) findViewById(R.id.image);
+        rlImage = findViewById(R.id.rl_image);
         name = (TextView) findViewById(R.id.name);
-        image.setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenWidth(this) * 5 / 8));
+        rlImage.setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenWidth(this) * 5 / 8));
 
         fragBaseFragments.add(new FragmentClassDetailClassInfo());
         fragBaseFragments.add(new FragmentClassDetailTeacherInfo());
         fragBaseFragments.add(new FragmentClassDetailClassList());
-
 
 
 //        fragmentlayout = (FragmentLayoutWithLine)findViewById(R.id.fragmentlayout);
@@ -120,12 +131,21 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
 
         audition = (Button) findViewById(R.id.audition);
+        auditionStart = (Button) findViewById(R.id.audition_start);
         pay = (Button) findViewById(R.id.pay);
+        startStudy = (Button) findViewById(R.id.start_study);
+        startStudyView = findViewById(R.id.start_study_view);
         title = (TextView) findViewById(R.id.title);
         price = (TextView) findViewById(R.id.price);
         studentnumber = (TextView) findViewById(R.id.student_number);
+        progress = (TextView) findViewById(R.id.progress);
+        timeToStart = (TextView) findViewById(R.id.time_to_start);
+        status = (TextView) findViewById(R.id.status);
+        layoutView = findViewById(R.id.layout_view);
         audition.setOnClickListener(this);
+        auditionStart.setOnClickListener(this);
         pay.setOnClickListener(this);
+        startStudy.setOnClickListener(this);
 
         mIndicator = (SimpleViewPagerIndicator) findViewById(R.id.id_stickynavlayout_indicator);
         mViewPager = (ViewPager) findViewById(R.id.id_stickynavlayout_viewpager);
@@ -180,6 +200,31 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     protected void onSuccess(JSONObject response) {
                         data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
                         Glide.with(RemedialClassDetailActivity.this).load(data.getData().getPublicize()).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
+                        status.setText(getStatus(data.getData().getStatus()));
+                        if (data.getData() != null && data.getData().getLive_start_time() != null) {
+                            try {
+                                if ("init".equals(data.getData().getStatus())||"published".equals(data.getData().getStatus())) {
+                                    long time = System.currentTimeMillis() - parse.parse(data.getData().getLive_start_time()).getTime();
+                                    int value = 0;
+                                    if (time > 0) {
+                                        value = (int) (time / (1000 * 3600 * 24));
+                                    }
+                                    timeToStart.setVisibility(View.VISIBLE);
+                                    progress.setVisibility(View.GONE);
+                                    timeToStart.setText("[" + getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day) + "]");
+                                    layoutView.setBackgroundColor(0xff66cc99);
+                                } else if ("teaching".equals(data.getData().getStatus())) {
+                                    progress.setVisibility(View.VISIBLE);
+                                    timeToStart.setVisibility(View.GONE);
+                                    layoutView.setBackgroundColor(0xff66cccc);
+                                    progress.setText("[进度" + data.getData().getCompleted_lesson_count() + "/" + data.getData().getPreset_lesson_count() + "]");
+                                } else {
+                                    layoutView.setVisibility(View.GONE);
+                                }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         if (data.getData() != null) {
                             String price = df.format(data.getData().getPrice());
                             if (price.startsWith(".")) {
@@ -188,7 +233,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                             name.setText(data.getData().getName());
                             title.setText(data.getData().getName());
                             RemedialClassDetailActivity.this.price.setText("￥" + price);
-                            studentnumber.setText("已购人数 " + data.getData().getBuy_tickets_count());
+                            studentnumber.setText("报名人数 " + data.getData().getBuy_tickets_count());
                         }
                         if (data != null) {
                             ((FragmentClassDetailClassInfo) fragBaseFragments.get(0)).setData(data);
@@ -196,20 +241,22 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                             ((FragmentClassDetailClassList) fragBaseFragments.get(2)).setData(data);
                             if (data.getData() != null) {
                                 if (data.getData().getIs_tasting()) {
-                                    audition.setEnabled(false);
-                                    audition.setText(getResources().getString(R.string.Joined_the_audition));
+                                    boolean hasPullAddress = !StringUtils.isNullOrBlanK(data.getData().getCamera()) && !StringUtils.isNullOrBlanK(data.getData().getBoard());//是否有拉流地址（本页代表已试听到期）
+                                    if (hasPullAddress) {
+                                        auditionStart.setVisibility(View.VISIBLE);
+                                    } else {
+                                        audition.setText(getResourceString(R.string.audition_over));
+                                        audition.setEnabled(false);
+                                    }
                                 } else {
-                                    audition.setEnabled(true);
                                     audition.setText(getResources().getString(R.string.Join_the_audition));
                                 }
 
                                 if (data.getData().getIs_bought()) {
-                                    pay.setEnabled(false);
-                                    pay.setText(getResources().getString(R.string.purchased));
-                                    audition.setEnabled(false);
-                                } else {
-                                    pay.setEnabled(true);
-                                    pay.setText(getResources().getString(R.string.purchase_now));
+                                    startStudyView.setVisibility(View.VISIBLE);
+                                    if (data.getData().getStatus().equals("completed")||data.getData().getStatus().equals("finished")) {
+                                        startStudy.setEnabled(false);
+                                    }
                                 }
                             }
                         }
@@ -237,16 +284,35 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
     @Override
     public void onClick(View v) {
+        if (data == null || data.getData() == null) {
+            return;
+        }
         switch (v.getId()) {
+            case R.id.audition_start:
+                Intent intent = new Intent(RemedialClassDetailActivity.this, NEVideoPlayerActivity.class);
+                intent.putExtra("url", data.getData().getBoard());
+                intent.putExtra("id", data.getData().getId());
+                intent.putExtra("sessionId", data.getData().getChat_team_id());
+                startActivity(intent);
+                break;
             case R.id.audition:
                 joinAudition();
                 break;
+            case R.id.start_study:
+                intent = new Intent(RemedialClassDetailActivity.this, NEVideoPlayerActivity.class);
+                intent.putExtra("url", data.getData().getBoard());
+                intent.putExtra("id", data.getData().getId());
+                intent.putExtra("sessionId", data.getData().getChat_team_id());
+                startActivity(intent);
+                break;
             case R.id.pay:
-                if("teaching".equals(data.getData().getStatus())){
+                if ("teaching".equals(data.getData().getStatus())) {
                     if (alertDialog == null) {
                         View view = View.inflate(RemedialClassDetailActivity.this, R.layout.dialog_cancel_or_confirm, null);
                         Button cancel = (Button) view.findViewById(R.id.cancel);
                         Button confirm = (Button) view.findViewById(R.id.confirm);
+                        TextView text = (TextView) view.findViewById(R.id.text);
+                        text.setText("该辅导班已开课，是否继续购买？");
                         cancel.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -270,9 +336,10 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     } else {
                         alertDialog.show();
                     }
-                }else{
+                } else {
                     payRemedial();
-                };
+                }
+                ;
                 break;
         }
     }
@@ -305,8 +372,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     @Override
                     protected void onSuccess(JSONObject response) {
                         //已加入试听
-                        audition.setEnabled(false);
-                        audition.setText(getResources().getString(R.string.Joined_the_audition));
+                        data.getData().setIs_tasting(true);
+                        auditionStart.setVisibility(View.VISIBLE);
                         if (StringUtils.isNullOrBlanK(BaseApplication.getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getAccountToken())) {
                             DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null,
                                     new VolleyListener(RemedialClassDetailActivity.this) {
@@ -400,13 +467,29 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         addToRequestQueue(request);
     }
 
+    private String getStatus(String status) {
+        if (status == null) {
+            return "待开课";
+        }
+        if (status.equals("published")) {//直播中
+            return "招生中";
+        } else if(status.equals("init")){
+            return "待开课";
+        }else if (status.equals("teaching")) {
+            return "已开课";
+        } else if (status.equals("completed")) {//未开始
+            return "已结束";
+        }
+        return "待开课";
+    }
+
     @Subscribe
     public void onEvent(PayResultState code) {
 //        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
 //
 //            finish();
 //        }
-            finish();
+        finish();
     }
 
     @Override

@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -54,8 +53,8 @@ public class FragmentTutorshipOver extends BaseFragment {
 
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
-        listView.getRefreshableView().setDividerHeight(1);
         listView.setMode(PullToRefreshBase.Mode.BOTH);
+        listView.setEmptyView(View.inflate(getActivity(),R.layout.empty_view,null));
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
         listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResourceString(R.string.refreshing));
@@ -66,19 +65,11 @@ public class FragmentTutorshipOver extends BaseFragment {
         adapter = new CommonAdapter<TutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship4) {
             @Override
             public void convert(ViewHolder helper, TutorialClassBean.Data item, int position) {
-
-                helper.setText(R.id.class_start_time, getResourceString(R.string.item_class_start_date)+ item.getLive_start_time());
-
-
-                helper.setText(R.id.class_end_time, getResourceString(R.string.item_class_end_date)+ item.getLive_end_time());
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
-                helper.setText(R.id.subject, getResourceString(R.string.item_subject)+ item.getSubject());
-                helper.setText(R.id.teacher, getResourceString(R.string.item_teacher) + item.getTeacher_name());
-                helper.setText(R.id.progress, item.getCompleted_lesson_count() + "/" + item.getPreset_lesson_count());
-                ((ProgressBar) helper.getView(R.id.progressbar)).setProgress(item.getCompleted_lesson_count());
-                ((ProgressBar) helper.getView(R.id.progressbar)).setMax(item.getPreset_lesson_count());
-                helper.setText(R.id.remain_class, String.valueOf(item.getPreset_lesson_count()-item .getCompleted_lesson_count()));
+                helper.setText(R.id.grade, item.getGrade());
+                helper.setText(R.id.subject,item.getSubject());
+                helper.setText(R.id.teacher,"/"+ item.getTeacher_name());
             }
 
 
@@ -142,7 +133,11 @@ public class FragmentTutorshipOver extends BaseFragment {
                         try {
                             TutorialClassBean data = JsonUtils.objectFromJson(response.toString(), TutorialClassBean.class);
                             if (data != null) {
-                                list.addAll(data.getData());
+                                for(TutorialClassBean.Data item : data.getData()){
+                                    if(item.isIs_bought()){//只显示已购买
+                                        list.add(item);
+                                    }
+                                }
                             }
                             adapter.notifyDataSetChanged();
                         } catch (JsonSyntaxException e) {
