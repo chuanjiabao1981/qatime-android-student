@@ -85,7 +85,7 @@ public class FragmentClassTableClosed extends BaseFragment {
                             }
                         });
 ////                helper.setText(R.id.course, item.getCourse_name());
-                helper.setText(R.id.classname, item.getName() + " " + item.getCourse_name());
+                helper.setText(R.id.classname, item.getName());
 
                 try {
                     Date date = parse.parse(item.getClass_date());
@@ -98,7 +98,13 @@ public class FragmentClassTableClosed extends BaseFragment {
                 helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
-                helper.getView(R.id.enter).setVisibility((!StringUtils.isNullOrBlanK(item.getCamera()) && !StringUtils.isNullOrBlanK(item.getBoard())) ? View.VISIBLE : View.GONE);
+                String status = item.getStatus();
+
+                boolean showEnter = "ready".equals(status)||"paused".equals(status)||"closed".equals(status)||"paused_inner".equals(status)||"teaching".equals(status);//是否是待上课、已直播、直播中
+                boolean hasPullAddress = !StringUtils.isNullOrBlanK(item.getCamera()) && !StringUtils.isNullOrBlanK(item.getBoard());//是否有拉流地址
+                //进入状态
+                helper.getView(R.id.enter).setVisibility(showEnter ? View.VISIBLE : View.GONE);//进入播放器按钮显示或隐藏
+                helper.getView(R.id.enter).setEnabled(hasPullAddress);
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -132,18 +138,20 @@ public class FragmentClassTableClosed extends BaseFragment {
     }
 
     private String getStatus(String status) {
-        if (status.equals("teaching")) {//直播中
-            return getResourceString(R.string.class_teaching);
-        } else if (status.equals("paused")) {
-            return getResourceString(R.string.class_teaching);
+        if (status.equals("missed")) {//待补课
+            return getResourceString(R.string.class_wait);
         } else if (status.equals("init")) {//未开始
             return getResourceString(R.string.class_init);
         } else if (status.equals("ready")) {//待开课
             return getResourceString(R.string.class_ready);
+        } else if (status.equals("teaching")) {//直播中
+            return getResourceString(R.string.class_teaching);
+        } else if (status.equals("closed")) {//直播中
+            return getResourceString(R.string.class_teaching);
+        } else if (status.equals("paused")) {//直播中
+            return getResourceString(R.string.class_teaching);
         } else if (status.equals("paused_inner")) {//暂停中
             return getResourceString(R.string.class_paused_inner);
-        } else if (status.equals("missed")) {//待补课
-            return getResourceString(R.string.class_wait);
         } else {
             return getResourceString(R.string.class_over);//已结束
         }

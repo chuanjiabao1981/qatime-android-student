@@ -52,6 +52,8 @@ public class FragmentPlayerLiveClassList extends BaseFragment {
                     holder.setText(R.id.status, getResourceString(R.string.class_ready));
                 } else if (item.getStatus().equals("teaching")) {//直播中
                     holder.setText(R.id.status, getResourceString(R.string.class_teaching));
+                } else if (item.getStatus().equals("closed")) {
+                    holder.setText(R.id.status, getResourceString(R.string.class_teaching));
                 } else if (item.getStatus().equals("paused")) {
                     holder.setText(R.id.status, getResourceString(R.string.class_teaching));
                 } else if (item.getStatus().equals("paused_inner")) {//暂停中
