@@ -87,7 +87,6 @@ public class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         for (Request request : requestList) {
-            Logger.e("cancel request:" + request.getUrl());
             request.cancel();
         }
         super.onDestroy();

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,10 +69,12 @@ public class FragmentPlayerAnnouncements extends BaseFragment {
                     helper.getView(R.id.late).setVisibility(View.VISIBLE);
                     ((TextView) helper.getView(R.id.time)).setTextColor(0xff151515);
                     ((TextView) helper.getView(R.id.describe)).setTextColor(0xff151515);
+                    helper.setImageResource(R.id.notify, R.mipmap.notify);
                 } else {
                     helper.getView(R.id.late).setVisibility(View.GONE);
                     ((TextView) helper.getView(R.id.time)).setTextColor(0xff545454);
                     ((TextView) helper.getView(R.id.describe)).setTextColor(0xff545454);
+                    helper.setImageResource(R.id.notify, R.mipmap.notify_dark);
                 }
                 helper.setText(R.id.time, item.getEdit_at());
                 helper.setText(R.id.describe, item.getAnnouncement());

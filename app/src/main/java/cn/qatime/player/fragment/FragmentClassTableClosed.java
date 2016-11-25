@@ -82,7 +82,8 @@ public class FragmentClassTableClosed extends BaseFragment {
                             }
                         });
 //
-                helper.setText(R.id.classname, item.getName());
+                helper.setText(R.id.course,item.getName());
+                helper.setText(R.id.classname, item.getCourse_name());
                 helper.setText(R.id.status, getStatus(item.getStatus()));
                 helper.setText(R.id.class_date, item.getClass_date() + " ");
                 helper.setText(R.id.live_time, item.getLive_time());
@@ -120,7 +121,9 @@ public class FragmentClassTableClosed extends BaseFragment {
             return getResourceString(R.string.class_ready);
         } else if (status.equals("paused_inner")) {//暂停中
             return getResourceString(R.string.class_paused_inner);
-        } else {
+        } else if (status.equals("missed")) {//待补课
+            return getResourceString(R.string.class_wait);
+        }else {
             return getResourceString(R.string.class_over);//已结束
         }
     }

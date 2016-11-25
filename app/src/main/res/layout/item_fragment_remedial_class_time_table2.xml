@@ -54,7 +54,7 @@
                 android:id="@+id/image"
                 android:layout_width="125dp"
                 android:layout_height="125dp"
-                android:scaleType="centerCrop"
+                android:scaleType="fitXY"
                 android:src="@mipmap/photo"/>
 
             <RelativeLayout

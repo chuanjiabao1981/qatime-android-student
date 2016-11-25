@@ -66,18 +66,6 @@
         </LinearLayout>
 
         <LinearLayout
-            style="@style/edit_layout_center_style"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp">
-
-            <EditText
-                android:id="@+id/register_code"
-                style="@style/activity_edit_text_style"
-                android:inputType="textPassword"
-                android:maxLength="16" />
-        </LinearLayout>
-
-        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"

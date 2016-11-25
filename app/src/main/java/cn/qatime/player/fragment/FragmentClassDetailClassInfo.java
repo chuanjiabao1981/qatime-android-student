@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.utils.Constant;
 import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.StringUtils;
 

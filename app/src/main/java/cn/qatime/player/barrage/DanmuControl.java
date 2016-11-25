@@ -23,6 +23,7 @@ import cn.qatime.player.barrage.model.DanmakuTimer;
 import cn.qatime.player.barrage.model.Danmakus;
 import cn.qatime.player.barrage.model.IDisplayer;
 import cn.qatime.player.barrage.model.SpannedCacheStuffer;
+import cn.qatime.player.barrage.model.Status;
 import cn.qatime.player.barrage.parser.BaseDanmakuParser;
 import cn.qatime.player.utils.ExpressionUtil;
 import libraryextra.utils.DensityUtils;
@@ -33,10 +34,6 @@ public class DanmuControl {
     //弹幕显示的时间(如果是list的话，会 * i)，记得加上mDanmakuView.getCurrentTime()
     private static final long ADD_DANMU_TIME = 2000;
 
-    private static final int ORANGE_COLOR = 0xffff815a;
-    private final Context context;
-
-    private int BITMAP_HEIGHT = 18;
     private float DANMU_TEXT_SIZE = 12f;//弹幕字体的大小
 
     //这两个用来控制两行弹幕之间的间距
@@ -46,9 +43,9 @@ public class DanmuControl {
 
     private IDanmakuView mDanmakuView;
     private DanmakuContext mDanmakuContext;
+    private Status status = Status.SHOW;
 
     public DanmuControl(Context context) {
-        this.context = context;
         setSize(context);
         initDanmuConfig();
     }
@@ -57,7 +54,6 @@ public class DanmuControl {
      * 对数值进行转换，适配手机，必须在初始化之前，否则有些数据不会起作用
      */
     private void setSize(Context context) {
-        BITMAP_HEIGHT = DensityUtils.dp2px(context, BITMAP_HEIGHT);
         DANMU_PADDING = DensityUtils.dp2px(context, DANMU_PADDING);
         DANMU_PADDING_INNER = DensityUtils.dp2px(context, DANMU_PADDING_INNER);
         DANMU_RADIUS = DensityUtils.dp2px(context, DANMU_RADIUS);
@@ -125,7 +121,7 @@ public class DanmuControl {
 
         @Override
         public void releaseResource(BaseDanmaku danmaku) {
-            // TODO 重要:清理含有ImageSpan的text中的一些占用内存的资源 例如drawable
+            //  重要:清理含有ImageSpan的text中的一些占用内存的资源 例如drawable
             if (danmaku.text instanceof Spanned) {
                 danmaku.text = "";
             }
@@ -181,12 +177,14 @@ public class DanmuControl {
     public void hide() {
         if (mDanmakuView != null) {
             mDanmakuView.hide();
+            status = Status.HIDE;
         }
     }
 
     public void show() {
         if (mDanmakuView != null) {
             mDanmakuView.show();
+            status = Status.SHOW;
         }
     }
 
@@ -227,9 +225,13 @@ public class DanmuControl {
             danmaku.isLive = false;
             danmaku.time = mDanmakuView.getCurrentTime() + (i * ADD_DANMU_TIME);
             danmaku.textSize = DANMU_TEXT_SIZE/* * (mDanmakuContext.getDisplayer().getDensity() - 0.6f)*/;
-            danmaku.textColor = Color.BLACK;
+            danmaku.textColor = 0xffCCCCCC;
             danmaku.textShadowColor = 0; // 重要：如果有图文混排，最好不要设置描边(设textShadowColor=0)，否则会进行两次复杂的绘制导致运行效率降低
             mDanmakuView.addDanmaku(danmaku);
         }
+    }
+
+    public Status getStatus() {
+        return status;
     }
 }

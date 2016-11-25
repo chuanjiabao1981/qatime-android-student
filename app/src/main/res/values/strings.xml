@@ -20,7 +20,7 @@
     <string name="by_grade">年级</string>
     <string name="price">价格范围</string>
     <string name="yuan">元</string>
-    <string name="class_hours_range">课时范围</string>
+    <string name="class_hours_range">课时总数</string>
     <string name="hours">课时</string>
     <string name="starting_range">开课时间</string>
     <string name="to">至</string>
@@ -207,6 +207,7 @@
     <string name="class_teaching">直播中</string>
     <string name="class_init">未开始</string>
     <string name="class_ready">待上课</string>
+    <string name="class_wait">待补课</string>
     <string name="class_paused_inner">暂停中</string>
     <string name="class_over">已直播</string>
     <!--//订单支付-->
@@ -404,6 +405,8 @@
     <string name="not_bind">未绑定</string>
     <string name="is_newest_version">已经是最新版本</string>
     <string name="landing">登陆中...</string>
+    <string name="live_side_open">副直播已开启</string>
+    <string name="live_side_close">副直播已关闭</string>
 
     <string name="team_need_authentication">需要身份验证</string>
     <string name="team_allow_anyone_join">允许任何人加入</string>

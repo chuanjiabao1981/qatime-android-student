@@ -20,7 +20,6 @@ import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,9 +42,6 @@ public class FragmentTutorshipOver extends BaseFragment {
     private java.util.List<TutorialClassBean.Data> list = new ArrayList<>();
     private CommonAdapter<TutorialClassBean.Data> adapter;
     private int page = 1;
-
-    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
 
     @Nullable
     @Override

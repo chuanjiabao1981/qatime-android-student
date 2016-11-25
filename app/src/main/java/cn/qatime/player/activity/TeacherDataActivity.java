@@ -17,6 +17,7 @@ import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +56,7 @@ public class TeacherDataActivity extends BaseActivity {
     private TextView town;
     private int page = 0;
     private CommonAdapter<TeacherDataBean.DataBean.Course> adapter;
+    private DecimalFormat df = new DecimalFormat("#.00");
     private int teacherId;
     private View relEmpty;
 
@@ -98,12 +100,17 @@ public class TeacherDataActivity extends BaseActivity {
             public void convert(ViewHolder helper, TeacherDataBean.DataBean.Course item, int position) {
                 if (item == null) {
                     Logger.e("item數據空");
-                }else {
-                    Glide.with(TeacherDataActivity.this).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.image)));
-                    helper.setText(R.id.subject, item.getSubject());
-                    helper.setText(R.id.course_title, item.getName());
-                    helper.setText(R.id.count, String.valueOf(item.getBuy_tickets_count()) + "人已购买");
+                    return;
                 }
+                Glide.with(TeacherDataActivity.this).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.image)));
+                helper.setText(R.id.grade, item.getGrade());
+                helper.setText(R.id.subject, item.getSubject());
+                helper.setText(R.id.course_title, item.getName());
+                String price = df.format(item.getPrice());
+                if (price.startsWith(".")) {
+                    price = "0" + price;
+                }
+                helper.setText(R.id.price, "￥" + price);
             }
         };
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -33,7 +33,6 @@ import libraryextra.utils.VolleyListener;
 public class RegisterActivity extends BaseActivity implements View.OnClickListener {
     EditText phone;
     EditText code;
-    EditText registercode;
     Button getcode;
     EditText password;
     EditText repassword;
@@ -57,7 +56,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         getcode = (Button) findViewById(R.id.get_code);
         password = (EditText) findViewById(R.id.password);
         repassword = (EditText) findViewById(R.id.repassword);
-        registercode = (EditText) findViewById(R.id.register_code);
         checkBox = (CheckBox) findViewById(R.id.checkBox);
         next = (Button) findViewById(R.id.next);
         agreement = (TextView) findViewById(R.id.agreement);
@@ -66,7 +64,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         code.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_input_verification_code)));
         password.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_input_password)));
         repassword.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_confirm_password)));
-        registercode.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_qatime_register_code)));
+//        registercode.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_qatime_register_code)));
 
         getcode.setOnClickListener(this);
         next.setOnClickListener(this);
@@ -181,11 +179,11 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             next.setClickable(true);
             return;
         }
-        if (StringUtils.isNullOrBlanK(registercode.getText().toString().trim())) {   //注册码
-            Toast.makeText(this, getResources().getString(R.string.enter_the_register_code), Toast.LENGTH_SHORT).show();
-            next.setClickable(true);
-            return;
-        }
+//        if (StringUtils.isNullOrBlanK(registercode.getText().toString().trim())) {   //注册码
+//            Toast.makeText(this, getResources().getString(R.string.enter_the_register_code), Toast.LENGTH_SHORT).show();
+//            next.setClickable(true);
+//            return;
+//        }
         if (!checkBox.isChecked()) {   //协议勾选
             Toast.makeText(this, getResources().getString(R.string.agree_agreement), Toast.LENGTH_SHORT).show();
             next.setClickable(true);
@@ -200,7 +198,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         map.put("accept", "" + (checkBox.isChecked() ? 1 : 0));
         map.put("type", "Student");
         map.put("client_type", "app");
-        map.put("register_code_value", registercode.getText().toString().trim());//注册码
+//        map.put("register_code_value", registercode.getText().toString().trim());//注册码
 
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlRegister, map), null, new VolleyListener(this) {

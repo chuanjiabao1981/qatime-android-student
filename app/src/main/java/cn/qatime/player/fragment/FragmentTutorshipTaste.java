@@ -48,9 +48,6 @@ public class FragmentTutorshipTaste extends BaseFragment {
     private CommonAdapter<TutorialClassBean.Data> adapter;
     private int page = 1;
 
-    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -87,7 +84,8 @@ public class FragmentTutorshipTaste extends BaseFragment {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
-                        intent.putExtra("url", item.getBoard());
+                        intent.putExtra("camera", item.getCamera());
+                        intent.putExtra("board", item.getBoard());
                         intent.putExtra("id", item.getId());
                         intent.putExtra("sessionId", item.getChat_team_id());
                         startActivity(intent);
