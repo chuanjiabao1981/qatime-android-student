@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,8 +21,8 @@
                 android:id="@+id/image"
                 android:layout_width="110dp"
                 android:layout_height="110dp"
-                android:layout_marginLeft="1dp"
                 android:layout_marginBottom="1dp"
+                android:layout_marginLeft="1dp"
                 android:layout_marginTop="1dp"
                 android:scaleType="fitXY"
                 android:src="@mipmap/photo" />
@@ -48,17 +50,22 @@
                             android:background="#f96"
                             android:ellipsize="end"
                             android:maxLines="1"
+                            android:paddingLeft="3dp"
+                            android:paddingRight="3dp"
                             android:text="试听中"
-                            android:textColor="#fff" />
+                            android:textColor="#fff"
+                            android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="2dp"
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="高考考前急速冲刺班相学练班"
-                            android:textColor="#333" />
+                            android:textColor="#333"
+                            android:textSize="13sp" />
 
                     </LinearLayout>
 
@@ -77,24 +84,24 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="年级"
-                            android:textSize="12sp"
-                            android:textColor="#666" />
+                            android:textColor="#666"
+                            android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/subject"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="科目"
-                            android:textSize="12sp"
-                            android:textColor="#666" />
+                            android:textColor="#666"
+                            android:textSize="12sp" />
 
                         <TextView
                             android:id="@+id/teacher"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="/老师"
-                            android:textSize="12sp"
-                            android:textColor="#666" />
+                            android:textColor="#666"
+                            android:textSize="12sp" />
 
                         <!--<View-->
                         <!--android:layout_width="0dp"-->

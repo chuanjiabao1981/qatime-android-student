@@ -190,7 +190,7 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         ImageView ivLeft = (ImageView) findViewById(R.id.iv_left);
         ImageView ivRight = (ImageView) findViewById(R.id.iv_right);
         monthDateView = (MonthDateView) findViewById(R.id.monthDateView);
-        monthDateView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, DensityUtils.dp2px(this, 22) * 7));
+        monthDateView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, DensityUtils.dp2px(this, 35) * 6));
         TextView tvDate = (TextView) findViewById(R.id.date_text);
         View tvToday = findViewById(R.id.date_operator_ll);
         monthDateView.setTextView(tvDate, null);

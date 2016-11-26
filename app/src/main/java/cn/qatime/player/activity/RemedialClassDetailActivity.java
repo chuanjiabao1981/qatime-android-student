@@ -60,7 +60,7 @@ import libraryextra.view.SimpleViewPagerIndicator;
 public class RemedialClassDetailActivity extends BaseFragmentActivity implements View.OnClickListener {
     ImageView image;
     private int id;
-    private String[] mTitles = new String[]{"辅导概况", "教师资料", "课程安排"};
+    private String[] mTitles = new String[]{"辅导详情", "教师资料", "课程安排"};
     private SimpleViewPagerIndicator mIndicator;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
     private Button audition;
@@ -212,11 +212,11 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                                     timeToStart.setVisibility(View.VISIBLE);
                                     progress.setVisibility(View.GONE);
                                     timeToStart.setText("[" + getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day) + "]");
-                                    layoutView.setBackgroundColor(0xff66cc99);
+                                    layoutView.setBackgroundColor(0xff00d564);
                                 } else if ("teaching".equals(data.getData().getStatus())) {
                                     progress.setVisibility(View.VISIBLE);
                                     timeToStart.setVisibility(View.GONE);
-                                    layoutView.setBackgroundColor(0xff66cccc);
+                                    layoutView.setBackgroundColor(0xff00a0e9);
                                     progress.setText("[进度" + data.getData().getCompleted_lesson_count() + "/" + data.getData().getPreset_lesson_count() + "]");
                                 } else {
                                     layoutView.setVisibility(View.GONE);
@@ -469,18 +469,18 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
     private String getStatus(String status) {
         if (status == null) {
-            return "待开课";
+            return "招生中";
         }
         if (status.equals("published")) {//直播中
             return "招生中";
         } else if(status.equals("init")){
-            return "待开课";
+            return "招生中";
         }else if (status.equals("teaching")) {
-            return "已开课";
+            return "开课中";
         } else if (status.equals("completed")) {//未开始
             return "已结束";
         }
-        return "待开课";
+        return "招生中";
     }
 
     @Subscribe

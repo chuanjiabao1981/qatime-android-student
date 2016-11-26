@@ -24,6 +24,8 @@
             android:background="#ff9900"
             android:ellipsize="middle"
             android:maxLines="1"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
             android:text="距开课3天"
             android:textColor="#fff"
             android:textSize="12sp" />
@@ -69,16 +71,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textColor="#333"
             android:text="老师"
+            android:textColor="#333"
             android:textSize="14sp" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_marginTop="-4dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="-4dp"
         android:orientation="horizontal">
 
         <TextView
@@ -107,8 +109,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textColor="#999"
             android:text="0人报名"
+            android:textColor="#999"
             android:textSize="12sp" />
     </LinearLayout>
 

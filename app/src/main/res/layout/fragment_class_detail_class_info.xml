@@ -32,19 +32,48 @@
                 android:orientation="vertical">
 
 
-                <TextView
-                    android:id="@+id/subject"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="6dp"
-                    android:text="◇ 地理" />
+                    android:orientation="horizontal"
+                    android:padding="6dp">
 
-                <TextView
-                    android:id="@+id/total_class"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="◇ "
+                        android:textColor="#00a0e9"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/subject"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:text="地理"
+                        android:textColor="#666" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="6dp"
-                    android:text="◇ 共14课" />
+                    android:orientation="horizontal"
+                    android:padding="6dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="◇ "
+                        android:textColor="#00a0e9"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/total_class"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="共14课"
+                        android:textColor="#666" />
+                </LinearLayout>
 
 
             </LinearLayout>
@@ -56,20 +85,49 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/grade"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="6dp"
-                    android:text="◇ 高一" />
+                    android:orientation="horizontal"
+                    android:padding="6dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="◇ "
+                        android:textColor="#00a0e9"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/grade"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:text="高一"
+                        android:textColor="#666" />
+                </LinearLayout>
 
 
-                <TextView
-                    android:id="@+id/class_type"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="6dp"
-                    android:text="◇ 在线直播" />
+                    android:orientation="horizontal"
+                    android:padding="6dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="◇ "
+                        android:textColor="#00a0e9"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/class_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="在线直播"
+                        android:textColor="#666" />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -78,13 +136,15 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="6dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="6dp"
-                android:text="◇ " />
+                android:text="◇ "
+                android:textColor="#00a0e9"
+                android:textSize="20sp" />
 
             <ImageView
                 android:layout_width="14dp"
@@ -99,27 +159,44 @@
                 android:paddingBottom="6dp"
                 android:paddingRight="6dp"
                 android:paddingTop="6dp"
-                android:text="2016-05-03" />
+                android:text="2016-05-03"
+                android:textColor="#666" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="至" />
+                android:text="至"
+                android:textColor="#666" />
 
             <TextView
                 android:id="@+id/class_end_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="6dp"
-                android:text="2016-08-08" />
+                android:text="2016-08-08"
+                android:textColor="#666" />
         </LinearLayout>
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="6dp"
-            android:paddingTop="6dp"
-            android:text="◇ 课程简介：" />
+            android:orientation="horizontal"
+            android:paddingLeft="6dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="◇ "
+                android:textColor="#00a0e9"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="6dp"
+                android:text="辅导介绍"
+                android:textColor="#666" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -131,12 +208,14 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="6dp"
                 android:text="◇ "
+                android:textSize="20sp"
                 android:visibility="invisible" />
 
             <TextView
                 android:id="@+id/describe"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="#999" />
         </LinearLayout>
 
 

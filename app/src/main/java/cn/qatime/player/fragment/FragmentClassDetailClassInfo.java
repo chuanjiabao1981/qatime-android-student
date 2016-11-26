@@ -12,24 +12,21 @@ import java.text.SimpleDateFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.utils.Constant;
 import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.StringUtils;
 
 public class FragmentClassDetailClassInfo extends BaseFragment {
 
-        TextView describe;
-        TextView classStartTime;
-        TextView classEndTime;
-        TextView subject;
-        TextView grade;
-        TextView totalclass;
-        TextView classType;
-        TextView progress;
-        RemedialClassDetailBean data;
-        private SimpleDateFormat parse1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        private SimpleDateFormat parse2 = new SimpleDateFormat("yyyy-MM-dd");
-        private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
+    TextView describe;
+    TextView classStartTime;
+    TextView classEndTime;
+    TextView subject;
+    TextView grade;
+    TextView totalclass;
+    TextView classType;
+    RemedialClassDetailBean data;
+    private SimpleDateFormat parse1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private SimpleDateFormat parse2 = new SimpleDateFormat("yyyy-MM-dd");
 
 
     @Nullable
@@ -53,17 +50,17 @@ public class FragmentClassDetailClassInfo extends BaseFragment {
     }
 
     public void setData(RemedialClassDetailBean bean) {
-        if (bean != null && bean.getData()!=null) {
-            subject.setText("◇ " + (bean.getData().getSubject() == null ? "" : bean.getData().getSubject()));
+        if (bean != null && bean.getData() != null) {
+            subject.setText((bean.getData().getSubject() == null ? "" : bean.getData().getSubject()));
             try {
                 classStartTime.setText((bean.getData().getLive_start_time() == null ? "" : parse2.format(parse1.parse(bean.getData().getLive_start_time()))));
                 classEndTime.setText(parse2.format(parse1.parse(bean.getData().getLive_end_time())));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            grade.setText("◇ " + (bean.getData().getGrade() == null ? "" : bean.getData().getGrade()));
-            totalclass.setText("◇ 共" + bean.getData().getPreset_lesson_count() + "课");
-            describe.setText(StringUtils.isNullOrBlanK(bean.getData().getDescription())?"暂无简介":bean.getData().getDescription());
+            grade.setText((bean.getData().getGrade() == null ? "" : bean.getData().getGrade()));
+            totalclass.setText("共" + bean.getData().getPreset_lesson_count() + "课");
+            describe.setText(StringUtils.isNullOrBlanK(bean.getData().getDescription()) ? "暂无简介" : bean.getData().getDescription());
         }
     }
 }
