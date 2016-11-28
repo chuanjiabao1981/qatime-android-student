@@ -35,15 +35,15 @@ public class FragmentPlayerLiveClassDetails extends BaseFragment {
         @Override
         public void run() {
             if (getActivity() != null && getActivity().getResources() != null) {
-                subject.setText("◇ " + (bean.getSubject() == null ? "" : bean.getSubject()));
+                subject.setText((bean.getSubject() == null ? "" : bean.getSubject()));
                 try {
                     classStartTime.setText((bean.getLive_start_time() == null ? "" : parse2.format(parse1.parse(bean.getLive_start_time()))));
                     classEndTime.setText(parse2.format(parse1.parse(bean.getLive_end_time())));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                grade.setText("◇ " + (bean.getGrade() == null ? "" : bean.getGrade()));
-                totalclass.setText("◇ 共" + bean.getPreset_lesson_count() + "课");
+                grade.setText((bean.getGrade() == null ? "" : bean.getGrade()));
+                totalclass.setText("共" + bean.getPreset_lesson_count() + "课");
                 describe.setText(StringUtils.isNullOrBlanK(bean.getDescription())?"暂无简介":bean.getDescription());
             }
         }
