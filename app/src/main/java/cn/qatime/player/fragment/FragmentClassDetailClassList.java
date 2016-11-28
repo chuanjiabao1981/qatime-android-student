@@ -70,12 +70,10 @@ public class FragmentClassDetailClassList extends BaseFragment {
                 if (item.getStatus().equals("closed")) {
                     ((TextView)holder.getView(R.id.status_color)).setTextColor(0xff999999);
                     ((TextView)holder.getView(R.id.name)).setTextColor(0xff999999);
-                    ((TextView)holder.getView(R.id.live_time)).setTextColor(0xff999999);
                     ((TextView)holder.getView(R.id.status)).setTextColor(0xff999999);
                 } else {
                     ((TextView)holder.getView(R.id.status_color)).setTextColor(0xff00a0e9);
                     ((TextView)holder.getView(R.id.name)).setTextColor(0xff666666);
-                    ((TextView)holder.getView(R.id.live_time)).setTextColor(0xff666666);
                     ((TextView)holder.getView(R.id.status)).setTextColor(0xff666666);
                 }
 

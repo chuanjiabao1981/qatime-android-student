@@ -43,7 +43,7 @@
                 android:layout_weight="1"
                 android:singleLine="true"
                 android:text="第一课，北京的天为什么一直是灰蒙蒙的，物理角度解其中缘。"
-                android:textColor="#333" />
+                android:textColor="#666" />
 
 
             <TextView
