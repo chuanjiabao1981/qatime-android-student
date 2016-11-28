@@ -4,13 +4,14 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <ImageView
-        android:layout_width="20dp"
+    <TextView
+        android:id="@+id/status_color"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginTop="-3dp"
         android:gravity="center"
         android:padding="5dp"
-        android:src="@drawable/shape_circle_class_list" />
+        android:text="◇"
+        android:textSize="20sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,7 +43,7 @@
                 android:layout_weight="1"
                 android:singleLine="true"
                 android:text="第一课，北京的天为什么一直是灰蒙蒙的，物理角度解其中缘。"
-                android:textColor="#333" />
+                android:textColor="#666" />
 
 
             <TextView
@@ -67,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="5dp"
                 android:text="2016年00月00日"
-                android:textColor="#666"
+                android:textColor="#999"
                 android:textSize="12sp" />
 
             <TextView
@@ -75,7 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="xx:xx"
-                android:textColor="#666"
+                android:textColor="#999"
                 android:textSize="12sp" />
 
 

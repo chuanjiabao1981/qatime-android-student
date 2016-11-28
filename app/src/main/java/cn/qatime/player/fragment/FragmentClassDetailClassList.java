@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -52,12 +53,12 @@ public class FragmentClassDetailClassList extends BaseFragment {
                     holder.setText(R.id.status, getResourceString(R.string.class_ready));
                 } else if (item.getStatus().equals("teaching")) {//直播中
                     holder.setText(R.id.status, getResourceString(R.string.class_teaching));
+                } else if (item.getStatus().equals("closed")) {
+                    holder.setText(R.id.status, "已结束");
                 } else if (item.getStatus().equals("paused")) {
                     holder.setText(R.id.status, getResourceString(R.string.class_teaching));
                 } else if (item.getStatus().equals("paused_inner")) {//暂停中
                     holder.setText(R.id.status, getResourceString(R.string.class_teaching));
-                } else if (item.getStatus().equals("missed")) {//待补课
-                    holder.setText(R.id.status, getResourceString(R.string.class_wait));
                 } else {
                     holder.setText(R.id.status, getResourceString(R.string.class_over));//已结束
                 }
@@ -65,6 +66,15 @@ public class FragmentClassDetailClassList extends BaseFragment {
                     holder.setText(R.id.class_date, format.format(parse.parse(item.getClass_date())));
                 } catch (ParseException e) {
                     e.printStackTrace();
+                }
+                if (item.getStatus().equals("closed")) {
+                    ((TextView)holder.getView(R.id.status_color)).setTextColor(0xff999999);
+                    ((TextView)holder.getView(R.id.name)).setTextColor(0xff999999);
+                    ((TextView)holder.getView(R.id.status)).setTextColor(0xff999999);
+                } else {
+                    ((TextView)holder.getView(R.id.status_color)).setTextColor(0xff00a0e9);
+                    ((TextView)holder.getView(R.id.name)).setTextColor(0xff666666);
+                    ((TextView)holder.getView(R.id.status)).setTextColor(0xff666666);
                 }
 
             }

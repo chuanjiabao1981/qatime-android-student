@@ -22,7 +22,6 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
-import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.StringUtils;
@@ -163,14 +162,17 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
                         if (response.isNull("data")) {
                             Toast.makeText(ForgetPasswordActivity.this, getResourceString(R.string.phone_not_exist), Toast.LENGTH_SHORT).show();
                         } else {
-                            Logger.e("找回成功");
-                            Toast.makeText(ForgetPasswordActivity.this, getResourceString(R.string.change_password_success), Toast.LENGTH_SHORT).show();
-                            BaseApplication.clearToken();
-                            setResult(Constant.RESPONSE_EXIT_LOGIN);
-                            Intent intent = new Intent(ForgetPasswordActivity.this, LoginActivity.class);
-                            intent.putExtra("sign", "exit_login");
-                            startActivity(intent);
-                            finish();
+                            if (statusLogin) {
+                                Logger.e("找回成功");
+                                BaseApplication.clearToken();
+                                Toast.makeText(ForgetPasswordActivity.this, getResourceString(R.string.change_password_success), Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(ForgetPasswordActivity.this, MainActivity.class);
+                                intent.putExtra("sign", "exit_login");
+                                startActivity(intent);
+                            } else {
+                                finish();
+                            }
+
                         }
                     }
 

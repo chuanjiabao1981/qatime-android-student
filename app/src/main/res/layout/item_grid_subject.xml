@@ -10,14 +10,15 @@
         android:id="@+id/subject_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:src="@mipmap/personal_information_head"
         custom:layout_heightPercent="70%w"
-        custom:layout_widthPercent="70%w"
-        android:src="@mipmap/personal_information_head" />
+        custom:layout_widthPercent="70%w" />
 
     <TextView
         android:id="@+id/subject_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/chinese"
-        android:textColor="#000" />
+        android:textColor="#666"
+        android:textSize="14sp" />
 </com.zhy.android.percent.support.PercentLinearLayout>

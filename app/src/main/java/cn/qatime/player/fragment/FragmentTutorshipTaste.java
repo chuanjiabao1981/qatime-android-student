@@ -112,7 +112,7 @@ public class FragmentTutorshipTaste extends BaseFragment {
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
                 helper.setText(R.id.grade, item.getGrade());
 
-                if ("init".equals(status)||"published".equals(status)||"init".equals(status)||"ready".equals(status)) {
+                if ("init".equals(status)||"published".equals(status)||"ready".equals(status)) {
                     helper.getView(R.id.teaching_time).setVisibility(View.VISIBLE);
                     helper.getView(R.id.class_over).setVisibility(View.GONE);
                     helper.getView(R.id.progress).setVisibility(View.GONE);

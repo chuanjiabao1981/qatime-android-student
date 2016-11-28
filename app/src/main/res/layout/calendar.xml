@@ -2,27 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="#ffffff"
     android:layout_centerInParent="true"
+    android:background="#eee"
     android:orientation="vertical">
     <!-- 日历时间选择栏 -->
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="#ffffff"
+        android:background="#eee"
         android:gravity="center_vertical"
         android:paddingTop="3dp">
 
-            <ImageView
+        <ImageView
             android:id="@+id/iv_left"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="70dp"
             android:background="@mipmap/left"
-            android:contentDescription="@null" />
+            android:contentDescription="@null"
+            android:padding="2dp" />
 
         <ImageView
             android:id="@+id/iv_right"
@@ -32,7 +31,8 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="70dp"
             android:background="@mipmap/right"
-            android:contentDescription="@null" />
+            android:contentDescription="@null"
+            android:padding="2dp" />
 
         <LinearLayout
             android:id="@+id/date_operator_ll"
@@ -48,9 +48,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text=""
                 android:textColor="#333333"
-                android:textSize="20sp" />
+                android:textSize="13sp" />
 
         </LinearLayout>
     </RelativeLayout>
@@ -58,9 +57,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="#ffffff"
+        android:background="#eee"
         android:orientation="vertical">
 
         <libraryextra.view.WeekDayView

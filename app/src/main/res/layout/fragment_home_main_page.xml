@@ -21,13 +21,22 @@
             android:padding="10dp">
 
             <ImageView
-                android:layout_width="18dp"
-                android:layout_height="18dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:src="@mipmap/city_select" />
+
             <TextView
                 android:id="@+id/city_name"
-                style="@style/backbar_text_style"
-                android:text="全国" />
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxWidth="56dp"
+                android:singleLine="true"
+                android:text="全国"
+                android:textColor="#fff"
+                android:textSize="14sp" />
 
         </LinearLayout>
 
@@ -73,16 +82,16 @@
                 android:background="#fff"
                 android:gravity="center"
                 android:numColumns="5"
-                android:verticalSpacing="6dp"
-                android:paddingBottom="9dp"
+                android:paddingBottom="10dp"
                 android:paddingLeft="9dp"
                 android:paddingRight="9dp"
-                android:paddingTop="10dp" />
+                android:paddingTop="10dp"
+                android:verticalSpacing="6dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="10dp"
                 android:background="#fff"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -97,6 +106,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="3dp"
                     android:text="名师推荐"
                     android:textColor="#000"
                     android:textSize="16sp" />
@@ -108,9 +118,9 @@
 
                 <ImageView
                     android:id="@+id/refresh_teacher"
-                    android:layout_width="40dp"
-                    android:padding="12dp"
+                    android:layout_width="30dp"
                     android:layout_height="match_parent"
+                    android:padding="10dp"
                     android:src="@mipmap/home_main_page_refresh" />
             </LinearLayout>
 
@@ -128,14 +138,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="10dp"
                 android:background="#fff"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:paddingBottom="8dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="10dp">
+                android:padding="10dp">
 
                 <ImageView
                     android:layout_width="16dp"
@@ -146,6 +153,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
+                    android:layout_marginLeft="3dp"
                     android:text="直播课程"
                     android:textColor="#000"
                     android:textSize="16sp" />
@@ -165,15 +173,15 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="全部"
-                        android:textStyle="bold"
-                        android:textSize="12sp"
-                        android:textColor="#999" />
+                        android:text="全部 "
+                        android:textColor="#999"
+                        android:textSize="12sp" />
 
                     <ImageView
-                        android:layout_width="13dp"
-                        android:layout_height="13dp"
+                        android:layout_width="wrap_content"
                         android:padding="3dp"
+                        android:layout_marginLeft="-3dp"
+                        android:layout_height="13dp"
                         android:src="@mipmap/home_right_arrow" />
                 </LinearLayout>
             </LinearLayout>

@@ -23,7 +23,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -154,21 +153,10 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
                     Logger.e("item數據空");
                     return;
                 }
-                ((ImageView) helper.getView(R.id.image)).setLayoutParams(new RelativeLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()) / 2, ScreenUtils.getScreenWidth(getActivity()) / 2 * 5 / 8));
+                ((ImageView) helper.getView(R.id.image)).setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()) / 2, ScreenUtils.getScreenWidth(getActivity()) / 2 * 5 / 8));
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.image)));
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.grade, item.getGrade());
-                try {
-                    long time = System.currentTimeMillis() - parse.parse(item.getPreview_time()).getTime();
-                    int value = 0;
-                    if (time > 0) {
-                        value = (int) (time / (1000 * 3600 * 24));
-                    }
-                    helper.setText(R.id.teaching_time, getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day));
-                } catch (ParseException e) {
-//                    e.printStackTrace();
-                    helper.getView(R.id.teaching_time).setVisibility(View.GONE);
-                }
                 if (item.getTeacher_name() != null) {
                     helper.setText(R.id.teacher, item.getTeacher_name());
                 }

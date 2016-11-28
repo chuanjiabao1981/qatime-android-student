@@ -128,14 +128,6 @@ public class MainActivity extends BaseFragmentActivity {
         fragmentlayout.getViewPager().setOffscreenPageLimit(3);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constant.REQUEST_EXIT_LOGIN && resultCode == Constant.RESPONSE_EXIT_LOGIN) {
-            finish();
-        }
-    }
-
 
     private boolean flag = false;
 

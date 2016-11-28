@@ -20,15 +20,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
         android:background="#fff"
         android:gravity="center"
-        android:horizontalSpacing="8dp"
+        android:horizontalSpacing="12dp"
         android:numColumns="4"
-        android:verticalSpacing="8dp" />
+        android:verticalSpacing="12dp" />
     <View
         android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:layout_marginTop="15dp"
-        android:background="#33cccccc" />
+        android:layout_height="1px"
+        android:background="#ccc"
+        android:layout_marginLeft="12dp" />
 </LinearLayout>

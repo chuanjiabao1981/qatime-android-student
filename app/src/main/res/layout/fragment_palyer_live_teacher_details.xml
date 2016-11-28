@@ -33,16 +33,14 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingLeft="6dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:lineSpacingExtra="1.2sp"
-                        android:paddingBottom="6dp"
-                        android:paddingLeft="6dp"
-                        android:paddingTop="6dp"
                         android:text="◇ "
+                        android:textSize="16sp"
                         android:visibility="invisible" />
 
                     <TextView
@@ -53,66 +51,114 @@
                         android:paddingBottom="6dp"
                         android:paddingTop="6dp"
                         android:text="姓名"
-                        android:textSize="16sp" />
+                        android:textColor="#333"
+                        android:textSize="15sp" />
 
                     <TextView
                         android:id="@+id/sex"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="3dp"
+                        android:layout_marginLeft="5dp"
                         android:text="♀"
-                        android:textColor="#fc6" />
+                        android:textColor="#fc6"
+                        android:textSize="20sp" />
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/teaching_years"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:lineSpacingExtra="1.2sp"
-                    android:padding="6dp"
-                    android:text="◇ 执教年数 10-20年" />
-
-                <TextView
-
-                    android:id="@+id/school"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:lineSpacingExtra="1.2sp"
-                    android:padding="6dp"
-                    android:text="◇ 所在学校 北京市第十四中学" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="6dp"
-                    android:paddingTop="6dp"
-                    android:text="◇ 教师简介" />
-
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:paddingLeft="6dp"
+                    android:paddingTop="6dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="6dp"
                         android:text="◇ "
+                        android:textColor="#00a0e9"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/teaching_years"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="执教年数 10-20年"
+                        android:textColor="#666" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="6dp"
+                    android:paddingTop="6dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="◇ "
+                        android:textColor="#00a0e9"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/school"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="所在学校 北京市第十四中学"
+                        android:textColor="#666" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="6dp"
+                    android:paddingTop="6dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="◇ "
+                        android:textColor="#00a0e9"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="教师简介"
+                        android:textColor="#666" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="6dp"
+                    android:paddingTop="6dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="◇ "
+                        android:textSize="16sp"
                         android:visibility="invisible" />
 
                     <TextView
                         android:id="@+id/describe"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="match_parent"
+                        android:textColor="#999"
+                        android:textSize="13sp" />
                 </LinearLayout>
 
             </LinearLayout>
 
             <ImageView
                 android:id="@+id/image"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
                 android:layout_marginTop="6dp"
                 android:scaleType="fitXY"
                 android:src="@mipmap/ic_launcher" />

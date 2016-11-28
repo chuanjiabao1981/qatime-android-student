@@ -30,18 +30,20 @@ public abstract class CitySelectAdapter extends BaseAdapter {
     private int[] itemLayoutId;
     private Context context;
     private ArrayList<String> listLately;
-    private Map<String, Integer> letterMap = new HashMap<String, Integer>();
+    private Map<String, Integer> letterMap;
 
     /**
      * @param context
+     * @param letterMap
      * @param listLately   最近
      * @param list         全部
      * @param itemLayoutId 最近 全国 城市
      */
-    public CitySelectAdapter(Context context, ArrayList<String> listLately, ArrayList<CityBean.Data> list, int... itemLayoutId) {
+    public CitySelectAdapter(Context context, HashMap<String, Integer> letterMap, ArrayList<String> listLately, ArrayList<CityBean.Data> list, int... itemLayoutId) {
         VIEW_TYPE_COUNT = itemLayoutId.length;
         this.listLately = listLately;
         this.list = list;
+        this.letterMap = letterMap;
         this.itemLayoutId = itemLayoutId;
         this.context = context;
     }
@@ -105,17 +107,16 @@ public abstract class CitySelectAdapter extends BaseAdapter {
             CityBean.Data item = list.get(position - 2);
             viewHolder.setText(R.id.city_latter, item.getFirstLetter());
             viewHolder.setText(R.id.city_name, item.getName());
-            if (!letterMap.containsKey(item.getFirstLetter())) {
-                letterMap.put(item.getFirstLetter(), position);
-            }
-            if (position > 3) {
+            if (position > 2) {
                 if (list.get(position - 3).getFirstLetter().equals(item.getFirstLetter())) {
                     viewHolder.getView(R.id.city_latter).setVisibility(View.GONE);
                 } else {
                     viewHolder.getView(R.id.city_latter).setVisibility(View.VISIBLE);
                 }
             }
-
+            if(position == 2){
+                viewHolder.getView(R.id.city_latter).setVisibility(View.VISIBLE);
+            }
             viewHolder.getView(R.id.city_name).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

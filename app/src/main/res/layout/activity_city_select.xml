@@ -22,8 +22,11 @@
 
         <TextView
             android:id="@+id/current_city"
-            android:layout_width="80dp"
-            android:layout_height="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:minWidth="80dp"
+            android:layout_gravity="center_vertical"
             android:background="@drawable/text_background_red"
             android:gravity="center"
             android:text="全国"
@@ -86,7 +89,6 @@
             <libraryextra.view.SideBar
                 android:id="@+id/sidebar"
                 android:layout_width="30dp"
-                android:visibility="gone"
                 android:layout_height="match_parent" />
         </LinearLayout>
 
