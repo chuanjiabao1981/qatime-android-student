@@ -101,7 +101,9 @@
         <!--网易云信  end-->
         <!--高德 start-->
         <service android:name="com.amap.api.location.APSService" />
-        <meta-data android:name="com.amap.api.v2.apikey" android:value="40904d2120a72cac2adc9f83d5a2dc0f"/>
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="40904d2120a72cac2adc9f83d5a2dc0f" />
         <!--高德 end-->
         <!--友盟推送start-->
         <meta-data

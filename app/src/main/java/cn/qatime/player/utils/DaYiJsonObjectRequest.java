@@ -20,12 +20,12 @@ import cn.qatime.player.base.BaseApplication;
 public class DaYiJsonObjectRequest extends JsonObjectRequest {
     public DaYiJsonObjectRequest(int method, String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         super(method, url, jsonRequest, listener, errorListener);
-        Logger.e(url);
+//        Logger.e(url);
     }
 
     public DaYiJsonObjectRequest(String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         super(url, jsonRequest, listener, errorListener);
-        Logger.e(url);
+//        Logger.e(url);
     }
 
     @Override

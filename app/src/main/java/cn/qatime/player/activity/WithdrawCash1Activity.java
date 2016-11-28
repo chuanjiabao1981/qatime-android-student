@@ -1,6 +1,5 @@
 package cn.qatime.player.activity;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -32,7 +31,6 @@ public class WithdrawCash1Activity extends BaseActivity {
     private LinearLayout toAlipayLayout;
     private ImageView toAlipay;
     private Button rechargeNow;
-    private AlertDialog alertDialog;
     private String payType = "bank";
     private static final int DECIMAL_DIGITS = 2;//小数的位数
 

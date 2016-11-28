@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 
 import org.json.JSONObject;
@@ -33,6 +34,7 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.CitySelectActivity;
+import cn.qatime.player.activity.LoginActivity;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.MessageFragmentActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
@@ -43,7 +45,6 @@ import cn.qatime.player.bean.ClassRecommendBean;
 import cn.qatime.player.bean.TeacherRecommendBean;
 import cn.qatime.player.utils.AMapLocationUtils;
 import cn.qatime.player.utils.Constant;
-import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
@@ -117,7 +118,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
     private void initTagImg() {
         final int imageIds[] = {R.mipmap.banner, R.mipmap.banner2, R.mipmap.banner3};
-        ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()), ScreenUtils.getScreenWidth(getActivity())/3);
+        ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()), ScreenUtils.getScreenWidth(getActivity()) / 3);
         tagViewpagerImg.setLayoutParams(params);
         tagViewpagerImg.init(R.drawable.shape_photo_tag_select, R.drawable.shape_photo_tag_nomal, 16, 8, 4, 30);
         tagViewpagerImg.setAutoNext(true, 3000);
@@ -184,7 +185,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), TeacherDataActivity.class);
                 intent.putExtra("teacherId", listRecommendTeacher.get(position).getTeacher().getId());
-                startActivity(intent);
+                startActivityForResult(intent, Constant.REQUEST);
             }
         });
     }
@@ -194,7 +195,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         map.put("page", String.valueOf(page));
         map.put("city_id", BaseApplication.getCurrentCity().getId() + "");
         map.put("per_page", String.valueOf(5));
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecommend + "index_teacher_recommend" + "/items", map), null,
+        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecommend + "index_teacher_recommend" + "/items", map), null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -258,7 +259,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 if (listRecommendClass.get(position) != null) {
                     intent.putExtra("id", listRecommendClass.get(position).getLive_studio_course().getId());
                 }
-                startActivity(intent);
+                startActivityForResult(intent, Constant.REQUEST);
             }
         });
     }
@@ -288,7 +289,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         map.put("page", String.valueOf(1));
         map.put("city_id", BaseApplication.getCurrentCity().getId() + "");
         map.put("per_page", String.valueOf(6));
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecommend + "index_live_studio_course_recommend" + "/items", map), null,
+        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecommend + "index_live_studio_course_recommend" + "/items", map), null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -338,9 +339,16 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 initTeacherData();
                 break;
             case R.id.message:
-//                startActivity(new Intent(getActivity(), NEVideoPlayerActivity.class));
-                Intent intent = new Intent(getActivity(), MessageFragmentActivity.class);
-                startActivity(intent);
+                Intent intent;
+                if (BaseApplication.isLogined()) {
+                    intent = new Intent(getActivity(), MessageFragmentActivity.class);
+                    startActivity(intent);
+                } else {
+                    intent = new Intent(getActivity(), LoginActivity.class);
+                    intent.putExtra("sign", Constant.VISITORTOLOGIN);
+                    intent.putExtra("action", Constant.LoginAction.toMessage);
+                    startActivityForResult(intent, Constant.REQUEST);
+                }
                 break;
             case R.id.city_select:
                 intent = new Intent(getActivity(), CitySelectActivity.class);
@@ -358,7 +366,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
 
     private void initLocationData() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,
+        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {

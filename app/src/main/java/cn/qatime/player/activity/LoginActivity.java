@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -64,6 +65,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private Button login;
     private CustomProgressDialog progress;
     private Profile profile;
+    public static boolean reenter = false;//用于标示是否是游客身份从主页跳转过来,    是  (如果是点击直接进入,就直接finish,否则跳转)
+    private String action;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,12 +79,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         username = (EditText) findViewById(R.id.name);
         password = (EditText) findViewById(R.id.pass);
         login = (Button) findViewById(R.id.login);
-        Button register = (Button) findViewById(R.id.register);
+        TextView register = (TextView) findViewById(R.id.register);
+        TextView enter = (TextView) findViewById(R.id.enter);
         View loginerror = findViewById(R.id.login_error);//忘记密码
         View reload = findViewById(R.id.reload);
 
         login.setOnClickListener(this);
         register.setOnClickListener(this);
+        enter.setOnClickListener(this);
         loginerror.setOnClickListener(this);
         reload.setOnClickListener(this);
         checkview.setOnClickListener(this);
@@ -89,10 +94,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if (!StringUtils.isNullOrBlanK(SPUtils.get(LoginActivity.this, "username", ""))) {
             username.setText(SPUtils.get(LoginActivity.this, "username", "").toString());
         }
-        String sign = getIntent().getStringExtra("sign");//从系统设置退出登录页面跳转而来，清除用户登录信息
-        if (!StringUtils.isNullOrBlanK(sign) && sign.equals("exit_login")) {
-//            username.setText("");
-            password.setText("");
+        String sign = getIntent().getStringExtra("sign");
+        if (!StringUtils.isNullOrBlanK(sign)) {
+            if (sign.equals("exit_login")) {//从系统设置退出登录页面跳转而来，清除用户登录信息
+                password.setText("");
+            } else if (sign.equals(Constant.VISITORTOLOGIN)) {//游客身份转到登录页
+                reenter = true;
+                action = getIntent().getStringExtra("action");
+                enter.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -128,6 +138,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 break;
             case R.id.checkview://重新换验证码
                 initCheckNum();
+                break;
+            case R.id.enter://直接进入
+                intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
                 break;
         }
     }
@@ -281,7 +296,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     intent.putExtra("username", username.getText().toString().trim());
                     intent.putExtra("password", password.getText().toString().trim());
                     intent.putExtra("token", profile.getToken());
-                    intent.putExtra("userId",profile.getData().getUser().getId());
+                    intent.putExtra("userId", profile.getData().getUser().getId());
                     startActivityForResult(intent, Constant.REGIST);
                 } else {
                     Logger.e("登录", response.toString());
@@ -303,7 +318,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             public void onErrorResponse(VolleyError volleyError) {
 //                BaseApplication.clearToken();
             }
-        }){
+        }) {
             /**
              * 由于没有登陆没有token，重写getHeaders方法 手动设置访问token
              * @return
@@ -380,8 +395,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 }
             });
         }
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
+
+        if (reenter) {
+            if (!StringUtils.isNullOrBlanK(action)) {
+                Intent data = new Intent();
+                data.putExtra("action", action);
+                setResult(Constant.VISITORLOGINED, data);//游客从主页到登录页,点击登录,通知会main initview
+            } else {
+                setResult(Constant.VISITORLOGINED);//游客从主页到登录页,点击登录,通知会main initview
+            }
+        } else {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
+
         DialogUtils.dismissDialog(progress);
         finish();
     }
