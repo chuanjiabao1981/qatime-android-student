@@ -109,11 +109,11 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
     private void showTimePickerDialog() {
         if (alertDialog == null) {
             final View view = View.inflate(NotifyCourseActivity.this, R.layout.dialog_time_picker, null);
-            final WheelView hours = (WheelView) view.findViewById(R.id.hours);
+            final WheelView hours = (WheelView) view.findViewById(R.id.dialog_hours);
             hours.setOffset(1);
             hours.setItems(al_hours);
             hours.setSeletion(al_hours.indexOf(hour));
-            final WheelView minutes = (WheelView) view.findViewById(R.id.minute);
+            final WheelView minutes = (WheelView) view.findViewById(R.id.dialog_minute);
             minutes.setOffset(1);
             minutes.setItems(al_minute);
             minutes.setSeletion(al_minute.indexOf(minute));
