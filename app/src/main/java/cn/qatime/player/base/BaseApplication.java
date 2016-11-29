@@ -54,6 +54,9 @@ public class BaseApplication extends Application {
     private static RequestQueue Queue;
     public static boolean newVersion;
     private static CityBean.Data currentCity;
+    private PushAgent mPushAgent;
+    private boolean voiceStatus;
+    private boolean shakeStatus;
 
     public static RequestQueue getRequestQueue() {
         if (Queue == null) {
@@ -81,19 +84,19 @@ public class BaseApplication extends Application {
                 .setLogLevel(UrlUtils.isDebug ? LogLevel.FULL : LogLevel.NONE);  // default : LogLevel.FULL
         profile = SPUtils.getObject(this, "profile", Profile.class);
         currentCity = SPUtils.getObject(this, "current_city", CityBean.Data.class);
+        shakeStatus = (boolean) SPUtils.get(this, "shake_status", true);
+        voiceStatus = (boolean) SPUtils.get(this, "voice_status", true);
         initUmengPush();
         initYunxin();
     }
 
     private void initUmengPush() {
-        final PushAgent mPushAgent = PushAgent.getInstance(this);
+        mPushAgent = PushAgent.getInstance(this);
         mPushAgent.setDebugMode(UrlUtils.isDebug);
 
-        // 通知声音由服务端控制
-        mPushAgent.setNotificationPlaySound(MsgConstant.NOTIFICATION_PLAY_SERVER);
+        mPushAgent.setNotificationPlaySound(shakeStatus ? MsgConstant.NOTIFICATION_PLAY_SDK_ENABLE : MsgConstant.NOTIFICATION_PLAY_SDK_DISABLE);
         mPushAgent.setNotificationPlayLights(MsgConstant.NOTIFICATION_PLAY_SERVER);
-        mPushAgent.setNotificationPlayVibrate(MsgConstant.NOTIFICATION_PLAY_SERVER);
-
+        mPushAgent.setNotificationPlayVibrate(voiceStatus ? MsgConstant.NOTIFICATION_PLAY_SDK_ENABLE : MsgConstant.NOTIFICATION_PLAY_SDK_DISABLE);
 //        UmengMessageHandler messageHandler = new UmengMessageHandler() {
 //            /**
 //             * 自定义通知栏样式的回调方法
@@ -176,6 +179,16 @@ public class BaseApplication extends Application {
 
     }
 
+    public static void setOptions(boolean voiceStatus, boolean shakeStatus) {
+        PushAgent.getInstance(context).setNotificationPlayVibrate(voiceStatus ? MsgConstant.NOTIFICATION_PLAY_SDK_ENABLE : MsgConstant.NOTIFICATION_PLAY_SDK_DISABLE);
+        PushAgent.getInstance(context).setNotificationPlaySound(shakeStatus ? MsgConstant.NOTIFICATION_PLAY_SDK_ENABLE : MsgConstant.NOTIFICATION_PLAY_SDK_DISABLE);
+        StatusBarNotificationConfig config = new StatusBarNotificationConfig();
+        config.ring = voiceStatus;
+        config.vibrate = shakeStatus;
+        NIMClient.updateStatusBarNotificationConfig(config);
+    }
+
+
     private void initYunxin() {
         /** 云信集成start*/
         // SDK初始化（启动后台服务，若已经存在用户登录信息， SDK 将完成自动登录）
@@ -226,9 +239,11 @@ public class BaseApplication extends Application {
         config.ledOnMs = 1000;
         config.ledOffMs = 1500;
         // 通知铃声的uri字符串
+
         config.notificationSound = "android.resource://cn.qatime.player/raw/msg";
         options.statusBarNotificationConfig = config;
-        config.vibrate = true;
+        config.ring = voiceStatus;
+        config.vibrate = shakeStatus;
 
         UserPreferences.setStatusConfig(config);
         // 配置保存图片，文件，log 等数据的目录

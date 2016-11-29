@@ -198,7 +198,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         map.put("accept", "" + (checkBox.isChecked() ? 1 : 0));
         map.put("type", "Student");
         map.put("client_type", "app");
-//        map.put("register_code_value", registercode.getText().toString().trim());//注册码
+        map.put("register_code_value","");//注册码
 
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlRegister, map), null, new VolleyListener(this) {
