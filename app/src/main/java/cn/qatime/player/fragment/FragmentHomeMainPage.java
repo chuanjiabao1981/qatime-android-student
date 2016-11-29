@@ -39,6 +39,7 @@ import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.bean.BannerRecommendBean;
 import cn.qatime.player.bean.ClassRecommendBean;
 import cn.qatime.player.bean.TeacherRecommendBean;
 import cn.qatime.player.utils.AMapLocationUtils;
@@ -50,8 +51,8 @@ import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.CityBean;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.SPUtils;
+import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.TagViewPager;
@@ -231,6 +232,41 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         });
         addToRequestQueue(request);
     }
+    private void initBannerData() {
+        Map<String, String> map = new HashMap<>();
+        map.put("city_id", BaseApplication.getCurrentCity().getId() + "");
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecommend + "index_banner" + "/items", map), null,
+                new VolleyListener(getActivity()) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        BannerRecommendBean bannerRecommendBean = JsonUtils.objectFromJson(response.toString(), BannerRecommendBean.class);
+                        if (bannerRecommendBean != null && bannerRecommendBean.getData() != null && bannerRecommendBean.getData().size() > 0) {
+//                            page++;
+//                            listRecommendTeacher.clear();
+//                            listRecommendTeacher.addAll(bannerRecommendBean.getData());
+//                            teacherAdapter.notifyDataSetChanged();
+                        } else {
+                        }
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
+    }
+
 
     private void initGridClass() {
         classAdapter = new CommonAdapter<ClassRecommendBean.DataBean>(getContext(), listRecommendClass, R.layout.item_class_recommend) {
@@ -370,9 +406,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                                 @Override
                                 public void onLocationBack(String result) {
                                     utils.stopLocation();
-                                    if (result.length() > 0 && result.endsWith("市")) {
-                                        result = result.substring(0, result.length() - 1);
-                                    }
+
                                     for (CityBean.Data item : listCity) {
                                         if (result.equals(item.getName())) {
                                             locationCity = item;
@@ -382,6 +416,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                                     if (currentCity == null) {
                                         if (locationCity == null) {//如果没有被赋值，则默认全国
                                             locationCity = new CityBean.Data("全国");
+                                            Toast.makeText(getActivity(), "暂未获取到您的位置信息，\n已为您切换至全国", Toast.LENGTH_SHORT).show();
                                             BaseApplication.setCurrentCity(locationCity);
                                             setCity();
                                         } else {
@@ -424,7 +459,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
-                // TODO: 2016/11/11 切换为全国
                 locationCity = new CityBean.Data("全国");
                 BaseApplication.setCurrentCity(locationCity);
                 setCity();
