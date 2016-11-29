@@ -73,7 +73,7 @@ public class FragmentClassTableClosed extends BaseFragment {
         adapter = new CommonAdapter<ClassTimeTableBean.DataEntity.LessonsEntity>(getActivity(), itemList, R.layout.item_fragment_remedial_class_time_table2) {
             @Override
             public void convert(ViewHolder helper, final ClassTimeTableBean.DataEntity.LessonsEntity item, int position) {
-                Glide.with(getActivity()).load(item.getCourse_publicize()).centerCrop().crossFade().dontAnimate().into((ImageView) helper.getView(R.id.image));
+                Glide.with(getActivity()).load(item.getCourse_publicize()).placeholder(R.mipmap.error_header_rect).centerCrop().crossFade().dontAnimate().into((ImageView) helper.getView(R.id.image));
                 helper.getView(R.id.image).setOnClickListener(
                         new View.OnClickListener() {
                             @Override

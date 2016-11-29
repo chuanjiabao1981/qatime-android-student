@@ -146,7 +146,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
 
     private void assignViews(View view) {
         information = (LinearLayout) view.findViewById(R.id.information);
-        banner = (ImageView) view.findViewById(R.id.head_sculpture);
+        banner = (ImageView) view.findViewById(R.id.banner);
         headSculpture = (ImageView) view.findViewById(R.id.head_sculpture);
         name = (TextView) view.findViewById(R.id.name);
         balance = (TextView) view.findViewById(R.id.balance);

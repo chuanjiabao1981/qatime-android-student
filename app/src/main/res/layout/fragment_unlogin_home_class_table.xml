@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout style="@style/top_style">
+
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_top_tab" />
+
+        <ImageView
+            android:id="@+id/calendar"
+            style="@style/backbar_icon_style"
+            android:layout_alignParentRight="true"
+            android:clickable="true"
+            android:src="@mipmap/calendar" />
+
+        <TextView
+            style="@style/backbar_text_style"
+            android:layout_centerInParent="true"
+            android:text="@string/time_table" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login_right_now"
+            android:textColor="#fff"
+            android:layout_centerInParent="true"
+            android:background="@drawable/button_bg_selector_orange" />
+    </RelativeLayout>
+</LinearLayout>

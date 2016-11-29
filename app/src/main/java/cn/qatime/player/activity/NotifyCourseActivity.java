@@ -23,8 +23,6 @@ import libraryextra.utils.SPUtils;
  */
 public class NotifyCourseActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
 
-    private CheckBox cb1;
-    private CheckBox cb2;
     private CheckBox sms;
     private CheckBox sys;
     private TextView textHours;
@@ -38,8 +36,6 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
 
 
     private void assignViews() {
-        cb1 = (CheckBox) findViewById(R.id.cb_1);
-        cb2 = (CheckBox) findViewById(R.id.cb_2);
         sms = (CheckBox) findViewById(R.id.sms);
         sys = (CheckBox) findViewById(R.id.sys);
         textHours = (TextView) findViewById(R.id.hours);
@@ -88,14 +84,10 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
         setContentView(R.layout.activity_notify_course);
         setTitle(getResourceString(R.string.notify_classes));
         assignViews();
-        cb1.setChecked((Boolean) SPUtils.get(this, "notify_course", true));
-        cb2.setChecked((Boolean) SPUtils.get(this, "notify_public", true));
         sms.setChecked((Boolean) SPUtils.get(this, "notify_sms", true));
         sys.setChecked((Boolean) SPUtils.get(this, "notify_sys", true));
 
 
-        cb1.setOnCheckedChangeListener(this);
-        cb2.setOnCheckedChangeListener(this);
         sms.setOnCheckedChangeListener(this);
         sys.setOnCheckedChangeListener(this);
         time.setOnClickListener(new View.OnClickListener() {
@@ -139,11 +131,6 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
-            case R.id.cb_1:
-                Logger.e("cb_1 click");
-
-                SPUtils.put(this, "notify_course", isChecked);
-                break;
 
             case R.id.sms:
 
@@ -152,14 +139,9 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
                 SPUtils.put(this, "notify_sms", isChecked);
                 break;
             case R.id.sys:
-
                 Logger.e("sys click");
 
                 SPUtils.put(this, "notify_sys", isChecked);
-                break;
-            case R.id.cb_2:
-                Logger.e("cb_2 click");
-                SPUtils.put(this, "notify_public", isChecked);
                 break;
         }
     }

@@ -395,6 +395,10 @@ public class BaseApplication extends Application {
         }
     }
 
+    public static boolean isLogined() {
+        return !StringUtils.isNullOrBlanK(getProfile().getToken());
+    }
+
     /**
      * 登录云信的token
      */

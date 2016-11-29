@@ -42,6 +42,8 @@ import cn.qatime.player.fragment.FragmentHomeClassTable;
 import cn.qatime.player.fragment.FragmentHomeMainPage;
 import cn.qatime.player.fragment.FragmentHomeUserCenter;
 import cn.qatime.player.fragment.FragmentRemedialClassAll;
+import cn.qatime.player.fragment.FragmentUnLoginHomeClassTable;
+import cn.qatime.player.fragment.FragmentUnLoginHomeUserCenter;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.Constant;
@@ -106,9 +108,15 @@ public class MainActivity extends BaseFragmentActivity {
         //添加fragment
         fragBaseFragments.add(new FragmentHomeMainPage());
         fragBaseFragments.add(new FragmentRemedialClassAll());
-        fragBaseFragments.add(new FragmentHomeClassTable());
-//        fragBaseFragments.add(new FragmentHomeMessage());
-        fragBaseFragments.add(new FragmentHomeUserCenter());
+
+        if (BaseApplication.isLogined()) {
+            fragBaseFragments.add(new FragmentHomeClassTable());
+            fragBaseFragments.add(new FragmentHomeUserCenter());
+        } else {
+            fragBaseFragments.add(new FragmentUnLoginHomeClassTable());
+            fragBaseFragments.add(new FragmentUnLoginHomeUserCenter());
+        }
+
 
         fragmentlayout = (FragmentLayout) findViewById(R.id.fragmentlayout);
         fragmentlayout.setScorllToNext(false);
@@ -128,6 +136,34 @@ public class MainActivity extends BaseFragmentActivity {
         fragmentlayout.getViewPager().setOffscreenPageLimit(3);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constant.REQUEST_EXIT_LOGIN && resultCode == Constant.RESPONSE_EXIT_LOGIN) {
+            finish();
+        }
+        Logger.e("requestCode" + requestCode + "***resultCode" + resultCode);
+        if (resultCode == Constant.VISITORLOGINED) {
+            initView();
+
+            if (data == null) return;
+            String action = data.getStringExtra("action");
+            if (!StringUtils.isNullOrBlanK(action)) {
+                if (action.equals(Constant.LoginAction.toMessage)) {
+                    Intent intent = new Intent(MainActivity.this, MessageFragmentActivity.class);
+                    startActivity(intent);
+                } else if (action.equals(Constant.LoginAction.toPage3)) {
+                    fragmentlayout.setCurrenItem(2);
+                } else if (action.equals(Constant.LoginAction.toPage4)) {
+                    fragmentlayout.setCurrenItem(3);
+                } else if (action.equals(Constant.LoginAction.toClassTimeTable)) {
+                    fragmentlayout.setCurrenItem(2);
+                    Intent intent = new Intent(MainActivity.this, ClassTimeTableActivity.class);
+                    startActivity(intent);
+                }
+            }
+        }
+    }
 
     private boolean flag = false;
 

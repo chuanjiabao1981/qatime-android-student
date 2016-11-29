@@ -24,6 +24,7 @@ import java.util.List;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.bean.TeacherDataBean;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
@@ -118,7 +119,7 @@ public class TeacherDataActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(TeacherDataActivity.this, RemedialClassDetailActivity.class);
                 intent.putExtra("id", list.get(position).getId());
-                startActivity(intent);
+                startActivityForResult(intent, Constant.REQUEST);
             }
         });
         grid.setAdapter(adapter);
@@ -167,9 +168,9 @@ public class TeacherDataActivity extends BaseActivity {
                                 sex.setTextColor(getSexColor(bean.getData().getGender()));
                                 Glide.with(TeacherDataActivity.this).load(bean.getData().getAvatar_url()).placeholder(R.mipmap.error_header_rect).crossFade().into(headSculpture);
                                 school.setText(bean.getData().getSchool());
-                                if(bean.getData().getCourses()!=null&&bean.getData().getCourses().size()>0){
+                                if (bean.getData().getCourses() != null && bean.getData().getCourses().size() > 0) {
                                     list.addAll(bean.getData().getCourses());
-                                }else{
+                                } else {
                                     relEmpty.setVisibility(View.VISIBLE);
                                 }
                             }
@@ -226,4 +227,11 @@ public class TeacherDataActivity extends BaseActivity {
         return "";
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Constant.VISITORLOGINED) {
+            setResult(Constant.VISITORLOGINED);
+        }
+    }
 }

@@ -25,7 +25,9 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -48,7 +50,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
@@ -80,7 +82,7 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
     private String timesorttype = "";
     private EditText priceLow;
     private EditText priceHigh;
-//    private EditText subjectLow;
+    //    private EditText subjectLow;
 //    private EditText subjectHigh;
     private TextView beginClassTime;
     private TextView endcLassTime;
@@ -189,7 +191,7 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
                 intent.putExtra("id", list.get(position).getId());
-                startActivity(intent);
+                startActivityForResult(intent, Constant.REQUEST);
             }
         });
     }
@@ -265,12 +267,11 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
                 e.printStackTrace();
             }
         }
-        map.put("class_date_floor",class_date_floor);
+        map.put("class_date_floor", class_date_floor);
         map.put("class_date_ceil", class_date_ceil);
         map.put("status", status);
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass, map), null,
+        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass, map), null,
                 new VolleyListener(getActivity()) {
-
 
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -544,8 +545,8 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
                 MDatePickerDialog beginPickerDialog = new MDatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                            class_date_floor = (year + "-" + ((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1))) + "-" + ((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth))));
-                            beginClassTime.setText(class_date_floor);
+                        class_date_floor = (year + "-" + ((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1))) + "-" + ((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth))));
+                        beginClassTime.setText(class_date_floor);
                     }
                 }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
                 beginPickerDialog.show();
@@ -554,8 +555,8 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
                 MDatePickerDialog endPickerDialog = new MDatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                            class_date_ceil = (year + "-" + ((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1))) + "-" + ((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth))));
-                            endcLassTime.setText(class_date_ceil);
+                        class_date_ceil = (year + "-" + ((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1))) + "-" + ((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth))));
+                        endcLassTime.setText(class_date_ceil);
                     }
                 }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
                 endPickerDialog.show();
