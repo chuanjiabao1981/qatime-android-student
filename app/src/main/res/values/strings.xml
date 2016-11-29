@@ -150,7 +150,6 @@
     <string name="forget_password">忘记密码</string>
     <string name="verification_code">请输入验证码</string>
     <string name="verification_code_is_incorrect">验证码不正确</string>
-    <string name="change_it">看不清，换一张？</string>
     <string name="logout">退出登录</string>
     <string name="press_another_exit">再按一次退出程序</string>
     <!--//注册-->

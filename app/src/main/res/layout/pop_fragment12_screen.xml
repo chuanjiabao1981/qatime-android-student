@@ -10,12 +10,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="18dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginTop="12dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="9dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="12dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -59,9 +59,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:textColor="#3000"
             android:gravity="center"
-            android:text="-" />
+            android:text="-"
+            android:textColor="#3000" />
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -182,22 +182,23 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="18dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingBottom="9dp"
             android:paddingRight="15dp"
+            android:paddingTop="9dp"
             android:text="@string/starting_range"
             android:textColor="#4000" />
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="horizontal">
@@ -205,7 +206,7 @@
             <TextView
                 android:id="@+id/begin_class_time"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:gravity="center"
                 android:hint="开始时间"
                 android:textColor="#a000"
@@ -231,7 +232,7 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="horizontal">
@@ -239,7 +240,7 @@
             <TextView
                 android:id="@+id/end_class_time"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:gravity="center"
                 android:hint="结束时间"
                 android:textColor="#a000"
@@ -263,7 +264,8 @@
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingTop="9dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -362,25 +364,23 @@
 
         <Button
             android:id="@+id/reset"
+            style="@style/dialog_button_style"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="9dp"
             android:layout_weight="1"
-            android:background="@drawable/dialog_button_background_selector"
-            android:text="@string/reset"
-            android:textColor="#fff" />
+            android:text="@string/reset" />
 
         <Button
             android:id="@+id/submit"
+            style="@style/dialog_button_style"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_marginLeft="9dp"
             android:layout_marginRight="12dp"
             android:layout_weight="1"
-            android:background="@drawable/dialog_button_background_selector"
-            android:text="@string/confirm"
-            android:textColor="#fff" />
+            android:text="@string/confirm" />
 
     </LinearLayout>
 
