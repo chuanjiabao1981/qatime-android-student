@@ -117,10 +117,10 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     }
 
     private void initTagImg() {
-        final int imageIds[] = {R.mipmap.banner, R.mipmap.banner2, R.mipmap.banner3};
-        ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()), ScreenUtils.getScreenWidth(getActivity())/3);
+        final int imageIds[] = {R.mipmap.no_banner};
+        ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()), ScreenUtils.getScreenWidth(getActivity()) / 3);
         tagViewpagerImg.setLayoutParams(params);
-        tagViewpagerImg.init(R.drawable.shape_photo_tag_select, R.drawable.shape_photo_tag_nomal, 16, 8, 4, 30);
+        tagViewpagerImg.init(imageIds.length == 1 ? 0 : R.drawable.shape_photo_tag_select, imageIds.length == 1 ? 0 : R.drawable.shape_photo_tag_nomal, 16, 8, 4, 30);
         tagViewpagerImg.setAutoNext(true, 3000);
 //        viewPager.setId(1252);
         tagViewpagerImg.setOnGetView(new TagViewPager.OnGetView() {
@@ -175,17 +175,21 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
             @Override
             public void convert(ViewHolder holder, TeacherRecommendBean.DataBean item, int position) {
-                Glide.with(getActivity()).load(item.getTeacher().getAvatar_url()).placeholder(R.mipmap.error_header).centerCrop().bitmapTransform(new GlideCircleTransform(getActivity())).crossFade().dontAnimate().into(((ImageView) holder.getView(R.id.teacher_img)));
-                holder.setText(R.id.teacher_text, item.getTeacher().getName());
+                if (item != null) {
+                    Glide.with(getActivity()).load(item.getTeacher().getAvatar_url()).error(R.mipmap.error_header).centerCrop().bitmapTransform(new GlideCircleTransform(getActivity())).crossFade().dontAnimate().into(((ImageView) holder.getView(R.id.teacher_img)));
+                    holder.setText(R.id.teacher_text, item.getTeacher().getName());
+                }
             }
         };
         gridviewTeacher.setAdapter(teacherAdapter);
         gridviewTeacher.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), TeacherDataActivity.class);
-                intent.putExtra("teacherId", listRecommendTeacher.get(position).getTeacher().getId());
-                startActivity(intent);
+                if (listRecommendTeacher.get(position) != null) {
+                    Intent intent = new Intent(getActivity(), TeacherDataActivity.class);
+                    intent.putExtra("teacherId", listRecommendTeacher.get(position).getTeacher().getId());
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -204,6 +208,9 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                             page++;
                             listRecommendTeacher.clear();
                             listRecommendTeacher.addAll(teacherRecommendBean.getData());
+                            while (listRecommendTeacher.size() < 5) {
+                                listRecommendTeacher.add(null);
+                            }
                             teacherAdapter.notifyDataSetChanged();
                         } else {
                             if (page != 1) {
@@ -232,6 +239,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         });
         addToRequestQueue(request);
     }
+
     private void initBannerData() {
         Map<String, String> map = new HashMap<>();
         map.put("city_id", BaseApplication.getCurrentCity().getId() + "");
@@ -277,24 +285,27 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
             @Override
             public void convert(ViewHolder holder, ClassRecommendBean.DataBean item, int position) {
-                Glide.with(getActivity()).load(item.getLive_studio_course().getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) holder.getView(R.id.class_recommend_img)));
-                holder.setText(R.id.course_title, item.getLive_studio_course().getName());
-                holder.setText(R.id.grade, item.getLive_studio_course().getGrade());
-                holder.setText(R.id.subject, item.getLive_studio_course().getSubject());
-                holder.setText(R.id.count, item.getLive_studio_course().getBuy_tickets_count() + "人报名");
-                ((TextView) holder.getView(R.id.reason)).setText(getReason(item.getReason()));
-                ((TextView) holder.getView(R.id.reason)).setBackgroundColor(getReasonBackground(item.getReason()));
+                if (item != null) {
+                    Glide.with(getActivity()).load(item.getLive_studio_course().getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) holder.getView(R.id.class_recommend_img)));
+                    holder.setText(R.id.course_title, item.getLive_studio_course().getName());
+                    holder.setText(R.id.grade, item.getLive_studio_course().getGrade());
+                    holder.setText(R.id.subject, item.getLive_studio_course().getSubject());
+                    holder.setText(R.id.count, item.getLive_studio_course().getBuy_tickets_count() + "人报名");
+                    ((TextView) holder.getView(R.id.reason)).setText(getReason(item.getReason()));
+                    ((TextView) holder.getView(R.id.reason)).setBackgroundColor(getReasonBackground(item.getReason()));
+                    ((TextView) holder.getView(R.id.reason)).setVisibility(View.VISIBLE);
+                }
             }
         };
         gridviewClass.setAdapter(classAdapter);
         gridviewClass.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
                 if (listRecommendClass.get(position) != null) {
+                    Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
                     intent.putExtra("id", listRecommendClass.get(position).getLive_studio_course().getId());
+                    startActivity(intent);
                 }
-                startActivity(intent);
             }
         });
     }
@@ -332,6 +343,9 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                         if (classRecommendBean != null && classRecommendBean.getData() != null) {
                             listRecommendClass.clear();
                             listRecommendClass.addAll(classRecommendBean.getData());
+                            while (listRecommendClass.size() < 6) {
+                                listRecommendClass.add(null);
+                            }
                             classAdapter.notifyDataSetChanged();
                         }
                     }

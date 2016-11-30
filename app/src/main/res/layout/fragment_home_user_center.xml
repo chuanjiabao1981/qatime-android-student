@@ -33,6 +33,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
+                android:background="#cccccc"
                 android:layout_height="192dp">
 
                 <ImageView
@@ -42,9 +43,9 @@
 
                 <LinearLayout
                     android:id="@+id/information"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#cecaca"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -52,13 +53,14 @@
                         android:id="@+id/head_sculpture"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
-                        android:src="@mipmap/personal_information_head" />
+                        android:src="@mipmap/error_header" />
 
                     <TextView
                         android:id="@+id/name"
+                        android:layout_marginTop="6dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="姓名"
+                        android:text="名字"
                         android:textColor="#fff" />
                 </LinearLayout>
 
