@@ -473,9 +473,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
-                locationCity = new CityBean.Data("全国");
-                BaseApplication.setCurrentCity(locationCity);
-                setCity();
             }
         });
         confirm.setOnClickListener(new View.OnClickListener() {
