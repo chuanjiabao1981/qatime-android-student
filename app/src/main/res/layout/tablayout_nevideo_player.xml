@@ -12,64 +12,63 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            style="@style/tab_item_height"
             android:layout_width="0dp"
             android:layout_weight="1"
-            style="@style/tab_item_height"
             android:orientation="horizontal">
 
-
-            <!-- android:id="@+id/tab_text" -->
             <TextView
                 android:id="@+id/tab_text1"
+                style="@style/tab_text_color_select"
                 android:layout_width="wrap_content"
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
-                android:text="公告"
-                style="@style/tab_text_color_select" />
+                android:text="公告" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
             style="@style/tab_item_height"
+            android:layout_width="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tab_text2"
+                style="@style/tab_text_color_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
-                android:text="@string/chat"
-                style="@style/tab_text_color_normal" />
+                android:text="@string/chat" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
             style="@style/tab_item_height"
+            android:layout_width="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tab_text3"
+                style="@style/tab_text_color_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
-                android:text="@string/live_details"
-                style="@style/tab_text_color_normal" />
+                android:text="@string/live_details" />
         </LinearLayout>
+
         <LinearLayout
-            android:layout_width="0dp"
             style="@style/tab_item_height"
+            android:layout_width="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tab_text4"
+                style="@style/tab_text_color_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
-                android:text="@string/member_list"
-                style="@style/tab_text_color_normal" />
+                android:text="@string/member_list" />
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

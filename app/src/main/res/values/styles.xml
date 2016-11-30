@@ -107,11 +107,11 @@
     <style name="button_style"> //小按钮
         <item name="android:layout_height">36dp</item>
         <item name="android:clickable">true</item>
-        <item name="android:background">@drawable/button_bg_selector_red</item>
+        <item name="android:background">@drawable/button_bg_selector_red_with_stork</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:textColor">#fff</item>
+        <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
     <style name="button_full_width_style"> //跨整个屏幕的按钮
@@ -121,8 +121,8 @@
         <item name="android:layout_marginLeft">12dp</item>
         <item name="android:layout_marginRight">12dp</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/button_bg_selector_red</item>
-        <item name="android:textColor">@color/white_normal</item>
+        <item name="android:background">@drawable/button_bg_selector_red_with_stork</item>
+        <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
     <style name="setting_text_style"> //设置文字

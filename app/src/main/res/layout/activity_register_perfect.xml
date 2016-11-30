@@ -14,16 +14,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/text_background"
             android:orientation="vertical"
-            android:paddingTop="12dp"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
-            >
+            android:paddingTop="12dp">
 
             <LinearLayout
                 android:id="@+id/change_head_sculpture"
@@ -52,7 +51,6 @@
                         android:textColor="#666" />
 
                 </LinearLayout>
-
 
                 <RelativeLayout
                     android:layout_width="0dp"
@@ -174,8 +172,8 @@
                 android:id="@+id/birthday_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingLeft="12dp">
 
                 <TextView
@@ -202,7 +200,7 @@
                     android:layout_width="12dp"
                     android:layout_height="12dp"
                     android:layout_marginLeft="2dp"
-                    android:src="@mipmap/down"/>
+                    android:src="@mipmap/down" />
             </LinearLayout>
 
             <View
@@ -214,8 +212,8 @@
                 android:id="@+id/grade_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:padding="12dp">
 
                 <TextView
@@ -233,13 +231,14 @@
                 <TextView
                     android:id="@+id/text_grade"
                     android:layout_width="wrap_content"
-                    android:text="高一"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="高一" />
+
                 <ImageView
                     android:layout_width="12dp"
                     android:layout_height="12dp"
                     android:layout_marginLeft="2dp"
-                    android:src="@mipmap/down"/>
+                    android:src="@mipmap/down" />
             </LinearLayout>
 
             <!--<View-->

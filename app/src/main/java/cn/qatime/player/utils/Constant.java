@@ -10,6 +10,8 @@ import android.os.Environment;
 public class Constant {
 
     public static String APP_ID = "wxf2dfbeb5f641ce40";//微信appid
+    public static String APP_SECRET = "7eb546caee5844cc6893449287be3b1b";//微信APP_SECRET
+
 
     public static final String CACHEPATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/qatime";
     public static final String VISITORTOLOGIN = "visitor_to_login";// 游客身份转到登录页

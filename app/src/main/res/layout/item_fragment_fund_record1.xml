@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:text="20160928094236123456"
+            android:text="00000000000000000"
             android:textColor="#666666" />
 
         <TextView
@@ -84,7 +84,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:text="+￥51110.00"
+            android:text="+￥0.00"
             android:textColor="#f00" />
 
         <TextView

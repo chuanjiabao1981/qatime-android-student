@@ -67,7 +67,7 @@
                     android:id="@+id/teaching_years"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="执教年数 10-20年"
+                    android:text="执教年数"
                     android:textColor="#666" />
             </LinearLayout>
 
@@ -89,7 +89,7 @@
                     android:id="@+id/school"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="所在学校 北京市第十四中学"
+                    android:text="所在学校"
                     android:textColor="#666" />
             </LinearLayout>
 
@@ -146,6 +146,6 @@
             android:layout_marginRight="20dp"
             android:layout_marginTop="6dp"
             android:scaleType="fitXY"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/error_header_rect" />
     </RelativeLayout>
 </ScrollView>

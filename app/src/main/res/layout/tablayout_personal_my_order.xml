@@ -56,8 +56,6 @@
                 android:text="@string/cancelled"
                 style="@style/tab_text_color_normal" />
         </LinearLayout>
-
-
     </LinearLayout>
 
 </FrameLayout>

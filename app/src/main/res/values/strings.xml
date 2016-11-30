@@ -161,7 +161,7 @@
     <string name="hint_input_password">输入登录密码</string>
     <string name="hint_confirm_password">确认登录密码</string>
     <string name="hint_qatime_register_code">请输入答疑时间注册码</string>
-    <string name="agree">同意</string>
+    <string name="agree"> 同意</string>
     <string name="agreement">《答疑时间用户协议》</string>
     <string name="phone_number_is_incorrect">手机号码不正确</string>
     <string name="can_not_be_empty">不能为空</string>
