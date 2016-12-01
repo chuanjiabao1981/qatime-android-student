@@ -167,6 +167,9 @@ public class MainActivity extends BaseFragmentActivity {
                 }
             }
         }
+        if (resultCode == Constant.RESPONSE) {
+            fragmentlayout.getChildAt(3);
+        }
     }
 
     private boolean flag = false;

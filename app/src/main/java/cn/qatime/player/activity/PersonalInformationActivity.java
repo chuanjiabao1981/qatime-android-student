@@ -124,7 +124,7 @@ public class PersonalInformationActivity extends BaseActivity {
 
     private void setValue(PersonalInformationBean bean) {
         Glide.with(PersonalInformationActivity.this).load(bean.getData().getAvatar_url()).placeholder(R.mipmap.personal_information_head).transform(new GlideCircleTransform(PersonalInformationActivity.this)).crossFade().into(headsculpture);
-        name.setText(bean.getData().getName());
+        name.setText(StringUtils.isNullOrBlanK(bean.getData().getName())?"姓名":bean.getData().getName());
         if (!StringUtils.isNullOrBlanK(bean.getData().getGender())) {
             if (bean.getData().getGender().equals("male")) {
                 sex.setText(getResources().getString(R.string.male));
