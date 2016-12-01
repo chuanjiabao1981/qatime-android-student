@@ -160,6 +160,10 @@ public class MainActivity extends BaseFragmentActivity {
                     fragmentlayout.setCurrenItem(2);
                     Intent intent = new Intent(MainActivity.this, ClassTimeTableActivity.class);
                     startActivity(intent);
+                } else if (action.equals(Constant.LoginAction.toPersonalInformationChange)) {
+                    fragmentlayout.setCurrenItem(3);
+                    Intent intent = new Intent(MainActivity.this, PersonalInformationActivity.class);
+                    startActivityForResult(intent, Constant.REQUEST);
                 }
             }
         }
@@ -204,14 +208,20 @@ public class MainActivity extends BaseFragmentActivity {
     private void parseIntent() {
         Intent data = getIntent();
         /**     * 解析通知栏发来的云信消息     */
-        if (data != null && data.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT)) {
-            Intent intent = new Intent(this, MessageFragmentActivity.class);
-            intent.putExtra("intent", data);
-            startActivity(intent);
-        } else if (data != null && data.hasExtra("type") && data.getStringExtra("type").equals("system_message")) {//转到系统消息页面
-            Intent intent = new Intent(this, MessageFragmentActivity.class);
-            intent.putExtra("intent", data);
-            startActivity(intent);
+        if (data != null) {
+            if (data.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT)) {
+                Intent intent = new Intent(this, MessageFragmentActivity.class);
+                intent.putExtra("intent", data);
+                startActivity(intent);
+            } else if (data.hasExtra("type") && data.getStringExtra("type").equals("system_message")) {//转到系统消息页面
+                Intent intent = new Intent(this, MessageFragmentActivity.class);
+                intent.putExtra("intent", data);
+                startActivity(intent);
+            } else if (!StringUtils.isNullOrBlanK(data.getStringExtra("action")) && data.getStringExtra("action").equals(Constant.LoginAction.toPersonalInformationChange)) {
+                fragmentlayout.setCurrenItem(3);
+                Intent intent = new Intent(MainActivity.this, PersonalInformationActivity.class);
+                startActivityForResult(intent, Constant.REQUEST);
+            }
         }
     }
 

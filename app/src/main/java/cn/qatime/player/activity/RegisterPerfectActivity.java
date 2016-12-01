@@ -95,13 +95,25 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()) {
             case R.id.edit_more:
-                Intent intent = new Intent(this, PersonalInformationChangeActivity.class);
+//                Intent intent = new Intent(this, PersonalInformationChangeActivity.class);
+//                if (LoginActivity.reenter) {
+//                    intent.putExtra("action", getIntent().getStringExtra("action"));
+//                }
+//                startActivityForResult(intent,Constant.REGIST);
                 if (LoginActivity.reenter) {
-                    intent.putExtra("action", getIntent().getStringExtra("action"));
+                    intent = new Intent();
+                    intent.putExtra("action", Constant.LoginAction.toPersonalInformationChange);
+                    setResult(Constant.RESPONSE, intent);
+                } else {
+                    intent = new Intent(this, MainActivity.class);
+                    intent.putExtra("action", Constant.LoginAction.toPersonalInformationChange);
+                    startActivity(intent);
+                    setResult(Constant.RESPONSE);
                 }
-                startActivityForResult(intent,Constant.REGIST);
+                finish();
                 break;
             case R.id.grade:
                 showGradePickerDialog();
@@ -141,10 +153,16 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                             BaseApplication.setProfile(profile);
                         }
                         DialogUtils.dismissDialog(progress);
-                        setResult(Constant.REGIST);
+//                        setResult(Constant.RESPONSE);
+
+//                        Intent intent = new Intent(RegisterPerfectActivity.this, MainActivity.class);
+//                        startActivity(intent);
+                        if (!LoginActivity.reenter) {
+                            Intent intent = new Intent(RegisterPerfectActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                        setResult(Constant.RESPONSE);
                         finish();
-                        Intent intent = new Intent(RegisterPerfectActivity.this, MainActivity.class);
-                        startActivity(intent);
                     }
 
                     @Override

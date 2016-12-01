@@ -113,6 +113,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()) {
             case R.id.login://登陆
                 login.setClickable(false);
@@ -130,10 +131,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                 break;
             case R.id.register://注册
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                if (reenter) {
-                    intent.putExtra("action",getIntent().getStringExtra("action"));
-                }
+                intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivityForResult(intent, Constant.REGIST);
                 break;
             case R.id.login_error://忘记密码
@@ -396,17 +394,21 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Constant.REGIST) {
-            finish();
-        }else if(resultCode == Constant.VISITORLOGINED){
-            if(StringUtils.isNullOrBlanK(data.getStringExtra("action"))){
-                Intent intent = new Intent();
-                intent.putExtra("action", data.getStringExtra("action"));
-                setResult(Constant.VISITORLOGINED, intent);
-            }else{
-                setResult(Constant.VISITORLOGINED);//游客从主页到登录页,点击登录,通知会main initview
+        if (requestCode == Constant.REGIST && resultCode == Constant.RESPONSE) {
+            if (reenter) {
+                setResult(Constant.VISITORLOGINED, data);
             }
             finish();
         }
+//        else if (resultCode == Constant.VISITORLOGINED) {
+//            if (StringUtils.isNullOrBlanK(data.getStringExtra("action"))) {
+//                Intent intent = new Intent();
+//                intent.putExtra("action", data.getStringExtra("action"));
+//                setResult(Constant.VISITORLOGINED, intent);
+//            } else {
+//                setResult(Constant.VISITORLOGINED);//游客从主页到登录页,点击登录,通知会main initview
+//            }
+//            finish();
+//        }
     }
 }

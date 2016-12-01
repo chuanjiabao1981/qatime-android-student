@@ -78,10 +78,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         next = (Button) findViewById(R.id.next);
         agreement = (TextView) findViewById(R.id.agreement);
 
-        phone.setHint(StringUtils.getSpannedString( getResources().getString(R.string.hint_phone_number)));
-        code.setHint(StringUtils.getSpannedString( getResources().getString(R.string.hint_input_verification_code)));
-        password.setHint(StringUtils.getSpannedString(getResources().getString(R.string.hint_input_password)));
-        repassword.setHint(StringUtils.getSpannedString( getResources().getString(R.string.hint_confirm_password)));
+        phone.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_phone_number)));
+        code.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_input_verification_code)));
+        password.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_input_password)));
+        repassword.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_confirm_password)));
 //        registercode.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_qatime_register_code)));
 
         getcode.setOnClickListener(this);
@@ -407,27 +407,28 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         }
         //下一步跳转，完善信息
         Intent intent = new Intent(RegisterActivity.this, RegisterPerfectActivity.class);
-        if (LoginActivity.reenter) {
-            intent.putExtra("action",getIntent().getStringExtra("action"));
-        }
+//        if (LoginActivity.reenter) {
+//            intent.putExtra("action", getIntent().getStringExtra("action"));
+//        }
         startActivityForResult(intent, Constant.REGIST);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constant.REGIST) {
-            setResult(resultCode);
-            finish();
-        }else if(resultCode == Constant.VISITORLOGINED){
-            if(StringUtils.isNullOrBlanK(data.getStringExtra("action"))){
-                Intent intent = new Intent();
-                intent.putExtra("action", data.getStringExtra("action"));
-                setResult(Constant.VISITORLOGINED, intent);
-            }else{
-                setResult(Constant.VISITORLOGINED);//游客从主页到登录页,点击登录,通知会main initview
-            }
+        if (requestCode == Constant.REGIST && resultCode == Constant.RESPONSE) {
+            setResult(resultCode, data);
             finish();
         }
+//        else if (resultCode == Constant.VISITORLOGINED) {
+//            if (StringUtils.isNullOrBlanK(data.getStringExtra("action"))) {
+//                Intent intent = new Intent();
+//                intent.putExtra("action", data.getStringExtra("action"));
+//                setResult(Constant.VISITORLOGINED, intent);
+//            } else {
+//                setResult(Constant.VISITORLOGINED);//游客从主页到登录页,点击登录,通知会main initview
+//            }
+//            finish();
+//        }
     }
 }
 
