@@ -60,10 +60,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         next = (Button) findViewById(R.id.next);
         agreement = (TextView) findViewById(R.id.agreement);
 
-        phone.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_phone_number)));
-        code.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_input_verification_code)));
-        password.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_input_password)));
-        repassword.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_confirm_password)));
+        phone.setHint(StringUtils.getSpannedString(getResources().getString(R.string.hint_phone_number)));
+        code.setHint(StringUtils.getSpannedString(getResources().getString(R.string.hint_input_verification_code)));
+        password.setHint(StringUtils.getSpannedString(getResources().getString(R.string.hint_input_password)));
+        repassword.setHint(StringUtils.getSpannedString(getResources().getString(R.string.hint_confirm_password)));
 //        registercode.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_qatime_register_code)));
 
         getcode.setOnClickListener(this);
@@ -128,8 +128,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    class TimeCount extends CountDownTimer {
-        public TimeCount(long millisInFuture, long countDownInterval) {
+    private class TimeCount extends CountDownTimer {
+        TimeCount(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
         }
 
@@ -198,7 +198,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         map.put("accept", "" + (checkBox.isChecked() ? 1 : 0));
         map.put("type", "Student");
         map.put("client_type", "app");
-        map.put("register_code_value","");//注册码
+        map.put("register_code_value", "");//注册码
 
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlRegister, map), null, new VolleyListener(this) {
@@ -222,7 +222,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     intent.putExtra("username", phone.getText().toString().trim());
                     intent.putExtra("password", password.getText().toString().trim());
                     intent.putExtra("token", token);
-                    intent.putExtra("userId",id);
+                    intent.putExtra("userId", id);
                     startActivityForResult(intent, Constant.REGIST);
 
                 } catch (JSONException e) {
