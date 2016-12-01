@@ -4,6 +4,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.orhanobut.logger.Logger;
 import com.zhy.android.percent.support.PercentRelativeLayout;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -37,6 +39,7 @@ import cn.qatime.player.barrage.DanmuControl;
 import cn.qatime.player.barrage.model.Status;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
+import cn.qatime.player.bean.VideoState;
 import cn.qatime.player.fragment.VideoFloatFragment;
 import libraryextra.bean.Announcements;
 import cn.qatime.player.fragment.FragmentPlayerAnnouncements;
@@ -67,6 +70,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     private boolean ismain = true;//video1 是否在主显示view上
     private int orientation = Configuration.ORIENTATION_PORTRAIT;//当前屏幕横竖屏状态
     private boolean isSubOpen = true;//副窗口开关
+    private VideoState videoState = VideoState.INIT;
 
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3, R.id.tab_text4};
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
@@ -99,6 +103,14 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     private AnimationDrawable bufferAnimation2;
     private PercentRelativeLayout buffering1;
     private PercentRelativeLayout buffering2;
+
+    private Handler hd = new Handler();
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            queryVideoState();
+        }
+    };
 
 
     private void assignViews() {
@@ -147,6 +159,19 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             }
         });
 
+        video1.setOnCompletionListener(new NELivePlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(NELivePlayer neLivePlayer) {
+                setVideoState(VideoState.INIT);
+            }
+        });
+        video2.setOnCompletionListener(new NELivePlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(NELivePlayer neLivePlayer) {
+                setVideoState(VideoState.INIT);
+            }
+        });
+
         whole = (RelativeLayout) findViewById(R.id.whole);
         mainVideo = (RelativeLayout) findViewById(R.id.main_video);
         mainView = (RelativeLayout) findViewById(R.id.main_view);
@@ -191,29 +216,37 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         }
         sessionId = getIntent().getStringExtra("sessionId");
 
-        String camera = getIntent().getStringExtra("camera");
-        String board = getIntent().getStringExtra("board");
 
         assignViews();
         initView();
         getAnnouncementsData();
         initData();
+        setVideoState(VideoState.INIT);
+    }
+
+    private void refreshState() {
+        String camera = getIntent().getStringExtra("camera");
+        String board = getIntent().getStringExtra("board");
 //        camera = "rtmp://va0a19f55.live.126.net/live/02dce8e380034cf9b2ef1f9c26c4234c";
 //        board = "rtmp://va0a19f55.live.126.net/live/1243a663c3e54b099d1cc35ee83a7921";
         if (!StringUtils.isNullOrBlanK(camera)) {
-            video2.setVideoPath(camera);
-            video2.start();
+            if (!video2.isPlaying()) {
+                video2.setVideoPath(camera);
+                video2.start();
+            }
         } else {
-            buffering2.setVisibility(View.GONE);
             bufferAnimation2.stop();
+            buffering2.setVisibility(View.GONE);
             videoNoData2.setVisibility(View.VISIBLE);
         }
         if (!StringUtils.isNullOrBlanK(board)) {
-            video1.setVideoPath(board);
-            video1.start();
+            if (!video1.isPlaying()) {
+                video1.setVideoPath(board);
+                video1.start();
+            }
         } else {
-            buffering1.setVisibility(View.GONE);
             bufferAnimation1.stop();
+            buffering1.setVisibility(View.GONE);
             videoNoData1.setVisibility(View.VISIBLE);
         }
     }
@@ -531,6 +564,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         }
         danMuController.destroy();
         fragment2.registerObservers(false);
+        hd.removeCallbacks(runnable);//停止查询播放状态
         super.onDestroy();
     }
 
@@ -546,6 +580,59 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         super.onBackPressed();
     }
 
+    /**
+     * 设置直播状态 {@see <a herf="https://github.com/chuanjiabao1981/qadoc/blob/master/live_status.md">直播状态</a> }
+     *
+     * @param videoState
+     */
+    private void setVideoState(VideoState videoState) {
+        this.videoState = videoState;
+        if (this.videoState == VideoState.INIT) {//初始化状态下查询状态
+            queryVideoState();
+        } else if (this.videoState == VideoState.UNPLAY) {//未直播状态下 开始轮询
+            hd.postDelayed(runnable, 30000);
+        } else if (this.videoState == VideoState.PLAYING) {//直播状态下 停止轮询等待完成
+            hd.removeCallbacks(runnable);
+            refreshState();
+        } else if (this.videoState == VideoState.CLOSED) {//关闭状态   摄像头关闭
+            hd.postDelayed(runnable, 30000);
+            video2.release_resource();
+            videoNoData2.setVisibility(View.VISIBLE);//摄像头关闭
+        }
+    }
+
+    private void queryVideoState() {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlLessons + BaseApplication.getUserId() + "/live_status",
+                null, new VolleyListener(NEVideoPlayerActivity.this) {
+            @Override
+            protected void onTokenOut() {
+                tokenOut();
+            }
+
+            @Override
+            protected void onSuccess(JSONObject response) {
+                try {
+                    JSONObject data = response.getJSONObject("data");
+                    int board = data.getInt("board");
+                    int camera = data.getInt("camera");
+                    if (camera == 0 && board == 0) {
+                        setVideoState(VideoState.UNPLAY);
+                    } else if (camera == 0 && board == 1) {
+                        setVideoState(VideoState.CLOSED);
+                    } else if (camera == 1 && board == 1) {
+                        setVideoState(VideoState.PLAYING);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            protected void onError(JSONObject response) {
+            }
+        }, new VolleyErrorListener());
+        addToRequestQueue(request);
+    }
 
     /**************************
      * VideoActivityInterface *
@@ -682,15 +769,12 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             video2.setVideoScalingMode(true);
         }
         video1.setZOrderOnTop(true);
-//        floatingWindow.addView(video1);
         floatingWindow.addView(window1);
     }
 
     @Override
     public void changeSub2Main() {
         ismain = true;
-//        mainView.removeView(video2);
-//        subVideo.removeView(video1);
         mainView.removeView(window2);
         subVideo.removeView(window1);
         video1.setZOrderOnTop(false);
@@ -702,8 +786,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         danmuParam.addRule(RelativeLayout.BELOW, R.id.main_video);
         danmuView.setLayoutParams(danmuParam);
         danmuView.setVisibility(View.VISIBLE);
-//        mainView.addView(video1);
-//        subVideo.addView(video2);
         mainView.addView(window1);
         subVideo.addView(window2);
     }

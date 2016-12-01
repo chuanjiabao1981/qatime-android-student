@@ -52,6 +52,8 @@ public class UrlUtils {
     public static String urlNotifications = baseUrl + "api/v1/notifications/";
     //账户充值
     public static String urlpayment = baseUrl + "api/v1/payment/users/";
+    //直播状态查询
+    public static String urlLessons = baseUrl + "api/v1/live_studio/lessons/";
 
     public static String getUrl(String function, Map<String, String> params) {
         String url = function + "?" + Map2String(params);

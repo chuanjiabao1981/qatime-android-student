@@ -474,31 +474,31 @@ public class NEVideoView extends SurfaceView {
                 } else if (what == NELivePlayer.NELP_BUFFERING_END) {
                     Logger.e(TAG, "onInfo: NELP_BUFFERING_END");
                     if (mBuffer != null) {
-                        mBuffer.setVisibility(View.GONE);
                         if (image1 != null) {
                             ((AnimationDrawable) image1.getBackground()).stop();
                         } else {
                             ((AnimationDrawable) (mBuffer.findViewById(R.id.buffer_image2)).getBackground()).stop();
                         }
+                        mBuffer.setVisibility(View.GONE);
                     }
                 } else if (what == NELivePlayer.NELP_FIRST_VIDEO_RENDERED) {
                     Logger.e(TAG, "onInfo: NELP_FIRST_VIDEO_RENDERED");
                     if (mBuffer != null) {
-                        mBuffer.setVisibility(View.GONE);
                         if (image1 != null) {
                             ((AnimationDrawable) image1.getBackground()).stop();
                         } else {
                             ((AnimationDrawable) (mBuffer.findViewById(R.id.buffer_image2)).getBackground()).stop();
                         }
+                        mBuffer.setVisibility(View.GONE);
                     }
                 } else if (what == NELivePlayer.NELP_FIRST_AUDIO_RENDERED) {
                     if (mBuffer != null) {
-                        mBuffer.setVisibility(View.GONE);
                         if (image1 != null) {
                             ((AnimationDrawable) image1.getBackground()).stop();
                         } else {
                             ((AnimationDrawable) (mBuffer.findViewById(R.id.buffer_image2)).getBackground()).stop();
                         }
+                        mBuffer.setVisibility(View.GONE);
                     }
                     Logger.e(TAG, "onInfo: NELP_FIRST_AUDIO_RENDERED");
                 }
