@@ -1,7 +1,6 @@
 package cn.qatime.player.activity;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,16 +8,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.Editable;
-import android.text.Selection;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,9 +33,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,16 +42,14 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
-import libraryextra.utils.AppUtils;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.UpLoadUtil;
 import cn.qatime.player.utils.UrlUtils;
-import libraryextra.view.WheelView;
 import libraryextra.bean.GradeBean;
 import libraryextra.bean.ImageItem;
-import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
 import libraryextra.transformation.GlideCircleTransform;
+import libraryextra.utils.AppUtils;
 import libraryextra.utils.DialogUtils;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
@@ -68,106 +58,73 @@ import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.CustomProgressDialog;
-import libraryextra.view.MDatePickerDialog;
+import libraryextra.view.WheelView;
 
 
 public class RegisterPerfectActivity extends BaseActivity implements View.OnClickListener {
-    ImageView headsculpture;
-    TextView sethead;
-    EditText name;
-    RadioButton men;
-    RadioButton women;
-    RadioGroup radiogroup;
-    TextView textGrade;
-    TextView complete;
-    private String imageUrl = "";
-    private TextView birthday;
-    private View birthdayView;
-    private View textGradeView;
-    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
 
-    private String select = "1990-01-01";//生日所选日期
+    private String imageUrl = "";
     private GradeBean gradeBean;
     private CustomProgressDialog progress;
-    private View changeHeadSculpture;
     private Uri captureUri;
     private AlertDialog alertDialog;
     private Profile profile;
+
+    private LinearLayout information;
+    private ImageView headSculpture;
+    private EditText name;
+    private EditText editGrade;
+    private TextView editMore;
+    private TextView complete;
+
+    private void assignViews() {
+        information = (LinearLayout) findViewById(R.id.information);
+        headSculpture = (ImageView) findViewById(R.id.head_sculpture);
+        name = (EditText) findViewById(R.id.name);
+        editGrade = (EditText) findViewById(R.id.grade);
+        editMore = (TextView) findViewById(R.id.edit_more);
+        complete = (TextView) findViewById(R.id.complete);
+
+        name = (EditText) findViewById(R.id.name);
+        name.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                return event.getKeyCode() == KeyEvent.KEYCODE_ENTER;
+            }
+        });
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_perfect);
         setTitle(getResources().getString(R.string.information_perfect));
-        initView();
+        assignViews();
 
         String gradeString = FileUtil.readFile(getFilesDir() + "/grade.txt");
         if (!StringUtils.isNullOrBlanK(gradeString)) {
             gradeBean = JsonUtils.objectFromJson(gradeString, GradeBean.class);
         }
-
-        changeHeadSculpture.setOnClickListener(this);
-        textGradeView.setOnClickListener(this);
-        birthdayView.setOnClickListener(this);
+        information.setOnClickListener(this);
         complete.setOnClickListener(this);
-        PersonalInformationBean data = (PersonalInformationBean) getIntent().getSerializableExtra("data");
-        if (data != null && data.getData() != null) {
-            initData(data);
-        }
-
+        editMore.setOnClickListener(this);
+        editGrade.setOnClickListener(this);
     }
 
-    private void initData(PersonalInformationBean data) {
-
-
-        Editable etext = name.getText();
-        Selection.setSelection(etext, etext.length());
-        birthday.setText(format.format(new Date()));
-        select = parse.format(new Date());
-
-
-        for (int i = 0; i < gradeBean.getData().getGrades().size(); i++) {
-            if (data.getData().getGrade().equals(gradeBean.getData().getGrades().get(i))) {
-                textGrade.setText(data.getData().getGrade());
-                break;
-
-            }
-        }
-
-    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.grade_view:
+            case R.id.edit_more:
+                //// TODO: 2016/12/1 完善更多
+                break;
+            case R.id.grade:
                 showGradePickerDialog();
                 break;
-            case R.id.change_head_sculpture://去选择图片
+            case R.id.information://去选择图片
                 final Intent intent = new Intent(RegisterPerfectActivity.this, PictureSelectActivity.class);
                 startActivityForResult(intent, Constant.REQUEST_PICTURE_SELECT);
-                break;
-            case R.id.birthday_view://生日
-                try {
-                    MDatePickerDialog dataDialog = new MDatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-                        @Override
-                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                            select = (year + "-" + ((monthOfYear + 1) >= 10 ? String.valueOf((monthOfYear + 1)) : ("0" + (monthOfYear + 1))) + "-" + ((dayOfMonth) >= 10 ? String.valueOf((dayOfMonth)) : ("0" + (dayOfMonth))));
-                            try {
-                                birthday.setText(format.format(parse.parse(select)));
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-
-                            }
-                        }
-                    }, parse.parse(select).getYear() + 1900, parse.parse(select).getMonth() + 1, parse.parse(select).getDay());
-                    dataDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-                    dataDialog.show();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-
                 break;
             case R.id.complete://完成
                 int userId = getIntent().getIntExtra("userId",0);
@@ -192,7 +149,6 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                         Intent data = new Intent();
                         data.putExtra("data", result);
                         DialogUtils.dismissDialog(progress);
-                        Toast.makeText(RegisterPerfectActivity.this, getResourceString(R.string.regiset_success), Toast.LENGTH_SHORT).show();
                         Map<String, String> map = new HashMap<>();
                         Intent intent = getIntent();
                         final String username = intent.getStringExtra("username");
@@ -306,20 +262,15 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                     Toast.makeText(this, getResources().getString(R.string.name_can_not_be_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                String grade = textGrade.getText().toString();
+                String grade = editGrade.getText().toString();
                 if (StringUtils.isNullOrBlanK(grade)) {
                     Toast.makeText(this, getResources().getString(R.string.grade_can_not_be_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                String gender = radiogroup.getCheckedRadioButtonId() == men.getId() ? "male" : "female";
-                String birthday = select.equals(parse.format(new Date())) ? "" : select;
                 Map<String, String> map = new HashMap<>();
                 map.put("name", sName);
                 map.put("grade", grade);
                 map.put("avatar", imageUrl);
-                map.put("gender", gender);
-                map.put("birthday", birthday);
-
                 util.execute(map);
                 break;
         }
@@ -331,7 +282,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
             final WheelView grade = (WheelView) view.findViewById(R.id.grade);
             grade.setOffset(1);
             grade.setItems(gradeBean.getData().getGrades());
-            grade.setSeletion(gradeBean.getData().getGrades().indexOf(textGrade.getText()));
+            grade.setSeletion(gradeBean.getData().getGrades().indexOf(editGrade.getText()));
             AlertDialog.Builder builder = new AlertDialog.Builder(RegisterPerfectActivity.this);
             alertDialog = builder.create();
             alertDialog.show();
@@ -339,7 +290,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
             alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
-                    textGrade.setText(grade.getSeletedItem());
+                    editGrade.setText(grade.getSeletedItem());
                 }
             });
 //            WindowManager.LayoutParams attributes = alertDialog.getWindow().getAttributes();
@@ -405,33 +356,13 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                 }
             });
         }
-        if (!LoginActivity.reenter) {
+//        if (!LoginActivity.reenter) {
             Intent intent = new Intent(RegisterPerfectActivity.this, MainActivity.class);
             startActivity(intent);
-        }
-        finish();
+//        }
+//        finish();
     }
 
-    private void initView() {
-        headsculpture = (ImageView) findViewById(R.id.head_sculpture);
-        changeHeadSculpture = findViewById(R.id.change_head_sculpture);
-        sethead = (TextView) findViewById(R.id.set_head);
-        name = (EditText) findViewById(R.id.name);
-        name.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                return event.getKeyCode() == KeyEvent.KEYCODE_ENTER;
-            }
-        });
-        men = (RadioButton) findViewById(R.id.men);
-        women = (RadioButton) findViewById(R.id.women);
-        radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
-        textGrade = (TextView) findViewById(R.id.text_grade);
-        birthday = (TextView) findViewById(R.id.birthday);
-        textGradeView = findViewById(R.id.grade_view);
-        birthdayView = findViewById(R.id.birthday_view);
-        complete = (TextView) findViewById(R.id.complete);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -471,7 +402,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                     Logger.e("回来成功");
                 }
                 if (!StringUtils.isNullOrBlanK(imageUrl)) {
-                    Glide.with(this).load(Uri.fromFile(new File(imageUrl))).transform(new GlideCircleTransform(this)).crossFade().into(headsculpture);
+                    Glide.with(this).load(Uri.fromFile(new File(imageUrl))).transform(new GlideCircleTransform(this)).crossFade().into(headSculpture);
                 }
             }
         }

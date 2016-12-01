@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -38,12 +37,10 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
-import libraryextra.utils.AppUtils;
 import cn.qatime.player.utils.Constant;
-import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
-import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
+import libraryextra.utils.AppUtils;
 import libraryextra.utils.CheckUtil;
 import libraryextra.utils.DialogUtils;
 import libraryextra.utils.JsonUtils;
@@ -127,7 +124,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 //                        return;
 //                    }
 //                } else {
-                    login();
+                login();
 //                }
 
                 break;
@@ -174,7 +171,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             return;
         }
         if (checklayout.getVisibility() == View.VISIBLE) {
-            if (!CheckUtil.checkNum(checkcode.getText().toString().trim(),checkNum)) {
+            if (!CheckUtil.checkNum(checkcode.getText().toString().trim(), checkNum)) {
                 Toast.makeText(this, "验证码不正确!", Toast.LENGTH_SHORT).show();
                 initCheckNum();
                 checkcode.setText("");
@@ -264,9 +261,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                     }
                                 }
                                 if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
-//                                   跳转mainActivity时再setProfile
-//                                   BaseApplication.setProfile(profile);
-                                    checkUserInfo();
+                                    Logger.e("登录", response.toString());
+                                    //登录成功且有个人信息  设置profile
+                                    BaseApplication.setProfile(profile);
+                                    SPUtils.put(LoginActivity.this, "username", username.getText().toString());
+                                    loginAccount();//登陆云信
                                 } else {
                                     //没有数据或token
                                 }
@@ -302,67 +301,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             }
         });
         addToRequestQueue(request);
-    }
-
-    /**
-     * 检查用户信息是否完整
-     */
-    private void checkUserInfo() {
-
-        DaYiJsonObjectRequest request1 = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + profile.getData().getUser().getId() + "/info", null, new VolleyListener(LoginActivity.this) {
-            @Override
-            protected void onTokenOut() {
-                tokenOut();
-            }
-
-            @Override
-            protected void onSuccess(JSONObject response) {
-                PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
-                String name = bean.getData().getName();
-                String grade = bean.getData().getGrade();
-                if (StringUtils.isNullOrBlanK(name) || StringUtils.isNullOrBlanK(grade)) {
-                    DialogUtils.dismissDialog(progress);
-                    Intent intent = new Intent(LoginActivity.this, RegisterPerfectActivity.class);
-                    Toast.makeText(LoginActivity.this, getResourceString(R.string.please_set_information), Toast.LENGTH_SHORT).show();
-                    intent.putExtra("username", username.getText().toString().trim());
-                    intent.putExtra("password", password.getText().toString().trim());
-                    intent.putExtra("token", profile.getToken());
-                    intent.putExtra("userId", profile.getData().getUser().getId());
-                    startActivityForResult(intent, Constant.REGIST);
-                } else {
-                    Logger.e("登录", response.toString());
-                    //登录成功且有个人信息  设置profile
-                    BaseApplication.setProfile(profile);
-                    SPUtils.put(LoginActivity.this, "username", username.getText().toString());
-                    loginAccount();//登陆云信
-                }
-
-            }
-
-            @Override
-            protected void onError(JSONObject response) {
-                Toast.makeText(LoginActivity.this, getResourceString(R.string.login_failed), Toast.LENGTH_SHORT).show();
-//                BaseApplication.clearToken();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-//                BaseApplication.clearToken();
-            }
-        }) {
-            /**
-             * 由于没有登陆没有token，重写getHeaders方法 手动设置访问token
-             * @return
-             * @throws AuthFailureError
-             */
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                map.put("Remember-Token", profile.getToken());
-                return map;
-            }
-        };
-        addToRequestQueue(request1);
     }
 
     /**
