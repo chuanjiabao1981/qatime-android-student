@@ -5,10 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -17,20 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.RequestCallback;
-import com.netease.nimlib.sdk.auth.AuthService;
-import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.orhanobut.logger.Logger;
-import com.umeng.message.PushAgent;
-import com.umeng.message.UTrack;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.util.HashMap;
@@ -39,24 +25,18 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
-import cn.qatime.player.config.UserPreferences;
-import cn.qatime.player.im.cache.TeamDataCache;
-import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.UpLoadUtil;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.GradeBean;
 import libraryextra.bean.ImageItem;
+import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
 import libraryextra.transformation.GlideCircleTransform;
-import libraryextra.utils.AppUtils;
 import libraryextra.utils.DialogUtils;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
-import libraryextra.utils.VolleyErrorListener;
-import libraryextra.utils.VolleyListener;
 import libraryextra.view.CustomProgressDialog;
 import libraryextra.view.WheelView;
 
@@ -117,26 +97,23 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.edit_more:
-                //// TODO: 2016/12/1 完善更多
+                Intent intent = new Intent(this, PersonalInformationChangeActivity.class);
+                if (LoginActivity.reenter) {
+                    intent.putExtra("action", getIntent().getStringExtra("action"));
+                }
+                startActivityForResult(intent,Constant.REGIST);
                 break;
             case R.id.grade:
                 showGradePickerDialog();
                 break;
             case R.id.information://去选择图片
-                final Intent intent = new Intent(RegisterPerfectActivity.this, PictureSelectActivity.class);
+                intent = new Intent(RegisterPerfectActivity.this, PictureSelectActivity.class);
                 startActivityForResult(intent, Constant.REQUEST_PICTURE_SELECT);
                 break;
             case R.id.complete://完成
-                int userId = getIntent().getIntExtra("userId",0);
-                final String token = getIntent().getStringExtra("token");
+                int userId = BaseApplication.getUserId();
                 String url = UrlUtils.urlPersonalInformation + userId + "/profile";
-
                 UpLoadUtil util = new UpLoadUtil(url) {
-                    @Override
-                    public String getHttpTokenHeader() {
-                        return token;
-                    }
-
                     @Override
                     public void httpStart() {
                         progress = DialogUtils.startProgressDialog(progress, RegisterPerfectActivity.this);
@@ -146,100 +123,28 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
 
                     @Override
                     protected void httpSuccess(final String result) {
-                        Intent data = new Intent();
-                        data.putExtra("data", result);
+                        //由于已经登陆，所以为profile赋值
+                        PersonalInformationBean sData = JsonUtils.objectFromJson(result, PersonalInformationBean.class);
+                        if (sData != null && sData.getData() != null) {
+                            BaseApplication.getProfile().getData().getUser().setAvatar_url(sData.getData().getAvatar_url());
+                            Profile profile = BaseApplication.getProfile();
+                            Profile.User user = profile.getData().getUser();
+                            user.setId(sData.getData().getId());
+                            user.setName(sData.getData().getName());
+                            user.setNick_name(sData.getData().getNick_name());
+                            user.setAvatar_url(sData.getData().getAvatar_url());
+                            user.setEx_big_avatar_url(sData.getData().getEx_big_avatar_url());
+                            user.setEmail(sData.getData().getEmail());
+                            user.setLogin_mobile(sData.getData().getLogin_mobile());
+                            user.setChat_account(sData.getData().getChat_account());
+                            profile.getData().setUser(user);
+                            BaseApplication.setProfile(profile);
+                        }
                         DialogUtils.dismissDialog(progress);
-                        Map<String, String> map = new HashMap<>();
-                        Intent intent = getIntent();
-                        final String username = intent.getStringExtra("username");
-                        String password = intent.getStringExtra("password");
-                        map.put("login_account", username);
-                        map.put("password", password);
-                        map.put("client_type", "app");
-                        map.put("client_cate", "student_client");
-                        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlLogin, map), null,
-                                new VolleyListener(RegisterPerfectActivity.this) {
-                                    @Override
-                                    protected void onTokenOut() {
-                                        tokenOut();
-                                    }
-
-                                    @Override
-                                    protected void onSuccess(JSONObject response) {
-                                        try {
-                                            JSONObject data = response.getJSONObject("data");
-                                            if (data.has("result")) {
-                                                if (data.getString("result") != null && data.getString("result").equals("failed")) {
-                                                    Toast.makeText(RegisterPerfectActivity.this, getResources().getString(R.string.account_or_password_error), Toast.LENGTH_SHORT).show();
-                                                }
-                                            } else {
-                                                Logger.e("登录", response.toString());
-                                                SPUtils.put(RegisterPerfectActivity.this, "username", username);
-                                                Profile profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
-                                                if (profile != null && profile.getData() != null && profile.getData().getUser() != null && profile.getData().getUser().getId() != 0) {
-                                                    PushAgent.getInstance(RegisterPerfectActivity.this).addAlias(String.valueOf(profile.getData().getUser().getId()), "student", new UTrack.ICallBack() {
-                                                        @Override
-                                                        public void onMessage(boolean b, String s) {
-
-                                                        }
-                                                    });
-                                                    String deviceToken = PushAgent.getInstance(RegisterPerfectActivity.this).getRegistrationId();
-                                                    if (!StringUtils.isNullOrBlanK(deviceToken)) {
-                                                        Map<String, String> m = new HashMap<>();
-                                                        m.put("user_id", String.valueOf(profile.getData().getUser().getId()));
-                                                        m.put("device_token", deviceToken);
-                                                        m.put("device_model", Build.MODEL);
-                                                        m.put("app_name", AppUtils.getAppName(RegisterPerfectActivity.this));
-                                                        m.put("app_version", AppUtils.getVersionName(RegisterPerfectActivity.this));
-                                                        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlDeviceInfo, m), null,
-                                                                new VolleyListener(RegisterPerfectActivity.this) {
-
-                                                                    @Override
-                                                                    protected void onSuccess(JSONObject response) {
-                                                                    }
-
-                                                                    @Override
-                                                                    protected void onError(JSONObject response) {
-
-                                                                    }
-
-                                                                    @Override
-                                                                    protected void onTokenOut() {
-                                                                        tokenOut();
-                                                                    }
-
-                                                                }, new VolleyErrorListener() {
-                                                            @Override
-                                                            public void onErrorResponse(VolleyError volleyError) {
-                                                                super.onErrorResponse(volleyError);
-                                                            }
-                                                        });
-                                                        addToRequestQueue(request);
-                                                    }
-                                                }
-                                                if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
-                                                    BaseApplication.setProfile(profile);
-                                                    loginAccount();
-                                                } else {
-                                                    //没有数据或token
-                                                }
-                                            }
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-
-                                    @Override
-                                    protected void onError(JSONObject response) {
-                                        Toast.makeText(RegisterPerfectActivity.this, getResourceString(R.string.login_failed), Toast.LENGTH_SHORT).show();
-                                    }
-                                }, new VolleyErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError volleyError) {
-                                super.onErrorResponse(volleyError);
-                            }
-                        });
-                        addToRequestQueue(request);
+                        setResult(Constant.REGIST);
+                        finish();
+                        Intent intent = new Intent(RegisterPerfectActivity.this, MainActivity.class);
+                        startActivity(intent);
                     }
 
                     @Override
@@ -283,6 +188,12 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
             grade.setOffset(1);
             grade.setItems(gradeBean.getData().getGrades());
             grade.setSeletion(gradeBean.getData().getGrades().indexOf(editGrade.getText()));
+            grade.setonItemClickListener(new WheelView.OnItemClickListener() {
+                @Override
+                public void onItemClick() {
+                    alertDialog.dismiss();
+                }
+            });
             AlertDialog.Builder builder = new AlertDialog.Builder(RegisterPerfectActivity.this);
             alertDialog = builder.create();
             alertDialog.show();
@@ -300,69 +211,6 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
             alertDialog.show();
         }
     }
-
-    private void loginAccount() {
-        String account = BaseApplication.getAccount();
-        String token = BaseApplication.getAccountToken();
-
-        if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
-            NIMClient.getService(AuthService.class).login(new LoginInfo(account, token)).setCallback(new RequestCallback<LoginInfo>() {
-                @Override
-                public void onSuccess(LoginInfo o) {
-                    Logger.e("云信登录成功" + o.getAccount());
-                    // 初始化消息提醒
-                    NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
-
-                    NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
-                    //缓存
-                    UserInfoCache.getInstance().clear();
-                    TeamDataCache.getInstance().clear();
-                    //                FriendDataCache.getInstance().clear();
-
-                    UserInfoCache.getInstance().buildCache();
-                    TeamDataCache.getInstance().buildCache();
-                    //好友维护,目前不需要
-                    //                FriendDataCache.getInstance().buildCache();
-
-                    UserInfoCache.getInstance().registerObservers(true);
-                    TeamDataCache.getInstance().registerObservers(true);
-//                                                FriendDataCache.getInstance().registerObservers(true);
-//
-//                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                    startActivity(intent);
-//                    DialogUtils.dismissDialog(progress);
-//                    finish();
-                }
-
-                @Override
-                public void onFailed(int code) {
-//                    BaseApplication.clearToken();
-                    profile.getData().setRemember_token("");
-                    SPUtils.putObject(RegisterPerfectActivity.this, "profile", profile);
-                    Logger.e(code + "code");
-//                    if (code == 302 || code == 404) {
-//                        Toast.makeText(LoginActivity.this, R.string.account_or_password_error, Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        Toast.makeText(LoginActivity.this, getResourceString(R.string.login_failed) + code, Toast.LENGTH_SHORT).show();
-//                    }
-                }
-
-                @Override
-                public void onException(Throwable throwable) {
-                    Logger.e(throwable.getMessage());
-//                    BaseApplication.clearToken();
-                    profile.getData().setRemember_token("");
-                    SPUtils.putObject(RegisterPerfectActivity.this, "profile", profile);
-                }
-            });
-        }
-//        if (!LoginActivity.reenter) {
-            Intent intent = new Intent(RegisterPerfectActivity.this, MainActivity.class);
-            startActivity(intent);
-//        }
-//        finish();
-    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -391,7 +239,6 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                         startActivityForResult(intent, Constant.PHOTO_CROP);
                     }
                 }
-
             }
         } else if (resultCode == Constant.PHOTO_CROP) {
             Logger.e("裁剪", "回来");
@@ -405,6 +252,18 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                     Glide.with(this).load(Uri.fromFile(new File(imageUrl))).transform(new GlideCircleTransform(this)).crossFade().into(headSculpture);
                 }
             }
+        } else if (resultCode == Constant.VISITORLOGINED) {
+            if (StringUtils.isNullOrBlanK(data.getStringExtra("action"))) {
+                Intent intent = new Intent();
+                intent.putExtra("action", data.getStringExtra("action"));
+                setResult(Constant.VISITORLOGINED, intent);
+            } else {
+                setResult(Constant.VISITORLOGINED);//游客从主页到登录页,点击登录,通知会main initview
+            }
+            finish();
+        } else if (resultCode == Constant.REGIST) {
+            setResult(resultCode);
+            finish();
         }
     }
 }

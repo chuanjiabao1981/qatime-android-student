@@ -101,6 +101,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if (!StringUtils.isNullOrBlanK(sign)) {
             if (sign.equals("exit_login")) {//从系统设置退出登录页面跳转而来，清除用户登录信息
                 password.setText("");
+                reenter = false;//认为是第一次进入
             } else if (sign.equals(Constant.VISITORTOLOGIN)) {//游客身份转到登录页
                 reenter = true;
                 action = getIntent().getStringExtra("action");
@@ -130,6 +131,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 break;
             case R.id.register://注册
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                if (reenter) {
+                    intent.putExtra("action",getIntent().getStringExtra("action"));
+                }
                 startActivityForResult(intent, Constant.REGIST);
                 break;
             case R.id.login_error://忘记密码
@@ -393,6 +397,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Constant.REGIST) {
+            finish();
+        }else if(resultCode == Constant.VISITORLOGINED){
+            if(StringUtils.isNullOrBlanK(data.getStringExtra("action"))){
+                Intent intent = new Intent();
+                intent.putExtra("action", data.getStringExtra("action"));
+                setResult(Constant.VISITORLOGINED, intent);
+            }else{
+                setResult(Constant.VISITORLOGINED);//游客从主页到登录页,点击登录,通知会main initview
+            }
             finish();
         }
     }

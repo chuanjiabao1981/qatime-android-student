@@ -457,4 +457,5 @@
     <string name="audition_over">试听结束</string>
     <string name="class_missed">待补课</string>
     <string name="unlogin_alert">您还未登录,请先登录!</string>
+    <string name="hader_can_not_be_empty">头像不能为空</string>
 </resources>
