@@ -30,8 +30,8 @@ public class UrlUtils {
     public static String urlAppconstantInformation = baseUrl + "api/v1/app_constant";
     //注册
     public static String urlRegister = baseUrl + "api/v1/user/register";
-    //獲取支付
-    public static String urlPayPrepare = baseUrl + "api/v1/live_studio/courses/";
+    //课程
+    public static String urlCourses = baseUrl + "api/v1/live_studio/courses/";
     //獲取支付结果
     public static String urlPayResult = baseUrl + "api/v1/payment/orders/";
     //订单列表
@@ -52,8 +52,6 @@ public class UrlUtils {
     public static String urlNotifications = baseUrl + "api/v1/notifications/";
     //账户充值
     public static String urlpayment = baseUrl + "api/v1/payment/users/";
-    //直播状态查询
-    public static String urlLessons = baseUrl + "api/v1/live_studio/lessons/";
 
     public static String getUrl(String function, Map<String, String> params) {
         String url = function + "?" + Map2String(params);
