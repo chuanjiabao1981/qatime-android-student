@@ -271,7 +271,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
             case R.id.audition_start:
                 if (BaseApplication.isLogined()) {
                     intent = new Intent(RemedialClassDetailActivity.this, NEVideoPlayerActivity.class);
-                    intent.putExtra("url", data.getData().getBoard());
+                    intent.putExtra("camera", data.getData().getCamera());
+                    intent.putExtra("board", data.getData().getBoard());
                     intent.putExtra("id", data.getData().getId());
                     intent.putExtra("sessionId", data.getData().getChat_team_id());
                     startActivity(intent);
@@ -293,7 +294,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
             case R.id.start_study:
                 if (BaseApplication.isLogined()) {
                     intent = new Intent(RemedialClassDetailActivity.this, NEVideoPlayerActivity.class);
-                    intent.putExtra("url", data.getData().getBoard());
+                    intent.putExtra("camera", data.getData().getCamera());
+                    intent.putExtra("board", data.getData().getBoard());
                     intent.putExtra("id", data.getData().getId());
                     intent.putExtra("sessionId", data.getData().getChat_team_id());
                     startActivity(intent);

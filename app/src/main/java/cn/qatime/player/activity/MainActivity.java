@@ -142,7 +142,6 @@ public class MainActivity extends BaseFragmentActivity {
         if (requestCode == Constant.REQUEST_EXIT_LOGIN && resultCode == Constant.RESPONSE_EXIT_LOGIN) {
             finish();
         }
-        Logger.e("requestCode" + requestCode + "***resultCode" + resultCode);
         if (resultCode == Constant.VISITORLOGINED) {
             initView();
 

@@ -31,7 +31,7 @@
                     android:layout_height="match_parent"
                     android:scaleType="fitXY"
                     android:src="@mipmap/video_no_data"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
                 <com.zhy.android.percent.support.PercentRelativeLayout
                     android:id="@+id/buffering1"
@@ -39,7 +39,7 @@
                     android:layout_height="match_parent"
                     android:background="#666666"
                     android:gravity="center"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <ImageView
                         android:id="@+id/buffer_image1"
@@ -83,7 +83,7 @@
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
                 android:src="@mipmap/video_no_data"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <com.zhy.android.percent.support.PercentRelativeLayout
                 android:id="@+id/buffering2"
@@ -91,7 +91,7 @@
                 android:layout_height="match_parent"
                 android:background="#666666"
                 android:gravity="center"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/buffer_image2"

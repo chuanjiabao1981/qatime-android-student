@@ -30,8 +30,8 @@ public class UrlUtils {
     public static String urlAppconstantInformation = baseUrl + "api/v1/app_constant";
     //注册
     public static String urlRegister = baseUrl + "api/v1/user/register";
-    //獲取支付
-    public static String urlPayPrepare = baseUrl + "api/v1/live_studio/courses/";
+    //课程
+    public static String urlCourses = baseUrl + "api/v1/live_studio/courses/";
     //獲取支付结果
     public static String urlPayResult = baseUrl + "api/v1/payment/orders/";
     //订单列表
