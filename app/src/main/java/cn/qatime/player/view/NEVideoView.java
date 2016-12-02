@@ -334,7 +334,7 @@ public class NEVideoView extends SurfaceView {
 
     OnVideoSizeChangedListener mSizeChangedListener = new OnVideoSizeChangedListener() {
         public void onVideoSizeChanged(NELivePlayer mp, int width, int height, int sarNum, int sarDen) {
-            Logger.e(TAG, "onVideoSizeChanged: " + width + "x" + height);
+//            Logger.e(TAG, "onVideoSizeChanged: " + width + "x" + height);
             mVideoWidth = mp.getVideoWidth();
             mVideoHeight = mp.getVideoHeight();
             if (mOnVideoSizeChangeListener != null) {
@@ -349,7 +349,7 @@ public class NEVideoView extends SurfaceView {
 
     OnPreparedListener mPreparedListener = new OnPreparedListener() {
         public void onPrepared(NELivePlayer mp) {
-            Logger.e(TAG, "onPrepared");
+//            Logger.e(TAG, "onPrepared");
             mCurrState = PREPARED;
             mNextState = STARTED;
             // briefly show the mediacontroller
@@ -453,7 +453,7 @@ public class NEVideoView extends SurfaceView {
     private OnInfoListener mInfoListener = new OnInfoListener() {
         @Override
         public boolean onInfo(NELivePlayer mp, int what, int extra) {
-            Logger.e(TAG, "onInfo: " + what + ", " + extra);
+//            Logger.e(TAG, "onInfo: " + what + ", " + extra);
             if (mOnInfoListener != null) {
                 mOnInfoListener.onInfo(mp, what, extra);
             }
@@ -462,7 +462,7 @@ public class NEVideoView extends SurfaceView {
                 ImageView image1 = (ImageView) mBuffer.findViewById(R.id.buffer_image1);
 
                 if (what == NELivePlayer.NELP_BUFFERING_START) {
-                    Logger.e(TAG, "onInfo: NELP_BUFFERING_START");
+//                    Logger.e(TAG, "onInfo: NELP_BUFFERING_START");
                     if (mBuffer != null) {
                         mBuffer.setVisibility(View.VISIBLE);
                         if (image1 != null) {
@@ -472,35 +472,35 @@ public class NEVideoView extends SurfaceView {
                         }
                     }
                 } else if (what == NELivePlayer.NELP_BUFFERING_END) {
-                    Logger.e(TAG, "onInfo: NELP_BUFFERING_END");
+//                    Logger.e(TAG, "onInfo: NELP_BUFFERING_END");
                     if (mBuffer != null) {
-                        mBuffer.setVisibility(View.GONE);
                         if (image1 != null) {
                             ((AnimationDrawable) image1.getBackground()).stop();
                         } else {
                             ((AnimationDrawable) (mBuffer.findViewById(R.id.buffer_image2)).getBackground()).stop();
                         }
+                        mBuffer.setVisibility(View.GONE);
                     }
                 } else if (what == NELivePlayer.NELP_FIRST_VIDEO_RENDERED) {
-                    Logger.e(TAG, "onInfo: NELP_FIRST_VIDEO_RENDERED");
+//                    Logger.e(TAG, "onInfo: NELP_FIRST_VIDEO_RENDERED");
                     if (mBuffer != null) {
-                        mBuffer.setVisibility(View.GONE);
                         if (image1 != null) {
                             ((AnimationDrawable) image1.getBackground()).stop();
                         } else {
                             ((AnimationDrawable) (mBuffer.findViewById(R.id.buffer_image2)).getBackground()).stop();
                         }
+                        mBuffer.setVisibility(View.GONE);
                     }
                 } else if (what == NELivePlayer.NELP_FIRST_AUDIO_RENDERED) {
                     if (mBuffer != null) {
-                        mBuffer.setVisibility(View.GONE);
                         if (image1 != null) {
                             ((AnimationDrawable) image1.getBackground()).stop();
                         } else {
                             ((AnimationDrawable) (mBuffer.findViewById(R.id.buffer_image2)).getBackground()).stop();
                         }
+                        mBuffer.setVisibility(View.GONE);
                     }
-                    Logger.e(TAG, "onInfo: NELP_FIRST_AUDIO_RENDERED");
+//                    Logger.e(TAG, "onInfo: NELP_FIRST_AUDIO_RENDERED");
                 }
             }
 
@@ -511,7 +511,7 @@ public class NEVideoView extends SurfaceView {
     private OnSeekCompleteListener mSeekCompleteListener = new OnSeekCompleteListener() {
         @Override
         public void onSeekComplete(NELivePlayer mp) {
-            Logger.e(TAG, "onSeekComplete");
+//            Logger.e(TAG, "onSeekComplete");
             if (mOnSeekCompleteListener != null)
                 mOnSeekCompleteListener.onSeekComplete(mp);
         }
@@ -723,10 +723,7 @@ public class NEVideoView extends SurfaceView {
     }
 
     public boolean isPlaying() {
-        if (mMediaPlayer != null && mIsPrepared) {
-            return mMediaPlayer.isPlaying();
-        }
-        return false;
+        return mMediaPlayer != null && mIsPrepared && mMediaPlayer.isPlaying();
     }
 
     public void manualPause(boolean paused) {

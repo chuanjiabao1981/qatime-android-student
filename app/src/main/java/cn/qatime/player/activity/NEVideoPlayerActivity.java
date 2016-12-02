@@ -4,7 +4,9 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -26,6 +28,7 @@ import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.orhanobut.logger.Logger;
 import com.zhy.android.percent.support.PercentRelativeLayout;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -37,6 +40,7 @@ import cn.qatime.player.barrage.DanmuControl;
 import cn.qatime.player.barrage.model.Status;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
+import cn.qatime.player.bean.VideoState;
 import cn.qatime.player.fragment.VideoFloatFragment;
 import libraryextra.bean.Announcements;
 import cn.qatime.player.fragment.FragmentPlayerAnnouncements;
@@ -100,6 +104,17 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     private PercentRelativeLayout buffering1;
     private PercentRelativeLayout buffering2;
 
+    private Handler hd = new Handler();
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            queryVideoState();
+        }
+    };
+    private int reload = 0;//轮询直播状态获取失败次数，两次以内需重试
+    private VideoState videoState;
+    private int playingReQuery = 0;
+
 
     private void assignViews() {
         screenW = ScreenUtils.getScreenWidth(NEVideoPlayerActivity.this);
@@ -142,8 +157,24 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             public boolean onError(NELivePlayer neLivePlayer, int i, int i1) {
                 buffering2.setVisibility(View.GONE);
                 bufferAnimation2.stop();
+                videoNoData2.setImageResource(R.mipmap.video_no_data);
                 videoNoData2.setVisibility(View.VISIBLE);
                 return true;
+            }
+        });
+
+        video1.setOnCompletionListener(new NELivePlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(NELivePlayer neLivePlayer) {
+                video1.release_resource();
+                setVideoState(VideoState.INIT);
+            }
+        });
+        video2.setOnCompletionListener(new NELivePlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(NELivePlayer neLivePlayer) {
+                video2.release_resource();
+                setVideoState(VideoState.INIT);
             }
         });
 
@@ -191,29 +222,50 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         }
         sessionId = getIntent().getStringExtra("sessionId");
 
-        String camera = getIntent().getStringExtra("camera");
-        String board = getIntent().getStringExtra("board");
-
         assignViews();
         initView();
         getAnnouncementsData();
         initData();
+        setVideoState(VideoState.INIT);
+    }
+
+    private void refreshState() {
+        String camera = getIntent().getStringExtra("camera");
+        String board = getIntent().getStringExtra("board");
 //        camera = "rtmp://va0a19f55.live.126.net/live/02dce8e380034cf9b2ef1f9c26c4234c";
 //        board = "rtmp://va0a19f55.live.126.net/live/1243a663c3e54b099d1cc35ee83a7921";
         if (!StringUtils.isNullOrBlanK(camera)) {
-            video2.setVideoPath(camera);
-            video2.start();
+            if (videoState == VideoState.PLAYING) {
+                if (!video2.isPlaying()) {
+                    if (videoNoData2.getVisibility() == View.VISIBLE) {
+                        videoNoData2.setVisibility(View.GONE);
+                    }
+                    video2.setVideoPath(camera);
+                    video2.start();
+                }
+            } else if (videoState == VideoState.CLOSED) {
+                videoNoData2.setImageResource(R.mipmap.video_closed);
+                videoNoData2.setVisibility(View.VISIBLE);//摄像头关闭
+            }
         } else {
-            buffering2.setVisibility(View.GONE);
             bufferAnimation2.stop();
+            buffering2.setVisibility(View.GONE);
+            videoNoData2.setImageResource(R.mipmap.video_no_data);
             videoNoData2.setVisibility(View.VISIBLE);
         }
+
         if (!StringUtils.isNullOrBlanK(board)) {
-            video1.setVideoPath(board);
-            video1.start();
+            if (!video1.isPlaying()) {
+                if (videoNoData1.getVisibility() == View.VISIBLE) {
+                    videoNoData1.setVisibility(View.GONE);
+                }
+                floatFragment.setPlaying(true);
+                video1.setVideoPath(board);
+                video1.start();
+            }
         } else {
-            buffering1.setVisibility(View.GONE);
             bufferAnimation1.stop();
+            buffering1.setVisibility(View.GONE);
             videoNoData1.setVisibility(View.VISIBLE);
         }
     }
@@ -416,6 +468,12 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     @Override
     protected void onResume() {
         super.onResume();
+
+        video1.start();
+        video2.start();
+        if (video1.isPlaying()) {
+            floatFragment.setPlaying(true);
+        }
         assert danMuController != null;
         danMuController.resume();
         fragment2.registerObservers(true);
@@ -521,6 +579,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     @Override
     protected void onDestroy() {
+        hd.removeCallbacks(runnable);//停止查询播放状态
+        Logger.e("退出轮询");
         video1.release_resource();
         video2.release_resource();
         video1 = null;
@@ -546,6 +606,116 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         super.onBackPressed();
     }
 
+    /**
+     * 设置直播状态 {@see <a herf="https://github.com/chuanjiabao1981/qadoc/blob/master/live_status.md">直播状态</a> }
+     *
+     * @param videoState
+     */
+    private void setVideoState(VideoState videoState) {
+        Logger.e("videoState" + videoState.toString());
+        if (videoState == VideoState.INIT) {//初始化状态下查询状态
+            hd.removeCallbacks(runnable);
+            if (this.videoState == videoState) {
+                return;
+            }
+            playingReQuery = 0;//异常退出重新查询用
+            this.videoState = videoState;
+            queryVideoState();
+        } else if (videoState == VideoState.UNPLAY) {//未直播状态下 开始轮询
+            this.videoState = videoState;
+            playingReQuery = 0;//异常退出重新查询用
+            hd.removeCallbacks(runnable);
+            hd.postDelayed(runnable, 30000);
+            if (videoNoData1.getVisibility() == View.GONE) {
+                videoNoData1.setVisibility(View.VISIBLE);
+                if (bufferAnimation1.isRunning()) {
+                    bufferAnimation1.stop();
+                }
+                if (buffering1.getVisibility() == View.VISIBLE) {
+                    buffering1.setVisibility(View.GONE);
+                }
+            }
+            videoNoData2.setImageResource(R.mipmap.video_no_data);
+            if (videoNoData2.getVisibility() == View.GONE) {
+                videoNoData2.setVisibility(View.VISIBLE);
+                if (bufferAnimation2.isRunning()) {
+                    bufferAnimation2.stop();
+                }
+                if (buffering2.getVisibility() == View.VISIBLE) {
+                    buffering2.setVisibility(View.GONE);
+                }
+            }
+        } else if (videoState == VideoState.PLAYING) {//直播状态下 停止轮询等待完成
+            this.videoState = videoState;
+            if (playingReQuery < 1) {
+//                Logger.e("重新查询");
+                hd.postDelayed(runnable, 15000);
+            } else {
+//                Logger.e("不再查询");
+                hd.removeCallbacks(runnable);
+                playingReQuery = 0;
+            }
+            playingReQuery++;
+            refreshState();
+        } else if (videoState == VideoState.CLOSED) {//关闭状态   摄像头关闭
+            this.videoState = videoState;
+            hd.removeCallbacks(runnable);
+            hd.postDelayed(runnable, 30000);
+            refreshState();
+        }
+    }
+
+    private void queryVideoState() {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlCourses + id + "/live_status",
+                null, new VolleyListener(NEVideoPlayerActivity.this) {
+            @Override
+            protected void onTokenOut() {
+                tokenOut();
+            }
+
+            @Override
+            protected void onSuccess(JSONObject response) {
+                reload = 0;
+                try {
+                    JSONObject data = response.getJSONObject("data");
+                    int board = data.getInt("board");
+                    int camera = data.getInt("camera");
+                    if (camera == 0 && board == 0) {
+                        setVideoState(VideoState.UNPLAY);
+                    } else if (camera == 2 && board == 1) {
+                        setVideoState(VideoState.CLOSED);
+                    } else if (camera == 1 && board == 1) {
+                        setVideoState(VideoState.PLAYING);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Logger.e("成功--异常");
+                }
+            }
+
+            @Override
+            protected void onError(JSONObject response) {
+                if (reload < 2) {
+                    hd.post(runnable);
+                } else {
+                    hd.postDelayed(runnable, 30000);
+                }
+                reload++;
+            }
+        }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+                if (reload < 2) {
+                    hd.post(runnable);
+                } else {
+                    hd.postDelayed(runnable, 30000);
+                }
+                reload++;
+            }
+        });
+        addToRequestQueue(request);
+    }
 
     /**************************
      * VideoActivityInterface *
@@ -676,21 +846,17 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             mainVideo.addView(danmuView, 1);
         }
 
-//        mainView.addView(video2);
         mainView.addView(window2);
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             video2.setVideoScalingMode(true);
         }
         video1.setZOrderOnTop(true);
-//        floatingWindow.addView(video1);
         floatingWindow.addView(window1);
     }
 
     @Override
     public void changeSub2Main() {
         ismain = true;
-//        mainView.removeView(video2);
-//        subVideo.removeView(video1);
         mainView.removeView(window2);
         subVideo.removeView(window1);
         video1.setZOrderOnTop(false);
@@ -702,8 +868,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         danmuParam.addRule(RelativeLayout.BELOW, R.id.main_video);
         danmuView.setLayoutParams(danmuParam);
         danmuView.setVisibility(View.VISIBLE);
-//        mainView.addView(video1);
-//        subVideo.addView(video2);
         mainView.addView(window1);
         subVideo.addView(window2);
     }
