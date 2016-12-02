@@ -23,7 +23,6 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
-import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
@@ -133,7 +132,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         tagViewpagerImg.setOnGetView(new TagViewPager.OnGetView() {
             @Override
             public View getView(ViewGroup container, int position) {
-                Logger.e("position:" + position + "url:" + listBanner.get(position).getLogo_url());
+//                Logger.e("position:" + position + "url:" + listBanner.get(position).getLogo_url());
                 ImageView iv = new ImageView(getActivity());
                 iv.setClickable(true);
                 iv.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));

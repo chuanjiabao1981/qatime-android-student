@@ -229,9 +229,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                             Announcements data = JsonUtils.objectFromJson(response.toString(), Announcements.class);
                             if (data != null) {
                                 if (data.getData() != null) {
-                                    if (data.getData().getMembers() != null) {
-                                        ((FragmentPlayerMembers) fragBaseFragments.get(3)).setData(data.getData().getMembers());
-                                    }
+                                    ((FragmentPlayerMembers) fragBaseFragments.get(3)).setData(data.getData());
+                                    ((FragmentPlayerMessage)fragBaseFragments.get(1)).setOwner(data.getData().getOwner());
                                     if (data.getData().getAnnouncements() != null) {
                                         ((FragmentPlayerAnnouncements) fragBaseFragments.get(0)).setData(data.getData().getAnnouncements());
                                     }

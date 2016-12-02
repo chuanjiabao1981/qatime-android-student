@@ -7,7 +7,6 @@ import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,7 +46,7 @@ import cn.qatime.player.im.cache.TeamDataCache;
 public class FragmentPlayerMessage extends BaseFragment {
     private TextView tipText;
     public PullToRefreshListView listView;
-    public BaseAdapter adapter;
+    public MessageAdapter adapter;
     public List<IMMessage> items = new ArrayList<>();
 
     public Team team;
@@ -86,6 +85,7 @@ public class FragmentPlayerMessage extends BaseFragment {
             }
         }
     };
+    private String owner;
 
     @Nullable
     @Override
@@ -432,6 +432,16 @@ public class FragmentPlayerMessage extends BaseFragment {
 
     public void setChatCallBack(Callback c) {
         this.chatCallback = c;
+    }
+
+    public void setOwner(String owner) {
+        if (adapter != null) {
+            adapter.setOwner(owner);
+
+        }
+//        else {
+//
+//        }
     }
 
     public interface Callback {

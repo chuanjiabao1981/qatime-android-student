@@ -35,7 +35,6 @@ import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.TutorialClassBean;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -154,7 +153,7 @@ public class FragmentTutorshipTeaching extends BaseFragment {
                             TutorialClassBean data = JsonUtils.objectFromJson(response.toString(), TutorialClassBean.class);
                             if (data != null) {
                                 for(TutorialClassBean.Data item : data.getData()){
-                                    if(item.isIs_bought()||!item.isTasted()){//只显示试听未过期或已购买
+                                    if(item.isIs_bought()||item.isIs_tasting()){//只显示试听未过期或已购买
                                         list.add(item);
                                     }
                                 }

@@ -218,7 +218,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                             ((FragmentClassDetailTeacherInfo) fragBaseFragments.get(1)).setData(data);
                             ((FragmentClassDetailClassList) fragBaseFragments.get(2)).setData(data);
                             if (data.getData() != null) {
-                                if (data.getData().getIs_tasting()) {//显示进入试听按钮
+                                if (data.getData().getIs_tasting() || data.getData().isTasted()) {//显示进入试听按钮
 //                                    boolean hasPullAddress = !StringUtils.isNullOrBlanK(data.getData().getCamera()) && !StringUtils.isNullOrBlanK(data.getData().getBoard());//是否有拉流地址（本页代表已试听到期）
                                     auditionStart.setVisibility(View.VISIBLE);
                                     audition.setVisibility(View.GONE);

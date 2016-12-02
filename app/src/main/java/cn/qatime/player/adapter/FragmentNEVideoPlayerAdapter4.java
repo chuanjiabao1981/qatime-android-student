@@ -2,6 +2,7 @@ package cn.qatime.player.adapter;
 
 import android.content.Context;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
@@ -39,6 +40,16 @@ public class FragmentNEVideoPlayerAdapter4 extends CommonAdapter<Announcements.D
         if (!letterMap.containsKey(item.getFirstLetter())) {
             letterMap.put(item.getFirstLetter(), position);
         }
+        if (item.isOwner()) {
+            ((TextView) holder.getView(R.id.name)).setTextColor(0xffbe0b0b);
+            ((TextView) holder.getView(R.id.role)).setTextColor(0xffbe0b0b);
+            ((TextView) holder.getView(R.id.role)).setText("老师");
+        } else {
+            ((TextView) holder.getView(R.id.name)).setTextColor(0xff666666);
+            ((TextView) holder.getView(R.id.role)).setTextColor(0xff999999);
+            ((TextView) holder.getView(R.id.role)).setText("学生");
+        }
+
         holder.setText(R.id.name, item.getName());
         Glide.with(context).load(item.getIcon()).placeholder(R.mipmap.error_header).fitCenter().crossFade().transform(new GlideCircleTransform(context)).dontAnimate().into((ImageView) holder.getView(R.id.image));
 //        if (position == 0) {
