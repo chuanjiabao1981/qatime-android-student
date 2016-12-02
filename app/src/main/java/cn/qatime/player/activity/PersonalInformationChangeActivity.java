@@ -71,7 +71,6 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     private GradeBean gradeBean;
     private CustomProgressDialog progress;
     private AlertDialog alertDialog;
-    private String action;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +98,6 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         if (data != null && data.getData() != null) {
             initData(data);
         }
-        action = getIntent().getStringExtra("action");
     }
 
     private void initData(PersonalInformationBean data) {

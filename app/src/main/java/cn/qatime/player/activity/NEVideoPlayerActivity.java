@@ -282,7 +282,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                             if (data != null) {
                                 if (data.getData() != null) {
                                     ((FragmentPlayerMembers) fragBaseFragments.get(3)).setData(data.getData());
-                                    ((FragmentPlayerMessage)fragBaseFragments.get(1)).setOwner(data.getData().getOwner());
+                                    ((FragmentPlayerMessage) fragBaseFragments.get(1)).setOwner(data.getData().getOwner());
                                     if (data.getData().getAnnouncements() != null) {
                                         ((FragmentPlayerAnnouncements) fragBaseFragments.get(0)).setData(data.getData().getAnnouncements());
                                     }
@@ -371,6 +371,15 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         });
 
         content = (EditText) findViewById(R.id.content);
+        content.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus && isSubBig) {
+                    changeSubSmall();
+                    floatFragment.setSubBig(false);
+                }
+            }
+        });
         ImageView emoji = (ImageView) findViewById(R.id.emoji);
 
         Button send = (Button) findViewById(R.id.send);
