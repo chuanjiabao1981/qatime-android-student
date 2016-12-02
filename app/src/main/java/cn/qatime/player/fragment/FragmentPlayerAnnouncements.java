@@ -15,10 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
-import libraryextra.bean.Announcements;
+import cn.qatime.player.base.BaseFragment;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import cn.qatime.player.base.BaseFragment;
+import libraryextra.bean.Announcements;
 
 public class FragmentPlayerAnnouncements extends BaseFragment {
     private PullToRefreshListView listView;
@@ -66,15 +66,15 @@ public class FragmentPlayerAnnouncements extends BaseFragment {
             @Override
             public void convert(ViewHolder helper, Announcements.DataBean.AnnouncementsBean item, int position) {
                 if (position == 0) {
-                    helper.getView(R.id.late).setVisibility(View.VISIBLE);
-                    ((TextView) helper.getView(R.id.time)).setTextColor(0xff151515);
-                    ((TextView) helper.getView(R.id.describe)).setTextColor(0xff151515);
-                    helper.setImageResource(R.id.notify, R.mipmap.notify);
+//                    helper.getView(R.id.late).setVisibility(View.VISIBLE);
+                    ((TextView) helper.getView(R.id.time)).setTextColor(0xff999999);
+                    ((TextView) helper.getView(R.id.describe)).setTextColor(0xff666666);
+                    helper.setImageResource(R.id.notify, R.mipmap.announcements_new);
                 } else {
-                    helper.getView(R.id.late).setVisibility(View.GONE);
-                    ((TextView) helper.getView(R.id.time)).setTextColor(0xff545454);
-                    ((TextView) helper.getView(R.id.describe)).setTextColor(0xff545454);
-                    helper.setImageResource(R.id.notify, R.mipmap.notify_dark);
+//                    helper.getView(R.id.late).setVisibility(View.GONE);
+                    ((TextView) helper.getView(R.id.time)).setTextColor(0xff999999);
+                    ((TextView) helper.getView(R.id.describe)).setTextColor(0xff999999);
+                    helper.setImageResource(R.id.notify, R.mipmap.announcements_normal);
                 }
                 helper.setText(R.id.time, item.getEdit_at());
                 helper.setText(R.id.describe, item.getAnnouncement());

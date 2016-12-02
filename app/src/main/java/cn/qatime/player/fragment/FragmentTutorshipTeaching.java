@@ -35,7 +35,6 @@ import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.TutorialClassBean;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -68,11 +67,6 @@ public class FragmentTutorshipTeaching extends BaseFragment {
         adapter = new CommonAdapter<TutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship3) {
             @Override
             public void convert(ViewHolder helper, final TutorialClassBean.Data item, int position) {
-                /**
-                 * 当前页hasPullAddress一定为true
-                 */
-//                boolean isBought = item.isIs_bought();//已经购买
-//                boolean hasPullAddress = !StringUtils.isNullOrBlanK(item.getCamera()) && !StringUtils.isNullOrBlanK(item.getBoard());//是否有拉流地址
 
 
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
@@ -87,19 +81,6 @@ public class FragmentTutorshipTeaching extends BaseFragment {
                     }
                 });
 
-//                //试听状态
-//                TextView taste = helper.getView(R.id.taste);
-//                if (hasPullAddress) {//(肯定有拉流地址)
-//                    taste.setText("试听中");
-//                    taste.setBackgroundColor(0xffff9966);
-//                    helper.getView(R.id.enter).setEnabled(true);//按钮是否能被点击
-//                } else {
-//                    taste.setText("已试听");
-//                    taste.setBackgroundColor(0xffcccccc);
-//                    helper.getView(R.id.enter).setEnabled(false);//按钮是否能被点击
-//                }
-
-//                taste.setVisibility(isBought ? View.GONE : View.VISIBLE);//已购买不显示试听状态
 
 
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
@@ -172,7 +153,7 @@ public class FragmentTutorshipTeaching extends BaseFragment {
                             TutorialClassBean data = JsonUtils.objectFromJson(response.toString(), TutorialClassBean.class);
                             if (data != null) {
                                 for(TutorialClassBean.Data item : data.getData()){
-                                    if(!StringUtils.isNullOrBlanK(item.getCamera()) && !StringUtils.isNullOrBlanK(item.getBoard())){//只显示试听未过期或已购买
+                                    if(item.isIs_bought()||item.isIs_tasting()){//只显示试听未过期或已购买
                                         list.add(item);
                                     }
                                 }

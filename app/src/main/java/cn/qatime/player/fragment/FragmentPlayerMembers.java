@@ -66,11 +66,23 @@ public class FragmentPlayerMembers extends BaseFragment {
         return view;
     }
 
-    public void setData(List<Announcements.DataBean.MembersBean> accounts) {
+    /**
+     *  两个setData删除一个
+     *
+     * @param accounts
+     */
+    public void setData(Announcements.DataBean accounts) {
         if (accounts != null) {
             list.clear();
-            list.addAll(accounts);
+            list.addAll(accounts.getMembers());
             for (Announcements.DataBean.MembersBean item : list) {
+                if (!StringUtils.isNullOrBlanK(accounts.getOwner())) {
+                    if (accounts.getOwner().equals(item.getAccid())) {
+                        item.setOwner(true);
+                    } else {
+                        item.setOwner(false);
+                    }
+                }
                 if (StringUtils.isNullOrBlanK(item.getName())) {
                     item.setFirstLetter("");
                 } else {
@@ -86,4 +98,29 @@ public class FragmentPlayerMembers extends BaseFragment {
             hd.postDelayed(runnable, 200);
         }
     }
+
+//    public void setData(List<Announcements.DataBean.MembersBean> accounts, RemedialClassDetailBean.Teacher teacher) {
+//        list.clear();
+//        Announcements.DataBean.MembersBean teacherAccounts = new Announcements.DataBean.MembersBean();
+//        teacherAccounts.setName(teacher.getName());
+//        teacherAccounts.setIcon(teacher.getAvatar_url());
+//        list.add(teacherAccounts);
+//        if (accounts != null) {
+//            list.addAll(accounts);
+//            for (Announcements.DataBean.MembersBean item : list) {
+//                if (StringUtils.isNullOrBlanK(item.getName())) {
+//                    item.setFirstLetter("");
+//                } else {
+//                    item.setFirstLetter(StringUtils.getPYIndexStr(item.getName().substring(0, 1)));
+//                }
+//            }
+//            Collections.sort(list, new Comparator<Announcements.DataBean.MembersBean>() {
+//                @Override
+//                public int compare(Announcements.DataBean.MembersBean lhs, Announcements.DataBean.MembersBean rhs) {
+//                    return lhs.getFirstLetter().compareTo(rhs.getFirstLetter());
+//                }
+//            });
+//            hd.postDelayed(runnable, 200);
+//        }
+//    }
 }

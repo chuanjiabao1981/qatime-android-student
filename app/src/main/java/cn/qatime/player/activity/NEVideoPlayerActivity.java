@@ -44,9 +44,9 @@ import cn.qatime.player.bean.VideoState;
 import cn.qatime.player.fragment.VideoFloatFragment;
 import libraryextra.bean.Announcements;
 import cn.qatime.player.fragment.FragmentPlayerAnnouncements;
-import cn.qatime.player.fragment.FragmentPlayerMessage;
 import cn.qatime.player.fragment.FragmentPlayerLiveDetails;
 import cn.qatime.player.fragment.FragmentPlayerMembers;
+import cn.qatime.player.fragment.FragmentPlayerMessage;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.presenter.VideoControlPresenter;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
@@ -281,9 +281,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                             Announcements data = JsonUtils.objectFromJson(response.toString(), Announcements.class);
                             if (data != null) {
                                 if (data.getData() != null) {
-                                    if (data.getData().getMembers() != null) {
-                                        ((FragmentPlayerMembers) fragBaseFragments.get(3)).setData(data.getData().getMembers());
-                                    }
+                                    ((FragmentPlayerMembers) fragBaseFragments.get(3)).setData(data.getData());
+                                    ((FragmentPlayerMessage)fragBaseFragments.get(1)).setOwner(data.getData().getOwner());
                                     if (data.getData().getAnnouncements() != null) {
                                         ((FragmentPlayerAnnouncements) fragBaseFragments.get(0)).setData(data.getData().getAnnouncements());
                                     }

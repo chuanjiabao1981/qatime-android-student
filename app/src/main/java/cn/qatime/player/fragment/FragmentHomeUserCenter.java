@@ -59,7 +59,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
         if (BaseApplication.getProfile().getData() != null && BaseApplication.getProfile().getData().getUser() != null) {
             Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).placeholder(R.mipmap.personal_information_head).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
         }
-        name.setText(StringUtils.isNullOrBlanK(BaseApplication.getProfile().getData().getUser().getName())?"姓名":BaseApplication.getProfile().getData().getUser().getName());
+        name.setText(StringUtils.isNullOrBlanK(BaseApplication.getProfile().getData().getUser().getName())?"null":BaseApplication.getProfile().getData().getUser().getName());
         initData();
         order.setOnClickListener(this);
         wallet.setOnClickListener(this);
