@@ -54,7 +54,7 @@
                             android:layout_width="0dp"
                             android:layout_height="0dp"
                             android:scaleType="fitXY"
-                            android:src="@mipmap/personal_information_head"
+                            android:src="@mipmap/error_header_rect"
                             custom:layout_heightPercent="40%w"
                             custom:layout_widthPercent="40%w" />
 

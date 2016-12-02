@@ -131,22 +131,18 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onLocationBack(String result) {
                 utils.stopLocation();
-                if (result.length() > 0 && result.endsWith("市")) {
-                    result = result.substring(0, result.length() - 1);
-                }
                 for (CityBean.Data item : list) {
                     if (result.equals(item.getName())) {
                         locationCity = item;
                     }
                 }
                 if (locationCity == null) {//如果没有被赋值，则默认全国
-                    locationCity = new CityBean.Data("全国");
-                    Toast.makeText(CitySelectActivity.this, "您所在的地区尚未加盟，\n已为您切换至全国", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CitySelectActivity.this, "暂未获取到您的位置信息", Toast.LENGTH_SHORT).show();
+                }else{
+                    setCityAndHistory(locationCity);
+                    Logger.e("location", result);
+                    Logger.e("locationCity", locationCity.getName());
                 }
-
-                setCityAndHistory(locationCity);
-                Logger.e("location", result);
-                Logger.e("locationCity", locationCity.getName());
             }
         });
         utils.startLocation();

@@ -25,9 +25,5 @@
         android:horizontalSpacing="12dp"
         android:numColumns="4"
         android:verticalSpacing="12dp" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#ccc"
-        android:layout_marginLeft="12dp" />
+
 </LinearLayout>

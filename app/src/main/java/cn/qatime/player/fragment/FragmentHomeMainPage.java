@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
+import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
@@ -41,6 +42,7 @@ import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.bean.BannerRecommendBean;
 import cn.qatime.player.bean.ClassRecommendBean;
 import cn.qatime.player.bean.TeacherRecommendBean;
 import cn.qatime.player.utils.AMapLocationUtils;
@@ -51,8 +53,8 @@ import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.CityBean;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.SPUtils;
+import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.TagViewPager;
@@ -77,6 +79,8 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private List<CityBean.Data> listCity;
     private CityBean.Data locationCity;
     private AMapLocationUtils utils;
+    private List<BannerRecommendBean.DataBean> listBanner = new ArrayList<>();
+    private BannerRecommendBean.DataBean noBanner;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -112,31 +116,72 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private void setCity() {
         cityName.setText(BaseApplication.getCurrentCity().getName());
         page = 1;//重置为第一页
+        initBannerData();
         initTeacherData();
         initClassData();
     }
 
     private void initTagImg() {
-        final int imageIds[] = {R.mipmap.banner, R.mipmap.banner2, R.mipmap.banner3};
+//        final int imageIds[] = {R.mipmap.no_banner};
         ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()), ScreenUtils.getScreenWidth(getActivity()) / 3);
         tagViewpagerImg.setLayoutParams(params);
-        tagViewpagerImg.init(R.drawable.shape_photo_tag_select, R.drawable.shape_photo_tag_nomal, 16, 8, 4, 30);
+        noBanner = new BannerRecommendBean.DataBean();
+        listBanner.add(noBanner);
+        tagViewpagerImg.init(R.drawable.shape_photo_tag_select,R.drawable.shape_photo_tag_nomal, 16, 8, 4, 30);
         tagViewpagerImg.setAutoNext(true, 3000);
 //        viewPager.setId(1252);
         tagViewpagerImg.setOnGetView(new TagViewPager.OnGetView() {
             @Override
             public View getView(ViewGroup container, int position) {
+                Logger.e("position:" + position + "url:" + listBanner.get(position).getLogo_url());
                 ImageView iv = new ImageView(getActivity());
                 iv.setClickable(true);
                 iv.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
                 iv.setId(position);
                 iv.setScaleType(ImageView.ScaleType.FIT_XY);
-                iv.setImageResource(imageIds[position]);
+                Glide.with(getActivity()).load(listBanner.get(position).getLogo_url()).placeholder(R.mipmap.no_banner).into(iv);
                 container.addView(iv);
                 return iv;
             }
         });
-        tagViewpagerImg.setAdapter(imageIds.length, 0);
+        tagViewpagerImg.setAdapter(listBanner.size(), 0);
+    }
+
+    private void initBannerData() {
+        Map<String, String> map = new HashMap<>();
+//        map.put("per_page", String.valueOf(1));
+        map.put("city_id", BaseApplication.getCurrentCity().getId() + "");
+        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecommend + "index_banner" + "/items", map), null,
+                new VolleyListener(getActivity()) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        BannerRecommendBean bannerRecommendBean = JsonUtils.objectFromJson(response.toString(), BannerRecommendBean.class);
+                        listBanner.clear();
+                        if (bannerRecommendBean != null && bannerRecommendBean.getData() != null && bannerRecommendBean.getData().size() > 0) {
+                            listBanner.addAll(bannerRecommendBean.getData());
+                        }
+                        if (listBanner.size() == 0) {
+                            listBanner.add(noBanner);
+                        }
+                        tagViewpagerImg.notifyChanged(listBanner.size());
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
     }
 
     private void initTagViewpagerSubject() {
@@ -175,17 +220,22 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
             @Override
             public void convert(ViewHolder holder, TeacherRecommendBean.DataBean item, int position) {
-                Glide.with(getActivity()).load(item.getTeacher().getAvatar_url()).placeholder(R.mipmap.error_header).centerCrop().bitmapTransform(new GlideCircleTransform(getActivity())).crossFade().dontAnimate().into(((ImageView) holder.getView(R.id.teacher_img)));
-                holder.setText(R.id.teacher_text, item.getTeacher().getName());
+                if (item != null) {
+                    Glide.with(getActivity()).load(item.getTeacher().getAvatar_url()).error(R.mipmap.error_header).centerCrop().bitmapTransform(new GlideCircleTransform(getActivity())).crossFade().dontAnimate().into(((ImageView) holder.getView(R.id.teacher_img)));
+                    holder.setText(R.id.teacher_text, item.getTeacher().getName());
+                }
             }
         };
         gridviewTeacher.setAdapter(teacherAdapter);
         gridviewTeacher.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), TeacherDataActivity.class);
-                intent.putExtra("teacherId", listRecommendTeacher.get(position).getTeacher().getId());
-                startActivityForResult(intent, Constant.REQUEST);
+                if (listRecommendTeacher.get(position) != null) {
+                    Intent intent = new Intent(getActivity(), TeacherDataActivity.class);
+                    intent.putExtra("teacherId", listRecommendTeacher.get(position).getTeacher().getId());
+                    startActivityForResult(intent, Constant.REQUEST);
+                }
+
             }
         });
     }
@@ -193,26 +243,27 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private void initTeacherData() {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(page));
-        map.put("city_id", BaseApplication.getCurrentCity().getId() + "");
         map.put("per_page", String.valueOf(5));
+        map.put("city_id", BaseApplication.getCurrentCity().getId() + "");
         JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecommend + "index_teacher_recommend" + "/items", map), null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
                         TeacherRecommendBean teacherRecommendBean = JsonUtils.objectFromJson(response.toString(), TeacherRecommendBean.class);
+                        //teacherRecommendBean.getData()==null有两种情况  1、没有更多的老师。2、本来就没有老师
+                        page++;
+                        listRecommendTeacher.clear();
                         if (teacherRecommendBean != null && teacherRecommendBean.getData() != null && teacherRecommendBean.getData().size() > 0) {
-                            page++;
-                            listRecommendTeacher.clear();
                             listRecommendTeacher.addAll(teacherRecommendBean.getData());
-                            teacherAdapter.notifyDataSetChanged();
-                        } else {
-                            if (page != 1) {
-                                page = 1;
-                                initTeacherData();
-                            } else {
-                                Toast.makeText(getActivity(), "没有更多推荐信息", Toast.LENGTH_SHORT).show();
+                        }
+                        if (listRecommendTeacher.size() < 5) {
+                            page = 1; //一旦size小于5，说明没有更多推荐老师了，将page重置
+                            while (listRecommendTeacher.size() < 5) {
+                                listRecommendTeacher.add(null);
+
                             }
                         }
+                        teacherAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -233,6 +284,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         addToRequestQueue(request);
     }
 
+
     private void initGridClass() {
         classAdapter = new CommonAdapter<ClassRecommendBean.DataBean>(getContext(), listRecommendClass, R.layout.item_class_recommend) {
             @Override
@@ -242,24 +294,27 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
             @Override
             public void convert(ViewHolder holder, ClassRecommendBean.DataBean item, int position) {
-                Glide.with(getActivity()).load(item.getLive_studio_course().getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) holder.getView(R.id.class_recommend_img)));
-                holder.setText(R.id.course_title, item.getLive_studio_course().getName());
-                holder.setText(R.id.grade, item.getLive_studio_course().getGrade());
-                holder.setText(R.id.subject, item.getLive_studio_course().getSubject());
-                holder.setText(R.id.count, item.getLive_studio_course().getBuy_tickets_count() + "人报名");
-                ((TextView) holder.getView(R.id.reason)).setText(getReason(item.getReason()));
-                ((TextView) holder.getView(R.id.reason)).setBackgroundColor(getReasonBackground(item.getReason()));
+                if (item != null) {
+                    Glide.with(getActivity()).load(item.getLive_studio_course().getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) holder.getView(R.id.class_recommend_img)));
+                    holder.setText(R.id.course_title, item.getLive_studio_course().getName());
+                    holder.setText(R.id.grade, item.getLive_studio_course().getGrade());
+                    holder.setText(R.id.subject, item.getLive_studio_course().getSubject());
+                    holder.setText(R.id.count, item.getLive_studio_course().getBuy_tickets_count() + "人报名");
+                    ((TextView) holder.getView(R.id.reason)).setText(getReason(item.getReason()));
+                    ((TextView) holder.getView(R.id.reason)).setBackgroundColor(getReasonBackground(item.getReason()));
+                    ((TextView) holder.getView(R.id.reason)).setVisibility(View.VISIBLE);
+                }
             }
         };
         gridviewClass.setAdapter(classAdapter);
         gridviewClass.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
                 if (listRecommendClass.get(position) != null) {
+                    Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
                     intent.putExtra("id", listRecommendClass.get(position).getLive_studio_course().getId());
+                    startActivityForResult(intent, Constant.REQUEST);
                 }
-                startActivityForResult(intent, Constant.REQUEST);
             }
         });
     }
@@ -287,18 +342,21 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private void initClassData() {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(1));
-        map.put("city_id", BaseApplication.getCurrentCity().getId() + "");
         map.put("per_page", String.valueOf(6));
+        map.put("city_id", BaseApplication.getCurrentCity().getId() + "");
         JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecommend + "index_live_studio_course_recommend" + "/items", map), null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
                         ClassRecommendBean classRecommendBean = JsonUtils.objectFromJson(response.toString(), ClassRecommendBean.class);
+                        listRecommendClass.clear();
                         if (classRecommendBean != null && classRecommendBean.getData() != null) {
-                            listRecommendClass.clear();
                             listRecommendClass.addAll(classRecommendBean.getData());
-                            classAdapter.notifyDataSetChanged();
                         }
+                        while (listRecommendClass.size() < 6) {
+                            listRecommendClass.add(null);
+                        }
+                        classAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -378,9 +436,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                                 @Override
                                 public void onLocationBack(String result) {
                                     utils.stopLocation();
-                                    if (result.length() > 0 && result.endsWith("市")) {
-                                        result = result.substring(0, result.length() - 1);
-                                    }
+
                                     for (CityBean.Data item : listCity) {
                                         if (result.equals(item.getName())) {
                                             locationCity = item;
@@ -390,6 +446,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                                     if (currentCity == null) {
                                         if (locationCity == null) {//如果没有被赋值，则默认全国
                                             locationCity = new CityBean.Data("全国");
+                                            Toast.makeText(getActivity(), "暂未获取到您的位置信息，\n已为您切换至全国", Toast.LENGTH_SHORT).show();
                                             BaseApplication.setCurrentCity(locationCity);
                                             setCity();
                                         } else {
@@ -432,10 +489,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
-                // TODO: 2016/11/11 切换为全国
-                locationCity = new CityBean.Data("全国");
-                BaseApplication.setCurrentCity(locationCity);
-                setCity();
             }
         });
         confirm.setOnClickListener(new View.OnClickListener() {
