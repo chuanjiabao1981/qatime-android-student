@@ -127,7 +127,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         tagViewpagerImg.setLayoutParams(params);
         noBanner = new BannerRecommendBean.DataBean();
         listBanner.add(noBanner);
-        tagViewpagerImg.init(listBanner.size() == 1 ? 0 : R.drawable.shape_photo_tag_select, listBanner.size() == 1 ? 0 : R.drawable.shape_photo_tag_nomal, 16, 8, 4, 30);
+        tagViewpagerImg.init(R.drawable.shape_photo_tag_select,R.drawable.shape_photo_tag_nomal, 16, 8, 4, 30);
         tagViewpagerImg.setAutoNext(true, 3000);
 //        viewPager.setId(1252);
         tagViewpagerImg.setOnGetView(new TagViewPager.OnGetView() {
@@ -156,17 +156,14 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     @Override
                     protected void onSuccess(JSONObject response) {
                         BannerRecommendBean bannerRecommendBean = JsonUtils.objectFromJson(response.toString(), BannerRecommendBean.class);
+                        listBanner.clear();
                         if (bannerRecommendBean != null && bannerRecommendBean.getData() != null && bannerRecommendBean.getData().size() > 0) {
-                            listBanner.clear();
                             listBanner.addAll(bannerRecommendBean.getData());
-                            if (listBanner.size() == 0) {
-                                listBanner.add(noBanner);
-                            }
-                            tagViewpagerImg.init(listBanner.size() == 1 ? 0 : R.drawable.shape_photo_tag_select, listBanner.size() == 1 ? 0 : R.drawable.shape_photo_tag_nomal, 16, 8, 4, 30);
-                            tagViewpagerImg.setAutoNext(true, 3000);
-                            tagViewpagerImg.refresh(listBanner.size());
-                        } else {
                         }
+                        if (listBanner.size() == 0) {
+                            listBanner.add(noBanner);
+                        }
+                        tagViewpagerImg.notifyChanged(listBanner.size());
                     }
 
                     @Override
@@ -253,22 +250,20 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     @Override
                     protected void onSuccess(JSONObject response) {
                         TeacherRecommendBean teacherRecommendBean = JsonUtils.objectFromJson(response.toString(), TeacherRecommendBean.class);
+                        //teacherRecommendBean.getData()==null有两种情况  1、没有更多的老师。2、本来就没有老师
+                        page++;
+                        listRecommendTeacher.clear();
                         if (teacherRecommendBean != null && teacherRecommendBean.getData() != null && teacherRecommendBean.getData().size() > 0) {
-                            page++;
-                            listRecommendTeacher.clear();
                             listRecommendTeacher.addAll(teacherRecommendBean.getData());
+                        }
+                        if (listRecommendTeacher.size() < 5) {
+                            page = 1; //一旦size小于5，说明没有更多推荐老师了，将page重置
                             while (listRecommendTeacher.size() < 5) {
                                 listRecommendTeacher.add(null);
-                            }
-                            teacherAdapter.notifyDataSetChanged();
-                        } else {
-                            if (page != 1) {
-                                page = 1;
-                                initTeacherData();
-                            } else {
-                                Toast.makeText(getActivity(), "没有更多推荐信息", Toast.LENGTH_SHORT).show();
+
                             }
                         }
+                        teacherAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -354,14 +349,14 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     @Override
                     protected void onSuccess(JSONObject response) {
                         ClassRecommendBean classRecommendBean = JsonUtils.objectFromJson(response.toString(), ClassRecommendBean.class);
+                        listRecommendClass.clear();
                         if (classRecommendBean != null && classRecommendBean.getData() != null) {
-                            listRecommendClass.clear();
                             listRecommendClass.addAll(classRecommendBean.getData());
-                            while (listRecommendClass.size() < 6) {
-                                listRecommendClass.add(null);
-                            }
-                            classAdapter.notifyDataSetChanged();
                         }
+                        while (listRecommendClass.size() < 6) {
+                            listRecommendClass.add(null);
+                        }
+                        classAdapter.notifyDataSetChanged();
                     }
 
                     @Override
