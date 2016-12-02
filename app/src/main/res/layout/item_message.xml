@@ -3,14 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp">
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
 
     <LinearLayout
         android:id="@+id/left"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingTop="10dp">
 
         <ImageView
             android:id="@+id/other_head"
@@ -35,7 +36,7 @@
                     android:id="@+id/other_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#565656"
+                    android:textColor="#333"
                     android:textSize="14sp" />
 
                 <TextView
@@ -44,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:text="00：00"
-                    android:textColor="#a1a1a1" />
+                    android:textColor="#999" />
 
             </LinearLayout>
 
@@ -54,7 +55,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="50dp"
                 android:background="@drawable/chatfrom_bg_normal"
-                android:gravity="center_vertical" />
+                android:gravity="center_vertical"
+                android:textColor="#666" />
         </LinearLayout>
     </LinearLayout>
 
@@ -78,17 +80,17 @@
                 android:layout_gravity="right"
                 android:layout_marginLeft="5dp"
                 android:text="00：00"
-                android:textColor="#a1a1a1" />
+                android:textColor="#999" />
 
             <TextView
                 android:id="@+id/my_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-
                 android:layout_marginLeft="50dp"
                 android:background="@drawable/chatto_bg_normal"
-                android:gravity="center_vertical" />
+                android:gravity="center_vertical"
+                android:textColor="#666" />
         </LinearLayout>
 
         <ImageView
