@@ -40,7 +40,7 @@
 
             <TextView
                 android:id="@+id/text_getcode"
-                style="@style/button_style"
+                style="@style/button_style_with_edit"
                 android:text="@string/getcode" />
         </LinearLayout>
     </LinearLayout>

@@ -125,9 +125,9 @@ public class MainActivity extends BaseFragmentActivity {
         fragmentlayout.setOnChangeFragmentListener(new FragmentLayout.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
-                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xffafaa9a);
+                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff666666);
                 ((ImageView) lastTabView.findViewById(tab_img[lastPosition])).setImageResource(tabImages[lastPosition][1]);
-                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xfff45050);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffbe0b0b);
                 ((ImageView) currentTabView.findViewById(tab_img[position])).setImageResource(tabImages[position][0]);
 //                enableMsgNotification(false);
             }
@@ -160,8 +160,16 @@ public class MainActivity extends BaseFragmentActivity {
                     fragmentlayout.setCurrenItem(2);
                     Intent intent = new Intent(MainActivity.this, ClassTimeTableActivity.class);
                     startActivity(intent);
+                } else if (action.equals(Constant.LoginAction.toPersonalInformationChange)) {
+                    fragmentlayout.setCurrenItem(3);
+                    Intent intent = new Intent(MainActivity.this, PersonalInformationActivity.class);
+                    startActivityForResult(intent, Constant.REQUEST);
                 }
             }
+        }
+        if (resultCode == Constant.RESPONSE && data.getIntExtra("from", -1) != -1) {//如果有返回并且携带了跳转码，则跳到响应的页面
+            initView();//刷新view
+            fragmentlayout.setCurrenItem(data.getIntExtra("from", -1));
         }
     }
 
@@ -204,14 +212,20 @@ public class MainActivity extends BaseFragmentActivity {
     private void parseIntent() {
         Intent data = getIntent();
         /**     * 解析通知栏发来的云信消息     */
-        if (data != null && data.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT)) {
-            Intent intent = new Intent(this, MessageFragmentActivity.class);
-            intent.putExtra("intent", data);
-            startActivity(intent);
-        } else if (data != null && data.hasExtra("type") && data.getStringExtra("type").equals("system_message")) {//转到系统消息页面
-            Intent intent = new Intent(this, MessageFragmentActivity.class);
-            intent.putExtra("intent", data);
-            startActivity(intent);
+        if (data != null) {
+            if (data.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT)) {
+                Intent intent = new Intent(this, MessageFragmentActivity.class);
+                intent.putExtra("intent", data);
+                startActivity(intent);
+            } else if (data.hasExtra("type") && data.getStringExtra("type").equals("system_message")) {//转到系统消息页面
+                Intent intent = new Intent(this, MessageFragmentActivity.class);
+                intent.putExtra("intent", data);
+                startActivity(intent);
+            } else if (!StringUtils.isNullOrBlanK(data.getStringExtra("action")) && data.getStringExtra("action").equals(Constant.LoginAction.toPersonalInformationChange)) {
+                fragmentlayout.setCurrenItem(3);
+                Intent intent = new Intent(MainActivity.this, PersonalInformationActivity.class);
+                startActivityForResult(intent, Constant.REQUEST);
+            }
         }
     }
 

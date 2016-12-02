@@ -64,15 +64,15 @@
     </style>
 
     <style name="activity_edit_text_style">//输入框
-        <item name="android:layout_height">36dp</item>
+        <item name="android:layout_height">45dp</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:background">@drawable/shape_input_radius</item>
+        <item name="android:background">@drawable/shape_input</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:paddingLeft">4dp</item>
-        <item name="android:paddingRight">4dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
         <item name="android:singleLine">true</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textColor">#ff333333</item>
         <item name="android:textColorHint">#ff999999</item>
     </style>
@@ -103,12 +103,22 @@
         <item name="android:gravity">center</item>
         <item name="android:orientation">horizontal</item>
     </style>
-
+    <style name="button_style_with_edit"> //输入框旁边的小按钮
+        <item name="android:layout_height">45dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/button_bg_selector_red_with_stork_no_corners</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
     <style name="button_style"> //小按钮
-        <item name="android:layout_height">36dp</item>
+        <item name="android:layout_height">40dp</item>
         <item name="android:clickable">true</item>
         <item name="android:background">@drawable/button_bg_selector_red_with_stork</item>
         <item name="android:gravity">center</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:textColor">@color/colorPrimary</item>
@@ -120,6 +130,7 @@
         <item name="android:layout_marginBottom">10dp</item>
         <item name="android:layout_marginLeft">12dp</item>
         <item name="android:layout_marginRight">12dp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/button_bg_selector_red_with_stork</item>
         <item name="android:textColor">@color/colorPrimary</item>
@@ -169,12 +180,12 @@
     </style>
 
     <style name="tab_menu_text_color_select">//菜单栏文字选中
-        <item name="android:textColor">#fff45050</item>
+        <item name="android:textColor">#ffbe0b0b</item>
         <item name="android:textSize">12sp</item>
     </style>
 
     <style name="tab_menu_text_color_normal">//菜单栏文字未选中
-        <item name="android:textColor">#ffafaa9a</item>
+        <item name="android:textColor">#ff666666</item>
         <item name="android:textSize">12sp</item>
     </style>
 
