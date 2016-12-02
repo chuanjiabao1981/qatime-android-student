@@ -180,12 +180,12 @@
     </style>
 
     <style name="tab_menu_text_color_select">//菜单栏文字选中
-        <item name="android:textColor">#fff45050</item>
+        <item name="android:textColor">#ffbe0b0b</item>
         <item name="android:textSize">12sp</item>
     </style>
 
     <style name="tab_menu_text_color_normal">//菜单栏文字未选中
-        <item name="android:textColor">#ffafaa9a</item>
+        <item name="android:textColor">#ff666666</item>
         <item name="android:textSize">12sp</item>
     </style>
 

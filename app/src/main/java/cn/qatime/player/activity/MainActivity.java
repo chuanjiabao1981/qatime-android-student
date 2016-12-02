@@ -125,9 +125,9 @@ public class MainActivity extends BaseFragmentActivity {
         fragmentlayout.setOnChangeFragmentListener(new FragmentLayout.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
-                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xffafaa9a);
+                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff666666);
                 ((ImageView) lastTabView.findViewById(tab_img[lastPosition])).setImageResource(tabImages[lastPosition][1]);
-                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xfff45050);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffbe0b0b);
                 ((ImageView) currentTabView.findViewById(tab_img[position])).setImageResource(tabImages[position][0]);
 //                enableMsgNotification(false);
             }
