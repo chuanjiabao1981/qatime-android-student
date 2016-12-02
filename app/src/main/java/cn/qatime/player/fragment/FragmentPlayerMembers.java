@@ -17,6 +17,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.adapter.FragmentNEVideoPlayerAdapter4;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.bean.Announcements;
+import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.StringUtils;
 
 public class FragmentPlayerMembers extends BaseFragment {
@@ -66,9 +67,37 @@ public class FragmentPlayerMembers extends BaseFragment {
         return view;
     }
 
+    /**
+     * todo 两个setData删除一个
+     * @param accounts
+     */
     public void setData(List<Announcements.DataBean.MembersBean> accounts) {
         if (accounts != null) {
             list.clear();
+            list.addAll(accounts);
+            for (Announcements.DataBean.MembersBean item : list) {
+                if (StringUtils.isNullOrBlanK(item.getName())) {
+                    item.setFirstLetter("");
+                } else {
+                    item.setFirstLetter(StringUtils.getPYIndexStr(item.getName().substring(0, 1)));
+                }
+            }
+            Collections.sort(list, new Comparator<Announcements.DataBean.MembersBean>() {
+                @Override
+                public int compare(Announcements.DataBean.MembersBean lhs, Announcements.DataBean.MembersBean rhs) {
+                    return lhs.getFirstLetter().compareTo(rhs.getFirstLetter());
+                }
+            });
+            hd.postDelayed(runnable, 200);
+        }
+    }
+    public void setData(List<Announcements.DataBean.MembersBean> accounts, RemedialClassDetailBean.Teacher teacher) {
+        list.clear();
+        Announcements.DataBean.MembersBean teacherAccounts = new Announcements.DataBean.MembersBean();
+        teacherAccounts.setName(teacher.getName());
+        teacherAccounts.setIcon(teacher.getAvatar_url());
+        list.add(teacherAccounts);
+        if (accounts != null) {
             list.addAll(accounts);
             for (Announcements.DataBean.MembersBean item : list) {
                 if (StringUtils.isNullOrBlanK(item.getName())) {
