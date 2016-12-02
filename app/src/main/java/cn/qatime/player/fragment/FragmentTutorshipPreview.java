@@ -37,7 +37,6 @@ import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.TutorialClassBean;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -72,20 +71,9 @@ public class FragmentTutorshipPreview extends BaseFragment {
 
             @Override
             public void convert(ViewHolder helper, final TutorialClassBean.Data item, int position) {
-                /**
-                 * 当前页hasPullAddress一定为true
-                 */
                 boolean isBought = item.isIs_bought();//已经购买
-//                boolean hasPullAddress = !StringUtils.isNullOrBlanK(item.getCamera()) && !StringUtils.isNullOrBlanK(item.getBoard());//是否有拉流地址
                 //试听状态
                 TextView taste = helper.getView(R.id.taste);
-//                if (hasPullAddress) {//有拉流地址说明试听没过期
-//                    taste.setText("试听中");
-//                    taste.setBackgroundColor(0xffff9966);
-//                } else {
-//                    taste.setText("已试听");
-//                    taste.setBackgroundColor(0xffcccccc);
-//                }
 
                 taste.setVisibility(isBought ? View.GONE : View.VISIBLE);//已购买不显示
 
@@ -164,7 +152,7 @@ public class FragmentTutorshipPreview extends BaseFragment {
                             TutorialClassBean data = JsonUtils.objectFromJson(response.toString(), TutorialClassBean.class);
                             if (data != null) {
                                 for(TutorialClassBean.Data item : data.getData()){
-                                    if(!StringUtils.isNullOrBlanK(item.getCamera()) && !StringUtils.isNullOrBlanK(item.getBoard())){//只显示试听未过期或已购买
+                                    if(item.isIs_bought()||!item.isTasted()){//只显示试听未过期或已购买
                                         list.add(item);
                                     }
                                 }

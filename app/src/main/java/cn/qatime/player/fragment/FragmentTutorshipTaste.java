@@ -38,7 +38,6 @@ import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.TutorialClassBean;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -60,7 +59,7 @@ public class FragmentTutorshipTaste extends BaseFragment {
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
         listView.setMode(PullToRefreshBase.Mode.BOTH);
-        listView.setEmptyView(View.inflate(getActivity(),R.layout.empty_view,null));
+        listView.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
         listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResourceString(R.string.refreshing));
@@ -77,7 +76,6 @@ public class FragmentTutorshipTaste extends BaseFragment {
                 String status = item.getStatus();
 
                 boolean isTeaching = "teaching".equals(status);//是否是开课中
-                boolean hasPullAddress = !StringUtils.isNullOrBlanK(item.getCamera()) && !StringUtils.isNullOrBlanK(item.getBoard());//是否有拉流地址（本页代表已试听到期）
 
                 //进入状态
                 helper.getView(R.id.enter).setVisibility(isTeaching ? View.VISIBLE : View.GONE);//进入播放器按钮显示或隐藏
@@ -95,7 +93,7 @@ public class FragmentTutorshipTaste extends BaseFragment {
 
                 //试听状态
                 TextView taste = helper.getView(R.id.taste);
-                if (hasPullAddress) {//有拉流地址说明试听没过期
+                if (!item.isTasted()) {//tasted为true为已经试听
                     taste.setText("试听中");
                     taste.setBackgroundColor(0xffff9966);
                     helper.getView(R.id.enter).setEnabled(true);//按钮是否能被点击
@@ -112,7 +110,7 @@ public class FragmentTutorshipTaste extends BaseFragment {
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
                 helper.setText(R.id.grade, item.getGrade());
 
-                if ("init".equals(status)||"published".equals(status)||"ready".equals(status)) {
+                if ("init".equals(status) || "published".equals(status) || "ready".equals(status)) {
                     helper.getView(R.id.teaching_time).setVisibility(View.VISIBLE);
                     helper.getView(R.id.class_over).setVisibility(View.GONE);
                     helper.getView(R.id.progress).setVisibility(View.GONE);
@@ -126,11 +124,11 @@ public class FragmentTutorshipTaste extends BaseFragment {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                }  else if ("completed".equals(status)||"finished".equals(status)) {
+                } else if ("completed".equals(status) || "finished".equals(status)) {
                     helper.getView(R.id.class_over).setVisibility(View.VISIBLE);
                     helper.getView(R.id.teaching_time).setVisibility(View.GONE);
                     helper.getView(R.id.progress).setVisibility(View.GONE);
-                }else {
+                } else {
                     helper.getView(R.id.progress).setVisibility(View.VISIBLE);
                     helper.getView(R.id.teaching_time).setVisibility(View.GONE);
                     helper.getView(R.id.class_over).setVisibility(View.GONE);
@@ -203,8 +201,8 @@ public class FragmentTutorshipTaste extends BaseFragment {
                         try {
                             TutorialClassBean data = JsonUtils.objectFromJson(response.toString(), TutorialClassBean.class);
                             if (data != null) {
-                                for(TutorialClassBean.Data item : data.getData()){
-                                    if(item.isIs_tasting()){//只显示试听
+                                for (TutorialClassBean.Data item : data.getData()) {
+                                    if (item.isIs_tasting() || item.isTasted()) {//只显示试听
                                         list.add(item);
                                     }
                                 }
