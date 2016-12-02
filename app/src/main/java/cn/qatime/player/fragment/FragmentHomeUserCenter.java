@@ -34,6 +34,7 @@ import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.transformation.GlideCircleTransform;
+import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyListener;
 
 public class FragmentHomeUserCenter extends BaseFragment implements View.OnClickListener {
@@ -58,7 +59,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
         if (BaseApplication.getProfile().getData() != null && BaseApplication.getProfile().getData().getUser() != null) {
             Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).placeholder(R.mipmap.personal_information_head).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
         }
-        name.setText(BaseApplication.getProfile().getData().getUser().getName());
+        name.setText(StringUtils.isNullOrBlanK(BaseApplication.getProfile().getData().getUser().getName())?"姓名":BaseApplication.getProfile().getData().getUser().getName());
         initData();
         order.setOnClickListener(this);
         wallet.setOnClickListener(this);
@@ -139,14 +140,14 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
         Logger.e("图片返回");
         if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
             Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).placeholder(R.mipmap.personal_information_head).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
-            name.setText(BaseApplication.getProfile().getData().getUser().getName());
+            name.setText(StringUtils.isNullOrBlanK(BaseApplication.getProfile().getData().getUser().getName())?"姓名":BaseApplication.getProfile().getData().getUser().getName());
             initData();
         }
     }
 
     private void assignViews(View view) {
         information = (LinearLayout) view.findViewById(R.id.information);
-        banner = (ImageView) view.findViewById(R.id.head_sculpture);
+        banner = (ImageView) view.findViewById(R.id.banner);
         headSculpture = (ImageView) view.findViewById(R.id.head_sculpture);
         name = (TextView) view.findViewById(R.id.name);
         balance = (TextView) view.findViewById(R.id.balance);

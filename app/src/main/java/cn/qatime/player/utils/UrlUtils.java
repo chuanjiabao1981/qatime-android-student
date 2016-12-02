@@ -1,5 +1,7 @@
 package cn.qatime.player.utils;
 
+import com.orhanobut.logger.Logger;
+
 import java.util.Iterator;
 import java.util.Map;
 
@@ -53,13 +55,10 @@ public class UrlUtils {
 
     public static String getUrl(String function, Map<String, String> params) {
         String url = function + "?" + Map2String(params);
-//        if (url.endsWith("&quot")) {
-//            url= url.trim().substring(0, url.length() - 5);
-//        }
         if (url.endsWith("&")) {
             url = url.substring(0, url.length() - 1);
         }
-//        LogUtils.e("请求地址------    " + url);
+        Logger.e("request*url****" + url);
         return url;
     }
 

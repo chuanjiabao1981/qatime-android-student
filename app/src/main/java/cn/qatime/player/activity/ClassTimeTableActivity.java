@@ -145,7 +145,7 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         adapter = new CommonAdapter<ClassTimeTableBean.DataEntity.LessonsEntity>(this, itemList, R.layout.item_activity_class_time_table) {
             @Override
             public void convert(ViewHolder helper, final ClassTimeTableBean.DataEntity.LessonsEntity item, int position) {
-                Glide.with(ClassTimeTableActivity.this).load(item.getCourse_publicize()).centerCrop().crossFade().dontAnimate().into((ImageView) helper.getView(R.id.image));
+                Glide.with(ClassTimeTableActivity.this).load(item.getCourse_publicize()).placeholder(R.mipmap.error_header_rect).centerCrop().crossFade().dontAnimate().into((ImageView) helper.getView(R.id.image));
 //                helper.setText(R.id.course, item.getCourse_name());
                 helper.setText(R.id.classname,  item.getName());
                 try {

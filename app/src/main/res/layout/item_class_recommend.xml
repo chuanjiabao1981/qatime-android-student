@@ -15,9 +15,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scaleType="fitXY"
+            android:src="@mipmap/photo"
             custom:layout_heightPercent="60%w"
-            custom:layout_widthPercent="100%w"
-            android:src="@mipmap/photo" />
+            custom:layout_widthPercent="100%w" />
 
         <TextView
             android:id="@+id/reason"

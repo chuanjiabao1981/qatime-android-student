@@ -1,4 +1,4 @@
-<resources tools:ignore="MissingTranslation" xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!--//刷新-->
     <string name="pull_to_refresh">下拉刷新</string>
     <string name="pull_to_load">上拉加载</string>
@@ -142,12 +142,14 @@
     <!--//登录-->
     <string name="account">请输入账号</string>
     <string name="password">请输入密码</string>
-    <string name="register">注册</string>
+    <string name="register">注册账号</string>
+    <string name="enter">直接进入</string>
     <string name="login">登录</string>
+    <string name="click_login">点击登录</string>
+    <string name="login_right_now">立即登录</string>
     <string name="forget_password">忘记密码</string>
     <string name="verification_code">请输入验证码</string>
     <string name="verification_code_is_incorrect">验证码不正确</string>
-    <string name="change_it">看不清，换一张？</string>
     <string name="logout">退出登录</string>
     <string name="press_another_exit">再按一次退出程序</string>
     <!--//注册-->
@@ -159,7 +161,7 @@
     <string name="hint_input_password">输入登录密码</string>
     <string name="hint_confirm_password">确认登录密码</string>
     <string name="hint_qatime_register_code">请输入答疑时间注册码</string>
-    <string name="agree">同意</string>
+    <string name="agree"> 同意</string>
     <string name="agreement">《答疑时间用户协议》</string>
     <string name="phone_number_is_incorrect">手机号码不正确</string>
     <string name="can_not_be_empty">不能为空</string>
@@ -454,4 +456,6 @@
     <string name="course_arrangement">课程安排</string>
     <string name="audition_over">试听结束</string>
     <string name="class_missed">待补课</string>
+    <string name="unlogin_alert">您还未登录,请先登录!</string>
+    <string name="hader_can_not_be_empty">头像不能为空</string>
 </resources>

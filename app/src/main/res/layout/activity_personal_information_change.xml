@@ -27,8 +27,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:orientation="horizontal"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -101,13 +101,13 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textColorHint="#bfbfbf"
                     android:background="@drawable/shape_input_radius"
                     android:hint="@string/hint_name"
                     android:inputType="text"
                     android:paddingBottom="5dp"
                     android:paddingTop="5dp"
                     android:textColor="#1e1e1e"
+                    android:textColorHint="#bfbfbf"
                     android:textSize="14sp" />
             </LinearLayout>
 
@@ -187,11 +187,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0000年00月00日" />
+
                 <ImageView
                     android:layout_width="12dp"
                     android:layout_height="12dp"
                     android:layout_marginLeft="2dp"
-                    android:src="@mipmap/down"/>
+                    android:src="@mipmap/down" />
 
             </LinearLayout>
 
@@ -204,8 +205,8 @@
                 android:id="@+id/grade_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
                 android:clickable="true"
+                android:gravity="center_vertical"
                 android:padding="12dp">
 
                 <TextView
@@ -223,13 +224,14 @@
                 <TextView
                     android:id="@+id/text_grade"
                     android:layout_width="wrap_content"
-                    android:text="高一"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="高一" />
+
                 <ImageView
                     android:layout_width="12dp"
                     android:layout_height="12dp"
                     android:layout_marginLeft="2dp"
-                    android:src="@mipmap/down"/>
+                    android:src="@mipmap/down" />
             </LinearLayout>
 
             <View
@@ -261,10 +263,10 @@
                     android:layout_weight="1"
                     android:background="@drawable/shape_input"
                     android:gravity="top"
-                    android:textColorHint="#bfbfbf"
                     android:hint="@string/hint_profiles"
                     android:minLines="3"
                     android:textColor="#1e1e1e"
+                    android:textColorHint="#bfbfbf"
                     android:textSize="14sp" />
             </LinearLayout>
 
@@ -281,10 +283,10 @@
         android:id="@+id/complete"
         android:layout_width="match_parent"
         android:layout_height="36dp"
+        android:layout_marginBottom="12dp"
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
         android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
         android:background="@drawable/button_bg_selector_red"
         android:gravity="center"
         android:text="@string/finish"

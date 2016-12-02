@@ -22,7 +22,6 @@ public class FragmentHomeClassTable extends BaseFragment {
 
     ImageView image;
     FragmentLayoutWithLine fragmentlayout;
-    private int id;
 
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2};
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();

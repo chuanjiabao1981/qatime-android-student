@@ -234,20 +234,13 @@ public class MessageAdapter extends BaseAdapter {
     }
 
     private String buildInviteMemberNotification(MemberChangeAttachment a, String fromAccount) {
-        StringBuilder sb = new StringBuilder();
-        String selfName = getTeamMemberDisplayName(fromAccount);
+        //        String selfName = getTeamMemberDisplayName(fromAccount);
+//
+//        sb.append(selfName);
+//        sb.append("邀请 ");
+        //        Team team = TeamDataCache.getInstance().getTeamById(teamId.get());
 
-        sb.append(selfName);
-        sb.append("邀请 ");
-        sb.append(buildMemberListString(a.getTargets(), fromAccount));
-        Team team = TeamDataCache.getInstance().getTeamById(teamId.get());
-        if (team.getType() == TeamTypeEnum.Advanced) {
-            sb.append(" 加入群");
-        } else {
-            sb.append(" 加入讨论组");
-        }
-
-        return sb.toString();
+        return buildMemberListString(a.getTargets(), fromAccount) + " 加入了本班";
     }
 
     private String buildKickMemberNotification(MemberChangeAttachment a) {
@@ -259,8 +252,6 @@ public class MessageAdapter extends BaseAdapter {
         } else {
             sb.append(" 已被移出讨论组");
         }
-
-
         return sb.toString();
     }
 
@@ -283,37 +274,37 @@ public class MessageAdapter extends BaseAdapter {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<TeamFieldEnum, Object> field : a.getUpdatedFields().entrySet()) {
             if (field.getKey() == TeamFieldEnum.Name) {
-                sb.append("名称被更新为 " + field.getValue());
+                sb.append("名称被更新为 ").append(field.getValue());
             } else if (field.getKey() == TeamFieldEnum.Introduce) {
-                sb.append("群介绍被更新为 " + field.getValue());
+                sb.append("群介绍被更新为 ").append(field.getValue());
             } else if (field.getKey() == TeamFieldEnum.Announcement) {
-                sb.append(TeamDataCache.getInstance().getTeamMemberDisplayNameYou(tid, account) + " 修改了群公告");
+                sb.append(TeamDataCache.getInstance().getTeamMemberDisplayNameYou(tid, account)).append(" 修改了群公告");
             } else if (field.getKey() == TeamFieldEnum.VerifyType) {
                 VerifyTypeEnum type = (VerifyTypeEnum) field.getValue();
                 String authen = "群身份验证权限更新为";
                 if (type == VerifyTypeEnum.Free) {
-                    sb.append(authen + context.getString(R.string.team_allow_anyone_join));
+                    sb.append(authen).append(context.getString(R.string.team_allow_anyone_join));
                 } else if (type == VerifyTypeEnum.Apply) {
-                    sb.append(authen + context.getString(R.string.team_need_authentication));
+                    sb.append(authen).append(context.getString(R.string.team_need_authentication));
                 } else {
-                    sb.append(authen + context.getString(R.string.team_not_allow_anyone_join));
+                    sb.append(authen).append(context.getString(R.string.team_not_allow_anyone_join));
                 }
             } else if (field.getKey() == TeamFieldEnum.Extension) {
-                sb.append("群扩展字段被更新为 " + field.getValue());
+                sb.append("群扩展字段被更新为 ").append(field.getValue());
             } else if (field.getKey() == TeamFieldEnum.Ext_Server) {
-                sb.append("群扩展字段(服务器)被更新为 " + field.getValue());
+                sb.append("群扩展字段(服务器)被更新为 ").append(field.getValue());
             } else if (field.getKey() == TeamFieldEnum.ICON) {
                 sb.append("群头像已更新");
             } else if (field.getKey() == TeamFieldEnum.InviteMode) {
-                sb.append("群邀请他人权限被更新为 " + field.getValue());
+                sb.append("群邀请他人权限被更新为 ").append(field.getValue());
             } else if (field.getKey() == TeamFieldEnum.TeamUpdateMode) {
-                sb.append("群资料修改权限被更新为 " + field.getValue());
+                sb.append("群资料修改权限被更新为 ").append(field.getValue());
             } else if (field.getKey() == TeamFieldEnum.BeInviteMode) {
-                sb.append("群被邀请人身份验证权限被更新为 " + field.getValue());
+                sb.append("群被邀请人身份验证权限被更新为 ").append(field.getValue());
             } else if (field.getKey() == TeamFieldEnum.TeamExtensionUpdateMode) {
-                sb.append("群扩展字段修改权限被更新为 " + field.getValue());
+                sb.append("群扩展字段修改权限被更新为 ").append(field.getValue());
             } else {
-                sb.append("群" + field.getKey() + "被更新为 " + field.getValue());
+                sb.append("群").append(field.getKey()).append("被更新为 ").append(field.getValue());
             }
             sb.append("\r\n");
         }
@@ -324,57 +315,26 @@ public class MessageAdapter extends BaseAdapter {
     }
 
     private String buildManagerPassTeamApplyNotification(MemberChangeAttachment a) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("管理员通过用户 ");
-        sb.append(buildMemberListString(a.getTargets(), null));
-        sb.append(" 的入群申请");
-
-        return sb.toString();
+        return "管理员通过用户 " + buildMemberListString(a.getTargets(), null) + " 的入群申请";
     }
 
     private String buildTransferOwnerNotification(String from, MemberChangeAttachment a) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getTeamMemberDisplayName(from));
-        sb.append(" 将群转移给 ");
-        sb.append(buildMemberListString(a.getTargets(), null));
-
-        return sb.toString();
+        return getTeamMemberDisplayName(from) + " 将群转移给 " + buildMemberListString(a.getTargets(), null);
     }
 
     private String buildAddTeamManagerNotification(MemberChangeAttachment a) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(buildMemberListString(a.getTargets(), null));
-        sb.append(" 被任命为管理员");
-
-        return sb.toString();
+        return buildMemberListString(a.getTargets(), null) + " 被任命为管理员";
     }
 
     private String buildRemoveTeamManagerNotification(MemberChangeAttachment a) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(buildMemberListString(a.getTargets(), null));
-        sb.append(" 被撤销管理员身份");
-
-        return sb.toString();
+        return buildMemberListString(a.getTargets(), null) + " 被撤销管理员身份";
     }
 
     private String buildAcceptInviteNotification(String from, MemberChangeAttachment a) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(getTeamMemberDisplayName(from));
-        sb.append(" 接受了 ").append(buildMemberListString(a.getTargets(), null)).append(" 的入群邀请");
-
-        return sb.toString();
+        return getTeamMemberDisplayName(from) + " 接受了 " + buildMemberListString(a.getTargets(), null) + " 的入群邀请";
     }
 
     private String buildMuteTeamNotification(MuteMemberAttachment a) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(buildMemberListString(a.getTargets(), null));
-        sb.append("被");
-        sb.append(a.isMute() ? "禁言" : "解除禁言");
-
-        return sb.toString();
+        return buildMemberListString(a.getTargets(), null) + "被" + (a.isMute() ? "禁言" : "解除禁言");
     }
 }

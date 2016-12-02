@@ -43,6 +43,7 @@ import cn.qatime.player.fragment.FragmentClassDetailClassList;
 import cn.qatime.player.fragment.FragmentClassDetailTeacherInfo;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.OrderPayBean;
@@ -64,7 +65,6 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     private SimpleViewPagerIndicator mIndicator;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
     private Button audition;
-    private Button pay;
     private TextView name;
     private TextView title;
     private RemedialClassDetailBean data;
@@ -113,26 +113,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         fragBaseFragments.add(new FragmentClassDetailTeacherInfo());
         fragBaseFragments.add(new FragmentClassDetailClassList());
 
-
-//        fragmentlayout = (FragmentLayoutWithLine)findViewById(R.id.fragmentlayout);
-//
-//        fragmentlayout.setScorllToNext(true);
-//        fragmentlayout.setScorll(true);
-//        fragmentlayout.setWhereTab(1);
-//        fragmentlayout.setTabHeight(4,0xffff9999);
-//        fragmentlayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
-//            @Override
-//            public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
-//                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff666666);
-//                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff333333);
-//            }
-//        });
-//        fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_remedial_class_detail, 0x0911);
-
-
         audition = (Button) findViewById(R.id.audition);
         auditionStart = (Button) findViewById(R.id.audition_start);
-        pay = (Button) findViewById(R.id.pay);
+        Button pay = (Button) findViewById(R.id.pay);
         startStudy = (Button) findViewById(R.id.start_study);
         startStudyView = findViewById(R.id.start_study_view);
         title = (TextView) findViewById(R.id.title);
@@ -160,7 +143,6 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
             public Fragment getItem(int position) {
                 return fragBaseFragments.get(position);
             }
-
         };
 
         mViewPager.setAdapter(mAdapter);
@@ -179,7 +161,6 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
         mIndicator.setOnItemClickListener(new SimpleViewPagerIndicator.OnItemClickListener() {
@@ -190,12 +171,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         });
     }
 
-
     private void initData() {
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass + "/" + id, null,
                 new VolleyListener(RemedialClassDetailActivity.this) {
-
-
                     @Override
                     protected void onSuccess(JSONObject response) {
                         data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
@@ -203,7 +181,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                         status.setText(getStatus(data.getData().getStatus()));
                         if (data.getData() != null && data.getData().getLive_start_time() != null) {
                             try {
-                                if ("init".equals(data.getData().getStatus())||"published".equals(data.getData().getStatus())) {
+                                if ("init".equals(data.getData().getStatus()) || "published".equals(data.getData().getStatus())) {
                                     long time = System.currentTimeMillis() - parse.parse(data.getData().getLive_start_time()).getTime();
                                     int value = 0;
                                     if (time > 0) {
@@ -254,7 +232,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
                                 if (data.getData().getIs_bought()) {
                                     startStudyView.setVisibility(View.VISIBLE);
-                                    if (data.getData().getStatus().equals("completed")||data.getData().getStatus().equals("finished")) {
+                                    if (data.getData().getStatus().equals("completed") || data.getData().getStatus().equals("finished")) {
                                         startStudy.setEnabled(false);
                                     }
                                 }
@@ -287,59 +265,80 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         if (data == null || data.getData() == null) {
             return;
         }
+        Intent intent;
         switch (v.getId()) {
             case R.id.audition_start:
-                Intent intent = new Intent(RemedialClassDetailActivity.this, NEVideoPlayerActivity.class);
-                intent.putExtra("url", data.getData().getBoard());
-                intent.putExtra("id", data.getData().getId());
-                intent.putExtra("sessionId", data.getData().getChat_team_id());
-                startActivity(intent);
+                if (BaseApplication.isLogined()) {
+                    intent = new Intent(RemedialClassDetailActivity.this, NEVideoPlayerActivity.class);
+                    intent.putExtra("url", data.getData().getBoard());
+                    intent.putExtra("id", data.getData().getId());
+                    intent.putExtra("sessionId", data.getData().getChat_team_id());
+                    startActivity(intent);
+                } else {
+                    intent = new Intent(RemedialClassDetailActivity.this, LoginActivity.class);
+                    intent.putExtra("sign", Constant.VISITORTOLOGIN);
+                    startActivityForResult(intent, Constant.REQUEST);
+                }
                 break;
             case R.id.audition:
-                joinAudition();
+                if (BaseApplication.isLogined()) {
+                    joinAudition();
+                } else {
+                    intent = new Intent(RemedialClassDetailActivity.this, LoginActivity.class);
+                    intent.putExtra("sign", Constant.VISITORTOLOGIN);
+                    startActivityForResult(intent, Constant.REQUEST);
+                }
                 break;
             case R.id.start_study:
-                intent = new Intent(RemedialClassDetailActivity.this, NEVideoPlayerActivity.class);
-                intent.putExtra("url", data.getData().getBoard());
-                intent.putExtra("id", data.getData().getId());
-                intent.putExtra("sessionId", data.getData().getChat_team_id());
-                startActivity(intent);
+                if (BaseApplication.isLogined()) {
+                    intent = new Intent(RemedialClassDetailActivity.this, NEVideoPlayerActivity.class);
+                    intent.putExtra("url", data.getData().getBoard());
+                    intent.putExtra("id", data.getData().getId());
+                    intent.putExtra("sessionId", data.getData().getChat_team_id());
+                    startActivity(intent);
+                } else {
+                    intent = new Intent(RemedialClassDetailActivity.this, LoginActivity.class);
+                    intent.putExtra("sign", Constant.VISITORTOLOGIN);
+                    startActivityForResult(intent, Constant.REQUEST);
+                }
                 break;
             case R.id.pay:
-                if ("teaching".equals(data.getData().getStatus())) {
-                    if (alertDialog == null) {
-                        View view = View.inflate(RemedialClassDetailActivity.this, R.layout.dialog_cancel_or_confirm, null);
-                        Button cancel = (Button) view.findViewById(R.id.cancel);
-                        Button confirm = (Button) view.findViewById(R.id.confirm);
-                        TextView text = (TextView) view.findViewById(R.id.text);
-                        text.setText("该辅导班已开课，是否继续购买？");
-                        cancel.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                alertDialog.dismiss();
-                            }
-                        });
-                        confirm.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                payRemedial();
-                                alertDialog.dismiss();
-                            }
-                        });
-                        AlertDialog.Builder builder = new AlertDialog.Builder(RemedialClassDetailActivity.this);
-                        alertDialog = builder.create();
-                        alertDialog.show();
-                        alertDialog.setContentView(view);
-//                        WindowManager.LayoutParams attributes = alertDialog.getWindow().getAttributes();
-//                        attributes.width= ScreenUtils.getScreenWidth(getApplicationContext())- DensityUtils.dp2px(getApplicationContext(),20)*2;
-//                        alertDialog.getWindow().setAttributes(attributes);
+                if (BaseApplication.isLogined()) {
+                    if ("teaching".equals(data.getData().getStatus())) {
+                        if (alertDialog == null) {
+                            View view = View.inflate(RemedialClassDetailActivity.this, R.layout.dialog_cancel_or_confirm, null);
+                            Button cancel = (Button) view.findViewById(R.id.cancel);
+                            Button confirm = (Button) view.findViewById(R.id.confirm);
+                            TextView text = (TextView) view.findViewById(R.id.text);
+                            text.setText("该辅导班已开课，是否继续购买？");
+                            cancel.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    alertDialog.dismiss();
+                                }
+                            });
+                            confirm.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    payRemedial();
+                                    alertDialog.dismiss();
+                                }
+                            });
+                            AlertDialog.Builder builder = new AlertDialog.Builder(RemedialClassDetailActivity.this);
+                            alertDialog = builder.create();
+                            alertDialog.show();
+                            alertDialog.setContentView(view);
+                        } else {
+                            alertDialog.show();
+                        }
                     } else {
-                        alertDialog.show();
+                        payRemedial();
                     }
                 } else {
-                    payRemedial();
+                    intent = new Intent(RemedialClassDetailActivity.this, LoginActivity.class);
+                    intent.putExtra("sign", Constant.VISITORTOLOGIN);
+                    startActivityForResult(intent, Constant.REQUEST);
                 }
-                ;
                 break;
         }
     }
@@ -473,9 +472,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         }
         if (status.equals("published")) {//直播中
             return "招生中";
-        } else if(status.equals("init")){
+        } else if (status.equals("init")) {
             return "招生中";
-        }else if (status.equals("teaching")) {
+        } else if (status.equals("teaching")) {
             return "开课中";
         } else if (status.equals("completed")) {//未开始
             return "已结束";
@@ -490,6 +489,14 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 //            finish();
 //        }
         finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Constant.VISITORLOGINED) {
+            setResult(Constant.VISITORLOGINED);
+        }
     }
 
     @Override

@@ -69,8 +69,6 @@ public class FragmentMessageNotifyNews extends BaseFragment {
             public void convert(ViewHolder helper, SystemNotifyBean.DataBean item, int position) {
                 helper.setText(R.id.date_time, item.getCreated_at()).setText(R.id.details, item.getNotice_content());
             }
-
-
         };
         listView.setAdapter(adapter);
 

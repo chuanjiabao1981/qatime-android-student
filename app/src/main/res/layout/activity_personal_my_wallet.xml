@@ -83,28 +83,26 @@
 
             <TextView
                 android:id="@+id/recharge"
+                style="@style/dialog_button_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
-                android:background="@drawable/text_button_selector"
                 android:gravity="center"
                 android:padding="12dp"
                 android:text="@string/recharge"
-                android:textColor="#fff"
                 android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/withdraw_cash"
+                style="@style/dialog_button_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="1dp"
                 android:layout_weight="1"
-                android:background="@drawable/text_button_selector"
                 android:gravity="center"
                 android:padding="12dp"
                 android:text="@string/withdraw_cash"
-                android:textColor="#fff"
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -141,6 +139,7 @@
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="#dfdddd" />
+
         <LinearLayout
             android:id="@+id/withdraw_record"
             android:layout_width="match_parent"
