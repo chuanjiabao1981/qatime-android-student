@@ -167,8 +167,9 @@ public class MainActivity extends BaseFragmentActivity {
                 }
             }
         }
-        if (resultCode == Constant.RESPONSE) {
-            fragmentlayout.getChildAt(3);
+        if (resultCode == Constant.RESPONSE && data.getIntExtra("from", -1) != -1) {//如果有返回并且携带了跳转码，则跳到响应的页面
+            initView();//刷新view
+            fragmentlayout.setCurrenItem(data.getIntExtra("from", -1));
         }
     }
 

@@ -157,10 +157,10 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
 
 //                        Intent intent = new Intent(RegisterPerfectActivity.this, MainActivity.class);
 //                        startActivity(intent);
-                        if (!LoginActivity.reenter) {
-                            Intent intent = new Intent(RegisterPerfectActivity.this, MainActivity.class);
-                            startActivity(intent);
-                        }
+//                        if (!LoginActivity.reenter) {
+//                            Intent intent = new Intent(RegisterPerfectActivity.this, MainActivity.class);
+//                            startActivity(intent);
+//                        }
                         setResult(Constant.RESPONSE);
                         finish();
                     }
