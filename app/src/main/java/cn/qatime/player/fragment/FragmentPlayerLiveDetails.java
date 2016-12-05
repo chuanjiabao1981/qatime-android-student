@@ -95,12 +95,8 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
                 } else {//closed finished billing completed
                     holder.setText(R.id.status, getResourceString(R.string.class_over));//已结束
                 }
-                try {
-                    holder.setText(R.id.class_date, parse2.format(parse1.parse(item.getClass_date())));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                if (item.getStatus().equals("closed")||item.getStatus().equals("finished")||item.getStatus().equals("billing")||item.getStatus().equals("completed")) {
+                holder.setText(R.id.class_date, item.getClass_date());
+                if (item.getStatus().equals("closed") || item.getStatus().equals("finished") || item.getStatus().equals("billing") || item.getStatus().equals("completed")) {
                     ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.live_time)).setTextColor(0xff999999);
