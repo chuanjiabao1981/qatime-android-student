@@ -6,7 +6,6 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -65,7 +64,6 @@ import libraryextra.utils.VolleyListener;
 import libraryextra.view.FragmentLayoutWithLine;
 
 public class NEVideoPlayerActivity extends BaseFragmentActivity implements VideoActivityInterface, VideoLayout.OnDoubleClickListener {
-//    private View mBuffer; //用于指示缓冲状态
 
     private boolean isSubBig = true;//副窗口是否是大的
     private boolean ismain = true;//video1 是否在主显示view上
@@ -371,15 +369,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         });
 
         content = (EditText) findViewById(R.id.content);
-        content.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus && isSubBig) {
-                    changeSubSmall();
-                    floatFragment.setSubBig(false);
-                }
-            }
-        });
         ImageView emoji = (ImageView) findViewById(R.id.emoji);
 
         Button send = (Button) findViewById(R.id.send);
@@ -397,6 +386,15 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         } else {
             content.setHint("");
         }
+        content.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isSubBig) {
+                    changeSubSmall();
+                    floatFragment.setSubBig(false);
+                }
+            }
+        });
     }
 
     /**
@@ -790,6 +788,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     @Override
     public void changeSubBig() {
+        KeyBoardUtils.closeKeybord(this);
         isSubBig = true;
         if (ismain) {
             floatingWindow.removeView(window2);
