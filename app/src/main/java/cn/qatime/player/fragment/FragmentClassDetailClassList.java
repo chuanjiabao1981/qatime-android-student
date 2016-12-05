@@ -53,13 +53,9 @@ public class FragmentClassDetailClassList extends BaseFragment {
                     holder.setText(R.id.status, getResourceString(R.string.class_ready));
                 } else if (item.getStatus().equals("teaching")) {//直播中
                     holder.setText(R.id.status, getResourceString(R.string.class_teaching));
-                } else if (item.getStatus().equals("closed")) {
-                    holder.setText(R.id.status, "已结束");
                 } else if (item.getStatus().equals("paused")) {
                     holder.setText(R.id.status, getResourceString(R.string.class_teaching));
-                } else if (item.getStatus().equals("paused_inner")) {//暂停中
-                    holder.setText(R.id.status, getResourceString(R.string.class_teaching));
-                } else {
+                } else {//closed finished billing completed
                     holder.setText(R.id.status, getResourceString(R.string.class_over));//已结束
                 }
                 try {
@@ -67,7 +63,7 @@ public class FragmentClassDetailClassList extends BaseFragment {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                if (item.getStatus().equals("closed")) {
+                if (item.getStatus().equals("closed")||item.getStatus().equals("finished")||item.getStatus().equals("billing")||item.getStatus().equals("completed")) {
                     ((TextView)holder.getView(R.id.status_color)).setTextColor(0xff999999);
                     ((TextView)holder.getView(R.id.name)).setTextColor(0xff999999);
                     ((TextView)holder.getView(R.id.status)).setTextColor(0xff999999);

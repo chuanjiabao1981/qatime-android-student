@@ -213,7 +213,7 @@
                 style="@style/button_style"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
-                android:textColor="#fff"
+                android:textColor="#be0b0b"
                 android:text="开始学习" />
         </LinearLayout>
 

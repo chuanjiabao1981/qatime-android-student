@@ -20,7 +20,6 @@ import java.util.List;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.view.VerticalListView;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.RemedialClassDetailBean;
@@ -28,6 +27,7 @@ import libraryextra.bean.SchoolBean;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
+import libraryextra.view.GridViewForScrollView;
 
 public class FragmentPlayerLiveDetails extends BaseFragment {
     private TextView subject;
@@ -43,7 +43,7 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
     private TextView school;
     private TextView teacherDescribe;
     private ImageView image;
-    private VerticalListView list;
+    private GridViewForScrollView list;
     private RemedialClassDetailBean.Data data;
     private CommonAdapter<RemedialClassDetailBean.Lessons> adapter;
     private List<RemedialClassDetailBean.Lessons> classList = new ArrayList<>();
@@ -51,6 +51,7 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
     private SimpleDateFormat parse1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private SimpleDateFormat parse2 = new SimpleDateFormat("yyyy-MM-dd");
     private Handler hd = new Handler();
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -68,15 +69,14 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
         school = (TextView) view.findViewById(R.id.school);
         teacherDescribe = (TextView) view.findViewById(R.id.teacher_describe);
         image = (ImageView) view.findViewById(R.id.image);
-        list = (VerticalListView) view.findViewById(R.id.list);
+        list = (GridViewForScrollView) view.findViewById(R.id.list);
         initList();
         return view;
     }
 
     private void initList() {
-        list.setDividerHeight(0);
         list.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
-        adapter = new CommonAdapter<RemedialClassDetailBean.Lessons>(getActivity(),classList, R.layout.item_fragment_nevideo_player33) {
+        adapter = new CommonAdapter<RemedialClassDetailBean.Lessons>(getActivity(), classList, R.layout.item_fragment_nevideo_player33) {
 
             @Override
             public void convert(ViewHolder holder, RemedialClassDetailBean.Lessons item, int position) {
@@ -90,13 +90,9 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
                     holder.setText(R.id.status, getResourceString(R.string.class_ready));
                 } else if (item.getStatus().equals("teaching")) {//直播中
                     holder.setText(R.id.status, getResourceString(R.string.class_teaching));
-                } else if (item.getStatus().equals("closed")) {
-                    holder.setText(R.id.status, "已结束");
                 } else if (item.getStatus().equals("paused")) {
                     holder.setText(R.id.status, getResourceString(R.string.class_teaching));
-                } else if (item.getStatus().equals("paused_inner")) {//暂停中
-                    holder.setText(R.id.status, getResourceString(R.string.class_teaching));
-                } else {
+                } else {//closed finished billing completed
                     holder.setText(R.id.status, getResourceString(R.string.class_over));//已结束
                 }
                 try {
@@ -104,18 +100,18 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                if (item.getStatus().equals("closed")) {
-                    ((TextView)holder.getView(R.id.status_color)).setTextColor(0xff999999);
-                    ((TextView)holder.getView(R.id.name)).setTextColor(0xff999999);
-                    ((TextView)holder.getView(R.id.live_time)).setTextColor(0xff999999);
-                    ((TextView)holder.getView(R.id.status)).setTextColor(0xff999999);
-                    ((TextView)holder.getView(R.id.class_date)).setTextColor(0xff999999);
+                if (item.getStatus().equals("closed")||item.getStatus().equals("finished")||item.getStatus().equals("billing")||item.getStatus().equals("completed")) {
+                    ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff999999);
+                    ((TextView) holder.getView(R.id.name)).setTextColor(0xff999999);
+                    ((TextView) holder.getView(R.id.live_time)).setTextColor(0xff999999);
+                    ((TextView) holder.getView(R.id.status)).setTextColor(0xff999999);
+                    ((TextView) holder.getView(R.id.class_date)).setTextColor(0xff999999);
                 } else {
-                    ((TextView)holder.getView(R.id.status_color)).setTextColor(0xff00a0e9);
-                    ((TextView)holder.getView(R.id.name)).setTextColor(0xff666666);
-                    ((TextView)holder.getView(R.id.live_time)).setTextColor(0xff666666);
-                    ((TextView)holder.getView(R.id.status)).setTextColor(0xff666666);
-                    ((TextView)holder.getView(R.id.class_date)).setTextColor(0xff666666);
+                    ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff00a0e9);
+                    ((TextView) holder.getView(R.id.name)).setTextColor(0xff666666);
+                    ((TextView) holder.getView(R.id.live_time)).setTextColor(0xff666666);
+                    ((TextView) holder.getView(R.id.status)).setTextColor(0xff666666);
+                    ((TextView) holder.getView(R.id.class_date)).setTextColor(0xff666666);
                 }
 
             }

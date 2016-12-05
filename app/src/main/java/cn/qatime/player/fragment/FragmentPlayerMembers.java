@@ -67,7 +67,7 @@ public class FragmentPlayerMembers extends BaseFragment {
     }
 
     /**
-     *  两个setData删除一个
+     * 两个setData删除一个
      *
      * @param accounts
      */
@@ -92,7 +92,7 @@ public class FragmentPlayerMembers extends BaseFragment {
             Collections.sort(list, new Comparator<Announcements.DataBean.MembersBean>() {
                 @Override
                 public int compare(Announcements.DataBean.MembersBean lhs, Announcements.DataBean.MembersBean rhs) {
-                    return lhs.getFirstLetter().compareTo(rhs.getFirstLetter());
+                    return rhs.isOwner()?1:lhs.getFirstLetter().compareTo(rhs.getFirstLetter());
                 }
             });
             hd.postDelayed(runnable, 200);
