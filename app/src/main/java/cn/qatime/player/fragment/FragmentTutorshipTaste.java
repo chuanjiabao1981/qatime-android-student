@@ -202,7 +202,7 @@ public class FragmentTutorshipTaste extends BaseFragment {
                             TutorialClassBean data = JsonUtils.objectFromJson(response.toString(), TutorialClassBean.class);
                             if (data != null) {
                                 for (TutorialClassBean.Data item : data.getData()) {
-                                    if (item.isIs_tasting() || item.isTasted()) {//只显示试听
+                                    if (!item.isIs_bought() && (item.isIs_tasting() || item.isTasted())) {//只显示试听
                                         list.add(item);
                                     }
                                 }
