@@ -398,7 +398,7 @@ public class MessageActivity extends BaseActivity {
                     if (success && result != null) {
                         updateTeamInfo(result);
                     } else {
-                        Toast.makeText(MessageActivity.this, getResourceString(R.string.get_group_failed), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MessageActivity.this, getResourceString(R.string.failed_to_obtain_group_information), Toast.LENGTH_SHORT).show();
                         finish();
                     }
                 }

@@ -27,6 +27,8 @@ import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.orhanobut.logger.Logger;
 import com.zhy.android.percent.support.PercentRelativeLayout;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -144,6 +146,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         video1.setOnErrorListener(new NELivePlayer.OnErrorListener() {
             @Override
             public boolean onError(NELivePlayer neLivePlayer, int i, int i1) {
+                setVideoState(VideoState.INIT);
                 buffering1.setVisibility(View.GONE);
                 bufferAnimation1.stop();
                 videoNoData1.setVisibility(View.VISIBLE);
@@ -153,6 +156,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         video2.setOnErrorListener(new NELivePlayer.OnErrorListener() {
             @Override
             public boolean onError(NELivePlayer neLivePlayer, int i, int i1) {
+                setVideoState(VideoState.INIT);
                 buffering2.setVisibility(View.GONE);
                 bufferAnimation2.stop();
                 videoNoData2.setImageResource(R.mipmap.video_no_data);
@@ -220,6 +224,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         }
         sessionId = getIntent().getStringExtra("sessionId");
 
+        EventBus.getDefault().register(this);
         assignViews();
         initView();
         getAnnouncementsData();
@@ -270,7 +275,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
 
     private void getAnnouncementsData() {
-
         if (id != 0) {
             DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass + "/" + id + "/realtime", null,
                     new VolleyListener(NEVideoPlayerActivity.this) {
@@ -597,6 +601,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         }
         danMuController.destroy();
         fragment2.registerObservers(false);
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 
@@ -721,6 +726,14 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             }
         });
         addToRequestQueue(request);
+    }
+
+
+    @Subscribe
+    public void onEvent(String event) {
+        if (!StringUtils.isNullOrBlanK(event) && event.equals("announcement")) {
+            getAnnouncementsData();
+        }
     }
 
     /**************************

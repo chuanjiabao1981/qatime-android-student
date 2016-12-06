@@ -21,20 +21,27 @@ import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.attachment.NotificationAttachment;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
+import com.netease.nimlib.sdk.msg.constant.NotificationType;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.QueryDirectionEnum;
+import com.netease.nimlib.sdk.team.constant.TeamFieldEnum;
 import com.netease.nimlib.sdk.team.constant.TeamTypeEnum;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
+import com.netease.nimlib.sdk.team.model.UpdateTeamAttachment;
 import com.orhanobut.logger.Logger;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.adapter.MessageAdapter;
@@ -278,6 +285,16 @@ public class FragmentPlayerMessage extends BaseFragment {
             List<IMMessage> addedListItems = new ArrayList<>(messages.size());
             for (IMMessage message : messages) {
                 if (isMyMessage(message) && (message.getMsgType() == MsgTypeEnum.text || message.getMsgType() == MsgTypeEnum.notification)) {
+                    if (message.getAttachment() instanceof NotificationAttachment) {
+                        if (((NotificationAttachment) message.getAttachment()).getType() == NotificationType.UpdateTeam) {
+                            UpdateTeamAttachment a = (UpdateTeamAttachment) message.getAttachment();
+                            for (Map.Entry<TeamFieldEnum, Object> field : a.getUpdatedFields().entrySet()) {
+                                if (field.getKey() == TeamFieldEnum.Announcement) {
+                                    EventBus.getDefault().post("announcement");
+                                }
+                            }
+                        }
+                    }
                     items.add(message);
                     addedListItems.add(message);
                     needRefresh = true;
