@@ -51,6 +51,7 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
     private SimpleDateFormat parse1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private SimpleDateFormat parse2 = new SimpleDateFormat("yyyy-MM-dd");
     private Handler hd = new Handler();
+    private View viewEmptyGone;
 
     @Nullable
     @Override
@@ -70,6 +71,7 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
         teacherDescribe = (TextView) view.findViewById(R.id.teacher_describe);
         image = (ImageView) view.findViewById(R.id.image);
         list = (GridViewForScrollView) view.findViewById(R.id.list);
+        viewEmptyGone = view.findViewById(R.id.view_empty_gone);
         initList();
         return view;
     }
@@ -127,6 +129,11 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
     private void setDataListDetails() {
         classList.clear();
         classList.addAll(data.getLessons());
+        if (classList.size() == 0) {
+            viewEmptyGone.setVisibility(View.GONE);
+        } else {
+            viewEmptyGone.setVisibility(View.VISIBLE);
+        }
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
