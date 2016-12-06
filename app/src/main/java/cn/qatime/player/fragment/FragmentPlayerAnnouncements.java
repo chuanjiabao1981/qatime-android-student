@@ -11,14 +11,19 @@ import android.widget.TextView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.NEVideoPlayerActivity;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.Announcements;
+import libraryextra.utils.StringUtils;
 
 public class FragmentPlayerAnnouncements extends BaseFragment {
     private PullToRefreshListView listView;
@@ -89,4 +94,5 @@ public class FragmentPlayerAnnouncements extends BaseFragment {
         items.addAll(announcements);
         hd.postDelayed(runnable, 200);
     }
+
 }

@@ -21,6 +21,8 @@ import com.netease.nimlib.sdk.team.model.MuteMemberAttachment;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.UpdateTeamAttachment;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -125,10 +127,10 @@ public class MessageAdapter extends BaseAdapter {
                             }
                         }));
             } else {
-                if (!StringUtils.isNullOrBlanK(owner)){
-                    if (owner.equals(item.getFromAccount())){
+                if (!StringUtils.isNullOrBlanK(owner)) {
+                    if (owner.equals(item.getFromAccount())) {
                         textHolder.othername.setTextColor(0xffbe0b0b);
-                    }else {
+                    } else {
                         textHolder.othername.setTextColor(0xff333333);
                     }
                 }

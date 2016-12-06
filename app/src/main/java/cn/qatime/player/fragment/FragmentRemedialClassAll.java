@@ -81,17 +81,10 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
     private String timesorttype = "";
     private EditText priceLow;
     private EditText priceHigh;
-    //    private EditText subjectLow;
-//    private EditText subjectHigh;
     private TextView beginClassTime;
     private TextView endcLassTime;
 
 
-    //    //价格开始区间
-//    private String price_floor = "";
-//    //价格结束区间
-//    private String price_ceil = "";
-    //开课日期开始区间
     private String class_date_floor = "";
     //开课日期结束区间
     private String class_date_ceil = "";
@@ -232,19 +225,6 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
         }
         map.put("price_floor", lowPrice);
         map.put("price_ceil", highPrice);
-//        String lowSubject = subjectLow == null ? "" : subjectLow.getText().toString();
-//        String highSubject = subjectHigh == null ? "" : subjectHigh.getText().toString();
-//        if (!StringUtils.isNullOrBlanK(lowSubject) && !StringUtils.isNullOrBlanK(highSubject)) {
-//            if (Integer.valueOf(lowSubject) > Integer.valueOf(highSubject)) {
-//                String temp = lowSubject;
-//                lowSubject = highSubject;
-//                highSubject = temp;
-//                subjectHigh.setText(highSubject);
-//                subjectLow.setText(lowSubject);
-//            }
-//        }
-//        map.put("preset_lesson_count_floor", lowSubject);
-//        map.put("preset_lesson_count_ceil", highSubject);
         if (!StringUtils.isNullOrBlanK(class_date_floor) && !StringUtils.isNullOrBlanK(class_date_ceil)) {
             try {
                 if (parseDate.parse(class_date_ceil).before(parseDate.parse(class_date_floor))) {
