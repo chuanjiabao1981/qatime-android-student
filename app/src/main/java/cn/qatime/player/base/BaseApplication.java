@@ -40,7 +40,6 @@ import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.im.LoginSyncDataStatusObserver;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
-import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.CityBean;
 import libraryextra.bean.Profile;
 import libraryextra.utils.AppUtils;
@@ -97,33 +96,6 @@ public class BaseApplication extends Application {
         mPushAgent.setNotificationPlaySound(shakeStatus ? MsgConstant.NOTIFICATION_PLAY_SDK_ENABLE : MsgConstant.NOTIFICATION_PLAY_SDK_DISABLE);
         mPushAgent.setNotificationPlayLights(MsgConstant.NOTIFICATION_PLAY_SERVER);
         mPushAgent.setNotificationPlayVibrate(voiceStatus ? MsgConstant.NOTIFICATION_PLAY_SDK_ENABLE : MsgConstant.NOTIFICATION_PLAY_SDK_DISABLE);
-//        UmengMessageHandler messageHandler = new UmengMessageHandler() {
-//            /**
-//             * 自定义通知栏样式的回调方法
-//             * */
-//            @Override
-//            public Notification getNotification(Context context, UMessage msg) {
-//                switch (msg.builder_id) {
-//                    case 1:
-//                        Notification.Builder builder = new Notification.Builder(context);
-//                        RemoteViews myNotificationView = new RemoteViews(context.getPackageName(), R.layout.notification_view);
-//                        myNotificationView.setTextViewText(R.id.notification_title, msg.title);
-//                        myNotificationView.setTextViewText(R.id.notification_text, msg.text);
-//                        myNotificationView.setImageViewBitmap(R.id.notification_large_icon, getLargeIcon(context, msg));
-//                        myNotificationView.setImageViewResource(R.id.notification_small_icon, getSmallIconId(context, msg));
-//                        builder.setContent(myNotificationView)
-//                                .setSmallIcon(getSmallIconId(context, msg))
-//                                .setTicker(msg.ticker)
-//                                .setAutoCancel(true);
-//
-//                        return builder.getNotification();
-//                    default:
-//                        //默认为0，若填写的builder_id并不存在，也使用默认。
-//                        return super.getNotification(context, msg);
-//                }
-//            }
-//        };
-//        mPushAgent.setMessageHandler(messageHandler);
 
         UmengNotificationClickHandler notificationClickHandler = new UmengNotificationClickHandler() {
             @Override
@@ -228,7 +200,7 @@ public class BaseApplication extends Application {
     // 如果返回值为 null，则全部使用默认参数。
     private SDKOptions options() {
         SDKOptions options = new SDKOptions();
-        options.appKey = UrlUtils.appKey;
+//        options.appKey = UrlUtils.appKey;
         // 如果将新消息通知提醒托管给 SDK 完成，需要添加以下配置。否则无需设置。
         StatusBarNotificationConfig config = new StatusBarNotificationConfig();
         // 通知要跳的页面

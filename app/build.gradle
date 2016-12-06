@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 android {
     signingConfigs {
         config {
@@ -12,10 +15,12 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
     defaultConfig {
-        applicationId "cn.qatime.player"
+        applicationId "cn.qatime.player.debug"
         minSdkVersion 14
         targetSdkVersion 22
+        manifestPlaceholders = [package_name: "cn.qatime.player.debug", yunxin_appkey: properties.getProperty("YunXinDebugAppKey")]
     }
+
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES.txt'
         exclude 'META-INF/LICENSE.txt'
@@ -37,6 +42,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
     sourceSets {
@@ -47,7 +53,18 @@ android {
     lintOptions {
         abortOnError false
     }
+    productFlavors {
+        flavors_debug {
+            applicationId "cn.qatime.player.debug"
+            manifestPlaceholders = [package_name: "cn.qatime.player.debug", yunxin_appkey: properties.getProperty("YunXinDebugAppKey")]
+        }
+        flavors_release {
+            applicationId "cn.qatime.player"
+            manifestPlaceholders = [package_name: "cn.qatime.player", yunxin_appkey: properties.getProperty("YunXinReleaseAppKey")]
+        }
+    }
 }
+
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')

@@ -34,13 +34,13 @@
             android:id="@+id/phone_number_m"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#333333"
-            android:padding="12dp" />
+            android:padding="12dp"
+            android:textColor="#333333" />
 
         <ImageView
+            style="@style/setting_icon_margin_right"
             android:layout_width="12dp"
             android:layout_height="12dp"
-            style="@style/setting_icon_margin_right"
             android:src="@mipmap/personal_enter" />
     </LinearLayout>
 
@@ -70,16 +70,51 @@
             android:id="@+id/email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#333333"
-            android:padding="12dp" />
+            android:padding="12dp"
+            android:textColor="#333333" />
 
         <ImageView
+            style="@style/setting_icon_margin_right"
             android:layout_width="12dp"
             android:layout_height="12dp"
-            style="@style/setting_icon_margin_right"
             android:src="@mipmap/personal_enter" />
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dfdddd" />
+
+    <LinearLayout
+        android:id="@+id/bind_wechat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/setting_text_style"
+            android:text="@string/bind_wechat" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#ffffff" />
+
+        <TextView
+            android:id="@+id/wechat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:textColor="#333333" />
+
+        <ImageView
+            style="@style/setting_icon_margin_right"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:src="@mipmap/personal_enter" />
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -107,13 +142,13 @@
             android:id="@+id/phone_number_p"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#333333"
-            android:padding="12dp" />
+            android:padding="12dp"
+            android:textColor="#333333" />
 
         <ImageView
+            style="@style/setting_icon_margin_right"
             android:layout_width="12dp"
             android:layout_height="12dp"
-            style="@style/setting_icon_margin_right"
             android:src="@mipmap/personal_enter" />
     </LinearLayout>
 
@@ -141,9 +176,9 @@
             android:background="#ffffff" />
 
         <ImageView
+            style="@style/setting_icon_margin_right"
             android:layout_width="12dp"
             android:layout_height="12dp"
-            style="@style/setting_icon_margin_right"
             android:src="@mipmap/personal_enter" />
     </LinearLayout>
 

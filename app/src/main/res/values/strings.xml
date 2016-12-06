@@ -280,6 +280,7 @@
     <string name="bind_phone_number">绑定手机</string>
     <string name="parent_phone_number">家长手机</string>
     <string name="bind_email">绑定邮箱</string>
+    <string name="bind_wechat">绑定微信</string>
     <string name="change_password">修改密码</string>
     <string name="current_phone">当前手机号码</string>
     <string name="new_email">输入新的邮箱</string>
