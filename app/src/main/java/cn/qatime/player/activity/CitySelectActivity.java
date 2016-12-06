@@ -2,8 +2,10 @@ package cn.qatime.player.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,7 +52,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
     private CityBean.Data locationCity;
     private AMapLocationUtils utils;
     private View locationView;
-    private HashMap<String,Integer> letterMap = new HashMap<>();
+    private HashMap<String, Integer> letterMap = new HashMap<>();
 
     private void assignViews() {
         currentCity = (TextView) findViewById(R.id.current_city);
@@ -130,6 +132,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
         utils = new AMapLocationUtils(getApplicationContext(), new AMapLocationUtils.LocationListener() {
             @Override
             public void onLocationBack(String result) {
+                locationView.setEnabled(true);
                 utils.stopLocation();
                 for (CityBean.Data item : list) {
                     if (result.equals(item.getName())) {
@@ -138,14 +141,44 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
                 }
                 if (locationCity == null) {//如果没有被赋值，则默认全国
                     Toast.makeText(CitySelectActivity.this, "暂未获取到您的位置信息", Toast.LENGTH_SHORT).show();
-                }else{
-                    setCityAndHistory(locationCity);
-                    Logger.e("location", result);
-                    Logger.e("locationCity", locationCity.getName());
+                } else {
+                    if (!BaseApplication.getCurrentCity().equals(locationCity)) {
+                        dialogCity();
+                        Logger.e("location", result);
+                        Logger.e("locationCity", locationCity.getName());
+                    }else{
+                        finish();
+                    }
                 }
             }
         });
         utils.startLocation();
+    }
+
+    private void dialogCity() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        View view = View.inflate(this, R.layout.dialog_cancel_or_confirm, null);
+        TextView text = (TextView) view.findViewById(R.id.text);
+        text.setText("已获取到您的位置信息，是否\n切换城市为" + locationCity.getName() + "？");
+        Button cancel = (Button) view.findViewById(R.id.cancel);
+        Button confirm = (Button) view.findViewById(R.id.confirm);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                setCityAndHistory(locationCity);
+            }
+        });
+        alertDialog.show();
+        alertDialog.setContentView(view);
     }
 
     private void initView() {
@@ -159,7 +192,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
         } else {
             listLately = lately;
         }
-        adapter = new CitySelectAdapter(this,letterMap, listLately, list, R.layout.item_city_lately, R.layout.item_city_all, R.layout.item_city_list) {
+        adapter = new CitySelectAdapter(this, letterMap, listLately, list, R.layout.item_city_lately, R.layout.item_city_all, R.layout.item_city_list) {
             @Override
             public void setCityName(CityBean.Data data) {
                 setCityAndHistory(data);

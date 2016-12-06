@@ -148,7 +148,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private void initBannerData() {
         Map<String, String> map = new HashMap<>();
 //        map.put("per_page", String.valueOf(1));
-        map.put("city_id", BaseApplication.getCurrentCity().getId() + "");
+        map.put("city_name", BaseApplication.getCurrentCity().getName());
         JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecommend + "index_banner" + "/items", map), null,
                 new VolleyListener(getActivity()) {
                     @Override
@@ -242,7 +242,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(page));
         map.put("per_page", String.valueOf(5));
-        map.put("city_id", BaseApplication.getCurrentCity().getId() + "");
+        map.put("city_name", BaseApplication.getCurrentCity().getName());
         JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecommend + "index_teacher_recommend" + "/items", map), null,
                 new VolleyListener(getActivity()) {
                     @Override
@@ -341,7 +341,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(1));
         map.put("per_page", String.valueOf(6));
-        map.put("city_id", BaseApplication.getCurrentCity().getId() + "");
+        map.put("city_name", BaseApplication.getCurrentCity().getName());
         JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecommend + "index_live_studio_course_recommend" + "/items", map), null,
                 new VolleyListener(getActivity()) {
                     @Override
@@ -445,9 +445,9 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                                         if (!currentCity.equals(locationCity)) {
                                             if (locationCity.getWorkstations_count() != 0) {
                                                 dialogCity();
-                                            } else {
-                                                BaseApplication.setCurrentCity(locationCity);
-                                                setCity();
+//                                            } else {
+//                                                BaseApplication.setCurrentCity(locationCity);
+//                                                setCity();
                                             }
                                         }
                                     } else {
