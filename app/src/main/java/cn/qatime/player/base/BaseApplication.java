@@ -40,6 +40,7 @@ import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.im.LoginSyncDataStatusObserver;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
+import custom.Configure;
 import libraryextra.bean.CityBean;
 import libraryextra.bean.Profile;
 import libraryextra.utils.AppUtils;
@@ -80,7 +81,7 @@ public class BaseApplication extends Application {
         Logger.init("QTA-TIME")               // default tag : PRETTYLOGGER or use just init()
                 .setMethodCount(3)            // default 2
                 .hideThreadInfo()             // default it is shown
-                .setLogLevel(UrlUtils.isDebug ? LogLevel.FULL : LogLevel.NONE);  // default : LogLevel.FULL
+                .setLogLevel(Configure.isDebug ? LogLevel.FULL : LogLevel.NONE);  // default : LogLevel.FULL
         profile = SPUtils.getObject(this, "profile", Profile.class);
         currentCity = SPUtils.getObject(this, "current_city", CityBean.Data.class);
         shakeStatus = (boolean) SPUtils.get(this, "shake_status", true);
@@ -91,7 +92,7 @@ public class BaseApplication extends Application {
 
     private void initUmengPush() {
         mPushAgent = PushAgent.getInstance(this);
-        mPushAgent.setDebugMode(UrlUtils.isDebug);
+        mPushAgent.setDebugMode(Configure.isDebug);
 
         mPushAgent.setNotificationPlaySound(shakeStatus ? MsgConstant.NOTIFICATION_PLAY_SDK_ENABLE : MsgConstant.NOTIFICATION_PLAY_SDK_DISABLE);
         mPushAgent.setNotificationPlayLights(MsgConstant.NOTIFICATION_PLAY_SERVER);

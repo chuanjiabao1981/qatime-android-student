@@ -18,7 +18,9 @@ android {
         applicationId "cn.qatime.player.debug"
         minSdkVersion 14
         targetSdkVersion 22
-        manifestPlaceholders = [package_name: "cn.qatime.player.debug", yunxin_appkey: properties.getProperty("YunXinDebugAppKey")]
+        manifestPlaceholders = [package_name: "cn.qatime.player.debug",
+                                yunxin_appkey: properties.getProperty("YunXinDebugAppKey"),
+                                amap_apikey  : properties.getProperty("amapDebugKey")]
     }
 
     packagingOptions {
@@ -56,15 +58,36 @@ android {
     productFlavors {
         flavors_debug {
             applicationId "cn.qatime.player.debug"
-            manifestPlaceholders = [package_name: "cn.qatime.player.debug", yunxin_appkey: properties.getProperty("YunXinDebugAppKey")]
+            manifestPlaceholders = [package_name: "cn.qatime.player.debug",
+                                    yunxin_appkey: properties.getProperty("YunXinDebugAppKey"),
+                                    amap_apikey  : properties.getProperty("amapDebugKey")]
         }
         flavors_release {
             applicationId "cn.qatime.player"
-            manifestPlaceholders = [package_name: "cn.qatime.player", yunxin_appkey: properties.getProperty("YunXinReleaseAppKey")]
+            manifestPlaceholders = [package_name : "cn.qatime.player",
+                                    yunxin_appkey: properties.getProperty("YunXinReleaseAppKey"),
+                                    amap_apikey  : properties.getProperty("amapReleaseKey")]
         }
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def appName = 'qatime_android'
+            def buildName
+
+            variant.productFlavors.each { product ->
+                buildName = product.name
+            }
+            output.outputFile = new File(output.outputFile.parent, appName + "_" + getVersionNameFromManifest() + "_" + buildName + ".apk");
+        }
+
     }
 }
 
+def getVersionNameFromManifest() {
+    def manifestParser = new com.android.builder.core.DefaultManifestParser(android.sourceSets.main.manifest.srcFile)
+    return manifestParser.getVersionName()
+}
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -74,3 +97,4 @@ dependencies {
     compile project(':common')
     compile project(':pushSDK')
 }
+

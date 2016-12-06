@@ -325,21 +325,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     //缓存
                     UserInfoCache.getInstance().clear();
                     TeamDataCache.getInstance().clear();
-                    //                FriendDataCache.getInstance().clear();
 
                     UserInfoCache.getInstance().buildCache();
                     TeamDataCache.getInstance().buildCache();
-                    //好友维护,目前不需要
-                    //                FriendDataCache.getInstance().buildCache();
 
                     UserInfoCache.getInstance().registerObservers(true);
                     TeamDataCache.getInstance().registerObservers(true);
-//                                                FriendDataCache.getInstance().registerObservers(true);
-//
-//                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                    startActivity(intent);
-//                    DialogUtils.dismissDialog(progress);
-//                    finish();
+//                  FriendDataCache.getInstance().registerObservers(true);
                 }
 
                 @Override
