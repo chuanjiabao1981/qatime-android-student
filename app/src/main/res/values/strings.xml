@@ -379,7 +379,6 @@
     <string name="after_try_again">请检查您的网络或稍后再试</string>
     <string name="you_have_quit_the_group">您已退出该群组</string>
     <string name="message_can_not_null">消息不能为空</string>
-    <string name="get_group_failed">获取群组信息失败!</string>
     <string name="no_course_information">暂无辅导班信息</string>
     <string name="hour">小时</string>
     <string name="minute">分钟</string>

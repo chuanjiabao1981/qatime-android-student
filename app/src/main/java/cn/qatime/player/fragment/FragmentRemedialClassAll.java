@@ -25,7 +25,6 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
@@ -82,24 +81,16 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
     private String timesorttype = "";
     private EditText priceLow;
     private EditText priceHigh;
-    //    private EditText subjectLow;
-//    private EditText subjectHigh;
     private TextView beginClassTime;
     private TextView endcLassTime;
 
 
-    //    //价格开始区间
-//    private String price_floor = "";
-//    //价格结束区间
-//    private String price_ceil = "";
-    //开课日期开始区间
     private String class_date_floor = "";
     //开课日期结束区间
     private String class_date_ceil = "";
     //辅导班状态
     private String status = "";
     private int page = 1;
-    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private SimpleDateFormat parseDate = new SimpleDateFormat("yyyy-MM-dd");
     DecimalFormat df = new DecimalFormat("#.00");
     private GradeBean gradeBean;
@@ -148,26 +139,19 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
         grid.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
         grid.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         grid.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
-        adapter = new CommonAdapter<RemedialClassBean.Data>(getActivity(), list, R.layout.item_fragment12) {
+        adapter = new CommonAdapter<RemedialClassBean.Data>(getActivity(), list, R.layout.item_fragment_remedial_class_all) {
             @Override
             public void convert(ViewHolder helper, RemedialClassBean.Data item, int position) {
                 if (item == null) {
                     Logger.e("item數據空");
                     return;
                 }
-                ((ImageView) helper.getView(R.id.image)).setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()) / 2, ScreenUtils.getScreenWidth(getActivity()) / 2 * 5 / 8));
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.image)));
-                helper.setText(R.id.subject, item.getSubject());
-                helper.setText(R.id.grade, item.getGrade());
-                if (item.getTeacher_name() != null) {
-                    helper.setText(R.id.teacher, item.getTeacher_name());
-                }
                 String price = df.format(item.getPrice());
                 if (price.startsWith(".")) {
                     price = "0" + price;
                 }
-                helper.setText(R.id.price, price);
-                helper.setText(R.id.student_number, String.valueOf(item.getBuy_tickets_count()) + "人报名");
+                helper.setText(R.id.name, item.getName()).setText(R.id.price, price).setText(R.id.teacher, item.getTeacher_name());
             }
         };
         grid.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
@@ -241,19 +225,6 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
         }
         map.put("price_floor", lowPrice);
         map.put("price_ceil", highPrice);
-//        String lowSubject = subjectLow == null ? "" : subjectLow.getText().toString();
-//        String highSubject = subjectHigh == null ? "" : subjectHigh.getText().toString();
-//        if (!StringUtils.isNullOrBlanK(lowSubject) && !StringUtils.isNullOrBlanK(highSubject)) {
-//            if (Integer.valueOf(lowSubject) > Integer.valueOf(highSubject)) {
-//                String temp = lowSubject;
-//                lowSubject = highSubject;
-//                highSubject = temp;
-//                subjectHigh.setText(highSubject);
-//                subjectLow.setText(lowSubject);
-//            }
-//        }
-//        map.put("preset_lesson_count_floor", lowSubject);
-//        map.put("preset_lesson_count_ceil", highSubject);
         if (!StringUtils.isNullOrBlanK(class_date_floor) && !StringUtils.isNullOrBlanK(class_date_ceil)) {
             try {
                 if (parseDate.parse(class_date_ceil).before(parseDate.parse(class_date_floor))) {

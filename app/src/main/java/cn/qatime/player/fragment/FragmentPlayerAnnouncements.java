@@ -11,14 +11,19 @@ import android.widget.TextView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.NEVideoPlayerActivity;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.Announcements;
+import libraryextra.utils.StringUtils;
 
 public class FragmentPlayerAnnouncements extends BaseFragment {
     private PullToRefreshListView listView;
@@ -53,6 +58,10 @@ public class FragmentPlayerAnnouncements extends BaseFragment {
 
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
+        View empty = View.inflate(getActivity(), R.layout.empty_view, null);
+        TextView textEmpty = (TextView) empty.findViewById(R.id.text_empty);
+        textEmpty.setText("暂无辅导班公告");
+        listView.setEmptyView(empty);
         listView.setMode(PullToRefreshBase.Mode.MANUAL_REFRESH_ONLY);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
@@ -89,4 +98,5 @@ public class FragmentPlayerAnnouncements extends BaseFragment {
         items.addAll(announcements);
         hd.postDelayed(runnable, 200);
     }
+
 }
