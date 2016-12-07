@@ -50,5 +50,6 @@ public class Constant {
         public static String toPage4 = "toPage4";
         public static String toClassTimeTable = "toClassTimeTable";
         public static String toMessage = "toMessage";
+        public static String toPersonalInformationChange = "toPersonalInformationChange";
     }
 }

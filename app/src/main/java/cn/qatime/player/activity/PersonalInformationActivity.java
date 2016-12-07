@@ -68,7 +68,7 @@ public class PersonalInformationActivity extends BaseActivity {
             if (!StringUtils.isNullOrBlanK(data.getStringExtra("data"))) {
                 PersonalInformationBean sData = JsonUtils.objectFromJson(data.getStringExtra("data"), PersonalInformationBean.class);
                 if (sData != null && sData.getData() != null) {
-                    bean=sData;
+                    bean = sData;
                     setValue(sData);
                     BaseApplication.getProfile().getData().getUser().setAvatar_url(sData.getData().getAvatar_url());
                     Profile profile = BaseApplication.getProfile();
@@ -84,7 +84,9 @@ public class PersonalInformationActivity extends BaseActivity {
 
                     profile.getData().setUser(user);
                     BaseApplication.setProfile(profile);
-                    setResult(Constant.RESPONSE);
+                    Intent intent = new Intent();
+                    intent.putExtra("from", 3);//从mainActivity进入时，用于标记是哪个页面返回的（从userCenter进入的不做处理）
+                    setResult(Constant.RESPONSE, intent);
                 }
             }
         }
@@ -124,7 +126,7 @@ public class PersonalInformationActivity extends BaseActivity {
 
     private void setValue(PersonalInformationBean bean) {
         Glide.with(PersonalInformationActivity.this).load(bean.getData().getAvatar_url()).placeholder(R.mipmap.personal_information_head).transform(new GlideCircleTransform(PersonalInformationActivity.this)).crossFade().into(headsculpture);
-        name.setText(bean.getData().getName());
+        name.setText(StringUtils.isNullOrBlanK(bean.getData().getName()) ? "null" : bean.getData().getName());
         if (!StringUtils.isNullOrBlanK(bean.getData().getGender())) {
             if (bean.getData().getGender().equals("male")) {
                 sex.setText(getResources().getString(R.string.male));

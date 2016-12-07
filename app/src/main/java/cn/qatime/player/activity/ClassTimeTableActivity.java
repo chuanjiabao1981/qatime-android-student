@@ -162,10 +162,8 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                 String status = item.getStatus();
 
                 boolean showEnter = "ready".equals(status)||"paused".equals(status)||"closed".equals(status)||"paused_inner".equals(status)||"teaching".equals(status);//是否是待上课、已直播、直播中
-                boolean hasPullAddress = !StringUtils.isNullOrBlanK(item.getCamera()) && !StringUtils.isNullOrBlanK(item.getBoard());//是否有拉流地址
                 //进入状态
                 helper.getView(R.id.enter).setVisibility(showEnter ? View.VISIBLE : View.GONE);//进入播放器按钮显示或隐藏
-                helper.getView(R.id.enter).setEnabled(hasPullAddress);
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

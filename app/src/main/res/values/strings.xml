@@ -211,7 +211,7 @@
     <string name="class_ready">待上课</string>
     <string name="class_wait">待补课</string>
     <string name="class_paused_inner">暂停中</string>
-    <string name="class_over">已直播</string>
+    <string name="class_over">已结束</string>
     <!--//订单支付-->
     <string name="use">使用</string>
     <string name="fail_pay">不能支付</string>
@@ -281,6 +281,8 @@
     <string name="parent_phone_number">家长手机</string>
     <string name="bind">绑 定</string>
     <string name="bind_email">绑定邮箱</string>
+    <string name="bind_rightnow">马上绑定</string>
+    <string name="bind_wechat">绑定微信</string>
     <string name="change_password">修改密码</string>
     <string name="current_phone">当前手机号码</string>
     <string name="new_email">输入新的邮箱</string>
@@ -380,7 +382,6 @@
     <string name="after_try_again">请检查您的网络或稍后再试</string>
     <string name="you_have_quit_the_group">您已退出该群组</string>
     <string name="message_can_not_null">消息不能为空</string>
-    <string name="get_group_failed">获取群组信息失败!</string>
     <string name="no_course_information">暂无辅导班信息</string>
     <string name="hour">小时</string>
     <string name="minute">分钟</string>
@@ -406,6 +407,7 @@
     <string name="regiset_success">注册成功</string>
     <string name="please_set_head">请选择头像</string>
     <string name="not_bind">未绑定</string>
+    <string name="bind_cancel">取消绑定</string>
     <string name="is_newest_version">已经是最新版本</string>
     <string name="landing">登陆中...</string>
     <string name="live_side_open">副直播已开启</string>
@@ -458,4 +460,6 @@
     <string name="audition_over">试听结束</string>
     <string name="class_missed">待补课</string>
     <string name="unlogin_alert">您还未登录,请先登录!</string>
+    <string name="hader_can_not_be_empty">头像不能为空</string>
+    <string name="teacher_translate">老师</string>
 </resources>

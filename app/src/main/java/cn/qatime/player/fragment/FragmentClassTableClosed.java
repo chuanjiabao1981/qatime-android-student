@@ -37,7 +37,6 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -101,17 +100,15 @@ public class FragmentClassTableClosed extends BaseFragment {
                 String status = item.getStatus();
 
                 boolean showEnter = "ready".equals(status)||"paused".equals(status)||"closed".equals(status)||"paused_inner".equals(status)||"teaching".equals(status);//是否是待上课、已直播、直播中
-                boolean hasPullAddress = !StringUtils.isNullOrBlanK(item.getCamera()) && !StringUtils.isNullOrBlanK(item.getBoard());//是否有拉流地址
                 //进入状态
                 helper.getView(R.id.enter).setVisibility(showEnter ? View.VISIBLE : View.GONE);//进入播放器按钮显示或隐藏
-                helper.getView(R.id.enter).setEnabled(hasPullAddress);
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
                         intent.putExtra("camera", item.getCamera());
                         intent.putExtra("board", item.getBoard());
-                        intent.putExtra("id", item.getId());
+                        intent.putExtra("id", item.getCourse_id());
                         intent.putExtra("sessionId", item.getChat_team_id());
                         startActivity(intent);
                     }

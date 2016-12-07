@@ -21,6 +21,8 @@ import com.netease.nimlib.sdk.team.model.MuteMemberAttachment;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.UpdateTeamAttachment;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +33,7 @@ import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.utils.ExpressionUtil;
 import cn.qatime.player.view.GifDrawable;
 import libraryextra.utils.DateUtils;
+import libraryextra.utils.StringUtils;
 
 /**
  * @author lungtify
@@ -44,10 +47,17 @@ public class MessageAdapter extends BaseAdapter {
     private int NOTIFICATION = 0;
     private int TEXT = 1;
     Hashtable<Integer, GifDrawable> cache = new Hashtable<Integer, GifDrawable>();
+    private String owner;
 
     public MessageAdapter(Context context, List<IMMessage> items) {
         this.context = context;
         this.items = items;
+    }
+
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -117,6 +127,13 @@ public class MessageAdapter extends BaseAdapter {
                             }
                         }));
             } else {
+                if (!StringUtils.isNullOrBlanK(owner)) {
+                    if (owner.equals(item.getFromAccount())) {
+                        textHolder.othername.setTextColor(0xffbe0b0b);
+                    } else {
+                        textHolder.othername.setTextColor(0xff333333);
+                    }
+                }
                 textHolder.right.setVisibility(View.GONE);
                 textHolder.left.setVisibility(View.VISIBLE);
                 Glide.with(context).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_32).crossFade().dontAnimate().into((ImageView) textHolder.otherhead);

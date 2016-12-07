@@ -11,14 +11,19 @@ import android.widget.TextView;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
-import libraryextra.bean.Announcements;
+import cn.qatime.player.activity.NEVideoPlayerActivity;
+import cn.qatime.player.base.BaseFragment;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import cn.qatime.player.base.BaseFragment;
+import libraryextra.bean.Announcements;
+import libraryextra.utils.StringUtils;
 
 public class FragmentPlayerAnnouncements extends BaseFragment {
     private PullToRefreshListView listView;
@@ -53,6 +58,10 @@ public class FragmentPlayerAnnouncements extends BaseFragment {
 
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
+        View empty = View.inflate(getActivity(), R.layout.empty_view, null);
+        TextView textEmpty = (TextView) empty.findViewById(R.id.text_empty);
+        textEmpty.setText("暂无辅导班公告");
+        listView.setEmptyView(empty);
         listView.setMode(PullToRefreshBase.Mode.MANUAL_REFRESH_ONLY);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
@@ -66,15 +75,15 @@ public class FragmentPlayerAnnouncements extends BaseFragment {
             @Override
             public void convert(ViewHolder helper, Announcements.DataBean.AnnouncementsBean item, int position) {
                 if (position == 0) {
-                    helper.getView(R.id.late).setVisibility(View.VISIBLE);
-                    ((TextView) helper.getView(R.id.time)).setTextColor(0xff151515);
-                    ((TextView) helper.getView(R.id.describe)).setTextColor(0xff151515);
-                    helper.setImageResource(R.id.notify, R.mipmap.notify);
+//                    helper.getView(R.id.late).setVisibility(View.VISIBLE);
+                    ((TextView) helper.getView(R.id.time)).setTextColor(0xff999999);
+                    ((TextView) helper.getView(R.id.describe)).setTextColor(0xff666666);
+                    helper.setImageResource(R.id.notify, R.mipmap.announcements_new);
                 } else {
-                    helper.getView(R.id.late).setVisibility(View.GONE);
-                    ((TextView) helper.getView(R.id.time)).setTextColor(0xff545454);
-                    ((TextView) helper.getView(R.id.describe)).setTextColor(0xff545454);
-                    helper.setImageResource(R.id.notify, R.mipmap.notify_dark);
+//                    helper.getView(R.id.late).setVisibility(View.GONE);
+                    ((TextView) helper.getView(R.id.time)).setTextColor(0xff999999);
+                    ((TextView) helper.getView(R.id.describe)).setTextColor(0xff999999);
+                    helper.setImageResource(R.id.notify, R.mipmap.announcements_normal);
                 }
                 helper.setText(R.id.time, item.getEdit_at());
                 helper.setText(R.id.describe, item.getAnnouncement());
@@ -89,4 +98,5 @@ public class FragmentPlayerAnnouncements extends BaseFragment {
         items.addAll(announcements);
         hd.postDelayed(runnable, 200);
     }
+
 }

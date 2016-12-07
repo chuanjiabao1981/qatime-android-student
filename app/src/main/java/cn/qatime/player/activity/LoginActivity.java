@@ -10,7 +10,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -31,6 +30,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,12 +41,10 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
-import libraryextra.utils.AppUtils;
 import cn.qatime.player.utils.Constant;
-import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
-import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
+import libraryextra.utils.AppUtils;
 import libraryextra.utils.CheckUtil;
 import libraryextra.utils.DialogUtils;
 import libraryextra.utils.JsonUtils;
@@ -107,6 +106,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if (!StringUtils.isNullOrBlanK(sign)) {
             if (sign.equals("exit_login")) {//从系统设置退出登录页面跳转而来，清除用户登录信息
                 password.setText("");
+                reenter = false;//认为是第一次进入
             } else if (sign.equals(Constant.VISITORTOLOGIN)) {//游客身份转到登录页
                 reenter = true;
                 action = getIntent().getStringExtra("action");
@@ -118,6 +118,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()) {
             case R.id.login://登陆
                 login.setClickable(false);
@@ -135,7 +136,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                 break;
             case R.id.register://注册
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivityForResult(intent, Constant.REGIST);
                 break;
             case R.id.login_error://忘记密码
@@ -153,7 +154,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             case R.id.wechat_login://微信登录
                 SendAuth.Req req = new SendAuth.Req();
                 req.scope = "snsapi_userinfo";
-                req.state = "wechat_sdk_demo_test";
+                req.state = "wechat_info";
                 api.sendReq(req);
                 break;
         }
@@ -238,7 +239,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                         m.put("user_id", String.valueOf(profile.getData().getUser().getId()));
                                         m.put("device_token", deviceToken);
                                         m.put("device_model", Build.MODEL);
-                                        m.put("app_name", AppUtils.getAppName(LoginActivity.this));
+                                        try {
+                                            m.put("app_name", URLEncoder.encode(AppUtils.getAppName(LoginActivity.this),"UTF-8"));
+                                        } catch (UnsupportedEncodingException e) {
+                                            e.printStackTrace();
+                                        }
                                         m.put("app_version", AppUtils.getVersionName(LoginActivity.this));
                                         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlDeviceInfo, m), null,
                                                 new VolleyListener(LoginActivity.this) {
@@ -267,9 +272,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                     }
                                 }
                                 if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
-//                                   跳转mainActivity时再setProfile
-//                                   BaseApplication.setProfile(profile);
-                                    checkUserInfo();
+                                    Logger.e("登录", response.toString());
+                                    //登录成功且有个人信息  设置profile
+                                    BaseApplication.setProfile(profile);
+                                    SPUtils.put(LoginActivity.this, "username", username.getText().toString());
+                                    loginAccount();//登陆云信
                                 } else {
                                     //没有数据或token
                                 }
@@ -308,67 +315,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     /**
-     * 检查用户信息是否完整
-     */
-    private void checkUserInfo() {
-
-        DaYiJsonObjectRequest request1 = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + profile.getData().getUser().getId() + "/info", null, new VolleyListener(LoginActivity.this) {
-            @Override
-            protected void onTokenOut() {
-                tokenOut();
-            }
-
-            @Override
-            protected void onSuccess(JSONObject response) {
-                PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
-                String name = bean.getData().getName();
-                String grade = bean.getData().getGrade();
-                if (StringUtils.isNullOrBlanK(name) || StringUtils.isNullOrBlanK(grade)) {
-                    DialogUtils.dismissDialog(progress);
-                    Intent intent = new Intent(LoginActivity.this, RegisterPerfectActivity.class);
-                    Toast.makeText(LoginActivity.this, getResourceString(R.string.please_set_information), Toast.LENGTH_SHORT).show();
-                    intent.putExtra("username", username.getText().toString().trim());
-                    intent.putExtra("password", password.getText().toString().trim());
-                    intent.putExtra("token", profile.getToken());
-                    intent.putExtra("userId", profile.getData().getUser().getId());
-                    startActivityForResult(intent, Constant.REGIST);
-                } else {
-                    Logger.e("登录", response.toString());
-                    //登录成功且有个人信息  设置profile
-                    BaseApplication.setProfile(profile);
-                    SPUtils.put(LoginActivity.this, "username", username.getText().toString());
-                    loginAccount();//登陆云信
-                }
-
-            }
-
-            @Override
-            protected void onError(JSONObject response) {
-                Toast.makeText(LoginActivity.this, getResourceString(R.string.login_failed), Toast.LENGTH_SHORT).show();
-//                BaseApplication.clearToken();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-//                BaseApplication.clearToken();
-            }
-        }) {
-            /**
-             * 由于没有登陆没有token，重写getHeaders方法 手动设置访问token
-             * @return
-             * @throws AuthFailureError
-             */
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                map.put("Remember-Token", profile.getToken());
-                return map;
-            }
-        };
-        addToRequestQueue(request1);
-    }
-
-    /**
      * 登陆云信
      */
     private void loginAccount() {
@@ -388,21 +334,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     //缓存
                     UserInfoCache.getInstance().clear();
                     TeamDataCache.getInstance().clear();
-                    //                FriendDataCache.getInstance().clear();
 
                     UserInfoCache.getInstance().buildCache();
                     TeamDataCache.getInstance().buildCache();
-                    //好友维护,目前不需要
-                    //                FriendDataCache.getInstance().buildCache();
 
                     UserInfoCache.getInstance().registerObservers(true);
                     TeamDataCache.getInstance().registerObservers(true);
-//                                                FriendDataCache.getInstance().registerObservers(true);
-//
-//                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                    startActivity(intent);
-//                    DialogUtils.dismissDialog(progress);
-//                    finish();
+//                  FriendDataCache.getInstance().registerObservers(true);
                 }
 
                 @Override
@@ -457,7 +395,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Constant.REGIST) {
+        if (requestCode == Constant.REGIST && resultCode == Constant.RESPONSE) {
+            if (reenter) {
+                Intent intent = new Intent();
+                intent.putExtra("action", action);
+                setResult(Constant.VISITORLOGINED, intent);
+            }
             finish();
         }
     }

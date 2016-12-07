@@ -5,17 +5,17 @@ import com.orhanobut.logger.Logger;
 import java.util.Iterator;
 import java.util.Map;
 
+import custom.Configure;
 import libraryextra.utils.StringUtils;
 
 /**
  * url类
  */
 public class UrlUtils {
-    public static boolean isDebug = true;
 
-    private static String baseUrl = isDebug ? "http://testing.qatime.cn/" : "http://qatime.cn/";
+    private static String baseUrl = Configure.isDebug ? "http://testing.qatime.cn/" : "http://qatime.cn/";
     //云信key
-    public static String appKey = isDebug ? "2a24ca70e580cab2bef58b1e62478f9f" : "4fe3a3fba0a40a00daf011049a29d995";
+//    public static String appKey = isDebug ? "2a24ca70e580cab2bef58b1e62478f9f" : "4fe3a3fba0a40a00daf011049a29d995";
     //登录
     public static String urlLogin = baseUrl + "api/v1/sessions";
     //辅导班
@@ -34,6 +34,8 @@ public class UrlUtils {
     public static String urlWeChatRegister = baseUrl + "api/v1/user/wechat_register";
     //獲取支付
     public static String urlPayPrepare = baseUrl + "api/v1/live_studio/courses/";
+    //课程
+    public static String urlCourses = baseUrl + "api/v1/live_studio/courses/";
     //獲取支付结果
     public static String urlPayResult = baseUrl + "api/v1/payment/orders/";
     //订单列表

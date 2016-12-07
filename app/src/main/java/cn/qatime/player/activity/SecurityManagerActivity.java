@@ -3,15 +3,26 @@ package cn.qatime.player.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
+import com.tencent.mm.sdk.modelmsg.SendAuth;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
@@ -21,6 +32,7 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -33,10 +45,16 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
     private LinearLayout parentPhoneNumber;
     private TextView phoneNumberP;
     private LinearLayout changePassword;
+    private View bindWeChat;
+    private TextView weChat;
+    private IWXAPI api;
+    private String openid;
 
     private void assignViews() {
         bindPhoneNumber = (LinearLayout) findViewById(R.id.bind_phone_number);
         bindEmail = (LinearLayout) findViewById(R.id.bind_email);
+        bindWeChat = findViewById(R.id.bind_wechat);
+        weChat = (TextView) findViewById(R.id.wechat);
         email = (TextView) findViewById(R.id.email);
         parentPhoneNumber = (LinearLayout) findViewById(R.id.parent_phone_number);
         phoneNumberP = (TextView) findViewById(R.id.phone_number_p);
@@ -50,8 +68,11 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_security_manager);
 
+        EventBus.getDefault().register(this);
         initView();
         initData();
+        api = WXAPIFactory.createWXAPI(this, null);
+        api.registerApp(Constant.APP_ID);
     }
 
     private void initData() {
@@ -66,14 +87,16 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
             protected void onSuccess(JSONObject response) {
                 Logger.e("学生信息：  " + response.toString());
                 PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
-                setValue(bean);
+                if (bean != null && bean.getData() != null) {
+                    setValue(bean);
+                }
             }
 
             @Override
             protected void onError(JSONObject response) {
                 Toast.makeText(SecurityManagerActivity.this, getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
             }
-        }, new VolleyErrorListener(){
+        }, new VolleyErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
@@ -84,6 +107,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
     }
 
     private void setValue(PersonalInformationBean bean) {
+        enableClick(true);
         String parentPhone = bean.getData().getParent_phone();
         if (parentPhone != null) {
             phoneNumberP.setText("" + parentPhone);
@@ -100,7 +124,16 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
             this.email.setText(getResourceString(R.string.not_bind));
             this.email.setTextColor(Color.RED);
         }
-
+        openid = bean.getData().getOpenid();
+        if (!StringUtils.isNullOrBlanK(openid)) {
+            weChat.setTextColor(0xff333333);
+            weChat.setBackgroundResource(R.drawable.shape_wechat_bind_background_able);
+            weChat.setText(getResourceString(R.string.bind_cancel));
+        } else {
+            weChat.setTextColor(0xffffffff);
+            weChat.setBackgroundResource(R.drawable.shape_wechat_bind_background_unable);
+            weChat.setText(getResourceString(R.string.bind_rightnow));
+        }
         String loginMobile = bean.getData().getLogin_mobile();
         if (loginMobile != null) {
             phoneNumberM.setText("" + loginMobile);
@@ -116,10 +149,20 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
         setTitle(getResources().getString(R.string.security_management));
         assignViews();
 
+        enableClick(false);
         bindPhoneNumber.setOnClickListener(this);
         bindEmail.setOnClickListener(this);
+        bindWeChat.setOnClickListener(this);
         parentPhoneNumber.setOnClickListener(this);
         changePassword.setOnClickListener(this);
+    }
+
+    private void enableClick(boolean b) {
+        bindPhoneNumber.setEnabled(b);
+        bindEmail.setEnabled(b);
+        bindWeChat.setEnabled(b);
+        parentPhoneNumber.setEnabled(b);
+        changePassword.setEnabled(b);
     }
 
     @Override
@@ -140,6 +183,18 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
                 intent.putExtra("next", "email");
                 startActivity(intent);
                 break;
+            case R.id.bind_wechat://绑定微信
+                if (!StringUtils.isNullOrBlanK(openid)) {
+                    dialogCancel();
+                } else {
+                    //绑定
+                    SendAuth.Req req = new SendAuth.Req();
+                    req.scope = "snsapi_userinfo";
+                    req.state = "wechat_info";
+                    api.sendReq(req);
+                }
+                enableClick(false);
+                break;
             case R.id.parent_phone_number://家长手机
                 intent = new Intent(this, ParentPhoneActivity.class);
                 intent.putExtra("phoneP", phoneNumberP.getText());
@@ -150,5 +205,91 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
                 startActivity(intent);
                 break;
         }
+    }
+
+    @Subscribe
+    public void onEvent(String code) {
+        //收到微信登錄code
+        Map<String, String> map = new HashMap<>();
+        map.put("code", code);
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST,
+                UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getUserId() + "/wechat", map), null, new VolleyListener(SecurityManagerActivity.this) {
+            @Override
+            protected void onTokenOut() {
+                tokenOut();
+            }
+
+            @Override
+            protected void onSuccess(JSONObject response) {
+                Logger.e("微信綁定" + response.toString());
+                initData();
+            }
+
+            @Override
+            protected void onError(JSONObject response) {
+
+            }
+        }, new VolleyErrorListener());
+        addToRequestQueue(request);
+    }
+
+    private void dialogCancel() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        View view = View.inflate(this, R.layout.dialog_cancel_or_confirm, null);
+        TextView text = (TextView) view.findViewById(R.id.text);
+        text.setText("取消绑定后将不能使用提现到微信功能，是否继续？");
+        Button cancel = (Button) view.findViewById(R.id.cancel);
+        Button confirm = (Button) view.findViewById(R.id.confirm);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                enableClick(true);
+            }
+        });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                cancelBindWechat();
+            }
+        });
+        alertDialog.show();
+        alertDialog.setContentView(view);
+    }
+
+    /**
+     * 取消綁定wechat
+     */
+    private void cancelBindWechat() {
+        Map<String, String> map = new HashMap<>();
+        map.put("openid", openid);
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.DELETE,
+                UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getUserId() + "/wechat", map), null, new VolleyListener(SecurityManagerActivity.this) {
+            @Override
+            protected void onTokenOut() {
+                tokenOut();
+            }
+
+            @Override
+            protected void onSuccess(JSONObject response) {
+                Logger.e("quxiao" + response.toString());
+                initData();
+            }
+
+            @Override
+            protected void onError(JSONObject response) {
+
+            }
+        }, new VolleyErrorListener());
+        addToRequestQueue(request);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:scaleType="fitXY"
             android:src="@mipmap/photo"
-            custom:layout_heightPercent="60%w"
+            custom:layout_heightPercent="66.66%w"
             custom:layout_widthPercent="100%w" />
 
         <TextView
@@ -25,9 +25,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:background="#ff9999"
+            android:visibility="invisible"
+            android:textSize="12dp"
             android:text="最热"
-            android:textColor="#fff"
-            android:textSize="12dp" />
+            android:textColor="#fff" />
     </com.zhy.android.percent.support.PercentRelativeLayout>
 
     <TextView
@@ -35,9 +36,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:singleLine="true"
-        android:text="辅导班"
-        android:textColor="#333"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:text="暂无辅导班数据"
+        android:textColor="#333" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -49,17 +50,17 @@
             android:id="@+id/grade"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
             android:textColor="#999"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:text="年级" />
 
         <TextView
             android:id="@+id/subject"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="科目"
             android:textColor="#999"
-            android:textSize="12sp" />
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:text="科目" />
 
         <View
             android:layout_width="0dp"
@@ -69,9 +70,9 @@
         <TextView
             android:id="@+id/count"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0已购买"
             android:textColor="#999"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:layout_height="wrap_content"
+            android:text="0人报名" />
     </LinearLayout>
 </com.zhy.android.percent.support.PercentLinearLayout>

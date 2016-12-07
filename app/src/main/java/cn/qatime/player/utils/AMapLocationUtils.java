@@ -6,7 +6,6 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.orhanobut.logger.Logger;
 
 
 /**
@@ -128,7 +127,7 @@ public class AMapLocationUtils {
 //                定位完成的时间
 //                sb.append("定位时间: " + location.getTime() + "\n");
 //                Logger.e(sb.toString());
-                return location.getCity();
+                return location.getDistrict();
             }
         } else {
 //            定位失败
