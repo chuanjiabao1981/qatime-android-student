@@ -99,6 +99,13 @@ public class FragmentMessageChatNews extends BaseFragment {
                         try {
                             Logger.e(response.toString());
                             courses = JsonUtils.objectFromJson(response.toString(), TutorialClassBean.class);
+                            for (TutorialClassBean.Data data : courses.getData()) {
+                                for (MessageListBean item : items) {
+                                    if (data.getChat_team_id().equals(item.getContactId())) {
+                                        item.setOwner(data.getChat_team_owner());
+                                    }
+                                }
+                            }
                             if (shouldPost) {
                                 if (!StringUtils.isNullOrBlanK(sessionId)) {
                                     if (courses != null && courses.getData() != null) {

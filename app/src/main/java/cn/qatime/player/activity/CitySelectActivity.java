@@ -182,7 +182,6 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
     }
 
     private void initView() {
-        refreshLately(BaseApplication.getCurrentCity());
         list = new ArrayList<>();
         ArrayList<String> lately = SPUtils.getObject(this, "listLately", ArrayList.class);
         if (lately == null || lately.size() == 0) {
@@ -191,6 +190,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
         } else {
             listLately = lately;
         }
+        refreshLately(BaseApplication.getCurrentCity());
         adapter = new CitySelectAdapter(this, letterMap, listLately, list, R.layout.item_city_lately, R.layout.item_city_all, R.layout.item_city_list) {
             @Override
             public void setCityName(CityBean.Data data) {
