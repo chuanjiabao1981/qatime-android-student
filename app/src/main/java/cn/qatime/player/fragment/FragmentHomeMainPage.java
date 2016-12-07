@@ -221,6 +221,9 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 if (item != null) {
                     Glide.with(getActivity()).load(item.getTeacher().getAvatar_url()).error(R.mipmap.error_header).centerCrop().bitmapTransform(new GlideCircleTransform(getActivity())).crossFade().dontAnimate().into(((ImageView) holder.getView(R.id.teacher_img)));
                     holder.setText(R.id.teacher_text, item.getTeacher().getName());
+                } else {
+                    Glide.with(getActivity()).load(R.mipmap.error_header).centerCrop().bitmapTransform(new GlideCircleTransform(getActivity())).crossFade().dontAnimate().into(((ImageView) holder.getView(R.id.teacher_img)));
+                    holder.setText(R.id.teacher_text, "教师名");
                 }
             }
         };
@@ -301,6 +304,13 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     ((TextView) holder.getView(R.id.reason)).setText(getReason(item.getReason()));
                     ((TextView) holder.getView(R.id.reason)).setBackgroundColor(getReasonBackground(item.getReason()));
                     ((TextView) holder.getView(R.id.reason)).setVisibility(View.VISIBLE);
+                }else {
+                    Glide.with(getActivity()).load(R.mipmap.photo).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) holder.getView(R.id.class_recommend_img)));
+                    holder.setText(R.id.course_title,"暂无辅导班数据");
+                    holder.setText(R.id.grade, "年级");
+                    holder.setText(R.id.subject, "科目");
+                    holder.setText(R.id.count, "0人报名");
+                    ((TextView) holder.getView(R.id.reason)).setVisibility(View.INVISIBLE);
                 }
             }
         };
@@ -451,7 +461,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                                             }
                                         }
                                     } else {
-                                        Toast.makeText(getActivity(), "暂未获取到城市信息",Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getActivity(), "暂未获取到城市信息", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });

@@ -106,7 +106,7 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
             }
         }
         progress.setText(data.Completed_lesson_count + "/" + data.Preset_lesson_count);
-        String price = df.format(data.price);
+        String price = df.format(data.current_price);
         if (price.startsWith(".")) {
             price = "0" + price;
         }

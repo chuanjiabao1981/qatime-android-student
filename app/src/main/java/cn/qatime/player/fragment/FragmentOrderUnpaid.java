@@ -104,7 +104,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
                 } else {//已取消
                     helper.setText(R.id.status, getResourceString(R.string.deal_closed));
                 }
-                String price = df.format(item.getProduct().getPrice());
+                String price = df.format(item.getProduct().getCurrent_price());
                 if (price.startsWith(".")) {
                     price = "0" + price;
                 }
@@ -123,7 +123,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
                                 }
                                 intent.putExtra("id", item.getId());
                                 intent.putExtra("time", item.getCreated_at());
-                                intent.putExtra("price", item.getProduct().getPrice());
+                                intent.putExtra("price", item.getProduct().getCurrent_price());
                                 intent.putExtra("type", item.getPay_type());
                                 startActivity(intent);
                             }

@@ -58,7 +58,6 @@ import libraryextra.bean.RemedialClassBean;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.KeyBoardUtils;
-import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -147,7 +146,7 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
                     return;
                 }
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.image)));
-                String price = df.format(item.getPrice());
+                String price = df.format(item.getCurrent_price());
                 if (price.startsWith(".")) {
                     price = "0" + price;
                 }

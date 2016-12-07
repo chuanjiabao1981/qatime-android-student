@@ -97,7 +97,7 @@ public class FragmentOrderCanceled extends BaseFragment {
                 } else {//已取消
                     helper.setText(R.id.status, "        ");
                 }
-                String price = df.format(item.getProduct().getPrice());
+                String price = df.format(item.getProduct().getCurrent_price());
                 if (price.startsWith(".")) {
                     price = "0" + price;
                 }
@@ -173,7 +173,7 @@ public class FragmentOrderCanceled extends BaseFragment {
                 } else {
                     payBean.status = list.get(position - 1).getProduct().getStatus();
                 }
-                payBean.price = list.get(position - 1).getProduct().getPrice();
+                payBean.current_price = list.get(position - 1).getProduct().getCurrent_price();
                 intent.putExtra("pay_data", payBean);
 
                 OrderDetailBean bean = new OrderDetailBean();//订单详情数据
@@ -185,7 +185,7 @@ public class FragmentOrderCanceled extends BaseFragment {
                 bean.teacher = list.get(position - 1).getProduct().getTeacher_name();
                 bean.Preset_lesson_count = list.get(position - 1).getProduct().getPreset_lesson_count();
                 bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
-                bean.price = list.get(position - 1).getProduct().getPrice();
+                bean.current_price = list.get(position - 1).getProduct().getCurrent_price();
                 intent.putExtra("data", bean);
                 startActivity(intent);
             }

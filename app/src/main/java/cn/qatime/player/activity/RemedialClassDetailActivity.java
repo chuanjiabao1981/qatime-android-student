@@ -359,7 +359,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         bean.classendtime = data.getData().getLive_end_time();
         bean.status = data.getData().getStatus();
         bean.classstarttime = data.getData().getLive_start_time();
-        bean.price = data.getData().getCurrent_price();
+        bean.current_price = data.getData().getCurrent_price();
 
         intent.putExtra("data", bean);
         startActivity(intent);

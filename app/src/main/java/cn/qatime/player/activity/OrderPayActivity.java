@@ -100,7 +100,7 @@ public class OrderPayActivity extends BaseActivity {
             aliPayData = getIntent().getStringExtra("data");
         }
 
-        String price = df.format(getIntent().getIntExtra("price", 0));
+        String price = df.format(getIntent().getFloatExtra("price", 0f));
         if (price.startsWith(".")) {
             price = "0" + price;
         }

@@ -111,7 +111,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
             paytype.setText(getResourceString(R.string.alipay_payment));
         }
         progress.setText(data.getProduct().getCompleted_lesson_count() + "/" + data.getProduct().getPreset_lesson_count());
-        String price = df.format(data.getProduct().getPrice());
+        String price = df.format(data.getProduct().getCurrent_price());
         if (price.startsWith(".")) {
             price = "0" + price;
         }
@@ -156,7 +156,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
                 }
                 intent.putExtra("id", data.getId());
                 intent.putExtra("time", data.getCreated_at());
-                intent.putExtra("price", data.getProduct().getPrice());
+                intent.putExtra("price", data.getProduct().getCurrent_price());
                 intent.putExtra("type", data.getPay_type());
                 startActivity(intent);
             }

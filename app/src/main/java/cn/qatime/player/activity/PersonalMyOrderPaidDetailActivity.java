@@ -98,7 +98,7 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
             status.setText(getResources().getString(R.string.deal_done));
         }
         progress.setText(data.Completed_lesson_count + "/" + data.Preset_lesson_count);
-        String price = df.format(data.price);
+        String price = df.format(data.current_price);
         if (price.startsWith(".")) {
             price = "0" + price;
         }
