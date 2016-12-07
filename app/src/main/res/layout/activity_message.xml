@@ -60,7 +60,7 @@
             <ImageView
                 android:id="@+id/emoji"
                 android:layout_width="wrap_content"
-                android:layout_height="34dp"
+                android:layout_height="40dp"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="center"
                 android:layout_marginLeft="5dp"
@@ -75,8 +75,9 @@
         <Button
             android:id="@+id/send"
             android:layout_width="60dp"
-            android:layout_height="34dp"
+            android:layout_height="40dp"
             android:layout_gravity="bottom"
+            android:layout_marginLeft="5dp"
             android:background="@drawable/button_bg_selector_red"
             android:gravity="center"
             android:text="发送"

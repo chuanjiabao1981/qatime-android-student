@@ -104,7 +104,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                                     if (courses != null && courses.getData() != null) {
                                         for (TutorialClassBean.Data data : courses.getData()) {
                                             if (sessionId.equals(data.getChat_team_id())) {
-                                                EventBus.getDefault().post(new ChatVideoBean(data.getId(), data.getCamera(),data.getBoard(), data.getName()));
+                                                EventBus.getDefault().post(new ChatVideoBean(data.getId(), data.getCamera(),data.getBoard(), data.getName(),data.getChat_team_owner()));
                                                 break;
                                             }
                                         }
@@ -181,6 +181,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                 intent.putExtra("camera", items.get(position - 1).getCamera());
                 intent.putExtra("board", items.get(position - 1).getBoard());
                 intent.putExtra("name", items.get(position - 1).getName());
+                intent.putExtra("owner", items.get(position - 1).getOwner());
                 startActivity(intent);
             }
         });
@@ -296,6 +297,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                         bean.setBoard(data.getBoard());
                         bean.setTime(item.getTime());
                         bean.setRecentMessageId(item.getRecentMessageId());
+                        bean.setOwner(data.getChat_team_owner());
                         items.add(bean);
                     }
                 }
@@ -495,6 +497,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                                 bean.setName(data.getName());
                                 bean.setCamera(data.getCamera());
                                 bean.setBoard(data.getBoard());
+                                bean.setOwner(data.getChat_team_owner());
                             }
                         }
                     } else {
@@ -610,6 +613,7 @@ public class FragmentMessageChatNews extends BaseFragment {
             intent.putExtra("camera", items.get(position).getCamera());
             intent.putExtra("board", items.get(position).getBoard());
             intent.putExtra("name", items.get(position).getName());
+            intent.putExtra("owner", items.get(position - 1).getOwner());
             startActivity(intent);
         } else {
             shouldPost = true;
@@ -618,6 +622,7 @@ public class FragmentMessageChatNews extends BaseFragment {
             intent.putExtra("sessionId", message.getSessionId());
             intent.putExtra("sessionType", message.getSessionType());
             intent.putExtra("name", message.getContent().replace("讨论组", ""));
+            intent.putExtra("owner", items.get(position - 1).getOwner());
             startActivity(intent);
         }
     }

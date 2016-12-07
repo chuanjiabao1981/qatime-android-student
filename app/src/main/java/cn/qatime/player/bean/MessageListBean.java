@@ -23,6 +23,15 @@ public class MessageListBean implements Serializable {
     private String name;
     private int courseId;
     private boolean mute;
+    private String owner;
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
 
     public void setContactId(String contactId) {
         this.contactId = contactId;

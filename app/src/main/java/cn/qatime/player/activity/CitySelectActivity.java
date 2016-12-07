@@ -146,7 +146,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
                         dialogCity();
                         Logger.e("location", result);
                         Logger.e("locationCity", locationCity.getName());
-                    }else{
+                    } else {
                         finish();
                     }
                 }
@@ -182,8 +182,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
     }
 
     private void initView() {
-        currentCity.setText(BaseApplication.getCurrentCity().getName());
-
+        refreshLately(BaseApplication.getCurrentCity());
         list = new ArrayList<>();
         ArrayList<String> lately = SPUtils.getObject(this, "listLately", ArrayList.class);
         if (lately == null || lately.size() == 0) {
@@ -234,6 +233,15 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
     }
 
     private void setCityAndHistory(CityBean.Data data) {
+        refreshLately(data);
+//                adapter.notifyDataSetChanged();
+        BaseApplication.setCurrentCity(data);
+        Intent intent = new Intent();
+        setResult(Constant.RESPONSE_CITY_SELECT, intent);
+        finish();
+    }
+
+    private void refreshLately(CityBean.Data data) {
         currentCity.setText(data.getName());
         if (listLately.contains(data.getName())) {
             listLately.remove(data.getName());
@@ -244,11 +252,6 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
                 listLately.remove(8);
             }
         }
-//                adapter.notifyDataSetChanged();
-        BaseApplication.setCurrentCity(data);
-        Intent intent = new Intent();
-        setResult(Constant.RESPONSE_CITY_SELECT, intent);
-        finish();
     }
 
     @Override
