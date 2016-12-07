@@ -28,6 +28,8 @@ import com.umeng.message.UTrack;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -149,7 +151,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             case R.id.wechat_login://微信登录
                 SendAuth.Req req = new SendAuth.Req();
                 req.scope = "snsapi_userinfo";
-                req.state = "wechat_sdk_demo_test";
+                req.state = "wechat_info";
                 api.sendReq(req);
                 break;
         }
@@ -234,7 +236,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                         m.put("user_id", String.valueOf(profile.getData().getUser().getId()));
                                         m.put("device_token", deviceToken);
                                         m.put("device_model", Build.MODEL);
-                                        m.put("app_name", AppUtils.getAppName(LoginActivity.this));
+                                        try {
+                                            m.put("app_name", URLEncoder.encode(AppUtils.getAppName(LoginActivity.this),"UTF-8"));
+                                        } catch (UnsupportedEncodingException e) {
+                                            e.printStackTrace();
+                                        }
                                         m.put("app_version", AppUtils.getVersionName(LoginActivity.this));
                                         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlDeviceInfo, m), null,
                                                 new VolleyListener(LoginActivity.this) {
@@ -325,21 +331,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     //缓存
                     UserInfoCache.getInstance().clear();
                     TeamDataCache.getInstance().clear();
-                    //                FriendDataCache.getInstance().clear();
 
                     UserInfoCache.getInstance().buildCache();
                     TeamDataCache.getInstance().buildCache();
-                    //好友维护,目前不需要
-                    //                FriendDataCache.getInstance().buildCache();
 
                     UserInfoCache.getInstance().registerObservers(true);
                     TeamDataCache.getInstance().registerObservers(true);
-//                                                FriendDataCache.getInstance().registerObservers(true);
-//
-//                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                    startActivity(intent);
-//                    DialogUtils.dismissDialog(progress);
-//                    finish();
+//                  FriendDataCache.getInstance().registerObservers(true);
                 }
 
                 @Override
