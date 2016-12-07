@@ -215,6 +215,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                                             if (data.has("result")) {
                                                 if (data.getString("result") != null && data.getString("result").equals("failed")) {
                                                     Toast.makeText(RegisterPerfectActivity.this, getResources().getString(R.string.account_or_password_error), Toast.LENGTH_SHORT).show();
+                                                    DialogUtils.dismissDialog(progress);
                                                 }
                                             } else {
                                                 Logger.e("登录", response.toString());

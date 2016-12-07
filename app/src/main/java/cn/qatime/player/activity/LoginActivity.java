@@ -26,6 +26,8 @@ import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.umeng.message.PushAgent;
 import com.umeng.message.UTrack;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -79,6 +81,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
         api = WXAPIFactory.createWXAPI(this, null);
         api.registerApp(Constant.APP_ID);
+        EventBus.getDefault().register(this);
 
         checklayout = findViewById(R.id.checklayout);
         checkview = (CheckView) findViewById(R.id.checkview);
@@ -127,7 +130,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 //                        return;
 //                    }
 //                } else {
-                    login();
+                login();
 //                }
 
                 break;
@@ -174,7 +177,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             return;
         }
         if (checklayout.getVisibility() == View.VISIBLE) {
-            if (!CheckUtil.checkNum(checkcode.getText().toString().trim(),checkNum)) {
+            if (!CheckUtil.checkNum(checkcode.getText().toString().trim(), checkNum)) {
                 Toast.makeText(this, "验证码不正确!", Toast.LENGTH_SHORT).show();
                 initCheckNum();
                 checkcode.setText("");
@@ -457,5 +460,56 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if (resultCode == Constant.REGIST) {
             finish();
         }
+    }
+
+    /**
+     * 微信註冊
+     *
+     * @param code 微信登錄嗎
+     */
+    @Subscribe
+    public void onEvent(String code) {
+        Map<String, String> map = new HashMap<>();
+        map.put("code", code);
+        map.put("client_cate", "student_client");
+        map.put("client_type", "app");
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlLogin + "/wechat", map), null, new VolleyListener(LoginActivity.this) {
+            @Override
+            protected void onTokenOut() {
+                tokenOut();
+            }
+
+            @Override
+            protected void onSuccess(JSONObject response) {
+                if (response.has("data")) {//返回登錄信息
+                    Profile data = JsonUtils.objectFromJson(response.toString(), Profile.class);
+                    BaseApplication.setProfile(data);
+                    SPUtils.put(LoginActivity.this, "username", username.getText().toString());
+                    loginAccount();//登陆云信
+
+                } else {
+                    try {
+                        String openid = response.getString("openid");
+                        Intent intent = new Intent(LoginActivity.this, WeChatBindActivity.class);
+                        intent.putExtra("openid", openid);
+                        startActivityForResult(intent, Constant.REGIST);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            protected void onError(JSONObject response) {
+
+            }
+        }, new VolleyErrorListener());
+        addToRequestQueue(request);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

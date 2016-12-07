@@ -349,8 +349,7 @@
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"
-            android:launchMode="singleTop"
-            android:theme="@android:style/Theme.NoDisplay" />
+            android:launchMode="singleTop" />
 
     </application>
 </manifest>

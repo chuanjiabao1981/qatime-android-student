@@ -1,5 +1,6 @@
 package cn.qatime.player.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -10,9 +11,24 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.orhanobut.logger.Logger;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.StringUtils;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 
 /**
  * @author lungtify
@@ -30,6 +46,7 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
     private TextView agreement;
     private Button next;
     private TimeCount time;
+    private String openid;
 
     private void assignViews() {
         phone = (EditText) findViewById(R.id.phone);
@@ -56,6 +73,7 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bind_wechat);
         setTitle("绑定");
+        openid = getIntent().getStringExtra("openid");
         assignViews();
 
     }
@@ -66,7 +84,7 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
             case R.id.get_code://获取验证码
                 if (StringUtils.isPhone(phone.getText().toString().trim())) {
                     time.start();
-                    // TODO: 2016/12/1 获取验证码
+                    getCode();
                 } else {
                     Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
                 }
@@ -78,6 +96,38 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
                 //// TODO: 2016/8/24 点击协议查看
                 break;
         }
+    }
+
+    private void getCode() {
+        Map<String, String> map = new HashMap<>();
+        map.put("send_to", phone.getText().toString().trim());
+        map.put("key", "register_captcha");
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlGetCode, map), null, new VolleyListener(this) {
+            @Override
+            protected void onTokenOut() {
+                tokenOut();
+            }
+
+            @Override
+            protected void onSuccess(JSONObject response) {
+                Toast.makeText(WeChatBindActivity.this, getResourceString(R.string.code_send_success), Toast.LENGTH_SHORT).show();
+                Logger.e("验证码发送成功" + phone.getText().toString().trim() + "---" + response.toString());
+            }
+
+            @Override
+            protected void onError(JSONObject response) {
+                Toast.makeText(WeChatBindActivity.this, getResourceString(R.string.code_send_failed), Toast.LENGTH_SHORT).show();
+            }
+
+
+        }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+                Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show();
+            }
+        });
+        addToRequestQueue(request);
     }
 
     private void next() {
@@ -102,6 +152,85 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
             next.setClickable(true);
             return;
         }
+        if (StringUtils.isNullOrBlanK(grade.getText().toString().trim())) {
+            Toast.makeText(this, getResourceString(R.string.grade_can_not_be_empty), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Map<String, String> map = new HashMap<>();
+        map.put("login_mobile", phone.getText().toString().trim());
+        map.put("captcha_confirmation", code.getText().toString().trim());
+        map.put("password", password.getText().toString().trim());
+        map.put("accept", "" + (checkBox.isChecked() ? 1 : 0));
+        map.put("type", "Student");
+        map.put("client_type", "app");
+        map.put("grade", "app");
+        map.put("openid", openid);
+
+
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlWeChatRegister, map),
+                null, new VolleyListener(this) {
+            @Override
+            protected void onTokenOut() {
+                tokenOut();
+            }
+
+            @Override
+            protected void onSuccess(JSONObject response) {
+
+//                try {
+//                    String token = response.getJSONObject("data").getString("remember_token");
+//                    int id = response.getJSONObject("data").getJSONObject("user").getInt("id");
+//
+//
+//                    Toast.makeText(WeChatBindActivity.this, getResourceString(R.string.please_set_information), Toast.LENGTH_SHORT).show();
+//                    Logger.e("注册成功" + response);
+//                    //下一步跳转
+//                    Intent intent = new Intent(WeChatBindActivity.this, RegisterPerfectActivity.class);
+//                    intent.putExtra("username", phone.getText().toString().trim());
+//                    intent.putExtra("password", password.getText().toString().trim());
+//                    intent.putExtra("token", token);
+//                    intent.putExtra("userId", id);
+//                    startActivityForResult(intent, Constant.REGIST);
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+
+
+            }
+
+            @Override
+            protected void onError(JSONObject response) {
+
+                String result = "";
+                try {
+                    result = response.getJSONObject("error").getString("msg");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Logger.e("注册失败--" + result);
+                if (result.contains("已经被使用")) {
+                    Toast.makeText(WeChatBindActivity.this, getResourceString(R.string.phone_already_used), Toast.LENGTH_SHORT).show();
+                } else if (result.contains("与确认值不匹配")) {
+                    Toast.makeText(WeChatBindActivity.this, getResourceString(R.string.code_error), Toast.LENGTH_SHORT).show();
+                } else if (result.contains("注册码")) {
+                    Toast.makeText(WeChatBindActivity.this, getResourceString(R.string.register_code_error), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(WeChatBindActivity.this, getResourceString(R.string.register_failed), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+
+        }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+                Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        addToRequestQueue(request);
     }
 
     private class TimeCount extends CountDownTimer {
