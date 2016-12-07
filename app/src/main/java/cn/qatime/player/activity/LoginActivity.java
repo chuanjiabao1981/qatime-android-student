@@ -78,9 +78,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        EventBus.getDefault().register(this);
         api = WXAPIFactory.createWXAPI(this, null);
         api.registerApp(Constant.APP_ID);
-        EventBus.getDefault().register(this);
 
         checklayout = findViewById(R.id.checklayout);
         checkview = (CheckView) findViewById(R.id.checkview);
@@ -122,17 +122,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         switch (v.getId()) {
             case R.id.login://登陆
                 login.setClickable(false);
-//                if (checklayout.getVisibility() == View.VISIBLE) {
-//                    if (CheckUtil.checkNum(checkcode.getText().toString(), checkNum)) {
-//                        login();
-//                    } else {
-//                        login.setClickable(true);
-//                        Toast.makeText(this, getResources().getString(R.string.verification_code_is_incorrect), Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }
-//                } else {
                 login();
-//                }
 
                 break;
             case R.id.register://注册
@@ -211,7 +201,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                 DialogUtils.dismissDialog(progress);
                                 if (data.getString("result") != null && data.getString("result").equals("failed")) {
                                     Toast.makeText(LoginActivity.this, getResources().getString(R.string.account_or_password_error), Toast.LENGTH_SHORT).show();
-                                    DialogUtils.dismissDialog(progress);
                                     BaseApplication.clearToken();
                                     login.setClickable(true);
                                     password.setText("");
@@ -240,7 +229,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                         m.put("device_token", deviceToken);
                                         m.put("device_model", Build.MODEL);
                                         try {
-                                            m.put("app_name", URLEncoder.encode(AppUtils.getAppName(LoginActivity.this),"UTF-8"));
+                                            m.put("app_name", URLEncoder.encode(AppUtils.getAppName(LoginActivity.this), "UTF-8"));
                                         } catch (UnsupportedEncodingException e) {
                                             e.printStackTrace();
                                         }
@@ -398,7 +387,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if (requestCode == Constant.REGIST && resultCode == Constant.RESPONSE) {
             if (reenter) {
                 Intent intent = new Intent();
-                intent.putExtra("action", action);
+                if (data != null) {
+                    intent.putExtra("action", data.getStringExtra("action"));
+                } else {
+                    intent.putExtra("action", action);
+                }
                 setResult(Constant.VISITORLOGINED, intent);
             }
             finish();
@@ -426,9 +419,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             protected void onSuccess(JSONObject response) {
                 if (response.has("data")) {//返回登錄信息
                     Profile data = JsonUtils.objectFromJson(response.toString(), Profile.class);
-                    BaseApplication.setProfile(data);
-                    SPUtils.put(LoginActivity.this, "username", username.getText().toString());
-                    loginAccount();//登陆云信
+                    if (data != null && data.getData() != null && !StringUtils.isNullOrBlanK(data.getData().getRemember_token())) {
+                        BaseApplication.setProfile(data);
+                        SPUtils.put(LoginActivity.this, "username", username.getText().toString());
+                        loginAccount();//登陆云信
+                    }else {
+                        //没有数据或没有token
+                    }
 
                 } else {
                     try {
@@ -446,7 +443,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             protected void onError(JSONObject response) {
 
             }
-        }, new VolleyErrorListener());
+        }, new VolleyErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+                Logger.e(volleyError.getMessage());
+            }
+        });
         addToRequestQueue(request);
     }
 

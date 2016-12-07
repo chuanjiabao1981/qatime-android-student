@@ -1,8 +1,10 @@
 package cn.qatime.player.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -13,22 +15,41 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.orhanobut.logger.Logger;
+import com.umeng.message.PushAgent;
+import com.umeng.message.UTrack;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.config.UserPreferences;
+import cn.qatime.player.im.cache.TeamDataCache;
+import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.bean.Profile;
+import libraryextra.utils.AppUtils;
+import libraryextra.utils.DialogUtils;
+import libraryextra.utils.JsonUtils;
+import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
+import libraryextra.view.CustomProgressDialog;
 
 /**
  * @author lungtify
@@ -47,6 +68,8 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
     private Button next;
     private TimeCount time;
     private String openid;
+    private Profile profile;
+    private CustomProgressDialog progress;
 
     private void assignViews() {
         phone = (EditText) findViewById(R.id.phone);
@@ -177,27 +200,61 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
 
             @Override
             protected void onSuccess(JSONObject response) {
+                profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
 
-//                try {
-//                    String token = response.getJSONObject("data").getString("remember_token");
-//                    int id = response.getJSONObject("data").getJSONObject("user").getInt("id");
-//
-//
-//                    Toast.makeText(WeChatBindActivity.this, getResourceString(R.string.please_set_information), Toast.LENGTH_SHORT).show();
-//                    Logger.e("注册成功" + response);
-//                    //下一步跳转
-//                    Intent intent = new Intent(WeChatBindActivity.this, RegisterPerfectActivity.class);
-//                    intent.putExtra("username", phone.getText().toString().trim());
-//                    intent.putExtra("password", password.getText().toString().trim());
-//                    intent.putExtra("token", token);
-//                    intent.putExtra("userId", id);
-//                    startActivityForResult(intent, Constant.REGIST);
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
+                if (profile != null && profile.getData() != null && profile.getData().getUser() != null && profile.getData().getUser().getId() != 0) {
+                    PushAgent.getInstance(WeChatBindActivity.this).addAlias(String.valueOf(profile.getData().getUser().getId()), "student", new UTrack.ICallBack() {
+                        @Override
+                        public void onMessage(boolean b, String s) {
 
+                        }
+                    });
+                    String deviceToken = PushAgent.getInstance(WeChatBindActivity.this).getRegistrationId();
+                    if (!StringUtils.isNullOrBlanK(deviceToken)) {
+                        Map<String, String> m = new HashMap<>();
+                        m.put("user_id", String.valueOf(profile.getData().getUser().getId()));
+                        m.put("device_token", deviceToken);
+                        m.put("device_model", Build.MODEL);
+                        try {
+                            m.put("app_name", URLEncoder.encode(AppUtils.getAppName(WeChatBindActivity.this), "UTF-8"));
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                        m.put("app_version", AppUtils.getVersionName(WeChatBindActivity.this));
+                        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlDeviceInfo, m), null,
+                                new VolleyListener(WeChatBindActivity.this) {
 
+                                    @Override
+                                    protected void onSuccess(JSONObject response) {
+                                    }
+
+                                    @Override
+                                    protected void onError(JSONObject response) {
+
+                                    }
+
+                                    @Override
+                                    protected void onTokenOut() {
+                                        tokenOut();
+                                    }
+
+                                }, new VolleyErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError volleyError) {
+                                super.onErrorResponse(volleyError);
+                            }
+                        });
+                        addToRequestQueue(request);
+                    }
+                }
+                if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
+                    Logger.e("登录", response.toString());
+                    //登录成功且有个人信息  设置profile
+                    BaseApplication.setProfile(profile);
+                    loginAccount();//登陆云信
+                } else {
+                    finish();
+                }
             }
 
             @Override
@@ -232,6 +289,67 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
 
         addToRequestQueue(request);
     }
+
+
+    /**
+     * 登陆云信
+     */
+    private void loginAccount() {
+        progress = DialogUtils.startProgressDialog(progress, this, "登录中...");
+        String account = BaseApplication.getAccount();
+        String token = BaseApplication.getAccountToken();
+
+        if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
+            NIMClient.getService(AuthService.class).login(new LoginInfo(account, token)).setCallback(new RequestCallback<LoginInfo>() {
+                @Override
+                public void onSuccess(LoginInfo o) {
+                    DialogUtils.dismissDialog(progress);
+                    Logger.e("云信登录成功" + o.getAccount());
+                    // 初始化消息提醒
+                    NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
+
+                    NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
+                    //缓存
+                    UserInfoCache.getInstance().clear();
+                    TeamDataCache.getInstance().clear();
+
+                    UserInfoCache.getInstance().buildCache();
+                    TeamDataCache.getInstance().buildCache();
+
+                    UserInfoCache.getInstance().registerObservers(true);
+                    TeamDataCache.getInstance().registerObservers(true);
+//                  FriendDataCache.getInstance().registerObservers(true);
+                }
+
+                @Override
+                public void onFailed(int code) {
+                    DialogUtils.dismissDialog(progress);
+                    profile.getData().setRemember_token("");
+                    SPUtils.putObject(WeChatBindActivity.this, "profile", profile);
+                    Logger.e(code + "code");
+                }
+
+                @Override
+                public void onException(Throwable throwable) {
+                    DialogUtils.dismissDialog(progress);
+                    Logger.e(throwable.getMessage());
+//                    BaseApplication.clearToken();
+                    profile.getData().setRemember_token("");
+                    SPUtils.putObject(WeChatBindActivity.this, "profile", profile);
+                }
+            });
+        }
+
+        if (!LoginActivity.reenter) {
+            Intent data = new Intent(WeChatBindActivity.this, MainActivity.class);
+            startActivity(data);
+        }
+        DialogUtils.dismissDialog(progress);
+        setResult(Constant.RESPONSE);
+        finish();
+
+    }
+
 
     private class TimeCount extends CountDownTimer {
         TimeCount(long millisInFuture, long countDownInterval) {

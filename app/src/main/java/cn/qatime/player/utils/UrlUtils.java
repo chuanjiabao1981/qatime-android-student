@@ -32,8 +32,6 @@ public class UrlUtils {
     public static String urlRegister = baseUrl + "api/v1/user/register";
     //微信注册
     public static String urlWeChatRegister = baseUrl + "api/v1/user/wechat_register";
-    //獲取支付
-    public static String urlPayPrepare = baseUrl + "api/v1/live_studio/courses/";
     //课程
     public static String urlCourses = baseUrl + "api/v1/live_studio/courses/";
     //獲取支付结果
