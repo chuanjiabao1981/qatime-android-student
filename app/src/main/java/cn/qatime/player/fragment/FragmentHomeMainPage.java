@@ -52,7 +52,6 @@ import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.CityBean;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.SPUtils;
 import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -126,7 +125,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         tagViewpagerImg.setLayoutParams(params);
         noBanner = new BannerRecommendBean.DataBean();
         listBanner.add(noBanner);
-        tagViewpagerImg.init(R.drawable.shape_photo_tag_select,R.drawable.shape_photo_tag_nomal, 16, 8, 4, 30);
+        tagViewpagerImg.init(R.drawable.shape_photo_tag_select, R.drawable.shape_photo_tag_nomal, 16, 8, 4, 30);
         tagViewpagerImg.setAutoNext(true, 3000);
 //        viewPager.setId(1252);
         tagViewpagerImg.setOnGetView(new TagViewPager.OnGetView() {
@@ -149,7 +148,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private void initBannerData() {
         Map<String, String> map = new HashMap<>();
 //        map.put("per_page", String.valueOf(1));
-        map.put("city_id", BaseApplication.getCurrentCity().getId() + "");
+        map.put("city_name", BaseApplication.getCurrentCity().getName());
         JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecommend + "index_banner" + "/items", map), null,
                 new VolleyListener(getActivity()) {
                     @Override
@@ -243,7 +242,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(page));
         map.put("per_page", String.valueOf(5));
-        map.put("city_id", BaseApplication.getCurrentCity().getId() + "");
+        map.put("city_name", BaseApplication.getCurrentCity().getName());
         JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecommend + "index_teacher_recommend" + "/items", map), null,
                 new VolleyListener(getActivity()) {
                     @Override
@@ -342,7 +341,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(1));
         map.put("per_page", String.valueOf(6));
-        map.put("city_id", BaseApplication.getCurrentCity().getId() + "");
+        map.put("city_name", BaseApplication.getCurrentCity().getName());
         JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecommend + "index_live_studio_course_recommend" + "/items", map), null,
                 new VolleyListener(getActivity()) {
                     @Override
@@ -441,16 +440,18 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                                             locationCity = item;
                                         }
                                     }
-                                    CityBean.Data currentCity = SPUtils.getObject(getActivity(), "current_city", CityBean.Data.class);
-                                    if (currentCity == null) {
-                                        if (locationCity == null) {//如果没有被赋值，则默认全国
-                                            locationCity = new CityBean.Data("全国");
-                                            Toast.makeText(getActivity(), "暂未获取到您的位置信息，\n已为您切换至全国", Toast.LENGTH_SHORT).show();
-                                            BaseApplication.setCurrentCity(locationCity);
-                                            setCity();
-                                        } else {
-                                            dialogCity();
+                                    CityBean.Data currentCity = BaseApplication.getCurrentCity();
+                                    if (locationCity != null) {
+                                        if (!currentCity.equals(locationCity)) {
+                                            if (locationCity.getWorkstations_count() != 0) {
+                                                dialogCity();
+//                                            } else {
+//                                                BaseApplication.setCurrentCity(locationCity);
+//                                                setCity();
+                                            }
                                         }
+                                    } else {
+                                        Toast.makeText(getActivity(), "暂未获取到城市信息",Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });

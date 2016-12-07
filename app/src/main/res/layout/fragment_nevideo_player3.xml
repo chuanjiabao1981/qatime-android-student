@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<cn.qatime.player.view.VerticalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff"
@@ -241,7 +241,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="10dp"
             android:paddingRight="10dp">
@@ -357,9 +357,9 @@
                     android:id="@+id/image"
                     android:layout_width="88dp"
                     android:layout_height="92dp"
+                    android:layout_gravity="bottom"
                     android:paddingBottom="4dp"
                     android:scaleType="fitXY"
-                    android:layout_gravity="bottom"
                     android:src="@mipmap/error_header_rect" />
             </LinearLayout>
 
@@ -387,22 +387,28 @@
         </LinearLayout>
 
         <View
+            android:id="@+id/view_empty_gone"
             android:layout_width="match_parent"
             android:layout_height="10dp"
             android:background="#f3f2f2" />
 
-        <libraryextra.view.GridViewForScrollView
-            android:id="@+id/list"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:cacheColorHint="#00000000"
-            android:listSelector="#00000000"
-            android:numColumns="1"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:scrollbars="none"
-            android:verticalSpacing="10dp" />
+            android:layout_height="wrap_content">
+
+            <libraryextra.view.GridViewForScrollView
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:cacheColorHint="#00000000"
+                android:listSelector="#00000000"
+                android:numColumns="1"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:scrollbars="none"
+                android:verticalSpacing="10dp" />
+        </RelativeLayout>
     </LinearLayout>
 
 
-</cn.qatime.player.view.VerticalScrollView>
+</ScrollView>
