@@ -21,8 +21,6 @@ import com.netease.nimlib.sdk.team.model.MuteMemberAttachment;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.UpdateTeamAttachment;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -129,16 +127,18 @@ public class MessageAdapter extends BaseAdapter {
             } else {
                 if (!StringUtils.isNullOrBlanK(owner)) {
                     if (owner.equals(item.getFromAccount())) {
+                        textHolder.othername.setText(item.getFromNick()+"(老师)");
                         textHolder.othername.setTextColor(0xffbe0b0b);
                     } else {
+                        textHolder.othername.setText(item.getFromNick());
                         textHolder.othername.setTextColor(0xff333333);
                     }
+                }else{
+                    textHolder.othername.setText(item.getFromNick());
                 }
                 textHolder.right.setVisibility(View.GONE);
                 textHolder.left.setVisibility(View.VISIBLE);
                 Glide.with(context).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_32).crossFade().dontAnimate().into((ImageView) textHolder.otherhead);
-
-                textHolder.othername.setText(item.getFromNick());
                 textHolder.othercontent.setText(ExpressionUtil.getExpressionString(
                         context, item.getContent(), ExpressionUtil.emoji, cache, new GifDrawable.UpdateListener() {
                             @Override
