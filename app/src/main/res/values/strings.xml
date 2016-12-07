@@ -280,6 +280,8 @@
     <string name="bind_phone_number">绑定手机</string>
     <string name="parent_phone_number">家长手机</string>
     <string name="bind_email">绑定邮箱</string>
+    <string name="bind_rightnow">马上绑定</string>
+    <string name="bind_wechat">绑定微信</string>
     <string name="change_password">修改密码</string>
     <string name="current_phone">当前手机号码</string>
     <string name="new_email">输入新的邮箱</string>
@@ -404,6 +406,7 @@
     <string name="regiset_success">注册成功</string>
     <string name="please_set_head">请选择头像</string>
     <string name="not_bind">未绑定</string>
+    <string name="bind_cancel">取消绑定</string>
     <string name="is_newest_version">已经是最新版本</string>
     <string name="landing">登陆中...</string>
     <string name="live_side_open">副直播已开启</string>

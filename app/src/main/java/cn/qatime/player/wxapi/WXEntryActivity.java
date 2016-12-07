@@ -12,6 +12,7 @@ import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import cn.qatime.player.base.BaseActivity;
@@ -45,7 +46,6 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler 
 
     @Override
     public void onReq(BaseReq baseReq) {
-        Logger.e("****" + baseReq.getType());
     }
 
     @Override
@@ -53,28 +53,12 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler 
         if (baseResp instanceof SendAuth.Resp) {
             SendAuth.Resp newResp = (SendAuth.Resp) baseResp;
             if (newResp.errCode == BaseResp.ErrCode.ERR_OK) {
-
                 //获取微信传回的code
                 String code = newResp.code;
                 Logger.e("***" + code);
-//                JsonObjectRequest request = new JsonObjectRequest("https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + Constant.APP_ID + "&secret=" + Constant.APP_SECRET + "&code=" + code + "&grant_type=authorization_code", null, new VolleyListener(this) {
-//                    @Override
-//                    protected void onTokenOut() {
-//
-//                    }
-//
-//                    @Override
-//                    protected void onSuccess(JSONObject response) {
-//
-//                    }
-//
-//                    @Override
-//                    protected void onError(JSONObject response) {
-//
-//                    }
-//                }, new VolleyErrorListener());
-//                addToRequestQueue(request);
+                EventBus.getDefault().post(code);
             }
         }
+        finish();
     }
 }

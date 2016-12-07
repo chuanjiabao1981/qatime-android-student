@@ -52,7 +52,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     private ImageView wechatPay;
     private int id;
     private String payType = "weixin";
-    private int priceNumber = 0;
+    private float priceNumber = 0;
     DecimalFormat df = new DecimalFormat("#.00");
     private SimpleDateFormat parse1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private SimpleDateFormat parse2 = new SimpleDateFormat("yyyy-MM-dd");
