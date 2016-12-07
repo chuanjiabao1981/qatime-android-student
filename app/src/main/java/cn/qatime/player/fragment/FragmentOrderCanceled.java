@@ -159,6 +159,8 @@ public class FragmentOrderCanceled extends BaseFragment {
                 Logger.e(list.get(position - 1).getId());
                 intent.putExtra("id", list.get(position - 1).getProduct().getId());
                 intent.putExtra("order_id", list.get(position - 1).getId());
+                intent.putExtra("created_at", list.get(position - 1).getCreated_at());
+                intent.putExtra("payType", list.get(position - 1).getPay_type());
                 OrderPayBean payBean = new OrderPayBean();//重新下单数据
                 payBean.image = list.get(position - 1).getProduct().getPublicize();
                 payBean.name = list.get(position - 1).getProduct().getName();

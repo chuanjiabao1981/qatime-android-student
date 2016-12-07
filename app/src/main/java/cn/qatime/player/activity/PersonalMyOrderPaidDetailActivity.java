@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
@@ -34,6 +36,8 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
     private TextView payprice;
     private int classid;
     DecimalFormat df = new DecimalFormat("#.00");
+    SimpleDateFormat parseISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
+    SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,22 +56,22 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
 
         Glide.with(PersonalMyOrderPaidDetailActivity.this).load(data.image).placeholder(R.mipmap.photo).centerCrop().crossFade().into(image);
         if (StringUtils.isNullOrBlanK(data.name)) {
-            name.setText( getResourceString(R.string.cancel_order_name));
+            name.setText(getResourceString(R.string.cancel_order_name));
         } else {
             name.setText(data.name);
         }
         if (StringUtils.isNullOrBlanK(data.grade)) {
-            grade.setText( getResourceString(R.string.grade));
+            grade.setText(getResourceString(R.string.grade));
         } else {
             grade.setText(data.grade);
         }
         if (StringUtils.isNullOrBlanK(data.subject)) {
-            subject.setText( getResourceString(R.string.subject));
+            subject.setText(getResourceString(R.string.subject));
         } else {
             subject.setText(data.subject);
         }
         if (StringUtils.isNullOrBlanK(data.teacher)) {
-            teacher.setText( getResourceString(R.string.cancel_order_teacher));
+            teacher.setText(getResourceString(R.string.cancel_order_teacher));
         } else {
             teacher.setText(data.teacher);
         }
@@ -76,13 +80,21 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
         if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("created_at"))) {
             buildtime.setText(getResourceString(R.string.is_null));
         } else {
-            buildtime.setText(getIntent().getStringExtra("created_at"));
+            try {
+                buildtime.setText(parse.format(parseISO.parse(getIntent().getStringExtra("created_at"))));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         //支付时间
         if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("pay_at"))) {
             paytime.setText(getResourceString(R.string.is_null));
         } else {
-            paytime.setText(getIntent().getStringExtra("pay_at"));
+            try {
+                buildtime.setText(parse.format(parseISO.parse(getIntent().getStringExtra("pay_at"))));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         String payType = getIntent().getStringExtra("payType");//支付方式
         if (payType.equals("weixin")) {
