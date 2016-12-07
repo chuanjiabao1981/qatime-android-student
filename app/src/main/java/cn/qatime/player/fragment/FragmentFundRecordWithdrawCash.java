@@ -24,6 +24,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,6 +55,8 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
     private CommonAdapter<WithdrawCashRecordBean.DataBean> adapter;
     DecimalFormat df = new DecimalFormat("#.00");
     private int page = 1;
+    SimpleDateFormat parseISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
+    SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Nullable
     @Override
@@ -142,7 +146,11 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
                 helper.setText(R.id.mode, getPayType(item.getPay_type()));
                 helper.setText(R.id.status, getStatus(item.getStatus()));
                 helper.setText(R.id.id,item.getTransaction_no());
-                helper.setText(R.id.time,item.getCreated_at());
+                try {
+                    helper.setText(R.id.time, parse.format(parseISO.parse(item.getCreated_at())));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         };
         listView.setAdapter(adapter);

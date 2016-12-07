@@ -107,7 +107,7 @@ public class TeacherDataActivity extends BaseActivity {
                 helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.course_title, item.getName());
-                String price = df.format(item.getPrice());
+                String price = df.format(item.getCurrent_price());
                 if (price.startsWith(".")) {
                     price = "0" + price;
                 }

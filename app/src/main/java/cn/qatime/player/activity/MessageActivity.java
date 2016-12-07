@@ -138,6 +138,7 @@ public class MessageActivity extends BaseActivity {
 //            }
 //        };
         adapter = new MessageAdapter(this, items);
+        adapter.setOwner(getIntent().getStringExtra("owner"));
         listView.setAdapter(adapter);
         content = (EditText) findViewById(R.id.content);
         emoji = (ImageView) findViewById(R.id.emoji);
@@ -539,6 +540,9 @@ public class MessageActivity extends BaseActivity {
             this.courseId = event.getCourseId();
             this.camera = event.getCamera();
             this.board = event.getBoard();
+            if (adapter != null) {
+                adapter.setOwner(event.getChat_team_owner());
+            }
             if (!StringUtils.isNullOrBlanK(event.getName())) {
                 setTitle(event.getName());
             } else {

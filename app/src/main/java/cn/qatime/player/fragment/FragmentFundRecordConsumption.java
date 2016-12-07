@@ -17,6 +17,8 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -45,6 +47,8 @@ public class FragmentFundRecordConsumption extends BaseFragment {
     private CommonAdapter<ConsumptionRecordBean.DataBean> adapter;
     DecimalFormat df = new DecimalFormat("#.00");
     private int page = 1;
+    SimpleDateFormat parseISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
+    SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Nullable
     @Override
@@ -128,7 +132,11 @@ public class FragmentFundRecordConsumption extends BaseFragment {
                     price = "0" + price;
                 }
                 helper.setText(R.id.money_amount, "-￥" + price);
-                helper.setText(R.id.time, item.getCreated_at());
+                try {
+                    helper.setText(R.id.time, parse.format(parseISO.parse(item.getCreated_at())));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 helper.setText(R.id.mode, getChangeType(item.getChange_type()));
                 helper.setText(R.id.type, item.getTarget_type());
             }

@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
@@ -34,6 +36,8 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
     private int classid;
     private TextView payprice;
     DecimalFormat df = new DecimalFormat("#.00");
+    SimpleDateFormat parseISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
+    SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,8 +95,11 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
             buildtime.setText("        ");
         }//创建时间
         else {
-            buildtime.setText(getIntent().getStringExtra("created_at"));
-
+            try {
+                buildtime.setText(parse.format(parseISO.parse(getIntent().getStringExtra("created_at"))));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("created_at"))) {
             paytype.setText("        ");
@@ -106,7 +113,7 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
             }
         }
         progress.setText(data.Completed_lesson_count + "/" + data.Preset_lesson_count);
-        String price = df.format(data.price);
+        String price = df.format(data.current_price);
         if (price.startsWith(".")) {
             price = "0" + price;
         }

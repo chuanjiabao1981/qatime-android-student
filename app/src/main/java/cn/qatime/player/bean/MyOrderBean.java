@@ -171,7 +171,8 @@ public class MyOrderBean implements Serializable {
 
         private String teacher_name;
 
-        private int price;
+        public float price;
+        public float current_price;
 
         private String chat_team_id;
 
@@ -237,12 +238,20 @@ public class MyOrderBean implements Serializable {
             return this.teacher_name;
         }
 
-        public void setPrice(int price) {
+        public float getPrice() {
+            return price;
+        }
+
+        public void setPrice(float price) {
             this.price = price;
         }
 
-        public int getPrice() {
-            return this.price;
+        public float getCurrent_price() {
+            return current_price;
+        }
+
+        public void setCurrent_price(float current_price) {
+            this.current_price = current_price;
         }
 
         public void setChat_team_id(String chat_team_id) {

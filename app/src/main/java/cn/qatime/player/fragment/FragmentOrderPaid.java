@@ -96,7 +96,7 @@ public class FragmentOrderPaid extends BaseFragment {
                 } else {//
                     helper.setText(R.id.status, "  ");
                 }
-                String price = df.format(item.getProduct().getPrice());
+                String price = df.format(item.getProduct().getCurrent_price());
                 if (price.startsWith(".")) {
                     price = "0" + price;
                 }
@@ -135,7 +135,7 @@ public class FragmentOrderPaid extends BaseFragment {
                 bean.teacher = list.get(position - 1).getProduct().getTeacher_name();
                 bean.Preset_lesson_count = list.get(position - 1).getProduct().getPreset_lesson_count();
                 bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
-                bean.price = list.get(position - 1).getProduct().getPrice();
+                bean.current_price = list.get(position - 1).getProduct().getCurrent_price();
                 intent.putExtra("data", bean);
                 intent.putExtra("payType", list.get(position - 1).getPay_type());
                 intent.putExtra("created_at", list.get(position - 1).getCreated_at());

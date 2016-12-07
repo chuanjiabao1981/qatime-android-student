@@ -76,7 +76,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         id = getIntent().getIntExtra("id", 0);
         if (data != null) {
             setValue(data);
-            priceNumber = data.price;
+            priceNumber = data.current_price;
 //            initData(data.getData().getId());
         }
         pay.setOnClickListener(this);
@@ -104,7 +104,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 //        } else {
 //            status.setText(getResources().getString(R.string.status_over));
 //        }
-        String price = df.format(data.price);
+        String price = df.format(data.current_price);
         if (price.startsWith(".")) {
             price = "0" + price;
         }
@@ -196,6 +196,8 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         alertDialog = builder.create();
         View view = View.inflate(this, R.layout.dialog_confirm, null);
+        TextView text = (TextView) view.findViewById(R.id.text);
+        text.setText("下单失败啦！！！");
         Button confirm = (Button) view.findViewById(R.id.confirm);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override

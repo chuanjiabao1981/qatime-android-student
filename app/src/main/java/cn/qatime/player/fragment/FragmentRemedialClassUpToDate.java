@@ -90,7 +90,7 @@ public class FragmentRemedialClassUpToDate extends BaseFragment {
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.teacher, item.getTeacher_name());
-                String price = df.format(item.getPrice());
+                String price = df.format(item.getCurrent_price());
                 if (price.startsWith(".")) {
                     price = "0" + price;
                 }

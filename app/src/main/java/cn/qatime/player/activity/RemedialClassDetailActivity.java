@@ -204,7 +204,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                             }
                         }
                         if (data.getData() != null) {
-                            String price = df.format(data.getData().getPrice());
+                            String price = df.format(data.getData().getCurrent_price());
                             if (price.startsWith(".")) {
                                 price = "0" + price;
                             }
@@ -359,7 +359,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         bean.classendtime = data.getData().getLive_end_time();
         bean.status = data.getData().getStatus();
         bean.classstarttime = data.getData().getLive_start_time();
-        bean.price = data.getData().getPrice();
+        bean.current_price = data.getData().getCurrent_price();
 
         intent.putExtra("data", bean);
         startActivity(intent);
