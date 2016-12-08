@@ -39,6 +39,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +67,6 @@ public class FragmentPlayerMessage extends BaseFragment {
     // 从服务器拉取消息记录
     private boolean remote = false;
 
-    private IMMessage anchor;
     private QueryDirectionEnum direction;
     private int LOAD_MESSAGE_COUNT = 20;//聊天加载条数
 
@@ -153,12 +153,7 @@ public class FragmentPlayerMessage extends BaseFragment {
         if (remote) {
             loadFromRemote();
         } else {
-            if (anchor == null) {
-                loadFromLocal(QueryDirectionEnum.QUERY_OLD);
-            } else {
-                // 加载指定anchor的上下文
-                loadAnchorContext();
-            }
+            loadFromLocal(QueryDirectionEnum.QUERY_OLD);
         }
     }
 
@@ -186,7 +181,7 @@ public class FragmentPlayerMessage extends BaseFragment {
 
     private IMMessage anchor() {
         if (items.size() == 0) {
-            return anchor == null ? MessageBuilder.createEmptyMessage(sessionId, sessionType, 0) : anchor;
+            return MessageBuilder.createEmptyMessage(sessionId, sessionType, 0);
         } else {
             int index = (direction == QueryDirectionEnum.QUERY_NEW ? items.size() - 1 : 0);
             return items.get(index);
@@ -245,10 +240,6 @@ public class FragmentPlayerMessage extends BaseFragment {
             }
         }
 
-        if (firstLoad && anchor != null) {
-            items.add(anchor);
-        }
-
         List<IMMessage> result = new ArrayList<>();
         for (IMMessage message : messages) {
             if (message.getMsgType() == MsgTypeEnum.text || message.getMsgType() == MsgTypeEnum.notification) {
@@ -284,8 +275,15 @@ public class FragmentPlayerMessage extends BaseFragment {
             boolean needRefresh = false;
             List<IMMessage> addedListItems = new ArrayList<>(messages.size());
             for (IMMessage message : messages) {
+                //做一下去重
+                for (IMMessage item : items) {
+                    if (item.isTheSame(message)) {
+                        items.remove(item);
+                        break;
+                    }
+                }
                 if (isMyMessage(message) && (message.getMsgType() == MsgTypeEnum.text || message.getMsgType() == MsgTypeEnum.notification)) {
-                    if (message.getAttachment() instanceof NotificationAttachment) {
+                    if (message.getAttachment() instanceof NotificationAttachment) {//收到公告更新通知消息,通知公告页面刷新公告
                         if (((NotificationAttachment) message.getAttachment()).getType() == NotificationType.UpdateTeam) {
                             UpdateTeamAttachment a = (UpdateTeamAttachment) message.getAttachment();
                             for (Map.Entry<TeamFieldEnum, Object> field : a.getUpdatedFields().entrySet()) {
@@ -295,18 +293,38 @@ public class FragmentPlayerMessage extends BaseFragment {
                             }
                         }
                     }
-                    items.add(message);
                     addedListItems.add(message);
                     needRefresh = true;
                 }
             }
-            if (chatCallback != null) {
-                chatCallback.back(addedListItems);
-            }
             if (needRefresh) {
+                items.addAll(addedListItems);
+                if (chatCallback != null) {
+                    chatCallback.back(addedListItems);
+                }
+                sortMessages(items);
                 adapter.notifyDataSetChanged();
                 listView.getRefreshableView().setSelection(adapter.getCount() - 1);
             }
+        }
+    };
+
+    /**
+     * **************************** 排序 ***********************************
+     */
+    private void sortMessages(List<IMMessage> list) {
+        if (list.size() == 0) {
+            return;
+        }
+        Collections.sort(list, comp);
+    }
+
+    private static Comparator<IMMessage> comp = new Comparator<IMMessage>() {
+
+        @Override
+        public int compare(IMMessage o1, IMMessage o2) {
+            long time = o1.getTime() - o2.getTime();
+            return time == 0 ? 0 : (time < 0 ? -1 : 1);
         }
     };
 
