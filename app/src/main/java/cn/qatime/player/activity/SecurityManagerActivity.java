@@ -193,7 +193,6 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
                     req.state = "wechat_info";
                     api.sendReq(req);
                 }
-                enableClick(false);
                 break;
             case R.id.parent_phone_number://家长手机
                 intent = new Intent(this, ParentPhoneActivity.class);
