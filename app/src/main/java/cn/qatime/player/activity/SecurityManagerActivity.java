@@ -227,7 +227,8 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
 
             @Override
             protected void onError(JSONObject response) {
-
+                enableClick(true);
+                Toast.makeText(SecurityManagerActivity.this, "绑定失败", Toast.LENGTH_SHORT).show();
             }
         }, new VolleyErrorListener());
         addToRequestQueue(request);
@@ -281,7 +282,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
 
             @Override
             protected void onError(JSONObject response) {
-
+                enableClick(true);
             }
         }, new VolleyErrorListener());
         addToRequestQueue(request);

@@ -1,5 +1,7 @@
 package cn.qatime.player.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -41,15 +43,18 @@ import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.bean.GradeBean;
 import libraryextra.bean.Profile;
 import libraryextra.utils.AppUtils;
 import libraryextra.utils.DialogUtils;
+import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.CustomProgressDialog;
+import libraryextra.view.WheelView;
 
 /**
  * @author lungtify
@@ -70,6 +75,8 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
     private String openid;
     private Profile profile;
     private CustomProgressDialog progress;
+    private AlertDialog alertDialog;
+    private GradeBean gradeBean;
 
     private void assignViews() {
         phone = (EditText) findViewById(R.id.phone);
@@ -83,12 +90,14 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
 
         time = new TimeCount(60000, 1000);
         getCode.setOnClickListener(this);
+        grade.setOnClickListener(this);
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 next.setEnabled(isChecked);
             }
         });
+        next.setOnClickListener(this);
     }
 
     @Override
@@ -98,7 +107,10 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
         setTitle("绑定");
         openid = getIntent().getStringExtra("openid");
         assignViews();
-
+        String gradeString = FileUtil.readFile(getFilesDir() + "/grade.txt");
+        if (!StringUtils.isNullOrBlanK(gradeString)) {
+            gradeBean = JsonUtils.objectFromJson(gradeString, GradeBean.class);
+        }
     }
 
     @Override
@@ -115,9 +127,40 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
             case R.id.next:
                 next();
                 break;
+            case R.id.grade:
+                showGradePickerDialog();
+                break;
             case R.id.agreement:
                 //// TODO: 2016/8/24 点击协议查看
                 break;
+        }
+    }
+
+    private void showGradePickerDialog() {
+        if (alertDialog == null) {
+            final View view = View.inflate(WeChatBindActivity.this, R.layout.dialog_grade_picker, null);
+            final WheelView wheelView = (WheelView) view.findViewById(R.id.grade);
+            wheelView.setOffset(1);
+            wheelView.setItems(gradeBean.getData().getGrades());
+            wheelView.setSeletion(gradeBean.getData().getGrades().indexOf(grade.getText()));
+            wheelView.setonItemClickListener(new WheelView.OnItemClickListener() {
+                @Override
+                public void onItemClick() {
+                    alertDialog.dismiss();
+                }
+            });
+            AlertDialog.Builder builder = new AlertDialog.Builder(WeChatBindActivity.this);
+            alertDialog = builder.create();
+            alertDialog.show();
+            alertDialog.setContentView(view);
+            alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    grade.setText(wheelView.getSeletedItem());
+                }
+            });
+        } else {
+            alertDialog.show();
         }
     }
 
@@ -156,23 +199,19 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
     private void next() {
         if (StringUtils.isNullOrBlanK(phone.getText().toString().trim())) {//账号为空
             Toast.makeText(this, getResources().getString(R.string.account_can_not_be_empty), Toast.LENGTH_SHORT).show();
-            next.setClickable(true);
             return;
         }
 
         if (!StringUtils.isPhone(phone.getText().toString().trim())) {//手机号不正确
             Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
-            next.setClickable(true);
             return;
         }
         if (StringUtils.isNullOrBlanK(code.getText().toString().trim())) { //验证码
             Toast.makeText(this, getResources().getString(R.string.enter_the_verification_code), Toast.LENGTH_SHORT).show();
-            next.setClickable(true);
             return;
         }
         if (!StringUtils.isGoodPWD(password.getText().toString().trim())) {
             Toast.makeText(this, getResources().getString(R.string.password_6_16), Toast.LENGTH_LONG).show();
-            next.setClickable(true);
             return;
         }
         if (StringUtils.isNullOrBlanK(grade.getText().toString().trim())) {
@@ -187,7 +226,11 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
         map.put("accept", "" + (checkBox.isChecked() ? 1 : 0));
         map.put("type", "Student");
         map.put("client_type", "app");
-        map.put("grade", "app");
+        try {
+            map.put("grade", URLEncoder.encode(grade.getText().toString(), "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         map.put("openid", openid);
 
 
@@ -268,11 +311,9 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
                 }
                 Logger.e("注册失败--" + result);
                 if (result.contains("已经被使用")) {
-                    Toast.makeText(WeChatBindActivity.this, getResourceString(R.string.phone_already_used), Toast.LENGTH_SHORT).show();
+                    dialogReTry();
                 } else if (result.contains("与确认值不匹配")) {
                     Toast.makeText(WeChatBindActivity.this, getResourceString(R.string.code_error), Toast.LENGTH_SHORT).show();
-                } else if (result.contains("注册码")) {
-                    Toast.makeText(WeChatBindActivity.this, getResourceString(R.string.register_code_error), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(WeChatBindActivity.this, getResourceString(R.string.register_failed), Toast.LENGTH_SHORT).show();
                 }
@@ -288,6 +329,35 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
         });
 
         addToRequestQueue(request);
+    }
+
+    /**
+     * 手机号已注册提示
+     */
+    private void dialogReTry() {
+        alertDialog = new AlertDialog.Builder(WeChatBindActivity.this).create();
+        View view = View.inflate(WeChatBindActivity.this, R.layout.dialog_cancel_or_confirm, null);
+        TextView text = (TextView) view.findViewById(R.id.text);
+        text.setText("该手机号已注册,请登录进入\n个人中心>安全设置绑定");
+        ((TextView) view.findViewById(R.id.cancel)).setText("新号码注册");
+        ((TextView) view.findViewById(R.id.confirm)).setText("登录");
+        Button cancel = (Button) view.findViewById(R.id.cancel);
+        Button confirm = (Button) view.findViewById(R.id.confirm);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                finish();
+            }
+        });
+        alertDialog.show();
+        alertDialog.setContentView(view);
     }
 
 

@@ -230,100 +230,100 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             @Override
             protected void onSuccess(JSONObject response) {
 
-                    Toast.makeText(RegisterActivity.this, getResourceString(R.string.please_set_information), Toast.LENGTH_SHORT).show();
-                    Logger.e("注册成功" + response);
-                    Map<String, String> map = new HashMap<>();
-                    map.put("login_account", phone.getText().toString().trim());
-                    map.put("password", password.getText().toString().trim());
-                    map.put("client_type", "app");
-                    map.put("client_cate", "student_client");
-                    JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlLogin, map), null,
-                            new VolleyListener(RegisterActivity.this) {
-                                @Override
-                                protected void onTokenOut() {
-                                    tokenOut();
-                                }
+                Toast.makeText(RegisterActivity.this, getResourceString(R.string.please_set_information), Toast.LENGTH_SHORT).show();
+                Logger.e("注册成功" + response);
+                Map<String, String> map = new HashMap<>();
+                map.put("login_account", phone.getText().toString().trim());
+                map.put("password", password.getText().toString().trim());
+                map.put("client_type", "app");
+                map.put("client_cate", "student_client");
+                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlLogin, map), null,
+                        new VolleyListener(RegisterActivity.this) {
+                            @Override
+                            protected void onTokenOut() {
+                                tokenOut();
+                            }
 
-                                @Override
-                                protected void onSuccess(JSONObject response) {
-                                    try {
-                                        JSONObject data = response.getJSONObject("data");
-                                        if (data.has("result")) {
-                                            if (data.getString("result") != null && data.getString("result").equals("failed")) {
-                                                Toast.makeText(RegisterActivity.this, getResources().getString(R.string.account_or_password_error), Toast.LENGTH_SHORT).show();
-                                            }
-                                        } else {
-                                            Logger.e("登录", response.toString());
-                                            SPUtils.put(RegisterActivity.this, "username", phone.getText().toString());
-                                            Profile profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
-                                            if (profile != null && profile.getData() != null && profile.getData().getUser() != null && profile.getData().getUser().getId() != 0) {
-                                                PushAgent.getInstance(RegisterActivity.this).addAlias(String.valueOf(profile.getData().getUser().getId()), "student", new UTrack.ICallBack() {
+                            @Override
+                            protected void onSuccess(JSONObject response) {
+                                try {
+                                    JSONObject data = response.getJSONObject("data");
+                                    if (data.has("result")) {
+                                        if (data.getString("result") != null && data.getString("result").equals("failed")) {
+                                            Toast.makeText(RegisterActivity.this, getResources().getString(R.string.account_or_password_error), Toast.LENGTH_SHORT).show();
+                                        }
+                                    } else {
+                                        Logger.e("登录", response.toString());
+                                        SPUtils.put(RegisterActivity.this, "username", phone.getText().toString());
+                                        Profile profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
+                                        if (profile != null && profile.getData() != null && profile.getData().getUser() != null && profile.getData().getUser().getId() != 0) {
+                                            PushAgent.getInstance(RegisterActivity.this).addAlias(String.valueOf(profile.getData().getUser().getId()), "student", new UTrack.ICallBack() {
+                                                @Override
+                                                public void onMessage(boolean b, String s) {
+
+                                                }
+                                            });
+                                            String deviceToken = PushAgent.getInstance(RegisterActivity.this).getRegistrationId();
+                                            if (!StringUtils.isNullOrBlanK(deviceToken)) {
+                                                Map<String, String> m = new HashMap<>();
+                                                m.put("user_id", String.valueOf(profile.getData().getUser().getId()));
+                                                m.put("device_token", deviceToken);
+                                                m.put("device_model", Build.MODEL);
+                                                try {
+                                                    m.put("app_name", URLEncoder.encode(AppUtils.getAppName(RegisterActivity.this), "UTF-8"));
+                                                } catch (UnsupportedEncodingException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                m.put("app_version", AppUtils.getVersionName(RegisterActivity.this));
+                                                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlDeviceInfo, m), null,
+                                                        new VolleyListener(RegisterActivity.this) {
+
+                                                            @Override
+                                                            protected void onSuccess(JSONObject response) {
+                                                            }
+
+                                                            @Override
+                                                            protected void onError(JSONObject response) {
+
+                                                            }
+
+                                                            @Override
+                                                            protected void onTokenOut() {
+                                                                tokenOut();
+                                                            }
+
+                                                        }, new VolleyErrorListener() {
                                                     @Override
-                                                    public void onMessage(boolean b, String s) {
-
+                                                    public void onErrorResponse(VolleyError volleyError) {
+                                                        super.onErrorResponse(volleyError);
                                                     }
                                                 });
-                                                String deviceToken = PushAgent.getInstance(RegisterActivity.this).getRegistrationId();
-                                                if (!StringUtils.isNullOrBlanK(deviceToken)) {
-                                                    Map<String, String> m = new HashMap<>();
-                                                    m.put("user_id", String.valueOf(profile.getData().getUser().getId()));
-                                                    m.put("device_token", deviceToken);
-                                                    m.put("device_model", Build.MODEL);
-                                                    try {
-                                                        m.put("app_name", URLEncoder.encode(AppUtils.getAppName(RegisterActivity.this),"UTF-8"));
-                                                    } catch (UnsupportedEncodingException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                    m.put("app_version", AppUtils.getVersionName(RegisterActivity.this));
-                                                    JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlDeviceInfo, m), null,
-                                                            new VolleyListener(RegisterActivity.this) {
-
-                                                                @Override
-                                                                protected void onSuccess(JSONObject response) {
-                                                                }
-
-                                                                @Override
-                                                                protected void onError(JSONObject response) {
-
-                                                                }
-
-                                                                @Override
-                                                                protected void onTokenOut() {
-                                                                    tokenOut();
-                                                                }
-
-                                                            }, new VolleyErrorListener() {
-                                                        @Override
-                                                        public void onErrorResponse(VolleyError volleyError) {
-                                                            super.onErrorResponse(volleyError);
-                                                        }
-                                                    });
-                                                    addToRequestQueue(request);
-                                                }
-                                            }
-                                            if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
-                                                BaseApplication.setProfile(profile);
-                                                loginAccount();
-                                            } else {
-                                                //没有数据或token
+                                                addToRequestQueue(request);
                                             }
                                         }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
+                                        if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
+                                            BaseApplication.setProfile(profile);
+                                            loginAccount();
+                                        } else {
+                                            //没有数据或token
+                                        }
                                     }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
+                            }
 
-                                @Override
-                                protected void onError(JSONObject response) {
-                                    Toast.makeText(RegisterActivity.this, getResourceString(R.string.login_failed), Toast.LENGTH_SHORT).show();
-                                }
-                            }, new VolleyErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError volleyError) {
-                            super.onErrorResponse(volleyError);
-                        }
-                    });
-                    addToRequestQueue(request);
+                            @Override
+                            protected void onError(JSONObject response) {
+                                Toast.makeText(RegisterActivity.this, getResourceString(R.string.login_failed), Toast.LENGTH_SHORT).show();
+                            }
+                        }, new VolleyErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        super.onErrorResponse(volleyError);
+                    }
+                });
+                addToRequestQueue(request);
 
             }
 
@@ -339,10 +339,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 Logger.e("注册失败--" + result);
                 if (result.contains("已经被使用")) {
                     Toast.makeText(RegisterActivity.this, getResourceString(R.string.phone_already_used), Toast.LENGTH_SHORT).show();
+
                 } else if (result.contains("与确认值不匹配")) {
                     Toast.makeText(RegisterActivity.this, getResourceString(R.string.code_error), Toast.LENGTH_SHORT).show();
-                } else if (result.contains("注册码")) {
-                    Toast.makeText(RegisterActivity.this, getResourceString(R.string.register_code_error), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(RegisterActivity.this, getResourceString(R.string.register_failed), Toast.LENGTH_SHORT).show();
                 }

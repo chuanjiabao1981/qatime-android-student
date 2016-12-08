@@ -417,25 +417,27 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
             @Override
             protected void onSuccess(JSONObject response) {
-                if (response.has("data")) {//返回登錄信息
-                    Profile data = JsonUtils.objectFromJson(response.toString(), Profile.class);
-                    if (data != null && data.getData() != null && !StringUtils.isNullOrBlanK(data.getData().getRemember_token())) {
-                        BaseApplication.setProfile(data);
-                        SPUtils.put(LoginActivity.this, "username", username.getText().toString());
-                        loginAccount();//登陆云信
-                    }else {
-                        //没有数据或没有token
-                    }
+                try {
+                    if (response.has("data")) {
+                        if (response.getJSONObject("data").has("remember_token")) {//返回登錄信息
+                            Profile data = JsonUtils.objectFromJson(response.toString(), Profile.class);
+                            if (data != null && data.getData() != null && !StringUtils.isNullOrBlanK(data.getData().getRemember_token())) {
+                                BaseApplication.setProfile(data);
+                                SPUtils.put(LoginActivity.this, "username", username.getText().toString());
+                                loginAccount();//登陆云信
+                            } else {
+                                //没有数据或没有token
+                            }
 
-                } else {
-                    try {
-                        String openid = response.getString("openid");
-                        Intent intent = new Intent(LoginActivity.this, WeChatBindActivity.class);
-                        intent.putExtra("openid", openid);
-                        startActivityForResult(intent, Constant.REGIST);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        } else {
+                            String openid = response.getJSONObject("data").getString("openid");
+                            Intent intent = new Intent(LoginActivity.this, WeChatBindActivity.class);
+                            intent.putExtra("openid", openid);
+                            startActivityForResult(intent, Constant.REGIST);
+                        }
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -443,7 +445,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             protected void onError(JSONObject response) {
 
             }
-        }, new VolleyErrorListener(){
+        }, new VolleyErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
