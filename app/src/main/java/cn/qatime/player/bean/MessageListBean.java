@@ -25,6 +25,22 @@ public class MessageListBean implements Serializable {
     private boolean mute;
     private String owner;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MessageListBean that = (MessageListBean) o;
+
+        return contactId != null ? contactId.equals(that.contactId) : that.contactId == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return contactId != null ? contactId.hashCode() : 0;
+    }
+
     public String getOwner() {
         return owner;
     }

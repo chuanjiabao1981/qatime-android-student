@@ -309,7 +309,9 @@ public class FragmentMessageChatNews extends BaseFragment {
                     bean.setTime(item.getTime());
                     bean.setRecentMessageId(item.getRecentMessageId());
                     bean.setOwner(data.getChat_team_owner());
-                    items.add(bean);
+                    if(!items.contains(bean)){
+                        items.add(bean);
+                    }
                 }
             }
         }
@@ -555,7 +557,9 @@ public class FragmentMessageChatNews extends BaseFragment {
                 bean.setUnreadCount(msg.getUnreadCount());
                 bean.setTime(msg.getTime());
                 bean.setRecentMessageId(msg.getRecentMessageId());
-                items.add(bean);
+                if(!items.contains(bean)){
+                    items.add(bean);
+                }
             }
 
             refreshMessages(true);
