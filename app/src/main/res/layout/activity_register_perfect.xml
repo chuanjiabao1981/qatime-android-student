@@ -49,12 +49,11 @@
 
         <LinearLayout style="@style/edit_layout_center_style">
 
-            <EditText
+            <TextView
                 android:id="@+id/grade"
                 style="@style/activity_edit_text_style"
                 android:hint="请选择年级"
                 android:maxLength="11"
-                android:focusable="false"
                 android:textColorHint="#ccc" />
         </LinearLayout>
 

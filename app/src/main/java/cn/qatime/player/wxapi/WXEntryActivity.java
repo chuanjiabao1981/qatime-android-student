@@ -58,6 +58,7 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler 
                 Logger.e("***" + code);
                 EventBus.getDefault().post(code);
             }
+            finish();
         }
         finish();
     }

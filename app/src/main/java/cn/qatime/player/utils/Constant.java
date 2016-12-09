@@ -11,7 +11,6 @@ public class Constant {
 
     public static String APP_ID = "wxf2dfbeb5f641ce40";//微信appid
 
-
     public static final String CACHEPATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/qatime";
     public static final String VISITORTOLOGIN = "visitor_to_login";// 游客身份转到登录页
 

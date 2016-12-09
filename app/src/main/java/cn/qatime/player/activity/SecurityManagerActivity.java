@@ -193,7 +193,6 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
                     req.state = "wechat_info";
                     api.sendReq(req);
                 }
-                enableClick(false);
                 break;
             case R.id.parent_phone_number://家长手机
                 intent = new Intent(this, ParentPhoneActivity.class);
@@ -227,7 +226,8 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
 
             @Override
             protected void onError(JSONObject response) {
-
+                enableClick(true);
+                Toast.makeText(SecurityManagerActivity.this, "绑定失败", Toast.LENGTH_SHORT).show();
             }
         }, new VolleyErrorListener());
         addToRequestQueue(request);
@@ -281,7 +281,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
 
             @Override
             protected void onError(JSONObject response) {
-
+                enableClick(true);
             }
         }, new VolleyErrorListener());
         addToRequestQueue(request);

@@ -98,11 +98,6 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
         Intent intent;
         switch (v.getId()) {
             case R.id.edit_more:
-//                Intent intent = new Intent(this, PersonalInformationChangeActivity.class);
-//                if (LoginActivity.reenter) {
-//                    intent.putExtra("action", getIntent().getStringExtra("action"));
-//                }
-//                startActivityForResult(intent,Constant.REGIST);
                 if (LoginActivity.reenter) {
                     intent = new Intent();
                     intent.putExtra("action", Constant.LoginAction.toPersonalInformationChange);
@@ -153,14 +148,10 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                             BaseApplication.setProfile(profile);
                         }
                         DialogUtils.dismissDialog(progress);
-//                        setResult(Constant.RESPONSE);
-
-//                        Intent intent = new Intent(RegisterPerfectActivity.this, MainActivity.class);
-//                        startActivity(intent);
-//                        if (!LoginActivity.reenter) {
-//                            Intent intent = new Intent(RegisterPerfectActivity.this, MainActivity.class);
-//                            startActivity(intent);
-//                        }
+                        if (!LoginActivity.reenter) {
+                            Intent data = new Intent(RegisterPerfectActivity.this, MainActivity.class);
+                            startActivity(data);
+                        }
                         setResult(Constant.RESPONSE);
                         finish();
                     }
@@ -222,9 +213,6 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                     editGrade.setText(grade.getSeletedItem());
                 }
             });
-//            WindowManager.LayoutParams attributes = alertDialog.getWindow().getAttributes();
-//            attributes.width= ScreenUtils.getScreenWidth(getApplicationContext())- DensityUtils.dp2px(getApplicationContext(),20)*2;
-//            alertDialog.getWindow().setAttributes(attributes);
         } else {
             alertDialog.show();
         }
@@ -270,18 +258,19 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                     Glide.with(this).load(Uri.fromFile(new File(imageUrl))).transform(new GlideCircleTransform(this)).crossFade().into(headSculpture);
                 }
             }
-        } else if (resultCode == Constant.VISITORLOGINED) {
-            if (StringUtils.isNullOrBlanK(data.getStringExtra("action"))) {
-                Intent intent = new Intent();
-                intent.putExtra("action", data.getStringExtra("action"));
-                setResult(Constant.VISITORLOGINED, intent);
-            } else {
-                setResult(Constant.VISITORLOGINED);//游客从主页到登录页,点击登录,通知会main initview
-            }
-            finish();
-        } else if (resultCode == Constant.REGIST) {
-            setResult(resultCode);
-            finish();
         }
+//        else if (resultCode == Constant.VISITORLOGINED) {
+//            if (StringUtils.isNullOrBlanK(data.getStringExtra("action"))) {
+//                Intent intent = new Intent();
+//                intent.putExtra("action", data.getStringExtra("action"));
+//                setResult(Constant.VISITORLOGINED, intent);
+//            } else {
+//                setResult(Constant.VISITORLOGINED);//游客从主页到登录页,点击登录,通知会main initview
+//            }
+//            finish();
+//        } else if (resultCode == Constant.REGIST) {
+//            setResult(resultCode);
+//            finish();
+//        }
     }
 }
