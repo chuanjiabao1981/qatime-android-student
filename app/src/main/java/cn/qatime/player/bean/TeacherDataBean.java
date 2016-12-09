@@ -168,14 +168,23 @@ public class TeacherDataBean {
             private int buy_tickets_count;
             private String grade;
             private String publicize;
-            private double price;
+            public float price;
+            public float current_price;
 
-            public double getPrice() {
+            public float getPrice() {
                 return price;
             }
 
-            public void setPrice(double price) {
+            public void setPrice(float price) {
                 this.price = price;
+            }
+
+            public float getCurrent_price() {
+                return current_price;
+            }
+
+            public void setCurrent_price(float current_price) {
+                this.current_price = current_price;
             }
 
             public String getGrade() {

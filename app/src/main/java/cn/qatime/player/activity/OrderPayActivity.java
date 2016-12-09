@@ -20,6 +20,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
@@ -100,17 +102,23 @@ public class OrderPayActivity extends BaseActivity {
             aliPayData = getIntent().getStringExtra("data");
         }
 
-        String price = df.format(getIntent().getIntExtra("price", 0));
+        String price = df.format(getIntent().getFloatExtra("price", 0f));
         if (price.startsWith(".")) {
             price = "0" + price;
         }
         code.setText(getResourceString(R.string.order_number) + "：" + getIntent().getStringExtra("id"));
-        time.setText(getResourceString(R.string.time_built) + "：" + getIntent().getStringExtra("time"));
+        SimpleDateFormat parseISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
+        SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            time.setText(getResourceString(R.string.time_built) + "：" + parse.format(parseISO.parse(getIntent().getStringExtra("time"))));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         if (payType.equals("alipay")) {
             type.setText(getResourceString(R.string.method_payment) + getResourceString(R.string.pay_alipay));
         } else if (payType.equals("weixin")) {
             type.setText(getResourceString(R.string.method_payment) + getResourceString(R.string.pay_wexin));
-        }else {
+        } else {
             type.setText(getResourceString(R.string.method_payment) + getResourceString(R.string.pay_account));
         }
         this.price.setText(getResourceString(R.string.amount_payment) + "：￥" + price);
@@ -169,7 +177,7 @@ public class OrderPayActivity extends BaseActivity {
                     // 必须异步调用
                     Thread payThread = new Thread(payRunnable);
                     payThread.start();
-                }else if(payType.equals("account")){
+                } else if (payType.equals("account")) {
                     Logger.e("钱包支付");
                     // TODO: 2016/10/8  钱包支付
 //                    Intent intent = new Intent(OrderPayActivity.this,OrderPayResultActivity.class);
@@ -183,10 +191,10 @@ public class OrderPayActivity extends BaseActivity {
 
     @Subscribe
     public void onEvent(PayResultState state) {
-        Intent intent = new Intent(this,OrderPayResultActivity.class);
-        intent.putExtra("state",state);
-        intent.putExtra("orderId",code.getText().toString().replace(getResourceString(R.string.order_number) + "：",""));
-        intent.putExtra("price",price.getText().toString().replace(getResourceString(R.string.amount_payment) + "：",""));
+        Intent intent = new Intent(this, OrderPayResultActivity.class);
+        intent.putExtra("state", state);
+        intent.putExtra("orderId", code.getText().toString().replace(getResourceString(R.string.order_number) + "：", ""));
+        intent.putExtra("price", price.getText().toString().replace(getResourceString(R.string.amount_payment) + "：", ""));
         startActivity(intent);
         finish();
     }

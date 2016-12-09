@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.utils.Constant;
@@ -36,8 +39,13 @@ public class WithdrawResultActivity extends BaseActivity implements View.OnClick
         amount.setText(getIntent().getStringExtra("amount"));
         mode.setText(getPayType(getIntent().getStringExtra("pay_type")));
         id.setText(getIntent().getStringExtra("id"));
-        time.setText(getIntent().getStringExtra("create_at"));
-
+        SimpleDateFormat parseISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
+        SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            time.setText(parse.format(parseISO.parse(getIntent().getStringExtra("create_at"))));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         withdrawCashConfirm = (Button) findViewById(R.id.withdraw_cash_confirm);
         phone = (TextView) findViewById(R.id.phone);
         phone.setOnClickListener(this);

@@ -20,6 +20,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
@@ -52,6 +54,8 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
     private int classid;
     DecimalFormat df = new DecimalFormat("#.00");
     private MyOrderBean.Data data;
+    SimpleDateFormat parseISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
+    SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +106,11 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         if (StringUtils.isNullOrBlanK(data.getCreated_at())) {
             buildtime.setText(getResourceString(R.string.is_null));
         } else {
-            buildtime.setText(data.getCreated_at());
+            try {
+                buildtime.setText(parse.format(parseISO.parse(data.getCreated_at())));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         String payType = data.getPay_type();//支付方式
         if (payType.equals("weixin")) {
@@ -111,7 +119,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
             paytype.setText(getResourceString(R.string.alipay_payment));
         }
         progress.setText(data.getProduct().getCompleted_lesson_count() + "/" + data.getProduct().getPreset_lesson_count());
-        String price = df.format(data.getProduct().getPrice());
+        String price = df.format(data.getProduct().getCurrent_price());
         if (price.startsWith(".")) {
             price = "0" + price;
         }
@@ -156,7 +164,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
                 }
                 intent.putExtra("id", data.getId());
                 intent.putExtra("time", data.getCreated_at());
-                intent.putExtra("price", data.getProduct().getPrice());
+                intent.putExtra("price", data.getProduct().getCurrent_price());
                 intent.putExtra("type", data.getPay_type());
                 startActivity(intent);
             }

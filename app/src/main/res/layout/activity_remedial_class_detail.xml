@@ -219,7 +219,7 @@
                 android:clickable="true"
                 android:gravity="center"
                 android:text="开始学习"
-                android:textColor="#be0b0b"
+                android:textColor="@drawable/text_selector_white_red"
                 android:textSize="16sp" />
         </LinearLayout>
 

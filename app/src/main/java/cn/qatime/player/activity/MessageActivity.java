@@ -18,7 +18,6 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
-import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
@@ -37,6 +36,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -67,7 +67,6 @@ public class MessageActivity extends BaseActivity {
 
     // 从服务器拉取消息记录
     private boolean remote = false;
-    private IMMessage anchor;
     private QueryDirectionEnum direction;
     private List<IMMessage> items = new ArrayList<>();
     private int LOAD_MESSAGE_COUNT = 20;//聊天加载条数
@@ -112,6 +111,7 @@ public class MessageActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+        loadMessage(false);
         registerTeamUpdateObserver(true);
     }
 
@@ -129,15 +129,8 @@ public class MessageActivity extends BaseActivity {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
 
-//        adapter = new CommonAdapter<IMMessage>(this, items, R.layout.item_message) {
-//            @Override
-//            public void convert(final ViewHolder holder, IMMessage item, int position) {
-//
-//
-//
-//            }
-//        };
         adapter = new MessageAdapter(this, items);
+        adapter.setOwner(getIntent().getStringExtra("owner"));
         listView.setAdapter(adapter);
         content = (EditText) findViewById(R.id.content);
         emoji = (ImageView) findViewById(R.id.emoji);
@@ -217,12 +210,7 @@ public class MessageActivity extends BaseActivity {
         if (remote) {
             loadFromRemote();
         } else {
-            if (anchor == null) {
-                loadFromLocal(QueryDirectionEnum.QUERY_OLD);
-            } else {
-                // 加载指定anchor的上下文
-                loadAnchorContext();
-            }
+            loadFromLocal(QueryDirectionEnum.QUERY_OLD);
         }
     }
 
@@ -249,39 +237,11 @@ public class MessageActivity extends BaseActivity {
 
     private IMMessage anchor() {
         if (items.size() == 0) {
-            return anchor == null ? MessageBuilder.createEmptyMessage(sessionId, sessionType, 0) : anchor;
+            return MessageBuilder.createEmptyMessage(sessionId, sessionType, 0);
         } else {
             int index = (direction == QueryDirectionEnum.QUERY_NEW ? items.size() - 1 : 0);
             return items.get(index);
         }
-    }
-
-    private void loadAnchorContext() {
-        // query old
-        this.direction = QueryDirectionEnum.QUERY_OLD;
-        NIMClient.getService(MsgService.class).queryMessageListEx(anchor(), direction, LOAD_MESSAGE_COUNT, true)
-                .setCallback(new RequestCallbackWrapper<List<IMMessage>>() {
-                    @Override
-                    public void onResult(int code, List<IMMessage> messages, Throwable exception) {
-                        if (code != ResponseCode.RES_SUCCESS || exception != null) {
-                            return;
-                        }
-                        onMessageLoaded(messages);
-
-                        // query new
-                        direction = QueryDirectionEnum.QUERY_NEW;
-                        NIMClient.getService(MsgService.class).queryMessageListEx(anchor(), direction, LOAD_MESSAGE_COUNT, true)
-                                .setCallback(new RequestCallbackWrapper<List<IMMessage>>() {
-                                    @Override
-                                    public void onResult(int code, List<IMMessage> messages, Throwable exception) {
-                                        if (code != ResponseCode.RES_SUCCESS || exception != null) {
-                                            return;
-                                        }
-                                        onMessageLoaded(messages);
-                                    }
-                                });
-                    }
-                });
     }
 
 
@@ -304,10 +264,6 @@ public class MessageActivity extends BaseActivity {
                     }
                 }
             }
-        }
-
-        if (firstLoad && anchor != null) {
-            items.add(anchor);
         }
 
         List<IMMessage> result = new ArrayList<>();
@@ -333,23 +289,32 @@ public class MessageActivity extends BaseActivity {
 
     private void registerObservers(boolean register) {
         MsgServiceObserve service = NIMClient.getService(MsgServiceObserve.class);
-        service.observeMsgStatus(messageStatusObserver, register);
+//        service.observeMsgStatus(messageStatusObserver, register);
         service.observeReceiveMessage(receiveMessageObserver, register);
     }
 
     Observer<List<IMMessage>> receiveMessageObserver = new Observer<List<IMMessage>>() {
         @Override
         public void onEvent(List<IMMessage> messages) {
+            if (messages == null || messages.isEmpty()) {
+                return;
+            }
             Logger.e("获取到消息");
             boolean needRefresh = false;
-            List<IMMessage> addedListItems = new ArrayList<>(messages.size());
             for (IMMessage message : messages) {
-                if (isMyMessage(message) && message.getMsgType() == MsgTypeEnum.text) {
-                    addedListItems.add(message);
-                    needRefresh = true;
+//                if (isMyMessage(message) && message.getMsgType() == MsgTypeEnum.text) {
+//                    addedListItems.add(message);
+//                    needRefresh = true;
+//                }
+                //做一下去重
+                for (IMMessage item : items) {
+                    if (item.isTheSame(message)) {
+                        items.remove(item);
+                        break;
+                    }
                 }
-                if (isMyMessage(message) && message.getMsgType() == MsgTypeEnum.notification) {
-                    addedListItems.add(message);
+                if (isMyMessage(message) && (message.getMsgType() == MsgTypeEnum.text || message.getMsgType() == MsgTypeEnum.notification)) {
+                    items.add(message);
                     isMute = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount()).isMute();
                     if (isMute) {
                         content.setHint(R.string.have_muted);
@@ -358,24 +323,45 @@ public class MessageActivity extends BaseActivity {
                     }
                     needRefresh = true;
                 }
+
             }
-            items.addAll(addedListItems);
+
             if (needRefresh) {
+                sortMessages(items);
                 adapter.notifyDataSetChanged();
                 listView.getRefreshableView().setSelection(adapter.getCount());
             }
         }
     };
+
     /**
-     * 消息状态变化观察者
+     * **************************** 排序 ***********************************
      */
-    Observer<IMMessage> messageStatusObserver = new Observer<IMMessage>() {
+    private void sortMessages(List<IMMessage> list) {
+        if (list.size() == 0) {
+            return;
+        }
+        Collections.sort(list, comp);
+    }
+
+    private static Comparator<IMMessage> comp = new Comparator<IMMessage>() {
+
         @Override
-        public void onEvent(IMMessage imMessage) {
-            if (isMyMessage(imMessage)) {
-            }
+        public int compare(IMMessage o1, IMMessage o2) {
+            long time = o1.getTime() - o2.getTime();
+            return time == 0 ? 0 : (time < 0 ? -1 : 1);
         }
     };
+//    /**
+//     * 消息状态变化观察者
+//     */
+//    Observer<IMMessage> messageStatusObserver = new Observer<IMMessage>() {
+//        @Override
+//        public void onEvent(IMMessage imMessage) {
+//            if (isMyMessage(imMessage)) {
+//            }
+//        }
+//    };
 
     public boolean isMyMessage(IMMessage message) {
         return message.getSessionType() == sessionType
@@ -511,7 +497,6 @@ public class MessageActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loadMessage(false);
         registerObservers(true);
         requestTeamInfo();
         NIMClient.getService(MsgService.class).setChattingAccount(sessionId, sessionType);
@@ -539,6 +524,9 @@ public class MessageActivity extends BaseActivity {
             this.courseId = event.getCourseId();
             this.camera = event.getCamera();
             this.board = event.getBoard();
+            if (adapter != null) {
+                adapter.setOwner(event.getChat_team_owner());
+            }
             if (!StringUtils.isNullOrBlanK(event.getName())) {
                 setTitle(event.getName());
             } else {

@@ -17,6 +17,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
@@ -40,7 +42,8 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
     DecimalFormat df = new DecimalFormat("#.00");
     private AppPayParamsBean data;
     private IWXAPI api;
-
+    SimpleDateFormat parseISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
+    SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private void assignViews() {
         id = (TextView) findViewById(R.id.id);
         time = (TextView) findViewById(R.id.time);
@@ -67,7 +70,11 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
 
         Intent intent = getIntent();
         id.setText(intent.getStringExtra("id"));
-        time.setText(intent.getStringExtra("created_at"));
+        try {
+            time.setText(parse.format(parseISO.parse(intent.getStringExtra("created_at"))));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         mode.setText(getPayType(intent.getStringExtra("pay_type")));
         String price = df.format(Double.valueOf(intent.getStringExtra("amount")));
         if (price.startsWith(".")) {
