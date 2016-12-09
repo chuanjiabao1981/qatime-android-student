@@ -215,7 +215,7 @@ public class BiaoQingView extends RelativeLayout {
     }
 
     public SpannableString getEmotionContent(int resId) {
-        String emoji = "[" + getResources().getResourceName(resId).replace("cn.qatime.player:mipmap/", "") + "]";
+        String emoji = "[" + getResources().getResourceEntryName(resId)+ "]";
         SpannableString spannableString = new SpannableString(emoji);
         int size = (int) content.getTextSize();
         GifHelper helper = new GifHelper();
