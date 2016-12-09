@@ -106,13 +106,15 @@
             android:id="@+id/wechat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="9dp"
             android:background="@drawable/shape_wechat_bind_background_unable"
             android:paddingBottom="1dp"
             android:paddingLeft="3dp"
             android:paddingRight="3dp"
             android:paddingTop="1dp"
             android:text="马上绑定"
-            android:textColor="#fff" />
+            android:textColor="#fff"
+            android:textSize="12sp" />
 
         <ImageView
             style="@style/setting_icon_margin_right"

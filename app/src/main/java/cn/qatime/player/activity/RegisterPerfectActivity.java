@@ -53,7 +53,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
     private LinearLayout information;
     private ImageView headSculpture;
     private EditText name;
-    private EditText editGrade;
+    private TextView editGrade;
     private TextView editMore;
     private TextView complete;
 
@@ -61,7 +61,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
         information = (LinearLayout) findViewById(R.id.information);
         headSculpture = (ImageView) findViewById(R.id.head_sculpture);
         name = (EditText) findViewById(R.id.name);
-        editGrade = (EditText) findViewById(R.id.grade);
+        editGrade = (TextView) findViewById(R.id.grade);
         editMore = (TextView) findViewById(R.id.edit_more);
         complete = (TextView) findViewById(R.id.complete);
 
