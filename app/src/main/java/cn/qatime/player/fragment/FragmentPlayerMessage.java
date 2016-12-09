@@ -1,5 +1,6 @@
 package cn.qatime.player.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -45,30 +46,27 @@ import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.MessageActivity;
 import cn.qatime.player.adapter.MessageAdapter;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.FriendDataCache;
 import cn.qatime.player.im.cache.TeamDataCache;
+import cn.qatime.player.view.listview.AutoRefreshListView;
+import cn.qatime.player.view.listview.ListViewUtil;
+import cn.qatime.player.view.listview.MessageListView;
 
 public class FragmentPlayerMessage extends BaseFragment {
     private TextView tipText;
-    public PullToRefreshListView listView;
+    public MessageListView messageListView;
     public MessageAdapter adapter;
     public List<IMMessage> items = new ArrayList<>();
 
     public Team team;
 
-    private boolean firstLoad = true;
-
-    private SimpleDateFormat parse1 = new SimpleDateFormat("HH:mm:ss");
-    private SimpleDateFormat parse2 = new SimpleDateFormat("MM-dd HH:mm");
-
     // 从服务器拉取消息记录
     private boolean remote = false;
-
-    private QueryDirectionEnum direction;
-    private int LOAD_MESSAGE_COUNT = 20;//聊天加载条数
 
     private SessionTypeEnum sessionType = SessionTypeEnum.Team;
     private String sessionId = "";
@@ -92,7 +90,6 @@ public class FragmentPlayerMessage extends BaseFragment {
             }
         }
     };
-    private String owner;
 
     @Nullable
     @Override
@@ -100,163 +97,154 @@ public class FragmentPlayerMessage extends BaseFragment {
         View view = View.inflate(getActivity(), R.layout.fragment_player_message, null);
         initView(view);
         hasLoad = true;
+        registerTeamUpdateObserver(true);
         return view;
     }
 
     private void initView(View view) {
         tipText = (TextView) view.findViewById(R.id.tip);
-        listView = (PullToRefreshListView) view.findViewById(R.id.list);
-        listView.getRefreshableView().setDividerHeight(0);
-        listView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
-        listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
-        listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
-        listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResourceString(R.string.refreshing));
-        listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResourceString(R.string.loading));
-        listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
-        listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
+        messageListView = (MessageListView) view.findViewById(R.id.list);
+        messageListView.requestDisallowInterceptTouchEvent(true);
+        messageListView.setMode(AutoRefreshListView.Mode.START);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+            messageListView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        }
 
         adapter = new MessageAdapter(getActivity(), items);
-        listView.setAdapter(adapter);
+        messageListView.setAdapter(adapter);
 
-        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+        messageListView.setOnRefreshListener(new MessageLoader(remote));
+        messageListView.setListViewEventListener(new MessageListView.OnListViewEventListener() {
             @Override
-            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
-                        listView.getLoadingLayoutProxy(false, true).setLastUpdatedLabel(label);
-                        listView.onRefreshComplete();
-                    }
-                }, 200);
-                loadFromRemote();
+            public void onListViewStartScroll() {
+                if (chatCallback!=null) {
+                    chatCallback.shouldCollapseInputPanel();
+                }
             }
         });
-        loadMessage(false);
     }
 
-    /**
-     * 将long值转换为时间
-     */
-    private String getTime(long time) {
-        Date result = new Date(time);
-        Date current = new Date();
-        if (result.getYear() == current.getYear() && result.getMonth() == current.getMonth() && result.getDate() == current.getDate()) {
-            return parse1.format(result);
-        } else {
-            return parse2.format(result);
-        }
+    public void scrollToBottom() {
+        ListViewUtil.scrollToBottom(messageListView);
     }
 
-    public void loadMessage(boolean remote) {
-        this.remote = remote;
-        if (remote) {
-            loadFromRemote();
-        } else {
-            loadFromLocal(QueryDirectionEnum.QUERY_OLD);
-        }
-    }
 
-    private void loadFromLocal(QueryDirectionEnum direction) {
-        this.direction = direction;
-//        messageListView.onRefreshStart(direction == QueryDirectionEnum.QUERY_NEW ? AutoRefreshListView.Mode.END : AutoRefreshListView.Mode.START);
-        NIMClient.getService(MsgService.class).queryMessageListEx(anchor(), direction, LOAD_MESSAGE_COUNT, true)
-                .setCallback(callback);
-    }
+    private class MessageLoader implements AutoRefreshListView.OnRefreshListener {
+        private int LOAD_MESSAGE_COUNT = 20;//聊天加载条数
+        // 从服务器拉取消息记录
+        private QueryDirectionEnum direction;
 
-    private void loadFromRemote() {
-        this.direction = QueryDirectionEnum.QUERY_OLD;
-        NIMClient.getService(MsgService.class).pullMessageHistory(anchor(), LOAD_MESSAGE_COUNT, true).setCallback(callback);
-    }
+        private boolean firstLoad = true;
 
-    private RequestCallback<List<IMMessage>> callback = new RequestCallbackWrapper<List<IMMessage>>() {
-        @Override
-        public void onResult(int code, List<IMMessage> messages, Throwable exception) {
-            if (messages != null) {
-                onMessageLoaded(messages);
+        public MessageLoader(boolean remote) {
+            if (remote) {
+                loadFromRemote();
+            } else {
+                loadFromLocal(QueryDirectionEnum.QUERY_OLD);
             }
         }
-    };
 
-
-    private IMMessage anchor() {
-        if (items.size() == 0) {
-            return MessageBuilder.createEmptyMessage(sessionId, sessionType, 0);
-        } else {
-            int index = (direction == QueryDirectionEnum.QUERY_NEW ? items.size() - 1 : 0);
-            return items.get(index);
+        @Override
+        public void onRefreshFromStart() {
+            if (remote) {
+                loadFromRemote();
+            } else {
+                loadFromLocal(QueryDirectionEnum.QUERY_OLD);
+            }
         }
-    }
 
-    private void loadAnchorContext() {
-        // query old
-        this.direction = QueryDirectionEnum.QUERY_OLD;
-        NIMClient.getService(MsgService.class).queryMessageListEx(anchor(), direction, LOAD_MESSAGE_COUNT, true)
-                .setCallback(new RequestCallbackWrapper<List<IMMessage>>() {
-                    @Override
-                    public void onResult(int code, List<IMMessage> messages, Throwable exception) {
-                        if (code != ResponseCode.RES_SUCCESS || exception != null) {
-                            return;
+        @Override
+        public void onRefreshFromEnd() {
+            if (!remote) {
+                loadFromLocal(QueryDirectionEnum.QUERY_NEW);
+            }
+        }
+
+        private void loadFromLocal(QueryDirectionEnum direction) {
+            this.direction = direction;
+            NIMClient.getService(MsgService.class).queryMessageListEx(anchor(), direction, LOAD_MESSAGE_COUNT, true)
+                    .setCallback(callback);
+        }
+
+        private void loadFromRemote() {
+            this.direction = QueryDirectionEnum.QUERY_OLD;
+            NIMClient.getService(MsgService.class).pullMessageHistory(anchor(), LOAD_MESSAGE_COUNT, true).setCallback(callback);
+        }
+
+        private RequestCallback<List<IMMessage>> callback = new RequestCallbackWrapper<List<IMMessage>>() {
+            @Override
+            public void onResult(int code, List<IMMessage> messages, Throwable exception) {
+                if (messages != null) {
+                    onMessageLoaded(messages);
+                }
+            }
+        };
+
+
+        private IMMessage anchor() {
+            if (items.size() == 0) {
+                return MessageBuilder.createEmptyMessage(sessionId, sessionType, 0);
+            } else {
+                int index = (direction == QueryDirectionEnum.QUERY_NEW ? items.size() - 1 : 0);
+                return items.get(index);
+            }
+        }
+
+        /**
+         * 历史消息加载处理
+         *
+         * @param messages
+         */
+        private void onMessageLoaded(List<IMMessage> messages) {
+            int count = messages.size();
+
+            if (firstLoad && items.size() > 0) {
+                // 在第一次加载的过程中又收到了新消息，做一下去重
+                for (IMMessage message : messages) {
+                    for (IMMessage item : items) {
+                        if (item.isTheSame(message)) {
+                            items.remove(item);
+                            break;
                         }
-                        onMessageLoaded(messages);
-
-                        // query new
-                        direction = QueryDirectionEnum.QUERY_NEW;
-                        NIMClient.getService(MsgService.class).queryMessageListEx(anchor(), direction, LOAD_MESSAGE_COUNT, true)
-                                .setCallback(new RequestCallbackWrapper<List<IMMessage>>() {
-                                    @Override
-                                    public void onResult(int code, List<IMMessage> messages, Throwable exception) {
-                                        if (code != ResponseCode.RES_SUCCESS || exception != null) {
-                                            return;
-                                        }
-                                        onMessageLoaded(messages);
-                                    }
-                                });
-                    }
-                });
-    }
-
-
-    /**
-     * 历史消息加载处理
-     *
-     * @param messages
-     */
-    private void onMessageLoaded(List<IMMessage> messages) {
-
-        if (remote) {
-            Collections.reverse(messages);
-        }
-
-        if (firstLoad && items.size() > 0) {
-            // 在第一次加载的过程中又收到了新消息，做一下去重
-            for (IMMessage message : messages) {
-                for (IMMessage item : items) {
-                    if (item.isTheSame(message)) {
-                        items.remove(item);
-                        break;
                     }
                 }
             }
-        }
 
-        List<IMMessage> result = new ArrayList<>();
-        for (IMMessage message : messages) {
-            if (message.getMsgType() == MsgTypeEnum.text || message.getMsgType() == MsgTypeEnum.notification) {
+            List<IMMessage> result = new ArrayList<>();
+            for (IMMessage message : messages) {
                 result.add(message);
             }
-        }
+            if (direction == QueryDirectionEnum.QUERY_NEW) {
+                items.addAll(result);
+            } else {
+                items.addAll(0, result);
+            }
 
-        if (direction == QueryDirectionEnum.QUERY_NEW) {
-            items.addAll(result);
-        } else {
-            items.addAll(0, result);
-        }
+            // 如果是第一次加载，updateShowTimeItem返回的就是lastShowTimeItem
+            if (firstLoad) {
+                ListViewUtil.scrollToBottom(messageListView);
+//                sendReceipt(); // 发送已读回执
+            }
 
-        adapter.notifyDataSetChanged();
-        listView.getRefreshableView().setSelection(result.size());
-//        messageListView.onRefreshComplete(count, LOAD_MESSAGE_COUNT, true);
-        firstLoad = false;
+//            adapter.updateShowTimeItem(items, true, firstLoad);
+//            updateReceipt(items); // 更新已读回执标签
+
+            refreshMessageList();
+            messageListView.onRefreshComplete(count, LOAD_MESSAGE_COUNT, true);
+            firstLoad = false;
+        }
+    }// 刷新消息列表
+
+    public void refreshMessageList() {
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        }
     }
 
     /**
@@ -271,9 +259,13 @@ public class FragmentPlayerMessage extends BaseFragment {
     Observer<List<IMMessage>> receiveMessageObserver = new Observer<List<IMMessage>>() {
         @Override
         public void onEvent(List<IMMessage> messages) {
+            if (messages == null || messages.isEmpty()) {
+                return;
+            }
             Logger.e("获取到消息");
-            boolean needRefresh = false;
             List<IMMessage> addedListItems = new ArrayList<>(messages.size());
+            boolean needScrollToBottom = ListViewUtil.isLastMessageVisible(messageListView);
+            boolean needRefresh = false;
             for (IMMessage message : messages) {
                 //做一下去重
                 for (IMMessage item : items) {
@@ -297,6 +289,7 @@ public class FragmentPlayerMessage extends BaseFragment {
                     needRefresh = true;
                 }
             }
+
             if (needRefresh) {
                 items.addAll(addedListItems);
                 if (chatCallback != null) {
@@ -304,8 +297,17 @@ public class FragmentPlayerMessage extends BaseFragment {
                 }
                 sortMessages(items);
                 adapter.notifyDataSetChanged();
-                listView.getRefreshableView().setSelection(adapter.getCount() - 1);
             }
+
+
+            // incoming messages tip
+            IMMessage lastMsg = messages.get(messages.size() - 1);
+            if (isMyMessage(lastMsg)) {
+                if (needScrollToBottom) {
+                    ListViewUtil.scrollToBottom(messageListView);
+                }
+            }
+
         }
     };
 
@@ -474,12 +476,17 @@ public class FragmentPlayerMessage extends BaseFragment {
             adapter.setOwner(owner);
 
         }
-//        else {
-//
-//        }
     }
 
     public interface Callback {
-        void back(List<IMMessage> result);
+        void back(List<IMMessage> result);//发送消息
+
+        void shouldCollapseInputPanel();//收起输入法回调
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        registerTeamUpdateObserver(false);
     }
 }
