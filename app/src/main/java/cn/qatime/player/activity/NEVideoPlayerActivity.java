@@ -95,8 +95,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     private DanmuControl danMuController;
     private int screenH;
     private int screenW;
-    private View window2;
-    private View window1;
+    private RelativeLayout window2;
+    private RelativeLayout window1;
     private ImageView videoNoData1;
     private ImageView videoNoData2;
     private AnimationDrawable bufferAnimation1;
@@ -121,8 +121,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         screenW = ScreenUtils.getScreenWidth(NEVideoPlayerActivity.this);
         screenH = ScreenUtils.getScreenHeight(NEVideoPlayerActivity.this);
 
-        window1 = findViewById(R.id.window1);
-        window2 = findViewById(R.id.window2);
+        window1 = (RelativeLayout) findViewById(R.id.window1);
+        window2 = (RelativeLayout) findViewById(R.id.window2);
 
         buffering1 = (PercentRelativeLayout) findViewById(R.id.buffering1);
         buffering2 = (PercentRelativeLayout) findViewById(R.id.buffering2);
@@ -402,10 +402,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
             @Override
             public void shouldCollapseInputPanel() {
-                KeyBoardUtils.closeKeybord(NEVideoPlayerActivity.this);
-                if (bq.getVisibility() == View.VISIBLE) {
-                    bq.setVisibility(View.GONE);
-                }
+                bq.closeEmojiAndInput();
             }
         });
     }
@@ -506,6 +503,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        int screenWidth = ScreenUtils.getScreenWidth(NEVideoPlayerActivity.this);
+        int screenHeight = ScreenUtils.getScreenHeight(NEVideoPlayerActivity.this);
 
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) { // 横屏
             orientation = Configuration.ORIENTATION_LANDSCAPE;
@@ -571,13 +570,14 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         float resultY = floatingWindow.getY();
         if (resultX < 0) {
             resultX = 0;
-        } else if (resultX >= screenW - floatingWindow.getWidth()) {
-            resultX = screenW - floatingWindow.getWidth();
+        } else if (resultX >= screenWidth - floatingWindow.getWidth()) {
+            resultX = screenWidth - floatingWindow.getWidth();
         }
+
         if (resultY < 0) {
             resultY = 0;
-        } else if (resultY >= screenH - floatingWindow.getHeight()) {
-            resultY = screenH - floatingWindow.getHeight();
+        } else if (resultY >= screenHeight - floatingWindow.getHeight()) {
+            resultY = screenHeight - floatingWindow.getHeight();
         }
         floatingWindow.setX(resultX);
         floatingWindow.setY(resultY);
@@ -915,8 +915,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 subVideo.setVisibility(View.VISIBLE);
             } else {
                 if (ismain) {
+                    video2.setVisibility(View.VISIBLE);
                     window2.setVisibility(View.VISIBLE);
                 } else {
+                    video1.setVisibility(View.VISIBLE);
                     window1.setVisibility(View.VISIBLE);
                 }
                 floatingWindow.setVisibility(View.VISIBLE);
@@ -927,8 +929,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 subVideo.setVisibility(View.GONE);
             } else {
                 if (ismain) {
+                    video2.setVisibility(View.GONE);
                     window2.setVisibility(View.GONE);
                 } else {
+                    video1.setVisibility(View.GONE);
                     window1.setVisibility(View.GONE);
                 }
                 floatingWindow.setVisibility(View.GONE);

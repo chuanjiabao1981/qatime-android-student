@@ -179,10 +179,7 @@ public class MessageActivity extends BaseActivity {
      * 收起输入法等
      */
     private void shouldCollapseInputPanel() {
-        KeyBoardUtils.closeKeybord(this);
-        if (bq.getVisibility() == View.VISIBLE) {
-            bq.setVisibility(View.GONE);
-        }
+        bq.closeEmojiAndInput();
     }
 
     private class MessageLoader implements AutoRefreshListView.OnRefreshListener {

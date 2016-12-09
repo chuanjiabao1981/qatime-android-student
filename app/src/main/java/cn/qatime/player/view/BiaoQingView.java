@@ -43,7 +43,7 @@ public class BiaoQingView extends RelativeLayout {
 
     private Handler hd = new Handler();
     private ImageView emoji;
-    private Runnable r1;
+    private Runnable runnable;
     private List<List<Map<String, Integer>>> listmap;
     private List<GridView> gv;
     private KeyEvent delete;
@@ -61,7 +61,7 @@ public class BiaoQingView extends RelativeLayout {
     }
 
     private void initEmoji() {
-        r1 = new Runnable() {
+        runnable = new Runnable() {
 
             @Override
             public void run() {
@@ -74,7 +74,7 @@ public class BiaoQingView extends RelativeLayout {
             @Override
             public void onClick(View v) {
                 if (viewPager.getVisibility() == GONE) {
-                    hd.postDelayed(r1, 50);
+                    hd.postDelayed(runnable, 50);
                     closeInput();
                 } else {
                     viewPager.setVisibility(View.GONE);
