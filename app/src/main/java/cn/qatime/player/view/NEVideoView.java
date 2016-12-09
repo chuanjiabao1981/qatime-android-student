@@ -10,7 +10,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;

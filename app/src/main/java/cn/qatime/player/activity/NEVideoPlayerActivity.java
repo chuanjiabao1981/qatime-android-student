@@ -114,6 +114,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     private int reload = 0;//轮询直播状态获取失败次数，两次以内需重试
     private VideoState videoState;
     private int playingReQuery = 0;
+    private BiaoQingView bq;
 
 
     private void assignViews() {
@@ -353,6 +354,34 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         fragment2 = (FragmentPlayerMessage) fragBaseFragments.get(1);
         fragment2.setSessionId(sessionId);
         fragment2.requestTeamInfo();
+
+        content = (EditText) findViewById(R.id.content);
+        ImageView emoji = (ImageView) findViewById(R.id.emoji);
+
+        Button send = (Button) findViewById(R.id.send);
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendMessage(content.getText().toString().trim(), isSubBig);
+                content.setText("");
+            }
+        });
+        bq = (BiaoQingView) findViewById(R.id.biaoQingView);
+        bq.init(content, emoji);
+        if (isMute) {
+            content.setHint(R.string.have_muted);
+        } else {
+            content.setHint("");
+        }
+        content.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isSubBig) {
+                    changeSubSmall();
+                    floatFragment.setSubBig(false);
+                }
+            }
+        });
         fragment2.setChatCallBack(new FragmentPlayerMessage.Callback() {
             @Override
             public void back(List<IMMessage> result) {
@@ -370,32 +399,12 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                     danMuController.addDanmuList(result);
                 }
             }
-        });
 
-        content = (EditText) findViewById(R.id.content);
-        ImageView emoji = (ImageView) findViewById(R.id.emoji);
-
-        Button send = (Button) findViewById(R.id.send);
-        send.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                sendMessage(content.getText().toString().trim(), isSubBig);
-                content.setText("");
-            }
-        });
-        BiaoQingView bq = (BiaoQingView) findViewById(R.id.biaoQingView);
-        bq.init(content, emoji);
-        if (isMute) {
-            content.setHint(R.string.have_muted);
-        } else {
-            content.setHint("");
-        }
-        content.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isSubBig) {
-                    changeSubSmall();
-                    floatFragment.setSubBig(false);
+            public void shouldCollapseInputPanel() {
+                KeyBoardUtils.closeKeybord(NEVideoPlayerActivity.this);
+                if (bq.getVisibility() == View.VISIBLE) {
+                    bq.setVisibility(View.GONE);
                 }
             }
         });
@@ -441,7 +450,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         }
         fragment2.items.add(message);
         fragment2.adapter.notifyDataSetChanged();
-        fragment2.listView.getRefreshableView().setSelection(fragment2.items.size() - 1);
+        fragment2.scrollToBottom();
     }
 
     private void initData() {

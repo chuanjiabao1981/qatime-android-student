@@ -151,11 +151,11 @@ public class MainActivity extends BaseFragmentActivity {
                 if (action.equals(Constant.LoginAction.toMessage)) {
                     Intent intent = new Intent(MainActivity.this, MessageFragmentActivity.class);
                     startActivity(intent);
-                } else if (action.equals(Constant.LoginAction.toPage3)) {
+                } else if (action.equals(Constant.LoginAction.toPage3)) {//课程表点击登录返回
                     fragmentlayout.setCurrenItem(2);
                 } else if (action.equals(Constant.LoginAction.toPage4)) {
                     fragmentlayout.setCurrenItem(3);
-                } else if (action.equals(Constant.LoginAction.toClassTimeTable)) {
+                } else if (action.equals(Constant.LoginAction.toClassTimeTable)) {//课程表右上角点击返回
                     fragmentlayout.setCurrenItem(2);
                     Intent intent = new Intent(MainActivity.this, ClassTimeTableActivity.class);
                     startActivity(intent);
@@ -166,9 +166,10 @@ public class MainActivity extends BaseFragmentActivity {
                 }
             }
         }
-        if (resultCode == Constant.RESPONSE && data.getIntExtra("from", -1) != -1) {//如果有返回并且携带了跳转码，则跳到响应的页面
-            initView();//刷新view
-            fragmentlayout.setCurrenItem(data.getIntExtra("from", -1));
+        if (resultCode == Constant.RESPONSE ) {//如果有返回并且携带了跳转码，则跳到响应的页面
+//            initView();//刷新view
+            fragmentlayout.setCurrenItem(3);
+            ((FragmentHomeUserCenter) fragBaseFragments.get(3)).onActivityResult(Constant.REQUEST, Constant.RESPONSE, null);
         }
     }
 

@@ -84,9 +84,7 @@ public class PersonalInformationActivity extends BaseActivity {
 
                     profile.getData().setUser(user);
                     BaseApplication.setProfile(profile);
-                    Intent intent = new Intent();
-                    intent.putExtra("from", 3);//从mainActivity进入时，用于标记是哪个页面返回的（从userCenter进入的不做处理）
-                    setResult(Constant.RESPONSE, intent);
+                    setResult(Constant.RESPONSE);
                 }
             }
         }

@@ -279,6 +279,7 @@
     //安全管理
     <string name="bind_phone_number">绑定手机</string>
     <string name="parent_phone_number">家长手机</string>
+    <string name="bind">绑 定</string>
     <string name="bind_email">绑定邮箱</string>
     <string name="bind_rightnow">马上绑定</string>
     <string name="bind_wechat">绑定微信</string>
