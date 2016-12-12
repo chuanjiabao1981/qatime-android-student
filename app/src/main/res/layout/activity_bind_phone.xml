@@ -9,9 +9,9 @@
     <LinearLayout style="@style/edit_layout_style">
 
         <LinearLayout
+            style="@style/edit_layout_top_style"
             android:paddingLeft="12dp"
-            android:paddingRight="12dp"
-            style="@style/edit_layout_top_style">
+            android:paddingRight="12dp">
 
             <EditText
                 android:id="@+id/target_phone"
@@ -21,9 +21,9 @@
         </LinearLayout>
 
         <LinearLayout
+            style="@style/edit_layout_bottom_style"
             android:paddingLeft="12dp"
-            android:paddingRight="12dp"
-            style="@style/edit_layout_bottom_style">
+            android:paddingRight="12dp">
 
             <EditText
                 android:id="@+id/code"
@@ -32,9 +32,10 @@
 
             <TextView
                 android:id="@+id/text_getcode"
-                android:textColor="@drawable/text_selector_white_red"
                 style="@style/button_style_with_edit"
-                android:text="@string/getcode" />
+                android:enabled="false"
+                android:text="@string/getcode"
+                android:textColor="@drawable/text_selector_white_red" />
         </LinearLayout>
     </LinearLayout>
 
