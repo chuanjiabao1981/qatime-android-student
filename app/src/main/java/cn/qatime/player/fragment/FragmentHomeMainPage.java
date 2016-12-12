@@ -26,6 +26,8 @@ import com.bumptech.glide.Glide;
 
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -148,7 +150,11 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private void initBannerData() {
         Map<String, String> map = new HashMap<>();
 //        map.put("per_page", String.valueOf(1));
-        map.put("city_name", BaseApplication.getCurrentCity().getName());
+        try {
+            map.put("city_name", URLEncoder.encode(BaseApplication.getCurrentCity().getName(),"UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecommend + "index_banner" + "/items", map), null,
                 new VolleyListener(getActivity()) {
                     @Override
@@ -245,7 +251,11 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(page));
         map.put("per_page", String.valueOf(5));
-        map.put("city_name", BaseApplication.getCurrentCity().getName());
+        try {
+            map.put("city_name", URLEncoder.encode(BaseApplication.getCurrentCity().getName(),"UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecommend + "index_teacher_recommend" + "/items", map), null,
                 new VolleyListener(getActivity()) {
                     @Override
@@ -351,7 +361,11 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(1));
         map.put("per_page", String.valueOf(6));
-        map.put("city_name", BaseApplication.getCurrentCity().getName());
+        try {
+            map.put("city_name", URLEncoder.encode(BaseApplication.getCurrentCity().getName(),"UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecommend + "index_live_studio_course_recommend" + "/items", map), null,
                 new VolleyListener(getActivity()) {
                     @Override
