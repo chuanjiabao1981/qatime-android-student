@@ -388,7 +388,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         final AlertDialog alertDialog = new AlertDialog.Builder(RegisterActivity.this).create();
         View view = View.inflate(RegisterActivity.this, R.layout.dialog_cancel_or_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("该手机号已注册,请登录进入\n个人中心>安全设置绑定");
+        text.setText("该手机号已注册,请直接登录");
         ((TextView) view.findViewById(R.id.cancel)).setText("新号码注册");
         ((TextView) view.findViewById(R.id.confirm)).setText("登录");
         Button cancel = (Button) view.findViewById(R.id.cancel);

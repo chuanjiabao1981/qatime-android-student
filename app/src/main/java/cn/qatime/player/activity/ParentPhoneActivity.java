@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,6 +53,27 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
         code = (EditText) findViewById(R.id.code);
         textGetcode = (TextView) findViewById(R.id.text_getcode);
         buttonOver = (Button) findViewById(R.id.button_over);
+
+        newParentPhone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (StringUtils.isPhone(newParentPhone.getText().toString().trim())) {
+                    textGetcode.setEnabled(true);
+                } else {
+                    textGetcode.setEnabled(false);
+                }
+            }
+        });
     }
 
 
@@ -114,7 +137,7 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
                     protected void onError(JSONObject response) {
                         Toast.makeText(getApplicationContext(), getResourceString(R.string.code_send_failed), Toast.LENGTH_LONG).show();
                     }
-                },new VolleyErrorListener(){
+                }, new VolleyErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         super.onErrorResponse(volleyError);
@@ -178,7 +201,7 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
                             e.printStackTrace();
                         }
                     }
-                }, new VolleyErrorListener(){
+                }, new VolleyErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         super.onErrorResponse(volleyError);
