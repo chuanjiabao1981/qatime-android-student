@@ -55,7 +55,6 @@ public class TeacherDataActivity extends BaseActivity {
     private TextView province;
     private TextView city;
     private TextView town;
-    private int page = 0;
     private CommonAdapter<TeacherDataBean.DataBean.Course> adapter;
     private DecimalFormat df = new DecimalFormat("#.00");
     private int teacherId;

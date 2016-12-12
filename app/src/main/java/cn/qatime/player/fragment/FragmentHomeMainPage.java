@@ -129,7 +129,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         listBanner.add(noBanner);
         tagViewpagerImg.init(R.drawable.shape_photo_tag_select, R.drawable.shape_photo_tag_nomal, 16, 8, 4, 30);
         tagViewpagerImg.setAutoNext(true, 3000);
-//        viewPager.setId(1252);
+//        viewPager.setResourceId(1252);
         tagViewpagerImg.setOnGetView(new TagViewPager.OnGetView() {
             @Override
             public View getView(ViewGroup container, int position) {
@@ -149,7 +149,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
     private void initBannerData() {
         Map<String, String> map = new HashMap<>();
-//        map.put("per_page", String.valueOf(1));
         try {
             map.put("city_name", URLEncoder.encode(BaseApplication.getCurrentCity().getName(),"UTF-8"));
         } catch (UnsupportedEncodingException e) {
@@ -314,9 +313,9 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     ((TextView) holder.getView(R.id.reason)).setText(getReason(item.getReason()));
                     ((TextView) holder.getView(R.id.reason)).setBackgroundColor(getReasonBackground(item.getReason()));
                     ((TextView) holder.getView(R.id.reason)).setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     Glide.with(getActivity()).load(R.mipmap.photo).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) holder.getView(R.id.class_recommend_img)));
-                    holder.setText(R.id.course_title,"暂无辅导班数据");
+                    holder.setText(R.id.course_title, "暂无辅导班数据");
                     holder.setText(R.id.grade, "年级");
                     holder.setText(R.id.subject, "科目");
                     holder.setText(R.id.count, "0人报名");
@@ -338,7 +337,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     }
 
     private String getReason(String reason) {
-
         if ("latest".equals(reason)) {
             return "最新";
         } else if ("hottest".equals(reason)) {
@@ -348,7 +346,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     }
 
     private int getReasonBackground(String reason) {
-
         if ("latest".equals(reason)) {
             return 0xff66cccc;
         } else if ("hottest".equals(reason)) {
@@ -362,7 +359,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         map.put("page", String.valueOf(1));
         map.put("per_page", String.valueOf(6));
         try {
-            map.put("city_name", URLEncoder.encode(BaseApplication.getCurrentCity().getName(),"UTF-8"));
+            map.put("city_name", URLEncoder.encode(BaseApplication.getCurrentCity().getName(), "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

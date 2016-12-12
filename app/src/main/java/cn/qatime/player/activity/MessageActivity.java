@@ -3,13 +3,7 @@ package cn.qatime.player.activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.text.format.DateUtils;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,21 +36,20 @@ import cn.qatime.player.adapter.MessageAdapter;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.ChatVideoBean;
+import cn.qatime.player.bean.InputPanel;
 import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.TeamDataCache;
-import cn.qatime.player.view.BiaoQingView;
 import cn.qatime.player.view.listview.AutoRefreshListView;
 import cn.qatime.player.view.listview.ListViewUtil;
 import cn.qatime.player.view.listview.MessageListView;
-import libraryextra.utils.KeyBoardUtils;
 import libraryextra.utils.StringUtils;
 
 /**
  * @author luntify
  * @date 2016/8/30 12:25
- * @Description
+ * @Description 聊天
  */
-public class MessageActivity extends BaseActivity {
+public class MessageActivity extends BaseActivity implements InputPanel.InputPanelListener {
     private String sessionId;//聊天对象id
     private SessionTypeEnum sessionType;
     private MessageListView messageListView;
@@ -64,22 +57,21 @@ public class MessageActivity extends BaseActivity {
     private boolean remote = false;
     private List<IMMessage> items = new ArrayList<>();
     private Team team;
-    private Button send;
     private TextView tipText;
-    private ImageView emoji;
-    private EditText content;
 
     private int courseId;
     private boolean isMute = false;//当前用户 是否被禁言
     private MessageAdapter adapter;
     private String board;
     private String camera;
-    private BiaoQingView bq;
+    private View rootView;
+    private InputPanel inputpanel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_message);
+        rootView = View.inflate(this, R.layout.activity_message, null);
+        setContentView(rootView);
         EventBus.getDefault().register(this);
         String name = getIntent().getStringExtra("name");
         if (!StringUtils.isNullOrBlanK(name)) {
@@ -104,12 +96,14 @@ public class MessageActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-//        loadMessage(false);
         registerTeamUpdateObserver(true);
     }
 
     private void initView() {
-        isMute = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount()).isMute();
+        TeamMember teamMember = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
+        if (teamMember != null) {
+            isMute = teamMember.isMute();
+        }
         tipText = (TextView) findViewById(R.id.tip);
         messageListView = (MessageListView) findViewById(R.id.list);
         messageListView.requestDisallowInterceptTouchEvent(true);
@@ -125,48 +119,8 @@ public class MessageActivity extends BaseActivity {
 
         messageListView.setOnRefreshListener(new MessageLoader(remote));
 
-        content = (EditText) findViewById(R.id.content);
-        emoji = (ImageView) findViewById(R.id.emoji);
-
-        send = (Button) findViewById(R.id.send);
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isAllowSendMessage()) {
-                    Toast.makeText(MessageActivity.this, getResourceString(R.string.team_send_message_not_allow), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (StringUtils.isNullOrBlanK(content.getText().toString())) {
-                    Toast.makeText(MessageActivity.this, getResourceString(R.string.message_can_not_null), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (isMute) {
-                    Toast.makeText(MessageActivity.this, getResourceString(R.string.have_muted), Toast.LENGTH_SHORT).show();
-                    content.setText("");
-                    return;
-                }
-                // 创建文本消息
-                IMMessage message = MessageBuilder.createTextMessage(
-                        sessionId, // 聊天对象的 ID，如果是单聊，为用户帐号，如果是群聊，为群组 ID
-                        sessionType, // 聊天类型，单聊或群组
-                        content.getText().toString() // 文本内容
-                );
-                // 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
-                NIMClient.getService(MsgService.class).sendMessage(message, true);
-
-                items.add(message);
-                adapter.notifyDataSetChanged();
-                ListViewUtil.scrollToBottom(messageListView);
-                content.setText("");
-            }
-        });
-        bq = (BiaoQingView) findViewById(R.id.biaoQingView);
-        bq.init(content, emoji);
-        if (isMute) {
-            content.setHint(R.string.have_muted);
-        } else {
-            content.setHint("");
-        }
+        inputpanel = new InputPanel(this, this, rootView, true);
+        inputpanel.setMute(isMute);
         messageListView.setListViewEventListener(new MessageListView.OnListViewEventListener() {
             @Override
             public void onListViewStartScroll() {
@@ -179,7 +133,23 @@ public class MessageActivity extends BaseActivity {
      * 收起输入法等
      */
     private void shouldCollapseInputPanel() {
-        bq.closeEmojiAndInput();
+        inputpanel.closeEmojiAndInput();
+    }
+
+    @Override
+    public void ChatMessage(String data) {
+//         创建文本消息
+        IMMessage message = MessageBuilder.createTextMessage(
+                sessionId, // 聊天对象的 ID，如果是单聊，为用户帐号，如果是群聊，为群组 ID
+                sessionType, // 聊天类型，单聊或群组
+                data // 文本内容
+        );
+        // 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
+        NIMClient.getService(MsgService.class).sendMessage(message, true);
+
+        items.add(message);
+        adapter.notifyDataSetChanged();
+        ListViewUtil.scrollToBottom(messageListView);
     }
 
     private class MessageLoader implements AutoRefreshListView.OnRefreshListener {
@@ -189,7 +159,7 @@ public class MessageActivity extends BaseActivity {
 
         private boolean firstLoad = true;
 
-        public MessageLoader(boolean remote) {
+        MessageLoader(boolean remote) {
             if (remote) {
                 loadFromRemote();
             } else {
@@ -276,47 +246,13 @@ public class MessageActivity extends BaseActivity {
             // 如果是第一次加载，updateShowTimeItem返回的就是lastShowTimeItem
             if (firstLoad) {
                 ListViewUtil.scrollToBottom(messageListView);
-//                sendReceipt(); // 发送已读回执
             }
-
-//            adapter.updateShowTimeItem(items, true, firstLoad);
-//            updateReceipt(items); // 更新已读回执标签
 
             refreshMessageList();
             messageListView.onRefreshComplete(count, LOAD_MESSAGE_COUNT, true);
             firstLoad = false;
 
 
-//            if (remote) {
-//                Collections.reverse(messages);
-//            }
-//            if (firstLoad && items.size() > 0) {
-//                // 在第一次加载的过程中又收到了新消息，做一下去重
-//                for (IMMessage message : messages) {
-//                    for (IMMessage item : items) {
-//                        if (item.isTheSame(message)) {
-//                            items.remove(item);
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
-//
-//            List<IMMessage> result = new ArrayList<>();
-//            for (IMMessage message : messages) {
-//                if (message.getMsgType() == MsgTypeEnum.text || message.getMsgType() == MsgTypeEnum.notification) {
-//                    result.add(message);
-//                }
-//            }
-//            if (direction == QueryDirectionEnum.QUERY_NEW) {
-//                items.addAll(result);
-//            } else {
-//                items.addAll(0, result);
-//            }
-//
-//            adapter.notifyDataSetChanged();
-//            messageListView.getRefreshableView().setSelection(result.size());
-//            firstLoad = false;
         }
     }
 
@@ -331,14 +267,6 @@ public class MessageActivity extends BaseActivity {
     }
 
 
-//    public void loadMessage(boolean remote) {
-//        this.remote = remote;
-//        if (remote) {
-//            loadFromRemote();
-//        } else {
-//            loadFromLocal(QueryDirectionEnum.QUERY_OLD);
-//        }
-//    }
 
 
     /**
@@ -347,7 +275,6 @@ public class MessageActivity extends BaseActivity {
 
     private void registerObservers(boolean register) {
         MsgServiceObserve service = NIMClient.getService(MsgServiceObserve.class);
-//        service.observeMsgStatus(messageStatusObserver, register);
         service.observeReceiveMessage(receiveMessageObserver, register);
     }
 
@@ -376,11 +303,7 @@ public class MessageActivity extends BaseActivity {
 
             if (needRefresh) {
                 isMute = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount()).isMute();
-                if (isMute) {
-                    content.setHint(R.string.have_muted);
-                } else {
-                    content.setHint("");
-                }
+                inputpanel.setMute(isMute);
                 sortMessages(items);
                 adapter.notifyDataSetChanged();
             }
@@ -393,39 +316,6 @@ public class MessageActivity extends BaseActivity {
                     ListViewUtil.scrollToBottom(messageListView);
                 }
             }
-
-
-//            boolean needRefresh = false;
-//            for (IMMessage message : messages) {
-////                if (isMyMessage(message) && message.getMsgType() == MsgTypeEnum.text) {
-////                    addedListItems.add(message);
-////                    needRefresh = true;
-////                }
-//                //做一下去重
-//                for (IMMessage item : items) {
-//                    if (item.isTheSame(message)) {
-//                        items.remove(item);
-//                        break;
-//                    }
-//                }
-//                if (isMyMessage(message) && (message.getMsgType() == MsgTypeEnum.text || message.getMsgType() == MsgTypeEnum.notification)) {
-//                    items.add(message);
-//                    isMute = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount()).isMute();
-//                    if (isMute) {
-//                        content.setHint(R.string.have_muted);
-//                    } else {
-//                        content.setHint("");
-//                    }
-//                    needRefresh = true;
-//                }
-//
-//            }
-//
-//            if (needRefresh) {
-//                sortMessages(items);
-//                adapter.notifyDataSetChanged();
-//                messageListView.getRefreshableView().setSelection(adapter.getCount());
-//            }
         }
     };
 
@@ -447,16 +337,6 @@ public class MessageActivity extends BaseActivity {
             return time == 0 ? 0 : (time < 0 ? -1 : 1);
         }
     };
-//    /**
-//     * 消息状态变化观察者
-//     */
-//    Observer<IMMessage> messageStatusObserver = new Observer<IMMessage>() {
-//        @Override
-//        public void onEvent(IMMessage imMessage) {
-//            if (isMyMessage(imMessage)) {
-//            }
-//        }
-//    };
 
     public boolean isMyMessage(IMMessage message) {
         return message.getSessionType() == sessionType
@@ -495,16 +375,9 @@ public class MessageActivity extends BaseActivity {
             return;
         }
         team = d;
+        inputpanel.setTeam(team);
         tipText.setText(team.getType() == TeamTypeEnum.Normal ? getResourceString(R.string.you_have_quit_the_group) : getResourceString(R.string.you_have_quit_the_group));
         tipText.setVisibility(team.isMyTeam() ? View.GONE : View.VISIBLE);
-    }
-
-    public boolean isAllowSendMessage() {
-        if (team == null || !team.isMyTeam()) {
-            Toast.makeText(MessageActivity.this, R.string.team_send_message_not_allow, Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        return true;
     }
 
 
@@ -521,7 +394,6 @@ public class MessageActivity extends BaseActivity {
             TeamDataCache.getInstance().unregisterTeamDataChangedObserver(teamDataChangedObserver);
             TeamDataCache.getInstance().unregisterTeamMemberDataChangedObserver(teamMemberDataChangedObserver);
         }
-//        FriendDataCache.getInstance().registerFriendDataChangedObserver(friendDataChangedObserver, register);
     }
 
     /**
@@ -567,28 +439,6 @@ public class MessageActivity extends BaseActivity {
         }
     };
 
-//    FriendDataCache.FriendDataChangedObserver friendDataChangedObserver = new FriendDataCache.FriendDataChangedObserver() {
-//        @Override
-//        public void onAddedOrUpdatedFriends(List<String> accounts) {
-//            adapter.notifyDataSetChanged();
-//        }
-//
-//        @Override
-//        public void onDeletedFriends(List<String> accounts) {
-//            adapter.notifyDataSetChanged();
-//        }
-//
-//        @Override
-//        public void onAddUserToBlackList(List<String> account) {
-//            adapter.notifyDataSetChanged();
-//        }
-//
-//        @Override
-//        public void onRemoveUserFromBlackList(List<String> account) {
-//            adapter.notifyDataSetChanged();
-//        }
-//    };
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -599,10 +449,11 @@ public class MessageActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (findViewById(R.id.viewPager) != null && findViewById(R.id.viewPager).getVisibility() == View.VISIBLE) {
-            findViewById(R.id.viewPager).setVisibility(View.GONE);
+        if (inputpanel.isEmojiShow()) {
+            inputpanel.closeEmojiAndInput();
             return;
         }
+
         super.onBackPressed();
     }
 

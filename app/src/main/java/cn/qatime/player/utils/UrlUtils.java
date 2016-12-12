@@ -13,7 +13,7 @@ import libraryextra.utils.StringUtils;
  */
 public class UrlUtils {
 
-    private static String baseUrl = Configure.isDebug ? "http://testing.qatime.cn/" : "http://qatime.cn/";
+    private static String baseUrl = Configure.isDebug ? "http://testing.qatime.cn/" : "https://qatime.cn/";
     //云信key
 //    public static String appKey = isDebug ? "2a24ca70e580cab2bef58b1e62478f9f" : "4fe3a3fba0a40a00daf011049a29d995";
     //登录
