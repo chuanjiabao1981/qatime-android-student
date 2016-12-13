@@ -283,7 +283,7 @@
     <string name="bind_email">绑定邮箱</string>
     <string name="bind_rightnow">马上绑定</string>
     <string name="bind_wechat">绑定微信</string>
-    <string name="change_password">修改密码</string>
+    <string name="change_password">修改登陆密码</string>
     <string name="current_phone">当前手机号码</string>
     <string name="new_email">输入新的邮箱</string>
     <string name="confirm_email">确认新的邮箱</string>
@@ -462,4 +462,5 @@
     <string name="unlogin_alert">您还未登录,请先登录!</string>
     <string name="hader_can_not_be_empty">头像不能为空</string>
     <string name="teacher_translate">老师</string>
+    <string name="change_pay_password">重置支付密码</string>
 </resources>

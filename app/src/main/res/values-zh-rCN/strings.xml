@@ -332,7 +332,7 @@
     <string name="amount_payment_order">支付金额</string>
     <string name="bind_email">绑定邮箱</string>
     <string name="bind_phone_number">绑定手机</string>
-    <string name="change_password">修改密码</string>
+    <string name="change_password">修改登陆密码</string>
     <string name="check_update">检查更新</string>
     <string name="class_1">第一课</string>
     <string name="class_2">第二课</string>

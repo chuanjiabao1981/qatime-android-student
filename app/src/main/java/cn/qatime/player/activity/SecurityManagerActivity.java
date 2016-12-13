@@ -45,6 +45,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
     private LinearLayout parentPhoneNumber;
     private TextView phoneNumberP;
     private LinearLayout changePassword;
+    private LinearLayout changePayPassword;
     private View bindWeChat;
     private TextView weChat;
     private IWXAPI api;
@@ -60,6 +61,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
         phoneNumberP = (TextView) findViewById(R.id.phone_number_p);
         phoneNumberM = (TextView) findViewById(R.id.phone_number_m);
         changePassword = (LinearLayout) findViewById(R.id.change_password);
+        changePayPassword = (LinearLayout) findViewById(R.id.change_pay_password);
 
     }
 
@@ -155,6 +157,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
         bindWeChat.setOnClickListener(this);
         parentPhoneNumber.setOnClickListener(this);
         changePassword.setOnClickListener(this);
+        changePayPassword.setOnClickListener(this);
     }
 
     private void enableClick(boolean b) {
@@ -203,8 +206,12 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
                 intent = new Intent(this, ChangePasswordActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.change_pay_password://修改支付密码
+                dialogPayPSW();
+                break;
         }
     }
+      
 
     @Subscribe
     public void onEvent(String code) {
@@ -233,6 +240,32 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
         addToRequestQueue(request);
     }
 
+    private void dialogPayPSW() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        View view = View.inflate(this, R.layout.dialog_cancel_or_confirm, null);
+        TextView text = (TextView) view.findViewById(R.id.text);
+        text.setText("新设置或修改后将在24小时内不能使用支付密码，是否继续？");
+        Button cancel = (Button) view.findViewById(R.id.cancel);
+        Button confirm = (Button) view.findViewById(R.id.confirm);
+        confirm.setText("继续");
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.show();
+        alertDialog.setContentView(view);
+    }
+
     private void dialogCancel() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final AlertDialog alertDialog = builder.create();
@@ -254,7 +287,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
             public void onClick(View v) {
                 alertDialog.dismiss();
                 cancelBindWechat();
-            }
+            }       
         });
         alertDialog.show();
         alertDialog.setContentView(view);
