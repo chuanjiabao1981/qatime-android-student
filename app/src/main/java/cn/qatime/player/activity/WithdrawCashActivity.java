@@ -24,11 +24,9 @@ import libraryextra.utils.StringUtils;
  * @date 2016/10/17 9:38
  * @Description:
  */
-public class WithdrawCash1Activity extends BaseActivity {
+public class WithdrawCashActivity extends BaseActivity {
     private EditText rechargeNum;
-    private LinearLayout toBankLayout;
     private ImageView toBank;
-    private LinearLayout toAlipayLayout;
     private ImageView toAlipay;
     private Button rechargeNow;
     private String payType = "bank";
@@ -36,9 +34,9 @@ public class WithdrawCash1Activity extends BaseActivity {
 
     private void assignViews() {
         rechargeNum = (EditText) findViewById(R.id.recharge_num);
-        toBankLayout = (LinearLayout) findViewById(R.id.to_bank_layout);
+        LinearLayout toBankLayout = (LinearLayout) findViewById(R.id.to_bank_layout);
         toBank = (ImageView) findViewById(R.id.to_bank);
-        toAlipayLayout = (LinearLayout) findViewById(R.id.to_alipay_layout);
+        LinearLayout toAlipayLayout = (LinearLayout) findViewById(R.id.to_alipay_layout);
         toAlipay = (ImageView) findViewById(R.id.to_alipay);
         rechargeNow = (Button) findViewById(R.id.recharge_now);
 
@@ -63,7 +61,7 @@ public class WithdrawCash1Activity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_withdraw1_cash);
+        setContentView(R.layout.activity_withdraw_cash);
         setTitle(getResourceString(R.string.withdraw_cash));
         assignViews();
         initListener();
@@ -146,22 +144,22 @@ public class WithdrawCash1Activity extends BaseActivity {
             public void onClick(View v) {
                 String amount = rechargeNum.getText().toString();
                 if (StringUtils.isNullOrBlanK(amount)) {
-                    Toast.makeText(WithdrawCash1Activity.this, R.string.amount_can_not_null, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(WithdrawCashActivity.this, R.string.amount_can_not_null, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (Double.valueOf(amount) == 0) {
-                    Toast.makeText(WithdrawCash1Activity.this, R.string.amount_can_not_zero, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(WithdrawCashActivity.this, R.string.amount_can_not_zero, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (Double.valueOf(amount) > Math.pow(10, 6)) {
-                    Toast.makeText(WithdrawCash1Activity.this, "金额不支持", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(WithdrawCashActivity.this, "金额不支持", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (Double.valueOf(amount) > Double.valueOf(getIntent().getStringExtra("balance"))) {
-                    Toast.makeText(WithdrawCash1Activity.this, getResourceString(R.string.amount_not_enough), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(WithdrawCashActivity.this, getResourceString(R.string.amount_not_enough), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Intent intent = new Intent(WithdrawCash1Activity.this, WithdrawConfirmActivity.class);
+                Intent intent = new Intent(WithdrawCashActivity.this, WithdrawConfirmActivity.class);
                 intent.putExtra("pay_type", payType);
                 intent.putExtra("amount", amount);
                 startActivityForResult(intent, Constant.REQUEST);

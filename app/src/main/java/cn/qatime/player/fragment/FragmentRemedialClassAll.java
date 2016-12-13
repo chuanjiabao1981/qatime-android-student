@@ -48,6 +48,7 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.UrlUtils;
@@ -240,6 +241,11 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
         map.put("class_date_floor", class_date_floor);
         map.put("class_date_ceil", class_date_ceil);
         map.put("status", status);
+        try {
+            map.put("city_name",URLEncoder.encode(BaseApplication.getCurrentCity().getName(),"UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass, map), null,
                 new VolleyListener(getActivity()) {
 

@@ -1,10 +1,13 @@
 package cn.qatime.player.activity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -79,6 +82,26 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         checkBox = (CheckBox) findViewById(R.id.checkBox);
         next = (Button) findViewById(R.id.next);
         agreement = (TextView) findViewById(R.id.agreement);
+        phone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (StringUtils.isPhone(phone.getText().toString().trim())) {
+                    getcode.setEnabled(true);
+                } else {
+                    getcode.setEnabled(false);
+                }
+            }
+        });
 
         phone.setHint(StringUtils.getSpannedString(getResources().getString(R.string.hint_phone_number)));
         code.setHint(StringUtils.getSpannedString(getResources().getString(R.string.hint_input_verification_code)));
@@ -338,15 +361,14 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 }
                 Logger.e("注册失败--" + result);
                 if (result.contains("已经被使用")) {
-                    Toast.makeText(RegisterActivity.this, getResourceString(R.string.phone_already_used), Toast.LENGTH_SHORT).show();
-
+//                    Toast.makeText(RegisterActivity.this, getResourceString(R.string.phone_already_used), Toast.LENGTH_SHORT).show();
+                    dialogReTry();
                 } else if (result.contains("与确认值不匹配")) {
                     Toast.makeText(RegisterActivity.this, getResourceString(R.string.code_error), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(RegisterActivity.this, getResourceString(R.string.register_failed), Toast.LENGTH_SHORT).show();
                 }
             }
-
 
         }, new VolleyErrorListener() {
             @Override
@@ -357,6 +379,46 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         });
 
         addToRequestQueue(request);
+    }
+
+    /**
+     * 手机号已注册提示
+     */
+    private void dialogReTry() {
+        final AlertDialog alertDialog = new AlertDialog.Builder(RegisterActivity.this).create();
+        View view = View.inflate(RegisterActivity.this, R.layout.dialog_cancel_or_confirm, null);
+        TextView text = (TextView) view.findViewById(R.id.text);
+        text.setText("该手机号已注册,请直接登录");
+        ((TextView) view.findViewById(R.id.cancel)).setText("新号码注册");
+        ((TextView) view.findViewById(R.id.confirm)).setText("登录");
+        Button cancel = (Button) view.findViewById(R.id.cancel);
+        Button confirm = (Button) view.findViewById(R.id.confirm);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                clearData();
+            }
+        });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                finish();
+            }
+        });
+        alertDialog.show();
+        alertDialog.setContentView(view);
+    }
+
+    /**
+     * 清空数据
+     */
+    private void clearData() {
+        phone.setText("");
+        code.setText("");
+        password.setText("");
+        repassword.setText("");
     }
 
     private void loginAccount() {

@@ -23,6 +23,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.netease.nimlib.p.d;
+import com.netease.nimlib.sdk.team.model.Team;
 import com.orhanobut.logger.Logger;
 
 import cn.qatime.player.R;
@@ -76,6 +78,7 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
     private ImageView danmuSwitch;
     private View exit;
     private LinearLayout bottomLayout;
+    private Team team;
 
 
     private void assignViews(View view) {
@@ -275,17 +278,27 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
                 if (StringUtils.isNullOrBlanK(comment.getText().toString().trim())) {
                     return;
                 }
-//                if (isMute) {
-//                    Toast.makeText(act, R.string.team_send_message_not_allow, Toast.LENGTH_SHORT).show();
-//                    comment.setText("");
-//                    return;
-//                }
+                if (!isAllowSendMessage()) {
+                    return;
+                }
+
+                if (isMute) {
+                    Toast.makeText(act, R.string.team_send_message_not_allow, Toast.LENGTH_SHORT).show();
+                    comment.setText("");
+                    return;
+                }
                 callback.sendMessage(comment.getText().toString().trim());
                 comment.setText("");
                 break;
         }
     }
-
+    public boolean isAllowSendMessage() {
+        if (team == null || !team.isMyTeam()) {
+            Toast.makeText(getActivity(), R.string.team_send_message_not_allow, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
     /**
      * 切换视频
      */
@@ -526,6 +539,10 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
         } else {
             danmuSwitch.setImageResource(R.mipmap.danmu_off);
         }
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
     }
 
     public interface CallBack {

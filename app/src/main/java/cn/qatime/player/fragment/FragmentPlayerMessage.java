@@ -59,11 +59,11 @@ import cn.qatime.player.view.listview.MessageListView;
 
 public class FragmentPlayerMessage extends BaseFragment {
     private TextView tipText;
-    public MessageListView messageListView;
-    public MessageAdapter adapter;
+    private MessageListView messageListView;
+    private MessageAdapter adapter;
     public List<IMMessage> items = new ArrayList<>();
 
-    public Team team;
+    private Team team;
 
     // 从服务器拉取消息记录
     private boolean remote = false;
@@ -118,7 +118,7 @@ public class FragmentPlayerMessage extends BaseFragment {
         messageListView.setListViewEventListener(new MessageListView.OnListViewEventListener() {
             @Override
             public void onListViewStartScroll() {
-                if (chatCallback!=null) {
+                if (chatCallback != null) {
                     chatCallback.shouldCollapseInputPanel();
                 }
             }
@@ -126,6 +126,7 @@ public class FragmentPlayerMessage extends BaseFragment {
     }
 
     public void scrollToBottom() {
+        adapter.notifyDataSetChanged();
         ListViewUtil.scrollToBottom(messageListView);
     }
 
@@ -367,17 +368,11 @@ public class FragmentPlayerMessage extends BaseFragment {
             return;
         }
         team = d;
-//        setTitle(team == null ? sessionId : team.getName() + "(" + team.getMemberCount() + "人)");
+        if (chatCallback != null) {
+            chatCallback.updateTeam(team);
+        }
 //
         hd.postDelayed(runnable, 200);
-    }
-
-    public boolean isAllowSendMessage() {
-        if (team == null || !team.isMyTeam()) {
-            Toast.makeText(getActivity(), R.string.team_send_message_not_allow, Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        return true;
     }
 
 
@@ -482,6 +477,8 @@ public class FragmentPlayerMessage extends BaseFragment {
         void back(List<IMMessage> result);//发送消息
 
         void shouldCollapseInputPanel();//收起输入法回调
+
+        void updateTeam(Team team);//再输入栏中判断是否在该群组
     }
 
     @Override

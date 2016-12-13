@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -98,6 +100,27 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
             }
         });
         next.setOnClickListener(this);
+
+        phone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (StringUtils.isPhone(phone.getText().toString().trim())) {
+                    getCode.setEnabled(true);
+                } else {
+                    getCode.setEnabled(false);
+                }
+            }
+        });
     }
 
     @Override
@@ -347,6 +370,7 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
+                clearData();
             }
         });
         confirm.setOnClickListener(new View.OnClickListener() {
@@ -358,6 +382,16 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
         });
         alertDialog.show();
         alertDialog.setContentView(view);
+    }
+
+    /**
+     * 清除数据
+     */
+    private void clearData() {
+        phone.setText("");
+        code.setText("");
+        password.setText("");
+        grade.setText("");
     }
 
 

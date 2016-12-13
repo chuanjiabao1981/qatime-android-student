@@ -3,6 +3,8 @@ package cn.qatime.player.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,6 +47,27 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
         code = (EditText) findViewById(R.id.code);
         textGetcode = (TextView) findViewById(R.id.text_getcode);
         buttonOver = (Button) findViewById(R.id.button_over);
+
+        targetPhone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (StringUtils.isPhone(targetPhone.getText().toString().trim())) {
+                    textGetcode.setEnabled(true);
+                } else {
+                    textGetcode.setEnabled(false);
+                }
+            }
+        });
     }
 
     @Override

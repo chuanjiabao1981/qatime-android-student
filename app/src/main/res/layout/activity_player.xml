@@ -124,69 +124,7 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <LinearLayout
-            android:id="@+id/input_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="5dp">
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <EditText
-                        android:id="@+id/content"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginRight="5dp"
-                        android:background="@drawable/shape_input_radius"
-                        android:maxLines="3"
-                        android:minHeight="40dp"
-                        android:paddingLeft="3dp"
-                        android:paddingRight="40dp"
-                        android:textSize="14sp" />
-
-                    <ImageView
-                        android:id="@+id/emoji"
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:layout_alignBottom="@id/content"
-                        android:layout_alignParentRight="true"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:paddingLeft="5dp"
-                        android:paddingRight="5dp"
-                        android:src="@mipmap/biaoqing" />
-                </RelativeLayout>
-
-                <Button
-                    android:id="@+id/send"
-                    android:layout_width="60dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="bottom"
-                    android:layout_marginLeft="5dp"
-                    android:background="@drawable/button_bg_selector_red"
-                    android:gravity="center"
-                    android:text="发送"
-                    android:textColor="#fff" />
-            </LinearLayout>
-
-            <cn.qatime.player.view.BiaoQingView
-                android:id="@+id/biaoQingView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
+        <include layout="@layout/message_input_layout" />
     </LinearLayout>
 
     <cn.qatime.player.view.VideoLayout
