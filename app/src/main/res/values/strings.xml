@@ -362,6 +362,11 @@
     <string name="customer_service_phone_number">0353-2135828</string>
     <string name="call_right_now">立即拨打</string>
     <string name="failed_to_obtain_group_information">获取群组信息失败!</string>
+    <string name="download_picture_fail">图片下载失败</string>
+    <string name="save_to_device">保存到手机</string>
+    <string name="picture_save_fail">图片保存失败</string>
+    <string name="picture_save_to">图片已保存到手机</string>
+    <string name="picker_image_error">获取图片出错</string>
 
 
     <string name="code_send_success">验证码发送成功，请注意查收</string>

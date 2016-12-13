@@ -4,6 +4,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,10 +23,12 @@ import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.attachment.AudioAttachment;
 import com.netease.nimlib.sdk.msg.attachment.NotificationAttachment;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.NotificationType;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.netease.nimlib.sdk.msg.model.AttachmentProgress;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.QueryDirectionEnum;
 import com.netease.nimlib.sdk.team.constant.TeamFieldEnum;
@@ -225,7 +228,6 @@ public class FragmentPlayerMessage extends BaseFragment {
             // 如果是第一次加载，updateShowTimeItem返回的就是lastShowTimeItem
             if (firstLoad) {
                 ListViewUtil.scrollToBottom(messageListView);
-//                sendReceipt(); // 发送已读回执
             }
 
 //            adapter.updateShowTimeItem(items, true, firstLoad);
@@ -255,6 +257,74 @@ public class FragmentPlayerMessage extends BaseFragment {
     public void registerObservers(boolean register) {
         MsgServiceObserve service = NIMClient.getService(MsgServiceObserve.class);
         service.observeReceiveMessage(receiveMessageObserver, register);
+        service.observeMsgStatus(messageStatusObserver, register);
+        service.observeAttachmentProgress(attachmentProgressObserver, register);
+    }
+
+    /**
+     * 消息状态变化观察者
+     */
+    Observer<IMMessage> messageStatusObserver = new Observer<IMMessage>() {
+        @Override
+        public void onEvent(IMMessage message) {
+            if (isMyMessage(message)) {
+                onMessageStatusChange(message);
+            }
+        }
+    };
+    /**
+     * 消息附件上传/下载进度观察者
+     */
+    Observer<AttachmentProgress> attachmentProgressObserver = new Observer<AttachmentProgress>() {
+        @Override
+        public void onEvent(AttachmentProgress progress) {
+            onAttachmentProgressChange(progress);
+        }
+    };
+
+    private void onMessageStatusChange(IMMessage message) {
+        int index = getItemIndex(message.getUuid());
+        if (index >= 0 && index < items.size()) {
+            IMMessage item = items.get(index);
+            item.setStatus(message.getStatus());
+            item.setAttachStatus(message.getAttachStatus());
+            if (item.getAttachment() instanceof AudioAttachment) {
+                item.setAttachment(message.getAttachment());
+            }
+            refreshViewHolderByIndex(index);
+        }
+    }
+
+    private void onAttachmentProgressChange(AttachmentProgress progress) {
+        int index = getItemIndex(progress.getUuid());
+        if (index >= 0 && index < items.size()) {
+            IMMessage item = items.get(index);
+            float value = (float) progress.getTransferred() / (float) progress.getTotal();
+            adapter.putProgress(item, value);
+            refreshViewHolderByIndex(index);
+        }
+    }
+
+    /**
+     * 刷新单条消息
+     *
+     * @param index
+     */
+    private void refreshViewHolderByIndex(final int index) {
+        getActivity().runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                if (index < 0) {
+                    return;
+                }
+                Object tag = ListViewUtil.getViewHolderByIndex(messageListView, index);
+                if (tag instanceof MessageAdapter.ImageHolder) {
+                    MessageAdapter.ImageHolder viewHolder = (MessageAdapter.ImageHolder) tag;
+                    viewHolder.refresh();
+                }
+            }
+        });
     }
 
     Observer<List<IMMessage>> receiveMessageObserver = new Observer<List<IMMessage>>() {
@@ -275,7 +345,7 @@ public class FragmentPlayerMessage extends BaseFragment {
                         break;
                     }
                 }
-                if (isMyMessage(message) && (message.getMsgType() == MsgTypeEnum.text || message.getMsgType() == MsgTypeEnum.notification)) {
+                if (isMyMessage(message) && (message.getMsgType() == MsgTypeEnum.text || message.getMsgType() == MsgTypeEnum.notification || message.getMsgType() == MsgTypeEnum.image)) {
                     if (message.getAttachment() instanceof NotificationAttachment) {//收到公告更新通知消息,通知公告页面刷新公告
                         if (((NotificationAttachment) message.getAttachment()).getType() == NotificationType.UpdateTeam) {
                             UpdateTeamAttachment a = (UpdateTeamAttachment) message.getAttachment();
@@ -480,6 +550,17 @@ public class FragmentPlayerMessage extends BaseFragment {
 
         void updateTeam(Team team);//再输入栏中判断是否在该群组
     }
+
+    private int getItemIndex(String uuid) {
+        for (int i = 0; i < items.size(); i++) {
+            IMMessage message = items.get(i);
+            if (TextUtils.equals(message.getUuid(), uuid)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
 
     @Override
     public void onDestroyView() {
