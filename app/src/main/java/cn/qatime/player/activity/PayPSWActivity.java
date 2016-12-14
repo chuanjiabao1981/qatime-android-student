@@ -1,10 +1,11 @@
 package cn.qatime.player.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import cn.qatime.player.R;
+import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.view.Keyboard;
 import cn.qatime.player.view.PayEditText;
 
@@ -13,7 +14,7 @@ import cn.qatime.player.view.PayEditText;
  * @date 2016/12/14 16:31
  * @Description:
  */
-public class PayPSWActivity extends Activity {
+public class PayPSWActivity extends BaseActivity {
     private PayEditText payEditText;
     private Keyboard keyboard;
     private static final String[] KEY = new String[]{
@@ -26,15 +27,22 @@ public class PayPSWActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_pay_password);
+        setContentView(R.layout.activity_pay_password);
         initView();
         setSubView();
         initEvent();
     }
 
     private void initView() {
+        setTitle("验证支付密码");
         payEditText = (PayEditText) findViewById(R.id.PayEditText_pay);
         keyboard = (Keyboard) findViewById(R.id.KeyboardView_pay);
+        payEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                keyboard.setVisibility(keyboard.getVisibility() == View.INVISIBLE ? View.VISIBLE : View.INVISIBLE);
+            }
+        });
     }
 
     private void setSubView() {

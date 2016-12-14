@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -35,6 +36,11 @@ public class PayEditText extends LinearLayout {
         this.context = context;
         initPayEditText();
         initEvent();
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        return true;
     }
 
     private void initEvent() {
@@ -70,7 +76,6 @@ public class PayEditText extends LinearLayout {
         tvForth = (TextView) view.findViewById(R.id.tv_pay4);
         tvFifth = (TextView) view.findViewById(R.id.tv_pay5);
         tvSixth = (TextView) view.findViewById(R.id.tv_pay6);
-        tvFirst.requestFocus();
         mPassword = new StringBuilder();
         addView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
     }
