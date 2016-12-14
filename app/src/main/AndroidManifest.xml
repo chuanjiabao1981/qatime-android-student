@@ -355,5 +355,6 @@
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"
             android:launchMode="singleTop" />
+        <activity android:name=".activity.PayPSWActivity"/>
     </application>
 </manifest>
