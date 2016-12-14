@@ -73,7 +73,6 @@
                                     android:id="@+id/name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="高玉明"
                                     android:textColor="#333"
                                     android:textSize="18sp" />
 
@@ -102,7 +101,6 @@
                                     android:id="@+id/category"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="高中"
                                     android:textColor="#fff"
                                     android:textSize="14sp" />
 
@@ -110,7 +108,6 @@
                                     android:id="@+id/subject"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="数学"
                                     android:textColor="#fff"
                                     android:textSize="14sp" />
                             </LinearLayout>
@@ -130,7 +127,7 @@
                             android:id="@+id/teach_age"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="3-5年教龄" />
+                            android:text="教龄" />
 
 
                         <View
@@ -157,14 +154,12 @@
                             <TextView
                                 android:id="@+id/city"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="保定" />
+                                android:layout_height="wrap_content" />
 
                             <TextView
                                 android:id="@+id/town"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="保定市" />
+                                android:layout_height="wrap_content"/>
                         </LinearLayout>
 
                         <View
@@ -175,8 +170,7 @@
                         <TextView
                             android:id="@+id/school"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="阳泉市第一实验中学" />
+                            android:layout_height="wrap_content" />
                     </LinearLayout>
                 </LinearLayout>
             </RelativeLayout>
