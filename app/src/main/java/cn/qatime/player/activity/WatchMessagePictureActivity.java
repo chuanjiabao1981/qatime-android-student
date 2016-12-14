@@ -42,9 +42,11 @@ import java.util.List;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.utils.BitmapDecoder;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.ImageUtil;
 import cn.qatime.player.view.BaseZoomableImageView;
 import cn.qatime.player.view.ImageGestureListener;
+import libraryextra.view.CustomAlertDialog;
 
 /**
  * @author lungtify
@@ -67,8 +69,10 @@ public class WatchMessagePictureActivity extends BaseActivity {
 
     private PagerAdapter adapter;
     private Handler handler;
+    private CustomAlertDialog alertDialog;
 
     private void assignViews() {
+        alertDialog = new CustomAlertDialog(this);
         imageViewPager = (ViewPager) findViewById(R.id.view_pager_image);
         loadingLayout = (RelativeLayout) findViewById(R.id.loading_layout);
     }
@@ -371,27 +375,26 @@ public class WatchMessagePictureActivity extends BaseActivity {
 
     // 图片长按
     protected void showWatchPictureAction() {
-//        if (alertDialog.isShowing()) {
-//            alertDialog.dismiss();
-//            return;
-//        }
-//        alertDialog.clearData();
-//        String path = ((ImageAttachment) message.getAttachment()).getThumbPath();
-//        if (TextUtils.isEmpty(path)) {
-//            return;
-//        }
-//        String title;
-//        if (!TextUtils.isEmpty(((ImageAttachment) message.getAttachment()).getPath())) {
-//            title = getString(R.string.save_to_device);
-//            alertDialog.addItem(title, new onSeparateItemClickListener() {
-//
-//                @Override
-//                public void onClick() {
-//                    savePicture();
-//                }
-//            });
-//        }
-//        alertDialog.show();
+        if (alertDialog.isShowing()) {
+            alertDialog.dismiss();
+            return;
+        }
+        alertDialog.clearData();
+        String path = ((ImageAttachment) message.getAttachment()).getThumbPath();
+        if (TextUtils.isEmpty(path)) {
+            return;
+        }
+        String title;
+        if (!TextUtils.isEmpty(((ImageAttachment) message.getAttachment()).getPath())) {
+            title = getString(R.string.save_to_device);
+            alertDialog.addItem(title, new CustomAlertDialog.onSeparateItemClickListener() {
+                @Override
+                public void onClick() {
+                    savePicture();
+                }
+            });
+        }
+        alertDialog.show();
     }
 
     // 保存图片
@@ -407,15 +410,16 @@ public class WatchMessagePictureActivity extends BaseActivity {
         String extension = TextUtils.isEmpty(attachment.getExtension()) ? "jpg" : attachment.getExtension();
         srcFilename += ("." + extension);
 
-        String picPath = StorageUtil.getSystemImagePath();
-        String dstPath = picPath + srcFilename;
+        String picPath = Constant.CACHEPATH;
+        String dstPath = picPath + "/" + srcFilename;
         if (AttachmentStore.copy(path, dstPath) != -1) {
             try {
                 ContentValues values = new ContentValues(2);
                 values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
                 values.put(MediaStore.Images.Media.DATA, dstPath);
+
                 getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-                Toast.makeText(WatchMessagePictureActivity.this, getString(R.string.picture_save_to), Toast.LENGTH_LONG).show();
+                Toast.makeText(WatchMessagePictureActivity.this, String.format(getString(R.string.picture_save_to), picPath), Toast.LENGTH_LONG).show();
             } catch (Exception e) {
                 // may be java.lang.UnsupportedOperationException
                 Toast.makeText(WatchMessagePictureActivity.this, getString(R.string.picture_save_fail), Toast.LENGTH_LONG).show();

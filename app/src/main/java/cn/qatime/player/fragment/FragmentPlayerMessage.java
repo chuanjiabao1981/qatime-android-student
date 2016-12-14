@@ -25,6 +25,7 @@ import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.attachment.AudioAttachment;
 import com.netease.nimlib.sdk.msg.attachment.NotificationAttachment;
+import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.NotificationType;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
@@ -60,7 +61,7 @@ import cn.qatime.player.view.listview.AutoRefreshListView;
 import cn.qatime.player.view.listview.ListViewUtil;
 import cn.qatime.player.view.listview.MessageListView;
 
-public class FragmentPlayerMessage extends BaseFragment {
+public class FragmentPlayerMessage extends BaseFragment implements MessageAdapter.EventListener {
     private TextView tipText;
     private MessageListView messageListView;
     private MessageAdapter adapter;
@@ -114,7 +115,7 @@ public class FragmentPlayerMessage extends BaseFragment {
             messageListView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         }
 
-        adapter = new MessageAdapter(getActivity(), items);
+        adapter = new MessageAdapter(getActivity(), items,this);
         messageListView.setAdapter(adapter);
 
         messageListView.setOnRefreshListener(new MessageLoader(remote));
@@ -133,6 +134,28 @@ public class FragmentPlayerMessage extends BaseFragment {
         ListViewUtil.scrollToBottom(messageListView);
     }
 
+    @Override
+    public void resendMessage(IMMessage message) {
+        // 重置状态为unsent
+        int index = getItemIndex(message.getUuid());
+        if (index >= 0 && index < items.size()) {
+            IMMessage item = items.get(index);
+            item.setStatus(MsgStatusEnum.sending);
+            deleteItem(item);
+
+            items.add(message);
+            adapter.notifyDataSetChanged();
+            ListViewUtil.scrollToBottom(messageListView);
+        }
+        NIMClient.getService(MsgService.class).sendMessage(message, true);
+    }
+
+    // 删除消息
+    private void deleteItem(IMMessage messageItem) {
+        NIMClient.getService(MsgService.class).deleteChattingHistory(messageItem);
+        items.remove(messageItem);
+        adapter.notifyDataSetChanged();
+    }
 
     private class MessageLoader implements AutoRefreshListView.OnRefreshListener {
         private int LOAD_MESSAGE_COUNT = 20;//聊天加载条数

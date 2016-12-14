@@ -335,7 +335,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.WatchMessagePictureActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:configChanges="keyboardHidden"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.WeChatBindActivity"

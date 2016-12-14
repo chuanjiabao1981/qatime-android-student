@@ -365,7 +365,7 @@
     <string name="download_picture_fail">图片下载失败</string>
     <string name="save_to_device">保存到手机</string>
     <string name="picture_save_fail">图片保存失败</string>
-    <string name="picture_save_to">图片已保存到手机</string>
+    <string name="picture_save_to">图片已保存到手机%s下</string>
     <string name="picker_image_error">获取图片出错</string>
 
 

@@ -16,6 +16,7 @@ import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.attachment.AudioAttachment;
+import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.AttachmentProgress;
@@ -55,7 +56,7 @@ import libraryextra.utils.StringUtils;
  * @date 2016/8/30 12:25
  * @Description 聊天
  */
-public class MessageActivity extends BaseActivity implements InputPanel.InputPanelListener {
+public class MessageActivity extends BaseActivity implements InputPanel.InputPanelListener, MessageAdapter.EventListener {
     private String sessionId;//聊天对象id
     private SessionTypeEnum sessionType;
     private MessageListView messageListView;
@@ -120,7 +121,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
             messageListView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         }
 
-        adapter = new MessageAdapter(this, items);
+        adapter = new MessageAdapter(this, items,this);
         adapter.setOwner(getIntent().getStringExtra("owner"));
         messageListView.setAdapter(adapter);
 
@@ -183,6 +184,33 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
                 }
             }
         }
+    }
+
+    /**
+     * 点击重新发送
+     * @param message
+     */
+    @Override
+    public void resendMessage(IMMessage message) {
+        // 重置状态为unsent
+        int index = getItemIndex(message.getUuid());
+        if (index >= 0 && index < items.size()) {
+            IMMessage item = items.get(index);
+            item.setStatus(MsgStatusEnum.sending);
+            deleteItem(item);
+
+            items.add(message);
+            adapter.notifyDataSetChanged();
+            ListViewUtil.scrollToBottom(messageListView);
+        }
+        NIMClient.getService(MsgService.class).sendMessage(message, true);
+    }
+
+    // 删除消息
+    private void deleteItem(IMMessage messageItem) {
+        NIMClient.getService(MsgService.class).deleteChattingHistory(messageItem);
+        items.remove(messageItem);
+        adapter.notifyDataSetChanged();
     }
 
     private class MessageLoader implements AutoRefreshListView.OnRefreshListener {

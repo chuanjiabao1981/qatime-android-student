@@ -79,7 +79,8 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="5dp"
                         android:padding="5dp"
-                        android:src="@mipmap/message_error_alert" />
+                        android:src="@mipmap/message_error_alert"
+                        android:visibility="gone" />
                 </LinearLayout>
 
 
@@ -139,7 +140,8 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="5dp"
                         android:padding="5dp"
-                        android:src="@mipmap/message_error_alert" />
+                        android:src="@mipmap/message_error_alert"
+                        android:visibility="gone" />
 
                     <RelativeLayout
                         android:id="@+id/content_mine"

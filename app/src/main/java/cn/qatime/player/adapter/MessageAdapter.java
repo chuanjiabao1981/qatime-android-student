@@ -56,6 +56,7 @@ public class MessageAdapter extends BaseAdapter {
     private final List<IMMessage> items;
     private final Context context;
     private final HashMap<String, Float> progresses;
+    private final EventListener listener;
     private int UNKNOWN = -1;
     private int NOTIFICATION = 0;
     private int TEXT = 1;
@@ -63,10 +64,15 @@ public class MessageAdapter extends BaseAdapter {
     private Hashtable<Integer, GifDrawable> cache = new Hashtable<>();
     private String owner;
 
-    public MessageAdapter(Context context, List<IMMessage> items) {
+    public interface EventListener {
+        void resendMessage(IMMessage message);
+    }
+
+    public MessageAdapter(Context context, List<IMMessage> items, EventListener listener) {
         this.context = context;
         this.items = items;
         progresses = new HashMap<>();
+        this.listener = listener;
     }
 
 
@@ -333,8 +339,7 @@ public class MessageAdapter extends BaseAdapter {
                     loadThumbnailImage(path, otherimage);
                 } else {
                     loadThumbnailImage(null, otherimage);
-                    if (message.getAttachStatus() == AttachStatusEnum.transferred
-                            || message.getAttachStatus() == AttachStatusEnum.def) {
+                    if (message.getAttachStatus() == AttachStatusEnum.transferred || message.getAttachStatus() == AttachStatusEnum.def) {
                         downloadAttachment();
                     }
                 }
@@ -356,10 +361,6 @@ public class MessageAdapter extends BaseAdapter {
                     }
                 }
             }
-            refreshStatus();
-        }
-
-        private void refreshStatus() {//上传进度
             ProgressBar progressCover;
             View alertButton;
             if (isReceivedMessage(message)) {
@@ -369,6 +370,34 @@ public class MessageAdapter extends BaseAdapter {
                 progressCover = progressmine;
                 alertButton = alertmine;
             }
+            setStatus(progressCover, alertButton);
+            refreshStatus(progressCover, alertButton);
+        }
+
+
+        /**
+         * 设置消息发送状态
+         */
+        private void setStatus(ProgressBar progressCover, View alertButton) {
+            MsgStatusEnum status = message.getStatus();
+            switch (status) {
+                case fail:
+                    progressCover.setVisibility(View.GONE);
+                    alertButton.setVisibility(View.VISIBLE);
+                    break;
+                case sending:
+                    progressCover.setVisibility(View.VISIBLE);
+                    alertButton.setVisibility(View.GONE);
+                    break;
+                default:
+                    progressCover.setVisibility(View.GONE);
+                    alertButton.setVisibility(View.GONE);
+                    break;
+            }
+        }
+
+        private void refreshStatus(ProgressBar progressCover, View alertButton) {//上传进度
+
             FileAttachment attachment = (FileAttachment) message.getAttachment();
             if (TextUtils.isEmpty(attachment.getPath()) && TextUtils.isEmpty(attachment.getThumbPath())) {
                 if (message.getAttachStatus() == AttachStatusEnum.fail || message.getStatus() == MsgStatusEnum.fail) {
@@ -415,8 +444,8 @@ public class MessageAdapter extends BaseAdapter {
         private class ItemClick implements View.OnClickListener {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context,WatchMessagePictureActivity.class);
-                intent.putExtra("message",message);
+                Intent intent = new Intent(context, WatchMessagePictureActivity.class);
+                intent.putExtra("message", message);
                 context.startActivity(intent);
             }
         }
@@ -427,8 +456,46 @@ public class MessageAdapter extends BaseAdapter {
         private class AlertClick implements View.OnClickListener {
             @Override
             public void onClick(View v) {
-
+                if (message.getDirect() == MsgDirectionEnum.Out) {
+                    // 发出的消息，如果是发送失败，直接重发，否则有可能是漫游到的多媒体消息，但文件下载
+                    if (message.getStatus() == MsgStatusEnum.fail) {
+                        resendMessage(message); // 重发
+                    } else {
+                        if (message.getAttachment() instanceof FileAttachment) {
+                            FileAttachment attachment = (FileAttachment) message.getAttachment();
+                            if (TextUtils.isEmpty(attachment.getPath())
+                                    && TextUtils.isEmpty(attachment.getThumbPath())) {
+                                showReDownload(message);
+                            }
+                        } else {
+                            resendMessage(message);
+                        }
+                    }
+                } else {
+                    showReDownload(message);
+                }
             }
+        }
+    }
+
+    /**
+     * 重新下载
+     *
+     * @param message
+     */
+    private void showReDownload(IMMessage message) {
+        if (message.getAttachment() != null && message.getAttachment() instanceof FileAttachment)
+            NIMClient.getService(MsgService.class).downloadAttachment(message, true);
+    }
+
+    /**
+     * 重发消息
+     *
+     * @param message
+     */
+    private void resendMessage(IMMessage message) {
+        if (listener != null) {
+            listener.resendMessage(message);
         }
     }
 
