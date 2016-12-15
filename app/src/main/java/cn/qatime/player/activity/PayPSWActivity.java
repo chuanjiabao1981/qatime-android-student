@@ -8,10 +8,24 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.view.Keyboard;
 import cn.qatime.player.view.PayEditText;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 
 /**
  * @author Tianhaoranly
@@ -92,7 +106,40 @@ public class PayPSWActivity extends BaseActivity {
         payEditText.setOnInputFinishedListener(new PayEditText.OnInputFinishedListener() {
             @Override
             public void onInputFinished(String password) {
-                Toast.makeText(getApplication(), "您的密码是：" + password, Toast.LENGTH_SHORT).show();
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("current_pament_password", password);
+                DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.cashAccounts + BaseApplication.getUserId() + "/password/ticket_token", map), null,
+                        new VolleyListener(PayPSWActivity.this) {
+                            @Override
+                            protected void onSuccess(JSONObject response) {
+                                Toast.makeText(PayPSWActivity.this, "密码正确", Toast.LENGTH_SHORT).show();
+                            }
+
+                            protected void onError(JSONObject response) {
+                                try {
+                                    int errorCode = response.getJSONObject("error").getInt("code");
+                                    if (errorCode == 2005) {
+                                        Toast.makeText(PayPSWActivity.this, "密码验证失败", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(PayPSWActivity.this, "请先设置支付密码", Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            protected void onTokenOut() {
+                                tokenOut();
+                            }
+                        }, new VolleyErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        super.onErrorResponse(volleyError);
+
+                    }
+                });
+                addToRequestQueue(request);
             }
         });
     }
