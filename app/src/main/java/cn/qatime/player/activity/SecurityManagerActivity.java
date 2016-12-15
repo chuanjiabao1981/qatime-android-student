@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -280,56 +279,9 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
     };
 
     private void popPayPSW() {
+//        PayPopView payPopView = new PayPopView("","",getWindow());
+//        payPopView.showPop();
         startActivity(new Intent(this,PayPSWActivity.class));
-//        View view = View.inflate(this, R.layout.dialog_pay_password, null);
-//        payEditText = (PayEditText) view.findViewById(R.id.PayEditText_pay);
-//        keyboard = (Keyboard) view.findViewById(R.id.KeyboardView_pay);
-//        PopupWindow pop = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-//        pop.setBackgroundDrawable(new ColorDrawable());
-//        pop.setFocusable(true);
-//        pop.setAnimationStyle(R.style.downDialogstyle);
-//        pop.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
-//        backgroundAlpha(0.7f);
-//        pop.setOnDismissListener(new PopupWindow.OnDismissListener() {
-//            @Override
-//            public void onDismiss() {
-//                WindowManager.LayoutParams lp = getWindow().getAttributes();
-//                lp.alpha = 1f;
-//                getWindow().setAttributes(lp);
-//            }
-//        });
-//        //设置键盘
-//        keyboard.setKeyboardKeys(KEY);
-//        keyboard.setOnClickKeyboardListener(new Keyboard.OnClickKeyboardListener() {
-//            @Override
-//            public void onKeyClick(int position, String value) {
-//                if (position < 11 && position != 9) {
-//                    payEditText.add(value);
-//                } else if (position == 9) {
-//                    payEditText.remove();
-//                } else if (position == 11) {
-//                    //当点击完成的时候，也可以通过payEditText.getText()获取密码，此时不应该注册OnInputFinishedListener接口
-//                    Toast.makeText(getApplication(), "您的密码是：" + payEditText.getText(), Toast.LENGTH_SHORT).show();
-//                    finish();
-//                }
-//            }
-//        });
-//
-//        /**
-//         * 当密码输入完成时的回调
-//         */
-//        payEditText.setOnInputFinishedListener(new PayEditText.OnInputFinishedListener() {
-//            @Override
-//            public void onInputFinished(String password) {
-//                Toast.makeText(getApplication(), "您的密码是：" + password, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-    }
-
-    public void backgroundAlpha(float bgAlpha) {
-        WindowManager.LayoutParams lp = getWindow().getAttributes();
-        lp.alpha = bgAlpha; //0.0-1.0
-        getWindow().setAttributes(lp);
     }
 
     private void dialogCancel() {

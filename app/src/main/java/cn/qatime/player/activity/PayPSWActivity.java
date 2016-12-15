@@ -1,7 +1,11 @@
 package cn.qatime.player.activity;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import cn.qatime.player.R;
@@ -23,6 +27,7 @@ public class PayPSWActivity extends BaseActivity {
             "7", "8", "9",
             "<<", "0", "完成"
     };
+    private EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +42,29 @@ public class PayPSWActivity extends BaseActivity {
         setTitle("验证支付密码");
         payEditText = (PayEditText) findViewById(R.id.PayEditText_pay);
         keyboard = (Keyboard) findViewById(R.id.KeyboardView_pay);
+        editText = new EditText(this);
         payEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 keyboard.setVisibility(keyboard.getVisibility() == View.INVISIBLE ? View.VISIBLE : View.INVISIBLE);
+//                KeyBoardUtils.openKeybord(editText,PayPSWActivity.this);
+            }
+        });
+        editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                payEditText.add(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }
