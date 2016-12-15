@@ -77,12 +77,6 @@ public class TeacherDataActivity extends BaseActivity {
         relEmpty = findViewById(R.id.rel_empty);
         describe = (TextView) findViewById(R.id.describe);
         grid = (GridViewForScrollView) findViewById(R.id.grid);
-        scroll.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ScrollView>() {
-            @Override
-            public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
-
-            }
-        });
     }
 
     @Override

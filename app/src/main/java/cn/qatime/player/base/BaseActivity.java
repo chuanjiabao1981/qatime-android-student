@@ -28,6 +28,7 @@ import libraryextra.utils.StringUtils;
 public class BaseActivity extends AppCompatActivity {
     private RequestQueue Queue;
     private AlertDialog alertDialog;
+    protected boolean destroyed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,5 +127,11 @@ public class BaseActivity extends AppCompatActivity {
 
     protected String getResourceString(int id) {
         return getResources().getString(id);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        destroyed = true;
     }
 }

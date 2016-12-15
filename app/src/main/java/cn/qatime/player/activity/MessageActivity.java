@@ -3,6 +3,7 @@ package cn.qatime.player.activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,8 +15,11 @@ import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.attachment.AudioAttachment;
+import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.netease.nimlib.sdk.msg.model.AttachmentProgress;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.QueryDirectionEnum;
 import com.netease.nimlib.sdk.team.constant.TeamTypeEnum;
@@ -26,6 +30,7 @@ import com.orhanobut.logger.Logger;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -39,9 +44,11 @@ import cn.qatime.player.bean.ChatVideoBean;
 import cn.qatime.player.bean.InputPanel;
 import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.TeamDataCache;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.view.listview.AutoRefreshListView;
 import cn.qatime.player.view.listview.ListViewUtil;
 import cn.qatime.player.view.listview.MessageListView;
+import libraryextra.bean.ImageItem;
 import libraryextra.utils.StringUtils;
 
 /**
@@ -49,7 +56,7 @@ import libraryextra.utils.StringUtils;
  * @date 2016/8/30 12:25
  * @Description 聊天
  */
-public class MessageActivity extends BaseActivity implements InputPanel.InputPanelListener {
+public class MessageActivity extends BaseActivity implements InputPanel.InputPanelListener, MessageAdapter.EventListener {
     private String sessionId;//聊天对象id
     private SessionTypeEnum sessionType;
     private MessageListView messageListView;
@@ -96,6 +103,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
                 startActivity(intent);
             }
         });
+        registerObservers(true);
         registerTeamUpdateObserver(true);
     }
 
@@ -113,7 +121,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
             messageListView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         }
 
-        adapter = new MessageAdapter(this, items);
+        adapter = new MessageAdapter(this, items,this);
         adapter.setOwner(getIntent().getStringExtra("owner"));
         messageListView.setAdapter(adapter);
 
@@ -144,12 +152,65 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
                 sessionType, // 聊天类型，单聊或群组
                 data // 文本内容
         );
+        sendMessage(message);
+    }
+
+    private void sendMessage(IMMessage message) {
         // 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
         NIMClient.getService(MsgService.class).sendMessage(message, true);
 
         items.add(message);
         adapter.notifyDataSetChanged();
         ListViewUtil.scrollToBottom(messageListView);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Constant.RESPONSE_PICTURE_SELECT) {//选择照片返回的照片
+            if (data != null) {
+                ImageItem image = (ImageItem) data.getSerializableExtra("data");
+                if (image != null && !StringUtils.isNullOrBlanK(image.imagePath)) {
+                    if (!inputpanel.isAllowSendMessage()) {
+                        return;
+                    }
+                    if (inputpanel.checkMute()) {
+                        return;
+                    }
+                    File file = new File(image.imagePath);
+                    if (file.exists()) {
+                        sendMessage(MessageBuilder.createImageMessage(sessionId, sessionType, file, file.getName()));
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 点击重新发送
+     * @param message
+     */
+    @Override
+    public void resendMessage(IMMessage message) {
+        // 重置状态为unsent
+        int index = getItemIndex(message.getUuid());
+        if (index >= 0 && index < items.size()) {
+            IMMessage item = items.get(index);
+            item.setStatus(MsgStatusEnum.sending);
+            deleteItem(item);
+
+            items.add(message);
+            adapter.notifyDataSetChanged();
+            ListViewUtil.scrollToBottom(messageListView);
+        }
+        NIMClient.getService(MsgService.class).sendMessage(message, true);
+    }
+
+    // 删除消息
+    private void deleteItem(IMMessage messageItem) {
+        NIMClient.getService(MsgService.class).deleteChattingHistory(messageItem);
+        items.remove(messageItem);
+        adapter.notifyDataSetChanged();
     }
 
     private class MessageLoader implements AutoRefreshListView.OnRefreshListener {
@@ -267,8 +328,6 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
     }
 
 
-
-
     /**
      * ****************** 观察者 **********************
      */
@@ -276,6 +335,74 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
     private void registerObservers(boolean register) {
         MsgServiceObserve service = NIMClient.getService(MsgServiceObserve.class);
         service.observeReceiveMessage(receiveMessageObserver, register);
+        service.observeMsgStatus(messageStatusObserver, register);
+        service.observeAttachmentProgress(attachmentProgressObserver, register);
+    }
+
+    /**
+     * 消息状态变化观察者
+     */
+    Observer<IMMessage> messageStatusObserver = new Observer<IMMessage>() {
+        @Override
+        public void onEvent(IMMessage message) {
+            if (isMyMessage(message)) {
+                onMessageStatusChange(message);
+            }
+        }
+    };
+    /**
+     * 消息附件上传/下载进度观察者
+     */
+    Observer<AttachmentProgress> attachmentProgressObserver = new Observer<AttachmentProgress>() {
+        @Override
+        public void onEvent(AttachmentProgress progress) {
+            onAttachmentProgressChange(progress);
+        }
+    };
+
+    private void onMessageStatusChange(IMMessage message) {
+        int index = getItemIndex(message.getUuid());
+        if (index >= 0 && index < items.size()) {
+            IMMessage item = items.get(index);
+            item.setStatus(message.getStatus());
+            item.setAttachStatus(message.getAttachStatus());
+            if (item.getAttachment() instanceof AudioAttachment) {
+                item.setAttachment(message.getAttachment());
+            }
+            refreshViewHolderByIndex(index);
+        }
+    }
+
+    private void onAttachmentProgressChange(AttachmentProgress progress) {
+        int index = getItemIndex(progress.getUuid());
+        if (index >= 0 && index < items.size()) {
+            IMMessage item = items.get(index);
+            float value = (float) progress.getTransferred() / (float) progress.getTotal();
+            adapter.putProgress(item, value);
+            refreshViewHolderByIndex(index);
+        }
+    }
+
+    /**
+     * 刷新单条消息
+     *
+     * @param index
+     */
+    private void refreshViewHolderByIndex(final int index) {
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                if (index < 0) {
+                    return;
+                }
+                Object tag = ListViewUtil.getViewHolderByIndex(messageListView, index);
+                if (tag instanceof MessageAdapter.ImageHolder) {
+                    MessageAdapter.ImageHolder viewHolder = (MessageAdapter.ImageHolder) tag;
+                    viewHolder.refresh();
+                }
+            }
+        });
     }
 
     Observer<List<IMMessage>> receiveMessageObserver = new Observer<List<IMMessage>>() {
@@ -295,7 +422,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
                         break;
                     }
                 }
-                if (isMyMessage(message) && (message.getMsgType() == MsgTypeEnum.text || message.getMsgType() == MsgTypeEnum.notification)) {
+                if (isMyMessage(message) && (message.getMsgType() == MsgTypeEnum.text || message.getMsgType() == MsgTypeEnum.notification || message.getMsgType() == MsgTypeEnum.image)) {
                     items.add(message);
                     needRefresh = true;
                 }
@@ -442,7 +569,6 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
     @Override
     protected void onResume() {
         super.onResume();
-        registerObservers(true);
         requestTeamInfo();
         NIMClient.getService(MsgService.class).setChattingAccount(sessionId, sessionType);
     }
@@ -460,7 +586,6 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
     @Override
     protected void onPause() {
         super.onPause();
-        registerObservers(false);
         NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
     }
 
@@ -481,9 +606,20 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         }
     }
 
+    private int getItemIndex(String uuid) {
+        for (int i = 0; i < items.size(); i++) {
+            IMMessage message = items.get(i);
+            if (TextUtils.equals(message.getUuid(), uuid)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        registerObservers(false);
         registerTeamUpdateObserver(false);
         EventBus.getDefault().unregister(this);
     }
