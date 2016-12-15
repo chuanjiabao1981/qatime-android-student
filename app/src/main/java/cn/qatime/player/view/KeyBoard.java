@@ -57,6 +57,13 @@ public class Keyboard extends RelativeLayout {
      */
     private void initKeyboardView() {
         View view = View.inflate(context, R.layout.view_keyboard, this);
+        View down = view.findViewById(R.id.keyboard_down);
+        down.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Keyboard.this.setVisibility(View.GONE);
+            }
+        });
         gvKeyboard = (GridView) view.findViewById(R.id.gv_keyboard);
         gvKeyboard.setAdapter(keyboardAdapter);
         initEvent();
@@ -86,7 +93,7 @@ public class Keyboard extends RelativeLayout {
     }
 
     private BaseAdapter keyboardAdapter = new BaseAdapter() {
-        private static final int KEY_NINE = 9;
+        private static final int KEY_NINE = 11;
 
         @Override
         public int getCount() {
@@ -131,7 +138,9 @@ public class Keyboard extends RelativeLayout {
                 viewHolder = (ViewHolder) convertView.getTag();
                 viewHolder.tvKey.setText(key[position]);
             }
-
+            if(position==9){
+                viewHolder.tvKey.setBackgroundColor(0xe0e0e0);
+            }
             return convertView;
         }
     };

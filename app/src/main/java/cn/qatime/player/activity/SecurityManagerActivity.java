@@ -271,12 +271,6 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
         alertDialog.setContentView(view);
     }
 
-    private static final String[] KEY = new String[]{
-            "1", "2", "3",
-            "4", "5", "6",
-            "7", "8", "9",
-            "<<", "0", "完成"
-    };
 
     private void popPayPSW() {
 //        PayPopView payPopView = new PayPopView("","",getWindow());

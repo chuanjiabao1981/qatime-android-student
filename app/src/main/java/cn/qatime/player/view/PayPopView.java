@@ -28,7 +28,7 @@ public class PayPopView {
             "1", "2", "3",
             "4", "5", "6",
             "7", "8", "9",
-            "<<", "0", "完成"
+            "", "0", "<<"
     };
     private View view;
 
@@ -50,11 +50,8 @@ public class PayPopView {
             public void onKeyClick(int position, String value) {
                 if (position < 11 && position != 9) {
                     payEditText.add(value);
-                } else if (position == 9) {
-                    payEditText.remove();
                 } else if (position == 11) {
-                    //当点击完成的时候，也可以通过payEditText.getText()获取密码，此时不应该注册OnInputFinishedListener接口
-                    Toast.makeText(window.getContext(), "您的密码是：" + payEditText.getText(), Toast.LENGTH_SHORT).show();
+                    payEditText.remove();
                 }
             }
         });
