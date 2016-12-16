@@ -74,7 +74,7 @@ public class ExpressionUtil {
         Pattern pattern = Pattern.compile(zhengze, Pattern.CASE_INSENSITIVE);
         try {
             // dealExpression(context, spannableString, pattern, 0);
-            dealExpression_gif(context, spannableString, pattern, 0, cache, listener);
+            dealExpression_gif(context, spannableString, pattern, cache, listener);
         } catch (Exception e) {
             Logger.e(e.toString());
         }
@@ -83,9 +83,9 @@ public class ExpressionUtil {
     }
 
     public static void dealExpression_gif(Context context,
-                                          SpannableString spannableString, Pattern patten, int start,
+                                          SpannableString spannableString, Pattern patten,
                                           Hashtable<Integer, GifDrawable> cache, GifDrawable.UpdateListener listener)
-            throws NoSuchFieldException, NumberFormatException,
+            throws NoSuchFieldException,
             IllegalAccessException, IllegalArgumentException {
         Matcher matcher = patten.matcher(spannableString);
         while (matcher.find()) {
@@ -108,17 +108,6 @@ public class ExpressionUtil {
         }
     }
 
-
-    /**
-     * Bitmap缩小的方法
-     */
-    private static Bitmap small(Bitmap bitmap) {
-        Matrix matrix = new Matrix();
-        matrix.postScale(0.65f, 0.65f); // 长和宽放大缩小的比例
-        Bitmap resizeBmp = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
-                bitmap.getHeight(), matrix, true);
-        return resizeBmp;
-    }
 
     /**
      * 得到一个SpanableString对象，通过传入的字符串,并进行正则判断

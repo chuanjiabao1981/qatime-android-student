@@ -265,7 +265,7 @@ public class InputPanel implements View.OnClickListener {
                 if (listener != null) {
                     listener.ChatMessage(content.getText().toString().trim());
                 }
-                Logger.e(content.getText().toString().trim());
+//                Logger.e(content.getText().toString().trim());
                 content.setText("");
                 changeSendStatus();
                 break;
