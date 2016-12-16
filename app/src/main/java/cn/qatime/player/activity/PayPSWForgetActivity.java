@@ -58,7 +58,7 @@ public class PayPSWForgetActivity extends BaseActivity implements View.OnClickLi
     private void initView() {
         setTitle(getResources().getString(R.string.verify_phone_number));
         assignViews();
-
+        password.setHint(StringUtils.getSpannedString(this, R.string.input_login_password));
         code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_code));
 
         textGetcode.setOnClickListener(this);

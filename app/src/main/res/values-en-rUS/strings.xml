@@ -350,5 +350,6 @@
     <string name="class_range">Course range</string>
     <string name="clean_cache">Clear cache</string>
     <string name="course_arrangement">course arrangement</string>
+    <string name="input_login_password">Input login password</string>
 </resources>
 
