@@ -97,7 +97,7 @@ public class PayPSWChangeActivity extends BaseActivity implements View.OnClickLi
                     over.setEnabled(false);
                     Toast.makeText(PayPSWChangeActivity.this, "请确认您的支付密码", Toast.LENGTH_SHORT).show();
                     setTitle("确认新支付密码");
-                }else{
+                } else {
                     over.setEnabled(true);
                 }
             }
@@ -140,13 +140,10 @@ public class PayPSWChangeActivity extends BaseActivity implements View.OnClickLi
                             protected void onError(JSONObject response) {
                                 try {
                                     int errorCode = response.getJSONObject("error").getInt("code");
-                                    if (errorCode == 2005) {
-                                        Toast.makeText(PayPSWChangeActivity.this, "密码验证失败", Toast.LENGTH_SHORT).show();
-                                    } else if (errorCode == 2003) {
-                                        Toast.makeText(PayPSWChangeActivity.this, "无效的验证码", Toast.LENGTH_SHORT).show();
-                                    } else if (errorCode == 2007) {
+                                    if (errorCode == 2007) {
                                         Toast.makeText(PayPSWChangeActivity.this, "授权token无效", Toast.LENGTH_SHORT).show();
                                     }
+                                    finish();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }

@@ -3,7 +3,6 @@ package cn.qatime.player.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -31,7 +30,7 @@ import libraryextra.utils.VolleyListener;
  * @date 2016/12/14 16:31
  * @Description:
  */
-public class PayPSWVerifyActivity extends BaseActivity {
+public class PayPSWVerifyActivity extends BaseActivity implements View.OnClickListener {
     private PayEditText payEditText;
     private CustomKeyboard customKeyboard;
     private static final String[] KEY = new String[]{
@@ -40,7 +39,7 @@ public class PayPSWVerifyActivity extends BaseActivity {
             "7", "8", "9",
             "", "0", "<<"
     };
-    private EditText editText;
+    private View forget;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,13 +54,11 @@ public class PayPSWVerifyActivity extends BaseActivity {
         setTitle("验证支付密码");
         payEditText = (PayEditText) findViewById(R.id.PayEditText_pay);
         customKeyboard = (CustomKeyboard) findViewById(R.id.KeyboardView_pay);
-        payEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                customKeyboard.setVisibility(customKeyboard.getVisibility() == View.INVISIBLE ? View.VISIBLE : View.INVISIBLE);
-//                KeyBoardUtils.openKeybord(editText,PayPSWVerifyActivity.this);
-            }
-        });
+        forget = findViewById(R.id.forget_pay_password);
+
+        forget.setOnClickListener(this);
+
+        payEditText.setOnClickListener(this);
     }
 
     private void setSubView() {
@@ -97,7 +94,7 @@ public class PayPSWVerifyActivity extends BaseActivity {
                                 Logger.e("密码正确");
                                 Intent intent = new Intent(PayPSWVerifyActivity.this, PayPSWChangeActivity.class);
                                 try {
-                                    intent.putExtra("ticket_token",response.getString("data"));
+                                    intent.putExtra("ticket_token", response.getString("data"));
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -112,7 +109,7 @@ public class PayPSWVerifyActivity extends BaseActivity {
                                     if (errorCode == 2005) {
                                         Toast.makeText(PayPSWVerifyActivity.this, "密码验证失败", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        Toast.makeText(PayPSWVerifyActivity.this, "请先设置支付密码", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(PayPSWVerifyActivity.this, "请先点击忘记支付密码进行重置", Toast.LENGTH_SHORT).show();
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -143,5 +140,18 @@ public class PayPSWVerifyActivity extends BaseActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.PayEditText_pay:
+                customKeyboard.setVisibility(customKeyboard.getVisibility() == View.INVISIBLE ? View.VISIBLE : View.INVISIBLE);
+                break;
+            case R.id.forget_pay_password:
+                startActivity(new Intent(this, PayPSWForgetActivity.class));
+                finish();
+                break;
+        }
     }
 }
