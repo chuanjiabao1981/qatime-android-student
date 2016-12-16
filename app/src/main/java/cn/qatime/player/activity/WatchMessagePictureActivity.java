@@ -87,6 +87,7 @@ public class WatchMessagePictureActivity extends BaseActivity {
         queryImageMessages();
 
         handler = new Handler();
+        registerObservers(true);
     }
 
     private void queryImageMessages() {

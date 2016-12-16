@@ -29,7 +29,6 @@ import com.netease.nimlib.sdk.team.model.MemberChangeAttachment;
 import com.netease.nimlib.sdk.team.model.MuteMemberAttachment;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.UpdateTeamAttachment;
-import com.orhanobut.logger.Logger;
 
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -288,6 +287,7 @@ public class MessageAdapter extends BaseAdapter {
             otherImageParams.height = width;
             otherImageParams.width = width;
             otherimage.setLayoutParams(otherImageParams);
+            otheralert.setLayoutParams(otherImageParams);
             ViewGroup.LayoutParams otherProgressParams = otherprogress.getLayoutParams();
             otherImageParams.width = width;
             otherprogress.setLayoutParams(otherProgressParams);
@@ -296,6 +296,7 @@ public class MessageAdapter extends BaseAdapter {
             imagemineParams.height = width;
             imagemineParams.width = width;
             imagemine.setLayoutParams(imagemineParams);
+            alertmine.setLayoutParams(imagemineParams);
 
             ViewGroup.LayoutParams progressmineParams = progressmine.getLayoutParams();
             progressmineParams.width = width;
@@ -348,7 +349,7 @@ public class MessageAdapter extends BaseAdapter {
                 left.setVisibility(View.GONE);
 
                 Glide.with(context).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).crossFade().dontAnimate().into((ImageView) headmine);
-                timemine.setText(DateUtils.getTimeShowString(message.getTime(), true));
+                timemine.setText(DateUtils.getTimeShowString(message.getTime(), false));
 
                 if (!TextUtils.isEmpty(thumbPath)) {
                     loadThumbnailImage(thumbPath, imagemine);

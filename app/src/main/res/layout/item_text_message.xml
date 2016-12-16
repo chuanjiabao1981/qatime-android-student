@@ -56,8 +56,10 @@
                 android:layout_marginRight="50dp"
                 android:background="@drawable/chatfrom_bg_normal"
                 android:gravity="center_vertical"
+                android:lineSpacingExtra="1.2dp"
                 android:textColor="#666"
-                android:textIsSelectable="true" />
+                android:textIsSelectable="true"
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -91,8 +93,10 @@
                 android:layout_marginLeft="50dp"
                 android:background="@drawable/chatto_bg_normal"
                 android:gravity="center_vertical"
+                android:lineSpacingExtra="1.2dp"
                 android:textColor="#666"
-                android:textIsSelectable="true" />
+                android:textIsSelectable="true"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <ImageView
