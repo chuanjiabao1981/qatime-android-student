@@ -15,15 +15,20 @@
         android:layout_marginRight="32dp"
         android:layout_marginTop="25dp" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:padding="10dp"
-        android:text="忘记支付密码？"
-        android:textColor="#00a2ee"
-        android:textSize="12sp" />
+    <Button
+        android:id="@+id/over"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/button_bg_selector_red_with_stork"
+        android:gravity="center"
+        android:text="@string/over"
+        android:visibility="invisible"
+        android:textColor="@drawable/text_selector_white_red"
+        android:textSize="16sp" />
 
     <View
         android:layout_width="match_parent"

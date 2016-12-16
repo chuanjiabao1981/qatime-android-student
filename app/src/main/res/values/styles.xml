@@ -133,7 +133,7 @@
         <item name="android:textSize">16sp</item>
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/button_bg_selector_red_with_stork</item>
-        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textColor">@drawable/text_selector_white_red</item>
     </style>
 
     <style name="setting_text_style"> //设置文字

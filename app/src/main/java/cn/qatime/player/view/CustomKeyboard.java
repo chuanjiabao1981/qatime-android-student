@@ -5,7 +5,6 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
@@ -18,22 +17,22 @@ import cn.qatime.player.R;
  * @date 2016/12/14 15:06
  * @Description:
  */
-public class Keyboard extends RelativeLayout {
+public class CustomKeyboard extends RelativeLayout {
     private Context context;
     private GridView gvKeyboard;
 
     private String[] key;
     private OnClickKeyboardListener onClickKeyboardListener;
 
-    public Keyboard(Context context) {
+    public CustomKeyboard(Context context) {
         this(context, null);
     }
 
-    public Keyboard(Context context, AttributeSet attrs) {
+    public CustomKeyboard(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public Keyboard(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CustomKeyboard(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context = context;
     }
@@ -42,14 +41,14 @@ public class Keyboard extends RelativeLayout {
      * 初始化键盘的点击事件
      */
     private void initEvent() {
-        gvKeyboard.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (onClickKeyboardListener != null && position >= 0) {
-                    onClickKeyboardListener.onKeyClick(position, key[position]);
-                }
-            }
-        });
+//        gvKeyboard.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                if (onClickKeyboardListener != null && position >= 0) {
+//                    onClickKeyboardListener.onKeyClick(position, key[position]);
+//                }
+//            }
+//        });
     }
 
     /**
@@ -61,7 +60,7 @@ public class Keyboard extends RelativeLayout {
         down.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Keyboard.this.setVisibility(View.GONE);
+                CustomKeyboard.this.setVisibility(View.GONE);
             }
         });
         gvKeyboard = (GridView) view.findViewById(R.id.gv_keyboard);
@@ -121,8 +120,8 @@ public class Keyboard extends RelativeLayout {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder viewHolder = null;
+        public View getView(final int position,View convertView, ViewGroup parent) {
+           ViewHolder viewHolder = null;
             if (convertView == null) {
                 if (getItemViewType(position) == 1) {
                     //数字键
@@ -138,9 +137,17 @@ public class Keyboard extends RelativeLayout {
                 viewHolder = (ViewHolder) convertView.getTag();
                 viewHolder.tvKey.setText(key[position]);
             }
-            if(position==9){
+            if (position == 9) {
                 viewHolder.tvKey.setBackgroundColor(0xe0e0e0);
             }
+            convertView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onClickKeyboardListener != null) {
+                        onClickKeyboardListener.onKeyClick(position, key[position]);
+                    }
+                }
+            });
             return convertView;
         }
     };

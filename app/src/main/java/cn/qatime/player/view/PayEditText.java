@@ -21,7 +21,7 @@ public class PayEditText extends LinearLayout {
     private Context context;
     private TextView tvFirst, tvSecond, tvThird, tvForth, tvFifth, tvSixth;
     private StringBuilder mPassword;
-    private OnInputFinishedListener onInputFinishedListener;
+    private OnInputChangeListener onInputChangeListener;
 
     public PayEditText(Context context) {
         this(context, null);
@@ -58,8 +58,8 @@ public class PayEditText extends LinearLayout {
             @Override
             public void afterTextChanged(Editable s) {
                 //六个密码都输入完成时回调
-                if (onInputFinishedListener != null && mPassword != null && mPassword.toString().length() == 6 && !StringUtils.isNullOrBlanK(s.toString())) {
-                    onInputFinishedListener.onInputFinished(mPassword.toString());
+                if (onInputChangeListener != null && mPassword != null && mPassword.toString().length() == 6 && !StringUtils.isNullOrBlanK(s.toString())) {
+                    onInputChangeListener.onInputFinished(mPassword.toString());
                 }
             }
         });
@@ -88,6 +88,9 @@ public class PayEditText extends LinearLayout {
     public void setTextFirst(String first) {
         tvFirst.setText(first);
         mPassword.append(first);
+        if (onInputChangeListener != null) {
+            onInputChangeListener.onInputAdd(first);
+        }
     }
 
     /**
@@ -98,6 +101,9 @@ public class PayEditText extends LinearLayout {
     public void setTextSecond(String second) {
         tvSecond.setText(second);
         mPassword.append(second);
+        if (onInputChangeListener != null) {
+            onInputChangeListener.onInputAdd(second);
+        }
     }
 
     /**
@@ -108,6 +114,9 @@ public class PayEditText extends LinearLayout {
     public void setTextThird(String third) {
         tvThird.setText(third);
         mPassword.append(third);
+        if (onInputChangeListener != null) {
+            onInputChangeListener.onInputAdd(third);
+        }
     }
 
     /**
@@ -118,6 +127,9 @@ public class PayEditText extends LinearLayout {
     public void setTextForth(String forth) {
         tvForth.setText(forth);
         mPassword.append(forth);
+        if (onInputChangeListener != null) {
+            onInputChangeListener.onInputAdd(forth);
+        }
     }
 
     /**
@@ -128,6 +140,9 @@ public class PayEditText extends LinearLayout {
     public void setTextFifth(String fifth) {
         tvFifth.setText(fifth);
         mPassword.append(fifth);
+        if (onInputChangeListener != null) {
+            onInputChangeListener.onInputAdd(fifth);
+        }
     }
 
     /**
@@ -138,6 +153,9 @@ public class PayEditText extends LinearLayout {
     public void setTextSixth(String sixth) {
         tvSixth.setText(sixth);
         mPassword.append(sixth);
+        if (onInputChangeListener != null) {
+            onInputChangeListener.onInputAdd(sixth);
+        }
     }
 
     /**
@@ -161,6 +179,9 @@ public class PayEditText extends LinearLayout {
             } else if (mPassword.length() == 6) {
                 tvSixth.setText(value);
             }
+            if (onInputChangeListener != null) {
+                onInputChangeListener.onInputAdd(value);
+            }
         }
     }
 
@@ -183,6 +204,25 @@ public class PayEditText extends LinearLayout {
                 tvSixth.setText("");
             }
             mPassword.deleteCharAt(mPassword.length() - 1);
+            if (onInputChangeListener != null) {
+                onInputChangeListener.onInputRemove();
+            }
+        }
+    }
+
+    /**
+     * 删除密码
+     */
+    public void clear() {
+        mPassword.delete(0, mPassword.length());
+        tvFirst.setText("");
+        tvSecond.setText("");
+        tvThird.setText("");
+        tvForth.setText("");
+        tvFifth.setText("");
+        tvSixth.setText("");
+        if (onInputChangeListener != null) {
+            onInputChangeListener.onInputRemove();
         }
     }
 
@@ -198,16 +238,20 @@ public class PayEditText extends LinearLayout {
     /**
      * 当密码输入完成时的回调接口
      */
-    public interface OnInputFinishedListener {
+    public interface OnInputChangeListener {
         void onInputFinished(String password);
+
+        void onInputAdd(String value);
+
+        void onInputRemove();
     }
 
     /**
      * 对外开放的方法
      *
-     * @param onInputFinishedListener
+     * @param onInputChangeListener
      */
-    public void setOnInputFinishedListener(OnInputFinishedListener onInputFinishedListener) {
-        this.onInputFinishedListener = onInputFinishedListener;
+    public void setOnInputChangeListener(OnInputChangeListener onInputChangeListener) {
+        this.onInputChangeListener = onInputChangeListener;
     }
 }

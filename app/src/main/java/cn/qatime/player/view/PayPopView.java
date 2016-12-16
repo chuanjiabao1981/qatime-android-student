@@ -35,7 +35,7 @@ public class PayPopView {
     private String title;
     private String price;
     private PayEditText payEditText;
-    private Keyboard keyboard;
+    private CustomKeyboard customKeyboard;
     private BaseActivity activity;
 
     private static final String[] KEY = new String[]{
@@ -56,10 +56,10 @@ public class PayPopView {
     private void init() {
         view = View.inflate(activity, R.layout.dialog_pay_password, null);
         payEditText = (PayEditText) view.findViewById(R.id.PayEditText_pay);
-        keyboard = (Keyboard) view.findViewById(R.id.KeyboardView_pay);
+        customKeyboard = (CustomKeyboard) view.findViewById(R.id.KeyboardView_pay);
         //设置键盘
-        keyboard.setKeyboardKeys(KEY);
-        keyboard.setOnClickKeyboardListener(new Keyboard.OnClickKeyboardListener() {
+        customKeyboard.setKeyboardKeys(KEY);
+        customKeyboard.setOnClickKeyboardListener(new CustomKeyboard.OnClickKeyboardListener() {
             @Override
             public void onKeyClick(int position, String value) {
                 if (position < 11 && position != 9) {
@@ -72,7 +72,7 @@ public class PayPopView {
         /**
          * 当密码输入完成时的回调
          */
-        payEditText.setOnInputFinishedListener(new PayEditText.OnInputFinishedListener() {
+        payEditText.setOnInputChangeListener(new PayEditText.OnInputChangeListener() {
             @Override
             public void onInputFinished(String password) {
                 Map<String, String> map = new HashMap<String, String>();
@@ -85,6 +85,7 @@ public class PayPopView {
                             }
 
                             protected void onError(JSONObject response) {
+                                payEditText.clear();
                                 try {
                                     int errorCode = response.getJSONObject("error").getInt("code");
                                     if (errorCode == 2005) {
@@ -110,12 +111,22 @@ public class PayPopView {
                 });
                 activity.addToRequestQueue(request);
             }
+
+            @Override
+            public void onInputAdd(String value) {
+
+            }
+
+            @Override
+            public void onInputRemove() {
+
+            }
         });
         payEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                keyboard.setVisibility(keyboard.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
-//                KeyBoardUtils.openKeybord(editText,PayPSWActivity.this);
+                customKeyboard.setVisibility(customKeyboard.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+//                KeyBoardUtils.openKeybord(editText,PayPSWVerifyActivity.this);
             }
         });
     }

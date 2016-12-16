@@ -30,7 +30,7 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
-import cn.qatime.player.view.Keyboard;
+import cn.qatime.player.view.CustomKeyboard;
 import cn.qatime.player.view.PayEditText;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.utils.JsonUtils;
@@ -53,7 +53,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
     private IWXAPI api;
     private String openid;
     private PayEditText payEditText;
-    private Keyboard keyboard;
+    private CustomKeyboard customKeyboard;
 
     private void assignViews() {
         bindPhoneNumber = (LinearLayout) findViewById(R.id.bind_phone_number);
@@ -275,7 +275,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
     private void popPayPSW() {
 //        PayPopView payPopView = new PayPopView("","",getWindow());
 //        payPopView.showPop();
-        startActivity(new Intent(this,PayPSWActivity.class));
+        startActivity(new Intent(this,PayPSWVerifyActivity.class));
     }
 
     private void dialogCancel() {
