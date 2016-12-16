@@ -1,5 +1,6 @@
 package cn.qatime.player.activity;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.drawable.AnimationDrawable;
@@ -31,6 +32,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +45,7 @@ import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.bean.InputPanel;
 import cn.qatime.player.bean.VideoState;
 import cn.qatime.player.fragment.VideoFloatFragment;
+import cn.qatime.player.utils.Constant;
 import libraryextra.bean.Announcements;
 import cn.qatime.player.fragment.FragmentPlayerAnnouncements;
 import cn.qatime.player.fragment.FragmentPlayerLiveDetails;
@@ -55,6 +58,7 @@ import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VideoActivityInterface;
 import cn.qatime.player.view.NEVideoView;
 import cn.qatime.player.view.VideoLayout;
+import libraryextra.bean.ImageItem;
 import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.ScreenUtils;
@@ -392,7 +396,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
      * @param comment       聊天內容
      * @param isSendToDanmu 是否将消息展示弹幕
      */
-    private void sendMessage(String comment, boolean isSendToDanmu) {
+    private void sendTextMessage(String comment, boolean isSendToDanmu) {
         if (StringUtils.isNullOrBlanK(sessionId)) {
             Toast.makeText(NEVideoPlayerActivity.this, getResourceString(R.string.team_not_exist), Toast.LENGTH_SHORT).show();
             return;
@@ -546,6 +550,30 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         floatingWindow.setY(resultY);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Constant.RESPONSE_PICTURE_SELECT) {//选择照片返回的照片
+            if (data != null) {
+                ImageItem image = (ImageItem) data.getSerializableExtra("data");
+                if (image != null && !StringUtils.isNullOrBlanK(image.imagePath)) {
+                    if (!inputPanel.isAllowSendMessage()) {
+                        return;
+                    }
+                    if (inputPanel.checkMute()) {
+                        return;
+                    }
+                    File file = new File(image.imagePath);
+                    if (file.exists()) {
+                        IMMessage message = MessageBuilder.createImageMessage(sessionId, sessionType, file, file.getName());
+                        NIMClient.getService(MsgService.class).sendMessage(message, true);
+                        fragment2.items.add(message);
+                        fragment2.scrollToBottom();
+                    }
+                }
+            }
+        }
+    }
 
     @Override
     protected void onPause() {
@@ -910,7 +938,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     @Override
     public void sendMessage(String message) {
         Logger.e("message" + message);
-        sendMessage(message, (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && isSubBig) | getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
+        sendTextMessage(message, (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && isSubBig) | getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
     }
 
     @Override
@@ -948,6 +976,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
      */
     @Override
     public void ChatMessage(String message) {
-        sendMessage(message, isSubBig);
+        sendTextMessage(message, isSubBig);
     }
 }

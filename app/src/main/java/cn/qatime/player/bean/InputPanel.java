@@ -148,13 +148,11 @@ public class InputPanel implements View.OnClickListener {
         inputEmojiLayout.setVisibility(showInput ? View.VISIBLE : GONE);
 
         runnable = new Runnable() {
-
             @Override
             public void run() {
                 tagViewPager.setVisibility(View.VISIBLE);
                 emoji.setImageResource(R.mipmap.keybord);
             }
-
         };
         emoji.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,12 +187,10 @@ public class InputPanel implements View.OnClickListener {
         content.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
@@ -263,28 +259,13 @@ public class InputPanel implements View.OnClickListener {
                     Toast.makeText(context, context.getResources().getString(R.string.message_can_not_null), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (isMute) {
-                    Toast.makeText(context, context.getResources().getString(R.string.have_muted), Toast.LENGTH_SHORT).show();
-                    content.setText("");
-                    changeSendStatus();
+                if (checkMute()) {
                     return;
                 }
-                // 创建文本消息
-//                IMMessage message = MessageBuilder.createTextMessage(
-//                        sessionId, // 聊天对象的 ID，如果是单聊，为用户帐号，如果是群聊，为群组 ID
-//                        sessionType, // 聊天类型，单聊或群组
-//                        content.getText().toString() // 文本内容
-//                );
-//                // 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
-//                NIMClient.getService(MsgService.class).sendMessage(message, true);
-//
-//                items.add(message);
-//                adapter.notifyDataSetChanged();
-//                ListViewUtil.scrollToBottom(messageListView);
                 if (listener != null) {
                     listener.ChatMessage(content.getText().toString().trim());
                 }
-                Logger.e(content.getText().toString().trim());
+//                Logger.e(content.getText().toString().trim());
                 content.setText("");
                 changeSendStatus();
                 break;
@@ -295,6 +276,21 @@ public class InputPanel implements View.OnClickListener {
                 context.startActivityForResult(intent, Constant.REQUEST);
                 break;
         }
+    }
+
+    /**
+     * 检查是否被禁言
+     *
+     * @return true 被禁言
+     */
+    public boolean checkMute() {
+        if (isMute) {
+            Toast.makeText(context, context.getResources().getString(R.string.have_muted), Toast.LENGTH_SHORT).show();
+            content.setText("");
+            changeSendStatus();
+            return true;
+        }
+        return false;
     }
 
     public void setTeam(Team team) {
@@ -361,7 +357,7 @@ public class InputPanel implements View.OnClickListener {
         }
     }
 
-    private boolean isAllowSendMessage() {
+    public boolean isAllowSendMessage() {
         if (team == null || !team.isMyTeam()) {
             Toast.makeText(context, R.string.team_send_message_not_allow, Toast.LENGTH_SHORT).show();
             return false;

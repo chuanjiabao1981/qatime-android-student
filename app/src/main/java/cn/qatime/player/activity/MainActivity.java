@@ -18,8 +18,11 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.NimIntent;
+import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
@@ -92,7 +95,7 @@ public class MainActivity extends BaseFragmentActivity {
 //        GetProvinceslist();
 //        GetCitieslist();
         GetSchoolslist();
-
+        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, true);
     }
 
     /**
@@ -388,8 +391,34 @@ public class MainActivity extends BaseFragmentActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, false);
     }
 
+    /**
+     * 监听用户在线状态
+     */
+    Observer<StatusCode> userStatusObserver = new Observer<StatusCode>() {
+        @Override
+        public void onEvent(StatusCode code) {
+            if (code.wontAutoLogin()) {
+//                kickOut(code);
+                Logger.e("未登录成功");
+            } else {
+                if (code == StatusCode.NET_BROKEN) {
+                    Logger.e("当前网络不可用");
+                } else if (code == StatusCode.UNLOGIN) {
+                    Logger.e("未登录");
+                } else if (code == StatusCode.CONNECTING) {
+                    Logger.e("连接中...");
+                } else if (code == StatusCode.LOGINING) {
+                    Logger.e("登录中...");
+                } else {
+//                    onRecentContactsLoaded();
+                    Logger.e("其他" + code);
+                }
+            }
+        }
+    };
 
     @Subscribe
     public void onEvent(String event) {
