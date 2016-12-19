@@ -125,6 +125,7 @@ public class PayPSWChangeActivity extends BaseActivity implements View.OnClickLi
                     payEditText.clear();
                     Toast.makeText(PayPSWChangeActivity.this, "两次密码不一致，请重新输入", Toast.LENGTH_SHORT).show();
                     setTitle("设置新支付密码");
+                    return;
                 }
                 Map<String, String> map = new HashMap<>();
                 map.put("pament_password", tempPassword);

@@ -99,13 +99,12 @@ public class PayPSWVerifyActivity extends BaseActivity implements View.OnClickLi
                                     e.printStackTrace();
                                 }
                                 startActivity(intent);
-                                finish();
                             }
 
                             protected void onError(JSONObject response) {
                                 payEditText.clear();
                                 try {
-                                    int errorCode = response.getJSONObject("error").getInt("code");
+                                       int errorCode = response.getJSONObject("error").getInt("code");
                                     if (errorCode == 2005) {
                                         Toast.makeText(PayPSWVerifyActivity.this, "密码验证失败", Toast.LENGTH_SHORT).show();
                                     } else {
