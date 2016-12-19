@@ -17,8 +17,6 @@ import com.bumptech.glide.Glide;
 
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
-
 import cn.qatime.player.R;
 import cn.qatime.player.activity.PersonalInformationActivity;
 import cn.qatime.player.activity.PersonalMyOrderActivity;
@@ -49,7 +47,6 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
     private TextView newVersion;
     private TextView name;
     private TextView balance;
-    DecimalFormat df = new DecimalFormat("#.00");
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

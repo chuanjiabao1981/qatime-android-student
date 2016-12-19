@@ -17,7 +17,10 @@ import android.widget.Toast;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.bean.CashAccountBean;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.view.PayPopView;
+import libraryextra.utils.KeyBoardUtils;
 import libraryextra.utils.StringUtils;
 
 /**
@@ -32,6 +35,8 @@ public class WithdrawCashActivity extends BaseActivity {
     private Button rechargeNow;
     private String payType = "bank";
     private static final int DECIMAL_DIGITS = 2;//小数的位数
+    private String amount;
+    private PayPopView payPopView;
 
     private void assignViews() {
         rechargeNum = (EditText) findViewById(R.id.recharge_num);
@@ -40,7 +45,16 @@ public class WithdrawCashActivity extends BaseActivity {
         LinearLayout toAlipayLayout = (LinearLayout) findViewById(R.id.to_alipay_layout);
         toAlipay = (ImageView) findViewById(R.id.to_alipay);
         rechargeNow = (Button) findViewById(R.id.recharge_now);
-
+        CashAccountBean cashAccount = BaseApplication.getCashAccount();
+        String price = "0";
+        if (cashAccount != null && cashAccount.getData() != null) {
+            price = cashAccount.getData().getBalance();
+            if (price.startsWith(".")) {
+                price = "0" + price;
+            }
+        }
+        price = "￥" + price;
+        rechargeNum.setHint(getString(R.string.withdraw_num_hint) + "(" + price + "可用)");
         toAlipayLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,7 +157,9 @@ public class WithdrawCashActivity extends BaseActivity {
 
             @Override
             public void onClick(View v) {
-                String amount = rechargeNum.getText().toString();
+                KeyBoardUtils.closeKeybord(WithdrawCashActivity.this);
+
+                amount = rechargeNum.getText().toString();
                 if (StringUtils.isNullOrBlanK(amount)) {
                     Toast.makeText(WithdrawCashActivity.this, R.string.amount_can_not_null, Toast.LENGTH_SHORT).show();
                     return;
@@ -160,10 +176,28 @@ public class WithdrawCashActivity extends BaseActivity {
                     Toast.makeText(WithdrawCashActivity.this, getResourceString(R.string.amount_not_enough), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Intent intent = new Intent(WithdrawCashActivity.this, WithdrawConfirmActivity.class);
-                intent.putExtra("pay_type", payType);
-                intent.putExtra("amount", amount);
-                startActivityForResult(intent, Constant.REQUEST);
+
+                payPopView = new PayPopView("用户提现", "￥" + amount, WithdrawCashActivity.this);
+                payPopView.showPop();
+                payPopView.setOnPayPSWVerifyListener(new PayPopView.OnPayPSWVerifyListener() {
+                    @Override
+                    public void onSuccess() {
+                        payPopView.dismiss();
+                        Intent intent = new Intent(WithdrawCashActivity.this, WithdrawConfirmActivity.class);
+                        intent.putExtra("pay_type", payType);
+                        intent.putExtra("amount", amount);
+                        startActivityForResult(intent, Constant.REQUEST);
+                    }
+
+                    @Override
+                    public void onError(int errorCode) {
+                        if (errorCode == 2005) {
+                            Toast.makeText(WithdrawCashActivity.this, "密码验证失败", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(WithdrawCashActivity.this, "请先设置支付密码", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
 
             }
         });
@@ -171,7 +205,7 @@ public class WithdrawCashActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constant.REQUEST &&resultCode == Constant.RESPONSE) {
+        if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
             setResult(resultCode);
             finish();
         }
