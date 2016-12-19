@@ -144,7 +144,9 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
                             intent.putExtra("pay_type",bean.getData().getPay_type());
                             intent.putExtra("id",bean.getData().getTransaction_no());
                             intent.putExtra("create_at",bean.getData().getCreated_at());
-                            startActivityForResult(intent, Constant.REQUEST);
+                            startActivity(intent);
+                            setResult(Constant.RESPONSE);
+                            finish();
                         } else {
                             onError(response);
                         }
@@ -203,14 +205,6 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_withdraw_confirm);
         assignViews();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constant.REGIST) {
-            setResult(resultCode);
-            finish();
-        }
     }
 
     class TimeCount extends CountDownTimer {

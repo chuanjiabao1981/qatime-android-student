@@ -13,7 +13,6 @@ import java.text.SimpleDateFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
-import cn.qatime.player.utils.Constant;
 
 /**
  * @author Tianhaoranly
@@ -96,12 +95,6 @@ public class WithdrawResultActivity extends BaseActivity implements View.OnClick
                 finish();
                 break;
         }
-    }
-
-    @Override
-    public void finish() {
-        setResult(Constant.RESPONSE);
-        super.finish();
     }
 
     private String getPayType(String pay_type) {
