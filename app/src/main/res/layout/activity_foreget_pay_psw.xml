@@ -10,8 +10,6 @@
         style="@style/edit_layout_style">
 
         <LinearLayout
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
             style="@style/edit_layout_top_style">
 
             <EditText
@@ -21,8 +19,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
             style="@style/edit_layout_bottom_style">
 
             <EditText

@@ -60,6 +60,8 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center</item>
+        <item name="android:paddingLeft">32dp</item>
+        <item name="android:paddingRight">32dp</item>
         <item name="android:orientation">vertical</item>
     </style>
 
@@ -111,7 +113,7 @@
         <item name="android:textSize">16sp</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textColor">@drawable/text_selector_white_red</item>
     </style>
     <style name="button_style"> //小按钮
         <item name="android:layout_height">40dp</item>
@@ -121,15 +123,15 @@
         <item name="android:textSize">16sp</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textColor">@drawable/text_selector_white_red</item>
     </style>
 
     <style name="button_full_width_style"> //跨整个屏幕的按钮
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">40dp</item>
         <item name="android:layout_marginBottom">10dp</item>
-        <item name="android:layout_marginLeft">12dp</item>
-        <item name="android:layout_marginRight">12dp</item>
+        <item name="android:layout_marginLeft">32dp</item>
+        <item name="android:layout_marginRight">32dp</item>
         <item name="android:textSize">16sp</item>
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/button_bg_selector_red_with_stork</item>

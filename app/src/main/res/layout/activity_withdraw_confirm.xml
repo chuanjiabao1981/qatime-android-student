@@ -12,41 +12,41 @@
 
         <include layout="@layout/layout_backbar" />
 
-        <EditText
-            android:id="@+id/account"
-            style="@style/activity_edit_text_style"
-            android:layout_width="match_parent"
-            android:layout_margin="12dp"
-            android:gravity="center_vertical"
-            android:hint="@string/hint_input_alipay_account"
-            android:inputType="number" />
-
-        <EditText
-            android:id="@+id/name"
-            style="@style/activity_edit_text_style"
-            android:layout_width="match_parent"
-            android:layout_marginBottom="12dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:gravity="center_vertical"
-            android:hint="@string/input_real_name" />
-
-        <LinearLayout
-            style="@style/edit_layout_bottom_style"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp">
+        <LinearLayout style="@style/edit_layout_style">
 
             <EditText
-                android:id="@+id/code"
+                android:id="@+id/name"
                 style="@style/activity_edit_text_style"
-                android:layout_weight="3"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="12dp"
+                android:layout_marginTop="12dp"
+                android:gravity="center_vertical"
+                android:hint="@string/input_real_name" />
+
+            <EditText
+                android:id="@+id/account"
+                style="@style/activity_edit_text_style"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:hint="@string/hint_input_alipay_account"
                 android:inputType="number" />
 
-            <TextView
-                android:id="@+id/text_getcode"
-                style="@style/button_style_with_edit"
-                android:layout_weight="2"
-                android:text="@string/getcode" />
+            <LinearLayout
+                style="@style/edit_layout_bottom_style"
+                android:layout_marginTop="12dp">
+
+                <EditText
+                    android:id="@+id/code"
+                    style="@style/activity_edit_text_style"
+                    android:layout_weight="3"
+                    android:inputType="number" />
+
+                <TextView
+                    android:id="@+id/text_getcode"
+                    style="@style/button_style_with_edit"
+                    android:layout_weight="2"
+                    android:text="@string/getcode" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
