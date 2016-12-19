@@ -278,7 +278,7 @@
     <string name="feedback">意见反馈</string>
     <string name="forget_password_1">忘记密码？</string>
     <string name="found_new_version">发现新版本</string>
-    <string name="getcode">获取验证码</string>
+    <string name="getcode">获取校验码</string>
     <string name="hint_6_16_password">6-16位字母或数字</string>
     <string name="hint_contact">请留下联系方式（手机/QQ/微信），方便我们联系您</string>
     <string name="hint_input_again">再输入一次</string>

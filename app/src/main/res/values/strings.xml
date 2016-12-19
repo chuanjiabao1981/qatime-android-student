@@ -333,7 +333,7 @@
     <string name="class_range">课程范围</string>
     <string name="sms_notify">短信通知</string>
     <string name="sys_notify">系统通知</string>
-    <string name="getcode">获取验证码</string>
+    <string name="getcode">获取校验码</string>
     <string name="alert_mode">提醒方式</string>
     <string name="time_setting">设置时间</string>
     <string name="Remedial_classes">辅导班课程</string>
