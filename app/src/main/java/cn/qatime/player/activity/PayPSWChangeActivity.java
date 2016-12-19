@@ -135,6 +135,7 @@ public class PayPSWChangeActivity extends BaseActivity implements View.OnClickLi
                             @Override
                             protected void onSuccess(JSONObject response) {
                                 Toast.makeText(PayPSWChangeActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
+                                BaseApplication.getCashAccount().getData().setHas_password(true);
                                 finish();
                             }
 

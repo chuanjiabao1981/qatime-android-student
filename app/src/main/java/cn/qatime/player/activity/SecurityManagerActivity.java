@@ -264,7 +264,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
-                popPayPSW();
+                changePayPSW();
             }
         });
         alertDialog.show();
@@ -272,10 +272,19 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
     }
 
 
-    private void popPayPSW() {
+    private void changePayPSW() {
 //        PayPopView payPopView = new PayPopView("","",getWindow());
 //        payPopView.showPop();
-        startActivity(new Intent(this,PayPSWVerifyActivity.class));
+        if (BaseApplication.getCashAccount() != null && BaseApplication.getCashAccount().getData() != null) {
+            if (BaseApplication.getCashAccount().getData().isHas_password()) {
+                startActivity(new Intent(this, PayPSWVerifyActivity.class));
+            } else {
+                startActivity(new Intent(this, PayPSWForgetActivity.class));
+            }
+        } else {
+            Toast.makeText(this, "error", Toast.LENGTH_SHORT).show();
+            Logger.e("未获取到支付密码状态");
+        }
     }
 
     private void dialogCancel() {

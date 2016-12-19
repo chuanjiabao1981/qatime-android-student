@@ -120,14 +120,9 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
         if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
             Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).placeholder(R.mipmap.personal_information_head).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
             name.setText(StringUtils.isNullOrBlanK(BaseApplication.getProfile().getData().getUser().getName()) ? "姓名" : BaseApplication.getProfile().getData().getUser().getName());
-            initData();
             CashAccountBean cashAccount = BaseApplication.getCashAccount();
             if (cashAccount != null && cashAccount.getData() != null) {
-                String price = cashAccount.getData().getBalance();
-                if (price.startsWith(".")) {
-                    price = "0" + price;
-                }
-                balance.setText(price);
+                initData();
             } else {
                 refreshCashAccount();
             }
