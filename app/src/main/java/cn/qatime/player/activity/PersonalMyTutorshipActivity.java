@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.TextView;
 
+import com.umeng.analytics.MobclickAgent;
+
 import java.util.ArrayList;
 
 import cn.qatime.player.R;
@@ -21,7 +23,7 @@ import libraryextra.view.FragmentLayoutWithLine;
  * 我的辅导
  */
 public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
-    private int[] tab_text = { R.id.tab_text2, R.id.tab_text3, R.id.tab_text4, R.id.tab_text5};
+    private int[] tab_text = {R.id.tab_text2, R.id.tab_text3, R.id.tab_text4, R.id.tab_text5};
     FragmentLayoutWithLine fragmentlayout;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
 
@@ -56,7 +58,7 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
         fragmentlayout.setScorllToNext(true);
         fragmentlayout.setScorll(true);
         fragmentlayout.setWhereTab(1);
-        fragmentlayout.setTabHeight(4,0xffbe0b0b);
+        fragmentlayout.setTabHeight(4, 0xffbe0b0b);
         fragmentlayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
@@ -79,5 +81,17 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
                 fragmentlayout.setCurrenItem(0);
             }
         }, 200);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

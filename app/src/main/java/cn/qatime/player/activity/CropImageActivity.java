@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
+import com.umeng.analytics.MobclickAgent;
+
 import java.io.File;
 import java.util.UUID;
 
@@ -111,28 +113,16 @@ public class CropImageActivity extends BaseActivity {
                 });
             }
         });
-//        TextView more = (TextView) findViewById(R.id.more);
-//        more.setText("确定");
-//        more.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                progress = DialogUtils.startProgressDialog(progress, CropImageActivity.this, "生成图片...");
-//                cropper.startCrop(Uri.fromFile(new File(Cantent.CACHEPATH + "/" + UUID.randomUUID().toString().replace("-", "") + ".jpg")), null, new SaveCallback() {
-//                    @Override
-//                    public void onSuccess(Uri outputUri) {
-//                        DialogUtils.dismissDialog(progress);
-//                        Intent intent = new Intent();
-//                        intent.putExtra("bitmap", outputUri.getPath());
-//                        setResult(Cantent.RESPONSE_SIMPLE_PICTURE, intent);
-//                        finish();
-//                    }
-//
-//                    @Override
-//                    public void onError() {
-//
-//                    }
-//                });
-//            }
-//        });
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

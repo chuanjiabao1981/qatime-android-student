@@ -24,13 +24,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.netease.nimlib.sdk.msg.MessageBuilder;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.team.model.Team;
-import com.orhanobut.logger.Logger;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.NEVideoPlayerActivity;
 import cn.qatime.player.activity.PictureSelectActivity;
 import cn.qatime.player.adapter.BiaoqingAdapter;
 import cn.qatime.player.utils.Constant;
@@ -50,6 +53,7 @@ public class InputPanel implements View.OnClickListener {
     private final Activity context;
     private final View rootView;
     private final InputPanelListener listener;
+    private final String sessionId;
     private String[][] biaoqingTags = new String[3][28];
     private LinearLayout inputEmojiLayout;
     private EditText content;
@@ -64,7 +68,7 @@ public class InputPanel implements View.OnClickListener {
     private OnInputShowListener onInputShowListener;
 
     public interface InputPanelListener {
-        void ChatMessage(String message);
+        void ChatMessage(IMMessage message);
     }
 
     public interface OnInputShowListener {
@@ -79,11 +83,13 @@ public class InputPanel implements View.OnClickListener {
      * @param context
      * @param rootView
      * @param showInput 初始化时,是否显示输入框
+     * @param sessionId 群组id
      */
-    public InputPanel(final Activity context, InputPanelListener listener, View rootView, boolean showInput) {
+    public InputPanel(final Activity context, InputPanelListener listener, View rootView, boolean showInput, String sessionId) {
         this.context = context;
         this.rootView = rootView;
         this.listener = listener;
+        this.sessionId = sessionId;
 
         assignViews(showInput);
         for (int i = 0; i < 3; i++) {
@@ -148,13 +154,11 @@ public class InputPanel implements View.OnClickListener {
         inputEmojiLayout.setVisibility(showInput ? View.VISIBLE : GONE);
 
         runnable = new Runnable() {
-
             @Override
             public void run() {
                 tagViewPager.setVisibility(View.VISIBLE);
                 emoji.setImageResource(R.mipmap.keybord);
             }
-
         };
         emoji.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,12 +193,10 @@ public class InputPanel implements View.OnClickListener {
         content.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
@@ -263,28 +265,35 @@ public class InputPanel implements View.OnClickListener {
                     Toast.makeText(context, context.getResources().getString(R.string.message_can_not_null), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (isMute) {
-                    Toast.makeText(context, context.getResources().getString(R.string.have_muted), Toast.LENGTH_SHORT).show();
-                    content.setText("");
-                    changeSendStatus();
+                if (checkMute()) {
                     return;
                 }
                 // 创建文本消息
-//                IMMessage message = MessageBuilder.createTextMessage(
-//                        sessionId, // 聊天对象的 ID，如果是单聊，为用户帐号，如果是群聊，为群组 ID
-//                        sessionType, // 聊天类型，单聊或群组
-//                        content.getText().toString() // 文本内容
-//                );
-//                // 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
-//                NIMClient.getService(MsgService.class).sendMessage(message, true);
-//
-//                items.add(message);
-//                adapter.notifyDataSetChanged();
-//                ListViewUtil.scrollToBottom(messageListView);
-                if (listener != null) {
-                    listener.ChatMessage(content.getText().toString().trim());
+                IMMessage message = MessageBuilder.createTextMessage(
+                        sessionId, // 聊天对象的 ID，如果是单聊，为用户帐号，如果是群聊，为群组 ID
+                        SessionTypeEnum.Team, // 聊天类型，单聊或群组
+                        content.getText().toString().trim() // 文本内容
+                );
+
+                if (context.getClass().equals(NEVideoPlayerActivity.class)) {
+                    if (((NEVideoPlayerActivity) context).limitMessage.size() >= 1) {
+                        if (message.getTime() - ((NEVideoPlayerActivity) context).limitMessage.get(0).getTime() < 2000) {
+                            Toast.makeText(context, context.getResources().getString(R.string.please_talk_later), Toast.LENGTH_SHORT).show();
+                            return;
+                        } else {
+                            ((NEVideoPlayerActivity) context).limitMessage.add(message);
+                            if (((NEVideoPlayerActivity) context).limitMessage.size() > 1) {
+                                ((NEVideoPlayerActivity) context).limitMessage.remove(0);
+                            }
+                        }
+                    } else {
+                        ((NEVideoPlayerActivity) context).limitMessage.add(message);
+                    }
                 }
-                Logger.e(content.getText().toString().trim());
+                if (listener != null) {
+                    listener.ChatMessage(message);
+                }
+//                Logger.e(content.getText().toString().trim());
                 content.setText("");
                 changeSendStatus();
                 break;
@@ -295,6 +304,21 @@ public class InputPanel implements View.OnClickListener {
                 context.startActivityForResult(intent, Constant.REQUEST);
                 break;
         }
+    }
+
+    /**
+     * 检查是否被禁言
+     *
+     * @return true 被禁言
+     */
+    public boolean checkMute() {
+        if (isMute) {
+            Toast.makeText(context, context.getResources().getString(R.string.have_muted), Toast.LENGTH_SHORT).show();
+            content.setText("");
+            changeSendStatus();
+            return true;
+        }
+        return false;
     }
 
     public void setTeam(Team team) {
@@ -361,7 +385,7 @@ public class InputPanel implements View.OnClickListener {
         }
     }
 
-    private boolean isAllowSendMessage() {
+    public boolean isAllowSendMessage() {
         if (team == null || !team.isMyTeam()) {
             Toast.makeText(context, R.string.team_send_message_not_allow, Toast.LENGTH_SHORT).show();
             return false;

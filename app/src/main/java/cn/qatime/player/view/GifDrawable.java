@@ -74,8 +74,4 @@ public class GifDrawable extends AnimationDrawable {
     public interface UpdateListener {
         void update();
     }
-
-    public void setUpdateListener(UpdateListener listener) {
-        this.mListener = listener;
-    }
 }

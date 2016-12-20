@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.umeng.analytics.MobclickAgent;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -46,13 +47,10 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
         setTitle(getResources().getString(R.string.detail_of_order));
         initView();
 
-
         OrderDetailBean data = (OrderDetailBean) getIntent().getSerializableExtra("data");
-
 
         if (data != null) {
             setValue(data);
-
         }
     }
 
@@ -122,7 +120,6 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
     }
 
     public void initView() {
-
         name = (TextView) findViewById(R.id.name);
         image = (ImageView) findViewById(R.id.image);
         subject = (TextView) findViewById(R.id.subject);
@@ -155,6 +152,16 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
             }
         });
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 }
 

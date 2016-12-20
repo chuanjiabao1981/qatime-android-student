@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,10 +59,10 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
         code.setHint(getResourceString(R.string.hint_input_code));
         payType = getIntent().getStringExtra("pay_type");
 
-        if ("alipay".equals(payType)){
+        if ("alipay".equals(payType)) {
             setTitle(getResourceString(R.string.withdraw_cash_to_alipay));
             account.setHint(getResourceString(R.string.hint_input_alipay_account));
-        }else if ("bank".equals(payType)){
+        } else if ("bank".equals(payType)) {
             account.setHint(getResourceString(R.string.hint_input_bank_card_account));
             setTitle(getResourceString(R.string.withdraw_cash_to_bank));
         }
@@ -69,12 +70,13 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
         withdrawCashNow.setOnClickListener(this);
         textGetcode.setOnClickListener(this);
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.text_getcode:
                 Map<String, String> map = new HashMap<>();
-                map.put("send_to",BaseApplication.getProfile().getData().getUser().getLogin_mobile());
+                map.put("send_to", BaseApplication.getProfile().getData().getUser().getLogin_mobile());
                 map.put("key", "withdraw_cash");
 
                 addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlGetCode, map), null, new VolleyListener(this) {
@@ -93,7 +95,7 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
                     protected void onError(JSONObject response) {
                         Toast.makeText(getApplicationContext(), getResourceString(R.string.code_send_failed), Toast.LENGTH_LONG).show();
                     }
-                },new VolleyErrorListener(){
+                }, new VolleyErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         super.onErrorResponse(volleyError);
@@ -106,10 +108,10 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
                 break;
             case R.id.withdraw_cash_now:
                 if (StringUtils.isNullOrBlanK(account.getText().toString())) { //账号
-                    if ("alipay".equals(payType)){
-                        Toast.makeText(this, getResources().getString( R.string.hint_input_alipay_account), Toast.LENGTH_SHORT).show();
-                    }else if ("bank".equals(payType)){
-                        Toast.makeText(this, getResources().getString( R.string.hint_input_bank_card_account), Toast.LENGTH_SHORT).show();
+                    if ("alipay".equals(payType)) {
+                        Toast.makeText(this, getResources().getString(R.string.hint_input_alipay_account), Toast.LENGTH_SHORT).show();
+                    } else if ("bank".equals(payType)) {
+                        Toast.makeText(this, getResources().getString(R.string.hint_input_bank_card_account), Toast.LENGTH_SHORT).show();
                     }
                     return;
                 }
@@ -158,19 +160,19 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
                             JSONObject error = response.getJSONObject("error");
                             int code = error.getInt("code");
                             if (code == 2003) {
-                                Toast.makeText(WithdrawConfirmActivity.this,getResources().getString(R.string.code_error),Toast.LENGTH_SHORT).show();
+                                Toast.makeText(WithdrawConfirmActivity.this, getResources().getString(R.string.code_error), Toast.LENGTH_SHORT).show();
                             } else if (code == 3002) {//  "msg": "验证失败: Value 账户资金不足，无法提取!"
-                                Toast.makeText(WithdrawConfirmActivity.this,getResources().getString(R.string.amount_not_enough),Toast.LENGTH_SHORT).show();
-                            } else  if (code == 3003) {//  "msg": "APIErrors::WithdrawExisted"
-                                Toast.makeText(WithdrawConfirmActivity.this,getResources().getString(R.string.withdraw_existed),Toast.LENGTH_SHORT).show();
-                            } else{
-                               dialog();
+                                Toast.makeText(WithdrawConfirmActivity.this, getResources().getString(R.string.amount_not_enough), Toast.LENGTH_SHORT).show();
+                            } else if (code == 3003) {//  "msg": "APIErrors::WithdrawExisted"
+                                Toast.makeText(WithdrawConfirmActivity.this, getResources().getString(R.string.withdraw_existed), Toast.LENGTH_SHORT).show();
+                            } else {
+                                dialog();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
-                }, new VolleyErrorListener(){
+                }, new VolleyErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         super.onErrorResponse(volleyError);
@@ -200,6 +202,7 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
 //        attributes.width= ScreenUtils.getScreenWidth(getApplicationContext())- DensityUtils.dp2px(getApplicationContext(),20)*2;
 //        alertDialog.getWindow().setAttributes(attributes);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -223,5 +226,17 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
             textGetcode.setEnabled(false);//防止重复点击
             textGetcode.setText(millisUntilFinished / 1000 + getResourceString(R.string.time_after_acquisition));
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

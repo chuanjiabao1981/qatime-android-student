@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -173,6 +174,11 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
         refreshCashAccount();
         setResult(Constant.RESPONSE);
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
 
     private void refreshCashAccount() {
         addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.urlpayment + BaseApplication.getUserId() + "/cash", null, new VolleyListener(PersonalMyWalletActivity.this) {
@@ -201,6 +207,11 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
         }));
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

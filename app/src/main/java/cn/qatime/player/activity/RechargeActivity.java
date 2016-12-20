@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -103,39 +104,6 @@ public class RechargeActivity extends BaseActivity {
     }
 
     private void initListener() {
-//        phone.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (alertDialogPhone == null) {
-//                    View view = View.inflate(RechargeActivity.this, R.layout.dialog_cancel_or_confirm, null);
-//                    TextView text = (TextView) view.findViewById(R.id.text);
-//                    text.setText(getResourceString(R.string.call_customer_service_phone) + phone.getText() + "?");
-//                    Button cancel = (Button) view.findViewById(R.id.cancel);
-//                    Button confirm = (Button) view.findViewById(R.id.confirm);
-//                    cancel.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            alertDialogPhone.dismiss();
-//                        }
-//                    });
-//                    confirm.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
-//                            startActivity(intent);
-//                            alertDialogPhone.dismiss();
-//                        }
-//                    });
-//                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(RechargeActivity.this);
-//                    alertDialogPhone = builder.create();
-//                    alertDialogPhone.show();
-//                    alertDialogPhone.setContentView(view);
-//                } else {
-//                    alertDialogPhone.show();
-//                }
-//            }
-//        });
-
         rechargeNum.setCustomSelectionActionModeCallback(new ActionMode.Callback() {//禁止复制粘贴
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -300,7 +268,17 @@ public class RechargeActivity extends BaseActivity {
 //        }
             finish();
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
