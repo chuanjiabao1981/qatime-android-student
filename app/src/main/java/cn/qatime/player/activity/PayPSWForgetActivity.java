@@ -22,6 +22,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.StringUtils;
@@ -31,7 +32,7 @@ import libraryextra.utils.VolleyListener;
 /**
  * Created by lenovo on 2016/8/17.
  */
-public class PayPSWForgetActivity extends BaseActivity implements View.OnClickListener {
+public class  PayPSWForgetActivity extends BaseActivity implements View.OnClickListener {
 
     private TextView textGetcode;
     private Button buttonNext;
@@ -128,6 +129,7 @@ public class PayPSWForgetActivity extends BaseActivity implements View.OnClickLi
                                     e.printStackTrace();
                                 }
                                 startActivity(intent);
+                                setResult(Constant.CHANGE_PAY_PSW);
                                 finish();
                             }
 
