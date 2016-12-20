@@ -186,7 +186,7 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
         alertDialog = builder.create();
         View view = View.inflate(this, R.layout.dialog_confirm, null);
         TextView tv = (TextView) view.findViewById(R.id.text);
-        tv.setText("提现系统繁忙，请稍候再试。");
+        tv.setText("提现系统繁忙，请稍候再试");
         Button confirm = (Button) view.findViewById(R.id.confirm);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override

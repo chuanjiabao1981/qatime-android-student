@@ -251,7 +251,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
         alertDialog.setCanceledOnTouchOutside(false);
         View view = View.inflate(this, R.layout.dialog_cancel_or_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("新设置或修改后将在24小时内不能使用支付密码，是否继续？");
+        text.setText("新设置或修改后将在24小时内不能使用支付密码，是否继续");
         Button cancel = (Button) view.findViewById(R.id.cancel);
         Button confirm = (Button) view.findViewById(R.id.confirm);
         confirm.setText("继续");
@@ -294,7 +294,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
         alertDialog.setCanceledOnTouchOutside(false);
         View view = View.inflate(this, R.layout.dialog_cancel_or_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("取消绑定后将不能使用提现到微信功能，是否继续？");
+        text.setText("取消绑定后将不能使用提现到微信功能，是否继续");
         Button cancel = (Button) view.findViewById(R.id.cancel);
         Button confirm = (Button) view.findViewById(R.id.confirm);
         cancel.setOnClickListener(new View.OnClickListener() {

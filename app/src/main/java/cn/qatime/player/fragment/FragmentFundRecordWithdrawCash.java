@@ -176,7 +176,7 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
                     final AlertDialog alertDialog = builder.create();
                     View view = View.inflate(getActivity(), R.layout.dialog_cancel_or_confirm, null);
                     TextView text = (TextView) view.findViewById(R.id.text);
-                    text.setText("是否放弃此提现？");
+                    text.setText("是否放弃此提现");
                     Button cancel = (Button) view.findViewById(R.id.cancel);
                     Button confirm = (Button) view.findViewById(R.id.confirm);
                     cancel.setOnClickListener(new View.OnClickListener() {
@@ -188,7 +188,6 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
                     confirm.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            // TODO: 2016/10/17 取消提现
                          CancelWithDraw(dataBean.getTransaction_no());
                             alertDialog.dismiss();
                         }

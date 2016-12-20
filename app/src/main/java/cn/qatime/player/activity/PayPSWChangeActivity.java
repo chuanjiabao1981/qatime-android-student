@@ -95,7 +95,6 @@ public class PayPSWChangeActivity extends BaseActivity implements View.OnClickLi
                     payEditText.clear();
                     over.setVisibility(View.VISIBLE);
                     over.setEnabled(false);
-                    Toast.makeText(PayPSWChangeActivity.this, "请确认您的支付密码", Toast.LENGTH_SHORT).show();
                     setTitle("确认新支付密码");
                 } else {
                     over.setEnabled(true);
@@ -113,18 +112,31 @@ public class PayPSWChangeActivity extends BaseActivity implements View.OnClickLi
             }
         });
     }
+    @Override
+    public void backClick(View v) {
+        if(over.getVisibility() == View.INVISIBLE ){
+            super.backClick(v);
+        }else {
+            reset();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(over.getVisibility() == View.INVISIBLE ){
+            super.onBackPressed();
+        }else {
+            reset();
+        }
+    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.over:
                 if (!tempPassword.equals(payEditText.getText())) {
-                    //重置
-                    over.setVisibility(View.INVISIBLE);
-                    tempPassword = "";
-                    payEditText.clear();
                     Toast.makeText(PayPSWChangeActivity.this, "两次密码不一致，请重新输入", Toast.LENGTH_SHORT).show();
-                    setTitle("设置新支付密码");
+                    reset();
                     return;
                 }
                 Map<String, String> map = new HashMap<>();
@@ -168,5 +180,13 @@ public class PayPSWChangeActivity extends BaseActivity implements View.OnClickLi
                 customKeyboard.setVisibility(customKeyboard.getVisibility() == View.INVISIBLE ? View.VISIBLE : View.INVISIBLE);
                 break;
         }
+    }
+
+    private void reset() {
+        //重置
+        over.setVisibility(View.INVISIBLE);
+        tempPassword = "";
+        payEditText.clear();
+        setTitle("设置新支付密码");
     }
 }
