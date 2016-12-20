@@ -99,6 +99,7 @@ public class PayPSWVerifyActivity extends BaseActivity implements View.OnClickLi
                                     e.printStackTrace();
                                 }
                                 startActivity(intent);
+                                finish();
                             }
 
                             protected void onError(JSONObject response) {
@@ -149,6 +150,7 @@ public class PayPSWVerifyActivity extends BaseActivity implements View.OnClickLi
                 break;
             case R.id.forget_pay_password:
                 startActivity(new Intent(this, PayPSWForgetActivity.class));
+                finish();
                 break;
         }
     }

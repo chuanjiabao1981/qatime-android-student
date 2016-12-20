@@ -264,7 +264,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
         final AlertDialog alertDialog = builder.create();
         View view = View.inflate(getActivity(), R.layout.dialog_cancel_or_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("是否确认取消此订单？");
+        text.setText("是否确认取消此订单");
         Button cancel = (Button) view.findViewById(R.id.cancel);
         Button confirm = (Button) view.findViewById(R.id.confirm);
         cancel.setOnClickListener(new View.OnClickListener() {

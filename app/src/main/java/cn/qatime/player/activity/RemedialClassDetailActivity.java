@@ -313,7 +313,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                             Button cancel = (Button) view.findViewById(R.id.cancel);
                             Button confirm = (Button) view.findViewById(R.id.confirm);
                             TextView text = (TextView) view.findViewById(R.id.text);
-                            text.setText("该辅导班已开课，是否继续购买？");
+                            text.setText("该辅导班已开课，是否继续购买");
                             cancel.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {

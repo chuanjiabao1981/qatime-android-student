@@ -503,7 +503,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         alertDialog.setCanceledOnTouchOutside(false);
         View view = View.inflate(getActivity(), R.layout.dialog_cancel_or_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("答疑时间已开通本地工作站，是否\n切换为" + locationCity.getName() + "？");
+        text.setText("答疑时间已开通本地工作站，是否\n切换为" + locationCity.getName());
         Button cancel = (Button) view.findViewById(R.id.cancel);
         Button confirm = (Button) view.findViewById(R.id.confirm);
         cancel.setOnClickListener(new View.OnClickListener() {

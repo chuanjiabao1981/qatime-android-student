@@ -110,7 +110,7 @@
         <item name="android:clickable">true</item>
         <item name="android:background">@drawable/button_bg_selector_red_with_stork_no_corners</item>
         <item name="android:gravity">center</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:textColor">@drawable/text_selector_white_red</item>
