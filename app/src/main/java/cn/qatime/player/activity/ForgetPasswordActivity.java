@@ -15,6 +15,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONObject;
 
@@ -232,4 +233,17 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
             getcode.setText(millisUntilFinished / 1000 + getResourceString(R.string.time_after_acquisition));
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
 }

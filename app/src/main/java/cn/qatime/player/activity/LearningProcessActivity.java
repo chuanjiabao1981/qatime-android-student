@@ -2,6 +2,8 @@ package cn.qatime.player.activity;
 
 import android.os.Bundle;
 
+import com.umeng.analytics.MobclickAgent;
+
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 
@@ -21,5 +23,16 @@ public class LearningProcessActivity extends BaseActivity {
     private void initView() {
         setContentView(R.layout.activity_learning_process);
         setTitle(getResourceString(R.string.learning_process));
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

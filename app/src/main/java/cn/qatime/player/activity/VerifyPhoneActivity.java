@@ -13,6 +13,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONObject;
 
@@ -92,7 +93,7 @@ public class VerifyPhoneActivity extends BaseActivity implements View.OnClickLis
                     protected void onError(JSONObject response) {
                         Toast.makeText(getApplicationContext(), getResourceString(R.string.code_send_failed), Toast.LENGTH_LONG).show();
                     }
-                },new VolleyErrorListener(){
+                }, new VolleyErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         super.onErrorResponse(volleyError);
@@ -142,7 +143,7 @@ public class VerifyPhoneActivity extends BaseActivity implements View.OnClickLis
                     protected void onError(JSONObject response) {
                         Toast.makeText(VerifyPhoneActivity.this, getResourceString(R.string.code_error), Toast.LENGTH_SHORT).show();
                     }
-                }, new VolleyErrorListener(){
+                }, new VolleyErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         super.onErrorResponse(volleyError);
@@ -179,4 +180,17 @@ public class VerifyPhoneActivity extends BaseActivity implements View.OnClickLis
             finish();
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
 }

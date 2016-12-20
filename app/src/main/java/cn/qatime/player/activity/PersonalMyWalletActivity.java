@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -198,7 +199,17 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
         //接收到充值信息后,设置返回码刷新数据
         setResult(Constant.RESPONSE);
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

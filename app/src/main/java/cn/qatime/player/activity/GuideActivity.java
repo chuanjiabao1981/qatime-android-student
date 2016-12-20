@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.umeng.analytics.MobclickAgent;
+
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import libraryextra.utils.BitmapUtil;
@@ -21,7 +23,7 @@ public class GuideActivity extends BaseActivity {
     private TagViewPager viewPager;
     private int width;
     private int height;
-    private int imageIds[] = {R.mipmap.index1, R.mipmap.index2,R.mipmap.index3};
+    private int imageIds[] = {R.mipmap.index1, R.mipmap.index2, R.mipmap.index3};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +42,7 @@ public class GuideActivity extends BaseActivity {
 //        viewPager.setId(1252);
         viewPager.setOnGetView(new TagViewPager.OnGetView() {
             @Override
-            public View getView(ViewGroup container, int position){
+            public View getView(ViewGroup container, int position) {
                 ImageView iv = new ImageView(GuideActivity.this);
                 iv.setClickable(true);
                 iv.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
@@ -55,7 +57,7 @@ public class GuideActivity extends BaseActivity {
                         public void onClick(View v) {
                             Intent intent = new Intent(GuideActivity.this, LoginActivity.class);
                             GuideActivity.this.startActivity(intent);
-                            getSharedPreferences("first", MODE_PRIVATE).edit().putBoolean("firstlogin",false).commit();
+                            getSharedPreferences("first", MODE_PRIVATE).edit().putBoolean("firstlogin", false).commit();
                             GuideActivity.this.finish();
                         }
                     });
@@ -64,5 +66,18 @@ public class GuideActivity extends BaseActivity {
             }
         });
         viewPager.setAdapter(imageIds.length, 0);
-    }}
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+}
 

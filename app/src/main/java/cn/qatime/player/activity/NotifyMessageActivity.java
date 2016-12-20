@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 
+import com.umeng.analytics.MobclickAgent;
+
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
@@ -95,5 +97,15 @@ public class NotifyMessageActivity extends BaseActivity implements View.OnClickL
             cbVoice.setChecked(false);
         }
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 }

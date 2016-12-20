@@ -12,6 +12,7 @@ import com.orhanobut.logger.Logger;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -44,6 +45,7 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
     private IWXAPI api;
     SimpleDateFormat parseISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
     SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     private void assignViews() {
         id = (TextView) findViewById(R.id.id);
         time = (TextView) findViewById(R.id.time);
@@ -80,7 +82,7 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
         if (price.startsWith(".")) {
             price = "0" + price;
         }
-        price = "￥"+price;
+        price = "￥" + price;
         amount.setText(price);
         data = (AppPayParamsBean) intent.getSerializableExtra("app_pay_params");
 
@@ -164,12 +166,24 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
 
     @Subscribe
     public void onEvent(PayResultState state) {
-        Intent intent = new Intent(this,RechargePayResultActivity.class);
-        intent.putExtra("orderId",id.getText().toString());
-        intent.putExtra("price",amount.getText().toString());
-        intent.putExtra("state",state);
+        Intent intent = new Intent(this, RechargePayResultActivity.class);
+        intent.putExtra("orderId", id.getText().toString());
+        intent.putExtra("price", amount.getText().toString());
+        intent.putExtra("state", state);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override

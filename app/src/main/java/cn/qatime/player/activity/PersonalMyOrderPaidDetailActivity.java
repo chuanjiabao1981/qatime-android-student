@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.umeng.analytics.MobclickAgent;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -144,6 +145,16 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
             }
         });
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 }
 

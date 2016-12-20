@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONObject;
 
@@ -127,5 +128,16 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
                 }));
                 break;
         }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

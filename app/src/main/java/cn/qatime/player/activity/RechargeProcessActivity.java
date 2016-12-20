@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.umeng.analytics.MobclickAgent;
+
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 
@@ -58,5 +60,16 @@ public class RechargeProcessActivity extends BaseActivity {
                 }
             }
         });
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

@@ -18,6 +18,7 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -154,5 +155,16 @@ public class PictureSelectActivity extends BaseActivity {
                 hd.sendEmptyMessage(1);
             }
         }).start();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

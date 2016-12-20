@@ -25,6 +25,7 @@ import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 import com.zhy.android.percent.support.PercentRelativeLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -465,6 +466,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         } else {
             NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
         }
+        MobclickAgent.onResume(this);
     }
 
 
@@ -583,6 +585,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
         super.onPause();
         danMuController.pause();
+        MobclickAgent.onPause(this);
         NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
     }
 

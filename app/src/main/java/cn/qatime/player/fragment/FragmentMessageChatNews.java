@@ -602,7 +602,6 @@ public class FragmentMessageChatNews extends BaseFragment {
                 return i;
             }
         }
-
         return -1;
     }
 
