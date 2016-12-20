@@ -144,6 +144,9 @@ public class PayPopView {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         super.onErrorResponse(volleyError);
+                        if (listener != null) {
+                            listener.onError(0);
+                        }
 
                     }
                 });
@@ -216,6 +219,10 @@ public class PayPopView {
     public interface OnPayPSWVerifyListener {
         void onSuccess();
 
+        /**
+         *
+         * @param errorCode 0：serverError
+         */
         void onError(int errorCode);
     }
 }

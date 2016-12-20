@@ -89,8 +89,12 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
                 startActivityForResult(intent, Constant.REQUEST);
                 break;
             case R.id.my_wallet:
-                intent = new Intent(getActivity(), PersonalMyWalletActivity.class);
-                startActivityForResult(intent, Constant.REQUEST);
+                if (BaseApplication.getCashAccount() != null && BaseApplication.getCashAccount().getData() != null) {
+                    intent = new Intent(getActivity(), PersonalMyWalletActivity.class);
+                    startActivityForResult(intent, Constant.REQUEST);
+                } else {
+                    Toast.makeText(getActivity(), "钱包信息异常，请检查网络连接后重试", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.my_order:
                 intent = new Intent(getActivity(), PersonalMyOrderActivity.class);

@@ -104,11 +104,13 @@ public class PayPSWVerifyActivity extends BaseActivity implements View.OnClickLi
                             protected void onError(JSONObject response) {
                                 payEditText.clear();
                                 try {
-                                       int errorCode = response.getJSONObject("error").getInt("code");
+                                    int errorCode = response.getJSONObject("error").getInt("code");
                                     if (errorCode == 2005) {
                                         Toast.makeText(PayPSWVerifyActivity.this, "密码验证失败", Toast.LENGTH_SHORT).show();
+                                    } else if (errorCode == 0) {
+                                        Toast.makeText(PayPSWVerifyActivity.this, "请检查网络连接", Toast.LENGTH_SHORT).show();
                                     } else {
-                                        Toast.makeText(PayPSWVerifyActivity.this, "请先点击忘记支付密码进行重置", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(PayPSWVerifyActivity.this, "请先点击忘记支付密码尝试重置", Toast.LENGTH_SHORT).show();
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();

@@ -54,6 +54,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
     private String openid;
     private PayEditText payEditText;
     private CustomKeyboard customKeyboard;
+    private AlertDialog alertDialog;
 
     private void assignViews() {
         bindPhoneNumber = (LinearLayout) findViewById(R.id.bind_phone_number);
@@ -246,7 +247,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
 
     private void dialogNotify() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        final AlertDialog alertDialog = builder.create();
+        alertDialog = builder.create();
         alertDialog.setCanceledOnTouchOutside(false);
         View view = View.inflate(this, R.layout.dialog_cancel_or_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
@@ -289,7 +290,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
 
     private void dialogCancel() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        final AlertDialog alertDialog = builder.create();
+        alertDialog = builder.create();
         alertDialog.setCanceledOnTouchOutside(false);
         View view = View.inflate(this, R.layout.dialog_cancel_or_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
