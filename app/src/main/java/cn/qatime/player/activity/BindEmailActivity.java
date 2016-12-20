@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
@@ -85,7 +84,7 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
         assignViews();
 
         inputNewEmail.setHint(StringUtils.getSpannedString(this, R.string.hint_input_email));
-        code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_code));
+        code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_email_code));
 
         textGetcode.setOnClickListener(this);
         buttonOver.setOnClickListener(this);

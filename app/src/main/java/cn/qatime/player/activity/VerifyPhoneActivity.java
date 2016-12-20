@@ -10,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
@@ -62,7 +61,7 @@ public class VerifyPhoneActivity extends BaseActivity implements View.OnClickLis
         assignViews();
 
         currentPhone.setText(BaseApplication.getProfile().getData().getUser().getLogin_mobile() + "");
-        code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_code));
+        code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_verification_code));
 
         textGetcode.setOnClickListener(this);
         buttonNext.setOnClickListener(this);

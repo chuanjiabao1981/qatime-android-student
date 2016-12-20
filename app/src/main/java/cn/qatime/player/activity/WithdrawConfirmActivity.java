@@ -56,7 +56,7 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
         code = (EditText) findViewById(R.id.code);
         textGetcode = (TextView) findViewById(R.id.text_getcode);
         time = new TimeCount(60000, 1000);
-        code.setHint(getResourceString(R.string.hint_input_code));
+        code.setHint(getResourceString(R.string.hint_input_verification_code));
         payType = getIntent().getStringExtra("pay_type");
 
         if ("alipay".equals(payType)) {

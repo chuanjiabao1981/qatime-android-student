@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
@@ -85,7 +84,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
         assignViews();
 
         targetPhone.setHint(StringUtils.getSpannedString(this, R.string.hint_input_new_phone));
-        code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_code));
+        code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_verification_code));
 
 
         textGetcode.setOnClickListener(this);

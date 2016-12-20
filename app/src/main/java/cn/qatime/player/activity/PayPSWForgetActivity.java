@@ -60,7 +60,7 @@ public class  PayPSWForgetActivity extends BaseActivity implements View.OnClickL
         setTitle("验证身份");
         assignViews();
         password.setHint("输入账户登录密码");
-        code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_code));
+        code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_verification_code));
 
         textGetcode.setOnClickListener(this);
         buttonNext.setOnClickListener(this);

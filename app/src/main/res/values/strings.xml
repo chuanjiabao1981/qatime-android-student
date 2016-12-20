@@ -156,7 +156,7 @@
     <string name="set_for_login">设置登录</string>
     <string name="get_verification_code">获取校验码</string>
     <string name="hint_input_verification_code">输入校验码</string>
-    <string name="hint_input_code">输入验证码</string>
+    <string name="hint_input_email_code">输入邮箱校验码</string>
     <string name="hint_phone_number">请输入大陆地区11位手机号码</string>
     <string name="hint_input_password">输入登录密码</string>
     <string name="hint_confirm_password">确认登录密码</string>
