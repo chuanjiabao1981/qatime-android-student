@@ -5,10 +5,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
 import com.orhanobut.logger.Logger;
@@ -28,7 +30,9 @@ import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.bean.PayResult;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.view.PayPopView;
 import libraryextra.bean.AppPayParamsBean;
+
 
 public class OrderPayActivity extends BaseActivity {
     TextView code;
@@ -74,6 +78,9 @@ public class OrderPayActivity extends BaseActivity {
         }
     };
     private int SDK_PAY_FLAG = 1;
+    private AlertDialog alertDialog;
+    private PayPopView payPopView;
+    private String amount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,11 +107,13 @@ public class OrderPayActivity extends BaseActivity {
             weixinData = (AppPayParamsBean) getIntent().getSerializableExtra("data");
         } else if (payType.equals("alipay")) {
             aliPayData = getIntent().getStringExtra("data");
+        } else if (payType.equals("account")) {
+
         }
 
-        String price = df.format(getIntent().getFloatExtra("price", 0f));
-        if (price.startsWith(".")) {
-            price = "0" + price;
+        amount = df.format(getIntent().getFloatExtra("price", 0f));
+        if (amount.startsWith(".")) {
+            amount = "0" + amount;
         }
         code.setText(getResourceString(R.string.order_number) + "：" + getIntent().getStringExtra("id"));
         SimpleDateFormat parseISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
@@ -121,7 +130,7 @@ public class OrderPayActivity extends BaseActivity {
         } else {
             type.setText(getResourceString(R.string.method_payment) + getResourceString(R.string.pay_account));
         }
-        this.price.setText(getResourceString(R.string.amount_payment) + "：￥" + price);
+        this.price.setText(getResourceString(R.string.amount_payment) + "：￥" + amount);
     }
 
     public void initView() {
@@ -179,7 +188,7 @@ public class OrderPayActivity extends BaseActivity {
                     payThread.start();
                 } else if (payType.equals("account")) {
                     Logger.e("钱包支付");
-                    // TODO: 2016/10/8  钱包支付
+                    showPSWPop();
 //                    Intent intent = new Intent(OrderPayActivity.this,OrderPayResultActivity.class);
 //                    intent.putExtra("state",PayResultState.SUCCESS);
 //                    startActivity(intent);
@@ -187,6 +196,119 @@ public class OrderPayActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    private void showPSWPop() {
+//        if (BaseApplication.getCashAccount().getData().isHas_password()) {
+        payPopView = new PayPopView("用户提现", "￥" + amount, OrderPayActivity.this);
+        payPopView.showPop();
+        payPopView.setOnPayPSWVerifyListener(new PayPopView.OnPayPSWVerifyListener() {
+            @Override
+            public void onSuccess() {
+                // TODO: 2016/12/20 支付订单
+                payPopView.dismiss();
+//                EventBus.getDefault().post(PayResultState.SUCCESS);
+//                                    finish();
+            }
+
+            @Override
+            public void onError(int errorCode) {
+                payPopView.dismiss();
+                if (errorCode == 2005) {
+                    dialogPSWError();
+                } else if (errorCode == 0) {
+                    Toast.makeText(OrderPayActivity.this, "请检查网络连接", Toast.LENGTH_SHORT).show();
+                } else {
+                    dialogServerError();
+                }
+            }
+        });
+//        } else {
+//            dialogNotify();
+//            Toast.makeText(OrderPayActivity.this, "请先设置支付密码", Toast.LENGTH_SHORT).show();
+//        }
+    }
+
+    private void dialogNotify() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        View view = View.inflate(this, R.layout.dialog_cancel_or_confirm, null);
+        TextView text = (TextView) view.findViewById(R.id.text);
+        text.setText("新设置或修改后将在24小时内不能使用支付密码，是否继续");
+        Button cancel = (Button) view.findViewById(R.id.cancel);
+        Button confirm = (Button) view.findViewById(R.id.confirm);
+        confirm.setText("继续");
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                changePayPSW();
+            }
+        });
+        alertDialog.show();
+        alertDialog.setContentView(view);
+    }
+
+    private void dialogServerError() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        View view = View.inflate(this, R.layout.dialog_confirm, null);
+        TextView text = (TextView) view.findViewById(R.id.text);
+        text.setText("提现系统繁忙，请稍后再试");
+        Button confirm = (Button) view.findViewById(R.id.confirm);
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.show();
+        alertDialog.setContentView(view);
+    }
+
+    private void dialogPSWError() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        View view = View.inflate(this, R.layout.dialog_cancel_or_confirm, null);
+        TextView text = (TextView) view.findViewById(R.id.text);
+        text.setText("支付密码输入不正确");
+        Button cancel = (Button) view.findViewById(R.id.cancel);
+        Button confirm = (Button) view.findViewById(R.id.confirm);
+        cancel.setText("重试");
+        confirm.setText("找回密码");
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                showPSWPop();
+            }
+        });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                dialogNotify();
+            }
+        });
+        alertDialog.show();
+        alertDialog.setContentView(view);
+    }
+
+    private void changePayPSW() {
+//        if (BaseApplication.getCashAccount().getData().isHas_password()) {
+//            startActivity(new Intent(this, PayPSWVerifyActivity.class));
+//        } else {
+            startActivity(new Intent(this, PayPSWForgetActivity.class));
+//        }
     }
 
     @Subscribe

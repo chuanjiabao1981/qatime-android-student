@@ -278,11 +278,11 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void changePayPSW() {
-        if (BaseApplication.getCashAccount().getData().isHas_password()) {
-            startActivity(new Intent(this, PayPSWVerifyActivity.class));
-        } else {
+//        if (BaseApplication.getCashAccount().getData().isHas_password()) {
+//            startActivity(new Intent(this, PayPSWVerifyActivity.class));
+//        } else {
             startActivity(new Intent(this, PayPSWForgetActivity.class));
-        }
+//        }
     }
 
     @Override

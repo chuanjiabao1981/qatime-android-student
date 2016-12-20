@@ -15,7 +15,6 @@ import com.bumptech.glide.Glide;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -154,17 +153,25 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                             }
                         } else if (payType.equals("account")) {
                             //余额支付成功  status---failed交易失败  shipped交易成功
-                            // TODO: 2016/10/8 余额支付  订单?  校验?
-                            try {
-                                if (response.getJSONObject("data").getString("status").equals("shipped")) {
-                                    EventBus.getDefault().post(PayResultState.SUCCESS);
-                                    finish();
-                                } else {
-                                    Toast.makeText(OrderConfirmActivity.this, "余额不足", Toast.LENGTH_SHORT).show();
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+//                            try {
+                                Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
+                                intent.putExtra("price", priceNumber);
+                                intent.putExtra("id", data.getData().getId());
+                                intent.putExtra("time", data.getData().getCreated_at());
+                                intent.putExtra("type", payType);
+                                String app_pay_params = data.getData().getApp_pay_str();
+                                intent.putExtra("data", app_pay_params);
+                                startActivity(intent);
+                                pay.setEnabled(true);
+//                                if (response.getJSONObject("data").getString("status").equals("shipped")) {
+//                                    EventBus.getDefault().post(PayResultState.SUCCESS);
+//                                    finish();
+//                                } else {
+//                                    Toast.makeText(OrderConfirmActivity.this, "余额不足", Toast.LENGTH_SHORT).show();
+//                                }
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
                         }
                         pay.setEnabled(true);
                     }
