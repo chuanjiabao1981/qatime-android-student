@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONObject;
 
@@ -181,5 +182,17 @@ public class PersonalInformationActivity extends BaseActivity {
         grade = (TextView) findViewById(R.id.grade);
         school = (TextView) findViewById(R.id.school);
         describe = (TextView) findViewById(R.id.describe);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

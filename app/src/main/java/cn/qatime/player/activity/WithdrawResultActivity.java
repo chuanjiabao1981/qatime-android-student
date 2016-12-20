@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.umeng.analytics.MobclickAgent;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -112,5 +114,17 @@ public class WithdrawResultActivity extends BaseActivity implements View.OnClick
                 return "支付宝";
         }
         return "银行卡";
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

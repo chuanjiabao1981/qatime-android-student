@@ -26,6 +26,7 @@ import com.netease.nimlib.sdk.team.constant.TeamTypeEnum;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -570,6 +571,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
     protected void onResume() {
         super.onResume();
         requestTeamInfo();
+        MobclickAgent.onResume(this);
         NIMClient.getService(MsgService.class).setChattingAccount(sessionId, sessionType);
     }
 
@@ -586,6 +588,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
     @Override
     protected void onPause() {
         super.onPause();
+        MobclickAgent.onPause(this);
         NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
     }
 

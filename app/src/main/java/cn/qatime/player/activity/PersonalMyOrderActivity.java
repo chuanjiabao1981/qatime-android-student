@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.umeng.analytics.MobclickAgent;
+
 import java.util.ArrayList;
 
 import cn.qatime.player.R;
@@ -31,8 +33,6 @@ public class PersonalMyOrderActivity extends BaseFragmentActivity {
 
 
     private void initView() {
-
-
         fragBaseFragments.add(new FragmentOrderUnpaid());
         fragBaseFragments.add(new FragmentOrderPaid());
         fragBaseFragments.add(new FragmentOrderCanceled());
@@ -60,5 +60,16 @@ public class PersonalMyOrderActivity extends BaseFragmentActivity {
             }
         }, 200);
 
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

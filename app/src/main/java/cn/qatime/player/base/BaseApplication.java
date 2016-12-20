@@ -22,6 +22,7 @@ import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.common.inter.ITagManager;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.MsgConstant;
@@ -86,6 +87,9 @@ public class BaseApplication extends Application {
         currentCity = SPUtils.getObject(this, "current_city", CityBean.Data.class);
         shakeStatus = (boolean) SPUtils.get(this, "shake_status", true);
         voiceStatus = (boolean) SPUtils.get(this, "voice_status", true);
+
+        //y友盟统计
+        MobclickAgent.setDebugMode(Configure.isDebug);
         initUmengPush();
         initYunxin();
     }

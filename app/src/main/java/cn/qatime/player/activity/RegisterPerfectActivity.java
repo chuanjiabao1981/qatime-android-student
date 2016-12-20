@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
 import java.util.HashMap;
@@ -259,18 +260,16 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                 }
             }
         }
-//        else if (resultCode == Constant.VISITORLOGINED) {
-//            if (StringUtils.isNullOrBlanK(data.getStringExtra("action"))) {
-//                Intent intent = new Intent();
-//                intent.putExtra("action", data.getStringExtra("action"));
-//                setResult(Constant.VISITORLOGINED, intent);
-//            } else {
-//                setResult(Constant.VISITORLOGINED);//游客从主页到登录页,点击登录,通知会main initview
-//            }
-//            finish();
-//        } else if (resultCode == Constant.REGIST) {
-//            setResult(resultCode);
-//            finish();
-//        }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

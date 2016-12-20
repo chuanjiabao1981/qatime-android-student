@@ -14,6 +14,7 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -243,7 +244,17 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         setResult(Constant.RESPONSE);//支付成功刷新订单
         finish();
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

@@ -15,6 +15,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -203,5 +204,17 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
             textGetcode.setEnabled(false);//防止重复点击
             textGetcode.setText(millisUntilFinished / 1000 + getResourceString(R.string.time_after_acquisition));
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }
