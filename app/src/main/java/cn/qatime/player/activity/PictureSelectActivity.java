@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,14 +73,10 @@ public class PictureSelectActivity extends BaseActivity {
 
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, int[] grantResults) {
         if (requestCode == REQUEST_CODE_SOME_FEATURES_PERMISSIONS) {
-            for (String permission : permissions) {
-                if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getImages();
-                } else {//未给权限
-
-                }
+            if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getImages();
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -93,7 +91,7 @@ public class PictureSelectActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (cameraGone) {
                     Intent data = new Intent();
-                    data.putExtra("data", detailList.get(position - 1));
+                    data.putExtra("data", detailList.get(position));
                     setResult(Constant.RESPONSE_PICTURE_SELECT, data);
                     finish();
                 } else {
@@ -157,5 +155,16 @@ public class PictureSelectActivity extends BaseActivity {
                 hd.sendEmptyMessage(1);
             }
         }).start();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

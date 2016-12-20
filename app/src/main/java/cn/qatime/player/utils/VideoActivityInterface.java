@@ -1,5 +1,7 @@
 package cn.qatime.player.utils;
 
+import com.netease.nimlib.sdk.msg.model.IMMessage;
+
 /**
  * @author lungtify
  * @Time 2016/11/2 16:25
@@ -37,7 +39,7 @@ public interface VideoActivityInterface {
 
     void changeSubOpen(boolean open);//副窗口开关
 
-    void sendMessage(String message);//发送消息
+    void sendMessage(IMMessage message);//发送消息
 
     void play();
 

@@ -14,6 +14,7 @@ import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONObject;
 
@@ -77,12 +78,6 @@ public class TeacherDataActivity extends BaseActivity {
         relEmpty = findViewById(R.id.rel_empty);
         describe = (TextView) findViewById(R.id.describe);
         grid = (GridViewForScrollView) findViewById(R.id.grid);
-        scroll.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ScrollView>() {
-            @Override
-            public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
-
-            }
-        });
     }
 
     @Override
@@ -232,5 +227,17 @@ public class TeacherDataActivity extends BaseActivity {
         if (resultCode == Constant.VISITORLOGINED) {
             setResult(Constant.VISITORLOGINED);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

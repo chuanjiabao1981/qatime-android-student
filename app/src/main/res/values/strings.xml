@@ -156,7 +156,7 @@
     <string name="set_for_login">设置登录</string>
     <string name="get_verification_code">获取校验码</string>
     <string name="hint_input_verification_code">输入校验码</string>
-    <string name="hint_input_code">输入验证码</string>
+    <string name="hint_input_email_code">输入邮箱校验码</string>
     <string name="hint_phone_number">请输入大陆地区11位手机号码</string>
     <string name="hint_input_password">输入登录密码</string>
     <string name="hint_confirm_password">确认登录密码</string>
@@ -290,7 +290,7 @@
     <string name="current_parent_phone">当前家长手机</string>
     <string name="new_parent_phone">家长新手机号</string>
     <string name="over">完成</string>
-    <string name="input_current_password" translatable="false">输入当前密码</string>
+    <string name="input_current_password">输入当前密码</string>
     <string name="input_new_password">输入新的密码</string>
     <string name="input_login_password">输入登陆密码</string>
     <string name="confirm_new_password">确认新的密码</string>
@@ -363,6 +363,11 @@
     <string name="customer_service_phone_number">0353-2135828</string>
     <string name="call_right_now">立即拨打</string>
     <string name="failed_to_obtain_group_information">获取群组信息失败!</string>
+    <string name="download_picture_fail">图片下载失败</string>
+    <string name="save_to_device">保存到手机</string>
+    <string name="picture_save_fail">图片保存失败</string>
+    <string name="picture_save_to">图片已保存到手机%s下</string>
+    <string name="picker_image_error">获取图片出错</string>
 
 
     <string name="code_send_success">验证码发送成功，请注意查收</string>
@@ -467,4 +472,6 @@
     <string name="change_pay_password">重置支付密码</string>
     <string name="support_automatic_transfer">(已支持自动转账)</string>
     <string name="class_closed">已直播</string>
+    <string name="please_talk_later">请稍候发言</string>
+
 </resources>

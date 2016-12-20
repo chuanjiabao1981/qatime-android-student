@@ -12,9 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -84,7 +84,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
         assignViews();
 
         targetPhone.setHint(StringUtils.getSpannedString(this, R.string.hint_input_new_phone));
-        code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_code));
+        code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_verification_code));
 
 
         textGetcode.setOnClickListener(this);
@@ -211,5 +211,16 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
             textGetcode.setEnabled(false);//防止重复点击
             textGetcode.setText(millisUntilFinished / 1000 + getResourceString(R.string.time_after_acquisition));
         }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

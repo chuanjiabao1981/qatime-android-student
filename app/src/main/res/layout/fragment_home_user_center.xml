@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="#f7f7f7"
     android:orientation="vertical">
 
     <RelativeLayout style="@style/top_style">
@@ -30,7 +30,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:background="#cccccc"
+                android:background="#fff"
                 android:layout_height="192dp">
 
                 <ImageView
@@ -58,7 +58,7 @@
                         android:layout_height="wrap_content"
                         android:paddingTop="10dp"
                         android:text="姓名"
-                        android:textColor="#fff" />
+                        android:textColor="#000" />
                 </LinearLayout>
 
             </RelativeLayout>
@@ -167,8 +167,8 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#dfdddd" />
+                android:layout_height="10px"
+                android:background="#f7f7f7" />
 
             <LinearLayout
                 android:id="@+id/security"

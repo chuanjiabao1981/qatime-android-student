@@ -27,6 +27,7 @@ import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
@@ -309,7 +310,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                     bean.setTime(item.getTime());
                     bean.setRecentMessageId(item.getRecentMessageId());
                     bean.setOwner(data.getChat_team_owner());
-                    if(!items.contains(bean)){
+                    if (!items.contains(bean)) {
                         items.add(bean);
                     }
                 }
@@ -421,7 +422,6 @@ public class FragmentMessageChatNews extends BaseFragment {
      * ********************** 收消息，处理状态变化 ************************
      */
     private void registerObservers(boolean register) {
-        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
         MsgServiceObserve service = NIMClient.getService(MsgServiceObserve.class);
         service.observeRecentContact(messageObserver, register);
         service.observeMsgStatus(statusObserver, register);
@@ -458,32 +458,6 @@ public class FragmentMessageChatNews extends BaseFragment {
             }
         }
     }
-
-    /**
-     * 监听用户在线状态
-     */
-    Observer<StatusCode> userStatusObserver = new Observer<StatusCode>() {
-        @Override
-        public void onEvent(StatusCode code) {
-            if (code.wontAutoLogin()) {
-//                kickOut(code);
-                Logger.e("未登录成功");
-            } else {
-                if (code == StatusCode.NET_BROKEN) {
-                    Logger.e("当前网络不可用");
-                } else if (code == StatusCode.UNLOGIN) {
-                    Logger.e("未登录");
-                } else if (code == StatusCode.CONNECTING) {
-                    Logger.e("连接中...");
-                } else if (code == StatusCode.LOGINING) {
-                    Logger.e("登录中...");
-                } else {
-//                    onRecentContactsLoaded();
-                    Logger.e("其他" + code);
-                }
-            }
-        }
-    };
 
     /**
      * 注册群信息&群成员更新监听
@@ -557,7 +531,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                 bean.setUnreadCount(msg.getUnreadCount());
                 bean.setTime(msg.getTime());
                 bean.setRecentMessageId(msg.getRecentMessageId());
-                if(!items.contains(bean)){
+                if (!items.contains(bean)) {
                     items.add(bean);
                 }
             }
@@ -628,7 +602,6 @@ public class FragmentMessageChatNews extends BaseFragment {
                 return i;
             }
         }
-
         return -1;
     }
 
@@ -658,7 +631,7 @@ public class FragmentMessageChatNews extends BaseFragment {
             intent.putExtra("camera", items.get(position).getCamera());
             intent.putExtra("board", items.get(position).getBoard());
             intent.putExtra("name", items.get(position).getName());
-            intent.putExtra("owner", items.get(position - 1).getOwner());
+            intent.putExtra("owner", items.get(position).getOwner());
             startActivity(intent);
         } else {
             shouldPost = true;
@@ -666,7 +639,9 @@ public class FragmentMessageChatNews extends BaseFragment {
             Intent intent = new Intent(getActivity(), MessageActivity.class);
             intent.putExtra("sessionId", message.getSessionId());
             intent.putExtra("sessionType", message.getSessionType());
-            intent.putExtra("name", message.getContent().replace("讨论组", ""));
+//            if (message.getMsgType() == MsgTypeEnum.text) {
+//                intent.putExtra("name", message.getContent().replace("讨论组", ""));
+//            }
             startActivity(intent);
         }
     }

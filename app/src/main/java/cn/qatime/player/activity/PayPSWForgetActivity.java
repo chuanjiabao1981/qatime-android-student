@@ -22,6 +22,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.StringUtils;
@@ -31,7 +32,7 @@ import libraryextra.utils.VolleyListener;
 /**
  * Created by lenovo on 2016/8/17.
  */
-public class PayPSWForgetActivity extends BaseActivity implements View.OnClickListener {
+public class  PayPSWForgetActivity extends BaseActivity implements View.OnClickListener {
 
     private TextView textGetcode;
     private Button buttonNext;
@@ -59,7 +60,7 @@ public class PayPSWForgetActivity extends BaseActivity implements View.OnClickLi
         setTitle("验证身份");
         assignViews();
         password.setHint("输入账户登录密码");
-        code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_code));
+        code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_verification_code));
 
         textGetcode.setOnClickListener(this);
         buttonNext.setOnClickListener(this);
@@ -128,6 +129,7 @@ public class PayPSWForgetActivity extends BaseActivity implements View.OnClickLi
                                     e.printStackTrace();
                                 }
                                 startActivity(intent);
+                                setResult(Constant.CHANGE_PAY_PSW);
                                 finish();
                             }
 

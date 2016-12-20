@@ -12,6 +12,7 @@ import com.netease.nimlib.sdk.NimIntent;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 
@@ -112,5 +113,13 @@ public class MessageFragmentActivity extends BaseFragmentActivity {
          *                    {@link #MSG_CHATTING_ACCOUNT_NONE} 目前没有与任何人对话，需要状态栏消息通知
          */
         NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
+        MobclickAgent.onResume(this);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
 }

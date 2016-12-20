@@ -18,6 +18,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.view.CustomKeyboard;
@@ -145,14 +146,20 @@ public class PayPSWVerifyActivity extends BaseActivity implements View.OnClickLi
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constant.REQUEST && resultCode == Constant.CHANGE_PAY_PSW) {
+            finish();
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.PayEditText_pay:
                 customKeyboard.setVisibility(customKeyboard.getVisibility() == View.INVISIBLE ? View.VISIBLE : View.INVISIBLE);
                 break;
             case R.id.forget_pay_password:
-                startActivity(new Intent(this, PayPSWForgetActivity.class));
-                finish();
+                startActivityForResult(new Intent(this, PayPSWForgetActivity.class), Constant.REQUEST);
                 break;
         }
     }

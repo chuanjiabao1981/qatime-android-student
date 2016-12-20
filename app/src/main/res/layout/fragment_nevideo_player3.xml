@@ -37,7 +37,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:text="名字名字名字名字名字名字名字名字名字名字名字名字名字名字名字"
+                    android:text="名字"
                     android:textColor="#333"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -306,7 +306,7 @@
                             android:id="@+id/teaching_years"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="执教年数 10-20年"
+                            android:text="执教年数"
                             android:textColor="#666" />
                     </LinearLayout>
 
@@ -327,7 +327,7 @@
                             android:id="@+id/school"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="所在学校 北京市第十四中学"
+                            android:text="所在学校"
                             android:textColor="#666" />
                     </LinearLayout>
 

@@ -187,7 +187,7 @@
     <string name="tutor_information">Course Details</string>
     <string name="hint_password_forget">Please enter your new password</string>
     <string name="hint_phone_number_forget">Please input the binding phone number</string>
-    <string name="hint_input_code">Input verification code</string>
+    <string name="hint_input_email_code">Input verification code</string>
     <string name="find_password">Retrieve password</string>
     <string name="click_to_add">Click to add</string>
     <string name="change_information">Change personal information</string>

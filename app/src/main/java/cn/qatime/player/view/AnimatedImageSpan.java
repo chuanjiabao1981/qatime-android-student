@@ -13,9 +13,9 @@ import android.text.style.DynamicDrawableSpan;
  * @Description:
  */
 public class AnimatedImageSpan extends DynamicDrawableSpan {
-    private Drawable mDrawable;
+    private GifDrawable mDrawable;
 
-    public AnimatedImageSpan(Drawable d) {
+    public AnimatedImageSpan(GifDrawable d) {
         super();
         mDrawable = d;
         // 用handler 通知继续下一帧
@@ -24,17 +24,17 @@ public class AnimatedImageSpan extends DynamicDrawableSpan {
 
             @Override
             public void run() {
-                ((GifDrawable) mDrawable).nextFrame();
+                mDrawable.nextFrame();
                 // 设置下一个的延迟取决于当前帧的持续时间
                 mHandler.postDelayed(this,
-                        ((GifDrawable) mDrawable).getFrameDuration());
+                        mDrawable.getFrameDuration());
             }
         });
     }
 
     @Override
     public Drawable getDrawable() {
-        return ((GifDrawable) mDrawable).getDrawable();
+        return mDrawable.getDrawable();
     }
 
     /**

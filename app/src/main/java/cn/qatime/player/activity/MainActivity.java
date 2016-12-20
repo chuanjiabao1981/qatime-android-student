@@ -18,12 +18,16 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.NimIntent;
+import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -92,7 +96,7 @@ public class MainActivity extends BaseFragmentActivity {
 //        GetProvinceslist();
 //        GetCitieslist();
         GetSchoolslist();
-
+        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, true);
     }
 
     /**
@@ -166,7 +170,7 @@ public class MainActivity extends BaseFragmentActivity {
                 }
             }
         }
-        if (resultCode == Constant.RESPONSE ) {//如果有返回并且携带了跳转码，则跳到响应的页面
+        if (resultCode == Constant.RESPONSE) {//如果有返回并且携带了跳转码，则跳到响应的页面
 //            initView();//刷新view
             fragmentlayout.setCurrenItem(3);
             ((FragmentHomeUserCenter) fragBaseFragments.get(3)).onActivityResult(Constant.REQUEST, Constant.RESPONSE, null);
@@ -377,19 +381,47 @@ public class MainActivity extends BaseFragmentActivity {
          *                    {@link #MSG_CHATTING_ACCOUNT_NONE} 目前没有与任何人对话，需要状态栏消息通知
          */
         NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
+        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, false);
     }
 
+    /**
+     * 监听用户在线状态
+     */
+    Observer<StatusCode> userStatusObserver = new Observer<StatusCode>() {
+        @Override
+        public void onEvent(StatusCode code) {
+            if (code.wontAutoLogin()) {
+//                kickOut(code);
+                Logger.e("未登录成功");
+            } else {
+                if (code == StatusCode.NET_BROKEN) {
+                    Logger.e("当前网络不可用");
+                } else if (code == StatusCode.UNLOGIN) {
+                    Logger.e("未登录");
+                } else if (code == StatusCode.CONNECTING) {
+                    Logger.e("连接中...");
+                } else if (code == StatusCode.LOGINING) {
+                    Logger.e("登录中...");
+                } else {
+//                    onRecentContactsLoaded();
+                    Logger.e("其他" + code);
+                }
+            }
+        }
+    };
 
     @Subscribe
     public void onEvent(String event) {
