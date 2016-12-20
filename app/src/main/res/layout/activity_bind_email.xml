@@ -6,45 +6,40 @@
 
     <include layout="@layout/layout_backbar" />
 
-
-    <EditText
-        android:id="@+id/input_new_email"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/shape_input"
-        android:gravity="center_vertical"
-        android:hint="@string/hint_input_email"
-        android:inputType="textEmailAddress"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:textColor="#ff333333"
-        android:textColorHint="#999"
-        android:textSize="14sp" />
-
-
-    <LinearLayout
-        style="@style/edit_layout_bottom_style"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp">
+    <LinearLayout style="@style/edit_layout_style">
 
         <EditText
-            android:id="@+id/code"
-            style="@style/activity_edit_text_style"
-            android:layout_weight="3"
-            android:hint="输入收到的验证码"
-            android:inputType="number" />
+            android:id="@+id/input_new_email"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/shape_input"
+            android:gravity="center_vertical"
+            android:hint="@string/hint_input_email"
+            android:inputType="textEmailAddress"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:textColor="#ff333333"
+            android:textColorHint="#999"
+            android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/text_getcode"
-            style="@style/button_style_with_edit"
-            android:layout_weight="2"
-            android:enabled="false"
-            android:text="获取邮箱验证码"
-            android:textColor="@drawable/text_selector_white_red" />
 
+        <LinearLayout style="@style/edit_layout_bottom_style">
+
+            <EditText
+                android:id="@+id/code"
+                style="@style/activity_edit_text_style"
+                android:hint="输入收到的校验码"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/text_getcode"
+                style="@style/button_style_with_edit"
+                android:enabled="false"
+                android:text="@string/getcode"
+                android:textColor="@drawable/text_selector_white_red" />
+
+        </LinearLayout>
     </LinearLayout>
 
     <Button

@@ -18,6 +18,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.Constant;
 import libraryextra.utils.StringUtils;
 
@@ -157,7 +158,7 @@ public class WithdrawCashActivity extends BaseActivity {
                     Toast.makeText(WithdrawCashActivity.this, "金额不支持", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (Double.valueOf(amount) > Double.valueOf(getIntent().getStringExtra("balance"))) {
+                if (Double.valueOf(amount) > Double.valueOf(BaseApplication.getCashAccount().getData().getBalance())) {
                     Toast.makeText(WithdrawCashActivity.this, getResourceString(R.string.amount_not_enough), Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -172,7 +173,7 @@ public class WithdrawCashActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constant.REGIST) {
+        if (requestCode == Constant.REQUEST &&resultCode == Constant.RESPONSE) {
             setResult(resultCode);
             finish();
         }

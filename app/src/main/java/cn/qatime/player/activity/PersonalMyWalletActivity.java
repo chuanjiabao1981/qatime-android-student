@@ -16,7 +16,6 @@ import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -24,11 +23,12 @@ import java.text.DecimalFormat;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.bean.CashAccountBean;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
-import libraryextra.utils.SPUtils;
+import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyListener;
 
 /**
@@ -83,46 +83,24 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
         rechargeRecord.setOnClickListener(this);
         withdrawRecord.setOnClickListener(this);
         withdrawCash.setOnClickListener(this);
-        SPUtils.put(PersonalMyWalletActivity.this, "balance", balance.getText().toString());
     }
 
     private void initData() {
-        addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.urlpayment + BaseApplication.getUserId() + "/cash", null, new VolleyListener(this) {
-
-            @Override
-            protected void onTokenOut() {
-                tokenOut();
+        CashAccountBean cashAccount = BaseApplication.getCashAccount();
+        if (cashAccount != null && cashAccount.getData() != null) {
+            String price = cashAccount.getData().getBalance();
+            if (price.startsWith(".")) {
+                price = "0" + price;
             }
-
-            @Override
-            protected void onSuccess(JSONObject response) {
-                try {
-                    String price = df.format(Double.valueOf(response.getJSONObject("data").getString("balance")));
-                    if (price.startsWith(".")) {
-                        price = "0" + price;
-                    }
-                    balance.setText(price);
-                    String price1 = df.format(Double.valueOf(response.getJSONObject("data").getString("total_expenditure")));
-                    if (price1.startsWith(".")) {
-                        price1 = "0" + price1;
-                    }
-                    consumption.setText(price1);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            balance.setText(price);
+            String price1 = cashAccount.getData().getTotal_expenditure();
+            if (price1.startsWith(".")) {
+                price1 = "0" + price1;
             }
-
-            @Override
-            protected void onError(JSONObject response) {
-                Toast.makeText(PersonalMyWalletActivity.this, getResourceString(R.string.get_wallet_info_error), Toast.LENGTH_SHORT).show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                Toast.makeText(PersonalMyWalletActivity.this, getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
-            }
-        }));
-
+            consumption.setText(price1);
+        } else {
+            refreshCashAccount();
+        }
     }
 
     @Override
@@ -132,7 +110,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
                 if (alertDialog == null) {
                     View view = View.inflate(PersonalMyWalletActivity.this, R.layout.dialog_cancel_or_confirm, null);
                     TextView text = (TextView) view.findViewById(R.id.text);
-                    text.setText(getResourceString(R.string.call_customer_service_phone) + phone.getText() + "?");
+                    text.setText(getResourceString(R.string.call_customer_service_phone) + phone.getText());
                     Button cancel = (Button) view.findViewById(R.id.cancel);
                     Button confirm = (Button) view.findViewById(R.id.confirm);
                     cancel.setOnClickListener(new View.OnClickListener() {
@@ -163,46 +141,70 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
                 break;
             case R.id.withdraw_cash:
                 intent = new Intent(this, WithdrawCashActivity.class);
-                intent.putExtra("balance",balance.getText().toString());
-                startActivityForResult(intent,Constant.REQUEST);
+                startActivityForResult(intent, Constant.REQUEST);
                 break;
             case R.id.recharge_record:
                 intent = new Intent(this, RecordFundActivity.class);
                 intent.putExtra("page", 0);
-                startActivity(intent);
+                startActivityForResult(intent,Constant.REQUEST);
                 break;
             case R.id.withdraw_record:
                 intent = new Intent(this, RecordFundActivity.class);
                 intent.putExtra("page", 1);
-                startActivity(intent);
+                startActivityForResult(intent,Constant.REQUEST);
                 break;
             case R.id.consumption_record:
                 intent = new Intent(this, RecordFundActivity.class);
                 intent.putExtra("page", 2);
-                startActivity(intent);
+                startActivityForResult(intent,Constant.REQUEST);
                 break;
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        initData();
+        if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
+            refreshCashAccount();
+            setResult(Constant.RESPONSE);
+        }
     }
 
     @Subscribe
     public void onEvent(PayResultState state) {
-//        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
-//
-//            finish();
-//        }
-        initData();
-        //接收到充值信息后,设置返回码刷新数据
+        refreshCashAccount();
         setResult(Constant.RESPONSE);
     }
     @Override
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
+    }
+
+    private void refreshCashAccount() {
+        addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.urlpayment + BaseApplication.getUserId() + "/cash", null, new VolleyListener(PersonalMyWalletActivity.this) {
+
+            @Override
+            protected void onTokenOut() {
+                tokenOut();
+            }
+
+            @Override
+            protected void onSuccess(JSONObject response) {
+                CashAccountBean cashAccount = JsonUtils.objectFromJson(response.toString(), CashAccountBean.class);
+                BaseApplication.setCashAccount(cashAccount);
+                initData();
+            }
+
+            @Override
+            protected void onError(JSONObject response) {
+                Toast.makeText(PersonalMyWalletActivity.this, getResourceString(R.string.get_wallet_info_error), Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Toast.makeText(PersonalMyWalletActivity.this, getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
+            }
+        }));
     }
 
     @Override

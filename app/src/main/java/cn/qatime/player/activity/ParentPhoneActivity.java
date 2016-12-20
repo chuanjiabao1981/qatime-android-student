@@ -13,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
@@ -93,7 +92,7 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
 
         password.setHint(StringUtils.getSpannedString(this, R.string.hint_input_password));
         newParentPhone.setHint(StringUtils.getSpannedString(this, R.string.new_parent_phone));
-        code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_code));
+        code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_verification_code));
 
         String phoneP = getIntent().getStringExtra("phoneP");
         currentParentPhone.setText(phoneP);

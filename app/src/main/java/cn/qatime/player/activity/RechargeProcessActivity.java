@@ -34,7 +34,7 @@ public class RechargeProcessActivity extends BaseActivity {
                 if (alertDialog == null) {
                     View view = View.inflate(RechargeProcessActivity.this, R.layout.dialog_cancel_or_confirm, null);
                     TextView text = (TextView) view.findViewById(R.id.text);
-                    text.setText(getResourceString(R.string.call_customer_service_phone) + phone.getText() + "?");
+                    text.setText(getResourceString(R.string.call_customer_service_phone) + phone.getText());
                     Button cancel = (Button) view.findViewById(R.id.cancel);
                     Button confirm = (Button) view.findViewById(R.id.confirm);
                     cancel.setOnClickListener(new View.OnClickListener() {

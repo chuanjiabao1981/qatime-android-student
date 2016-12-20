@@ -198,7 +198,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         alertDialog = builder.create();
         View view = View.inflate(this, R.layout.dialog_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("下单失败啦！！！");
+        text.setText("下单失败，请稍后再试");
         Button confirm = (Button) view.findViewById(R.id.confirm);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override

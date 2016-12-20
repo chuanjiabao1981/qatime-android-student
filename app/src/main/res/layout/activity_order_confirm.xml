@@ -27,7 +27,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
+                    android:layout_marginLeft="32dp"
                     android:layout_marginTop="12dp"
                     android:layout_weight="1"
                     android:text="@string/commodity_name"
@@ -48,7 +48,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:padding="12dp">
+                android:paddingBottom="12dp"
+                android:paddingLeft="32dp"
+                android:paddingRight="32dp"
+                android:paddingTop="12dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -67,8 +70,8 @@
                         android:id="@+id/image"
                         android:layout_width="160dp"
                         android:layout_height="120dp"
-                        android:scaleType="centerCrop"
                         android:padding="1dp"
+                        android:scaleType="centerCrop"
                         android:src="@mipmap/photo" />
                     <!--科目类型-->
                     <TextView
@@ -88,23 +91,23 @@
                     <TextView
                         android:id="@+id/teacher"
                         android:layout_width="wrap_content"
-                        android:padding="1dp"
                         android:layout_height="wrap_content"
+                        android:padding="1dp"
                         android:textColor="#666666" />
                     <!--课时总数-->
                     <TextView
                         android:id="@+id/class_number"
                         android:layout_width="wrap_content"
-                        android:padding="1dp"
                         android:layout_height="wrap_content"
+                        android:padding="1dp"
                         android:textColor="#666666" />
                     <!--开课时间-->
                     <TextView
                         android:id="@+id/class_start_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=""
                         android:padding="1dp"
+                        android:text=""
                         android:textColor="#666666" />
                     <!--结课时间-->
                     <TextView
@@ -123,8 +126,8 @@
                     <TextView
                         android:id="@+id/price"
                         android:layout_width="wrap_content"
-                        android:padding="1dp"
                         android:layout_height="wrap_content"
+                        android:padding="1dp"
                         android:textColor="#666666" />
                 </LinearLayout>
             </LinearLayout>
@@ -140,18 +143,18 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingLeft="32dp"
+            android:paddingRight="32dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
-                android:gravity="center_vertical"
-                android:layout_weight="1"
-                android:text="@string/method_payment"
-                android:layout_marginTop="6dp"
                 android:layout_marginBottom="6dp"
+                android:layout_marginTop="6dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/method_payment"
                 android:textColor="#666666" />
 
             <LinearLayout
@@ -166,8 +169,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingTop="6dp"
-                    android:paddingBottom="6dp">
+                    android:paddingBottom="6dp"
+                    android:paddingTop="6dp">
 
                     <ImageView
                         android:id="@+id/wechat_pay"
@@ -198,8 +201,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingTop="6dp"
-                    android:paddingBottom="6dp">
+                    android:paddingBottom="6dp"
+                    android:paddingTop="6dp">
 
                     <ImageView
                         android:id="@+id/alipay"
@@ -230,8 +233,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingTop="6dp"
-                    android:paddingBottom="6dp">
+                    android:paddingBottom="6dp"
+                    android:paddingTop="6dp">
 
                     <ImageView
                         android:id="@+id/account"
@@ -269,7 +272,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
+                android:layout_marginLeft="32dp"
                 android:text="@string/amount_payment"
                 android:textColor="#333333" />
 
@@ -287,13 +290,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/yuan"
+                android:layout_marginRight="32dp"
                 android:textColor="#333333" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="一二三"
-                android:visibility="invisible" />
         </LinearLayout>
 
 

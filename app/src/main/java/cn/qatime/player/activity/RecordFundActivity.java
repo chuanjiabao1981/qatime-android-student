@@ -45,7 +45,7 @@ public class RecordFundActivity extends BaseFragmentActivity{
                 if (alertDialog == null) {
                     View view = View.inflate(RecordFundActivity.this, R.layout.dialog_cancel_or_confirm, null);
                     TextView text = (TextView) view.findViewById(R.id.text);
-                    text.setText(getResourceString(R.string.call_customer_service_phone) + "0353-2135828?");
+                    text.setText(getResourceString(R.string.call_customer_service_phone) + "0353-2135828");
                     Button cancel = (Button) view.findViewById(R.id.cancel);
                     Button confirm = (Button) view.findViewById(R.id.confirm);
                     cancel.setOnClickListener(new View.OnClickListener() {

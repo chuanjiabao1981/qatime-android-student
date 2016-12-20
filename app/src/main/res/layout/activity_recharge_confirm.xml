@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingBottom="8dp"
-                android:paddingLeft="10dp"
+                android:paddingLeft="30dp"
                 android:paddingRight="10dp"
                 android:paddingTop="8dp">
 
@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingBottom="8dp"
-                android:paddingRight="10dp"
+                android:paddingRight="32dp"
                 android:paddingTop="8dp">
 
                 <TextView

@@ -15,8 +15,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
+            android:paddingLeft="32dp"
+            android:paddingRight="32dp"
             android:paddingTop="12dp">
 
             <TextView
@@ -59,8 +59,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp">
+            android:paddingLeft="32dp"
+            android:paddingRight="32dp">
 
             <TextView
                 android:layout_width="wrap_content"

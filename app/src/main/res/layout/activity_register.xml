@@ -8,9 +8,7 @@
     <include layout="@layout/layout_backbar" />
 
     <LinearLayout
-        style="@style/edit_layout_style"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp">
+        style="@style/edit_layout_style">
 
         <LinearLayout style="@style/edit_layout_top_style">
 
@@ -27,7 +25,6 @@
             <EditText
                 android:id="@+id/code"
                 style="@style/activity_edit_text_style"
-                android:layout_weight="3"
                 android:ems="10"
                 android:inputType="number"
                 android:textColorHint="#ccc" />
@@ -35,10 +32,8 @@
             <Button
                 android:id="@+id/get_code"
                 style="@style/button_style_with_edit"
-                android:layout_weight="2"
                 android:enabled="false"
-                android:text="@string/get_verification_code"
-                android:textColor="@drawable/text_selector_white_red" />
+                android:text="@string/get_verification_code" />
 
 
         </LinearLayout>
@@ -95,8 +90,6 @@
     <Button
         android:id="@+id/next"
         style="@style/button_full_width_style"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
         android:enabled="false"
         android:text="@string/next"
         android:textColor="@drawable/text_selector_white_red" />

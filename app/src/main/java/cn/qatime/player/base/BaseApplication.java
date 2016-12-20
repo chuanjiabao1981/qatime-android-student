@@ -37,6 +37,7 @@ import org.json.JSONObject;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
+import cn.qatime.player.bean.CashAccountBean;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.im.LoginSyncDataStatusObserver;
 import cn.qatime.player.im.cache.TeamDataCache;
@@ -58,6 +59,7 @@ public class BaseApplication extends Application {
     private PushAgent mPushAgent;
     private boolean voiceStatus;
     private boolean shakeStatus;
+    private static CashAccountBean cashAccount;
 
     public static RequestQueue getRequestQueue() {
         if (Queue == null) {
@@ -73,6 +75,14 @@ public class BaseApplication extends Application {
     public static void setCurrentCity(CityBean.Data currentCity) {
         BaseApplication.currentCity = currentCity;
         SPUtils.putObject(context, "current_city", currentCity);
+    }
+
+    public static void setCashAccount(CashAccountBean cashAccount) {
+        BaseApplication.cashAccount = cashAccount;
+    }
+
+    public static CashAccountBean getCashAccount() {
+        return cashAccount;
     }
 
     @Override

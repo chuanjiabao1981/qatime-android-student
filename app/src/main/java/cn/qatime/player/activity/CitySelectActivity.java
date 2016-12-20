@@ -162,7 +162,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
         alertDialog.setCanceledOnTouchOutside(false);
         View view = View.inflate(this, R.layout.dialog_cancel_or_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("已获取到您的位置信息，是否\n切换为" + locationCity.getName() + "？");
+        text.setText("已获取到您的位置信息，是否\n切换为" + locationCity.getName());
         Button cancel = (Button) view.findViewById(R.id.cancel);
         Button confirm = (Button) view.findViewById(R.id.confirm);
         cancel.setOnClickListener(new View.OnClickListener() {

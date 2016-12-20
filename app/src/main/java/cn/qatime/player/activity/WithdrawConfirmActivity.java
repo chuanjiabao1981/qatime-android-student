@@ -56,7 +56,7 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
         code = (EditText) findViewById(R.id.code);
         textGetcode = (TextView) findViewById(R.id.text_getcode);
         time = new TimeCount(60000, 1000);
-        code.setHint(getResourceString(R.string.hint_input_code));
+        code.setHint(getResourceString(R.string.hint_input_verification_code));
         payType = getIntent().getStringExtra("pay_type");
 
         if ("alipay".equals(payType)) {
@@ -141,12 +141,14 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
                     protected void onSuccess(JSONObject response) {
                         if (!response.isNull("data")) {
                             WithdrawCashBean bean = JsonUtils.objectFromJson(response.toString(), WithdrawCashBean.class);
-                            Intent intent = new Intent(WithdrawConfirmActivity.this, WithdrawResultActivity.class);
-                            intent.putExtra("amount", bean.getData().getAmount());
-                            intent.putExtra("pay_type", bean.getData().getPay_type());
-                            intent.putExtra("id", bean.getData().getTransaction_no());
-                            intent.putExtra("create_at", bean.getData().getCreated_at());
-                            startActivityForResult(intent, Constant.REQUEST);
+                            Intent intent = new Intent(WithdrawConfirmActivity.this,WithdrawResultActivity.class);
+                            intent.putExtra("amount",bean.getData().getAmount());
+                            intent.putExtra("pay_type",bean.getData().getPay_type());
+                            intent.putExtra("id",bean.getData().getTransaction_no());
+                            intent.putExtra("create_at",bean.getData().getCreated_at());
+                            startActivity(intent);
+                            setResult(Constant.RESPONSE);
+                            finish();
                         } else {
                             onError(response);
                         }
@@ -186,7 +188,7 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
         alertDialog = builder.create();
         View view = View.inflate(this, R.layout.dialog_confirm, null);
         TextView tv = (TextView) view.findViewById(R.id.text);
-        tv.setText("提现系统繁忙，请稍候再试。");
+        tv.setText("提现系统繁忙，请稍候再试");
         Button confirm = (Button) view.findViewById(R.id.confirm);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,14 +208,6 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_withdraw_confirm);
         assignViews();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constant.REGIST) {
-            setResult(resultCode);
-            finish();
-        }
     }
 
     class TimeCount extends CountDownTimer {

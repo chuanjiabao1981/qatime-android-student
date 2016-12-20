@@ -7,7 +7,7 @@
     <string name="release_to_load">松开加载</string>
     <string name="release_to_refresh">松开刷新</string>
     <!--//fragment1-->
-    <string name="login_has_expired">登录已过期，请重新登录！</string>
+    <string name="login_has_expired">登录已过期，请重新登录</string>
     <string name="home_page">首页</string>
     <string name="time_table">课程表</string>
     <string name="message">消息</string>
@@ -147,7 +147,7 @@
     <string name="set_for_login">设置登录</string>
     <string name="get_verification_code">获取校验码</string>
     <string name="hint_input_verification_code">输入校验码</string>
-    <string name="hint_input_code">输入验证码</string>
+    <string name="hint_input_email_code">输入邮箱校验码</string>
     <string name="hint_phone_number">请输入大陆地区11位手机号码</string>
     <string name="hint_input_password">输入登录密码</string>
     <string name="hint_confirm_password">确认登录密码</string>
@@ -278,7 +278,7 @@
     <string name="feedback">意见反馈</string>
     <string name="forget_password_1">忘记密码？</string>
     <string name="found_new_version">发现新版本</string>
-    <string name="getcode">获取验证码</string>
+    <string name="getcode">获取校验码</string>
     <string name="hint_6_16_password">6-16位字母或数字</string>
     <string name="hint_contact">请留下联系方式（手机/QQ/微信），方便我们联系您</string>
     <string name="hint_input_again">再输入一次</string>
@@ -332,7 +332,7 @@
     <string name="amount_payment_order">支付金额</string>
     <string name="bind_email">绑定邮箱</string>
     <string name="bind_phone_number">绑定手机</string>
-    <string name="change_password">修改密码</string>
+    <string name="change_password">修改登陆密码</string>
     <string name="check_update">检查更新</string>
     <string name="class_1">第一课</string>
     <string name="class_2">第二课</string>
@@ -342,4 +342,5 @@
     <string name="clean_cache">清理缓存</string>
     <string name="item_to_start_main">距开课</string>
     <string name="course_arrangement">课程安排</string>
+    <string name="input_login_password">输入登陆密码</string>
 </resources>

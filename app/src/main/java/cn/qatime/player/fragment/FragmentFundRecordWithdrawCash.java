@@ -19,8 +19,6 @@ import com.android.volley.VolleyError;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -34,7 +32,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.bean.PayResultState;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
@@ -62,7 +60,6 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fund_record_withdraw_cash, container, false);
-        EventBus.getDefault().register(this);
         initview(view);
         return view;
     }
@@ -179,7 +176,7 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
                     final AlertDialog alertDialog = builder.create();
                     View view = View.inflate(getActivity(), R.layout.dialog_cancel_or_confirm, null);
                     TextView text = (TextView) view.findViewById(R.id.text);
-                    text.setText("是否放弃此提现？");
+                    text.setText("是否放弃此提现");
                     Button cancel = (Button) view.findViewById(R.id.cancel);
                     Button confirm = (Button) view.findViewById(R.id.confirm);
                     cancel.setOnClickListener(new View.OnClickListener() {
@@ -191,7 +188,6 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
                     confirm.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            // TODO: 2016/10/17 取消提现
                          CancelWithDraw(dataBean.getTransaction_no());
                             alertDialog.dismiss();
                         }
@@ -225,6 +221,7 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
             protected void onSuccess(JSONObject response) {
                 if (!response.isNull("data")) {
                     Toast.makeText(getActivity(), "提现取消成功", Toast.LENGTH_SHORT).show();
+                    getActivity().setResult(Constant.RESPONSE);
                     initData(1);
                 } else {
                     onError(response);
@@ -241,21 +238,6 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
                 super.onErrorResponse(volleyError);
             }
         }));
-    }
-
-    @Subscribe
-    public void onEvent(PayResultState code) {
-        //充值成功刷新订单
-        if (!isLoad) {
-            initData(1);
-        }
-    }
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 
     private String getPayType(String pay_type) {

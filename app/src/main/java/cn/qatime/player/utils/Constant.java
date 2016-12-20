@@ -27,6 +27,7 @@ public class Constant {
     public static int REGIST = 0x1009;
     public static int RESPONSE_CITY_SELECT = 0x1010;
     public static int VISITORLOGINED = 0x1011;
+    public static int CHANGE_PAY_PSW = 0x1012;
 
     public static class CourseStatus {
         public static String published = "published";//招生中

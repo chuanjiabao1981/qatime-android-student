@@ -14,9 +14,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
-import com.orhanobut.logger.Logger;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -30,10 +28,12 @@ import cn.qatime.player.activity.SecurityManagerActivity;
 import cn.qatime.player.activity.SystemSettingActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.bean.CashAccountBean;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.transformation.GlideCircleTransform;
+import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyListener;
 
@@ -59,8 +59,8 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
         if (BaseApplication.getProfile().getData() != null && BaseApplication.getProfile().getData().getUser() != null) {
             Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).placeholder(R.mipmap.personal_information_head).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
         }
-        name.setText(StringUtils.isNullOrBlanK(BaseApplication.getProfile().getData().getUser().getName())?"null":BaseApplication.getProfile().getData().getUser().getName());
-        initData();
+        name.setText(StringUtils.isNullOrBlanK(BaseApplication.getProfile().getData().getUser().getName()) ? "null" : BaseApplication.getProfile().getData().getUser().getName());
+        refreshCashAccount();
         order.setOnClickListener(this);
         wallet.setOnClickListener(this);
         course.setOnClickListener(this);
@@ -72,36 +72,16 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
     }
 
     private void initData() {
-        addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.urlpayment + BaseApplication.getUserId() + "/cash", null, new VolleyListener(getActivity()){
-
-            @Override
-            protected void onTokenOut() {
-                tokenOut();
+        CashAccountBean cashAccount = BaseApplication.getCashAccount();
+        if (cashAccount != null && cashAccount.getData() != null) {
+            String price = cashAccount.getData().getBalance();
+            if (price.startsWith(".")) {
+                price = "0" + price;
             }
-
-            @Override
-            protected void onSuccess(JSONObject response) {
-                try {
-                    String price = df.format(Double.valueOf(response.getJSONObject("data").getString("balance")));
-                    if (price.startsWith(".")) {
-                        price = "0" + price;
-                    }
-                    balance.setText(price);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            protected void onError(JSONObject response) {
-                Toast.makeText(getActivity(),  getResourceString(R.string.get_wallet_info_error), Toast.LENGTH_SHORT).show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                Toast.makeText(getActivity(), getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
-            }
-        }));
+            balance.setText(price);
+        } else {
+            refreshCashAccount();
+        }
     }
 
     @Override
@@ -113,7 +93,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
                 break;
             case R.id.my_wallet:
                 intent = new Intent(getActivity(), PersonalMyWalletActivity.class);
-                startActivityForResult(intent,Constant.REQUEST);
+                startActivityForResult(intent, Constant.REQUEST);
                 break;
             case R.id.my_order:
                 intent = new Intent(getActivity(), PersonalMyOrderActivity.class);
@@ -137,12 +117,43 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Logger.e("图片返回");
         if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
             Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).placeholder(R.mipmap.personal_information_head).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
-            name.setText(StringUtils.isNullOrBlanK(BaseApplication.getProfile().getData().getUser().getName())?"姓名":BaseApplication.getProfile().getData().getUser().getName());
-            initData();
+            name.setText(StringUtils.isNullOrBlanK(BaseApplication.getProfile().getData().getUser().getName()) ? "姓名" : BaseApplication.getProfile().getData().getUser().getName());
+            CashAccountBean cashAccount = BaseApplication.getCashAccount();
+            if (cashAccount != null && cashAccount.getData() != null) {
+                initData();
+            } else {
+                refreshCashAccount();
+            }
         }
+    }
+
+    private void refreshCashAccount() {
+        addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.urlpayment + BaseApplication.getUserId() + "/cash", null, new VolleyListener(getActivity()) {
+
+            @Override
+            protected void onTokenOut() {
+                tokenOut();
+            }
+
+            @Override
+            protected void onSuccess(JSONObject response) {
+                CashAccountBean cashAccount = JsonUtils.objectFromJson(response.toString(), CashAccountBean.class);
+                BaseApplication.setCashAccount(cashAccount);
+                initData();
+            }
+
+            @Override
+            protected void onError(JSONObject response) {
+                Toast.makeText(getActivity(), getResourceString(R.string.get_wallet_info_error), Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Toast.makeText(getActivity(), getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
+            }
+        }));
     }
 
     private void assignViews(View view) {
