@@ -343,4 +343,5 @@
     <string name="item_to_start_main">距开课</string>
     <string name="course_arrangement">课程安排</string>
     <string name="input_login_password">输入登陆密码</string>
+    <string name="class_closed">已直播</string>
 </resources>

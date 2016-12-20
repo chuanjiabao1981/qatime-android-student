@@ -8,7 +8,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
@@ -118,7 +117,6 @@ public class PayPopView {
                         new VolleyListener(activity) {
                             @Override
                             protected void onSuccess(JSONObject response) {
-                                Toast.makeText(activity, "密码正确", Toast.LENGTH_SHORT).show();
                                 if (listener != null) {
                                     listener.onSuccess();
                                 }

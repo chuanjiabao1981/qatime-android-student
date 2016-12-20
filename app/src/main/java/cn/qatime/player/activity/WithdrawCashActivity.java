@@ -1,6 +1,7 @@
 package cn.qatime.player.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
@@ -30,7 +31,7 @@ import libraryextra.utils.StringUtils;
  * @date 2016/10/17 9:38
  * @Description:
  */
-public class WithdrawCashActivity extends BaseActivity {
+public class WithdrawCashActivity extends BaseActivity implements View.OnClickListener {
     private EditText rechargeNum;
     private ImageView toBank;
     private ImageView toAlipay;
@@ -40,6 +41,8 @@ public class WithdrawCashActivity extends BaseActivity {
     private String amount;
     private PayPopView payPopView;
     private AlertDialog alertDialog;
+    private TextView phone;
+    private android.app.AlertDialog alertDialogPhone;
 
     private void assignViews() {
         rechargeNum = (EditText) findViewById(R.id.recharge_num);
@@ -58,22 +61,12 @@ public class WithdrawCashActivity extends BaseActivity {
         }
         price = "￥" + price;
         rechargeNum.setHint(getString(R.string.withdraw_num_hint) + "(" + price + "可用)");
-        toAlipayLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                payType = "alipay";
-                toAlipay.setImageResource(R.drawable.shape_select_circle_select);
-                toBank.setImageResource(R.drawable.shape_select_circle_normal);
-            }
-        });
-        toBankLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                payType = "bank";
-                toBank.setImageResource(R.drawable.shape_select_circle_select);
-                toAlipay.setImageResource(R.drawable.shape_select_circle_normal);
-            }
-        });
+
+        phone = (TextView) findViewById(R.id.phone);
+        phone.setOnClickListener(this);
+
+        toAlipayLayout.setOnClickListener(this);
+        toBankLayout.setOnClickListener(this);
     }
 
     @Override
@@ -156,14 +149,7 @@ public class WithdrawCashActivity extends BaseActivity {
             }
         });
 
-        rechargeNow.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                showPSWPop();
-
-            }
-        });
+        rechargeNow.setOnClickListener(this);
     }
 
     private void showPSWPop() {
@@ -204,7 +190,7 @@ public class WithdrawCashActivity extends BaseActivity {
                 payPopView.dismiss();
                 if (errorCode == 2005) {
                     dialogPSWError();
-                }else if(errorCode == 0) {
+                } else if (errorCode == 0) {
                     Toast.makeText(WithdrawCashActivity.this, "请检查网络连接", Toast.LENGTH_SHORT).show();
                 } else {
                     dialogServerError();
@@ -223,7 +209,7 @@ public class WithdrawCashActivity extends BaseActivity {
         alertDialog.setCanceledOnTouchOutside(false);
         View view = View.inflate(this, R.layout.dialog_cancel_or_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("新设置或修改后将在24小时内不能使用支付密码，是否继续？");
+        text.setText("新设置或修改后将在24小时内不能使用支付密码，是否继续");
         Button cancel = (Button) view.findViewById(R.id.cancel);
         Button confirm = (Button) view.findViewById(R.id.confirm);
         confirm.setText("继续");
@@ -250,7 +236,7 @@ public class WithdrawCashActivity extends BaseActivity {
         alertDialog.setCanceledOnTouchOutside(false);
         View view = View.inflate(this, R.layout.dialog_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("提现系统繁忙，请稍后再试。");
+        text.setText("提现系统繁忙，请稍后再试");
         Button confirm = (Button) view.findViewById(R.id.confirm);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -304,6 +290,54 @@ public class WithdrawCashActivity extends BaseActivity {
         if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
             setResult(resultCode);
             finish();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.phone:
+                if (alertDialogPhone == null) {
+                    View view = View.inflate(WithdrawCashActivity.this, R.layout.dialog_cancel_or_confirm, null);
+                    TextView text = (TextView) view.findViewById(R.id.text);
+                    text.setText(getResourceString(R.string.call_customer_service_phone) + phone.getText());
+                    Button cancel = (Button) view.findViewById(R.id.cancel);
+                    Button confirm = (Button) view.findViewById(R.id.confirm);
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialogPhone.dismiss();
+                        }
+                    });
+                    confirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialogPhone.dismiss();
+                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
+                            startActivity(intent);
+                        }
+                    });
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(WithdrawCashActivity.this);
+                    alertDialogPhone = builder.create();
+                    alertDialogPhone.show();
+                    alertDialogPhone.setContentView(view);
+                } else {
+                    alertDialogPhone.show();
+                }
+                break;
+            case R.id.to_bank_layout:
+                payType = "bank";
+                toBank.setImageResource(R.drawable.shape_select_circle_select);
+                toAlipay.setImageResource(R.drawable.shape_select_circle_normal);
+                break;
+            case R.id.to_alipay_layout:
+                payType = "alipay";
+                toAlipay.setImageResource(R.drawable.shape_select_circle_select);
+                toBank.setImageResource(R.drawable.shape_select_circle_normal);
+                break;
+            case R.id.recharge_now:
+                showPSWPop();
+                break;
         }
     }
 }
