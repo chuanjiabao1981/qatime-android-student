@@ -24,10 +24,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.netease.nimlib.p.d;
+import com.netease.nimlib.sdk.msg.MessageBuilder;
+import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.orhanobut.logger.Logger;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.NEVideoPlayerActivity;
 import libraryextra.utils.KeyBoardUtils;
 import libraryextra.utils.StringUtils;
 
@@ -38,6 +43,7 @@ import libraryextra.utils.StringUtils;
  * @Describe 播放器控制框
  */
 public class VideoFloatFragment extends Fragment implements View.OnClickListener {
+    private final String sessionId;
     private boolean showState = true;//是否是显示状态
     private boolean isDanmuOn = true;//弹幕默认开启
     private boolean isSubBig = true;//副窗口默认大
@@ -56,7 +62,7 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
     private View mainControl;
     private RelativeLayout playToolbar;
     private TextView videoName;
-    private TextView viewCount;
+    //    private TextView viewCount;
     private ImageView play;
     private LinearLayout commentLayout;
     private ImageView refresh;
@@ -81,12 +87,17 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
     private Team team;
 
 
+    public VideoFloatFragment(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+
     private void assignViews(View view) {
         exit = view.findViewById(R.id.player_exit);
         mainControl = view.findViewById(R.id.main_control);
         playToolbar = (RelativeLayout) view.findViewById(R.id.play_toolbar);
         videoName = (TextView) view.findViewById(R.id.video_name);
-        viewCount = (TextView) view.findViewById(R.id.view_count);
+//        viewCount = (TextView) view.findViewById(R.id.view_count);
         bottomLayout = (LinearLayout) view.findViewById(R.id.bottom_layout);
         play = (ImageView) view.findViewById(R.id.play);
         commentLayout = (LinearLayout) view.findViewById(R.id.comment_layout);
@@ -287,18 +298,42 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
                     comment.setText("");
                     return;
                 }
-                callback.sendMessage(comment.getText().toString().trim());
+                // 创建文本消息
+                IMMessage message = MessageBuilder.createTextMessage(
+                        sessionId, // 聊天对象的 ID，如果是单聊，为用户帐号，如果是群聊，为群组 ID
+                        SessionTypeEnum.Team, // 聊天类型，单聊或群组
+                        comment.getText().toString().trim() // 文本内容
+                );
+                if (act.getClass().equals(NEVideoPlayerActivity.class)) {
+                    if (((NEVideoPlayerActivity) act).limitMessage.size() >= 1) {
+                        if (message.getTime() - ((NEVideoPlayerActivity) act).limitMessage.get(0).getTime() < 2000) {
+                            Toast.makeText(act, getResources().getString(R.string.please_talk_later), Toast.LENGTH_SHORT).show();
+                            return;
+                        } else {
+                            ((NEVideoPlayerActivity) act).limitMessage.add(message);
+                            if (((NEVideoPlayerActivity) act).limitMessage.size() > 1) {
+                                ((NEVideoPlayerActivity) act).limitMessage.remove(0);
+                            }
+                        }
+                    } else {
+                        ((NEVideoPlayerActivity) act).limitMessage.add(message);
+                    }
+                }
+
+                callback.sendMessage(message);
                 comment.setText("");
                 break;
         }
     }
+
     public boolean isAllowSendMessage() {
         if (team == null || !team.isMyTeam()) {
-            Toast.makeText(getActivity(), R.string.team_send_message_not_allow, Toast.LENGTH_SHORT).show();
+            Toast.makeText(act, R.string.team_send_message_not_allow, Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
     }
+
     /**
      * 切换视频
      */
@@ -570,7 +605,7 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
 
         void changeSubOpen(boolean open);
 
-        void sendMessage(String message);
+        void sendMessage(IMMessage message);
 
         void pause();
 

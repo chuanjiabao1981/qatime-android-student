@@ -2,6 +2,8 @@ package cn.qatime.player.presenter;
 
 import android.content.pm.ActivityInfo;
 
+import com.netease.nimlib.sdk.msg.model.IMMessage;
+
 import cn.qatime.player.fragment.VideoFloatFragment;
 import cn.qatime.player.utils.VideoActivityInterface;
 
@@ -95,7 +97,7 @@ public class VideoControlPresenter implements VideoFloatFragment.CallBack {
     }
 
     @Override
-    public void sendMessage(String message) {
+    public void sendMessage(IMMessage message) {
         assert vai != null;
         vai.sendMessage(message);
     }
