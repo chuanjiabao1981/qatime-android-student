@@ -122,13 +122,13 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
             messageListView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         }
 
-        adapter = new MessageAdapter(this, items,this);
+        adapter = new MessageAdapter(this, items, this);
         adapter.setOwner(getIntent().getStringExtra("owner"));
         messageListView.setAdapter(adapter);
 
         messageListView.setOnRefreshListener(new MessageLoader(remote));
 
-        inputpanel = new InputPanel(this, this, rootView, true);
+        inputpanel = new InputPanel(this, this, rootView, true, sessionId);
         inputpanel.setMute(isMute);
         messageListView.setListViewEventListener(new MessageListView.OnListViewEventListener() {
             @Override
@@ -146,13 +146,13 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
     }
 
     @Override
-    public void ChatMessage(String data) {
-//         创建文本消息
-        IMMessage message = MessageBuilder.createTextMessage(
-                sessionId, // 聊天对象的 ID，如果是单聊，为用户帐号，如果是群聊，为群组 ID
-                sessionType, // 聊天类型，单聊或群组
-                data // 文本内容
-        );
+    public void ChatMessage(IMMessage message) {
+////         创建文本消息
+//        IMMessage message = MessageBuilder.createTextMessage(
+//                sessionId, // 聊天对象的 ID，如果是单聊，为用户帐号，如果是群聊，为群组 ID
+//                sessionType, // 聊天类型，单聊或群组
+//                data // 文本内容
+//        );
         sendMessage(message);
     }
 
@@ -189,6 +189,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
 
     /**
      * 点击重新发送
+     *
      * @param message
      */
     @Override

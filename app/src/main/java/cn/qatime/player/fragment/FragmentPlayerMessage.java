@@ -111,7 +111,7 @@ public class FragmentPlayerMessage extends BaseFragment implements MessageAdapte
             messageListView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         }
 
-        adapter = new MessageAdapter(getActivity(), items,this);
+        adapter = new MessageAdapter(getActivity(), items, this);
         messageListView.setAdapter(adapter);
 
         messageListView.setOnRefreshListener(new MessageLoader(remote));
@@ -273,7 +273,7 @@ public class FragmentPlayerMessage extends BaseFragment implements MessageAdapte
      * ****************** 观察者 **********************
      */
 
-    public void registerObservers(boolean register) {
+    private void registerObservers(boolean register) {
         MsgServiceObserve service = NIMClient.getService(MsgServiceObserve.class);
         service.observeReceiveMessage(receiveMessageObserver, register);
         service.observeMsgStatus(messageStatusObserver, register);
@@ -471,6 +471,7 @@ public class FragmentPlayerMessage extends BaseFragment implements MessageAdapte
      * @param register
      */
     public void registerTeamUpdateObserver(boolean register) {
+        registerObservers(register);
         if (register) {
             TeamDataCache.getInstance().registerTeamDataChangedObserver(teamDataChangedObserver);
             TeamDataCache.getInstance().registerTeamMemberDataChangedObserver(teamMemberDataChangedObserver);

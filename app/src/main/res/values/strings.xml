@@ -467,4 +467,6 @@
     <string name="unlogin_alert">您还未登录,请先登录!</string>
     <string name="hader_can_not_be_empty">头像不能为空</string>
     <string name="teacher_translate">老师</string>
+    <string name="please_talk_later">请稍候发言</string>
+
 </resources>

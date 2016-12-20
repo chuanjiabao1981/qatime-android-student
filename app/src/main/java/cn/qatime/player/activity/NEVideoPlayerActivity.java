@@ -74,6 +74,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     private boolean ismain = true;//video1 是否在主显示view上
     private int orientation = Configuration.ORIENTATION_PORTRAIT;//当前屏幕横竖屏状态
     private boolean isSubOpen = true;//副窗口开关
+    public List<IMMessage> limitMessage = new ArrayList<>();//用于限制2s内发送消息
 
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3, R.id.tab_text4};
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
@@ -191,7 +192,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         subVideo = (RelativeLayout) findViewById(R.id.sub_video);
         //控制框
         VideoControlPresenter controlPresenter = new VideoControlPresenter(this);
-        floatFragment = new VideoFloatFragment();
+        floatFragment = new VideoFloatFragment(sessionId);
         floatFragment.setCallback(controlPresenter);
         getSupportFragmentManager().beginTransaction().replace(R.id.control, floatFragment).commit();
 
@@ -319,7 +320,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 floatFragment.setMute(isMute);
             }
         }
-        inputPanel = new InputPanel(this, this, rootView, false);
+        inputPanel = new InputPanel(this, this, rootView, false, sessionId);
         inputPanel.setMute(isMute);
         inputPanel.setOnInputShowListener(new InputPanel.OnInputShowListener() {
             @Override
@@ -394,20 +395,20 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     /**
      * 發送消息
      *
-     * @param comment       聊天內容
+     * @param message       聊天內容
      * @param isSendToDanmu 是否将消息展示弹幕
      */
-    private void sendTextMessage(String comment, boolean isSendToDanmu) {
+    private void sendTextMessage(IMMessage message, boolean isSendToDanmu) {
         if (StringUtils.isNullOrBlanK(sessionId)) {
             Toast.makeText(NEVideoPlayerActivity.this, getResourceString(R.string.team_not_exist), Toast.LENGTH_SHORT).show();
             return;
         }
-        // 创建文本消息
-        IMMessage message = MessageBuilder.createTextMessage(
-                sessionId, // 聊天对象的 ID，如果是单聊，为用户帐号，如果是群聊，为群组 ID
-                sessionType, // 聊天类型，单聊或群组
-                comment.trim() // 文本内容
-        );
+//        // 创建文本消息
+//        IMMessage message = MessageBuilder.createTextMessage(
+//                sessionId, // 聊天对象的 ID，如果是单聊，为用户帐号，如果是群聊，为群组 ID
+//                sessionType, // 聊天类型，单聊或群组
+//                comment // 文本内容
+//        );
         // 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
         NIMClient.getService(MsgService.class).sendMessage(message, true);
         //横屏状态下,将发送的消息展示到弹幕去
@@ -460,7 +461,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         }
         assert danMuController != null;
         danMuController.resume();
-        fragment2.registerObservers(true);
         if (!StringUtils.isNullOrBlanK(sessionId)) {
             NIMClient.getService(MsgService.class).setChattingAccount(sessionId, sessionType);
         } else {
@@ -568,6 +568,19 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                     File file = new File(image.imagePath);
                     if (file.exists()) {
                         IMMessage message = MessageBuilder.createImageMessage(sessionId, sessionType, file, file.getName());
+                        if (limitMessage.size() >= 1) {
+                            if (message.getTime() - limitMessage.get(0).getTime() < 2000) {
+                                Toast.makeText(this, getResources().getString(R.string.please_talk_later), Toast.LENGTH_SHORT).show();
+                                return;
+                            } else {
+                                limitMessage.add(message);
+                                if (limitMessage.size() > 1) {
+                                    limitMessage.remove(0);
+                                }
+                            }
+                        } else {
+                            limitMessage.add(message);
+                        }
                         NIMClient.getService(MsgService.class).sendMessage(message, true);
                         fragment2.items.add(message);
                         fragment2.scrollToBottom();
@@ -603,7 +616,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
         danMuController.destroy();
-        fragment2.registerObservers(false);
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
@@ -939,7 +951,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     }
 
     @Override
-    public void sendMessage(String message) {
+    public void sendMessage(IMMessage message) {
         Logger.e("message" + message);
         sendTextMessage(message, (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && isSubBig) | getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
     }
@@ -978,7 +990,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
      * @param message
      */
     @Override
-    public void ChatMessage(String message) {
+    public void ChatMessage(IMMessage message) {
         sendTextMessage(message, isSubBig);
     }
 }
