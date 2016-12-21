@@ -150,7 +150,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private void initBannerData() {
         Map<String, String> map = new HashMap<>();
         try {
-            map.put("city_name", URLEncoder.encode(BaseApplication.getCurrentCity().getName(),"UTF-8"));
+            map.put("city_name", URLEncoder.encode(BaseApplication.getCurrentCity().getName(), "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -251,7 +251,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         map.put("page", String.valueOf(page));
         map.put("per_page", String.valueOf(5));
         try {
-            map.put("city_name", URLEncoder.encode(BaseApplication.getCurrentCity().getName(),"UTF-8"));
+            map.put("city_name", URLEncoder.encode(BaseApplication.getCurrentCity().getName(), "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -453,13 +453,16 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 //                                    如果没有被赋值，则默认全国
                             utils = new AMapLocationUtils(getActivity(), new AMapLocationUtils.LocationListener() {
                                 @Override
-                                public void onLocationBack(String result) {
-                                    utils.stopLocation();
-
-                                    for (CityBean.Data item : listCity) {
-                                        if (result.equals(item.getName())) {
-                                            locationCity = item;
+                                public void onLocationBack(String[] result) {
+                                    if (result != null && result.length > 1) {
+                                        for (CityBean.Data item : listCity) {
+                                            if (result[1].equals(item.getName()) || result[0].equals(item.getName())) {//需先对比区,区不对应往上对比市,不可颠倒
+                                                locationCity = item;
+                                            }
                                         }
+                                    } else {
+                                        Toast.makeText(getActivity(), "暂未获取到您的位置信息", Toast.LENGTH_SHORT).show();
+                                        return;
                                     }
                                     CityBean.Data currentCity = BaseApplication.getCurrentCity();
                                     if (locationCity != null) {

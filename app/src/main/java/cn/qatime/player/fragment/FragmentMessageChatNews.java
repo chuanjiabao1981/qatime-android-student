@@ -374,7 +374,7 @@ public class FragmentMessageChatNews extends BaseFragment {
         sortRecentContacts(items);
         adapter.notifyDataSetChanged();
 
-        if (unreadChanged) {
+//        if (unreadChanged) {
 
             // 方式一：累加每个最近联系人的未读（快）
             /*
@@ -385,12 +385,12 @@ public class FragmentMessageChatNews extends BaseFragment {
             */
 
             // 方式二：直接从SDK读取（相对慢）
-            int unreadNum = NIMClient.getService(MsgService.class).getTotalUnreadCount();
+//            int unreadNum = NIMClient.getService(MsgService.class).getTotalUnreadCount();
 
 //            if (callback != null) {
 //                callback.onUnreadCountChange(unreadNum);
 //            }
-        }
+//        }
     }
 
     /**

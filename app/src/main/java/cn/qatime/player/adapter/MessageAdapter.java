@@ -184,7 +184,7 @@ public class MessageAdapter extends BaseAdapter {
             }
             textHolder.right.setVisibility(View.GONE);
             textHolder.left.setVisibility(View.VISIBLE);
-            Glide.with(context).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_32).crossFade().dontAnimate().into((ImageView) textHolder.otherhead);
+            Glide.with(context).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_default).crossFade().dontAnimate().into((ImageView) textHolder.otherhead);
             textHolder.othercontent.setText(ExpressionUtil.getExpressionString(
                     context, item.getContent(), ExpressionUtil.emoji, cache, new GifDrawable.UpdateListener() {
                         @Override
@@ -196,7 +196,7 @@ public class MessageAdapter extends BaseAdapter {
         } else {
             textHolder.right.setVisibility(View.VISIBLE);
             textHolder.left.setVisibility(View.GONE);
-            Glide.with(context).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).crossFade().dontAnimate().into((ImageView) textHolder.headmine);
+            Glide.with(context).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_default).crossFade().dontAnimate().into((ImageView) textHolder.headmine);
             textHolder.timemine.setText(DateUtils.getTimeShowString(item.getTime(), false));
             textHolder.contentmine.setText(ExpressionUtil.getExpressionString(
                     context, item.getContent(), ExpressionUtil.emoji, cache, new GifDrawable.UpdateListener() {
@@ -331,7 +331,7 @@ public class MessageAdapter extends BaseAdapter {
                 } else {
                     othername.setText(message.getFromNick());
                 }
-                Glide.with(context).load(BaseApplication.getUserInfoProvide().getUserInfo(message.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_32).crossFade().dontAnimate().into((ImageView) otherhead);
+                Glide.with(context).load(BaseApplication.getUserInfoProvide().getUserInfo(message.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_default).crossFade().dontAnimate().into((ImageView) otherhead);
                 othertime.setText(DateUtils.getTimeShowString(message.getTime(), false));
 
                 if (!TextUtils.isEmpty(thumbPath)) {
@@ -348,7 +348,7 @@ public class MessageAdapter extends BaseAdapter {
                 right.setVisibility(View.VISIBLE);
                 left.setVisibility(View.GONE);
 
-                Glide.with(context).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).crossFade().dontAnimate().into((ImageView) headmine);
+                Glide.with(context).load(BaseApplication.getUserInfoProvide().getUserInfo(message.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_default).crossFade().dontAnimate().into((ImageView) headmine);
                 timemine.setText(DateUtils.getTimeShowString(message.getTime(), false));
 
                 if (!TextUtils.isEmpty(thumbPath)) {

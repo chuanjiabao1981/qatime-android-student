@@ -96,7 +96,7 @@ public class NEVideoView extends SurfaceView {
 
     private boolean isBackground;
     private boolean manualPause = false;
-    private NEVideoViewReceiver mReceiver;
+//    private NEVideoViewReceiver mReceiver;
 
     public NEVideoView(Context context) {
         super(context);
@@ -215,7 +215,7 @@ public class NEVideoView extends SurfaceView {
         setFocusable(true);
         setFocusableInTouchMode(true);
         requestFocus();
-        registerBroadCast();
+//        registerBroadCast();
         mCurrState = IDLE;
         mNextState = IDLE;
     }
@@ -807,39 +807,39 @@ public class NEVideoView extends SurfaceView {
 
     // 以下用于接收资源释放成功的消息
 
-    /**
-     * 注册监听器
-     */
-    private void registerBroadCast() {
-        unRegisterBroadCast();
-        mReceiver = new NEVideoViewReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(NEMediaPlayer.NELP_RELEASE_SUCCESS);
-        mContext.registerReceiver(mReceiver, filter);
-    }
-
-    /**
-     * 反注册监听器
-     */
-    private void unRegisterBroadCast() {
-        if (mReceiver != null) {
-            mContext.unregisterReceiver(mReceiver);
-            mReceiver = null;
-        }
-    }
-
-    /**
-     * 资源释放成功通知的消息接收器类
-     */
-    private class NEVideoViewReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(NEMediaPlayer.NELP_RELEASE_SUCCESS)) {
-                Log.i(TAG, NEMediaPlayer.NELP_RELEASE_SUCCESS);
-                unRegisterBroadCast(); // 接收到消息后反注册监听器
-            }
-        }
-    }
+//    /**
+//     * 注册监听器
+//     */
+//    private void registerBroadCast() {
+//        unRegisterBroadCast();
+//        mReceiver = new NEVideoViewReceiver();
+//        IntentFilter filter = new IntentFilter();
+//        filter.addAction(NEMediaPlayer.NELP_RELEASE_SUCCESS);
+//        mContext.registerReceiver(mReceiver, filter);
+//    }
+//
+//    /**
+//     * 反注册监听器
+//     */
+//    private void unRegisterBroadCast() {
+//        if (mReceiver != null) {
+//            mContext.unregisterReceiver(mReceiver);
+//            mReceiver = null;
+//        }
+//    }
+//
+//    /**
+//     * 资源释放成功通知的消息接收器类
+//     */
+//    private class NEVideoViewReceiver extends BroadcastReceiver {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            if (intent.getAction().equals(NEMediaPlayer.NELP_RELEASE_SUCCESS)) {
+//                Log.i(TAG, NEMediaPlayer.NELP_RELEASE_SUCCESS);
+//                unRegisterBroadCast(); // 接收到消息后反注册监听器
+//            }
+//        }
+//    }
 
 }
 
