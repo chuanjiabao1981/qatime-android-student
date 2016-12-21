@@ -3,22 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <RelativeLayout
-        style="@style/top_style">
+
+    <RelativeLayout style="@style/top_style">
 
         <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/shape_top_tab" />
+
         <TextView
             style="@style/backbar_text_style"
             android:layout_centerInParent="true"
             android:text="@string/Remedial_class" />
     </RelativeLayout>
+
     <LinearLayout
-        android:layout_width="match_parent"
         style="@style/tab_item_height"
-        android:layout_marginBottom="1dp"
+        android:layout_width="match_parent"
         android:background="#ffffff"
         android:orientation="horizontal">
 
@@ -34,10 +35,10 @@
 
             <TextView
                 android:id="@+id/time_text"
+                style="@style/tab_text_color_select"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/by_time"
-                style="@style/tab_text_color_select" />
+                android:text="@string/by_time" />
 
             <ImageView
                 android:layout_width="10dp"
@@ -58,10 +59,10 @@
 
             <TextView
                 android:id="@+id/subject_text"
+                style="@style/tab_text_color_select"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/by_subject"
-                style="@style/tab_text_color_select" />
+                android:text="@string/by_subject" />
 
             <ImageView
                 android:layout_width="10dp"
@@ -82,10 +83,10 @@
 
             <TextView
                 android:id="@+id/class_text"
+                style="@style/tab_text_color_select"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/by_grade"
-                style="@style/tab_text_color_select" />
+                android:text="@string/by_grade" />
 
             <ImageView
                 android:layout_width="10dp"
@@ -96,38 +97,43 @@
 
         <FrameLayout
             android:id="@+id/screen"
-            android:clickable="true"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:clickable="true">
 
             <ImageView
                 android:layout_width="34dp"
                 android:layout_height="34dp"
                 android:layout_gravity="center_vertical"
-                android:padding="10dp"
                 android:layout_marginRight="10dp"
+                android:padding="10dp"
                 android:src="@mipmap/screen_funnel" />
         </FrameLayout>
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#ccc" />
+
     <RelativeLayout
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:background="#ffffff"
-        android:paddingTop="10dp"
-        android:layout_height="match_parent">
+        android:paddingTop="10dp">
 
         <com.handmark.pulltorefresh.library.PullToRefreshGridView
             android:id="@+id/grid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#ffffff"
             android:cacheColorHint="@null"
             android:horizontalSpacing="10dp"
-            android:background="#ffffff"
             android:numColumns="2"
             android:scrollbars="none"
-            android:verticalSpacing="16dp" />
+            android:verticalSpacing="20dp" />
 
     </RelativeLayout>
 

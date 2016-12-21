@@ -1,31 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ccc"
+    android:paddingBottom="1px">
 
     <LinearLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:gravity="center"
-        android:background="@mipmap/tab_with_bottom_line"
+        android:background="#fff"
         android:orientation="horizontal">
 
         <!--<LinearLayout-->
-            <!--style="@style/tab_item_height"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:orientation="horizontal">-->
+        <!--style="@style/tab_item_height"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_weight="1"-->
+        <!--android:orientation="horizontal">-->
 
 
-            <!--&lt;!&ndash; android:id="@+id/tab_text" &ndash;&gt;-->
-            <!--<TextView-->
-                <!--android:id="@+id/tab_text1"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="18.0dip"-->
-                <!--android:gravity="center_vertical"-->
-                <!--android:text="@string/today"-->
-                <!--style="@style/tab_text_color_select" />-->
+        <!--&lt;!&ndash; android:id="@+id/tab_text" &ndash;&gt;-->
+        <!--<TextView-->
+        <!--android:id="@+id/tab_text1"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="18.0dip"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:text="@string/today"-->
+        <!--style="@style/tab_text_color_select" />-->
         <!--</LinearLayout>-->
 
         <LinearLayout
@@ -38,16 +40,16 @@
             <!-- android:id="@+id/tab_text" -->
             <TextView
                 android:id="@+id/tab_text2"
+                style="@style/tab_text_color_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
-                android:text="@string/to_start"
-                style="@style/tab_text_color_normal" />
+                android:text="@string/to_start" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
             style="@style/tab_item_height"
+            android:layout_width="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
 
@@ -55,41 +57,41 @@
             <!-- android:id="@+id/tab_text" -->
             <TextView
                 android:id="@+id/tab_text3"
+                style="@style/tab_text_color_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
-                android:text="@string/started"
-                style="@style/tab_text_color_normal" />
+                android:text="@string/started" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
             style="@style/tab_item_height"
+            android:layout_width="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tab_text4"
+                style="@style/tab_text_color_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
-                android:text="@string/done"
-                style="@style/tab_text_color_normal" />
+                android:text="@string/done" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
             style="@style/tab_item_height"
+            android:layout_width="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tab_text5"
+                style="@style/tab_text_color_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="18.0dip"
                 android:gravity="center_vertical"
-                android:text="@string/audition"
-                style="@style/tab_text_color_normal" />
+                android:text="@string/audition" />
         </LinearLayout>
 
 

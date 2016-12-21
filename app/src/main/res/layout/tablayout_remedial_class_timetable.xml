@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:paddingBottom="1px"
+    android:background="#ccc"
     android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="@mipmap/tab_with_bottom_line"
+        android:background="#fff"
         android:gravity="center"
         android:orientation="horizontal">
 

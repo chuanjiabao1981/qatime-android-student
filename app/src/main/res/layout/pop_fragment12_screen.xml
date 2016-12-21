@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:paddingRight="15dp"
             android:text="@string/price"
-            android:textColor="#4000" />
+            android:textColor="#333" />
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -194,7 +194,7 @@
             android:paddingRight="15dp"
             android:paddingTop="9dp"
             android:text="@string/starting_range"
-            android:textColor="#4000" />
+            android:textColor="#333" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -210,7 +210,7 @@
                 android:gravity="center"
                 android:hint="开始时间"
                 android:textColor="#a000"
-                android:textColorHint="#3000"
+                android:textColorHint="#999"
                 android:textSize="14sp" />
 
             <ImageView
@@ -218,7 +218,7 @@
                 android:layout_height="10dp"
                 android:layout_marginLeft="2dp"
                 android:scaleType="centerInside"
-                android:src="@mipmap/down" />
+                android:src="@mipmap/screen_down" />
         </LinearLayout>
 
         <TextView
@@ -244,7 +244,7 @@
                 android:gravity="center"
                 android:hint="结束时间"
                 android:textColor="#a000"
-                android:textColorHint="#3000"
+                android:textColorHint="#999"
                 android:textSize="14sp" />
 
             <ImageView
@@ -252,7 +252,7 @@
                 android:layout_height="10dp"
                 android:layout_marginLeft="2dp"
                 android:scaleType="centerInside"
-                android:src="@mipmap/down" />
+                android:src="@mipmap/screen_down" />
         </LinearLayout>
     </LinearLayout>
 
@@ -260,7 +260,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="18dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
         android:gravity="center_vertical"
@@ -272,7 +272,7 @@
             android:layout_height="wrap_content"
             android:paddingRight="15dp"
             android:text="@string/state"
-            android:textColor="#4000" />
+            android:textColor="#333" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -285,7 +285,6 @@
                 android:layout_width="0dp"
                 android:layout_height="26dp"
                 android:layout_weight="1"
-                android:background="@drawable/text_background_select"
                 android:clickable="true"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -308,7 +307,7 @@
                     android:layout_toLeftOf="@id/started_text"
                     android:gravity="center"
                     android:text="√"
-                    android:textColor="#a000" />
+                    android:textColor="#be0b0b" />
             </RelativeLayout>
 
             <TextView
@@ -323,7 +322,6 @@
                 android:layout_height="26dp"
                 android:layout_alignParentRight="true"
                 android:layout_weight="1"
-                android:background="@drawable/text_background_select"
                 android:clickable="true"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -347,7 +345,7 @@
                     android:layout_toLeftOf="@id/recruiting_text"
                     android:gravity="center"
                     android:text="√"
-                    android:textColor="#a000" />
+                    android:textColor="#be0b0b" />
 
             </RelativeLayout>
 

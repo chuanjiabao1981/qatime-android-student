@@ -25,13 +25,12 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#ffffff"
             android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:background="#fff"
-                android:layout_height="192dp">
+                android:layout_height="192dp"
+                android:background="#fff">
 
                 <ImageView
                     android:id="@+id/banner"
@@ -65,13 +64,13 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#dfdddd" />
+                android:layout_height="10dp" />
 
             <LinearLayout
                 android:id="@+id/my_wallet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#fff"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -82,8 +81,7 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_weight="1"
-                    android:background="#ffffff" />
+                    android:layout_weight="1" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -115,6 +113,7 @@
                 android:id="@+id/my_order"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#fff"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -125,8 +124,7 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_weight="1"
-                    android:background="#ffffff" />
+                    android:layout_weight="1" />
 
                 <ImageView
                     style="@style/setting_icon_margin_right"
@@ -144,6 +142,7 @@
                 android:id="@+id/my_course"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#fff"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -154,8 +153,7 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_weight="1"
-                    android:background="#ffffff" />
+                    android:layout_weight="1" />
 
                 <ImageView
                     style="@style/setting_icon_margin_right"
@@ -167,13 +165,13 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="10px"
-                android:background="#f7f7f7" />
+                android:layout_height="10dp" />
 
             <LinearLayout
                 android:id="@+id/security"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#fff"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -184,8 +182,7 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_weight="1"
-                    android:background="#ffffff" />
+                    android:layout_weight="1" />
 
                 <ImageView
                     style="@style/setting_icon_margin_right"
@@ -203,6 +200,7 @@
                 android:id="@+id/setting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#fff"
                 android:gravity="center"
                 android:orientation="horizontal">
 
