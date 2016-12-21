@@ -456,9 +456,14 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
         video1.start();
         video2.start();
-        if (video1.isPlaying()) {
-            floatFragment.setPlaying(true);
-        }
+        hd.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (video1.isPlaying()) {
+                    floatFragment.setPlaying(true);
+                }
+            }
+        },300);
         assert danMuController != null;
         danMuController.resume();
         if (!StringUtils.isNullOrBlanK(sessionId)) {

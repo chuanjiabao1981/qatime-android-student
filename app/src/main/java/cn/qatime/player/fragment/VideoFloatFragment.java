@@ -245,7 +245,7 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
                         KeyBoardUtils.closeKeybord(act);
                         callback.fullScreen();
                         zoom.setVisibility(View.GONE);
-                        danmuSwitch.setEnabled(true);//当横屏时   弹幕开关可用
+                        danmuSwitch.setVisibility(View.VISIBLE); //当横屏时   弹幕开关可用
                         //横平时 评论框出现
                         commentLayout.setVisibility(View.VISIBLE);
                         viewChange.setVisibility(View.GONE);
@@ -263,7 +263,7 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
                             isDanmuOn = false;
                             danmuSwitch.setImageResource(R.mipmap.danmu_off);
                         }
-                        danmuSwitch.setEnabled(false);
+                        danmuSwitch.setVisibility(View.GONE);
                     }
 
                     callback.changeSubOpen(false);
@@ -278,7 +278,7 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
                     if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                         viewChange.setVisibility(View.GONE);
                     } else {
-                        danmuSwitch.setEnabled(true);
+                        danmuSwitch.setVisibility(View.VISIBLE);
                         viewChange.setVisibility(View.VISIBLE);
                     }
                     ivSwitch.setVisibility(View.VISIBLE);
@@ -365,12 +365,16 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
         }
 //        if (isSubOpen) {
         if (isSubBig) {
-            danmuSwitch.setEnabled(true);
+            if (danmuSwitch.getVisibility() != View.VISIBLE) {
+                danmuSwitch.setVisibility(View.VISIBLE);
+            }
         } else {
             isDanmuOn = false;
             callback.shutDanmaku();
             danmuSwitch.setImageResource(R.mipmap.danmu_off);
-            danmuSwitch.setEnabled(false);
+            if (danmuSwitch.getVisibility() != View.GONE) {
+                danmuSwitch.setVisibility(View.GONE);
+            }
         }
 //        }
         commentLayout.setVisibility(View.GONE);
@@ -394,9 +398,9 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
             isSubBig = false;
             callback.changeSubSmall();
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {//横屏时弹幕开关可用
-                danmuSwitch.setEnabled(true);
+                danmuSwitch.setVisibility(View.VISIBLE);
             } else {//转为小窗口竖屏时  弹幕关闭,并不可用
-                danmuSwitch.setEnabled(false);
+                danmuSwitch.setVisibility(View.GONE);
                 danmuSwitch.setImageResource(R.mipmap.danmu_off);
                 isDanmuOn = false;
                 callback.shutDanmaku();
@@ -404,7 +408,7 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
         } else {
             isSubBig = true;
             callback.changeSubBig();
-            danmuSwitch.setEnabled(true);
+            danmuSwitch.setVisibility(View.VISIBLE);
         }
         viewChange.setImageResource(isSubBig ? R.mipmap.float_change_big : R.mipmap.float_change_small);
     }
@@ -506,15 +510,15 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
         viewChange.setImageResource(isSubBig ? R.mipmap.float_change_big : R.mipmap.float_change_small);
         if (!isSubBig) {//小窗口出现
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {//横屏时弹幕开关可用
-                danmuSwitch.setEnabled(true);
+                danmuSwitch.setVisibility(View.VISIBLE);
             } else {//转为小窗口竖屏时  弹幕关闭,并不可用
-                danmuSwitch.setEnabled(false);
+                danmuSwitch.setVisibility(View.GONE);
                 danmuSwitch.setImageResource(R.mipmap.danmu_off);
                 isDanmuOn = false;
                 callback.shutDanmaku();
             }
         } else {
-            danmuSwitch.setEnabled(true);
+            danmuSwitch.setVisibility(View.VISIBLE);
         }
     }
 
@@ -526,7 +530,7 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 viewChange.setVisibility(View.GONE);
             } else {
-                danmuSwitch.setEnabled(true);
+                danmuSwitch.setVisibility(View.VISIBLE);
                 viewChange.setVisibility(View.VISIBLE);
             }
             ivSwitch.setVisibility(View.VISIBLE);
@@ -536,7 +540,7 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
                     isDanmuOn = false;
                     danmuSwitch.setImageResource(R.mipmap.danmu_off);
                 }
-                danmuSwitch.setEnabled(false);
+                danmuSwitch.setVisibility(View.GONE);
             }
             Toast.makeText(act, getResources().getString(R.string.live_side_close), Toast.LENGTH_SHORT).show();
             subSwitch.setImageResource(R.mipmap.float_subvideo_open);
