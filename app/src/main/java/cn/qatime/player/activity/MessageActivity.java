@@ -70,8 +70,6 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
     private int courseId;
     private boolean isMute = false;//当前用户 是否被禁言
     private MessageAdapter adapter;
-    private String board;
-    private String camera;
     private View rootView;
     private InputPanel inputpanel;
 
@@ -90,15 +88,13 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         sessionId = getIntent().getStringExtra("sessionId");
         sessionType = (SessionTypeEnum) getIntent().getSerializableExtra("sessionType");
         courseId = getIntent().getIntExtra("courseId", 0);
-        camera = getIntent().getStringExtra("camera");
-        board = getIntent().getStringExtra("board");
         initView();
         setRightImage(R.mipmap.online_room, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MessageActivity.this, NEVideoPlayerActivity.class);
-                intent.putExtra("camera", camera);
-                intent.putExtra("board", board);
+//                intent.putExtra("camera", camera);
+//                intent.putExtra("board", board);
                 intent.putExtra("id", courseId);
                 intent.putExtra("sessionId", sessionId);
                 startActivity(intent);
@@ -597,8 +593,6 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
     public void onEvent(ChatVideoBean event) {
         if (event != null) {
             this.courseId = event.getCourseId();
-            this.camera = event.getCamera();
-            this.board = event.getBoard();
             if (adapter != null) {
                 adapter.setOwner(event.getChat_team_owner());
             }

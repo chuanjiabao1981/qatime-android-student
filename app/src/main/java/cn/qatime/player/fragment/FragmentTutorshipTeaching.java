@@ -73,8 +73,8 @@ public class FragmentTutorshipTeaching extends BaseFragment {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
-                        intent.putExtra("camera", item.getCamera());
-                        intent.putExtra("board", item.getBoard());
+//                        intent.putExtra("camera", item.getCamera());
+//                        intent.putExtra("board", item.getBoard());
                         intent.putExtra("id", item.getId());
                         intent.putExtra("sessionId", item.getChat_team_id());
                         startActivity(intent);

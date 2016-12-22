@@ -116,6 +116,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     private int playingReQuery = 0;
     private View rootView;
     private InputPanel inputPanel;
+    private String camera;
+    private String board;
 
 
     private void assignViews() {
@@ -231,14 +233,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         initView();
         getAnnouncementsData();
         initData();
-        setVideoState(VideoState.INIT);
+
     }
 
     private void refreshState() {
-        String camera = getIntent().getStringExtra("camera");
-        String board = getIntent().getStringExtra("board");
-//        camera = "rtmp://va0a19f55.live.126.net/live/02dce8e380034cf9b2ef1f9c26c4234c";
-//        board = "rtmp://va0a19f55.live.126.net/live/1243a663c3e54b099d1cc35ee83a7921";
         if (!StringUtils.isNullOrBlanK(camera)) {
             if (videoState == VideoState.PLAYING) {
                 if (!video2.isPlaying()) {
@@ -428,6 +426,11 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                             RemedialClassDetailBean data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
                             if (data != null) {
                                 ((FragmentPlayerLiveDetails) fragBaseFragments.get(2)).setData(data);
+                                if (data.getData() != null) {
+                                    camera = data.getData().getCamera();
+                                    board = data.getData().getBoard();
+                                    setVideoState(VideoState.INIT);
+                                }
                             }
                         }
 
@@ -463,9 +466,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                     floatFragment.setPlaying(true);
                 }
             }
-        },300);
-        assert danMuController != null;
-        danMuController.resume();
+        }, 300);
         if (!StringUtils.isNullOrBlanK(sessionId)) {
             NIMClient.getService(MsgService.class).setChattingAccount(sessionId, sessionType);
         } else {
@@ -602,7 +603,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         floatFragment.setPlaying(false);
 
         super.onPause();
-        danMuController.pause();
         MobclickAgent.onPause(this);
         NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
     }

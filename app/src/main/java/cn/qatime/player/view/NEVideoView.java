@@ -2,17 +2,14 @@ package cn.qatime.player.view;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -711,76 +708,13 @@ public class NEVideoView extends SurfaceView {
         }
     }
 
-    public void seekAndChangeUrl(long msec, String path) {
-        mUri = Uri.parse(path);
-        //mMediaPlayer.stop();
-        stopPlayback();
-        mSeekWhenPrepared = msec;
-        openVideo();
-        requestLayout();
-        invalidate();
-    }
-
     public boolean isPlaying() {
         return mMediaPlayer != null && mIsPrepared && mMediaPlayer.isPlaying();
-    }
-
-    public void manualPause(boolean paused) {
-        manualPause = paused;
     }
 
     public boolean isPaused() {
         //return (mCurrentState == PLAY_STATE_PAUSED) ? true : false;
         return manualPause;
-    }
-
-    public int getBufferPercentage() {
-        if (mMediaPlayer != null)
-            return mCurrentBufferPercentage;
-        return 0;
-    }
-
-    public boolean canPause() {
-        return true;
-    }
-
-    public boolean canSeekBackward() {
-        return true;
-    }
-
-    public boolean canSeekForward() {
-        return true;
-    }
-
-    public void setMediaType(String MediaType) {
-        mMediaType = MediaType;
-    }
-
-    public String getMediaType() {
-        return mMediaType;
-    }
-
-    public boolean isHardware() {
-        return mHardwareDecoder;
-    }
-
-    public void setHardwareDecoder(boolean enabled) {
-        mHardwareDecoder = enabled;
-        if (mHardwareDecoder) {
-            mPauseInBackground = true;
-        }
-    }
-
-    public boolean isInBackground() {
-        return isBackground;
-    }
-
-    public void setPauseInBackground(boolean enabled) {
-        mPauseInBackground = enabled;
-
-        if (mHardwareDecoder) {
-            mPauseInBackground = true;
-        }
     }
 
 //    //获取日志文件路径
