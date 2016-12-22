@@ -548,12 +548,12 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
 
             case R.id.started:
                 startedText.setChecked(!startedText.isChecked());
-//                started.setBackgroundResource(startedText.isChecked() ? R.drawable.text_background_select : R.drawable.text_background_normal);
+                started.setBackgroundResource(startedText.isChecked() ? R.drawable.text_background_select : R.drawable.text_background_normal);
                 startedSelected.setVisibility(startedText.isChecked() ? View.VISIBLE : View.INVISIBLE);
                 break;
             case R.id.   recruiting:
                 recruitingText.setChecked(!recruitingText.isChecked());
-//                recruiting.setBackgroundResource(recruitingText.isChecked() ? R.drawable.text_background_select : R.drawable.text_background_normal);
+                recruiting.setBackgroundResource(recruitingText.isChecked() ? R.drawable.text_background_select : R.drawable.text_background_normal);
                 recruitingSelected.setVisibility(recruitingText.isChecked() ? View.VISIBLE : View.INVISIBLE);
                 break;
 
