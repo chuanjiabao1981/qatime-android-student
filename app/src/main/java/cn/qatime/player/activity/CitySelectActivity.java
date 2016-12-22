@@ -132,20 +132,24 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
         //如果没有被赋值，则默认全国
         utils = new AMapLocationUtils(getApplicationContext(), new AMapLocationUtils.LocationListener() {
             @Override
-            public void onLocationBack(String result) {
+            public void onLocationBack(String[] result) {
                 locationView.setEnabled(true);
-                utils.stopLocation();
-                for (CityBean.Data item : list) {
-                    if (result.equals(item.getName())) {
-                        locationCity = item;
+                if (result != null && result.length > 1) {
+                    for (CityBean.Data item : list) {
+                        if (result[1].equals(item.getName()) || result[0].equals(item.getName())) {//需先对比区,区不对应往上对比市,不可颠倒
+                            locationCity = item;
+                        }
                     }
+                } else {
+                    Toast.makeText(CitySelectActivity.this, "暂未获取到您的位置信息", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 if (locationCity == null) {//如果没有被赋值，则默认全国
                     Toast.makeText(CitySelectActivity.this, "暂未获取到您的位置信息", Toast.LENGTH_SHORT).show();
                 } else {
                     if (!BaseApplication.getCurrentCity().equals(locationCity)) {
                         dialogCity();
-                        Logger.e("location", result);
+//                        Logger.e("location", result);
                         Logger.e("locationCity", locationCity.getName());
                     } else {
                         finish();
@@ -269,6 +273,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
                 break;
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -279,5 +284,13 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
     protected void onPause() {
         super.onPause();
         MobclickAgent.onPause(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (utils!=null) {
+            utils.destroyLocation();
+        }
     }
 }

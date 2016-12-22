@@ -69,7 +69,7 @@ public class AMapLocationUtils {
     /**
      * 停止定位
      */
-    public void stopLocation() {
+    private void stopLocation() {
         // 停止定位
         locationClient.stopLocation();
     }
@@ -89,10 +89,10 @@ public class AMapLocationUtils {
     }
 
     public interface LocationListener {
-        void onLocationBack(String result);
+        void onLocationBack(String[] result);
     }
 
-    private synchronized static String getLocationStr(AMapLocation location) {
+    private synchronized static String[] getLocationStr(AMapLocation location) {
         if (null == location) {
             return null;
         }
@@ -106,29 +106,30 @@ public class AMapLocationUtils {
 //            sb.append("精    度    : " + location.getAccuracy() + "米" + "\n");
 //            sb.append("提供者    : " + location.getProvider() + "\n");
 
-            if (location.getProvider().equalsIgnoreCase(
+            if (!location.getProvider().equalsIgnoreCase(
                     android.location.LocationManager.GPS_PROVIDER)) {
+                // 提供者是GPS时是没有以下信息的
+                //                sb.append("国    家    : " + location.getCountry() + "\n");
+                //                sb.append("省            : " + location.getProvince() + "\n");
+                //                sb.append("市            : " + location.getCity() + "\n");
+                //                sb.append("城市编码 : " + location.getCityCode() + "\n");
+                //                sb.append("区            : " + location.getDistrict() + "\n");
+                //                sb.append("区域 码   : " + location.getAdCode() + "\n");
+                //                sb.append("地    址    : " + location.getAddress() + "\n");
+                //                sb.append("兴趣点    : " + location.getPoiName() + "\n");
+                //                定位完成的时间
+                //                sb.append("定位时间: " + location.getTime() + "\n");
+                //                Logger.e(sb.toString());
+                return new String[]{location.getCity(), location.getDistrict()};
+            }
+//            else {
 //                // 以下信息只有提供者是GPS时才会有
 //                sb.append("速    度    : " + location.getSpeed() + "米/秒" + "\n");
 //                sb.append("角    度    : " + location.getBearing() + "\n");
 //                // 获取当前提供定位服务的卫星个数
 //                sb.append("星    数    : "
 //                        + location.getSatellites() + "\n");
-            } else {
-                // 提供者是GPS时是没有以下信息的
-//                sb.append("国    家    : " + location.getCountry() + "\n");
-//                sb.append("省            : " + location.getProvince() + "\n");
-//                sb.append("市            : " + location.getCity() + "\n");
-//                sb.append("城市编码 : " + location.getCityCode() + "\n");
-//                sb.append("区            : " + location.getDistrict() + "\n");
-//                sb.append("区域 码   : " + location.getAdCode() + "\n");
-//                sb.append("地    址    : " + location.getAddress() + "\n");
-//                sb.append("兴趣点    : " + location.getPoiName() + "\n");
-//                定位完成的时间
-//                sb.append("定位时间: " + location.getTime() + "\n");
-//                Logger.e(sb.toString());
-                return location.getDistrict();
-            }
+//            }
         } else {
 //            定位失败
 //            sb.append("定位失败" + "\n");
@@ -136,10 +137,10 @@ public class AMapLocationUtils {
 //            sb.append("错误信息:" + location.getErrorInfo() + "\n");
 //            sb.append("错误描述:" + location.getLocationDetail() + "\n");
 //            Logger.e(sb.toString());
-            return "未查询到定位结果";
+            return null;
         }
 //        Logger.e(sb.toString());
-        return "未查询到定位结果";
+        return null;
     }
 
 }

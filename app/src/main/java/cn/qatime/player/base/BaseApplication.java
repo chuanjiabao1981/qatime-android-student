@@ -264,7 +264,7 @@ public class BaseApplication extends Application {
 
         @Override
         public int getDefaultIconResId() {
-            return R.mipmap.head_sculpture;
+            return R.mipmap.head_default;
         }
 
         @Override
