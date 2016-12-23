@@ -42,16 +42,6 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@id/yuan"
-                android:paddingTop="6dp"
-                android:text="@string/balance"
-                android:textColor="#999999"
-                android:textSize="14sp" />
-
-            <TextView
                 android:id="@+id/consumption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

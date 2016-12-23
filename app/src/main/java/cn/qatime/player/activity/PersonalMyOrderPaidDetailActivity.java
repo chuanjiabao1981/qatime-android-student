@@ -29,7 +29,6 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
     private TextView paytime;
     private LinearLayout listitem;
     private TextView name;
-    private ImageView image;
     private TextView grade;
     private TextView teacher;
     private ImageView status;
@@ -89,7 +88,7 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
             paytime.setText(getResourceString(R.string.is_null));
         } else {
             try {
-                buildtime.setText(parse.format(parseISO.parse(getIntent().getStringExtra("pay_at"))));
+                paytime.setText(parse.format(parseISO.parse(getIntent().getStringExtra("pay_at"))));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -117,9 +116,7 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
     }
 
     public void initView() {
-
         name = (TextView) findViewById(R.id.name);
-        image = (ImageView) findViewById(R.id.image);
         subject = (TextView) findViewById(R.id.subject);
         grade = (TextView) findViewById(R.id.grade);
         status = (ImageView) findViewById(R.id.status);
