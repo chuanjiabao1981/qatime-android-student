@@ -819,7 +819,11 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 bufferAnimation1.start();
             }
         }
-        floatingWindow.setVisibility(View.VISIBLE);
+        if (isSubOpen) {
+            floatingWindow.setVisibility(View.VISIBLE);
+        } else {
+            floatingWindow.setVisibility(View.GONE);
+        }
         subVideo.setVisibility(View.GONE);
     }
 

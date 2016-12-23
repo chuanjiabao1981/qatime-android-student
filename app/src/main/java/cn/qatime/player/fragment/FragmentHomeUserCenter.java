@@ -39,7 +39,6 @@ import libraryextra.utils.VolleyListener;
 
 public class FragmentHomeUserCenter extends BaseFragment implements View.OnClickListener {
     private LinearLayout information;
-    private ImageView banner;
     private ImageView headSculpture;
     private LinearLayout order;
     private LinearLayout wallet;
@@ -49,7 +48,6 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
     private TextView newVersion;
     private TextView name;
     private TextView balance;
-    DecimalFormat df = new DecimalFormat("#.00");
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -158,7 +156,6 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
 
     private void assignViews(View view) {
         information = (LinearLayout) view.findViewById(R.id.information);
-        banner = (ImageView) view.findViewById(R.id.banner);
         headSculpture = (ImageView) view.findViewById(R.id.head_sculpture);
         name = (TextView) view.findViewById(R.id.name);
         balance = (TextView) view.findViewById(R.id.balance);

@@ -291,7 +291,7 @@ public class FragmentMessageChatNews extends BaseFragment {
         items.clear();
         for (TutorialClassBean.Data data : courses.getData()) {
             for (RecentContact item : loadedRecents) {
-                if (data.getChat_team_id().equals(item.getContactId())) {
+                if (data != null && !StringUtils.isNullOrBlanK(data.getChat_team_id()) && data.getChat_team_id().equals(item.getContactId())) {
                     Team team = TeamDataCache.getInstance().getTeamById(item.getContactId());
                     MessageListBean bean = new MessageListBean();
                     bean.setMute(team.mute());
@@ -319,53 +319,6 @@ public class FragmentMessageChatNews extends BaseFragment {
             loadedRecents = null;
         }
         refreshMessages(true);
-
-//        if (courses != null && courses.getData() != null) {
-//            for (TutorialClassBean.Data data : courses.getData()) {
-//                for (RecentContact item : loadedRecents) {
-//                    if (data.getChat_team_id().equals(item.getContactId())) {
-//                        Team team = TeamDataCache.getInstance().getTeamById(item.getContactId());
-//                        MessageListBean bean = new MessageListBean();
-//                        bean.setMute(team.mute());
-//                        bean.setContactId(item.getContactId());
-//                        bean.setSessionType(item.getSessionType());
-//                        bean.setName(data.getName());
-//                        if (StringUtils.isNullOrBlanK(bean.getName())) {
-//                            bean.setName(item.getContent().replace("讨论组", ""));
-//                        }
-//                        bean.setCourseId(data.getId());
-//                        bean.setUnreadCount(item.getUnreadCount());
-//                        bean.setCamera(data.getCamera());
-//                        bean.setBoard(data.getBoard());
-//                        bean.setTime(item.getTime());
-//                        bean.setRecentMessageId(item.getRecentMessageId());
-//                        bean.setOwner(data.getChat_team_owner());
-//                        items.add(bean);
-//                    }
-//                }
-//            }
-//        } else {
-//            getCourses();
-//            for (RecentContact item : loadedRecents) {
-////                    if (data.getChat_team_id().equals(item.getContactId())) {
-//                Team team = TeamDataCache.getInstance().getTeamById(item.getContactId());
-//                MessageListBean bean = new MessageListBean();
-//                bean.setMute(team.mute());
-//                bean.setContactId(item.getContactId());
-//                bean.setSessionType(item.getSessionType());
-//                bean.setName(TeamDataCache.getInstance().getTeamName(item.getContactId()).replace("讨论组", ""));
-//                bean.setUnreadCount(item.getUnreadCount());
-//                bean.setRecentMessageId(item.getRecentMessageId());
-//                bean.setTime(item.getTime());
-//                items.add(bean);
-////                    }
-//            }
-//        }
-//        if (loadedRecents != null) {
-////            items.addAll(loadedRecents);
-//            loadedRecents = null;
-//        }
-
     }
 
     private void refreshMessages(boolean unreadChanged) {

@@ -42,6 +42,9 @@
                 android:id="@+id/price_low"
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 android:background="@drawable/screen_edit_background"
                 android:gravity="center"
                 android:inputType="number"
@@ -50,10 +53,7 @@
                 android:singleLine="true"
                 android:textColor="#a000"
                 android:textColorHint="#ff999999"
-                android:textSize="16sp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:textSize="16sp" />
 
         </RelativeLayout>
 
@@ -183,12 +183,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:paddingBottom="18dp"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
-        android:paddingTop="12dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:paddingTop="12dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -295,7 +295,8 @@
             android:layout_marginLeft="12dp"
             android:layout_marginRight="9dp"
             android:layout_weight="1"
-            android:text="@string/reset" />
+            android:text="@string/reset"
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/submit"
@@ -305,7 +306,8 @@
             android:layout_marginLeft="9dp"
             android:layout_marginRight="12dp"
             android:layout_weight="1"
-            android:text="@string/confirm" />
+            android:text="@string/confirm"
+            android:textSize="14sp" />
 
     </LinearLayout>
 
