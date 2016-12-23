@@ -69,24 +69,11 @@ public class FragmentOrderPaid extends BaseFragment {
         adapter = new CommonAdapter<MyOrderBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_order2) {
             @Override
             public void convert(ViewHolder helper, MyOrderBean.Data item, int position) {
-                Glide.with(getActivity()).load(item.getProduct().getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
-                helper.setText(R.id.classname, item.getProduct().getName());
-                if (StringUtils.isNullOrBlanK(item.getProduct().getGrade())) {
-                    helper.setText(R.id.grade, "年级");
-                } else {
-                    helper.setText(R.id.grade, item.getProduct().getGrade());
-                }
-                if (StringUtils.isNullOrBlanK(item.getProduct().getSubject())) {
-                    helper.setText(R.id.subject, "科目");
-                } else {
-                    helper.setText(R.id.subject, item.getProduct().getSubject());
-                }
-                if (StringUtils.isNullOrBlanK(item.getProduct().getTeacher_name())) {
-                    helper.setText(R.id.teacher, "老师");
-                } else {
-                    helper.setText(R.id.teacher, item.getProduct().getTeacher_name());
-                }
-                helper.setText(R.id.progress, item.getProduct().getCompleted_lesson_count() + "/" + item.getProduct().getPreset_lesson_count());//进度
+                StringBuilder sp = new StringBuilder();
+                sp.append(item.getProduct().getGrade()).append(item.getProduct().getSubject()).append("/共").append(item.getProduct().getLesson_count())
+                        .append("课/").append(item.getProduct().getTeacher_name());
+                helper.setText(R.id.classname, item.getProduct().getName())
+                        .setText(R.id.describe, sp.toString());
                 if (item.getStatus().equals("shipped")) {//正在交易
                     helper.setText(R.id.status, getResourceString(R.string.dealing));
                 } else if (item.getStatus().equals("paid")) {//正在交易

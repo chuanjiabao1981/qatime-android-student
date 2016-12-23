@@ -7,10 +7,15 @@
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#f7f7f7"
         android:cacheColorHint="#00000000"
-        android:scrollbars="none"
-        android:dividerHeight = "1px"
+        android:divider="#f7f7f7"
+        android:dividerHeight="10dp"
+        android:horizontalSpacing="0dp"
         android:listSelector="#00000000"
-        android:background="#05000000" />
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:scrollbars="none"
+        android:verticalSpacing="0dp" />
 
 </RelativeLayout>

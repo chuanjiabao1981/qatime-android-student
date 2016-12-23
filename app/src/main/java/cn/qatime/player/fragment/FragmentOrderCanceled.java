@@ -46,7 +46,6 @@ public class FragmentOrderCanceled extends BaseFragment {
     private java.util.List<MyOrderBean.Data> list = new ArrayList<>();
     private CommonAdapter<MyOrderBean.Data> adapter;
     private int page = 1;
-    private int id;
     DecimalFormat df = new DecimalFormat("#.00");
 
     @Nullable
@@ -70,24 +69,11 @@ public class FragmentOrderCanceled extends BaseFragment {
         adapter = new CommonAdapter<MyOrderBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_order3) {
             @Override
             public void convert(ViewHolder helper, final MyOrderBean.Data item, final int position) {
-                Glide.with(getActivity()).load(item.getProduct().getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
-                helper.setText(R.id.classname, item.getProduct().getName());
-                if (StringUtils.isNullOrBlanK(item.getProduct().getGrade())) {
-                    helper.setText(R.id.grade, "年级");
-                } else {
-                    helper.setText(R.id.grade, item.getProduct().getGrade());
-                }
-                if (StringUtils.isNullOrBlanK(item.getProduct().getSubject())) {
-                    helper.setText(R.id.subject, "科目");
-                } else {
-                    helper.setText(R.id.subject, item.getProduct().getSubject());
-                }
-                if (StringUtils.isNullOrBlanK(item.getProduct().getTeacher_name())) {
-                    helper.setText(R.id.teacher, "老师");
-                } else {
-                    helper.setText(R.id.teacher, item.getProduct().getTeacher_name());
-                }
-                helper.setText(R.id.progress, item.getProduct().getCompleted_lesson_count() + "/" + item.getProduct().getPreset_lesson_count());//进度
+                StringBuilder sp = new StringBuilder();
+                sp.append(item.getProduct().getGrade()).append(item.getProduct().getSubject()).append("/共").append(item.getProduct().getLesson_count())
+                        .append("课/").append(item.getProduct().getTeacher_name());
+                helper.setText(R.id.classname, item.getProduct().getName())
+                        .setText(R.id.describe, sp.toString());
                 if (item.getStatus().equals("refunded")) {//交易关闭
                     helper.setText(R.id.status, getResourceString(R.string.deal_closed));
                 } else if (item.getStatus().equals("canceled")) {//交易关闭
@@ -107,28 +93,6 @@ public class FragmentOrderCanceled extends BaseFragment {
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-//                                Intent intent = new Intent(getActivity(), OrderConfirmActivity.class);
-//                                intent.putExtra("id", list.get(position).getProduct().getId());
-//                                OrderPayBean bean = new OrderPayBean();
-//                                bean.image = list.get(position).getProduct().getPublicize();
-//                                bean.name = list.get(position).getProduct().getName();
-//                                bean.subject = list.get(position).getProduct().getSubject();
-//                                bean.grade = list.get(position).getProduct().getGrade();
-//                                bean.status = list.get(position).getStatus();
-//                                bean.classnumber = list.get(position).getProduct().getPreset_lesson_count();
-//                                bean.teacher = list.get(position).getProduct().getTeacher_name();
-//                                bean.classendtime = list.get(position).getProduct().getLive_end_time();
-//                                bean.classstarttime = list.get(position).getProduct().getLive_start_time();
-//                                if (StringUtils.isNullOrBlanK(list.get(position).getProduct().getStatus())) {
-//                                    bean.status = " ";
-//                                } else {
-//                                    bean.status = list.get(position).getProduct().getStatus();
-//                                }
-//                                Logger.e(list.get(position).getProduct().getStatus());
-//                                bean.price = list.get(position).getProduct().getPrice();
-//                                intent.putExtra("data", bean);
-//
-//                                startActivity(intent);
                                 Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
                                 intent.putExtra("id", item.getProduct().getId());
                                 intent.putExtra("page", 0);

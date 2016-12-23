@@ -79,23 +79,13 @@ public class FragmentOrderUnpaid extends BaseFragment {
         adapter = new CommonAdapter<MyOrderBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_order1) {
             @Override
             public void convert(ViewHolder helper, final MyOrderBean.Data item, final int position) {
-                Glide.with(getActivity()).load(item.getProduct().getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
-                helper.setText(R.id.classname, item.getProduct().getName());
-                if (StringUtils.isNullOrBlanK(item.getProduct().getGrade())) {
-                    helper.setText(R.id.grade, "年级");
-                } else {
-                    helper.setText(R.id.grade, item.getProduct().getGrade());
-                }
-
-                if (StringUtils.isNullOrBlanK(item.getProduct().getSubject())) {
-                    helper.setText(R.id.subject, "科目");
-                } else {
-                    helper.setText(R.id.subject, item.getProduct().getSubject());
-                }
-
-                helper.setText(R.id.teacher, item.getProduct().getTeacher_name());
-
-                helper.setText(R.id.progress, item.getProduct().getCompleted_lesson_count() + "/" + item.getProduct().getPreset_lesson_count());//进度
+                StringBuilder sp = new StringBuilder();
+                sp.append(item.getProduct().getGrade())
+                        .append(item.getProduct().getSubject())
+                        .append("/共").append(item.getProduct().getLesson_count()).append("课")
+                        .append("/").append(item.getProduct().getTeacher_name());
+                helper.setText(R.id.classname, item.getProduct().getName())
+                        .setText(R.id.describe, sp.toString());
 
                 if (item.getStatus().equals("unpaid")) {//待付款
                     helper.setText(R.id.status, getResourceString(R.string.waiting_for_payment));
@@ -109,7 +99,6 @@ public class FragmentOrderUnpaid extends BaseFragment {
                     price = "0" + price;
                 }
                 helper.setText(R.id.price, "￥" + price);
-
 
                 helper.getView(R.id.pay).setOnClickListener(
                         new View.OnClickListener() {
@@ -171,7 +160,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
 //                bean.Preset_lesson_count = list.get(position - 1).getProduct().getPreset_lesson_count();
 //                bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
 //                bean.price = list.get(position - 1).getProduct().getPrice();
-                intent.putExtra("data",  list.get(position-1));
+                intent.putExtra("data", list.get(position - 1));
 //                intent.putExtra("payType", list.get(position - 1).getPay_type());
 //                intent.putExtra("created_at", list.get(position - 1).getCreated_at());
                 startActivityForResult(intent, Constant.REQUEST);
