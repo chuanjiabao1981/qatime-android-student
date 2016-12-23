@@ -7,7 +7,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.umeng.analytics.MobclickAgent;
 
 import java.text.DecimalFormat;
@@ -33,7 +32,7 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
     private ImageView image;
     private TextView grade;
     private TextView teacher;
-    private TextView status;
+    private ImageView status;
     private TextView payprice;
     private int classid;
     DecimalFormat df = new DecimalFormat("#.00");
@@ -54,8 +53,6 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
 
     private void setValue(OrderDetailBean data) {
         classid = data.id;
-
-        Glide.with(PersonalMyOrderPaidDetailActivity.this).load(data.image).placeholder(R.mipmap.photo).centerCrop().crossFade().into(image);
         if (StringUtils.isNullOrBlanK(data.name)) {
             name.setText(getResourceString(R.string.cancel_order_name));
         } else {
@@ -104,13 +101,13 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
             paytype.setText(getResourceString(R.string.alipay_payment));
         }
         if (data.status.equals("paid")) {//正在交易
-            status.setText(getResources().getString(R.string.dealing));
+            status.setImageResource(R.mipmap.paying);
         } else if (data.status.equals("shipped")) {//正在交易
-            status.setText(getResources().getString(R.string.dealing));
+            status.setImageResource(R.mipmap.paying);
         } else {//交易完成
-            status.setText(getResources().getString(R.string.deal_done));
+            status.setImageResource(R.mipmap.complete_pay);
         }
-        progress.setText(data.Completed_lesson_count + "/" + data.Preset_lesson_count);
+        progress.setText("共" + data.Preset_lesson_count + "课");
         String price = df.format(data.current_price);
         if (price.startsWith(".")) {
             price = "0" + price;
@@ -125,7 +122,7 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
         image = (ImageView) findViewById(R.id.image);
         subject = (TextView) findViewById(R.id.subject);
         grade = (TextView) findViewById(R.id.grade);
-        status = (TextView) findViewById(R.id.status);
+        status = (ImageView) findViewById(R.id.status);
         teacher = (TextView) findViewById(R.id.teacher);
         progress = (TextView) findViewById(R.id.progress);//进度
         ordernumber = (TextView) findViewById(R.id.order_number);//订单编号
@@ -145,6 +142,7 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
             }
         });
     }
+
     @Override
     protected void onResume() {
         super.onResume();

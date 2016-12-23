@@ -6,270 +6,89 @@
 
     <include layout="@layout/layout_backbar" />
 
-    <RelativeLayout
+    <ImageView
+        android:id="@+id/status"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="144dp"
-            android:background="#bfbdbd"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="10dp"
-            android:scaleType="centerCrop">
-
-            <TextView
-                android:id="@+id/status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:padding="8dp"
-                android:text="@string/waiting_for_payment"
-                android:textColor="#ffbc04"
-                android:textSize="20sp" />
-
-            <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:orientation="horizontal"-->
-            <!--android:padding="5dp">-->
-
-            <!--<View-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="1dp"-->
-            <!--android:layout_weight="1"/>-->
-
-            <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center"-->
-
-            <!--android:text="订单将于"-->
-            <!--android:textColor="#ffffff"/>-->
-
-            <!--<TextView-->
-            <!--android:id="@+id/time"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center"-->
-
-            <!--android:text="xx:xx:xx:xx"-->
-            <!--android:textColor="#ffffff"/>-->
-
-            <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center"-->
-
-            <!--android:text="后自动关闭"-->
-            <!--android:textColor="#ffffff"/>-->
-
-            <!--<View-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="1dp"-->
-            <!--android:layout_weight="1"/>-->
-            <!--"-->
-
-
-            <!--</LinearLayout>-->
-        </LinearLayout>
-    </RelativeLayout>
+        android:layout_height="144dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/waiting_pay" />
 
     <LinearLayout
         android:id="@+id/list_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#faf6f6"
+        android:background="#fff"
         android:orientation="horizontal"
-        android:padding="12dp"
-        android:weightSum="1">
-
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="#dcdcdc"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/photo" />
-
+        android:padding="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.35"
-            android:background="#faf6f6"
-            android:orientation="vertical"
-            android:padding="2dp">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="2"
-                android:paddingBottom="5dp"
-                android:text="辅导班" />
+                android:text="辅导班"
+                android:textColor="#333" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/grade"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:paddingLeft="2dp"
                     android:text="年级"
+                    android:textColor="#666"
                     android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/subject"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
                     android:text="科目"
+                    android:textColor="#666"
                     android:textSize="13sp" />
 
                 <TextView
-                    android:id="@+id/teacher"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginLeft="15dp"
-                    android:padding="2dp"
-                    android:text="姓名"
+                    android:text="/"
+                    android:textColor="#666"
                     android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/progress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginLeft="15dp"
-                    android:padding="2dp"
-                    android:text="0/0"
+                    android:text="共0课"
+                    android:textColor="#666"
                     android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="/"
+                    android:textColor="#666"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/teacher"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="姓名"
+                    android:textColor="#666"
+                    android:textSize="13sp" />
+
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="2dp"
-                android:text="开课20160715  15:30"
-                android:textSize="13sp" />
-
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.65"
-            android:background="#faf6f6"></RelativeLayout>
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="4dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/order_number" />
-
-            <TextView
-                android:id="@+id/order_number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
-                android:text="" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="4dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/time_built" />
-
-            <TextView
-                android:id="@+id/build_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
-                android:layout_marginLeft="40dp"
-                android:text="" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="4dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/time_payment" />
-
-            <TextView
-                android:id="@+id/pay_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
-                android:text="" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="4dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/method_payment" />
-
-            <TextView
-                android:id="@+id/pay_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
-                android:text="" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="4dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="@string/amount_payment_order" />
-
-            <TextView
-                android:id="@+id/pay_price"
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
-                android:text="" />
         </LinearLayout>
 
     </LinearLayout>
@@ -277,25 +96,112 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#dfdddd" />
+        android:background="#f7f7f7" />
 
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:orientation="horizontal"-->
-    <!--android:padding="5dp">-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="vertical"
+        android:padding="10dp">
 
-    <!--<TextView-->
-    <!--android:id="@+id/cancel_order"-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_margin="2dp"-->
-    <!--android:layout_weight="1"-->
-    <!--android:background="@drawable/text_background"-->
-    <!--android:gravity="center"-->
-    <!--android:padding="10dp"-->
-    <!--android:text="@string/cancel_order"/>-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/order_number"
+                android:textColor="#333" />
+
+            <TextView
+                android:id="@+id/order_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="28dp"
+                android:textColor="#666" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/time_built"
+                android:textColor="#333" />
+
+            <TextView
+                android:id="@+id/build_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="28dp"
+                android:textColor="#666" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/time_payment"
+                android:textColor="#333" />
+
+            <TextView
+                android:id="@+id/pay_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="28dp"
+                android:textColor="#666" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/method_payment"
+                android:textColor="#333" />
+
+            <TextView
+                android:id="@+id/pay_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="28dp"
+                android:textColor="#666" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/amount_payment_order"
+                android:textColor="#333" />
+
+            <TextView
+                android:id="@+id/pay_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="28dp"
+                android:textColor="#666" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>
 

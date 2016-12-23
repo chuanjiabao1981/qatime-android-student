@@ -148,21 +148,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), PersonalMyOrderUnpaidDetailActivity.class);
-//                intent.putExtra("id", list.get(position - 1).getId());
-//                OrderDetailBean bean = new OrderDetailBean();
-//                bean.id = list.get(position - 1).getProduct().getId();
-//                bean.image = list.get(position - 1).getProduct().getPublicize();
-//                bean.name = list.get(position - 1).getProduct().getName();
-//                bean.subject = list.get(position - 1).getProduct().getSubject();
-//                bean.grade = list.get(position - 1).getProduct().getGrade();
-//                bean.status = list.get(position - 1).getStatus();
-//                bean.teacher = list.get(position - 1).getProduct().getTeacher_name();
-//                bean.Preset_lesson_count = list.get(position - 1).getProduct().getPreset_lesson_count();
-//                bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
-//                bean.price = list.get(position - 1).getProduct().getPrice();
                 intent.putExtra("data", list.get(position - 1));
-//                intent.putExtra("payType", list.get(position - 1).getPay_type());
-//                intent.putExtra("created_at", list.get(position - 1).getCreated_at());
                 startActivityForResult(intent, Constant.REQUEST);
 
             }
