@@ -23,6 +23,11 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.model.RecentContact;
 
 import org.json.JSONObject;
 
@@ -59,6 +64,8 @@ import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.TagViewPager;
 
+import static cn.qatime.player.R.id.count;
+
 public class FragmentHomeMainPage extends BaseFragment implements View.OnClickListener {
 
 
@@ -80,7 +87,27 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private CityBean.Data locationCity;
     private AMapLocationUtils utils;
     private List<BannerRecommendBean.DataBean> listBanner = new ArrayList<>();
+//    private View count;
+
     private BannerRecommendBean.DataBean noBanner;
+    //  创建观察者对象
+    Observer<List<RecentContact>> messageObserver =
+            new Observer<List<RecentContact>>() {
+                @Override
+                public void onEvent(List<RecentContact> messages) {
+                    refreshUnreadNum();
+                }
+            };
+
+    /**
+     * 刷新未读
+     */
+    private void refreshUnreadNum() {
+        int unreadNum = NIMClient.getService(MsgService.class).getTotalUnreadCount();
+//                    Logger.e("unreadNum" + unreadNum);
+//        count.setVisibility(unreadNum == 0 ? View.GONE : View.VISIBLE);
+        message.setImageResource(unreadNum == 0 ? R.mipmap.message :R.mipmap.message_x);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -99,6 +126,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         citySelect = view.findViewById(R.id.city_select);
         gridviewClass = (GridView) view.findViewById(R.id.gridview_class);
         message = (ImageView) view.findViewById(R.id.message);
+//        count = view.findViewById(count);
 
         setCity();
 
@@ -111,6 +139,10 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         allClass.setOnClickListener(this);
         message.setOnClickListener(this);
         citySelect.setOnClickListener(this);
+        refreshUnreadNum();
+        //  注册/注销观察者
+        NIMClient.getService(MsgServiceObserve.class)
+                .observeRecentContact(messageObserver, true);
     }
 
     private void setCity() {
@@ -309,7 +341,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     holder.setText(R.id.course_title, item.getLive_studio_course().getName());
                     holder.setText(R.id.grade, item.getLive_studio_course().getGrade());
                     holder.setText(R.id.subject, item.getLive_studio_course().getSubject());
-                    holder.setText(R.id.count, item.getLive_studio_course().getBuy_tickets_count() + "人报名");
+                    holder.setText(count, item.getLive_studio_course().getBuy_tickets_count() + "人报名");
                     ((TextView) holder.getView(R.id.reason)).setText(getReason(item.getReason()));
                     ((TextView) holder.getView(R.id.reason)).setBackgroundColor(getReasonBackground(item.getReason()));
                     ((TextView) holder.getView(R.id.reason)).setVisibility(View.VISIBLE);
@@ -318,7 +350,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     holder.setText(R.id.course_title, "暂无辅导班数据");
                     holder.setText(R.id.grade, "年级");
                     holder.setText(R.id.subject, "科目");
-                    holder.setText(R.id.count, "0人报名");
+                    holder.setText(count, "0人报名");
                     ((TextView) holder.getView(R.id.reason)).setVisibility(View.INVISIBLE);
                 }
             }
@@ -399,6 +431,9 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     @Override
     public void onDestroy() {
         super.onDestroy();
+        //  注册/注销观察者
+        NIMClient.getService(MsgServiceObserve.class)
+                .observeRecentContact(messageObserver, true);
     }
 
     @Override
