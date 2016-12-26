@@ -24,10 +24,8 @@ import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.RequestCallbackWrapper;
 import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.StatusCode;
-import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
-import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
@@ -449,8 +447,10 @@ public class FragmentMessageChatNews extends BaseFragment {
                     boolean haveData = false;
                     if (courses != null && courses.getData() != null) {
                         for (TutorialClassBean.Data data : courses.getData()) {
-                            if (data.getChat_team_id().equals(bean.getContactId())) {
-                                haveData = true;
+                            if(data!=null&&bean!=null){
+                                if (data.getChat_team_id().equals(bean.getContactId())) {
+                                    haveData = true;
+                                }
                             }
                         }
                         if (!haveData) {
