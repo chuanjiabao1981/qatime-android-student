@@ -22,7 +22,7 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="16dp"
                 android:src="@mipmap/city_select" />
 
             <TextView
@@ -40,22 +40,32 @@
 
         </LinearLayout>
 
+
         <ImageView
             android:id="@+id/message"
-            style="@style/backbar_icon_style"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:scaleType="centerInside"
             android:layout_alignParentRight="true"
             android:clickable="true"
             android:src="@mipmap/message" />
 
-        <!--<TextView-->
-        <!--style="@style/backbar_text_style"-->
-        <!--android:layout_centerInParent="true"-->
-        <!--android:text="答疑时间" />-->
+        <!--<View-->
+        <!--android:id="@+id/count"-->
+        <!--android:layout_width="10dp"-->
+        <!--android:layout_height="10dp"-->
+        <!--android:layout_alignRight="@id/message"-->
+        <!--android:layout_marginRight="5dp"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:background="@drawable/shape_circle"-->
+        <!--android:visibility="visible" />-->
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:src="@mipmap/home_logo" />
+
 
     </RelativeLayout>
 
@@ -179,9 +189,9 @@
 
                     <ImageView
                         android:layout_width="wrap_content"
-                        android:padding="3dp"
-                        android:layout_marginLeft="-3dp"
                         android:layout_height="13dp"
+                        android:layout_marginLeft="-3dp"
+                        android:padding="3dp"
                         android:src="@mipmap/home_right_arrow" />
                 </LinearLayout>
             </LinearLayout>
