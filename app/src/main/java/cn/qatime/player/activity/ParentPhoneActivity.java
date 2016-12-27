@@ -97,7 +97,7 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
         String phoneP = getIntent().getStringExtra("phoneP");
         currentParentPhone.setText(phoneP);
         if (!phoneP.equals("未绑定")) {
-            currentParentPhone.setTextColor(Color.BLACK);
+            currentParentPhone.setTextColor(0xff666666);
         } else {
             currentParentPhone.setTextColor(Color.RED);
         }
