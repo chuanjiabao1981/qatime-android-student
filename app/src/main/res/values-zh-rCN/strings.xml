@@ -95,8 +95,8 @@
     <string name="click_to_add">点击添加</string>
     <string name="hint_name">输入真实姓名更方便老师联系你</string>
     <string name="hint_profiles">一句话介绍自己</string>
-    <string name="boy">我是男神</string>
-    <string name="girl">我是女神</string>
+    <string name="boy">男生</string>
+    <string name="girl">女生</string>
     <string name="finish">完成</string>
     <string name="male">男</string>
     <string name="female">女</string>

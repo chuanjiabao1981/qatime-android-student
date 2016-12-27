@@ -67,14 +67,7 @@
                 android:layout_height="1px"
                 android:background="#dfdddd" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="10dp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#dfdddd" />
 
             <LinearLayout
                 android:id="@+id/my_wallet"

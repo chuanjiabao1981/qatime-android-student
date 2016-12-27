@@ -16,8 +16,6 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,11 +50,10 @@ import libraryextra.view.WheelView;
 
 public class PersonalInformationChangeActivity extends BaseActivity implements View.OnClickListener {
     ImageView headsculpture;
-    TextView replace;
+    View replace;
     EditText name;
-    RadioButton men;
-    RadioButton women;
-    RadioGroup radiogroup;
+    TextView men;
+    TextView women;
     TextView textGrade;
     TextView complete;
     private Uri captureUri;
@@ -72,6 +69,8 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     private GradeBean gradeBean;
     private CustomProgressDialog progress;
     private AlertDialog alertDialog;
+    private String gender = "";
+    //    private EditText school;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +91,8 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
 
 
         replace.setOnClickListener(this);
+        men.setOnClickListener(this);
+        women.setOnClickListener(this);
         birthdayView.setOnClickListener(this);
         complete.setOnClickListener(this);
         gradeView.setOnClickListener(this);
@@ -109,11 +110,11 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         Selection.setSelection(etext, etext.length());
         if (!StringUtils.isNullOrBlanK(data.getData().getGender())) {
             if (data.getData().getGender().equals("male")) {
-                men.setChecked(true);
-                women.setChecked(false);
+                men.setSelected(true);
+                women.setSelected(false);
             } else {
-                men.setChecked(false);
-                women.setChecked(true);
+                men.setSelected(false);
+                women.setSelected(true);
             }
         }
         if (!StringUtils.isNullOrBlanK(data.getData().getBirthday())) {
@@ -142,6 +143,16 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.men:
+                men.setSelected(true);
+                women.setSelected(false);
+                gender = "male";
+                break;
+            case R.id.women:
+                women.setSelected(true);
+                men.setSelected(false);
+                gender = "female";
+                break;
             case R.id.grade_view:
                 showGradePickerDialog();
                 break;
@@ -214,7 +225,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                     Toast.makeText(this, getResources().getString(R.string.grade_can_not_be_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                String gender = radiogroup.getCheckedRadioButtonId() == men.getId() ? "male" : "female";
+
                 String birthday = select.equals(parse.format(new Date())) ? "" : select;
                 String desc = describe.getText().toString();
                 Map<String, String> map = new HashMap<>();
@@ -264,7 +275,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
 
     private void initView() {
         headsculpture = (ImageView) findViewById(R.id.head_sculpture);
-        replace = (TextView) findViewById(R.id.replace);
+        replace = findViewById(R.id.replace);
         name = (EditText) findViewById(R.id.name);
         name.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -272,12 +283,14 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 return event.getKeyCode() == KeyEvent.KEYCODE_ENTER;
             }
         });
-        men = (RadioButton) findViewById(R.id.men);
-        women = (RadioButton) findViewById(R.id.women);
-        radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
+        men = (TextView) findViewById(R.id.men);
+        women = (TextView) findViewById(R.id.women);
         textGrade = (TextView) findViewById(R.id.text_grade);
         describe = (EditText) findViewById(R.id.describe);
-        describe.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
+//        school = (EditText) findViewById(R.id.school);
+        describe.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
+        name.setFilters(new InputFilter[]{new InputFilter.LengthFilter(7)});
+//        school.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
         birthday = (TextView) findViewById(R.id.birthday);
         birthdayView = findViewById(R.id.birthday_view);
         gradeView = findViewById(R.id.grade_view);

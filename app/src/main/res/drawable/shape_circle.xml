@@ -4,9 +4,9 @@
     <corners android:radius="90dp" />
 
     <gradient
-        android:centerColor="#fff"
-        android:endColor="#fff"
-        android:startColor="#fff" />
+        android:centerColor="#00ccff"
+        android:endColor="#00ccff"
+        android:startColor="#00ccff" />
     <!--<gradient-->
     <!--android:centerColor="#ffffff"-->
     <!--android:endColor="#fff"-->
@@ -15,7 +15,7 @@
         <!--android:width="1dp"-->
         <!--android:color="#ffffff" />-->
     <size
-        android:height="12dp"
-        android:width="12dp" />
+        android:height="20dp"
+        android:width="20dp" />
 
 </shape>
