@@ -118,7 +118,7 @@
                     android:layout_width="10dp"
                     android:layout_height="10dp"
                     android:layout_margin="2dp"
-                    android:src="@mipmap/down" />
+                    android:src="@mipmap/screen_down" />
             </LinearLayout>
 
             <TextView

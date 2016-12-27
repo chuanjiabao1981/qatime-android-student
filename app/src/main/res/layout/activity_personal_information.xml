@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f7f7f7"
     android:orientation="vertical">
 
     <include layout="@layout/layout_backbar" />
@@ -13,6 +14,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#fff"
             android:orientation="vertical">
 
             <LinearLayout
@@ -60,8 +62,12 @@
 
                 <TextView
                     android:id="@+id/name"
-                    style="@style/setting_text_style"
-                    android:layout_marginRight="10dp" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:textSize="13sp"
+                    android:gravity="center"
+                    android:textColor="#666" />
 
             </LinearLayout>
 
@@ -86,8 +92,12 @@
 
                 <TextView
                     android:id="@+id/sex"
-                    style="@style/setting_text_style"
-                    android:layout_marginRight="10dp" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center"
+                    android:textSize="13sp"
+                    android:textColor="#666" />
 
             </LinearLayout>
 
@@ -112,8 +122,12 @@
 
                 <TextView
                     android:id="@+id/birthday"
-                    style="@style/setting_text_style"
-                    android:layout_marginRight="10dp"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center"
+                    android:textSize="13sp"
+                    android:textColor="#666"  />
 
             </LinearLayout>
 
@@ -138,8 +152,12 @@
 
                 <TextView
                     android:id="@+id/grade"
-                    style="@style/setting_text_style"
-                    android:layout_marginRight="10dp" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center"
+                    android:textSize="13sp"
+                    android:textColor="#666"  />
 
             </LinearLayout>
 
@@ -164,9 +182,12 @@
 
                 <TextView
                     android:id="@+id/school"
-                    style="@style/setting_text_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
-                    android:text="" />
+                    android:gravity="center"
+                    android:textSize="13sp"
+                    android:textColor="#666"  />
             </LinearLayout>
 
             <View
@@ -177,18 +198,26 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingBottom="14dp"
+                android:paddingTop="14dp">
 
                 <TextView
-                    style="@style/setting_text_style"
-                    android:text="@string/profiles" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:text="@string/profiles"
+                    android:textColor="#333" />
 
                 <TextView
                     android:id="@+id/describe"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="3dp"
-                    android:text="" />
+                    android:layout_marginRight="10dp"
+                    android:paddingLeft="20dp"
+                    android:text=""
+                    android:textSize="13sp"
+                    android:textColor="#666" />
 
             </LinearLayout>
 
