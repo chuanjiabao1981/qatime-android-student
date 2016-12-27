@@ -45,7 +45,46 @@
             android:layout_height="12dp"
             android:src="@mipmap/personal_enter" />
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dfdddd" />
 
+    <LinearLayout
+        android:id="@+id/bind_wechat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/setting_text_style"
+            android:text="@string/bind_wechat" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/wechat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="9dp"
+            android:background="@drawable/shape_wechat_bind_background_unable"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:text="马上绑定"
+            android:textColor="#fff"
+            android:textSize="13sp" />
+
+        <ImageView
+            style="@style/setting_icon_margin_right"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:src="@mipmap/personal_enter" />
+    </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
@@ -83,48 +122,7 @@
             android:src="@mipmap/personal_enter" />
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#dfdddd" />
 
-    <LinearLayout
-        android:id="@+id/bind_wechat"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#fff"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
-            style="@style/setting_text_style"
-            android:text="@string/bind_wechat" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <TextView
-            android:id="@+id/wechat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="9dp"
-            android:background="@drawable/shape_wechat_bind_background_unable"
-            android:paddingBottom="1dp"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:paddingTop="1dp"
-            android:text="马上绑定"
-            android:textColor="#fff"
-            android:textSize="13sp" />
-
-        <ImageView
-            style="@style/setting_icon_margin_right"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:src="@mipmap/personal_enter" />
-    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
