@@ -35,8 +35,7 @@
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_margin="10dp"
                     android:src="@mipmap/personal_information_head" />
             </LinearLayout>
 
@@ -62,7 +61,7 @@
                 <TextView
                     android:id="@+id/name"
                     style="@style/setting_text_style"
-                    android:layout_marginRight="12dp" />
+                    android:layout_marginRight="10dp" />
 
             </LinearLayout>
 
@@ -88,7 +87,7 @@
                 <TextView
                     android:id="@+id/sex"
                     style="@style/setting_text_style"
-                    android:layout_marginRight="12dp" />
+                    android:layout_marginRight="10dp" />
 
             </LinearLayout>
 
@@ -104,7 +103,6 @@
 
                 <TextView
                     style="@style/setting_text_style"
-                    android:layout_marginRight="24dp"
                     android:text="@string/birthday" />
 
                 <View
@@ -114,10 +112,8 @@
 
                 <TextView
                     android:id="@+id/birthday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="12dp"
-                    android:text="" />
+                    style="@style/setting_text_style"
+                    android:layout_marginRight="10dp"/>
 
             </LinearLayout>
 
@@ -133,7 +129,6 @@
 
                 <TextView
                     style="@style/setting_text_style"
-                    android:layout_marginRight="24dp"
                     android:text="@string/grade" />
 
                 <View
@@ -144,8 +139,7 @@
                 <TextView
                     android:id="@+id/grade"
                     style="@style/setting_text_style"
-                    android:layout_marginRight="12dp"
-                    android:text="@string/grade" />
+                    android:layout_marginRight="10dp" />
 
             </LinearLayout>
 
@@ -161,7 +155,6 @@
 
                 <TextView
                     style="@style/setting_text_style"
-                    android:layout_marginRight="24dp"
                     android:text="@string/school" />
 
                 <View
@@ -172,7 +165,7 @@
                 <TextView
                     android:id="@+id/school"
                     style="@style/setting_text_style"
-                    android:layout_marginRight="12dp"
+                    android:layout_marginRight="10dp"
                     android:text="" />
             </LinearLayout>
 
@@ -188,7 +181,6 @@
 
                 <TextView
                     style="@style/setting_text_style"
-                    android:layout_marginRight="24dp"
                     android:text="@string/profiles" />
 
                 <TextView

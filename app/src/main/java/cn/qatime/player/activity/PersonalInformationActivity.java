@@ -129,7 +129,7 @@ public class PersonalInformationActivity extends BaseActivity {
         if (!StringUtils.isNullOrBlanK(bean.getData().getGender())) {
             if (bean.getData().getGender().equals("male")) {
                 sex.setText(getResources().getString(R.string.male));
-            } else {
+            } else if (bean.getData().getGender().equals("male")) {
                 sex.setText(getResources().getString(R.string.female));
             }
         } else {
