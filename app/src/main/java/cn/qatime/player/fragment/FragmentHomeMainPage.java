@@ -77,7 +77,8 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private int page = 1;
     private List<ClassRecommendBean.DataBean> listRecommendClass = new ArrayList<>();
     private BaseAdapter classAdapter;
-    private ImageView message;
+    private View message;
+    private ImageView message_x;
     private ArrayList<TeacherRecommendBean.DataBean> listRecommendTeacher = new ArrayList<>();
     private CommonAdapter<TeacherRecommendBean.DataBean> teacherAdapter;
     private GridView gridviewSubject;
@@ -105,8 +106,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private void refreshUnreadNum() {
         int unreadNum = NIMClient.getService(MsgService.class).getTotalUnreadCount();
 //                    Logger.e("unreadNum" + unreadNum);
-//        count.setVisibility(unreadNum == 0 ? View.GONE : View.VISIBLE);
-        message.setImageResource(unreadNum == 0 ? R.mipmap.message :R.mipmap.message_x);
+        message_x.setVisibility(unreadNum == 0 ? View.GONE : View.VISIBLE);
     }
 
     @Override
@@ -125,7 +125,8 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         allClass = view.findViewById(R.id.all_class);
         citySelect = view.findViewById(R.id.city_select);
         gridviewClass = (GridView) view.findViewById(R.id.gridview_class);
-        message = (ImageView) view.findViewById(R.id.message);
+        message = view.findViewById(R.id.message);
+        message_x = (ImageView) view.findViewById(R.id.message_x);
 //        count = view.findViewById(count);
 
         setCity();
