@@ -65,8 +65,8 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
         assignViews();
 
         password.setHint(StringUtils.getSpannedString(this, R.string.hint_input_current_password));
-        newPassword.setHint(StringUtils.getSpannedString(this, R.string.hint_6_16_password));
-        confirmNewPassword.setHint(StringUtils.getSpannedString(this, R.string.hint_input_again));
+        newPassword.setHint(StringUtils.getSpannedString(this, R.string.input_new_password));
+        confirmNewPassword.setHint(StringUtils.getSpannedString(this, R.string.confirm_new_password));
 
 
         forgetPassword.setOnClickListener(this);
