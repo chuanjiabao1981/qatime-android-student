@@ -10,7 +10,12 @@
         style="@style/edit_layout_style">
 
         <LinearLayout
-            style="@style/edit_layout_top_style">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:gravity="center">
 
             <EditText
                 android:id="@+id/password"
@@ -19,7 +24,11 @@
         </LinearLayout>
 
         <LinearLayout
-            style="@style/edit_layout_bottom_style">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center">
 
             <EditText
                 android:id="@+id/code"

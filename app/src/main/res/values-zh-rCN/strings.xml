@@ -267,7 +267,7 @@
 
     <string name="team_send_message_not_allow">您已不在该群，不能发送消息</string>
     <string name="confirm_email">确认新的邮箱</string>
-    <string name="confirm_new_password">确认新的密码</string>
+    <string name="confirm_new_password">请确认新密码</string>
     <string name="current_parent_phone">当前家长手机</string>
     <string name="current_phone">当前手机号码</string>
     <string name="current_version">V</string>
@@ -276,7 +276,7 @@
     <string name="email_wrong">邮箱不正确</string>
     <string name="end">End</string>
     <string name="feedback">意见反馈</string>
-    <string name="forget_password_1">忘记密码？</string>
+    <string name="forget_password_1">忘记密码</string>
     <string name="found_new_version">发现新版本</string>
     <string name="getcode">获取校验码</string>
     <string name="hint_6_16_password">6-16位字母或数字</string>
@@ -287,7 +287,7 @@
     <string name="hint_input_new_phone">输入新手机号码（仅支持大陆地区11位）</string>
     <string name="hint_opinion">请在此输入您的宝贵意见和建议，它能够帮助我们有效的改进产品，使其更满足您的需要。</string>
     <string name="input_current_password">输入当前密码</string>
-    <string name="input_new_password">输入新的密码</string>
+    <string name="input_new_password">请输入新密码</string>
     <string name="learn_1">01 查找辅导</string>
     <string name="learn_2">02 购买辅导</string>
     <string name="learn_3">03 辅导开课</string>

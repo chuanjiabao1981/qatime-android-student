@@ -153,6 +153,7 @@
             android:id="@+id/phone_number_p"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="12dp"
             android:textColor="#666"
             android:textSize="13sp" />
 
