@@ -48,6 +48,7 @@ public class
 StartActivity extends BaseActivity implements View.OnClickListener {
     private AlertDialog alertDialog;
     private String downLoadLinks;
+    private boolean updateEnforce;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,17 +97,18 @@ StartActivity extends BaseActivity implements View.OnClickListener {
                     alertDialog = builder.create();
                     try {
                         x.setOnClickListener(StartActivity.this);
-                        final boolean enforce = response.getJSONObject("data").getBoolean("enforce");
-                        if (enforce) {
+                        updateEnforce = response.getJSONObject("data").getBoolean("enforce");
+                        if (updateEnforce) {
                             TextView pleaseUpdate = (TextView) view.findViewById(R.id.please_update);
                             pleaseUpdate.setVisibility(View.VISIBLE);
+                            x.setVisibility(View.GONE);
 //                            Toast.makeText(StartActivity.this, "重大更新，请先进行升级", Toast.LENGTH_SHORT).show();
 //                            alertDialog.setCancelable(false);
                         }
                         alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                             @Override
                             public void onDismiss(DialogInterface dialog) {
-                                if (enforce) {
+                                if (updateEnforce) {
                                     finish();
                                 } else {
                                     startApp();

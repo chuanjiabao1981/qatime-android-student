@@ -28,7 +28,6 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.AppUtils;
 import libraryextra.utils.DataCleanUtils;
-import libraryextra.utils.DensityUtils;
 import libraryextra.utils.DownFileUtil;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyListener;
@@ -52,6 +51,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
     private android.app.AlertDialog alertDialog;
     private String apkUrl;
     private String downLoadLinks;
+    private View updateView;
 
     private void assignViews() {
         learningProcess = (LinearLayout) findViewById(R.id.learning_process);
@@ -140,28 +140,35 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                         if (response.isNull("data")) {
                             Toast.makeText(SystemSettingActivity.this, getResourceString(R.string.is_newest_version), Toast.LENGTH_SHORT).show();
                         } else {
-                            //TODO 获取更新信信息0
                             Logger.e(response.toString());
                             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(SystemSettingActivity.this);
-                            final View view = View.inflate(SystemSettingActivity.this, R.layout.dialog_check_update, null);
-                            Button down = (Button) view.findViewById(R.id.download);
-                            View x = view.findViewById(R.id.image_x);
-                            TextView newVersion = (TextView) view.findViewById(R.id.new_version);
-                            TextView desc = (TextView) view.findViewById(R.id.desc);
-                            desc.setMaxHeight(DensityUtils.dp2px(SystemSettingActivity.this, 300));
+                            updateView = View.inflate(SystemSettingActivity.this, R.layout.dialog_check_update, null);
+                            Button down = (Button) updateView.findViewById(R.id.download);
+                            View x = updateView.findViewById(R.id.image_x);
+                            TextView newVersion = (TextView) updateView.findViewById(R.id.new_version);
+                            TextView desc = (TextView) updateView.findViewById(R.id.desc);
                             try {
                                 x.setOnClickListener(SystemSettingActivity.this);
+                               boolean updateEnforce = response.getJSONObject("data").getBoolean("enforce");
+                                if (!updateEnforce) {
+                                    TextView pleaseUpdate = (TextView) updateView.findViewById(R.id.please_update);
+                                    pleaseUpdate.setVisibility(View.VISIBLE);
+                                    x.setVisibility(View.GONE);
+//                            Toast.makeText(StartActivity.this, "重大更新，请先进行升级", Toast.LENGTH_SHORT).show();
+//                            alertDialog.setCancelable(false);
+                                }
                                 String descStr = response.getJSONObject("data").getString("description");
-                                desc.setText(StringUtils.isNullOrBlanK(descStr) ? getResourceString(R.string.performance_optimization) : descStr);
+                                desc.setText(StringUtils.isNullOrBlanK(descStr) ? "无" : descStr);
+                                desc.setText("哈看的啥是爱了就是地方了就爱了；阿什顿飞了；东方巨龙；的啊空间受到法律；阿斯加德分了就爱上；来得及发；拉金德拉骄傲；两地分居了；安静的；了大大加快速度发货卡还是对方空间啊好看世界的繁华啊快乐就好士大夫空间哈上课几点发货就卡还是对方空间哈是空间的发哈速度快就会发生的划分空间啦收到回复就卡少得可怜几号放假卡上的划分健康啦还是大家看法哈健康的说法就快啦受到了健康福哈健康的话尽快发货速度连空间哈就考虑到回复即可啊活动经费快乐哈架空历史地方很近卡拉什地方加快了哈数据库里的咖啡合家安康说的话放空间啊圣诞节快乐飞哈市款到发货啊良好的福利金卡还是会计代理焕发健康了好地方金坷垃好地方哈市双节快乐款到发货垃圾卡好的借口哈就快乐的方法");
                                 downLoadLinks = response.getJSONObject("data").getString("download_links");
-                                newVersion.setText("V" + response.getJSONObject("data").getString("version"));
+                                newVersion.setText("(V" + response.getJSONObject("data").getString("version")+")");
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                             down.setOnClickListener(SystemSettingActivity.this);
                             alertDialog = builder.create();
                             alertDialog.show();
-                            alertDialog.setContentView(view);
+                            alertDialog.setContentView(updateView);
                             alertDialog.setCanceledOnTouchOutside(false);
                             alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable());
                         }
