@@ -1,4 +1,4 @@
-<resources tools:ignore="MissingTranslation" xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!--//刷新-->
     <string name="pull_to_refresh">下拉刷新</string>
     <string name="pull_to_load">上拉加载</string>
@@ -7,7 +7,7 @@
     <string name="release_to_load">松开加载</string>
     <string name="release_to_refresh">松开刷新</string>
     <!--//fragment1-->
-    <string name="login_has_expired">登录已过期，请重新登录！</string>
+    <string name="login_has_expired">登录已过期，请重新登录</string>
     <string name="app_name">答疑时间</string>
     <string name="home_page">首页</string>
     <string name="time_table">课程表</string>
@@ -20,12 +20,11 @@
     <string name="by_grade">年级</string>
     <string name="price">价格范围</string>
     <string name="yuan">元</string>
-    <string name="class_hours_range">课时范围</string>
+    <string name="class_hours_range">课时总数</string>
     <string name="hours">课时</string>
     <string name="starting_range">开课时间</string>
     <string name="to">至</string>
     <string name="state">当前状态</string>
-    <string name="cancel">取消</string>
     <string name="reset">重置</string>
     <string name="confirm">确定</string>//
     <string name="by_price_up">按价格↑</string>
@@ -97,8 +96,8 @@
     <string name="click_to_add">点击添加</string>
     <string name="hint_name">输入真实姓名更方便老师联系你</string>
     <string name="hint_profiles">一句话介绍自己</string>
-    <string name="boy">我是男神</string>
-    <string name="girl">我是女神</string>
+    <string name="boy">男生</string>
+    <string name="girl">女生</string>
     <string name="finish">完成</string>
     <string name="male">男</string>
     <string name="female">女</string>
@@ -124,8 +123,8 @@
     <string name="deal_closed">交易关闭</string>//
     <string name="order_confirm">订单确认</string>
     <string name="pay_confirm">支付确认</string>
-    <string name="commodity_name">商品名称</string>
-    <string name="commodity_detail">商品详情</string>
+    <string name="commodity_name">课程名称</string>
+    <string name="commodity_detail">课程详情</string>
     <string name="pay_remind">请您在24小时内完成支付，否则订单会自动取消。</string>
     <string name="problem_phone">遇到问题请拨打客服电话</string>
     <!--//详情-->
@@ -137,30 +136,32 @@
     <string name="student_number">学习人数</string>
     <string name="Join_the_audition">加入试听</string>
     <string name="Joined_the_audition">已加入试听</string>
-    <string name="purchase_now">立即购买</string>
+    <string name="purchase_now">立即报名</string>
     <string name="purchased">已购买</string>
     <string name="no_tutorial_classes_ID">没有辅导班ID</string>
     <!--//登录-->
     <string name="account">请输入账号</string>
     <string name="password">请输入密码</string>
-    <string name="register">注册</string>
+    <string name="register">注册账号</string>
+    <string name="enter">直接进入</string>
     <string name="login">登录</string>
+    <string name="click_login">点击登录</string>
+    <string name="login_right_now">立即登录</string>
     <string name="forget_password">忘记密码</string>
     <string name="verification_code">请输入验证码</string>
     <string name="verification_code_is_incorrect">验证码不正确</string>
-    <string name="change_it">看不清，换一张？</string>
     <string name="logout">退出登录</string>
     <string name="press_another_exit">再按一次退出程序</string>
     <!--//注册-->
     <string name="set_for_login">设置登录</string>
     <string name="get_verification_code">获取校验码</string>
     <string name="hint_input_verification_code">输入校验码</string>
-    <string name="hint_input_code">输入验证码</string>
+    <string name="hint_input_email_code">输入邮箱校验码</string>
     <string name="hint_phone_number">请输入大陆地区11位手机号码</string>
     <string name="hint_input_password">输入登录密码</string>
     <string name="hint_confirm_password">确认登录密码</string>
     <string name="hint_qatime_register_code">请输入答疑时间注册码</string>
-    <string name="agree">同意</string>
+    <string name="agree"> 同意</string>
     <string name="agreement">《答疑时间用户协议》</string>
     <string name="phone_number_is_incorrect">手机号码不正确</string>
     <string name="can_not_be_empty">不能为空</string>
@@ -196,20 +197,21 @@
     <string name="grade_type">授课类型：</string>
     <!--//课程详情2-->
     <string name="teacher_name">老师姓名：</string>
-    <string name="teacher_years">执教年龄：</string>
+    <string name="teacher_years">执教年龄 </string>
     <string name="within_three_years">3年以内</string>
     <string name="within_ten_years">3-10年</string>
     <string name="more_than_ten_years">20年以上</string>
     <string name="within_twenty_years">10-20年</string>
     <string name="teacher_subject">授课科目：</string>
-    <string name="teacher_school">所在学校：</string>
+    <string name="teacher_school">所在学校 </string>
     <string name="teacher_introduction">自我介绍：</string>
     <!--课程状态-->
     <string name="class_teaching">直播中</string>
     <string name="class_init">未开始</string>
     <string name="class_ready">待上课</string>
+    <string name="class_wait">待补课</string>
     <string name="class_paused_inner">暂停中</string>
-    <string name="class_over">已直播</string>
+    <string name="class_over">已结束</string>
     <!--//订单支付-->
     <string name="use">使用</string>
     <string name="fail_pay">不能支付</string>
@@ -230,7 +232,7 @@
     <string name="item_class_start_date">开课</string>
     <string name="item_class_end_date">结课</string>
     <string name="item_next_class">下一课</string>
-    <string name="item_to_start">距离开课还有</string>
+    <string name="item_to_start">距离开课</string>
     <string name="item_day">天</string>
     <string name="item_subject">科目：</string>
     <string name="item_time">时间</string>
@@ -255,8 +257,8 @@
     <string name="send">发送</string>
     <string name="notice">公告</string>
     <string name="chat">聊天</string>
-    <string name="live_details">直播详情</string>
-    <string name="member_list">成员列表</string>
+    <string name="live_details">详情</string>
+    <string name="member_list">成员</string>
     <string name="buffering">缓冲中</string>
     <string name="hd">高清</string>
     <string name="pd">普清</string>
@@ -277,8 +279,11 @@
     //安全管理
     <string name="bind_phone_number">绑定手机</string>
     <string name="parent_phone_number">家长手机</string>
+    <string name="bind">绑 定</string>
     <string name="bind_email">绑定邮箱</string>
-    <string name="change_password">修改密码</string>
+    <string name="bind_rightnow">马上绑定</string>
+    <string name="bind_wechat">绑定微信</string>
+    <string name="change_password">修改登陆密码</string>
     <string name="current_phone">当前手机号码</string>
     <string name="new_email">输入新的邮箱</string>
     <string name="confirm_email">确认新的邮箱</string>
@@ -286,9 +291,10 @@
     <string name="new_parent_phone">家长新手机号</string>
     <string name="over">完成</string>
     <string name="input_current_password">输入当前密码</string>
-    <string name="input_new_password">输入新的密码</string>
-    <string name="confirm_new_password">确认新的密码</string>
-    <string name="forget_password_1">忘记密码？</string>
+    <string name="input_new_password">请输入新密码</string>
+    <string name="input_login_password">输入登陆密码</string>
+    <string name="confirm_new_password">请确认新密码</string>
+    <string name="forget_password_1">忘记密码</string>
     <string name="hint_input_new_phone">输入新手机号码（仅支持大陆地区11位）</string>
     <string name="hint_input_email">请输入完整邮箱地址</string>
     <string name="hint_input_again">再输入一次</string>
@@ -327,17 +333,14 @@
     <string name="class_range">课程范围</string>
     <string name="sms_notify">短信通知</string>
     <string name="sys_notify">系统通知</string>
-    <string name="getcode">获取验证码</string>
+    <string name="getcode">获取校验码</string>
     <string name="alert_mode">提醒方式</string>
     <string name="time_setting">设置时间</string>
     <string name="Remedial_classes">辅导班课程</string>
+    <string name="Remedial_class">辅导班</string>
     <string name="public_course">公开课课程</string>
     <string name="advance">提前</string>
     <string name="remind_me">提醒我</string>
-    <string name="found_new_version">发现新版本</string>
-    <string name="update_desc">更新内容：</string>
-    <string name="down_now">立即下载</string>
-    <string name="update_notify1">建议wifi环境下操作</string>
     <string name="update_notify2">土豪请无视！</string>
     <string name="password_6_16">密码长度必须为6-16位</string>
     <string name="email_wrong">邮箱不正确</string>
@@ -348,10 +351,8 @@
     <string name="about_us_desc"><![CDATA[    北京维幄通达网络科技有限公司，成立于2012年初，主要从事教育科研产品的销售以及教育网络推广。公司实力优越，拥有一批科研技术专业能力强大的研发团队。目前，教育信息化改革的背景下，公司紧紧围绕互联网技术与教育产生信息化这一特点，重点着力于建立独具特色的现代信息化教育模式，公司的研发成果为优化教育资源，推进教育信息改革起到了很大的促进作用。现阶段公司正积极面向全国开展销售推广业务，具有强大的发展潜力和良好的发展前景。现诚邀有志之士加入我们，与我们携手共同实现理想。]]></string>
     <string name="team_send_message_not_allow">您已不在该群，不能发送消息</string>
     <string name="team_not_exist">该群不存在</string>
-    <string name="please_update">请升级版本后使用</string>
     <string name="item_to_start_main">距开课</string>
     <string name="team">群组</string>
-    <string name="resume_alert">恢复提醒</string>
     <string name="nolongger_alert">不再提醒</string>
     <string name="performance_optimization">性能优化</string>
     <string name="check_for_update_failed">检查更新失败</string>
@@ -362,6 +363,11 @@
     <string name="customer_service_phone_number">0353-2135828</string>
     <string name="call_right_now">立即拨打</string>
     <string name="failed_to_obtain_group_information">获取群组信息失败!</string>
+    <string name="download_picture_fail">图片下载失败</string>
+    <string name="save_to_device">保存到手机</string>
+    <string name="picture_save_fail">图片保存失败</string>
+    <string name="picture_save_to">图片已保存到手机%s下</string>
+    <string name="picker_image_error">获取图片出错</string>
 
 
     <string name="code_send_success">验证码发送成功，请注意查收</string>
@@ -371,7 +377,7 @@
     <string name="email_already_bind">绑定失败,邮箱已经被绑定</string>
     <string name="phone_already_bind">绑定失败,手机已经被绑定</string>
     <string name="code_error">验证码错误</string>
-    <string name="time_after_acquisition">S后重新获取</string>
+    <string name="time_after_acquisition">S</string>
     <string name="bind_phone_success">绑定手机修改成功,请重新登陆</string>
     <string name="bind_parent_phone_success">家长手机修改成功</string>
     <string name="bind_parent_phone_failed">家长手机已被使用</string>
@@ -382,7 +388,6 @@
     <string name="after_try_again">请检查您的网络或稍后再试</string>
     <string name="you_have_quit_the_group">您已退出该群组</string>
     <string name="message_can_not_null">消息不能为空</string>
-    <string name="get_group_failed">获取群组信息失败!</string>
     <string name="no_course_information">暂无辅导班信息</string>
     <string name="hour">小时</string>
     <string name="minute">分钟</string>
@@ -408,8 +413,11 @@
     <string name="regiset_success">注册成功</string>
     <string name="please_set_head">请选择头像</string>
     <string name="not_bind">未绑定</string>
+    <string name="bind_cancel">取消绑定</string>
     <string name="is_newest_version">已经是最新版本</string>
     <string name="landing">登陆中...</string>
+    <string name="live_side_open">副直播已开启</string>
+    <string name="live_side_close">副直播已关闭</string>
 
     <string name="team_need_authentication">需要身份验证</string>
     <string name="team_allow_anyone_join">允许任何人加入</string>
@@ -435,4 +443,32 @@
     <string name="pay_account">：余额支付</string>
     <string name="recharge_num_hint"><font size="14">请输入想要充值的金额</font></string>
     <string name="my_record_fund">资金记录</string>
+    <string name="withdraw_cash">提现</string>
+    <string name="recharge_num">充值金额</string>
+    <string name="withdraw_num">提现金额</string>
+    <string name="withdraw_cash_manner">提现方式</string>
+    <string name="recharge_manner">充值方式</string>
+    <string name="transfer_accounts">转账</string>
+    <string name="withdraw_num_hint">请输入想要提现的金额</string>
+    <string name="withdraw_cash_record">提现记录</string>
+    <string name="hint_input_alipay_account">请输入完整的支付宝账号</string>
+    <string name="hint_input_bank_card_account">请输入完整的银行卡卡号</string>
+    <string name="input_real_name">请输入真实姓名</string>
+    <string name="withdraw_cash_now">立即提现</string>
+    <string name="withdraw_cash_to_alipay">提现到支付宝</string>
+    <string name="withdraw_cash_to_bank">提现到银行卡</string>
+    <string name="withdraw_cash_result">提交结果</string>
+    <string name="amount_not_enough">账户余额不足</string>
+    <string name="code_use_already">验证码已失效</string>
+    <string name="withdraw_existed">存在未完成的提现订单</string>
+    <string name="start_audition">开始试听</string>
+    <string name="course_arrangement">课程安排</string>
+    <string name="audition_over">试听结束</string>
+    <string name="class_missed">待补课</string>
+    <string name="unlogin_alert">您还未登录,请先登录!</string>
+    <string name="hader_can_not_be_empty">头像不能为空</string>
+    <string name="teacher_translate">老师</string>
+    <string name="change_pay_password">重置支付密码</string>
+    <string name="please_talk_later">请稍候发言</string>
+
 </resources>

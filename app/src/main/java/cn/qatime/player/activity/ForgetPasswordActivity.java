@@ -3,6 +3,8 @@ package cn.qatime.player.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +15,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONObject;
 
@@ -22,7 +25,6 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
-import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.StringUtils;
@@ -67,6 +69,26 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
         code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_verification_code));
         newpass.setHint(StringUtils.getSpannedString(this, R.string.hint_password_forget));
         confirmNewpass.setHint(StringUtils.getSpannedString(this, R.string.confirm_new_password));
+        number.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (StringUtils.isPhone(number.getText().toString().trim())) {
+                    getcode.setEnabled(true);
+                } else {
+                    getcode.setEnabled(false);
+                }
+            }
+        });
 
         getcode.setOnClickListener(this);
         submit.setOnClickListener(this);
@@ -114,7 +136,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
                         Toast.makeText(getApplicationContext(), getResourceString(R.string.code_send_failed), Toast.LENGTH_LONG).show();
 
                     }
-                }, new VolleyErrorListener(){
+                }, new VolleyErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show();
@@ -123,19 +145,20 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
                 time.start();
                 break;
             case R.id.submit:
+                if (StringUtils.isNullOrBlanK(phone)) {
+                    Toast.makeText(this, "手机号不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (!StringUtils.isPhone(phone)) {//手机号不正确
                     Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
-
                     return;
                 }
                 if (StringUtils.isNullOrBlanK(code.getText().toString().trim())) { //验证码
                     Toast.makeText(this, getResources().getString(R.string.enter_the_verification_code), Toast.LENGTH_SHORT).show();
-
                     return;
                 }
                 if (StringUtils.isNullOrBlanK(newpass.getText().toString().trim())) { //验证码
                     Toast.makeText(this, getResources().getString(R.string.password_can_not_be_empty), Toast.LENGTH_SHORT).show();
-
                     return;
                 }
                 if (!StringUtils.isGoodPWD(newpass.getText().toString().trim())) {//密码格式不正确
@@ -163,14 +186,17 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
                         if (response.isNull("data")) {
                             Toast.makeText(ForgetPasswordActivity.this, getResourceString(R.string.phone_not_exist), Toast.LENGTH_SHORT).show();
                         } else {
-                            Logger.e("找回成功");
-                            Toast.makeText(ForgetPasswordActivity.this, getResourceString(R.string.change_password_success), Toast.LENGTH_SHORT).show();
-                            BaseApplication.clearToken();
-                            setResult(Constant.RESPONSE_EXIT_LOGIN);
-                            Intent intent = new Intent(ForgetPasswordActivity.this, LoginActivity.class);
-                            intent.putExtra("sign", "exit_login");
-                            startActivity(intent);
-                            finish();
+                            if (statusLogin) {
+                                Logger.e("找回成功");
+                                BaseApplication.clearToken();
+                                Toast.makeText(ForgetPasswordActivity.this, getResourceString(R.string.change_password_success), Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(ForgetPasswordActivity.this, MainActivity.class);
+                                intent.putExtra("sign", "exit_login");
+                                startActivity(intent);
+                            } else {
+                                finish();
+                            }
+
                         }
                     }
 
@@ -190,8 +216,8 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
     }
 
 
-    class TimeCount extends CountDownTimer {
-        public TimeCount(long millisInFuture, long countDownInterval) {
+    private class TimeCount extends CountDownTimer {
+        TimeCount(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
         }
 
@@ -207,4 +233,17 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
             getcode.setText(millisUntilFinished / 1000 + getResourceString(R.string.time_after_acquisition));
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
 }

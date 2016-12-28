@@ -7,34 +7,43 @@
 
     <include layout="@layout/layout_backbar" />
 
-    <LinearLayout style="@style/edit_layout_style">
+    <LinearLayout
+        style="@style/edit_layout_style">
 
         <LinearLayout
-            style="@style/edit_layout_center_style"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:gravity="center">
 
             <EditText
                 android:id="@+id/phone"
                 style="@style/activity_edit_text_style"
-                android:maxLength="11" />
+                android:inputType="phone"
+                android:maxLength="11"
+                android:textColorHint="#ccc" />
         </LinearLayout>
 
         <LinearLayout
-            style="@style/edit_layout_center_style"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp">
-
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center">
 
             <EditText
                 android:id="@+id/code"
                 style="@style/activity_edit_text_style"
                 android:ems="10"
-                android:inputType="number" />
+                android:inputType="number"
+                android:textColorHint="#ccc" />
 
             <Button
                 android:id="@+id/get_code"
-                style="@style/button_style"
+                style="@style/button_style_with_edit"
+                android:enabled="false"
                 android:text="@string/get_verification_code" />
 
 
@@ -42,68 +51,59 @@
 
 
         <LinearLayout
-            style="@style/edit_layout_center_style"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center">
 
             <EditText
                 android:id="@+id/password"
                 style="@style/activity_edit_text_style"
                 android:inputType="textPassword"
-                android:maxLength="16" />
+                android:maxLength="16"
+                android:textColorHint="#ccc" />
         </LinearLayout>
 
         <LinearLayout
-            style="@style/edit_layout_center_style"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center">
 
             <EditText
                 android:id="@+id/repassword"
                 style="@style/activity_edit_text_style"
                 android:inputType="textPassword"
-                android:maxLength="16" />
-        </LinearLayout>
-
-        <LinearLayout
-            style="@style/edit_layout_center_style"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp">
-
-            <EditText
-                android:id="@+id/register_code"
-                style="@style/activity_edit_text_style"
-                android:inputType="textPassword"
-                android:maxLength="16" />
+                android:maxLength="16"
+                android:textColorHint="#ccc" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:gravity="center_vertical"
-            android:layout_marginLeft="12dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
-            android:layout_marginRight="12dp"
             android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
 
             <CheckBox
                 android:id="@+id/checkBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/agree" />
+                android:button="@drawable/checkbox_selector"
+                android:paddingLeft="5dp"
+                android:text="@string/agree"
+                android:textColor="#999"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/agreement"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/agreement"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="#0000ff" />
+                android:textColor="#00a2ee"
+                android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -111,6 +111,7 @@
         android:id="@+id/next"
         style="@style/button_full_width_style"
         android:enabled="false"
-        android:text="@string/next" />
+        android:text="@string/next"
+        android:textColor="@drawable/text_selector_white_red" />
 
 </LinearLayout>

@@ -1,8 +1,13 @@
 package cn.qatime.player.activity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -13,21 +18,37 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.PushAgent;
+import com.umeng.message.UTrack;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.config.UserPreferences;
+import cn.qatime.player.im.cache.TeamDataCache;
+import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.Profile;
+import libraryextra.utils.AppUtils;
+import libraryextra.utils.JsonUtils;
+import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -35,7 +56,6 @@ import libraryextra.utils.VolleyListener;
 public class RegisterActivity extends BaseActivity implements View.OnClickListener {
     EditText phone;
     EditText code;
-    EditText registercode;
     Button getcode;
     EditText password;
     EditText repassword;
@@ -43,6 +63,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     TextView agreement;
     Button next;
     private TimeCount time;
+    private Profile profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,16 +80,35 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         getcode = (Button) findViewById(R.id.get_code);
         password = (EditText) findViewById(R.id.password);
         repassword = (EditText) findViewById(R.id.repassword);
-        registercode = (EditText) findViewById(R.id.register_code);
         checkBox = (CheckBox) findViewById(R.id.checkBox);
         next = (Button) findViewById(R.id.next);
         agreement = (TextView) findViewById(R.id.agreement);
+        phone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-        phone.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_phone_number)));
-        code.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_input_verification_code)));
-        password.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_input_password)));
-        repassword.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_confirm_password)));
-        registercode.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_qatime_register_code)));
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (StringUtils.isPhone(phone.getText().toString().trim())) {
+                    getcode.setEnabled(true);
+                } else {
+                    getcode.setEnabled(false);
+                }
+            }
+        });
+
+        phone.setHint(StringUtils.getSpannedString(getResources().getString(R.string.hint_phone_number)));
+        code.setHint(StringUtils.getSpannedString(getResources().getString(R.string.hint_input_verification_code)));
+        password.setHint(StringUtils.getSpannedString(getResources().getString(R.string.hint_input_password)));
+        repassword.setHint(StringUtils.getSpannedString(getResources().getString(R.string.hint_confirm_password)));
+//        registercode.setHint(StringUtils.getSpannedString(this, getResources().getString(R.string.hint_qatime_register_code)));
 
         getcode.setOnClickListener(this);
         next.setOnClickListener(this);
@@ -132,8 +172,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-    class TimeCount extends CountDownTimer {
-        public TimeCount(long millisInFuture, long countDownInterval) {
+    private class TimeCount extends CountDownTimer {
+        TimeCount(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
         }
 
@@ -183,11 +223,11 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             next.setClickable(true);
             return;
         }
-        if (StringUtils.isNullOrBlanK(registercode.getText().toString().trim())) {   //注册码
-            Toast.makeText(this, getResources().getString(R.string.enter_the_register_code), Toast.LENGTH_SHORT).show();
-            next.setClickable(true);
-            return;
-        }
+//        if (StringUtils.isNullOrBlanK(registercode.getText().toString().trim())) {   //注册码
+//            Toast.makeText(this, getResources().getString(R.string.enter_the_register_code), Toast.LENGTH_SHORT).show();
+//            next.setClickable(true);
+//            return;
+//        }
         if (!checkBox.isChecked()) {   //协议勾选
             Toast.makeText(this, getResources().getString(R.string.agree_agreement), Toast.LENGTH_SHORT).show();
             next.setClickable(true);
@@ -202,7 +242,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         map.put("accept", "" + (checkBox.isChecked() ? 1 : 0));
         map.put("type", "Student");
         map.put("client_type", "app");
-        map.put("register_code_value", registercode.getText().toString().trim());//注册码
+        map.put("register_code_value", "564654");//注册码
 
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlRegister, map), null, new VolleyListener(this) {
@@ -214,31 +254,100 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             @Override
             protected void onSuccess(JSONObject response) {
 
-                try {
-                    String token = response.getJSONObject("data").getString("remember_token");
-                    int id = response.getJSONObject("data").getJSONObject("user").getInt("id");
+                Toast.makeText(RegisterActivity.this, getResourceString(R.string.please_set_information), Toast.LENGTH_SHORT).show();
+                Logger.e("注册成功" + response);
+                Map<String, String> map = new HashMap<>();
+                map.put("login_account", phone.getText().toString().trim());
+                map.put("password", password.getText().toString().trim());
+                map.put("client_type", "app");
+                map.put("client_cate", "student_client");
+                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlLogin, map), null,
+                        new VolleyListener(RegisterActivity.this) {
+                            @Override
+                            protected void onTokenOut() {
+                                tokenOut();
+                            }
 
+                            @Override
+                            protected void onSuccess(JSONObject response) {
+                                try {
+                                    JSONObject data = response.getJSONObject("data");
+                                    if (data.has("result")) {
+                                        if (data.getString("result") != null && data.getString("result").equals("failed")) {
+                                            Toast.makeText(RegisterActivity.this, getResources().getString(R.string.account_or_password_error), Toast.LENGTH_SHORT).show();
+                                        }
+                                    } else {
+                                        Logger.e("登录", response.toString());
+                                        SPUtils.put(RegisterActivity.this, "username", phone.getText().toString());
+                                        Profile profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
+                                        if (profile != null && profile.getData() != null && profile.getData().getUser() != null && profile.getData().getUser().getId() != 0) {
+                                            PushAgent.getInstance(RegisterActivity.this).addAlias(String.valueOf(profile.getData().getUser().getId()), "student", new UTrack.ICallBack() {
+                                                @Override
+                                                public void onMessage(boolean b, String s) {
 
-                    Toast.makeText(RegisterActivity.this, getResourceString(R.string.please_set_information), Toast.LENGTH_SHORT).show();
-                    Logger.e("注册成功" + response);
-                    //下一步跳转
-                    Profile profile = new Profile();
-                    Profile.Data data = new Profile().new Data();
-                    data.setRemember_token(token);
-                    Profile.User user = new Profile().new User();
-                    user.setId(id);
-                    data.setUser(user);
-                    profile.setData(data);
-                    BaseApplication.setProfile(profile);
-                    Intent intent = new Intent(RegisterActivity.this, RegisterPerfectActivity.class);
-                    intent.putExtra("username", phone.getText().toString().trim());
-                    intent.putExtra("password", password.getText().toString().trim());
-                    startActivityForResult(intent, Constant.REGIST);
+                                                }
+                                            });
+                                            String deviceToken = PushAgent.getInstance(RegisterActivity.this).getRegistrationId();
+                                            if (!StringUtils.isNullOrBlanK(deviceToken)) {
+                                                Map<String, String> m = new HashMap<>();
+                                                m.put("user_id", String.valueOf(profile.getData().getUser().getId()));
+                                                m.put("device_token", deviceToken);
+                                                m.put("device_model", Build.MODEL);
+                                                try {
+                                                    m.put("app_name", URLEncoder.encode(AppUtils.getAppName(RegisterActivity.this), "UTF-8"));
+                                                } catch (UnsupportedEncodingException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                m.put("app_version", AppUtils.getVersionName(RegisterActivity.this));
+                                                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlDeviceInfo, m), null,
+                                                        new VolleyListener(RegisterActivity.this) {
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                                                            @Override
+                                                            protected void onSuccess(JSONObject response) {
+                                                            }
 
+                                                            @Override
+                                                            protected void onError(JSONObject response) {
+
+                                                            }
+
+                                                            @Override
+                                                            protected void onTokenOut() {
+                                                                tokenOut();
+                                                            }
+
+                                                        }, new VolleyErrorListener() {
+                                                    @Override
+                                                    public void onErrorResponse(VolleyError volleyError) {
+                                                        super.onErrorResponse(volleyError);
+                                                    }
+                                                });
+                                                addToRequestQueue(request);
+                                            }
+                                        }
+                                        if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
+                                            BaseApplication.setProfile(profile);
+                                            loginAccount();
+                                        } else {
+                                            //没有数据或token
+                                        }
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            protected void onError(JSONObject response) {
+                                Toast.makeText(RegisterActivity.this, getResourceString(R.string.login_failed), Toast.LENGTH_SHORT).show();
+                            }
+                        }, new VolleyErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        super.onErrorResponse(volleyError);
+                    }
+                });
+                addToRequestQueue(request);
 
             }
 
@@ -253,16 +362,14 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 }
                 Logger.e("注册失败--" + result);
                 if (result.contains("已经被使用")) {
-                    Toast.makeText(RegisterActivity.this, getResourceString(R.string.phone_already_used), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(RegisterActivity.this, getResourceString(R.string.phone_already_used), Toast.LENGTH_SHORT).show();
+                    dialogReTry();
                 } else if (result.contains("与确认值不匹配")) {
                     Toast.makeText(RegisterActivity.this, getResourceString(R.string.code_error), Toast.LENGTH_SHORT).show();
-                } else if (result.contains("注册码")) {
-                    Toast.makeText(RegisterActivity.this, getResourceString(R.string.register_code_error), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(RegisterActivity.this, getResourceString(R.string.register_failed), Toast.LENGTH_SHORT).show();
                 }
             }
-
 
         }, new VolleyErrorListener() {
             @Override
@@ -273,17 +380,111 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         });
 
         addToRequestQueue(request);
-//下一步跳转
-//        Intent intent = new Intent(RegisterActivity.this, RegisterPerfectActivity.class);
-//        startActivity(intent);
+    }
+
+    /**
+     * 手机号已注册提示
+     */
+    private void dialogReTry() {
+        final AlertDialog alertDialog = new AlertDialog.Builder(RegisterActivity.this).create();
+        View view = View.inflate(RegisterActivity.this, R.layout.dialog_cancel_or_confirm, null);
+        TextView text = (TextView) view.findViewById(R.id.text);
+        text.setText("该手机号已注册,请直接登录");
+        ((TextView) view.findViewById(R.id.cancel)).setText("新号码注册");
+        ((TextView) view.findViewById(R.id.confirm)).setText("登录");
+        Button cancel = (Button) view.findViewById(R.id.cancel);
+        Button confirm = (Button) view.findViewById(R.id.confirm);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                clearData();
+            }
+        });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                finish();
+            }
+        });
+        alertDialog.show();
+        alertDialog.setContentView(view);
+    }
+
+    /**
+     * 清空数据
+     */
+    private void clearData() {
+        phone.setText("");
+        code.setText("");
+        password.setText("");
+        repassword.setText("");
+    }
+
+    private void loginAccount() {
+        String account = BaseApplication.getAccount();
+        String token = BaseApplication.getAccountToken();
+
+        if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
+            NIMClient.getService(AuthService.class).login(new LoginInfo(account, token)).setCallback(new RequestCallback<LoginInfo>() {
+                @Override
+                public void onSuccess(LoginInfo o) {
+                    Logger.e("云信登录成功" + o.getAccount());
+                    // 初始化消息提醒
+                    NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
+
+                    NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
+                    //缓存
+                    UserInfoCache.getInstance().clear();
+                    TeamDataCache.getInstance().clear();
+                    //                FriendDataCache.getInstance().clear();
+
+                    UserInfoCache.getInstance().buildCache();
+                    TeamDataCache.getInstance().buildCache();
+                    //好友维护,目前不需要
+                    //                FriendDataCache.getInstance().buildCache();
+                    UserInfoCache.getInstance().registerObservers(true);
+                    TeamDataCache.getInstance().registerObservers(true);
+                }
+
+                @Override
+                public void onFailed(int code) {
+                    profile.getData().setRemember_token("");
+                    SPUtils.putObject(RegisterActivity.this, "profile", profile);
+                    Logger.e(code + "code");
+                }
+
+                @Override
+                public void onException(Throwable throwable) {
+                    Logger.e(throwable.getMessage());
+                    profile.getData().setRemember_token("");
+                    SPUtils.putObject(RegisterActivity.this, "profile", profile);
+                }
+            });
+        }
+        //下一步跳转，完善信息
+        Intent intent = new Intent(RegisterActivity.this, RegisterPerfectActivity.class);
+        startActivityForResult(intent, Constant.REGIST);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constant.REGIST) {
-            setResult(resultCode);
+        if (requestCode == Constant.REGIST && resultCode == Constant.RESPONSE) {
+            setResult(resultCode, data);
             finish();
         }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }
 

@@ -9,4 +9,12 @@
         android:layout_centerInParent="true"
         android:text="起始页"
         android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/version"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="15dp"
+        android:gravity="center" />
 </RelativeLayout>

@@ -18,7 +18,7 @@ import cn.qatime.player.utils.Constant;
 /**
  * @author luntify
  * @date 2016/8/15 11:11
- * @Description
+ * @Description 微信支付回调
  */
 public class WXPayEntryActivity extends BaseActivity implements IWXAPIEventHandler {
 

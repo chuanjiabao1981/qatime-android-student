@@ -21,14 +21,14 @@ import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
 
 public class BaseFragment extends Fragment {
-    private RequestQueue Queue = BaseApplication.getRequestQueue();
+    private RequestQueue Queue;
     protected boolean isLoad = false;
     private AlertDialog alertDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        Queue = Volley.newRequestQueue(getActivity());
+        Queue = BaseApplication.getRequestQueue();
     }
 
     public void onShow() {
@@ -87,7 +87,6 @@ public class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         for (Request request : requestList) {
-            Logger.e("cancel request:" + request.getUrl());
             request.cancel();
         }
         super.onDestroy();

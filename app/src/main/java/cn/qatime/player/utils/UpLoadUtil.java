@@ -62,7 +62,7 @@ public abstract class UpLoadUtil extends AsyncTask<Map<String, String>, String, 
 
             HttpPut httpPut = new HttpPut(url);
 
-            httpPut.setHeader("Remember-Token", BaseApplication.getProfile().getToken());
+            httpPut.setHeader("Remember-Token", getHttpTokenHeader());
 
             Map<String, String> item = params[0];
             Iterator<Map.Entry<String, String>> iterator = item.entrySet().iterator();
@@ -102,6 +102,14 @@ public abstract class UpLoadUtil extends AsyncTask<Map<String, String>, String, 
         return json;
     }
 
+    /**
+     * 还未登入的话需要重写返回token
+     * @return
+     */
+    public String getHttpTokenHeader() {
+        return BaseApplication.getProfile().getToken();
+    }
+
     @Override
     protected void onProgressUpdate(String... values) {
 
@@ -112,7 +120,6 @@ public abstract class UpLoadUtil extends AsyncTask<Map<String, String>, String, 
         try {
             if (!StringUtils.isNullOrBlanK(result)) {
                 if (new JSONObject(result).getInt("status") == 0) {
-                    // TODO: 2016/8/26 int == 500  Internal Server Error?
                     httpFailed(result);
                 } else {
                     httpSuccess(result);

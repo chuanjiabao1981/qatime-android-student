@@ -18,10 +18,36 @@ public class MessageListBean implements Serializable {
     private MsgStatusEnum msgStatus;
     private long time;
     private int unreadCount;
-    private String pull_address;
+//    private String camera;
+//    private String board;
     private String name;
     private int courseId;
     private boolean mute;
+    private String owner;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MessageListBean that = (MessageListBean) o;
+
+        return contactId != null ? contactId.equals(that.contactId) : that.contactId == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return contactId != null ? contactId.hashCode() : 0;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
 
     public void setContactId(String contactId) {
         this.contactId = contactId;
@@ -47,13 +73,21 @@ public class MessageListBean implements Serializable {
         this.unreadCount = unreadCount;
     }
 
-    public String getPull_address() {
-        return pull_address;
-    }
-
-    public void setPull_address(String pull_address) {
-        this.pull_address = pull_address;
-    }
+//    public String getCamera() {
+//        return camera;
+//    }
+//
+//    public void setCamera(String camera) {
+//        this.camera = camera;
+//    }
+//
+//    public String getBoard() {
+//        return board;
+//    }
+//
+//    public void setBoard(String board) {
+//        this.board = board;
+//    }
 
     public String getContactId() {
         return contactId;

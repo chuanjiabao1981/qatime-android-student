@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,10 +31,10 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
-import cn.qatime.player.utils.AppUtils;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
-import cn.qatime.player.utils.DownFileUtil;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.utils.AppUtils;
+import libraryextra.utils.DownFileUtil;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
@@ -51,6 +53,7 @@ StartActivity extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+        ((TextView) findViewById(R.id.version)).setText("V " + AppUtils.getVersionName(this));
         GetGradeslist();//加载年纪列表
         checkUpdate();
 
@@ -130,7 +133,7 @@ StartActivity extends BaseActivity implements View.OnClickListener {
                 Toast.makeText(StartActivity.this, getResourceString(R.string.check_for_update_failed), Toast.LENGTH_SHORT).show();
                 startApp();
             }
-        }, new VolleyErrorListener(){
+        }, new VolleyErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
@@ -150,7 +153,7 @@ StartActivity extends BaseActivity implements View.OnClickListener {
                 DownFileUtil downFileUtil = new DownFileUtil(this, downLoadLinks, "qatime.apk", "", "qatime.apk") {
                     @Override
                     public void downOK() {
-                        DownFileUtil.insertAPK("", getApplicationContext());
+                        DownFileUtil.insertAPK(Environment.getExternalStorageDirectory() + "/qatime.apk", getApplicationContext());
                     }
 
                     @Override
@@ -221,5 +224,16 @@ StartActivity extends BaseActivity implements View.OnClickListener {
             }
         });
         addToRequestQueue(request);
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

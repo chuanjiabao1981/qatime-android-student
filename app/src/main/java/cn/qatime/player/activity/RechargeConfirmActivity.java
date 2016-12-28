@@ -12,11 +12,14 @@ import com.orhanobut.logger.Logger;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
@@ -40,6 +43,8 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
     DecimalFormat df = new DecimalFormat("#.00");
     private AppPayParamsBean data;
     private IWXAPI api;
+    SimpleDateFormat parseISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
+    SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private void assignViews() {
         id = (TextView) findViewById(R.id.id);
@@ -67,13 +72,17 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
 
         Intent intent = getIntent();
         id.setText(intent.getStringExtra("id"));
-        time.setText(intent.getStringExtra("created_at"));
+        try {
+            time.setText(parse.format(parseISO.parse(intent.getStringExtra("created_at"))));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         mode.setText(getPayType(intent.getStringExtra("pay_type")));
         String price = df.format(Double.valueOf(intent.getStringExtra("amount")));
         if (price.startsWith(".")) {
             price = "0" + price;
         }
-        price = "￥"+price;
+        price = "￥" + price;
         amount.setText(price);
         data = (AppPayParamsBean) intent.getSerializableExtra("app_pay_params");
 
@@ -88,7 +97,7 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
                 if (alertDialogPhone == null) {
                     View view = View.inflate(RechargeConfirmActivity.this, R.layout.dialog_cancel_or_confirm, null);
                     TextView text = (TextView) view.findViewById(R.id.text);
-                    text.setText(getResourceString(R.string.call_customer_service_phone) + phone.getText() + "?");
+                    text.setText(getResourceString(R.string.call_customer_service_phone) + phone.getText());
                     Button cancel = (Button) view.findViewById(R.id.cancel);
                     Button confirm = (Button) view.findViewById(R.id.confirm);
                     cancel.setOnClickListener(new View.OnClickListener() {
@@ -157,10 +166,24 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
 
     @Subscribe
     public void onEvent(PayResultState state) {
-        Intent intent = new Intent(this,RechargePayResultActivity.class);
-        intent.putExtra("state",state);
+        Intent intent = new Intent(this, RechargePayResultActivity.class);
+        intent.putExtra("orderId", id.getText().toString());
+        intent.putExtra("price", amount.getText().toString());
+        intent.putExtra("state", state);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override

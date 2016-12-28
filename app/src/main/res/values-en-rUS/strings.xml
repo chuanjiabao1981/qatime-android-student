@@ -7,7 +7,6 @@
     <string name="release_to_load">Release to Load</string>
     <string name="release_to_refresh">Release to Refresh</string>
     //fragment1
-    <string name="app_name">QuestionTime</string>//答疑时间
     <string name="home_page">Home</string>//首页
     <string name="time_table">Timetable</string>//课程表
     <string name="message">Messages</string>//消息
@@ -188,7 +187,7 @@
     <string name="tutor_information">Course Details</string>
     <string name="hint_password_forget">Please enter your new password</string>
     <string name="hint_phone_number_forget">Please input the binding phone number</string>
-    <string name="hint_input_code">Input verification code</string>
+    <string name="hint_input_email_code">Input verification code</string>
     <string name="find_password">Retrieve password</string>
     <string name="click_to_add">Click to add</string>
     <string name="change_information">Change personal information</string>
@@ -265,7 +264,7 @@
     <string name="no_external_storage">No external storage</string>
     <string name="more_than_ten_years">More than ten years</string>
     <string name="member_list">Member list</string>
-    <string name="login_has_expired"> Logon failure: the specified account password has expired.</string>
+    <string name="login_has_expired"> Logon failure: the specified account password has expired</string>
     <string name="live_details">Live details</string>
     <string name="clip_photo">Clip photo</string>
     <string name="comment_content">Comment content</string>
@@ -286,7 +285,7 @@
     <string name="email_wrong">Email error</string>
     <string name="end">End</string>
     <string name="feedback">Feedback</string>
-    <string name="forget_password_1">Forget password?</string>
+    <string name="forget_password_1">Forget password</string>
     <string name="found_new_version">Discover New version</string>
     <string name="getcode">Get verification code</string>
     <string name="hint_6_16_password">6-16 letters or numbers</string>
@@ -350,5 +349,7 @@
     <string name="class_n">Lesson N</string>
     <string name="class_range">Course range</string>
     <string name="clean_cache">Clear cache</string>
+    <string name="course_arrangement">course arrangement</string>
+    <string name="input_login_password">Input login password</string>
 </resources>
 

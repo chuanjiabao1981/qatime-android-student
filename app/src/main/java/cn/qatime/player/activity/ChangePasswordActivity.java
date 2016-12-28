@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONObject;
 
@@ -21,7 +22,6 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
-import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.StringUtils;
@@ -65,8 +65,8 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
         assignViews();
 
         password.setHint(StringUtils.getSpannedString(this, R.string.hint_input_current_password));
-        newPassword.setHint(StringUtils.getSpannedString(this, R.string.hint_6_16_password));
-        confirmNewPassword.setHint(StringUtils.getSpannedString(this, R.string.hint_input_again));
+        newPassword.setHint(StringUtils.getSpannedString(this, R.string.input_new_password));
+        confirmNewPassword.setHint(StringUtils.getSpannedString(this, R.string.confirm_new_password));
 
 
         forgetPassword.setOnClickListener(this);
@@ -82,7 +82,7 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
             case R.id.forget_password:
                 Intent intent = new Intent(this, ForgetPasswordActivity.class);
                 intent.putExtra("status_login", true);
-                startActivityForResult(intent, Constant.REQUEST_EXIT_LOGIN);
+                startActivity(intent);
                 break;
             case R.id.button_over:
                 if (!(StringUtils.isGoodPWD(password1) || StringUtils.isGoodPWD(password2) || StringUtils.isGoodPWD(password3))) {
@@ -108,13 +108,11 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
                     @Override
                     protected void onSuccess(JSONObject response) {
                         Logger.e("验证成功");
-                        Toast.makeText(ChangePasswordActivity.this, getResourceString(R.string.change_password_success), Toast.LENGTH_SHORT).show();
                         BaseApplication.clearToken();
-                        setResult(Constant.RESPONSE_EXIT_LOGIN);
-                        Intent intent = new Intent(ChangePasswordActivity.this, LoginActivity.class);
+                        Toast.makeText(ChangePasswordActivity.this, getResourceString(R.string.change_password_success), Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(ChangePasswordActivity.this, MainActivity.class);
                         intent.putExtra("sign", "exit_login");
                         startActivity(intent);
-                        finish();
                     }
 
                     @Override
@@ -131,12 +129,15 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
                 break;
         }
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constant.REQUEST_EXIT_LOGIN && resultCode == Constant.RESPONSE_EXIT_LOGIN) {
-            setResult(Constant.RESPONSE_EXIT_LOGIN);
-            finish();
-        }
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

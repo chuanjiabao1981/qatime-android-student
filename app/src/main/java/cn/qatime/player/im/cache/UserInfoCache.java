@@ -97,7 +97,7 @@ public class UserInfoCache {
      * 构建缓存与清理
      */
     public void buildCache() {
-        //TODO 有登录数据时调用构建
+        //有登录数据时调用构建
         List<NimUserInfo> users = NIMClient.getService(UserService.class).getAllUserInfo();
         addOrUpdateUsers(users, false);
     }

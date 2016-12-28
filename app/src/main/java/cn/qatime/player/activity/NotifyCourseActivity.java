@@ -9,13 +9,14 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
-import cn.qatime.player.view.WheelView;
+import libraryextra.view.WheelView;
 import libraryextra.utils.SPUtils;
 
 /**
@@ -23,8 +24,6 @@ import libraryextra.utils.SPUtils;
  */
 public class NotifyCourseActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
 
-    private CheckBox cb1;
-    private CheckBox cb2;
     private CheckBox sms;
     private CheckBox sys;
     private TextView textHours;
@@ -38,8 +37,6 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
 
 
     private void assignViews() {
-        cb1 = (CheckBox) findViewById(R.id.cb_1);
-        cb2 = (CheckBox) findViewById(R.id.cb_2);
         sms = (CheckBox) findViewById(R.id.sms);
         sys = (CheckBox) findViewById(R.id.sys);
         textHours = (TextView) findViewById(R.id.hours);
@@ -58,7 +55,6 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
     private void initData() {
         al_hours = new ArrayList<>();
         al_minute = new ArrayList<>();
-        int j = 0;
         String str;
         for (int i = 0; i <= 24; i++) {
             str = String.valueOf(i);
@@ -89,14 +85,10 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
         setContentView(R.layout.activity_notify_course);
         setTitle(getResourceString(R.string.notify_classes));
         assignViews();
-        cb1.setChecked((Boolean) SPUtils.get(this, "notify_course", true));
-        cb2.setChecked((Boolean) SPUtils.get(this, "notify_public", true));
         sms.setChecked((Boolean) SPUtils.get(this, "notify_sms", true));
         sys.setChecked((Boolean) SPUtils.get(this, "notify_sys", true));
 
 
-        cb1.setOnCheckedChangeListener(this);
-        cb2.setOnCheckedChangeListener(this);
         sms.setOnCheckedChangeListener(this);
         sys.setOnCheckedChangeListener(this);
         time.setOnClickListener(new View.OnClickListener() {
@@ -110,11 +102,11 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
     private void showTimePickerDialog() {
         if (alertDialog == null) {
             final View view = View.inflate(NotifyCourseActivity.this, R.layout.dialog_time_picker, null);
-            final WheelView hours = (WheelView) view.findViewById(R.id.hours);
+            final WheelView hours = (WheelView) view.findViewById(R.id.dialog_hours);
             hours.setOffset(1);
             hours.setItems(al_hours);
             hours.setSeletion(al_hours.indexOf(hour));
-            final WheelView minutes = (WheelView) view.findViewById(R.id.minute);
+            final WheelView minutes = (WheelView) view.findViewById(R.id.dialog_minute);
             minutes.setOffset(1);
             minutes.setItems(al_minute);
             minutes.setSeletion(al_minute.indexOf(minute));
@@ -140,11 +132,6 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
-            case R.id.cb_1:
-                Logger.e("cb_1 click");
-
-                SPUtils.put(this, "notify_course", isChecked);
-                break;
 
             case R.id.sms:
 
@@ -153,14 +140,9 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
                 SPUtils.put(this, "notify_sms", isChecked);
                 break;
             case R.id.sys:
-
                 Logger.e("sys click");
 
                 SPUtils.put(this, "notify_sys", isChecked);
-                break;
-            case R.id.cb_2:
-                Logger.e("cb_2 click");
-                SPUtils.put(this, "notify_public", isChecked);
                 break;
         }
     }
@@ -172,5 +154,16 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
         SPUtils.put(this, "notify_hour", hour);
         SPUtils.put(this, "notify_minute", minute);
         super.onStop();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

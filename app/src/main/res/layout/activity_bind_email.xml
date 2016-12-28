@@ -8,73 +8,43 @@
 
     <LinearLayout style="@style/edit_layout_style">
 
-        <LinearLayout
-            style="@style/edit_layout_top_style"
-            android:paddingLeft="12dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:text="@string/new_email" />
-
-            <EditText
-                android:id="@+id/input_new_email"
-                style="@style/activity_edit_text_style"
-                android:layout_marginLeft="12dp"
-                android:hint="@string/hint_input_email"
-                android:inputType="textEmailAddress" />
-
-            <ImageView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:src="@mipmap/pay_success"
-                android:visibility="invisible" />
-        </LinearLayout>
-
-        <LinearLayout
+        <EditText
+            android:id="@+id/input_new_email"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/shape_input"
+            android:gravity="center_vertical"
+            android:hint="@string/hint_input_email"
+            android:inputType="textEmailAddress"
             android:paddingLeft="12dp"
-            style="@style/edit_layout_center_style">
+            android:paddingRight="12dp"
+            android:textColor="#ff333333"
+            android:textColorHint="#999"
+            android:textSize="14sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:text="@string/confirm_email" />
-
-            <EditText
-                android:id="@+id/confirm_new_email"
-                style="@style/activity_edit_text_style"
-                android:layout_marginLeft="12dp"
-                android:hint="@string/hint_input_again"
-                android:inputType="textEmailAddress" />
-
-            <ImageView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:src="@mipmap/pay_success"
-                android:visibility="invisible" />
-        </LinearLayout>
 
         <LinearLayout
-        android:paddingLeft="12dp"
-        style="@style/edit_layout_bottom_style">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:gravity="center">
 
             <EditText
                 android:id="@+id/code"
                 style="@style/activity_edit_text_style"
+                android:hint="输入收到的校验码"
                 android:inputType="number" />
 
             <TextView
                 android:id="@+id/text_getcode"
-                style="@style/button_style"
-                android:text="@string/getcode" />
+                style="@style/button_style_with_edit"
+                android:enabled="false"
+                android:text="@string/getcode"
+                android:textColor="@drawable/text_selector_white_red" />
 
-            <ImageView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:src="@mipmap/pay_success"
-                android:visibility="invisible" />
         </LinearLayout>
     </LinearLayout>
 

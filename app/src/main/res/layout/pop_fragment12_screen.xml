@@ -10,38 +10,24 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="18dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginTop="12dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="9dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="12dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingRight="15dp"
             android:text="@string/price"
-            android:textColor="#4000" />
+            android:textColor="#333" />
 
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1">
-
-            <EditText
-                android:id="@+id/price_low"
-                android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:background="@drawable/shape_input_radius"
-                android:gravity="center"
-                android:inputType="number"
-                android:maxLength="5"
-                android:minEms="3"
-                android:singleLine="true"
-                android:textColor="#a000"
-                android:textColorHint="#ff999999"
-                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="18dp"
@@ -52,6 +38,23 @@
                 android:text="@string/yuan"
                 android:textColor="#a000" />
 
+            <EditText
+                android:id="@+id/price_low"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/screen_edit_background"
+                android:gravity="center"
+                android:inputType="number"
+                android:maxLength="5"
+                android:minEms="3"
+                android:singleLine="true"
+                android:textColor="#a000"
+                android:textColorHint="#ff999999"
+                android:textSize="16sp" />
+
         </RelativeLayout>
 
         <TextView
@@ -60,7 +63,8 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:gravity="center"
-            android:text="-" />
+            android:text="-"
+            android:textColor="#3000" />
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -71,7 +75,7 @@
                 android:id="@+id/price_high"
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
-                android:background="@drawable/shape_input_radius"
+                android:background="@drawable/screen_edit_background"
                 android:gravity="center"
                 android:inputType="number"
                 android:maxLength="5"
@@ -93,99 +97,50 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="18dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingRight="15dp"
-            android:text="@string/class_hours_range"
-            android:textColor="#4000" />
-
-        <EditText
-            android:id="@+id/subject_low"
-            android:layout_width="0dp"
-            android:layout_height="32dp"
-            android:layout_weight="1"
-            android:background="@drawable/shape_input_radius"
-            android:gravity="center"
-            android:inputType="number"
-            android:maxLength="3"
-            android:minEms="3"
-            android:singleLine="true"
-            android:textColor="#a000"
-            android:textColorHint="#ff999999"
-            android:textSize="16sp" />
-
-        <TextView
-            android:layout_width="15dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:gravity="center"
-            android:text="-" />
-
-        <EditText
-            android:id="@+id/subject_high"
-            android:layout_width="0dp"
-            android:layout_height="32dp"
-            android:layout_weight="1"
-            android:background="@drawable/shape_input_radius"
-            android:gravity="center"
-            android:inputType="number"
-            android:maxLength="3"
-            android:minEms="3"
-            android:singleLine="true"
-            android:textColor="#a000"
-            android:textColorHint="#ff999999"
-            android:textSize="16sp" />
-
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="18dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginLeft="12dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="9dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="12dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingBottom="9dp"
             android:paddingRight="15dp"
+            android:paddingTop="9dp"
             android:text="@string/starting_range"
-            android:textColor="#4000" />
+            android:textColor="#333" />
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="32dp"
             android:layout_weight="1"
+            android:background="@drawable/screen_edit_background"
             android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/begin_class_time"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2016-11-11"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:hint="开始时间"
                 android:textColor="#a000"
-                android:textSize="16sp" />
+                android:textColorHint="#999"
+                android:textSize="14sp" />
 
             <ImageView
                 android:layout_width="10dp"
                 android:layout_height="10dp"
                 android:layout_marginLeft="2dp"
                 android:scaleType="centerInside"
-                android:src="@mipmap/down" />
+                android:src="@mipmap/screen_down" />
         </LinearLayout>
 
         <TextView
@@ -199,25 +154,28 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="32dp"
             android:layout_weight="1"
+            android:background="@drawable/screen_edit_background"
             android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/end_class_time"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2016-11-11"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:hint="结束时间"
                 android:textColor="#a000"
-                android:textSize="16sp" />
+                android:textColorHint="#999"
+                android:textSize="14sp" />
 
             <ImageView
                 android:layout_width="10dp"
                 android:layout_height="10dp"
                 android:layout_marginLeft="2dp"
                 android:scaleType="centerInside"
-                android:src="@mipmap/down" />
+                android:src="@mipmap/screen_down" />
         </LinearLayout>
     </LinearLayout>
 
@@ -225,29 +183,32 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="18dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="12dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingBottom="9dp"
             android:paddingRight="15dp"
+            android:paddingTop="9dp"
             android:text="@string/state"
-            android:textColor="#4000" />
+            android:textColor="#333" />
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="horizontal">
 
             <RelativeLayout
                 android:id="@+id/started"
                 android:layout_width="0dp"
-                android:layout_height="26dp"
+                android:layout_height="32dp"
                 android:layout_weight="1"
                 android:background="@drawable/text_background_select"
                 android:clickable="true"
@@ -271,7 +232,8 @@
                     android:layout_centerVertical="true"
                     android:layout_toLeftOf="@id/started_text"
                     android:gravity="center"
-                    android:text="√" />
+                    android:text="√"
+                    android:textColor="#be0b0b" />
             </RelativeLayout>
 
             <TextView
@@ -283,7 +245,7 @@
             <RelativeLayout
                 android:id="@+id/recruiting"
                 android:layout_width="0dp"
-                android:layout_height="26dp"
+                android:layout_height="32dp"
                 android:layout_alignParentRight="true"
                 android:layout_weight="1"
                 android:background="@drawable/text_background_select"
@@ -309,7 +271,8 @@
                     android:layout_centerVertical="true"
                     android:layout_toLeftOf="@id/recruiting_text"
                     android:gravity="center"
-                    android:text="√" />
+                    android:text="√"
+                    android:textColor="#be0b0b" />
 
             </RelativeLayout>
 
@@ -326,25 +289,25 @@
 
         <Button
             android:id="@+id/reset"
+            style="@style/dialog_button_style"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="9dp"
             android:layout_weight="1"
-            android:background="@drawable/dialog_button_background_selector"
             android:text="@string/reset"
-            android:textColor="#fff" />
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/submit"
+            style="@style/dialog_button_style"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_marginLeft="9dp"
             android:layout_marginRight="12dp"
             android:layout_weight="1"
-            android:background="@drawable/dialog_button_background_selector"
             android:text="@string/confirm"
-            android:textColor="#fff" />
+            android:textSize="14sp" />
 
     </LinearLayout>
 

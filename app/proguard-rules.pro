@@ -23,7 +23,6 @@
 -dontwarn com.bumptech.glide.**
 -dontwarn libraryextra.**
 -keep class cn.qatime.player.view.**{*;}
--keep class cn.qatime.player.view.BiaoQingView {*;}
 -keep class libraryextra.transformation.GlideCircleTransform {*;}
 -keep class libraryextra.transformation.GlideRoundTransform {*;}
 #common

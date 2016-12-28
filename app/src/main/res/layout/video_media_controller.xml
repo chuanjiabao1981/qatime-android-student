@@ -1,222 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/controller"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_control"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:background="#00000000">
 
     <RelativeLayout
         android:id="@+id/play_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="45dip">
+        android:layout_height="45dp"
+        android:background="@drawable/shape_video_toolbar">
 
         <ImageView
             android:id="@+id/player_exit"
             android:layout_width="45dp"
             android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:onClick="backClick"
+            android:clickable="true"
             android:padding="13dp"
             android:src="@mipmap/ic_play_exit" />
 
-        <LinearLayout
-            android:id="@+id/toolbar_layout"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/video_name"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/player_exit"
+            android:ellipsize="marquee"
+            android:focusable="true"
             android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/video_name"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:ellipsize="marquee"
-                android:focusable="true"
-                android:gravity="center_vertical"
-                android:singleLine="true"
-                android:text="視頻名字"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/definition"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/hd"
-                android:textColor="#fff" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/view_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/shape_circle_bg"
-            android:drawableLeft="@mipmap/head_write_32"
-            android:paddingBottom="2dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:paddingTop="2dp"
             android:singleLine="true"
-            android:textSize="12dp"
-            android:text="123"
-            android:textColor="#fff" />
+            android:text="視頻名字"
+            android:textColor="#fff"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+        <!--<TextView-->
+            <!--android:id="@id/view_count"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginRight="3dp"-->
+            <!--android:background="@drawable/shape_circle_bg"-->
+            <!--android:drawableLeft="@mipmap/eyes"-->
+            <!--android:paddingBottom="2dp"-->
+            <!--android:paddingLeft="5dp"-->
+            <!--android:paddingRight="5dp"-->
+            <!--android:paddingTop="2dp"-->
+            <!--android:singleLine="true"-->
+            <!--android:text="123"-->
+            <!--android:textColor="#fff"-->
+            <!--android:textSize="13sp" />-->
     </RelativeLayout>
-
-    <RadioGroup
-        android:id="@+id/radiogroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginTop="40dp"
-        android:background="#999"
-        android:orientation="horizontal"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
-        android:visibility="gone">
-
-        <RadioButton
-            android:id="@+id/radio1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/hd" />
-
-        <RadioButton
-            android:id="@+id/radio2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/pd" />
-        <!--普清（PDTV）、标清（SDTV）、高清（HDTV）-->
-    </RadioGroup>
-
-    <LinearLayout
-        android:id="@+id/barrage_setting_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_marginBottom="45dp"
-        android:background="#999"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:layout_marginTop="3dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/viewing_mode" />
-
-            <SeekBar
-                android:id="@+id/brightness"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:max="255"
-                android:progress="0" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:layout_marginTop="2dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/barrage_transparent" />
-
-            <SeekBar
-                android:id="@+id/barrage_transparent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:layout_marginTop="2dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/barrage_size" />
-
-            <SeekBar
-                android:id="@+id/barrage_size"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:layout_marginTop="2dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/barrage_speed" />
-
-            <SeekBar
-                android:id="@+id/barrage_speed"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/barrage_position" />
-
-            <RadioGroup
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/position_top" />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/position_bottom" />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/full_screen" />
-            </RadioGroup>
-        </LinearLayout>
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/bottom_layout"
         android:layout_width="fill_parent"
         android:layout_height="45dp"
-        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
+        android:background="#b3000000"
         android:orientation="horizontal">
 
         <ImageView
@@ -227,28 +68,29 @@
             android:padding="13dp"
             android:src="@mipmap/nemediacontroller_play" />
 
-        <RelativeLayout
+        <ImageView
+            android:id="@+id/refresh"
+            android:layout_width="22dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:src="@mipmap/refresh" />
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/comment_layout"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
                 android:layout_weight="1"
                 android:orientation="horizontal"
                 android:visibility="gone">
-
-                <ImageView
-                    android:id="@+id/refresh"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:src="@mipmap/refresh" />
 
                 <EditText
                     android:id="@+id/comment"
@@ -257,63 +99,64 @@
                     android:layout_marginBottom="2dp"
                     android:layout_marginTop="2dp"
                     android:layout_weight="4"
-                    android:textSize="14sp"
-                    android:textColor="#333333"
                     android:background="@drawable/shape_input"
                     android:hint="@string/comment_content"
-                    android:imeOptions="flagNoExtractUi" />
+                    android:imeOptions="flagNoExtractUi"
+                    android:textColor="#333333"
+                    android:textSize="14sp" />
 
                 <Button
                     android:id="@+id/commit"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="2dp"
-                    android:layout_marginTop="2dp"
                     android:layout_marginLeft="5dp"
+                    android:layout_marginTop="2dp"
                     android:layout_weight="1"
-                    android:textColor="#fff"
                     android:background="@drawable/button_bg_selector_gray"
-                    android:text="@string/send" />
-
-                <TextView
-                    android:id="@+id/barrage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="5dp"
-                    android:gravity="center"
-                    android:text="@string/barrage_open"
+                    android:text="@string/send"
                     android:textColor="#fff" />
-
-                <ImageView
-                    android:id="@+id/barrage_setting"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:src="@mipmap/setting"
-                    android:visibility="gone" />
-
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/zoom_layout"
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/danmu_switch"
+                android:layout_width="40dp"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:padding="6dp"
+                android:src="@mipmap/danmu_on" />
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1" />
+            <ImageView
+                android:id="@+id/view_change"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:padding="8dp"
+                android:src="@mipmap/float_change_big" />
 
-                <ImageView
-                    android:id="@+id/zoom"
-                    android:layout_width="45dp"
-                    android:layout_height="match_parent"
-                    android:clickable="true"
-                    android:padding="13dp"
-                    android:src="@mipmap/nemediacontroller_scale01" />
-            </LinearLayout>
-        </RelativeLayout>
+            <ImageView
+                android:id="@+id/iv_switch"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:padding="8dp"
+                android:src="@mipmap/float_switchup" />
+
+            <ImageView
+                android:id="@+id/zoom"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:padding="8dp"
+                android:src="@mipmap/zoom_big" />
+
+        </LinearLayout>
     </LinearLayout>
-</FrameLayout>
+
+    <ImageView
+        android:id="@+id/sub_switch"
+        android:layout_width="45dp"
+        android:layout_height="32dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/float_subvideo_close" />
+</RelativeLayout>

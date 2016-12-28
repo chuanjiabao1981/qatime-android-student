@@ -18,13 +18,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="消费类型"
+            android:text="编&#8195;&#8195;号"
             android:textColor="#999999" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="支付方式"
+            android:text="提现方式"
             android:textColor="#999999" />
 
         <TextView
@@ -43,11 +43,11 @@
         android:paddingLeft="12dp">
 
         <TextView
-            android:id="@+id/type"
+            android:id="@+id/id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:text="课程"
+            android:text="20160928094236123456"
             android:textColor="#666666" />
 
         <TextView
@@ -71,17 +71,27 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:gravity="right"
-        android:paddingRight="6dp">
+        android:orientation="vertical">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textColor="#f00" />
         <TextView
             android:id="@+id/money_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="6dp"
             android:singleLine="true"
-            android:text="+￥500.00"
+            android:text="+￥0.00"
             android:textColor="#f00" />
+
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="充值成功"
+            android:textColor="#666666" />
     </LinearLayout>
 </LinearLayout>

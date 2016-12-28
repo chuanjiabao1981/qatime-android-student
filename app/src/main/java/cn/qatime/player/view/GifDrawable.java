@@ -8,7 +8,7 @@ import android.graphics.drawable.Drawable;
 
 import java.io.InputStream;
 
-import cn.qatime.player.utils.GifHelper;
+import libraryextra.utils.GifHelper;
 
 /**
  * @author lungtify
@@ -73,9 +73,5 @@ public class GifDrawable extends AnimationDrawable {
      */
     public interface UpdateListener {
         void update();
-    }
-
-    public void setUpdateListener(UpdateListener listener) {
-        this.mListener = listener;
     }
 }

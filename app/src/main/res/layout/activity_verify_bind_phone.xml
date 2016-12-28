@@ -6,36 +6,40 @@
 
     <include layout="@layout/layout_backbar" />
 
-    <LinearLayout
-        style="@style/edit_layout_style">
+    <LinearLayout style="@style/edit_layout_style">
 
         <LinearLayout
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
-            style="@style/edit_layout_top_style">
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:gravity="center">
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="36dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/current_phone"
-                android:textSize="14sp" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textSize="13sp"
+                android:textColor="#666"
+                android:text="@string/current_phone" />
 
             <TextView
                 android:id="@+id/current_phone"
                 android:layout_width="0dp"
-                android:layout_height="36dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
                 android:layout_weight="1"
-                android:textColor="#333333"
-                android:gravity="center"
-                android:textSize="14sp" />
+                android:textSize="13sp"
+                android:textColor="#666" />
         </LinearLayout>
 
         <LinearLayout
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
-            style="@style/edit_layout_bottom_style">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:gravity="center">
 
             <EditText
                 android:id="@+id/code"
@@ -44,8 +48,9 @@
 
             <TextView
                 android:id="@+id/text_getcode"
-                style="@style/button_style"
-                android:text="@string/getcode" />
+                style="@style/button_style_with_edit"
+                android:text="@string/getcode"
+                android:textColor="@drawable/text_selector_white_red" />
         </LinearLayout>
     </LinearLayout>
 

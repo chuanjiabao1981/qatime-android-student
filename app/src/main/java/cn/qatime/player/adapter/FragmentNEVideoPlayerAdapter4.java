@@ -2,6 +2,7 @@ package cn.qatime.player.adapter;
 
 import android.content.Context;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
@@ -10,10 +11,9 @@ import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
-import cn.qatime.player.bean.Announcements;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.RemedialClassDetailBean;
+import libraryextra.bean.Announcements;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.StringUtils;
 
@@ -40,8 +40,23 @@ public class FragmentNEVideoPlayerAdapter4 extends CommonAdapter<Announcements.D
         if (!letterMap.containsKey(item.getFirstLetter())) {
             letterMap.put(item.getFirstLetter(), position);
         }
+        if (item.isOwner()) {
+            ((TextView) holder.getView(R.id.name)).setTextColor(0xffbe0b0b);
+            ((TextView) holder.getView(R.id.role)).setTextColor(0xffbe0b0b);
+            ((TextView) holder.getView(R.id.role)).setText("老师");
+        } else {
+            ((TextView) holder.getView(R.id.name)).setTextColor(0xff666666);
+            ((TextView) holder.getView(R.id.role)).setTextColor(0xff999999);
+            ((TextView) holder.getView(R.id.role)).setText("学生");
+        }
+
         holder.setText(R.id.name, item.getName());
-        Glide.with(context).load(item.getIcon()).placeholder(R.mipmap.head_32).fitCenter().crossFade().transform(new GlideCircleTransform(context)).dontAnimate().into((ImageView) holder.getView(R.id.image));
+        Glide.with(context).load(item.getIcon()).placeholder(R.mipmap.error_header).fitCenter().crossFade().transform(new GlideCircleTransform(context)).dontAnimate().into((ImageView) holder.getView(R.id.image));
+//        if (position == 0) {
+//            ((TextView) holder.getView(R.id.name)).setTextColor(0xffbe0b0b);
+//            ((TextView) holder.getView(R.id.role)).setTextColor(0xffbe0b0b);
+//            holder.setText(R.id.role, context.getString(R.string.teacher_translate));
+//        }
     }
 
     public int getPositionByLetter(String s) {

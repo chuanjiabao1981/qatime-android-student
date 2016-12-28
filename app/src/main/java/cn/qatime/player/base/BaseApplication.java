@@ -17,21 +17,36 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.NimStrings;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
+import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.common.inter.ITagManager;
+import com.umeng.message.IUmengRegisterCallback;
+import com.umeng.message.MsgConstant;
+import com.umeng.message.PushAgent;
+import com.umeng.message.UTrack;
+import com.umeng.message.UmengNotificationClickHandler;
+import com.umeng.message.entity.UMessage;
+import com.umeng.message.tag.TagManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
+import cn.qatime.player.bean.CashAccountBean;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.im.LoginSyncDataStatusObserver;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
-import cn.qatime.player.utils.AppUtils;
-import cn.qatime.player.utils.UrlUtils;
+import custom.Configure;
+import libraryextra.bean.CityBean;
 import libraryextra.bean.Profile;
+import libraryextra.utils.AppUtils;
 import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
 
@@ -41,9 +56,34 @@ public class BaseApplication extends Application {
     private static BaseApplication context;
     private static RequestQueue Queue;
     public static boolean newVersion;
+    private static CityBean.Data currentCity;
+    private PushAgent mPushAgent;
+    private boolean voiceStatus;
+    private boolean shakeStatus;
+    private static CashAccountBean cashAccount;
 
     public static RequestQueue getRequestQueue() {
+        if (Queue == null) {
+            Queue = Volley.newRequestQueue(context);
+        }
         return Queue;
+    }
+
+    public static CityBean.Data getCurrentCity() {
+        return currentCity == null ? new CityBean.Data("全国") : currentCity;
+    }
+
+    public static void setCurrentCity(CityBean.Data currentCity) {
+        BaseApplication.currentCity = currentCity;
+        SPUtils.putObject(context, "current_city", currentCity);
+    }
+
+    public static void setCashAccount(CashAccountBean cashAccount) {
+        BaseApplication.cashAccount = cashAccount;
+    }
+
+    public static CashAccountBean getCashAccount() {
+        return cashAccount;
     }
 
     @Override
@@ -53,11 +93,91 @@ public class BaseApplication extends Application {
         Logger.init("QTA-TIME")               // default tag : PRETTYLOGGER or use just init()
                 .setMethodCount(3)            // default 2
                 .hideThreadInfo()             // default it is shown
-                .setLogLevel(UrlUtils.isDebug ? LogLevel.FULL : LogLevel.NONE);  // default : LogLevel.FULL
-
-        Queue = Volley.newRequestQueue(getApplicationContext());
-
+                .setLogLevel(Configure.isDebug ? LogLevel.FULL : LogLevel.NONE);  // default : LogLevel.FULL
         profile = SPUtils.getObject(this, "profile", Profile.class);
+        currentCity = SPUtils.getObject(this, "current_city", CityBean.Data.class);
+        shakeStatus = (boolean) SPUtils.get(this, "shake_status", true);
+        voiceStatus = (boolean) SPUtils.get(this, "voice_status", true);
+
+        //y友盟统计
+        MobclickAgent.setDebugMode(Configure.isDebug);
+        initUmengPush();
+        initYunxin();
+    }
+
+    private void initUmengPush() {
+        mPushAgent = PushAgent.getInstance(this);
+        mPushAgent.setDebugMode(Configure.isDebug);
+
+        mPushAgent.setNotificationPlaySound(shakeStatus ? MsgConstant.NOTIFICATION_PLAY_SDK_ENABLE : MsgConstant.NOTIFICATION_PLAY_SDK_DISABLE);
+        mPushAgent.setNotificationPlayLights(MsgConstant.NOTIFICATION_PLAY_SERVER);
+        mPushAgent.setNotificationPlayVibrate(voiceStatus ? MsgConstant.NOTIFICATION_PLAY_SDK_ENABLE : MsgConstant.NOTIFICATION_PLAY_SDK_DISABLE);
+
+        UmengNotificationClickHandler notificationClickHandler = new UmengNotificationClickHandler() {
+            @Override
+            public void dealWithCustomAction(Context context, UMessage msg) {
+                Logger.e("收到custom");
+                if (msg != null && msg.custom != null && !StringUtils.isNullOrBlanK(msg.custom)) {
+                    try {
+                        JSONObject response = new JSONObject(msg.custom);
+                        if (response.has("type") && response.get("type").toString().equals("0")) {
+                            Intent intent = new Intent(BaseApplication.this, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.putExtra("type", "system_message");
+                            startActivity(intent);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+        mPushAgent.setNotificationClickHandler(notificationClickHandler);
+
+        //注册推送服务，每次调用register方法都会回调该接口
+        mPushAgent.register(new IUmengRegisterCallback() {
+
+            @Override
+            public void onSuccess(String deviceToken) {
+                //注册成功会返回device token
+                if (getUserId() != 0) {
+                    mPushAgent.addAlias(String.valueOf(getUserId()), "student", new UTrack.ICallBack() {
+                        @Override
+                        public void onMessage(boolean b, String s) {
+                            Logger.e("添加别名" + b);
+                        }
+                    });
+                }
+                mPushAgent.getTagManager().add(new TagManager.TCallBack() {
+                    @Override
+                    public void onMessage(boolean b, ITagManager.Result result) {
+                        Logger.e("添加tag" + b);
+                    }
+                }, "student");
+                Logger.e("device" + deviceToken);
+            }
+
+            @Override
+            public void onFailure(String s, String s1) {
+
+            }
+        });
+        //TODO
+//        mPushAgent.setNotificaitonOnForeground(false);
+
+    }
+
+    public static void setOptions(boolean voiceStatus, boolean shakeStatus) {
+        PushAgent.getInstance(context).setNotificationPlayVibrate(voiceStatus ? MsgConstant.NOTIFICATION_PLAY_SDK_ENABLE : MsgConstant.NOTIFICATION_PLAY_SDK_DISABLE);
+        PushAgent.getInstance(context).setNotificationPlaySound(shakeStatus ? MsgConstant.NOTIFICATION_PLAY_SDK_ENABLE : MsgConstant.NOTIFICATION_PLAY_SDK_DISABLE);
+        StatusBarNotificationConfig config = new StatusBarNotificationConfig();
+        config.ring = voiceStatus;
+        config.vibrate = shakeStatus;
+        NIMClient.updateStatusBarNotificationConfig(config);
+    }
+
+
+    private void initYunxin() {
         /** 云信集成start*/
         // SDK初始化（启动后台服务，若已经存在用户登录信息， SDK 将完成自动登录）
         SPUtils.setContext(this);
@@ -96,10 +216,10 @@ public class BaseApplication extends Application {
     // 如果返回值为 null，则全部使用默认参数。
     private SDKOptions options() {
         SDKOptions options = new SDKOptions();
-        options.appKey = UrlUtils.appKey;
+//        options.appKey = UrlUtils.appKey;
         // 如果将新消息通知提醒托管给 SDK 完成，需要添加以下配置。否则无需设置。
         StatusBarNotificationConfig config = new StatusBarNotificationConfig();
-        //TODO 通知要跳的页面
+        // 通知要跳的页面
         config.notificationEntrance = MainActivity.class; // 点击通知栏跳转到该Activity
         config.notificationSmallIconId = R.mipmap.ic_launcher;
         // 呼吸灯配置
@@ -107,17 +227,18 @@ public class BaseApplication extends Application {
         config.ledOnMs = 1000;
         config.ledOffMs = 1500;
         // 通知铃声的uri字符串
+
         config.notificationSound = "android.resource://cn.qatime.player/raw/msg";
         options.statusBarNotificationConfig = config;
-        config.vibrate = true;
+        config.ring = voiceStatus;
+        config.vibrate = shakeStatus;
 
         UserPreferences.setStatusConfig(config);
         // 配置保存图片，文件，log 等数据的目录
         // 如果 options 中没有设置这个值，SDK 会使用下面代码示例中的位置作为 SDK 的数据目录。
         // 该目录目前包含 log, file, image, audio, video, thumb 这6个目录。
         // 如果第三方 APP 需要缓存清理功能， 清理这个目录下面个子目录的内容即可。
-        String sdkPath = getCacheDir() + "/nim";
-        options.sdkStorageRootPath = sdkPath;
+        options.sdkStorageRootPath = getCacheDir() + "/nim";
 
         // 配置是否需要预下载附件缩略图，默认为 true
         options.preloadAttach = true;
@@ -144,7 +265,7 @@ public class BaseApplication extends Application {
 
         @Override
         public int getDefaultIconResId() {
-            return R.mipmap.head_sculpture;
+            return R.mipmap.head_default;
         }
 
         @Override
@@ -222,6 +343,7 @@ public class BaseApplication extends Application {
             }
             SPUtils.putObject(context, "profile", profile);
             LoginSyncDataStatusObserver.getInstance().reset();
+            NIMClient.getService(AuthService.class).logout();
         }
     }
 
@@ -275,6 +397,10 @@ public class BaseApplication extends Application {
         } else {
             return "";
         }
+    }
+
+    public static boolean isLogined() {
+        return !StringUtils.isNullOrBlanK(getProfile().getToken());
     }
 
     /**

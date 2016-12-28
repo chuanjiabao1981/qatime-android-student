@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f7f7f7"
     android:orientation="vertical">
 
     <include layout="@layout/layout_backbar" />
@@ -13,16 +14,32 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#fff"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:id="@+id/head_sculpture"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_gravity="center"
-                android:src="@mipmap/personal_information_head" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/setting_text_style"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/head" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1px"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:id="@+id/head_sculpture"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:src="@mipmap/personal_information_head" />
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -45,8 +62,12 @@
 
                 <TextView
                     android:id="@+id/name"
-                    android:layout_marginRight="12dp"
-                    style="@style/setting_text_style" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:textSize="13sp"
+                    android:gravity="center"
+                    android:textColor="#666" />
 
             </LinearLayout>
 
@@ -71,9 +92,12 @@
 
                 <TextView
                     android:id="@+id/sex"
-                    android:layout_marginRight="12dp"
-                    style="@style/setting_text_style"
-                    android:text="@string/male" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center"
+                    android:textSize="13sp"
+                    android:textColor="#666" />
 
             </LinearLayout>
 
@@ -88,7 +112,6 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_marginRight="24dp"
                     style="@style/setting_text_style"
                     android:text="@string/birthday" />
 
@@ -100,9 +123,11 @@
                 <TextView
                     android:id="@+id/birthday"
                     android:layout_width="wrap_content"
-                    android:layout_marginRight="12dp"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:layout_marginRight="10dp"
+                    android:gravity="center"
+                    android:textSize="13sp"
+                    android:textColor="#666"  />
 
             </LinearLayout>
 
@@ -117,7 +142,6 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_marginRight="24dp"
                     style="@style/setting_text_style"
                     android:text="@string/grade" />
 
@@ -128,9 +152,12 @@
 
                 <TextView
                     android:id="@+id/grade"
-                    android:layout_marginRight="12dp"
-                    style="@style/setting_text_style"
-                    android:text="@string/high3" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center"
+                    android:textSize="13sp"
+                    android:textColor="#666"  />
 
             </LinearLayout>
 
@@ -139,14 +166,12 @@
                 android:layout_height="1px"
                 android:background="#dfdddd" />
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_marginRight="24dp"
                     style="@style/setting_text_style"
                     android:text="@string/school" />
 
@@ -157,10 +182,12 @@
 
                 <TextView
                     android:id="@+id/school"
-                    android:layout_marginRight="12dp"
-                    style="@style/setting_text_style"
-                    android:text="" />
-
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center"
+                    android:textSize="13sp"
+                    android:textColor="#666"  />
             </LinearLayout>
 
             <View
@@ -171,19 +198,26 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingBottom="14dp"
+                android:paddingTop="14dp">
 
                 <TextView
-                    android:layout_marginRight="24dp"
-                    style="@style/setting_text_style"
-                    android:text="@string/profiles" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:text="@string/profiles"
+                    android:textColor="#333" />
 
                 <TextView
                     android:id="@+id/describe"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="3dp"
-                    android:text="" />
+                    android:layout_marginRight="10dp"
+                    android:paddingLeft="20dp"
+                    android:text=""
+                    android:textSize="13sp"
+                    android:textColor="#666" />
 
             </LinearLayout>
 

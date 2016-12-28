@@ -3,6 +3,7 @@ package cn.qatime.player.activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,12 +24,12 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
-import cn.qatime.player.utils.AppUtils;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
-import cn.qatime.player.utils.DataCleanUtils;
-import cn.qatime.player.utils.DownFileUtil;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.utils.AppUtils;
+import libraryextra.utils.DataCleanUtils;
 import libraryextra.utils.DensityUtils;
+import libraryextra.utils.DownFileUtil;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyListener;
 
@@ -125,9 +127,9 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 Map<String, String> map = new HashMap<>();
                 map.put("category", "student_client");
                 map.put("platform", "android");
-                map.put("version", AppUtils.getVersionName(this));
-//                map.put("version", "0.0.1");
-                BaseApplication.getRequestQueue().add(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlcheckUpdate, map), null, new VolleyListener(this) {
+//                map.put("version", AppUtils.getVersionName(this));
+                map.put("version", "0.0.1");
+                addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlcheckUpdate, map), null, new VolleyListener(this) {
                     @Override
                     protected void onTokenOut() {
                         tokenOut();
@@ -202,7 +204,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 DownFileUtil downFileUtil = new DownFileUtil(this, downLoadLinks, "qatime.apk", "", "qatime.apk") {
                     @Override
                     public void downOK() {
-                        DownFileUtil.insertAPK("", getApplicationContext());
+                        DownFileUtil.insertAPK(Environment.getExternalStorageDirectory() + "/qatime.apk", getApplicationContext());
                     }
 
                     @Override
@@ -216,6 +218,17 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 alertDialog.dismiss();
                 break;
         }
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

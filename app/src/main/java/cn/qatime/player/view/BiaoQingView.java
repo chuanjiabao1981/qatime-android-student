@@ -1,9 +1,11 @@
 package cn.qatime.player.view;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Handler;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -16,28 +18,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.orhanobut.logger.Logger;
-
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
-import cn.qatime.player.utils.GifHelper;
-import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.utils.DensityUtils;
+import libraryextra.utils.GifHelper;
 import libraryextra.view.TagViewPager;
 
 public class BiaoQingView extends RelativeLayout {
-    private EditText content;
+    private EditText edit;
     private TagViewPager viewPager;
     private List<Bitmap> bitmapList = new ArrayList<>();
 
@@ -47,6 +46,9 @@ public class BiaoQingView extends RelativeLayout {
     private List<List<Map<String, Integer>>> listmap;
     private List<GridView> gv;
     private KeyEvent delete;
+    private LayoutParams params;
+
+    private String[][] biaoqingTags = new String[3][28];
 
     public BiaoQingView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -61,165 +63,138 @@ public class BiaoQingView extends RelativeLayout {
     }
 
     private void initEmoji() {
-        r1 = new Runnable() {
-
-            @Override
-            public void run() {
-                viewPager.setVisibility(View.VISIBLE);
-                emoji.setImageResource(R.mipmap.keybord);
-            }
-
-        };
         emoji.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (viewPager.getVisibility() == GONE) {
-                    hd.postDelayed(r1, 50);
+                if (BiaoQingView.this.getVisibility() == GONE) {//如果隐藏 打开
+                    BiaoQingView.this.setVisibility(View.VISIBLE);
                     closeInput();
                 } else {
-                    viewPager.setVisibility(View.GONE);
-                    emoji.setImageResource(R.mipmap.biaoqing);
-                    content.requestFocus();
+                    edit.requestFocus();
                     openInput();
                 }
             }
         });
-        content.setOnTouchListener(new View.OnTouchListener() {
+        edit.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                content.requestFocus();
                 openInput();
-                emoji.setImageResource(R.mipmap.biaoqing);
-                viewPager.setVisibility(View.GONE);
                 return false;
             }
         });
-        initData();
-        initGv();
         initViewPager();
+        initData();
+//        initGv();
     }
 
     private void initViewPager() {
         viewPager = new TagViewPager(getContext());
-        LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, DensityUtils.dp2px(getContext(), 180));
+        params = new LayoutParams(LayoutParams.MATCH_PARENT, DensityUtils.dp2px(getContext(), 180));
         viewPager.setLayoutParams(params);
-        viewPager.setId(R.id.viewPager);
-        viewPager.setVisibility(View.GONE);
         this.addView(viewPager);
         viewPager.init(R.drawable.shape_biaoqing_tag_select, R.drawable.shape_biaoqing_tag_nomal, 16, 8, 2, 40);
         viewPager.setAutoNext(false, 0);
         viewPager.setOnGetView(new TagViewPager.OnGetView() {
             @Override
-            public View getView(ViewGroup container, int position) {
-                container.addView(gv.get(position));
-                return gv.get(position);
+            public View getView(ViewGroup container, final int page) {
+                GridView mGridView = new GridView(edit.getContext());
+                mGridView.setLayoutParams(params);
+                mGridView.setGravity(Gravity.CENTER);
+                mGridView.setPadding(0,20,0,0);
+                mGridView.setBackgroundColor(Color.WHITE);
+                mGridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
+                mGridView.setNumColumns(7);
+                mGridView.setAdapter(new BaseAdapter() {
+
+                    public ViewHolder viewHolder;
+
+                    @Override
+                    public int getCount() {
+                        return biaoqingTags[page].length;
+                    }
+
+                    @Override
+                    public Object getItem(int position) {
+                        return biaoqingTags[page][position];
+                    }
+
+                    @Override
+                    public long getItemId(int position) {
+                        return position;
+                    }
+
+                    @TargetApi(Build.VERSION_CODES.KITKAT)
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        viewHolder = ViewHolder.get(edit.getContext(), convertView, parent, R.layout.item_emoji_page, position);
+                        if (biaoqingTags[page][position] != null) {
+                            try {
+                                viewHolder.setImageResource(R.id.emoji_image, Integer.parseInt(R.mipmap.class.getDeclaredField(biaoqingTags[page][position]).get(null).toString()));
+                            } catch (IllegalAccessException | NoSuchFieldException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        return viewHolder.getConvertView();
+                    }
+                });
+                mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if (position < 21) {
+                            edit.append(getEmotionContent(biaoqingTags[viewPager.getCurrentItem()][position]));
+                        } else if (position == 27) {
+                            //动作按下
+                            int action = KeyEvent.ACTION_DOWN;
+                            //code:删除，其他code也可以，例如 code = 0
+                            int code = KeyEvent.KEYCODE_DEL;
+                            KeyEvent event = new KeyEvent(action, code);
+                            edit.onKeyDown(KeyEvent.KEYCODE_DEL, event); //抛给系统处理了
+                        } else if (viewPager.getCurrentItem() != 2) {
+                            edit.append(getEmotionContent(biaoqingTags[viewPager.getCurrentItem()][position]));
+                        }
+                    }
+                });
+                container.addView(mGridView);
+                return mGridView;
             }
         });
         viewPager.setAdapter(3);
     }
 
-    private void initGv() {
-        int action = KeyEvent.ACTION_DOWN;
-        //code:删除，其他code也可以，例如 code = 0
-        int code = KeyEvent.KEYCODE_DEL;
-        delete = new KeyEvent(action, code);
-        gv = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            GridView grid = new GridView(getContext());
-            grid.setNumColumns(7);
-            grid.setSelector(new ColorDrawable(Color.TRANSPARENT));
-            grid.setPadding(0,20,0,0);
-            grid.setBackgroundColor(Color.WHITE);
-            grid.setLayoutParams(new GridView.LayoutParams(GridView.LayoutParams.MATCH_PARENT, GridView.LayoutParams.WRAP_CONTENT));
-            grid.setGravity(Gravity.CENTER);
-            grid.setAdapter(new CommonAdapter<Map<String, Integer>>(getContext(), listmap.get(i), R.layout.item_emoji_page) {
 
-                @Override
-                public void convert(ViewHolder holder, Map<String, Integer> item, int position) {
-                    ImageView view = holder.getView(R.id.emoji_image);
-                    if (item.get("image") != null) {
-                        int resId = item.get("image");
-//                        if (position == 27) {
-                            view.setImageResource(resId);
-//                        } else {
-//                            Glide.with(getContext()).load(resId).dontAnimate().crossFade().into(view);
-////                                view.setImageResource(resId);
-//                        }
+    private void initData() {
+        int position = 1;
+
+        try {
+            for (int i = 0; i < 3; i++) {
+                for (int j = 27 * i; j < 27 * (i + 1); j++) {
+                    biaoqingTags[i][j - 27 * i] = "em_" + position;
+                    if (j != 27) {
+                        position++;
                     }
                 }
-            });
-            grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    if (position < 21) {
-                        content.append(getEmotionContent(listmap.get(viewPager.getCurrentItem()).get(position).get("image")));
-                    } else if (position == 27) {
-                        //动作按下
-                        content.setPressed(true);
-                        content.onKeyDown(KeyEvent.KEYCODE_DEL, delete); //抛给系统处理了
-                    } else if (viewPager.getCurrentItem() != 2) {
-                        content.append(getEmotionContent(listmap.get(viewPager.getCurrentItem()).get(position).get("image")));
-                    }
-                }
-            });
-            gv.add(grid);
+                biaoqingTags[i][27] = "emoji_delete";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    private void initData() {
-        List<Map<String, Integer>> listitems1 = new ArrayList<>();
-        List<Map<String, Integer>> listitems2 = new ArrayList<>();
-        List<Map<String, Integer>> listitems3 = new ArrayList<>();
+    public SpannableString getEmotionContent(String resId) {
+        String emoji = "[" + resId + "]";
+        SpannableString spannableString = new SpannableString(emoji);
+        int size = (int) edit.getTextSize();
+        GifHelper helper = new GifHelper();
+        int id = 0;
         try {
-            for (int i = 1; i <= 28; i++) {
-                Map<String, Integer> listitem1 = new HashMap<>();
-                if (i != 28) {
-                    listitem1.put("image",
-                            Integer.parseInt(R.mipmap.class.getDeclaredField("em_" + i).get(null).toString()));
-                } else {
-                    listitem1.put("image", R.mipmap.emoji_delete);
-                }
-                listitems1.add(listitem1);
-            }
-            for (int i = 28; i <= 55; i++) {
-                Map<String, Integer> listitem2 = new HashMap<>();
-                if (i != 55) {
-                    listitem2.put("image", Integer.parseInt(R.mipmap.class.getDeclaredField("em_" + i).get(null).toString()));
-                } else {
-                    listitem2.put("image", R.mipmap.emoji_delete);
-                }
-                listitems2.add(listitem2);
-            }
-
-            for (int i = 55; i <= 82; i++) {
-                Map<String, Integer> listitem3 = new HashMap<>();
-                if (i <= 75) {
-                    listitem3.put("image", Integer.parseInt(R.mipmap.class.getDeclaredField("em_" + i).get(null).toString()));
-                } else if (i == 82) {
-                    listitem3.put("image", R.mipmap.emoji_delete);
-                } else {
-                    listitem3.put("image", null);
-                }
-                listitems3.add(listitem3);
-            }
+            id = Integer.parseInt(R.mipmap.class.getDeclaredField(resId).get(null).toString());
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
-        listmap = new ArrayList();
-        listmap.add(listitems1);
-        listmap.add(listitems2);
-        listmap.add(listitems3);
-    }
-
-    public SpannableString getEmotionContent(int resId) {
-        String emoji = "[" + getResources().getResourceName(resId).replace("cn.qatime.player:mipmap/", "") + "]";
-        SpannableString spannableString = new SpannableString(emoji);
-        int size = (int) content.getTextSize();
-        GifHelper helper = new GifHelper();
-        InputStream is = getResources().openRawResource(resId);
+        InputStream is = getResources().openRawResource(id);
         helper.read(is);
         Bitmap bitmap = helper.getImage();
         Bitmap scaleBitmap = Bitmap.createScaledBitmap(bitmap, size, size, true);
@@ -231,44 +206,37 @@ public class BiaoQingView extends RelativeLayout {
     }
 
     public void init(EditText edit, ImageView emoji) {
-        this.content = edit;
+        this.edit = edit;
         this.emoji = emoji;
+        BiaoQingView.this.setVisibility(View.GONE);//初始隐藏
         initEmoji();
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        listmap.clear();
-        gv.clear();
-        //回收bitmap
-        Logger.e("BiaoQingView回收Bitmp");
-        for (Bitmap bitmap : bitmapList) {
-            bitmap.recycle();
-        }
     }
 
     /**
      * 关闭输入法
      */
     public void closeInput() {
+        if (BiaoQingView.this.getVisibility() == View.VISIBLE) {
+            emoji.setImageResource(R.mipmap.keybord);
+        }
         InputMethodManager inputMethodManager = (InputMethodManager) this
                 .getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(content.getWindowToken(), 0);
+        inputMethodManager.hideSoftInputFromWindow(edit.getWindowToken(), 0);
     }
 
     /**
-     * 打开输入发
+     * 输入法打开
      */
 
     public void openInput() {
+        emoji.setImageResource(R.mipmap.biaoqing);
+        BiaoQingView.this.setVisibility(View.GONE);
         InputMethodManager inputMethodManager = (InputMethodManager) this.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         // 接受软键盘输入的编辑文本或其它视图
-        inputMethodManager.showSoftInput(content, 0);
+        inputMethodManager.showSoftInput(edit, 0);
     }
 
     public void closeEmojiAndInput() {
-        viewPager.setVisibility(View.GONE);
         emoji.setImageResource(R.mipmap.biaoqing);
         closeInput();
     }

@@ -4,8 +4,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 
+import com.umeng.analytics.MobclickAgent;
+
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.base.BaseApplication;
 import libraryextra.utils.SPUtils;
 
 /**
@@ -17,6 +20,8 @@ public class NotifyMessageActivity extends BaseActivity implements View.OnClickL
     private CheckBox cbShake;
     private View shake;
     private View voice;
+    private boolean voiceStatus;
+    private boolean shakeStatus;
 
 
     private void assignViews() {
@@ -58,7 +63,6 @@ public class NotifyMessageActivity extends BaseActivity implements View.OnClickL
                 break;
             case R.id.shake:
                 setShakeStatus();
-
                 break;
         }
     }
@@ -68,29 +72,40 @@ public class NotifyMessageActivity extends BaseActivity implements View.OnClickL
 //        cbShake.setChecked(!check);
 //        UserPreferences.setVibrateToggle(!check);
 
-        boolean shakeStatus = (boolean) SPUtils.get(this, "shake_status", true);
+        shakeStatus = !(boolean) SPUtils.get(this, "shake_status", true);
+        BaseApplication.setOptions((boolean) SPUtils.get(this, "voice_status", true), shakeStatus);
         if (shakeStatus) {
-            SPUtils.put(this, "shake_status", false);
-            cbShake.setChecked(false);
-        } else {
             SPUtils.put(this, "shake_status", true);
             cbShake.setChecked(true);
+        } else {
+            SPUtils.put(this, "shake_status", false);
+            cbShake.setChecked(false);
         }
     }
 
     private void setVoiceStatus() {
 //        boolean check = UserPreferences.getRingToggle();
 //        cbVoice.setChecked(!check);
-//        UserPreferences.setRingToggle(!check);
-
-        boolean voiceStatus = (boolean) SPUtils.get(this, "voice_status", true);
+//        UserPreferences.setRingToggle(!check)
+        voiceStatus = !(boolean) SPUtils.get(this, "voice_status", true);
+        BaseApplication.setOptions(voiceStatus, (boolean) SPUtils.get(this, "shake_status", true));
         if (voiceStatus) {
-            SPUtils.put(this, "voice_status", false);
-            cbVoice.setChecked(false);
-        } else {
             SPUtils.put(this, "voice_status", true);
             cbVoice.setChecked(true);
+        } else {
+            SPUtils.put(this, "voice_status", false);
+            cbVoice.setChecked(false);
         }
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 }

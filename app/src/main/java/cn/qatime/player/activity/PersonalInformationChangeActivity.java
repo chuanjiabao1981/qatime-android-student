@@ -16,13 +16,12 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
 import java.text.ParseException;
@@ -37,7 +36,6 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.UpLoadUtil;
 import cn.qatime.player.utils.UrlUtils;
-import cn.qatime.player.view.WheelView;
 import libraryextra.bean.GradeBean;
 import libraryextra.bean.ImageItem;
 import libraryextra.bean.PersonalInformationBean;
@@ -48,14 +46,14 @@ import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.view.CustomProgressDialog;
 import libraryextra.view.MDatePickerDialog;
+import libraryextra.view.WheelView;
 
 public class PersonalInformationChangeActivity extends BaseActivity implements View.OnClickListener {
     ImageView headsculpture;
-    TextView replace;
+    View replace;
     EditText name;
-    RadioButton men;
-    RadioButton women;
-    RadioGroup radiogroup;
+    TextView men;
+    TextView women;
     TextView textGrade;
     TextView complete;
     private Uri captureUri;
@@ -67,10 +65,12 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
     private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
     private String imageUrl = "";
-    private String select = "";//生日所选日期
+    private String select = "2000-01-01";//生日所选日期
     private GradeBean gradeBean;
     private CustomProgressDialog progress;
     private AlertDialog alertDialog;
+    private String gender = "";
+    //    private EditText school;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +91,8 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
 
 
         replace.setOnClickListener(this);
+        men.setOnClickListener(this);
+        women.setOnClickListener(this);
         birthdayView.setOnClickListener(this);
         complete.setOnClickListener(this);
         gradeView.setOnClickListener(this);
@@ -104,14 +106,15 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         Glide.with(PersonalInformationChangeActivity.this).load(data.getData().getAvatar_url()).placeholder(R.mipmap.personal_information_head).transform(new GlideCircleTransform(PersonalInformationChangeActivity.this)).crossFade().into(headsculpture);
         name.setText(data.getData().getName());
         Editable etext = name.getText();
+        imageUrl = data.getData().getAvatar_url();
         Selection.setSelection(etext, etext.length());
         if (!StringUtils.isNullOrBlanK(data.getData().getGender())) {
             if (data.getData().getGender().equals("male")) {
-                men.setChecked(true);
-                women.setChecked(false);
+                men.setSelected(true);
+                women.setSelected(false);
             } else {
-                men.setChecked(false);
-                women.setChecked(true);
+                men.setSelected(false);
+                women.setSelected(true);
             }
         }
         if (!StringUtils.isNullOrBlanK(data.getData().getBirthday())) {
@@ -140,6 +143,16 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.men:
+                men.setSelected(true);
+                women.setSelected(false);
+                gender = "male";
+                break;
+            case R.id.women:
+                women.setSelected(true);
+                men.setSelected(false);
+                gender = "female";
+                break;
             case R.id.grade_view:
                 showGradePickerDialog();
                 break;
@@ -179,17 +192,16 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
 
                     @Override
                     protected void httpSuccess(String result) {
+                        DialogUtils.dismissDialog(progress);
                         Intent data = new Intent();
                         data.putExtra("data", result);
                         setResult(Constant.RESPONSE, data);
-                        DialogUtils.dismissDialog(progress);
                         Toast.makeText(PersonalInformationChangeActivity.this, getResources().getString(R.string.change_information_successful), Toast.LENGTH_SHORT).show();
                         finish();
                     }
 
                     @Override
                     protected void httpFailed(String result) {
-                        // TODO: 2016/8/26 ERROR 处理
                         Toast.makeText(PersonalInformationChangeActivity.this, getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
                         DialogUtils.dismissDialog(progress);
                     }
@@ -204,12 +216,16 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                     Toast.makeText(this, getResources().getString(R.string.name_can_not_be_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (StringUtils.isNullOrBlanK(imageUrl)) {
+                    Toast.makeText(this, getResources().getString(R.string.hader_can_not_be_empty), Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 String grade = textGrade.getText().toString();
                 if (StringUtils.isNullOrBlanK(grade)) {
                     Toast.makeText(this, getResources().getString(R.string.grade_can_not_be_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                String gender = radiogroup.getCheckedRadioButtonId() == men.getId() ? "male" : "female";
+
                 String birthday = select.equals(parse.format(new Date())) ? "" : select;
                 String desc = describe.getText().toString();
                 Map<String, String> map = new HashMap<>();
@@ -233,7 +249,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
             grade.setOffset(1);
             grade.setItems(gradeBean.getData().getGrades());
             grade.setSeletion(gradeBean.getData().getGrades().indexOf(textGrade.getText()));
-            grade.setonItemClickListener(new WheelView.OnItemClickListener(){
+            grade.setonItemClickListener(new WheelView.OnItemClickListener() {
                 @Override
                 public void onItemClick() {
                     alertDialog.dismiss();
@@ -259,7 +275,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
 
     private void initView() {
         headsculpture = (ImageView) findViewById(R.id.head_sculpture);
-        replace = (TextView) findViewById(R.id.replace);
+        replace = findViewById(R.id.replace);
         name = (EditText) findViewById(R.id.name);
         name.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -267,12 +283,14 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 return event.getKeyCode() == KeyEvent.KEYCODE_ENTER;
             }
         });
-        men = (RadioButton) findViewById(R.id.men);
-        women = (RadioButton) findViewById(R.id.women);
-        radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
+        men = (TextView) findViewById(R.id.men);
+        women = (TextView) findViewById(R.id.women);
         textGrade = (TextView) findViewById(R.id.text_grade);
         describe = (EditText) findViewById(R.id.describe);
-        describe.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
+//        school = (EditText) findViewById(R.id.school);
+        describe.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
+        name.setFilters(new InputFilter[]{new InputFilter.LengthFilter(7)});
+//        school.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
         birthday = (TextView) findViewById(R.id.birthday);
         birthdayView = findViewById(R.id.birthday_view);
         gradeView = findViewById(R.id.grade_view);
@@ -321,5 +339,17 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 }
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

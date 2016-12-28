@@ -26,7 +26,6 @@
             android:text="@string/home_page"
             style="@style/tab_menu_text_color_select" />
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="0dp"
         style="@style/tab_menu_height"
@@ -37,17 +36,16 @@
         <ImageView
             android:id="@+id/tab_img2"
             style="@style/tab_menu_icon_size"
-            android:src="@mipmap/tab_moments_2" />
+            android:src="@mipmap/tab_tutorship_2" />
 
         <TextView
             android:id="@+id/tab_text2"
             android:layout_width="wrap_content"
             android:layout_height="18dp"
             android:gravity="center_vertical"
-            android:text="@string/time_table"
+            android:text="@string/Remedial_class"
             style="@style/tab_menu_text_color_normal" />
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="0dp"
         style="@style/tab_menu_height"
@@ -58,16 +56,37 @@
         <ImageView
             android:id="@+id/tab_img3"
             style="@style/tab_menu_icon_size"
-            android:src="@mipmap/tab_message_2" />
+            android:src="@mipmap/tab_moments_2" />
 
         <TextView
             android:id="@+id/tab_text3"
             android:layout_width="wrap_content"
             android:layout_height="18dp"
             android:gravity="center_vertical"
-            android:text="@string/message"
+            android:text="@string/time_table"
             style="@style/tab_menu_text_color_normal" />
     </LinearLayout>
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="0dp"-->
+        <!--style="@style/tab_menu_height"-->
+        <!--android:layout_weight="1"-->
+        <!--android:gravity="center"-->
+        <!--android:orientation="vertical">-->
+
+        <!--<ImageView-->
+            <!--android:id="@+id/tab_img3"-->
+            <!--style="@style/tab_menu_icon_size"-->
+            <!--android:src="@mipmap/tab_message_2" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/tab_text3"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="18dp"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:text="@string/message"-->
+            <!--style="@style/tab_menu_text_color_normal" />-->
+    <!--</LinearLayout>-->
 
 
     <LinearLayout

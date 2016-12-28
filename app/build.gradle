@@ -1,21 +1,28 @@
 apply plugin: 'com.android.application'
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 android {
-//    signingConfigs {
-//        config {
-//            keyAlias 'qatime'
-//            keyPassword '32147896'
-//            storeFile file('C:/Users/lenovo/Desktop/qatime.jks')
-//            storePassword '32147896'
-//        }
-//    }
+    signingConfigs {
+        config {
+            keyAlias 'qatime'
+            keyPassword '32147896'
+            storeFile file('C:/Users/lenovo/Desktop/qatime.jks')
+            storePassword '32147896'
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
-    defaultConfig {
-        applicationId "cn.qatime.player"
-        minSdkVersion 14
-        targetSdkVersion 22
-    }
+//    defaultConfig {
+//        applicationId "cn.qatime.player.debug"
+//        minSdkVersion 14
+//        targetSdkVersion 22
+//        manifestPlaceholders = [package_name : "cn.qatime.player.debug", // 测试微信需使用正式包名
+//                                yunxin_appkey: properties.getProperty("YunXinDebugAppKey"),
+//                                amap_apikey  : properties.getProperty("amapDebugKey")]
+//    }
+
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES.txt'
         exclude 'META-INF/LICENSE.txt'
@@ -32,11 +39,12 @@ android {
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//            signingConfig signingConfigs.config
+            signingConfig signingConfigs.config
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
     sourceSets {
@@ -47,6 +55,38 @@ android {
     lintOptions {
         abortOnError false
     }
+    productFlavors {
+        flavors_debug {
+            applicationId "cn.qatime.player.debug"
+            manifestPlaceholders = [package_name : "cn.qatime.player.debug",
+                                    yunxin_appkey: properties.getProperty("YunXinDebugAppKey"),
+                                    amap_apikey  : properties.getProperty("amapDebugKey")]
+        }
+        flavors_release {
+            applicationId "cn.qatime.player"
+            manifestPlaceholders = [package_name : "cn.qatime.player",
+                                    yunxin_appkey: properties.getProperty("YunXinReleaseAppKey"),
+                                    amap_apikey  : properties.getProperty("amapReleaseKey")]
+        }
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def appName = 'qatime_android'
+            def buildName
+
+            variant.productFlavors.each { product ->
+                buildName = product.name
+            }
+            output.outputFile = new File(output.outputFile.parent, appName + "_" + getVersionNameFromManifest() + "_" + buildName + ".apk");
+        }
+
+    }
+}
+
+def getVersionNameFromManifest() {
+    def manifestParser = new com.android.builder.core.DefaultManifestParser(android.sourceSets.main.manifest.srcFile)
+    return manifestParser.getVersionName()
 }
 
 dependencies {
@@ -55,4 +95,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile project(':library_pulltorefresh')
     compile project(':common')
+    compile project(':pushSDK')
 }
+

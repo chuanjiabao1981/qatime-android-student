@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,9 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,6 +53,27 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
         code = (EditText) findViewById(R.id.code);
         textGetcode = (TextView) findViewById(R.id.text_getcode);
         buttonOver = (Button) findViewById(R.id.button_over);
+
+        newParentPhone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (StringUtils.isPhone(newParentPhone.getText().toString().trim())) {
+                    textGetcode.setEnabled(true);
+                } else {
+                    textGetcode.setEnabled(false);
+                }
+            }
+        });
     }
 
 
@@ -69,12 +92,12 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
 
         password.setHint(StringUtils.getSpannedString(this, R.string.hint_input_password));
         newParentPhone.setHint(StringUtils.getSpannedString(this, R.string.new_parent_phone));
-        code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_code));
+        code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_verification_code));
 
         String phoneP = getIntent().getStringExtra("phoneP");
         currentParentPhone.setText(phoneP);
         if (!phoneP.equals("未绑定")) {
-            currentParentPhone.setTextColor(Color.BLACK);
+            currentParentPhone.setTextColor(0xff666666);
         } else {
             currentParentPhone.setTextColor(Color.RED);
         }
@@ -114,7 +137,7 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
                     protected void onError(JSONObject response) {
                         Toast.makeText(getApplicationContext(), getResourceString(R.string.code_send_failed), Toast.LENGTH_LONG).show();
                     }
-                },new VolleyErrorListener(){
+                }, new VolleyErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         super.onErrorResponse(volleyError);
@@ -178,7 +201,7 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
                             e.printStackTrace();
                         }
                     }
-                }, new VolleyErrorListener(){
+                }, new VolleyErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         super.onErrorResponse(volleyError);
@@ -207,4 +230,17 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
             textGetcode.setText(millisUntilFinished / 1000 + getResourceString(R.string.time_after_acquisition));
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
 }

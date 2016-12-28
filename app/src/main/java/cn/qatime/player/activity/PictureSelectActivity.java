@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +26,7 @@ import java.util.List;
 import cn.qatime.player.R;
 import cn.qatime.player.adapter.PictureSelectAdapter;
 import cn.qatime.player.base.BaseActivity;
-import cn.qatime.player.utils.AlbumHelper;
+import libraryextra.utils.AlbumHelper;
 import cn.qatime.player.utils.Constant;
 import libraryextra.bean.ImageBucket;
 import libraryextra.bean.ImageItem;
@@ -45,9 +47,9 @@ public class PictureSelectActivity extends BaseActivity {
         }
     };
     private AlbumHelper helper;
-    private GridView gridView;
     private PictureSelectAdapter adapter;
     private int REQUEST_CODE_SOME_FEATURES_PERMISSIONS = 1;
+    private boolean cameraGone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,43 +64,47 @@ public class PictureSelectActivity extends BaseActivity {
             } else {
                 getImages();
             }
-        }else {
+        } else {
             getImages();
         }
+        cameraGone = getIntent().getBooleanExtra("gonecamera", false);//设置是否显示照相
         initView();
     }
 
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, int[] grantResults) {
         if (requestCode == REQUEST_CODE_SOME_FEATURES_PERMISSIONS) {
-            for (int i = 0; i < permissions.length; i++) {
-                if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getImages();
-                } else {//未给权限
-
-                }
+            if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getImages();
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private void initView() {
-        gridView = (GridView) findViewById(R.id.gridView);
-        adapter = new PictureSelectAdapter(this, detailList);
+        GridView gridView = (GridView) findViewById(R.id.gridView);
+        adapter = new PictureSelectAdapter(this, detailList, cameraGone);
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
-                    // ##########拍照##########
-                    Intent newIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(newIntent, Constant.REQUEST_CAMERA);
-                } else {
+                if (cameraGone) {
                     Intent data = new Intent();
-                    data.putExtra("data", detailList.get(position - 1));
+                    data.putExtra("data", detailList.get(position));
                     setResult(Constant.RESPONSE_PICTURE_SELECT, data);
                     finish();
+                } else {
+                    if (position == 0) {
+                        // ##########拍照##########
+                        Intent newIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(newIntent, Constant.REQUEST_CAMERA);
+                    } else {
+                        Intent data = new Intent();
+                        data.putExtra("data", detailList.get(position - 1));
+                        setResult(Constant.RESPONSE_PICTURE_SELECT, data);
+                        finish();
+                    }
                 }
             }
         });
@@ -149,5 +155,16 @@ public class PictureSelectActivity extends BaseActivity {
                 hd.sendEmptyMessage(1);
             }
         }).start();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

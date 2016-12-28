@@ -21,12 +21,15 @@ import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,11 +39,12 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.config.UserPreferences;
-import cn.qatime.player.fragment.FragmentRemedialClassDetail1;
-import cn.qatime.player.fragment.FragmentRemedialClassDetail2;
-import cn.qatime.player.fragment.FragmentRemedialClassDetail3;
+import cn.qatime.player.fragment.FragmentClassDetailClassInfo;
+import cn.qatime.player.fragment.FragmentClassDetailClassList;
+import cn.qatime.player.fragment.FragmentClassDetailTeacherInfo;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.OrderPayBean;
@@ -58,11 +62,10 @@ import libraryextra.view.SimpleViewPagerIndicator;
 public class RemedialClassDetailActivity extends BaseFragmentActivity implements View.OnClickListener {
     ImageView image;
     private int id;
-    private String[] mTitles = new String[]{"辅导概况", "教师资料", "课程列表"};
+    private String[] mTitles = new String[]{"辅导详情", "教师资料", "课程安排"};
     private SimpleViewPagerIndicator mIndicator;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
     private Button audition;
-    private Button pay;
     private TextView name;
     private TextView title;
     private RemedialClassDetailBean data;
@@ -71,8 +74,18 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     private int pager = 0;
     TextView price;
     TextView studentnumber;
+    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     DecimalFormat df = new DecimalFormat("#.00");
     private AlertDialog alertDialog;
+    private Button startStudy;
+    private View startStudyView;
+    private View rlImage;
+    private TextView progress;
+    private TextView status;
+    private TextView timeToStart;
+    private View layoutView;
+    private Button auditionStart;
+    private TextView transferPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,38 +107,31 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     public void initView() {
         EventBus.getDefault().register(this);
         image = (ImageView) findViewById(R.id.image);
+        rlImage = findViewById(R.id.rl_image);
         name = (TextView) findViewById(R.id.name);
-        image.setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenWidth(this) * 5 / 8));
+        rlImage.setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenWidth(this) * 5 / 8));
 
-        fragBaseFragments.add(new FragmentRemedialClassDetail1());
-        fragBaseFragments.add(new FragmentRemedialClassDetail2());
-        fragBaseFragments.add(new FragmentRemedialClassDetail3());
-
-
-
-//        fragmentlayout = (FragmentLayoutWithLine)findViewById(R.id.fragmentlayout);
-//
-//        fragmentlayout.setScorllToNext(true);
-//        fragmentlayout.setScorll(true);
-//        fragmentlayout.setWhereTab(1);
-//        fragmentlayout.setTabHeight(4,0xffff9999);
-//        fragmentlayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
-//            @Override
-//            public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
-//                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff666666);
-//                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff333333);
-//            }
-//        });
-//        fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_remedial_class_detail, 0x0911);
-
+        fragBaseFragments.add(new FragmentClassDetailClassInfo());
+        fragBaseFragments.add(new FragmentClassDetailTeacherInfo());
+        fragBaseFragments.add(new FragmentClassDetailClassList());
 
         audition = (Button) findViewById(R.id.audition);
-        pay = (Button) findViewById(R.id.pay);
+        auditionStart = (Button) findViewById(R.id.audition_start);
+        Button pay = (Button) findViewById(R.id.pay);
+        startStudy = (Button) findViewById(R.id.start_study);
+        startStudyView = findViewById(R.id.start_study_view);
         title = (TextView) findViewById(R.id.title);
         price = (TextView) findViewById(R.id.price);
+        transferPrice = (TextView) findViewById(R.id.transfer_price);
         studentnumber = (TextView) findViewById(R.id.student_number);
+        progress = (TextView) findViewById(R.id.progress);
+        timeToStart = (TextView) findViewById(R.id.time_to_start);
+        status = (TextView) findViewById(R.id.status);
+        layoutView = findViewById(R.id.layout_view);
         audition.setOnClickListener(this);
+        auditionStart.setOnClickListener(this);
         pay.setOnClickListener(this);
+        startStudy.setOnClickListener(this);
 
         mIndicator = (SimpleViewPagerIndicator) findViewById(R.id.id_stickynavlayout_indicator);
         mViewPager = (ViewPager) findViewById(R.id.id_stickynavlayout_viewpager);
@@ -140,7 +146,6 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
             public Fragment getItem(int position) {
                 return fragBaseFragments.get(position);
             }
-
         };
 
         mViewPager.setAdapter(mAdapter);
@@ -159,7 +164,6 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
         mIndicator.setOnItemClickListener(new SimpleViewPagerIndicator.OnItemClickListener() {
@@ -170,46 +174,82 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         });
     }
 
-
     private void initData() {
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass + "/" + id, null,
                 new VolleyListener(RemedialClassDetailActivity.this) {
-
-
                     @Override
                     protected void onSuccess(JSONObject response) {
                         data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
                         Glide.with(RemedialClassDetailActivity.this).load(data.getData().getPublicize()).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
+                        status.setText(getStatus(data.getData().getStatus()));
+                        if (data.getData() != null && data.getData().getLive_start_time() != null) {
+                            try {
+                                if ("init".equals(data.getData().getStatus()) || "published".equals(data.getData().getStatus())) {
+                                    long time = System.currentTimeMillis() - parse.parse(data.getData().getLive_start_time()).getTime();
+                                    int value = 0;
+                                    if (time > 0) {
+                                        value = (int) (time / (1000 * 3600 * 24));
+                                    }
+                                    timeToStart.setVisibility(View.VISIBLE);
+                                    progress.setVisibility(View.GONE);
+                                    timeToStart.setText("[" + getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day) + "]");
+                                    layoutView.setBackgroundColor(0xff00d564);
+                                } else if ("teaching".equals(data.getData().getStatus())) {
+                                    progress.setVisibility(View.VISIBLE);
+                                    timeToStart.setVisibility(View.GONE);
+                                    layoutView.setBackgroundColor(0xff00a0e9);
+                                    progress.setText("[进度" + data.getData().getCompleted_lesson_count() + "/" + data.getData().getPreset_lesson_count() + "]");
+                                } else if (Constant.CourseStatus.finished.equals(data.getData().getStatus()) || Constant.CourseStatus.completed.equals(data.getData().getStatus())) {
+                                    progress.setVisibility(View.VISIBLE);
+                                    timeToStart.setVisibility(View.GONE);
+                                    layoutView.setBackgroundColor(0xff999999);
+                                    progress.setText("[进度" + data.getData().getCompleted_lesson_count() + "/" + data.getData().getPreset_lesson_count() + "]");
+                                } else {
+                                    layoutView.setVisibility(View.GONE);
+                                }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        name.setText(data.getData().getName());
+                        title.setText(data.getData().getName());
                         if (data.getData() != null) {
-                            String price = df.format(data.getData().getPrice());
+                            String price = df.format(data.getData().getCurrent_price());
                             if (price.startsWith(".")) {
                                 price = "0" + price;
                             }
-                            name.setText(data.getData().getName());
-                            title.setText(data.getData().getName());
                             RemedialClassDetailActivity.this.price.setText("￥" + price);
-                            studentnumber.setText("已购人数 " + data.getData().getBuy_tickets_count());
+                            if (Constant.CourseStatus.teaching.equals(data.getData().getStatus())) {
+                                transferPrice.setVisibility(View.VISIBLE);
+                            } else {
+                                transferPrice.setVisibility(View.GONE);
+                            }
                         }
+
+                        studentnumber.setText("报名人数 " + data.getData().getBuy_tickets_count());
                         if (data != null) {
-                            ((FragmentRemedialClassDetail1) fragBaseFragments.get(0)).setData(data);
-                            ((FragmentRemedialClassDetail2) fragBaseFragments.get(1)).setData(data);
-                            ((FragmentRemedialClassDetail3) fragBaseFragments.get(2)).setData(data);
+                            ((FragmentClassDetailClassInfo) fragBaseFragments.get(0)).setData(data);
+                            ((FragmentClassDetailTeacherInfo) fragBaseFragments.get(1)).setData(data);
+                            ((FragmentClassDetailClassList) fragBaseFragments.get(2)).setData(data);
                             if (data.getData() != null) {
-                                if (data.getData().getIs_tasting()) {
-                                    audition.setEnabled(false);
-                                    audition.setText(getResources().getString(R.string.Joined_the_audition));
+                                if (data.getData().getIs_tasting() || data.getData().isTasted()) {//显示进入试听按钮
+//                                    boolean hasPullAddress = !StringUtils.isNullOrBlanK(data.getData().getCamera()) && !StringUtils.isNullOrBlanK(data.getData().getBoard());//是否有拉流地址（本页代表已试听到期）
+                                    auditionStart.setVisibility(View.VISIBLE);
+                                    audition.setVisibility(View.GONE);
+                                    if (data.getData().isTasted()) {
+                                        auditionStart.setText(getResourceString(R.string.audition_over));
+                                        auditionStart.setEnabled(false);
+                                    }
                                 } else {
-                                    audition.setEnabled(true);
                                     audition.setText(getResources().getString(R.string.Join_the_audition));
+                                    auditionStart.setVisibility(View.GONE);
                                 }
 
                                 if (data.getData().getIs_bought()) {
-                                    pay.setEnabled(false);
-                                    pay.setText(getResources().getString(R.string.purchased));
-                                    audition.setEnabled(false);
-                                } else {
-                                    pay.setEnabled(true);
-                                    pay.setText(getResources().getString(R.string.purchase_now));
+                                    startStudyView.setVisibility(View.VISIBLE);
+                                    if (data.getData().getStatus().equals("completed") || data.getData().getStatus().equals("finished")) {
+                                        startStudy.setEnabled(false);
+                                    }
                                 }
                             }
                         }
@@ -237,42 +277,85 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
     @Override
     public void onClick(View v) {
+        if (data == null || data.getData() == null) {
+            return;
+        }
+        Intent intent;
         switch (v.getId()) {
+            case R.id.audition_start:
+                if (BaseApplication.isLogined()) {
+                    intent = new Intent(RemedialClassDetailActivity.this, NEVideoPlayerActivity.class);
+//                    intent.putExtra("camera", data.getData().getCamera());
+//                    intent.putExtra("board", data.getData().getBoard());
+                    intent.putExtra("id", data.getData().getId());
+                    intent.putExtra("sessionId", data.getData().getChat_team_id());
+                    startActivity(intent);
+                } else {
+                    intent = new Intent(RemedialClassDetailActivity.this, LoginActivity.class);
+                    intent.putExtra("sign", Constant.VISITORTOLOGIN);
+                    startActivityForResult(intent, Constant.REQUEST);
+                }
+                break;
             case R.id.audition:
-                joinAudition();
+                if (BaseApplication.isLogined()) {
+                    joinAudition();
+                } else {
+                    intent = new Intent(RemedialClassDetailActivity.this, LoginActivity.class);
+                    intent.putExtra("sign", Constant.VISITORTOLOGIN);
+                    startActivityForResult(intent, Constant.REQUEST);
+                }
+                break;
+            case R.id.start_study:
+                if (BaseApplication.isLogined()) {
+                    intent = new Intent(RemedialClassDetailActivity.this, NEVideoPlayerActivity.class);
+//                    intent.putExtra("camera", data.getData().getCamera());
+//                    intent.putExtra("board", data.getData().getBoard());
+                    intent.putExtra("id", data.getData().getId());
+                    intent.putExtra("sessionId", data.getData().getChat_team_id());
+                    startActivity(intent);
+                } else {
+                    intent = new Intent(RemedialClassDetailActivity.this, LoginActivity.class);
+                    intent.putExtra("sign", Constant.VISITORTOLOGIN);
+                    startActivityForResult(intent, Constant.REQUEST);
+                }
                 break;
             case R.id.pay:
-                if("teaching".equals(data.getData().getStatus())){
-                    if (alertDialog == null) {
-                        View view = View.inflate(RemedialClassDetailActivity.this, R.layout.dialog_cancel_or_confirm, null);
-                        Button cancel = (Button) view.findViewById(R.id.cancel);
-                        Button confirm = (Button) view.findViewById(R.id.confirm);
-                        cancel.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                alertDialog.dismiss();
-                            }
-                        });
-                        confirm.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                payRemedial();
-                                alertDialog.dismiss();
-                            }
-                        });
-                        AlertDialog.Builder builder = new AlertDialog.Builder(RemedialClassDetailActivity.this);
-                        alertDialog = builder.create();
-                        alertDialog.show();
-                        alertDialog.setContentView(view);
-//                        WindowManager.LayoutParams attributes = alertDialog.getWindow().getAttributes();
-//                        attributes.width= ScreenUtils.getScreenWidth(getApplicationContext())- DensityUtils.dp2px(getApplicationContext(),20)*2;
-//                        alertDialog.getWindow().setAttributes(attributes);
+                if (BaseApplication.isLogined()) {
+                    if ("teaching".equals(data.getData().getStatus())) {
+                        if (alertDialog == null) {
+                            View view = View.inflate(RemedialClassDetailActivity.this, R.layout.dialog_cancel_or_confirm, null);
+                            Button cancel = (Button) view.findViewById(R.id.cancel);
+                            Button confirm = (Button) view.findViewById(R.id.confirm);
+                            TextView text = (TextView) view.findViewById(R.id.text);
+                            text.setText("该辅导班已开课，是否继续购买");
+                            cancel.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    alertDialog.dismiss();
+                                }
+                            });
+                            confirm.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    payRemedial();
+                                    alertDialog.dismiss();
+                                }
+                            });
+                            AlertDialog.Builder builder = new AlertDialog.Builder(RemedialClassDetailActivity.this);
+                            alertDialog = builder.create();
+                            alertDialog.show();
+                            alertDialog.setContentView(view);
+                        } else {
+                            alertDialog.show();
+                        }
                     } else {
-                        alertDialog.show();
+                        payRemedial();
                     }
-                }else{
-                    payRemedial();
-                };
+                } else {
+                    intent = new Intent(RemedialClassDetailActivity.this, LoginActivity.class);
+                    intent.putExtra("sign", Constant.VISITORTOLOGIN);
+                    startActivityForResult(intent, Constant.REQUEST);
+                }
                 break;
         }
     }
@@ -290,7 +373,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         bean.classendtime = data.getData().getLive_end_time();
         bean.status = data.getData().getStatus();
         bean.classstarttime = data.getData().getLive_start_time();
-        bean.price = data.getData().getPrice();
+        bean.current_price = data.getData().getCurrent_price();
 
         intent.putExtra("data", bean);
         startActivity(intent);
@@ -305,8 +388,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     @Override
                     protected void onSuccess(JSONObject response) {
                         //已加入试听
-                        audition.setEnabled(false);
-                        audition.setText(getResources().getString(R.string.Joined_the_audition));
+                        data.getData().setIs_tasting(true);
+                        auditionStart.setVisibility(View.VISIBLE);
                         if (StringUtils.isNullOrBlanK(BaseApplication.getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getAccountToken())) {
                             DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null,
                                     new VolleyListener(RemedialClassDetailActivity.this) {
@@ -400,13 +483,49 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         addToRequestQueue(request);
     }
 
+    private String getStatus(String status) {
+        if (status == null) {
+            return "招生中";
+        }
+        if (status.equals("published")) {//直播中
+            return "招生中";
+        } else if (status.equals("init")) {
+            return "招生中";
+        } else if (status.equals("teaching")) {
+            return "开课中";
+        } else if (status.equals(Constant.CourseStatus.completed) || status.equals(Constant.CourseStatus.finished)) {//未开始
+            return "已结束";
+        }
+        return "招生中";
+    }
+
     @Subscribe
     public void onEvent(PayResultState code) {
 //        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
 //
 //            finish();
 //        }
-            finish();
+        finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Constant.VISITORLOGINED) {
+            setResult(Constant.VISITORLOGINED);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override

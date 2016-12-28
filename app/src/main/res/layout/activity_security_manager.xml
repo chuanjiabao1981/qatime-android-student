@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f7f7f7"
     android:orientation="vertical">
 
 
@@ -17,6 +18,7 @@
         android:id="@+id/bind_phone_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#fff"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -27,23 +29,62 @@
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="#ffffff" />
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/phone_number_m"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#333333"
-            android:padding="12dp" />
+            android:padding="12dp"
+            android:textColor="#666"
+            android:textSize="13sp" />
 
         <ImageView
+            style="@style/setting_icon_margin_right"
             android:layout_width="12dp"
             android:layout_height="12dp"
-            style="@style/setting_icon_margin_right"
             android:src="@mipmap/personal_enter" />
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dfdddd" />
 
+    <LinearLayout
+        android:id="@+id/bind_wechat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/setting_text_style"
+            android:text="@string/bind_wechat" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/wechat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="9dp"
+            android:background="@drawable/shape_wechat_bind_background_unable"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
+            android:text="马上绑定"
+            android:textColor="#fff"
+            android:textSize="13sp" />
+
+        <ImageView
+            style="@style/setting_icon_margin_right"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:src="@mipmap/personal_enter" />
+    </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
@@ -53,6 +94,7 @@
         android:id="@+id/bind_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#fff"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -63,22 +105,23 @@
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="#ffffff" />
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#333333"
-            android:padding="12dp" />
+            android:padding="12dp"
+            android:textColor="#666"
+            android:textSize="13sp" />
 
         <ImageView
+            style="@style/setting_icon_margin_right"
             android:layout_width="12dp"
             android:layout_height="12dp"
-            style="@style/setting_icon_margin_right"
             android:src="@mipmap/personal_enter" />
     </LinearLayout>
+
 
 
     <View
@@ -90,6 +133,7 @@
         android:id="@+id/parent_phone_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#fff"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -101,22 +145,58 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="#ffffff" />
+            android:id="@+id/view2" />
 
         <TextView
             android:id="@+id/phone_number_p"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#333333"
-            android:padding="12dp" />
+            android:padding="12dp"
+            android:textColor="#666"
+            android:textSize="13sp" />
 
         <ImageView
+            style="@style/setting_icon_margin_right"
             android:layout_width="12dp"
             android:layout_height="12dp"
-            style="@style/setting_icon_margin_right"
             android:src="@mipmap/personal_enter" />
     </LinearLayout>
 
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dfdddd" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="10dp"
+        android:background="#dfdddd" />
+
+    <LinearLayout
+        android:id="@+id/change_pay_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/setting_text_style"
+            android:text="@string/change_pay_password" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            style="@style/setting_icon_margin_right"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:src="@mipmap/personal_enter" />
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -127,6 +207,7 @@
         android:id="@+id/change_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#fff"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -137,13 +218,12 @@
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="#ffffff" />
+            android:layout_weight="1" />
 
         <ImageView
+            style="@style/setting_icon_margin_right"
             android:layout_width="12dp"
             android:layout_height="12dp"
-            style="@style/setting_icon_margin_right"
             android:src="@mipmap/personal_enter" />
     </LinearLayout>
 

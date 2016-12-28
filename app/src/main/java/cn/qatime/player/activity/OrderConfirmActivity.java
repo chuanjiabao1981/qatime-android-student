@@ -6,13 +6,13 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -20,6 +20,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +34,6 @@ import libraryextra.bean.AppPayParamsBean;
 import libraryextra.bean.OrderConfirmBean;
 import libraryextra.bean.OrderPayBean;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.SPUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -50,11 +51,12 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     TextView payprice;
     private Button pay;
     private ImageView wechatPay;
-    private LinearLayout radioGroup;
     private int id;
     private String payType = "weixin";
-    private int priceNumber = 0;
+    private float priceNumber = 0;
     DecimalFormat df = new DecimalFormat("#.00");
+    private SimpleDateFormat parse1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private SimpleDateFormat parse2 = new SimpleDateFormat("yyyy-MM-dd");
     private AlertDialog alertDialog;
     private ImageView aliPay;
     private ImageView account;
@@ -75,7 +77,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         id = getIntent().getIntExtra("id", 0);
         if (data != null) {
             setValue(data);
-            priceNumber = data.price;
+            priceNumber = data.current_price;
 //            initData(data.getData().getId());
         }
         pay.setOnClickListener(this);
@@ -90,8 +92,12 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         grade.setText(getResources().getString(R.string.grade_type) + data.grade);
         classnumber.setText(getResources().getString(R.string.total_class_hours) + data.classnumber);
         teacher.setText(getResources().getString(R.string.teacher) + data.teacher);
-        classstarttime.setText(getResources().getString(R.string.class_start_time) + data.classstarttime);
-        classendtime.setText(getResources().getString(R.string.class_end_time) + data.classendtime);
+        try {
+            classstarttime.setText(getResources().getString(R.string.class_start_time) + parse2.format(parse1.parse(data.classstarttime)));
+            classendtime.setText(getResources().getString(R.string.class_end_time) + parse2.format(parse1.parse(data.classendtime)));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 //        if (data.status.equals("preview")) {
 //            status.setText(getResources().getString(R.string.status_preview));
 //        } else if (data.status.equals("teaching")) {
@@ -99,7 +105,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 //        } else {
 //            status.setText(getResources().getString(R.string.status_over));
 //        }
-        String price = df.format(data.price);
+        String price = df.format(data.current_price);
         if (price.startsWith(".")) {
             price = "0" + price;
         }
@@ -114,7 +120,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         pay.setEnabled(false);
         Map<String, String> map = new HashMap<>();
         map.put("pay_type", payType);
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlPayPrepare + id + "/orders", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlCourses + id + "/orders", map), null,
                 new VolleyListener(OrderConfirmActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -129,8 +135,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                                 AppPayParamsBean app_pay_params = data.getData().getApp_pay_params();
                                 intent.putExtra("data", app_pay_params);
                                 startActivity(intent);
-                                SPUtils.put(OrderConfirmActivity.this, "orderId", data.getData().getId());
-                                SPUtils.put(OrderConfirmActivity.this, "price", priceNumber);
                                 pay.setEnabled(true);
                             } else {
                                 dialog();
@@ -145,8 +149,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                                 String app_pay_params = data.getData().getApp_pay_str();
                                 intent.putExtra("data", app_pay_params);
                                 startActivity(intent);
-                                SPUtils.put(OrderConfirmActivity.this, "orderId", data.getData().getId());
-                                SPUtils.put(OrderConfirmActivity.this, "price", priceNumber);
                                 pay.setEnabled(true);
                             } else {
                                 dialog();
@@ -195,6 +197,8 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         alertDialog = builder.create();
         View view = View.inflate(this, R.layout.dialog_confirm, null);
+        TextView text = (TextView) view.findViewById(R.id.text);
+        text.setText("下单失败，请稍后再试");
         Button confirm = (Button) view.findViewById(R.id.confirm);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -220,7 +224,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         classstarttime = (TextView) findViewById(R.id.class_start_time);
         classendtime = (TextView) findViewById(R.id.class_end_time);
 //        status = (TextView) findViewById(R.id.status);
-        radioGroup = (LinearLayout) findViewById(R.id.radiogroup);
         wechatLayout = findViewById(R.id.wechat_layout);
         alipayLayout = findViewById(R.id.alipay_layout);
         accountLayout = findViewById(R.id.account_layout);
@@ -274,6 +277,17 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         finish();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 
     @Override
     protected void onDestroy() {

@@ -18,13 +18,16 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.NimIntent;
+import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
-import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -39,10 +42,12 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.config.UserPreferences;
-import cn.qatime.player.fragment.Fragment1;
-import cn.qatime.player.fragment.Fragment2;
-import cn.qatime.player.fragment.Fragment3;
-import cn.qatime.player.fragment.Fragment4;
+import cn.qatime.player.fragment.FragmentHomeClassTable;
+import cn.qatime.player.fragment.FragmentHomeMainPage;
+import cn.qatime.player.fragment.FragmentHomeUserCenter;
+import cn.qatime.player.fragment.FragmentRemedialClassAll;
+import cn.qatime.player.fragment.FragmentUnLoginHomeClassTable;
+import cn.qatime.player.fragment.FragmentUnLoginHomeUserCenter;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.Constant;
@@ -66,15 +71,10 @@ public class MainActivity extends BaseFragmentActivity {
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3, R.id.tab_text4};
     private int tabImages[][] = {
             {R.mipmap.tab_home_1, R.mipmap.tab_home_2},
+            {R.mipmap.tab_tutorship_1, R.mipmap.tab_tutorship_2},
             {R.mipmap.tab_moments_1, R.mipmap.tab_moments_2},
-            {R.mipmap.tab_message_1, R.mipmap.tab_message_2},
             {R.mipmap.tab_person_1, R.mipmap.tab_person_2}};
-    private int currentPosition = 0;
 
-    /**
-     * 当前用户信息
-     */
-//    public Profile profile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,12 +96,7 @@ public class MainActivity extends BaseFragmentActivity {
 //        GetProvinceslist();
 //        GetCitieslist();
         GetSchoolslist();
-
-
-//        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
-//        registerMsgUnreadInfoObserver(true);
-//        registerSystemMessageObservers(true);
-//        requestSystemMessageUnreadCount();
+        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, true);
     }
 
     /**
@@ -115,10 +110,17 @@ public class MainActivity extends BaseFragmentActivity {
         }
 
         //添加fragment
-        fragBaseFragments.add(new Fragment1());
-        fragBaseFragments.add(new Fragment2());
-        fragBaseFragments.add(new Fragment3());
-        fragBaseFragments.add(new Fragment4());
+        fragBaseFragments.add(new FragmentHomeMainPage());
+        fragBaseFragments.add(new FragmentRemedialClassAll());
+
+        if (BaseApplication.isLogined()) {
+            fragBaseFragments.add(new FragmentHomeClassTable());
+            fragBaseFragments.add(new FragmentHomeUserCenter());
+        } else {
+            fragBaseFragments.add(new FragmentUnLoginHomeClassTable());
+            fragBaseFragments.add(new FragmentUnLoginHomeUserCenter());
+        }
+
 
         fragmentlayout = (FragmentLayout) findViewById(R.id.fragmentlayout);
         fragmentlayout.setScorllToNext(false);
@@ -127,12 +129,11 @@ public class MainActivity extends BaseFragmentActivity {
         fragmentlayout.setOnChangeFragmentListener(new FragmentLayout.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
-                currentPosition = position;
-                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xffafaa9a);
+                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff666666);
                 ((ImageView) lastTabView.findViewById(tab_img[lastPosition])).setImageResource(tabImages[lastPosition][1]);
-                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xfff45050);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffbe0b0b);
                 ((ImageView) currentTabView.findViewById(tab_img[position])).setImageResource(tabImages[position][0]);
-                enableMsgNotification(false);
+//                enableMsgNotification(false);
             }
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout, 0x1000);
@@ -145,10 +146,38 @@ public class MainActivity extends BaseFragmentActivity {
         if (requestCode == Constant.REQUEST_EXIT_LOGIN && resultCode == Constant.RESPONSE_EXIT_LOGIN) {
             finish();
         }
+        if (resultCode == Constant.VISITORLOGINED) {
+            initView();
+
+            if (data == null) return;
+            String action = data.getStringExtra("action");
+            if (!StringUtils.isNullOrBlanK(action)) {
+                if (action.equals(Constant.LoginAction.toMessage)) {
+                    Intent intent = new Intent(MainActivity.this, MessageFragmentActivity.class);
+                    startActivity(intent);
+                } else if (action.equals(Constant.LoginAction.toPage3)) {//课程表点击登录返回
+                    fragmentlayout.setCurrenItem(2);
+                } else if (action.equals(Constant.LoginAction.toPage4)) {
+                    fragmentlayout.setCurrenItem(3);
+                } else if (action.equals(Constant.LoginAction.toClassTimeTable)) {//课程表右上角点击返回
+                    fragmentlayout.setCurrenItem(2);
+                    Intent intent = new Intent(MainActivity.this, ClassTimeTableActivity.class);
+                    startActivity(intent);
+                } else if (action.equals(Constant.LoginAction.toPersonalInformationChange)) {
+                    fragmentlayout.setCurrenItem(3);
+                    Intent intent = new Intent(MainActivity.this, PersonalInformationActivity.class);
+                    startActivityForResult(intent, Constant.REQUEST);
+                }
+            }
+        }
+        if (resultCode == Constant.RESPONSE) {//如果有返回并且携带了跳转码，则跳到响应的页面
+//            initView();//刷新view
+            fragmentlayout.setCurrenItem(3);
+            ((FragmentHomeUserCenter) fragBaseFragments.get(3)).onActivityResult(Constant.REQUEST, Constant.RESPONSE, null);
+        }
     }
 
-
-    boolean flag = false;
+    private boolean flag = false;
 
     @Override
     public void onBackPressed() {
@@ -184,28 +213,22 @@ public class MainActivity extends BaseFragmentActivity {
         }
     }
 
-    /**
-     * 解析通知栏发来的云信消息
-     */
     private void parseIntent() {
-        Intent intent = getIntent();
-        if (intent != null && intent.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT)) {
-            ArrayList<IMMessage> messages = (ArrayList<IMMessage>) intent.getSerializableExtra(NimIntent.EXTRA_NOTIFY_CONTENT);
-            if (messages != null && messages.size() == 1) {
-                final IMMessage message = messages.get(0);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (message != null) {
-                            if (fragmentlayout != null) {
-                                fragmentlayout.setCurrenItem(2);
-                            }
-                            if (((Fragment3) fragBaseFragments.get(2)) != null) {
-                                ((Fragment3) fragBaseFragments.get(2)).setMessage(message);
-                            }
-                        }
-                    }
-                }, 500);
+        Intent data = getIntent();
+        /**     * 解析通知栏发来的云信消息     */
+        if (data != null) {
+            if (data.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT)) {
+                Intent intent = new Intent(this, MessageFragmentActivity.class);
+                intent.putExtra("intent", data);
+                startActivity(intent);
+            } else if (data.hasExtra("type") && data.getStringExtra("type").equals("system_message")) {//转到系统消息页面
+                Intent intent = new Intent(this, MessageFragmentActivity.class);
+                intent.putExtra("intent", data);
+                startActivity(intent);
+            } else if (!StringUtils.isNullOrBlanK(data.getStringExtra("action")) && data.getStringExtra("action").equals(Constant.LoginAction.toPersonalInformationChange)) {
+                fragmentlayout.setCurrenItem(3);
+                Intent intent = new Intent(MainActivity.this, PersonalInformationActivity.class);
+                startActivityForResult(intent, Constant.REQUEST);
             }
         }
     }
@@ -350,41 +373,55 @@ public class MainActivity extends BaseFragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        enableMsgNotification(false);
+        /**
+         * 设置最近联系人的消息为已读
+         *
+         * @param account,    聊天对象帐号，或者以下两个值：
+         *                    {@link #MSG_CHATTING_ACCOUNT_ALL} 目前没有与任何人对话，但能看到消息提醒（比如在消息列表界面），不需要在状态栏做消息通知
+         *                    {@link #MSG_CHATTING_ACCOUNT_NONE} 目前没有与任何人对话，需要状态栏消息通知
+         */
+        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
+        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        enableMsgNotification(true);
+        MobclickAgent.onPause(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, false);
     }
 
-    /**********************************************
-     * 云信
-     *******************************************************/
-
-    private void enableMsgNotification(boolean enable) {
-        boolean msg = (currentPosition != 2);
-        if (enable | msg) {
-            /**
-             * 设置最近联系人的消息为已读
-             *
-             * @param account,    聊天对象帐号，或者以下两个值：
-             *                    {@link #MSG_CHATTING_ACCOUNT_ALL} 目前没有与任何人对话，但能看到消息提醒（比如在消息列表界面），不需要在状态栏做消息通知
-             *                    {@link #MSG_CHATTING_ACCOUNT_NONE} 目前没有与任何人对话，需要状态栏消息通知
-             */
-            NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
-        } else {
-            NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
+    /**
+     * 监听用户在线状态
+     */
+    Observer<StatusCode> userStatusObserver = new Observer<StatusCode>() {
+        @Override
+        public void onEvent(StatusCode code) {
+            if (code.wontAutoLogin()) {
+//                kickOut(code);
+                Logger.e("未登录成功");
+            } else {
+                if (code == StatusCode.NET_BROKEN) {
+                    Logger.e("当前网络不可用");
+                } else if (code == StatusCode.UNLOGIN) {
+                    Logger.e("未登录");
+                } else if (code == StatusCode.CONNECTING) {
+                    Logger.e("连接中...");
+                } else if (code == StatusCode.LOGINING) {
+                    Logger.e("登录中...");
+                } else {
+//                    onRecentContactsLoaded();
+                    Logger.e("其他" + code);
+                }
+            }
         }
-    }
-
+    };
 
     @Subscribe
     public void onEvent(String event) {
@@ -468,4 +505,13 @@ public class MainActivity extends BaseFragmentActivity {
         });
         addToRequestQueue(request);
     }
+
+    public void setCurrentPosition(int currentPosition, String s) {
+        fragmentlayout.setCurrenItem(currentPosition);
+        if (!StringUtils.isNullOrBlanK(s)) {
+            FragmentRemedialClassAll fragmentRemedialClassAll = (FragmentRemedialClassAll) fragBaseFragments.get(1);
+            fragmentRemedialClassAll.initDataAsSubject(s);
+        }
+    }
+
 }
