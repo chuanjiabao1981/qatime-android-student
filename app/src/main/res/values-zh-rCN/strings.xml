@@ -137,7 +137,7 @@
     <string name="password">请输入密码</string>
     <string name="register">注册</string>
     <string name="login">登录</string>
-    <string name="forget_password">忘记密码</string>
+    <string name="forget_password">找回密码</string>
     <string name="verification_code">请输入验证码</string>
     <string name="verification_code_is_incorrect">验证码不正确</string>
     <string name="change_it">看不清，换一张？</string>
