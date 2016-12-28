@@ -22,8 +22,7 @@ public class Constant {
     public static int RESPONSE_CAMERA = 0x1004;
     public static int PHOTO_CROP = 0x1005;
     public static int REQUEST_PICTURE_SELECT = 0x1006;
-    public static int RESPONSE_PICTURE_SELECT = 0x1007;
-    public static int RESPONSE_HEAD_SCULPTURE = 0x1008;
+    public static int RESPONSE_PICTURE_SELECT = 0x1007;    public static int RESPONSE_HEAD_SCULPTURE = 0x1008;
     public static int REGIST = 0x1009;
     public static int RESPONSE_CITY_SELECT = 0x1010;
     public static int VISITORLOGINED = 0x1011;
@@ -32,6 +31,8 @@ public class Constant {
     public static class CourseStatus {
         public static String published = "published";//招生中
         public static String teaching = "teaching";//已开课
+        public static String finished = "finished";//已结束
+        public static String completed = "completed";//已完成
     }
 
     /**
