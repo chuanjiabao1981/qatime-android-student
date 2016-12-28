@@ -94,8 +94,18 @@
                         android:id="@+id/price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="100.00"
                         android:textColor="#be0b0b"
                         android:textSize="14sp" /> <!--价格-->
+                    <TextView
+                        android:id="@+id/transfer_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="(插班价)"
+                        android:textColor="#be0b0b"
+                        android:textSize="14sp"
+                        android:visibility="gone" />
 
                     <View
                         android:layout_width="0dp"
