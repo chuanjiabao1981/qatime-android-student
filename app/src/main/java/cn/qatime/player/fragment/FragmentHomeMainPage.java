@@ -434,7 +434,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         super.onDestroy();
         //  注册/注销观察者
         NIMClient.getService(MsgServiceObserve.class)
-                .observeRecentContact(messageObserver, true);
+                .observeRecentContact(messageObserver, false);
     }
 
     @Override

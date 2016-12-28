@@ -1,5 +1,6 @@
 package cn.qatime.player.fragment;
 
+import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
@@ -20,12 +21,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.netease.nimlib.p.d;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
-import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.team.model.Team;
@@ -61,7 +59,7 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
 
     private View mainControl;
     private RelativeLayout playToolbar;
-    private TextView videoName;
+//    private TextView videoName;
     //    private TextView viewCount;
     private ImageView play;
     private LinearLayout commentLayout;
@@ -96,7 +94,7 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
         exit = view.findViewById(R.id.player_exit);
         mainControl = view.findViewById(R.id.main_control);
         playToolbar = (RelativeLayout) view.findViewById(R.id.play_toolbar);
-        videoName = (TextView) view.findViewById(R.id.video_name);
+//        videoName = (TextView) view.findViewById(R.id.video_name);
 //        viewCount = (TextView) view.findViewById(R.id.view_count);
         bottomLayout = (LinearLayout) view.findViewById(R.id.bottom_layout);
         play = (ImageView) view.findViewById(R.id.play);
@@ -212,11 +210,31 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
                 break;
             case R.id.refresh://刷新按钮
                 if (callback != null) {
-                    callback.refresh();
                     ObjectAnimator animator = ObjectAnimator.ofFloat(refresh, "rotation", 0F, 360F).setDuration(300L);
                     animator.setRepeatCount(2);
                     animator.setInterpolator(new AccelerateDecelerateInterpolator());
                     animator.start();
+                   animator.addListener(new Animator.AnimatorListener() {
+                       @Override
+                       public void onAnimationStart(Animator animation) {
+
+                       }
+
+                       @Override
+                       public void onAnimationEnd(Animator animation) {
+                           callback.refresh();
+                       }
+
+                       @Override
+                       public void onAnimationCancel(Animator animation) {
+
+                       }
+
+                       @Override
+                       public void onAnimationRepeat(Animator animation) {
+
+                       }
+                   });
                 }
                 break;
             case R.id.danmu_switch://弹幕开关
@@ -249,7 +267,7 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
                         //横平时 评论框出现
                         commentLayout.setVisibility(View.VISIBLE);
                         viewChange.setVisibility(View.GONE);
-                        videoName.setVisibility(View.VISIBLE);
+//                        videoName.setVisibility(View.VISIBLE);
                     }
                 }
                 break;
@@ -384,7 +402,7 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
             viewChange.setVisibility(View.GONE);
         }
         comment.setText("");
-        videoName.setVisibility(View.GONE);
+//        videoName.setVisibility(View.GONE);
     }
 
     /**
