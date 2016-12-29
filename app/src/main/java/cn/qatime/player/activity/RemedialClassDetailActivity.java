@@ -214,7 +214,12 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                         name.setText(data.getData().getName());
                         title.setText(data.getData().getName());
                         if (data.getData() != null) {
-                            String price = df.format(data.getData().getCurrent_price());
+                            String price = null;
+                            if (Constant.CourseStatus.finished.equals(data.getData().getStatus()) || Constant.CourseStatus.completed.equals(data.getData().getStatus())) {
+                                price = df.format(data.getData().getPrice());
+                            } else {
+                                price = df.format(data.getData().getCurrent_price());
+                            }
                             if (price.startsWith(".")) {
                                 price = "0" + price;
                             }
