@@ -169,8 +169,8 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(ClassTimeTableActivity.this, NEVideoPlayerActivity.class);
-                        intent.putExtra("camera", item.getCamera());
-                        intent.putExtra("board", item.getBoard());
+//                        intent.putExtra("camera", item.getCamera());
+//                        intent.putExtra("board", item.getBoard());
                         intent.putExtra("id", Integer.valueOf(item.getCourse_id()));
                         intent.putExtra("sessionId", item.getChat_team_id());
                         startActivity(intent);

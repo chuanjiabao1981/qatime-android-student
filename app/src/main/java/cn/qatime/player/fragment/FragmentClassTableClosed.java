@@ -106,8 +106,8 @@ public class FragmentClassTableClosed extends BaseFragment {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
-                        intent.putExtra("camera", item.getCamera());
-                        intent.putExtra("board", item.getBoard());
+//                        intent.putExtra("camera", item.getCamera());
+//                        intent.putExtra("board", item.getBoard());
                         intent.putExtra("id", item.getCourse_id());
                         intent.putExtra("sessionId", item.getChat_team_id());
                         startActivity(intent);

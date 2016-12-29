@@ -85,6 +85,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     private TextView timeToStart;
     private View layoutView;
     private Button auditionStart;
+    private TextView transferPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +122,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         startStudyView = findViewById(R.id.start_study_view);
         title = (TextView) findViewById(R.id.title);
         price = (TextView) findViewById(R.id.price);
+        transferPrice = (TextView) findViewById(R.id.transfer_price);
         studentnumber = (TextView) findViewById(R.id.student_number);
         progress = (TextView) findViewById(R.id.progress);
         timeToStart = (TextView) findViewById(R.id.time_to_start);
@@ -197,6 +199,11 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                                     timeToStart.setVisibility(View.GONE);
                                     layoutView.setBackgroundColor(0xff00a0e9);
                                     progress.setText("[进度" + data.getData().getCompleted_lesson_count() + "/" + data.getData().getPreset_lesson_count() + "]");
+                                } else if (Constant.CourseStatus.finished.equals(data.getData().getStatus()) || Constant.CourseStatus.completed.equals(data.getData().getStatus())) {
+                                    progress.setVisibility(View.VISIBLE);
+                                    timeToStart.setVisibility(View.GONE);
+                                    layoutView.setBackgroundColor(0xff999999);
+                                    progress.setText("[进度" + data.getData().getCompleted_lesson_count() + "/" + data.getData().getPreset_lesson_count() + "]");
                                 } else {
                                     layoutView.setVisibility(View.GONE);
                                 }
@@ -204,16 +211,27 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                                 e.printStackTrace();
                             }
                         }
+                        name.setText(data.getData().getName());
+                        title.setText(data.getData().getName());
                         if (data.getData() != null) {
-                            String price = df.format(data.getData().getCurrent_price());
+                            String price = null;
+                            if (Constant.CourseStatus.finished.equals(data.getData().getStatus()) || Constant.CourseStatus.completed.equals(data.getData().getStatus())) {
+                                price = df.format(data.getData().getPrice());
+                            } else {
+                                price = df.format(data.getData().getCurrent_price());
+                            }
                             if (price.startsWith(".")) {
                                 price = "0" + price;
                             }
-                            name.setText(data.getData().getName());
-                            title.setText(data.getData().getName());
                             RemedialClassDetailActivity.this.price.setText("￥" + price);
-                            studentnumber.setText("报名人数 " + data.getData().getBuy_tickets_count());
+                            if (Constant.CourseStatus.teaching.equals(data.getData().getStatus())) {
+                                transferPrice.setVisibility(View.VISIBLE);
+                            } else {
+                                transferPrice.setVisibility(View.GONE);
+                            }
                         }
+
+                        studentnumber.setText("报名人数 " + data.getData().getBuy_tickets_count());
                         if (data != null) {
                             ((FragmentClassDetailClassInfo) fragBaseFragments.get(0)).setData(data);
                             ((FragmentClassDetailTeacherInfo) fragBaseFragments.get(1)).setData(data);
@@ -272,8 +290,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
             case R.id.audition_start:
                 if (BaseApplication.isLogined()) {
                     intent = new Intent(RemedialClassDetailActivity.this, NEVideoPlayerActivity.class);
-                    intent.putExtra("camera", data.getData().getCamera());
-                    intent.putExtra("board", data.getData().getBoard());
+//                    intent.putExtra("camera", data.getData().getCamera());
+//                    intent.putExtra("board", data.getData().getBoard());
                     intent.putExtra("id", data.getData().getId());
                     intent.putExtra("sessionId", data.getData().getChat_team_id());
                     startActivity(intent);
@@ -295,8 +313,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
             case R.id.start_study:
                 if (BaseApplication.isLogined()) {
                     intent = new Intent(RemedialClassDetailActivity.this, NEVideoPlayerActivity.class);
-                    intent.putExtra("camera", data.getData().getCamera());
-                    intent.putExtra("board", data.getData().getBoard());
+//                    intent.putExtra("camera", data.getData().getCamera());
+//                    intent.putExtra("board", data.getData().getBoard());
                     intent.putExtra("id", data.getData().getId());
                     intent.putExtra("sessionId", data.getData().getChat_team_id());
                     startActivity(intent);
@@ -451,7 +469,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
                     @Override
                     protected void onError(JSONObject response) {
-
+//                        Toast.makeText(RemedialClassDetailActivity.this, "该课程不支持试听", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -480,7 +498,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
             return "招生中";
         } else if (status.equals("teaching")) {
             return "开课中";
-        } else if (status.equals("completed")) {//未开始
+        } else if (status.equals(Constant.CourseStatus.completed) || status.equals(Constant.CourseStatus.finished)) {//未开始
             return "已结束";
         }
         return "招生中";

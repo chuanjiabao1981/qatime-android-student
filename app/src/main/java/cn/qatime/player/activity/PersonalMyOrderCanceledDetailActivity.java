@@ -7,7 +7,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.umeng.analytics.MobclickAgent;
 
 import java.text.DecimalFormat;
@@ -30,10 +29,9 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
     private TextView reorder;
     private LinearLayout listitem;
     private TextView name;
-    private ImageView image;
     private TextView grade;
     private TextView teacher;
-    private TextView status;
+    private ImageView status;
     private int classid;
     private TextView payprice;
     DecimalFormat df = new DecimalFormat("#.00");
@@ -57,7 +55,6 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
     private void setValue(OrderDetailBean data) {
         classid = getIntent().getIntExtra("id", 0);
 
-        Glide.with(PersonalMyOrderCanceledDetailActivity.this).load(data.image).placeholder(R.mipmap.photo).centerCrop().crossFade().into(image);
         if (StringUtils.isNullOrBlanK(data.name)) {
             name.setText(getResourceString(R.string.cancel_order_name));
         } else {
@@ -80,13 +77,11 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
         }
 
         if (data.status.equals("refunded")) {//交易关闭
-            status.setText(getResources().getString(R.string.deal_closed));
+            status.setImageResource(R.mipmap.close_pay);
         } else if (data.status.equals("canceled")) {//交易关闭
-            status.setText(getResources().getString(R.string.deal_closed));
+            status.setImageResource(R.mipmap.close_pay);
         } else if (data.status.equals("expired")) {//交易关闭
-            status.setText(getResources().getString(R.string.deal_closed));
-        } else {//空
-            status.setText("        ");
+            status.setImageResource(R.mipmap.close_pay);
         }
         ordernumber.setText(getIntent().getStringExtra("order_id"));
         if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("created_at"))) {
@@ -110,7 +105,7 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
                 paytype.setText(getResourceString(R.string.alipay_payment));
             }
         }
-        progress.setText(data.Completed_lesson_count + "/" + data.Preset_lesson_count);
+        progress.setText("共" + data.Preset_lesson_count + "课");
         String price = df.format(data.current_price);
         if (price.startsWith(".")) {
             price = "0" + price;
@@ -121,11 +116,10 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
 
     public void initView() {
         name = (TextView) findViewById(R.id.name);
-        image = (ImageView) findViewById(R.id.image);
         subject = (TextView) findViewById(R.id.subject);
         grade = (TextView) findViewById(R.id.grade);
         teacher = (TextView) findViewById(R.id.teacher);
-        status = (TextView) findViewById(R.id.status);
+        status = (ImageView) findViewById(R.id.status);
         progress = (TextView) findViewById(R.id.progress);//进度
         ordernumber = (TextView) findViewById(R.id.order_number);//订单编号
         buildtime = (TextView) findViewById(R.id.build_time);//创建时间
@@ -152,6 +146,7 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
             }
         });
     }
+
     @Override
     protected void onResume() {
         super.onResume();

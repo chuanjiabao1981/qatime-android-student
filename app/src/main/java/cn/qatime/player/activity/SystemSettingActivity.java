@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -28,7 +29,6 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.AppUtils;
 import libraryextra.utils.DataCleanUtils;
-import libraryextra.utils.DensityUtils;
 import libraryextra.utils.DownFileUtil;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyListener;
@@ -52,6 +52,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
     private android.app.AlertDialog alertDialog;
     private String apkUrl;
     private String downLoadLinks;
+    private View updateView;
 
     private void assignViews() {
         learningProcess = (LinearLayout) findViewById(R.id.learning_process);
@@ -140,28 +141,34 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                         if (response.isNull("data")) {
                             Toast.makeText(SystemSettingActivity.this, getResourceString(R.string.is_newest_version), Toast.LENGTH_SHORT).show();
                         } else {
-                            //TODO 获取更新信信息0
                             Logger.e(response.toString());
                             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(SystemSettingActivity.this);
-                            final View view = View.inflate(SystemSettingActivity.this, R.layout.dialog_check_update, null);
-                            Button down = (Button) view.findViewById(R.id.download);
-                            View x = view.findViewById(R.id.image_x);
-                            TextView newVersion = (TextView) view.findViewById(R.id.new_version);
-                            TextView desc = (TextView) view.findViewById(R.id.desc);
-                            desc.setMaxHeight(DensityUtils.dp2px(SystemSettingActivity.this, 300));
+                            updateView = View.inflate(SystemSettingActivity.this, R.layout.dialog_check_update, null);
+                            Button down = (Button) updateView.findViewById(R.id.download);
+                            View x = updateView.findViewById(R.id.image_x);
+                            TextView newVersion = (TextView) updateView.findViewById(R.id.new_version);
+                            TextView desc = (TextView) updateView.findViewById(R.id.desc);
+                            desc.setMovementMethod(ScrollingMovementMethod.getInstance());
                             try {
                                 x.setOnClickListener(SystemSettingActivity.this);
+                               //boolean updateEnforce = response.getJSONObject("data").getBoolean("enforce");
+//                                if (!updateEnforce) {
+//                                    TextView pleaseUpdate = (TextView) updateView.findViewById(R.id.please_update);
+//                                    pleaseUpdate.setVisibility(View.VISIBLE);
+//                                    x.setVisibility(View.GONE);
+//                                }
                                 String descStr = response.getJSONObject("data").getString("description");
-                                desc.setText(StringUtils.isNullOrBlanK(descStr) ? getResourceString(R.string.performance_optimization) : descStr);
+                                desc.setText(StringUtils.isNullOrBlanK(descStr) ? "无" : descStr);
                                 downLoadLinks = response.getJSONObject("data").getString("download_links");
-                                newVersion.setText("V" + response.getJSONObject("data").getString("version"));
+                                newVersion.setText("(V" + response.getJSONObject("data").getString("version")+")");
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                             down.setOnClickListener(SystemSettingActivity.this);
                             alertDialog = builder.create();
                             alertDialog.show();
-                            alertDialog.setContentView(view);
+                            alertDialog.setContentView(updateView);
+                            alertDialog.setCancelable(false);
                             alertDialog.setCanceledOnTouchOutside(false);
                             alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable());
                         }

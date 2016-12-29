@@ -23,6 +23,11 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.model.RecentContact;
 
 import org.json.JSONObject;
 
@@ -59,6 +64,8 @@ import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.TagViewPager;
 
+import static cn.qatime.player.R.id.count;
+
 public class FragmentHomeMainPage extends BaseFragment implements View.OnClickListener {
 
 
@@ -70,7 +77,8 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private int page = 1;
     private List<ClassRecommendBean.DataBean> listRecommendClass = new ArrayList<>();
     private BaseAdapter classAdapter;
-    private ImageView message;
+    private View message;
+    private ImageView message_x;
     private ArrayList<TeacherRecommendBean.DataBean> listRecommendTeacher = new ArrayList<>();
     private CommonAdapter<TeacherRecommendBean.DataBean> teacherAdapter;
     private GridView gridviewSubject;
@@ -80,7 +88,26 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private CityBean.Data locationCity;
     private AMapLocationUtils utils;
     private List<BannerRecommendBean.DataBean> listBanner = new ArrayList<>();
+//    private View count;
+
     private BannerRecommendBean.DataBean noBanner;
+    //  创建观察者对象
+    Observer<List<RecentContact>> messageObserver =
+            new Observer<List<RecentContact>>() {
+                @Override
+                public void onEvent(List<RecentContact> messages) {
+                    refreshUnreadNum();
+                }
+            };
+
+    /**
+     * 刷新未读
+     */
+    private void refreshUnreadNum() {
+        int unreadNum = NIMClient.getService(MsgService.class).getTotalUnreadCount();
+//                    Logger.e("unreadNum" + unreadNum);
+        message_x.setVisibility(unreadNum == 0 ? View.GONE : View.VISIBLE);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -98,7 +125,9 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         allClass = view.findViewById(R.id.all_class);
         citySelect = view.findViewById(R.id.city_select);
         gridviewClass = (GridView) view.findViewById(R.id.gridview_class);
-        message = (ImageView) view.findViewById(R.id.message);
+        message = view.findViewById(R.id.message);
+        message_x = (ImageView) view.findViewById(R.id.message_x);
+//        count = view.findViewById(count);
 
         setCity();
 
@@ -111,6 +140,10 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         allClass.setOnClickListener(this);
         message.setOnClickListener(this);
         citySelect.setOnClickListener(this);
+        refreshUnreadNum();
+        //  注册/注销观察者
+        NIMClient.getService(MsgServiceObserve.class)
+                .observeRecentContact(messageObserver, true);
     }
 
     private void setCity() {
@@ -150,7 +183,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private void initBannerData() {
         Map<String, String> map = new HashMap<>();
         try {
-            map.put("city_name", URLEncoder.encode(BaseApplication.getCurrentCity().getName(),"UTF-8"));
+            map.put("city_name", URLEncoder.encode(BaseApplication.getCurrentCity().getName(), "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -251,7 +284,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         map.put("page", String.valueOf(page));
         map.put("per_page", String.valueOf(5));
         try {
-            map.put("city_name", URLEncoder.encode(BaseApplication.getCurrentCity().getName(),"UTF-8"));
+            map.put("city_name", URLEncoder.encode(BaseApplication.getCurrentCity().getName(), "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -309,7 +342,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     holder.setText(R.id.course_title, item.getLive_studio_course().getName());
                     holder.setText(R.id.grade, item.getLive_studio_course().getGrade());
                     holder.setText(R.id.subject, item.getLive_studio_course().getSubject());
-                    holder.setText(R.id.count, item.getLive_studio_course().getBuy_tickets_count() + "人报名");
+                    holder.setText(count, item.getLive_studio_course().getBuy_tickets_count() + "人报名");
                     ((TextView) holder.getView(R.id.reason)).setText(getReason(item.getReason()));
                     ((TextView) holder.getView(R.id.reason)).setBackgroundColor(getReasonBackground(item.getReason()));
                     ((TextView) holder.getView(R.id.reason)).setVisibility(View.VISIBLE);
@@ -318,7 +351,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     holder.setText(R.id.course_title, "暂无辅导班数据");
                     holder.setText(R.id.grade, "年级");
                     holder.setText(R.id.subject, "科目");
-                    holder.setText(R.id.count, "0人报名");
+                    holder.setText(count, "0人报名");
                     ((TextView) holder.getView(R.id.reason)).setVisibility(View.INVISIBLE);
                 }
             }
@@ -399,6 +432,9 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     @Override
     public void onDestroy() {
         super.onDestroy();
+        //  注册/注销观察者
+        NIMClient.getService(MsgServiceObserve.class)
+                .observeRecentContact(messageObserver, false);
     }
 
     @Override
@@ -453,13 +489,16 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 //                                    如果没有被赋值，则默认全国
                             utils = new AMapLocationUtils(getActivity(), new AMapLocationUtils.LocationListener() {
                                 @Override
-                                public void onLocationBack(String result) {
-                                    utils.stopLocation();
-
-                                    for (CityBean.Data item : listCity) {
-                                        if (result.equals(item.getName())) {
-                                            locationCity = item;
+                                public void onLocationBack(String[] result) {
+                                    if (result != null && result.length > 1) {
+                                        for (CityBean.Data item : listCity) {
+                                            if (result[1].equals(item.getName()) || result[0].equals(item.getName())) {//需先对比区,区不对应往上对比市,不可颠倒
+                                                locationCity = item;
+                                            }
                                         }
+                                    } else {
+                                        Toast.makeText(getActivity(), "暂未获取到您的位置信息", Toast.LENGTH_SHORT).show();
+                                        return;
                                     }
                                     CityBean.Data currentCity = BaseApplication.getCurrentCity();
                                     if (locationCity != null) {

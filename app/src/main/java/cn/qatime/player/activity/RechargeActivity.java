@@ -2,6 +2,7 @@ package cn.qatime.player.activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -54,8 +55,8 @@ public class RechargeActivity extends BaseActivity {
     private View wechatLayout;
     private View alipayLayout;
     private String payType = "weixin";
-//    private TextView phone;
-//    private AlertDialog alertDialogPhone;
+    private TextView phone;
+    private AlertDialog alertDialogPhone;
 
     private void assignViews() {
         rechargeNum = (EditText) findViewById(R.id.recharge_num);
@@ -64,9 +65,14 @@ public class RechargeActivity extends BaseActivity {
         wechatPay = (ImageView) findViewById(R.id.wechat_pay);
         alipay = (ImageView) findViewById(R.id.alipay);
         rechargeNow = (Button) findViewById(R.id.recharge_now);
-//        phone = (TextView) findViewById(R.id.phone);
+        phone = (TextView) findViewById(R.id.phone);
 
-
+        phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogPhone();
+            }
+        });
         alipayLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,6 +96,36 @@ public class RechargeActivity extends BaseActivity {
             }
         });
 
+    }
+
+    private void dialogPhone() {
+        if (alertDialogPhone == null) {
+            View view = View.inflate(RechargeActivity.this, R.layout.dialog_cancel_or_confirm, null);
+            TextView text = (TextView) view.findViewById(R.id.text);
+            text.setText(getResourceString(R.string.call_customer_service_phone) + phone.getText());
+            Button cancel = (Button) view.findViewById(R.id.cancel);
+            Button confirm = (Button) view.findViewById(R.id.confirm);
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    alertDialogPhone.dismiss();
+                }
+            });
+            confirm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    alertDialogPhone.dismiss();
+                    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
+                    startActivity(intent);
+                }
+            });
+            AlertDialog.Builder builder = new AlertDialog.Builder(RechargeActivity.this);
+            alertDialogPhone = builder.create();
+            alertDialogPhone.show();
+            alertDialogPhone.setContentView(view);
+        } else {
+            alertDialogPhone.show();
+        }
     }
 
 

@@ -17,6 +17,7 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.NimStrings;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
+import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
@@ -264,7 +265,7 @@ public class BaseApplication extends Application {
 
         @Override
         public int getDefaultIconResId() {
-            return R.mipmap.head_sculpture;
+            return R.mipmap.head_default;
         }
 
         @Override
@@ -342,6 +343,7 @@ public class BaseApplication extends Application {
             }
             SPUtils.putObject(context, "profile", profile);
             LoginSyncDataStatusObserver.getInstance().reset();
+            NIMClient.getService(AuthService.class).logout();
         }
     }
 

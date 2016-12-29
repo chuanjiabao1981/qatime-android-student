@@ -508,7 +508,6 @@ public class MainActivity extends BaseFragmentActivity {
 
     public void setCurrentPosition(int currentPosition, String s) {
         fragmentlayout.setCurrenItem(currentPosition);
-        fragmentlayout.setCurrenItem(currentPosition);
         if (!StringUtils.isNullOrBlanK(s)) {
             FragmentRemedialClassAll fragmentRemedialClassAll = (FragmentRemedialClassAll) fragBaseFragments.get(1);
             fragmentRemedialClassAll.initDataAsSubject(s);

@@ -9,29 +9,17 @@ import java.io.Serializable;
  */
 public class ChatVideoBean implements Serializable {
     private int courseId;
-    private String board;
-    private String camera;
     private String name;
     private String chat_team_owner;
 
-    public ChatVideoBean(int courseId, String camera, String board, String name,String chat_team_owner) {
+    public ChatVideoBean(int courseId, String name, String chat_team_owner) {
         this.courseId = courseId;
-        this.camera = camera;
-        this.board = board;
         this.name = name;
         this.chat_team_owner = chat_team_owner;
     }
 
     public int getCourseId() {
         return courseId;
-    }
-
-    public String getBoard() {
-        return board;
-    }
-
-    public String getCamera() {
-        return camera;
     }
 
     public String getName() {

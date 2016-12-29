@@ -21,15 +21,16 @@
             android:padding="10dp">
 
             <ImageView
+                android:id="@+id/imageView"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:src="@mipmap/city_select" />
 
             <TextView
                 android:id="@+id/city_name"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="2dp"
                 android:ellipsize="end"
                 android:gravity="center"
                 android:maxWidth="56dp"
@@ -40,22 +41,49 @@
 
         </LinearLayout>
 
-        <ImageView
+        <RelativeLayout
             android:id="@+id/message"
-            style="@style/backbar_icon_style"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:clickable="true"
-            android:src="@mipmap/message" />
+            android:layout_centerVertical="true"
+            android:clickable="true">
 
-        <!--<TextView-->
-        <!--style="@style/backbar_text_style"-->
-        <!--android:layout_centerInParent="true"-->
-        <!--android:text="答疑时间" />-->
+            <ImageView
+                android:id="@+id/message_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="6dp"
+                android:src="@mipmap/message" />
+
+            <ImageView
+                android:id="@+id/message_x"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@id/message_icon"
+                android:layout_alignTop="@id/message_icon"
+                android:src="@mipmap/message_x" />
+        </RelativeLayout>
+        <!--<View-->
+        <!--android:id="@+id/count"-->
+        <!--android:layout_width="10dp"-->
+        <!--android:layout_height="10dp"-->
+        <!--android:layout_alignRight="@id/message"-->
+        <!--android:layout_marginRight="5dp"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:background="@drawable/shape_circle"-->
+        <!--android:visibility="visible" />-->
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:src="@mipmap/home_logo" />
+            android:src="@mipmap/home_logo"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/imageView2" />
+
 
     </RelativeLayout>
 
@@ -179,9 +207,9 @@
 
                     <ImageView
                         android:layout_width="wrap_content"
-                        android:padding="3dp"
-                        android:layout_marginLeft="-3dp"
                         android:layout_height="13dp"
+                        android:layout_marginLeft="-3dp"
+                        android:padding="3dp"
                         android:src="@mipmap/home_right_arrow" />
                 </LinearLayout>
             </LinearLayout>

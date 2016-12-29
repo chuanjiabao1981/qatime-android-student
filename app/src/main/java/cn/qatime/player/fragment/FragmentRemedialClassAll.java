@@ -2,7 +2,6 @@ package cn.qatime.player.fragment;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -309,9 +308,7 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
         endcLassTime.setText("");
         beginClassTime.setHint("开始时间");
         endcLassTime.setHint("结束时间");
-        started.setBackgroundResource(R.drawable.text_background_select);
         startedSelected.setVisibility(View.VISIBLE);
-        recruiting.setBackgroundResource(R.drawable.text_background_select);
         recruitingSelected.setVisibility(View.VISIBLE);
 
     }
@@ -351,12 +348,12 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
                         TextView select = holder.getView(R.id.select);
                         view.setText(item);
                         if (position == timesortposition) {
-                            view.setTextColor(Color.LTGRAY);
-                            select.setTextColor(Color.LTGRAY);
+                            view.setTextColor(0xffbe0b0b);
+                            select.setTextColor(0xffbe0b0b);
                             select.setVisibility(View.VISIBLE);
                         } else {
-                            view.setTextColor(Color.GRAY);
-                            select.setTextColor(Color.GRAY);
+                            view.setTextColor(0xff999999);
+                            select.setTextColor(0xff999999);
                             select.setVisibility(View.INVISIBLE);
                         }
                     }
@@ -409,12 +406,12 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
                         TextView select = holder.getView(R.id.select);
                         view.setText(item);
                         if (subjecttext.getText().toString().equals(item) || (subjecttext.getText().toString().equals(getResourceString(R.string.by_subject)) && position == 0)) {
-                            view.setTextColor(Color.LTGRAY);
-                            select.setTextColor(Color.LTGRAY);
+                            view.setTextColor(0xffbe0b0b);
+                            select.setTextColor(0xffbe0b0b);
                             select.setVisibility(View.VISIBLE);
                         } else {
-                            view.setTextColor(Color.GRAY);
-                            select.setTextColor(Color.GRAY);
+                            view.setTextColor(0xff999999);
+                            select.setTextColor(0xff999999);
                             select.setVisibility(View.INVISIBLE);
                         }
                     }
@@ -462,12 +459,12 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
                         TextView select = holder.getView(R.id.select);
                         view.setText(item);
                         if (classtext.getText().toString().equals(item) || (classtext.getText().toString().equals(getResourceString(R.string.by_grade)) && position == 0)) {
-                            view.setTextColor(Color.LTGRAY);
-                            select.setTextColor(Color.LTGRAY);
+                            view.setTextColor(0xffbe0b0b);
+                            select.setTextColor(0xffbe0b0b);
                             select.setVisibility(View.VISIBLE);
                         } else {
-                            view.setTextColor(Color.GRAY);
-                            select.setTextColor(Color.GRAY);
+                            view.setTextColor(0xff999999);
+                            select.setTextColor(0xff999999);
                             select.setVisibility(View.INVISIBLE);
                         }
                     }
@@ -554,7 +551,7 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
                 started.setBackgroundResource(startedText.isChecked() ? R.drawable.text_background_select : R.drawable.text_background_normal);
                 startedSelected.setVisibility(startedText.isChecked() ? View.VISIBLE : View.INVISIBLE);
                 break;
-            case R.id.recruiting:
+            case R.id.   recruiting:
                 recruitingText.setChecked(!recruitingText.isChecked());
                 recruiting.setBackgroundResource(recruitingText.isChecked() ? R.drawable.text_background_select : R.drawable.text_background_normal);
                 recruitingSelected.setVisibility(recruitingText.isChecked() ? View.VISIBLE : View.INVISIBLE);

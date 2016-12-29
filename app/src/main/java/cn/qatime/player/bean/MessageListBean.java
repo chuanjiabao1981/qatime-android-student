@@ -18,8 +18,8 @@ public class MessageListBean implements Serializable {
     private MsgStatusEnum msgStatus;
     private long time;
     private int unreadCount;
-    private String camera;
-    private String board;
+//    private String camera;
+//    private String board;
     private String name;
     private int courseId;
     private boolean mute;
@@ -73,21 +73,21 @@ public class MessageListBean implements Serializable {
         this.unreadCount = unreadCount;
     }
 
-    public String getCamera() {
-        return camera;
-    }
-
-    public void setCamera(String camera) {
-        this.camera = camera;
-    }
-
-    public String getBoard() {
-        return board;
-    }
-
-    public void setBoard(String board) {
-        this.board = board;
-    }
+//    public String getCamera() {
+//        return camera;
+//    }
+//
+//    public void setCamera(String camera) {
+//        this.camera = camera;
+//    }
+//
+//    public String getBoard() {
+//        return board;
+//    }
+//
+//    public void setBoard(String board) {
+//        this.board = board;
+//    }
 
     public String getContactId() {
         return contactId;

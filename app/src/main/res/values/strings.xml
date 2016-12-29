@@ -96,8 +96,8 @@
     <string name="click_to_add">点击添加</string>
     <string name="hint_name">输入真实姓名更方便老师联系你</string>
     <string name="hint_profiles">一句话介绍自己</string>
-    <string name="boy">我是男神</string>
-    <string name="girl">我是女神</string>
+    <string name="boy">男生</string>
+    <string name="girl">女生</string>
     <string name="finish">完成</string>
     <string name="male">男</string>
     <string name="female">女</string>
@@ -147,7 +147,7 @@
     <string name="login">登录</string>
     <string name="click_login">点击登录</string>
     <string name="login_right_now">立即登录</string>
-    <string name="forget_password">忘记密码</string>
+    <string name="forget_password">找回密码</string>
     <string name="verification_code">请输入验证码</string>
     <string name="verification_code_is_incorrect">验证码不正确</string>
     <string name="logout">退出登录</string>
@@ -291,10 +291,10 @@
     <string name="new_parent_phone">家长新手机号</string>
     <string name="over">完成</string>
     <string name="input_current_password">输入当前密码</string>
-    <string name="input_new_password">输入新的密码</string>
+    <string name="input_new_password">请输入新密码</string>
     <string name="input_login_password">输入登陆密码</string>
-    <string name="confirm_new_password">确认新的密码</string>
-    <string name="forget_password_1">忘记密码？</string>
+    <string name="confirm_new_password">请确认新密码</string>
+    <string name="forget_password_1">忘记密码</string>
     <string name="hint_input_new_phone">输入新手机号码（仅支持大陆地区11位）</string>
     <string name="hint_input_email">请输入完整邮箱地址</string>
     <string name="hint_input_again">再输入一次</string>
@@ -473,5 +473,6 @@
     <string name="support_automatic_transfer">(已支持自动转账)</string>
     <string name="class_closed">已直播</string>
     <string name="please_talk_later">请稍候发言</string>
+    <string name="update_desc">更新内容</string>
 
 </resources>

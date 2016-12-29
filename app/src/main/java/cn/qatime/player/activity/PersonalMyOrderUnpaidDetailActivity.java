@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
-import com.bumptech.glide.Glide;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
@@ -46,11 +45,10 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
     private TextView pay;
     private TextView cancelorder;
     private TextView name;
-    private ImageView image;
     private LinearLayout listitem;
     private TextView grade;
     private TextView teacher;
-    private TextView status;
+//    private ImageView status;
     private TextView payprice;
     private int classid;
     DecimalFormat df = new DecimalFormat("#.00");
@@ -74,12 +72,11 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
 
     private void setValue() {
         classid = data.getProduct().getId();
-        Glide.with(PersonalMyOrderUnpaidDetailActivity.this).load(data.getProduct().getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into(image);
-        if (data.getStatus().equals("unpaid")) {//等待付款
-            status.setText(getResources().getString(R.string.waiting_for_payment));
-        } else {//空
-            status.setText("        ");
-        }
+//        if (data.getStatus().equals("unpaid")) {//等待付款
+//            status.setText(getResources().getString(R.string.waiting_for_payment));
+//        } else {//空
+//            status.setText("        ");
+//        }
         if (StringUtils.isNullOrBlanK(data.getProduct().getName())) {
             name.setText(getResourceString(R.string.cancel_order_name));
         } else {
@@ -119,7 +116,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         } else {
             paytype.setText(getResourceString(R.string.alipay_payment));
         }
-        progress.setText(data.getProduct().getCompleted_lesson_count() + "/" + data.getProduct().getPreset_lesson_count());
+        progress.setText("共" + data.getProduct().getPreset_lesson_count() + "课");
         String price = df.format(data.getProduct().getCurrent_price());
         if (price.startsWith(".")) {
             price = "0" + price;
@@ -129,9 +126,8 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
     }
 
     public void initView() {
-        status = (TextView) findViewById(R.id.status);
+//        status = (ImageView) findViewById(R.id.status);
         name = (TextView) findViewById(R.id.name);
-        image = (ImageView) findViewById(R.id.image);
         subject = (TextView) findViewById(R.id.subject);
         grade = (TextView) findViewById(R.id.grade);
         teacher = (TextView) findViewById(R.id.teacher);
@@ -234,16 +230,18 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         });
         addToRequestQueue(request);
     }
+
     @Subscribe
     public void onEvent(PayResultState state) {
-        Intent intent = new Intent(this,OrderPayResultActivity.class);
-        intent.putExtra("orderId",ordernumber.getText().toString());
-        intent.putExtra("price",payprice.getText().toString());
-        intent.putExtra("state",state);
+        Intent intent = new Intent(this, OrderPayResultActivity.class);
+        intent.putExtra("orderId", ordernumber.getText().toString());
+        intent.putExtra("price", payprice.getText().toString());
+        intent.putExtra("state", state);
         startActivity(intent);
         setResult(Constant.RESPONSE);//支付成功刷新订单
         finish();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -255,6 +253,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         super.onPause();
         MobclickAgent.onPause(this);
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

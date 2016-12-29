@@ -119,7 +119,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
         String parentPhone = bean.getData().getParent_phone();
         if (parentPhone != null) {
             phoneNumberP.setText("" + parentPhone);
-            phoneNumberP.setTextColor(0xff333333);
+            phoneNumberP.setTextColor(0xff666666);
         } else {
             phoneNumberP.setText(getResourceString(R.string.not_bind));
             phoneNumberP.setTextColor(Color.RED);
@@ -127,14 +127,14 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
         String email = bean.getData().getEmail();
         if (email != null) {
             this.email.setText("" + email);
-            this.email.setTextColor(0xff333333);
+            this.email.setTextColor(0xff666666);
         } else {
             this.email.setText(getResourceString(R.string.not_bind));
             this.email.setTextColor(Color.RED);
         }
         openid = bean.getData().getOpenid();
         if (!StringUtils.isNullOrBlanK(openid)) {
-            weChat.setTextColor(0xff333333);
+            weChat.setTextColor(0xff666666);
             weChat.setBackgroundResource(R.drawable.shape_wechat_bind_background_able);
             weChat.setText(getResourceString(R.string.bind_cancel));
         } else {
@@ -145,7 +145,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
         String loginMobile = bean.getData().getLogin_mobile();
         if (loginMobile != null) {
             phoneNumberM.setText("" + loginMobile);
-            phoneNumberM.setTextColor(0xff333333);
+            phoneNumberM.setTextColor(0xff666666);
         } else {
             phoneNumberM.setText(getResourceString(R.string.not_bind));
             phoneNumberM.setTextColor(Color.RED);
