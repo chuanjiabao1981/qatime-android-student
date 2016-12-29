@@ -194,6 +194,7 @@
     <string name="status_preview">当前状态：招生中</string>
     <string name="status_teaching">当前状态：已开课</string>
     <string name="status_over">当前状态：已结束</string>
+    <string name="current_status">当前状态：</string>
     <string name="grade_type">授课类型：</string>
     <!--//课程详情2-->
     <string name="teacher_name">老师姓名：</string>
@@ -398,8 +399,8 @@
     <string name="order_create_failed">订单生成失败</string>
     <string name="order_cancel_failed">订单取消失败,请稍后再试</string>
     <string name="order_cancel_success">订单已成功取消</string>
-    <string name="pay_wexin"> ：微信支付</string>
-    <string name="pay_alipay"> ：支付宝支付</string>
+    <string name="pay_wexin">微信支付</string>
+    <string name="pay_alipay">支付宝支付</string>
     <string name="not_support_alipay">暂不支持支付宝支付</string>
     <string name="subject">科目</string>
     <string name="is_null">为空</string>
@@ -440,7 +441,7 @@
     <string name="recharge_failure">充值结果未找到</string>
     <string name="recharge_success">充值成功</string>
     <string name="account_payment">余额支付</string>
-    <string name="pay_account">：余额支付</string>
+    <string name="pay_account">余额支付</string>
     <string name="recharge_num_hint"><font size="14">请输入想要充值的金额</font></string>
     <string name="my_record_fund">资金记录</string>
     <string name="withdraw_cash">提现</string>
@@ -474,5 +475,6 @@
     <string name="class_closed">已直播</string>
     <string name="please_talk_later">请稍候发言</string>
     <string name="update_desc">更新内容</string>
+    <string name="teach_type">授课方式：在线直播</string>
 
 </resources>

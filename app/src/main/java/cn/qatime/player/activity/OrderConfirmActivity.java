@@ -27,6 +27,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.bean.PayResultState;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.AppPayParamsBean;
@@ -45,7 +46,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     TextView classnumber;
     TextView classstarttime;
     TextView classendtime;
-    //    TextView status;
+    TextView status;
     TextView price;
     TextView payprice;
     private Button pay;
@@ -97,13 +98,9 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         } catch (ParseException e) {
             e.printStackTrace();
         }
-//        if (data.status.equals("preview")) {
-//            status.setText(getResources().getString(R.string.status_preview));
-//        } else if (data.status.equals("teaching")) {
-//            status.setText(getResources().getString(R.string.status_teaching));
-//        } else {
-//            status.setText(getResources().getString(R.string.status_over));
-//        }
+
+        status.setText(getResources().getString(R.string.current_status) + getStatus(data.status));
+
         String price = df.format(data.current_price);
         if (price.startsWith(".")) {
             price = "0" + price;
@@ -155,15 +152,15 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                         } else if (payType.equals("account")) {
                             //余额支付成功  status---failed交易失败  shipped交易成功
 //                            try {
-                                Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
-                                intent.putExtra("price", priceNumber);
-                                intent.putExtra("id", data.getData().getId());
-                                intent.putExtra("time", data.getData().getCreated_at());
-                                intent.putExtra("type", payType);
-                                String app_pay_params = data.getData().getApp_pay_str();
-                                intent.putExtra("data", app_pay_params);
-                                startActivity(intent);
-                                pay.setEnabled(true);
+                            Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
+                            intent.putExtra("price", priceNumber);
+                            intent.putExtra("id", data.getData().getId());
+                            intent.putExtra("time", data.getData().getCreated_at());
+                            intent.putExtra("type", payType);
+                            String app_pay_params = data.getData().getApp_pay_str();
+                            intent.putExtra("data", app_pay_params);
+                            startActivity(intent);
+                            pay.setEnabled(true);
 //                                if (response.getJSONObject("data").getString("status").equals("shipped")) {
 //                                    EventBus.getDefault().post(PayResultState.SUCCESS);
 //                                    finish();
@@ -230,7 +227,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         classnumber = (TextView) findViewById(R.id.class_number);
         classstarttime = (TextView) findViewById(R.id.class_start_time);
         classendtime = (TextView) findViewById(R.id.class_end_time);
-//        status = (TextView) findViewById(R.id.status);
+        status = (TextView) findViewById(R.id.status);
         wechatLayout = findViewById(R.id.wechat_layout);
         alipayLayout = findViewById(R.id.alipay_layout);
         accountLayout = findViewById(R.id.account_layout);
@@ -273,6 +270,22 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                 wechatPay.setImageResource(R.drawable.shape_select_circle_normal);
             }
         });
+    }
+
+    private String getStatus(String status) {
+        if (status == null) {
+            return "招生中";
+        }
+        if (status.equals("published")) {//直播中
+            return "招生中";
+        } else if (status.equals("init")) {
+            return "招生中";
+        } else if (status.equals("teaching")) {
+            return "开课中";
+        } else if (status.equals(Constant.CourseStatus.completed) || status.equals(Constant.CourseStatus.finished)) {//未开始
+            return "已结束";
+        }
+        return "招生中";
     }
 
     @Subscribe

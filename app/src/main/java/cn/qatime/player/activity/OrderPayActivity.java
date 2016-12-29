@@ -116,22 +116,22 @@ public class OrderPayActivity extends BaseActivity {
         if (amount.startsWith(".")) {
             amount = "0" + amount;
         }
-        code.setText(getResourceString(R.string.order_number) + "：" + getIntent().getStringExtra("id"));
+        code.setText(getIntent().getStringExtra("id"));
         SimpleDateFormat parseISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
         SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
-            time.setText(getResourceString(R.string.time_built) + "：" + parse.format(parseISO.parse(getIntent().getStringExtra("time"))));
+            time.setText(parse.format(parseISO.parse(getIntent().getStringExtra("time"))));
         } catch (ParseException e) {
             e.printStackTrace();
         }
         if (payType.equals("alipay")) {
-            type.setText(getResourceString(R.string.method_payment) + getResourceString(R.string.pay_alipay));
+            type.setText(getResourceString(R.string.pay_alipay));
         } else if (payType.equals("weixin")) {
-            type.setText(getResourceString(R.string.method_payment) + getResourceString(R.string.pay_wexin));
+            type.setText(getResourceString(R.string.pay_wexin));
         } else {
-            type.setText(getResourceString(R.string.method_payment) + getResourceString(R.string.pay_account));
+            type.setText(getResourceString(R.string.pay_account));
         }
-        this.price.setText(getResourceString(R.string.amount_payment) + "：￥" + amount);
+        this.price.setText("￥" + amount);
     }
 
     public void initView() {
@@ -308,7 +308,7 @@ public class OrderPayActivity extends BaseActivity {
 //        if (BaseApplication.getCashAccount().getData().isHas_password()) {
 //            startActivity(new Intent(this, PayPSWVerifyActivity.class));
 //        } else {
-            startActivity(new Intent(this, PayPSWForgetActivity.class));
+        startActivity(new Intent(this, PayPSWForgetActivity.class));
 //        }
     }
 

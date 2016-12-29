@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@drawable/text_background"
+        android:background="#fff"
         android:scrollbars="none">
 
         <LinearLayout
@@ -27,50 +27,47 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="32dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_weight="1"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="28dp"
+                    android:layout_marginTop="10dp"
                     android:text="@string/commodity_name"
-                    android:textColor="#666666" />
+                    android:textColor="#333" />
 
                 <TextView
                     android:id="@+id/name"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:layout_weight="10"
-                    android:padding="1dp"
+                    android:layout_marginTop="10dp"
                     android:text=""
-                    android:textColor="#666666" />
+                    android:textColor="#666666"
+                    android:textSize="13sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:paddingBottom="12dp"
-                android:paddingLeft="32dp"
-                android:paddingRight="32dp"
-                android:paddingTop="12dp">
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_marginRight="28dp"
                     android:text="@string/commodity_detail"
-                    android:textColor="#666666" />
+                    android:textColor="#333" />
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="10"
                     android:orientation="vertical">
 
                     <ImageView
                         android:id="@+id/image"
                         android:layout_width="160dp"
                         android:layout_height="120dp"
-                        android:padding="1dp"
                         android:scaleType="centerCrop"
                         android:src="@mipmap/photo" />
                     <!--科目类型-->
@@ -78,89 +75,116 @@
                         android:id="@+id/project"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="1dp"
-                        android:textColor="#666666" />
+                        android:paddingTop="10dp"
+                        android:textColor="#666666"
+                        android:textSize="13sp" />
                     <!--年级类型-->
                     <TextView
                         android:id="@+id/grade"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="1dp"
-                        android:textColor="#666666" />
+                        android:paddingTop="10dp"
+                        android:textColor="#666666"
+                        android:textSize="13sp" />
                     <!--授课老师-->
                     <TextView
                         android:id="@+id/teacher"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="1dp"
-                        android:textColor="#666666" />
+                        android:paddingTop="10dp"
+                        android:textColor="#666666"
+                        android:textSize="13sp" />
                     <!--课时总数-->
                     <TextView
+
                         android:id="@+id/class_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="1dp"
-                        android:textColor="#666666" />
+                        android:paddingTop="10dp"
+                        android:textColor="#666666"
+                        android:textSize="13sp" />
                     <!--开课时间-->
+
                     <TextView
+
                         android:id="@+id/class_start_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="1dp"
+                        android:paddingTop="10dp"
                         android:text=""
-                        android:textColor="#666666" />
+                        android:textColor="#666666"
+                        android:textSize="13sp" />
                     <!--结课时间-->
+
                     <TextView
+
                         android:id="@+id/class_end_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="1dp"
-                        android:textColor="#666666" />
-                    <!--当前状态-->
-                    <!--<TextView-->
-                    <!--android:id="@+id/status"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"/>-->
-                    <!--价格-->
+                        android:paddingTop="10dp"
+                        android:textColor="#666666"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:textColor="#666666"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:text="@string/teach_type"
+                        android:textColor="#666666"
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="1dp"
-                        android:textColor="#666666" />
+                        android:paddingTop="10dp"
+                        android:textColor="#666666"
+                        android:textSize="13sp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dfdddd" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#ffffff"
+        android:background="#f7f7f7"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#fff"
             android:orientation="horizontal"
-            android:paddingLeft="32dp"
-            android:paddingRight="32dp">
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
-                android:layout_marginBottom="6dp"
-                android:layout_marginTop="6dp"
-                android:layout_weight="1"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="28dp"
+                android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
                 android:text="@string/method_payment"
-                android:textColor="#666666" />
+                android:textColor="#333" />
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="10"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -169,8 +193,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingBottom="6dp"
-                    android:paddingTop="6dp">
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp">
 
                     <ImageView
                         android:id="@+id/wechat_pay"
@@ -181,10 +205,10 @@
                         android:src="@drawable/shape_select_circle_select" />
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="3dp"
                         android:src="@mipmap/wechat_pay" />
 
                     <TextView
@@ -192,7 +216,8 @@
                         android:layout_height="20dp"
                         android:gravity="center"
                         android:text="@string/wechat_payment"
-                        android:textColor="#666666" />
+                        android:textColor="#666666"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -201,8 +226,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingBottom="6dp"
-                    android:paddingTop="6dp">
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp">
 
                     <ImageView
                         android:id="@+id/alipay"
@@ -213,10 +238,10 @@
                         android:src="@drawable/shape_select_circle_normal" />
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="3dp"
                         android:src="@mipmap/alipay" />
 
                     <TextView
@@ -224,7 +249,8 @@
                         android:layout_height="20dp"
                         android:gravity="center"
                         android:text="@string/alipay_payment"
-                        android:textColor="#666666" />
+                        android:textColor="#666666"
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -233,8 +259,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingBottom="6dp"
-                    android:paddingTop="6dp">
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp">
 
                     <ImageView
                         android:id="@+id/account"
@@ -245,11 +271,10 @@
                         android:src="@drawable/shape_select_circle_normal" />
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:padding="1dp"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="3dp"
                         android:src="@mipmap/account_pay" />
 
                     <TextView
@@ -257,7 +282,8 @@
                         android:layout_height="20dp"
                         android:gravity="center"
                         android:text="@string/account_payment"
-                        android:textColor="#666666" />
+                        android:textColor="#666666"
+                        android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -265,14 +291,15 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="32dp"
+                android:layout_marginLeft="10dp"
                 android:text="@string/amount_payment"
                 android:textColor="#333333" />
 
@@ -283,23 +310,31 @@
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="00"
-                android:textColor="#fc0202"
+                android:textColor="#be0b0b"
                 android:textSize="30dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:text="@string/yuan"
-                android:layout_marginRight="32dp"
                 android:textColor="#333333" />
         </LinearLayout>
 
 
         <Button
             android:id="@+id/pay"
-            style="@style/button_full_width_style"
-            android:layout_marginTop="12dp"
-            android:text="@string/pay_now" />
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_bg_selector_red_with_stork"
+            android:gravity="center"
+            android:text="@string/pay_now"
+            android:textColor="@drawable/text_selector_white_red"
+            android:textSize="16sp" />
 
     </LinearLayout>
 
