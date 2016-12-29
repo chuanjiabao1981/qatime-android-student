@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -92,8 +93,8 @@ StartActivity extends BaseActivity implements View.OnClickListener {
                     Button down = (Button) view.findViewById(R.id.download);
                     View x = view.findViewById(R.id.image_x);
                     TextView newVersion = (TextView) view.findViewById(R.id.new_version);
-
                     TextView desc = (TextView) view.findViewById(R.id.desc);
+                    desc.setMovementMethod(ScrollingMovementMethod.getInstance());
                     alertDialog = builder.create();
                     try {
                         x.setOnClickListener(StartActivity.this);
@@ -116,9 +117,9 @@ StartActivity extends BaseActivity implements View.OnClickListener {
                             }
                         });
                         String descStr = response.getJSONObject("data").getString("description");
-                        desc.setText(StringUtils.isNullOrBlanK(descStr) ? getResourceString(R.string.performance_optimization) : descStr);
+                        desc.setText(StringUtils.isNullOrBlanK(descStr) ?"无": descStr);
                         downLoadLinks = response.getJSONObject("data").getString("download_links");
-                        newVersion.setText("V" + response.getJSONObject("data").getString("version"));
+                        newVersion.setText("(V" + response.getJSONObject("data").getString("version")+")");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -126,6 +127,7 @@ StartActivity extends BaseActivity implements View.OnClickListener {
                     alertDialog.show();
                     alertDialog.setContentView(view);
                     alertDialog.setCanceledOnTouchOutside(false);
+                    alertDialog.setCancelable(false);
                     alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable());
                 }
             }
