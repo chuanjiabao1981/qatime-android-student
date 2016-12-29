@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.PayResult;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.Constant;
@@ -206,10 +207,11 @@ public class OrderPayActivity extends BaseActivity {
         payPopView.setOnPayPSWVerifyListener(new PayPopView.OnPayPSWVerifyListener() {
             @Override
             public void onSuccess() {
-                // TODO: 2016/12/20 支付订单
+                // TODO: 2016/12/20 调用接口支付订单
                 payPopView.dismiss();
-//                EventBus.getDefault().post(PayResultState.SUCCESS);
-//                                    finish();
+
+
+                
             }
 
             @Override
@@ -220,7 +222,11 @@ public class OrderPayActivity extends BaseActivity {
                 } else if (errorCode == 0) {
                     Toast.makeText(OrderPayActivity.this, "请检查网络连接", Toast.LENGTH_SHORT).show();
                 } else {
-                    dialogServerError();
+                    if(BaseApplication.getCashAccount().getData().isHas_password()){
+                        dialogServerError();//系统繁忙
+                    }else{
+                        Toast.makeText(OrderPayActivity.this, "暂未设置过支付密码", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -263,7 +269,7 @@ public class OrderPayActivity extends BaseActivity {
         alertDialog.setCanceledOnTouchOutside(false);
         View view = View.inflate(this, R.layout.dialog_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("提现系统繁忙，请稍后再试");
+        text.setText("支付系统繁忙，请稍后再试");
         Button confirm = (Button) view.findViewById(R.id.confirm);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -85,7 +85,7 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
         setContentView(R.layout.activity_notify_course);
         setTitle(getResourceString(R.string.notify_classes));
         assignViews();
-        sms.setChecked((Boolean) SPUtils.get(this, "notify_sms", true));
+        sms.setChecked((Boolean) SPUtils.get(this, "notify_sms", false));
         sys.setChecked((Boolean) SPUtils.get(this, "notify_sys", true));
 
 
