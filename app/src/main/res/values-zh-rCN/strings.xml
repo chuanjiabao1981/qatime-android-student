@@ -137,7 +137,7 @@
     <string name="password">请输入密码</string>
     <string name="register">注册</string>
     <string name="login">登录</string>
-    <string name="forget_password">忘记密码</string>
+    <string name="forget_password">找回密码</string>
     <string name="verification_code">请输入验证码</string>
     <string name="verification_code_is_incorrect">验证码不正确</string>
     <string name="change_it">看不清，换一张？</string>
@@ -315,7 +315,7 @@
     <string name="start">Start</string>
     <string name="sys_notify">系统通知</string>
     <string name="time_setting">设置时间</string>
-    <string name="update_desc">更新内容：</string>
+    <string name="update_desc">更新内容</string>
     <string name="update_notify1">建议wifi环境下操作</string>
     <string name="update_notify2">土豪请无视！</string>
     <string name="verify_phone_number">验证手机</string>

@@ -1,7 +1,6 @@
 package cn.qatime.player.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
@@ -44,10 +43,12 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
     private TimeCount time;
     private TextView currentParentPhone;
     private String phone;
+    private View currentParentPhoneLayout;
 
 
     private void assignViews() {
         currentParentPhone = (TextView) findViewById(R.id.current_parent_phone);
+        currentParentPhoneLayout = findViewById(R.id.current_parent_phone_layout);
         password = (EditText) findViewById(R.id.password);
         newParentPhone = (EditText) findViewById(R.id.new_parent_phone);
         code = (EditText) findViewById(R.id.code);
@@ -97,13 +98,12 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
         String phoneP = getIntent().getStringExtra("phoneP");
         currentParentPhone.setText(phoneP);
         if (!phoneP.equals("未绑定")) {
-            currentParentPhone.setTextColor(0xff666666);
+            currentParentPhoneLayout.setVisibility(View.VISIBLE);
         } else {
-            currentParentPhone.setTextColor(Color.RED);
+            currentParentPhoneLayout.setVisibility(View.GONE);
         }
         textGetcode.setOnClickListener(this);
         buttonOver.setOnClickListener(this);
-
     }
 
     @Override

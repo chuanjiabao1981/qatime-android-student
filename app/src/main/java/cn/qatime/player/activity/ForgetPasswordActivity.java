@@ -99,6 +99,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
             number.setVisibility(View.GONE);
             phone = BaseApplication.getProfile().getData().getUser().getLogin_mobile() + "";
             currentPhone.setText(phone);
+            getcode.setEnabled(true);
         } else {
             number.setVisibility(View.VISIBLE);
             currentPhoneView.setVisibility(View.GONE);

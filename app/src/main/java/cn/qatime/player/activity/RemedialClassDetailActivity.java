@@ -469,7 +469,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
                     @Override
                     protected void onError(JSONObject response) {
-
+//                        Toast.makeText(RemedialClassDetailActivity.this, "该课程不支持试听", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
