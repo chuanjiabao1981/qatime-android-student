@@ -106,14 +106,14 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="#cccccc" />
+                android:background="#dfdddd" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="@string/pay_remind"
-                android:textColor="@color/gray_normal_light" />
+                android:textColor="#999" />
         </LinearLayout>
 
         <Button
