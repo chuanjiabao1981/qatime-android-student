@@ -17,7 +17,7 @@ public interface VideoActivityInterface {
      */
     void refresh();
 
-    void setOrientation(int orientation);
+    void zoom();
 
     void changeSubSmall();
 
@@ -31,6 +31,7 @@ public interface VideoActivityInterface {
     void changeMain2Floating();
 
     void changeSub2Main();
+
     /***********************************************************/
 
     void pause();
@@ -44,4 +45,6 @@ public interface VideoActivityInterface {
     void play();
 
     boolean isPlaying();
+
+    boolean isPortrait();
 }
