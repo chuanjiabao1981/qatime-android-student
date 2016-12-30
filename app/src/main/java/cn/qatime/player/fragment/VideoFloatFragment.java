@@ -176,11 +176,15 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
                         public void run() {
                             vanish();
                             KeyBoardUtils.closeKeybord(act);
-                            comment.clearFocus();
-                            comment.setText("");
+                            if (commentLayout.getVisibility() == View.VISIBLE) {
+                                comment.clearFocus();
+                                if (!StringUtils.isNullOrBlanK(comment.getText().toString())) {
+                                    comment.setText("");
+                                }
+                            }
                         }
                     }.run();
-
+                    Logger.e("断");
                 } else {
                     new Runnable() {
                         @Override

@@ -392,7 +392,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                     floatFragment.setMute(isMute);
                     inputPanel.setMute(isMute);
                 }
-                if ((getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && isSubBig) | getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                if (!screenSwitchUtils.isPortrait() || isSubBig) {
                     danMuController.addDanmuList(result);
                 }
             }
@@ -825,7 +825,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     public void changeSubSmall() {
         isSubBig = false;
         boolean needReStart = false;
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+        if (screenSwitchUtils.isPortrait()) {
             danmuView.setVisibility(View.GONE);
         } else {
             danmuView.setVisibility(View.VISIBLE);
@@ -854,11 +854,11 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 bufferAnimation1.start();
             }
         }
-//        if (isSubOpen) {
-        floatingWindow.setVisibility(View.VISIBLE);
-//        } else {
-//            floatingWindow.setVisibility(View.GONE);
-//        }
+        if (isSubOpen) {
+            floatingWindow.setVisibility(View.VISIBLE);
+        } else {
+            floatingWindow.setVisibility(View.GONE);
+        }
         subVideo.setVisibility(View.GONE);
     }
 
@@ -994,7 +994,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     @Override
     public void sendMessage(IMMessage message) {
         Logger.e("message" + message);
-        sendTextMessage(message, (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && isSubBig) | getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
+        sendTextMessage(message, (screenSwitchUtils.isPortrait() && isSubBig) | !screenSwitchUtils.isPortrait());
     }
 
     @Override
