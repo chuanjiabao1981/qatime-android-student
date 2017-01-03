@@ -8,11 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.android.volley.VolleyError;
-import com.bumptech.glide.Glide;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -26,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.ApplyRefundActivity;
 import cn.qatime.player.activity.PersonalMyOrderPaidDetailActivity;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.MyOrderBean;
@@ -35,7 +34,6 @@ import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.OrderDetailBean;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -68,7 +66,7 @@ public class FragmentOrderPaid extends BaseFragment {
 
         adapter = new CommonAdapter<MyOrderBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_order2) {
             @Override
-            public void convert(ViewHolder helper, MyOrderBean.Data item, int position) {
+            public void convert(ViewHolder helper, final MyOrderBean.Data item, int position) {
                 StringBuilder sp = new StringBuilder();
                 sp.append(item.getProduct().getGrade()).append(item.getProduct().getSubject()).append("/共").append(item.getProduct().getLesson_count())
                         .append("课/").append(item.getProduct().getTeacher_name());
@@ -89,7 +87,17 @@ public class FragmentOrderPaid extends BaseFragment {
                 }
                 helper.setText(R.id.price, "￥" + price);
 
-
+                helper.getView(R.id.apply_refund).setOnClickListener(
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                // TODO: 2017/1/3 申请退款
+                                Intent intent = new Intent(getActivity(), ApplyRefundActivity.class);
+                                intent.putExtra("id", item.getProduct().getId());
+                                intent.putExtra("page", 0);
+                                startActivity(intent);
+                            }
+                        });
             }
         };
         listView.setAdapter(adapter);

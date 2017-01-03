@@ -372,5 +372,9 @@
             android:name=".activity.PayPSWForgetActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
-    </application>
+        <activity
+            android:name=".activity.ApplyRefundActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+</application>
 </manifest>
