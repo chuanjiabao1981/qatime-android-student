@@ -180,7 +180,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     @Override
                     protected void onSuccess(JSONObject response) {
                         data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
-                        Glide.with(RemedialClassDetailActivity.this).load(data.getData().getPublicize()).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
+                        Glide.with(getApplicationContext()).load(data.getData().getPublicize()).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
                         status.setText(getStatus(data.getData().getStatus()));
                         if (data.getData() != null && data.getData().getLive_start_time() != null) {
                             try {
