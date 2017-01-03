@@ -261,7 +261,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     private void refreshState() {
         if (!StringUtils.isNullOrBlanK(camera)) {
             if (videoState == VideoState.PLAYING) {
-                if (!video2.isPlaying()) {
+                if (video2 != null && !video2.isPlaying()) {
                     if (videoNoData2.getVisibility() == View.VISIBLE) {
                         videoNoData2.setVisibility(View.GONE);
                     }
@@ -280,7 +280,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         }
 
         if (!StringUtils.isNullOrBlanK(board)) {
-            if (!video1.isPlaying()) {
+            if (video1 != null && !video1.isPlaying()) {
                 if (videoNoData1.getVisibility() == View.VISIBLE) {
                     videoNoData1.setVisibility(View.GONE);
                 }
@@ -484,7 +484,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         hd.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (video1.isPlaying()) {
+                if (video1 != null && video1.isPlaying()) {
                     floatFragment.setPlaying(true);
                 }
             }
@@ -1005,7 +1005,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     @Override
     public boolean isPlaying() {
-        return video1.isPlaying() | video2.isPlaying();
+        return (video1 != null && video1.isPlaying()) || (video2 != null && video2.isPlaying());
     }
 
     @Override
