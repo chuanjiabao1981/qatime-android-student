@@ -103,11 +103,17 @@ public class BaseActivity extends AppCompatActivity {
         startActivity(intent);
 //        this.finish();
     }
-
     public <T> Request<T> addToRequestQueue(Request<T> request) {
+        request.setTag(this);
         return Queue.add(request);
     }
 
+    @Override
+    protected void onDestroy() {
+        cancelAll(this);
+        super.onDestroy();
+        destroyed = true;
+    }
     public void cancelAll(final Object tag) {
         Queue.cancelAll(tag);
     }
@@ -120,9 +126,5 @@ public class BaseActivity extends AppCompatActivity {
         return getResources().getString(id);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        destroyed = true;
-    }
+
 }

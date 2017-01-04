@@ -102,9 +102,15 @@ public class BaseFragmentActivity extends FragmentActivity {
     }
 
     public <T> Request<T> addToRequestQueue(Request<T> request) {
+        request.setTag(this);
         return Queue.add(request);
     }
 
+    @Override
+    protected void onDestroy() {
+        cancelAll(this);
+        super.onDestroy();
+    }
     public void cancelAll(final Object tag) {
         Queue.cancelAll(tag);
     }

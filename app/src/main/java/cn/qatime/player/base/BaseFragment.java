@@ -13,9 +13,6 @@ import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
 
@@ -71,18 +68,14 @@ public class BaseFragment extends Fragment {
 //        getActivity().finish();
     }
 
-    private List<Request> requestList = new ArrayList<>();//记录当前页访问的url
-
     public <T> Request<T> addToRequestQueue(Request<T> request) {
-        requestList.add(request);
+        request.setTag(this);
         return Queue.add(request);
     }
 
     @Override
     public void onDestroy() {
-        for (Request request : requestList) {
-            request.cancel();
-        }
+        cancelAll(this);
         super.onDestroy();
     }
 
