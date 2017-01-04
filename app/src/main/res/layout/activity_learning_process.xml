@@ -44,7 +44,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center_horizontal"
                     android:text="@string/start"
-                    android:textColor="#a00f" />
+                    android:textColor="#be0b0b" />
             </LinearLayout>
 
             <LinearLayout
@@ -380,7 +380,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center_horizontal"
                     android:text="@string/end"
-                    android:textColor="#a00f" />
+                    android:textColor="#be0b0b" />
             </LinearLayout>
 
         </LinearLayout>
