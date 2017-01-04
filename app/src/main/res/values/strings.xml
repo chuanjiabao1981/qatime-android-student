@@ -472,5 +472,6 @@
     <string name="change_pay_password">重置支付密码</string>
     <string name="please_talk_later">请稍候发言</string>
     <string name="update_desc">更新内容</string>
+    <string name="refund_record">退款记录</string>
 
 </resources>

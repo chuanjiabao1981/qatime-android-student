@@ -18,6 +18,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.fragment.FragmentFundRecordRecharge;
+import cn.qatime.player.fragment.FragmentFundRecordRefund;
 import cn.qatime.player.fragment.FragmentFundRecordWithdrawCash;
 import cn.qatime.player.fragment.FragmentFundRecordConsumption;
 import libraryextra.view.FragmentLayoutWithLine;
@@ -28,7 +29,7 @@ import libraryextra.view.FragmentLayoutWithLine;
  * @Description:
  */
 public class RecordFundActivity extends BaseFragmentActivity{
-    private int[] tab_text = {R.id.tab_text1, R.id.tab_text2,R.id.tab_text3};
+    private int[] tab_text = {R.id.tab_text1, R.id.tab_text2,R.id.tab_text3,R.id.tab_text4};
     FragmentLayoutWithLine fragmentlayout;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
     private int page;
@@ -80,6 +81,7 @@ public class RecordFundActivity extends BaseFragmentActivity{
         fragBaseFragments.add(new FragmentFundRecordRecharge());
         fragBaseFragments.add(new FragmentFundRecordWithdrawCash());
         fragBaseFragments.add(new FragmentFundRecordConsumption());
+        fragBaseFragments.add(new FragmentFundRecordRefund());
 
         fragmentlayout = (FragmentLayoutWithLine) findViewById(R.id.fragmentlayout);
 

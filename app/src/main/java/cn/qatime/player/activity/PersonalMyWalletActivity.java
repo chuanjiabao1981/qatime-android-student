@@ -48,6 +48,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
     private TextView withdrawCash;
     private Dialog alertDialog;
     DecimalFormat df = new DecimalFormat("#.00");
+    private LinearLayout refundRecord;
 
     private void assignViews() {
         balance = (TextView) findViewById(R.id.balance);
@@ -56,6 +57,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
         rechargeRecord = (LinearLayout) findViewById(R.id.recharge_record);
         consumptionRecord = (LinearLayout) findViewById(R.id.consumption_record);
         withdrawRecord = (LinearLayout) findViewById(R.id.withdraw_record);
+        refundRecord = (LinearLayout) findViewById(R.id.refund_record);
         phone = (TextView) findViewById(R.id.phone);
         recharge = (TextView) findViewById(R.id.recharge);
         withdrawCash = (TextView) findViewById(R.id.withdraw_cash);
@@ -82,6 +84,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
         consumptionRecord.setOnClickListener(this);
         rechargeRecord.setOnClickListener(this);
         withdrawRecord.setOnClickListener(this);
+        refundRecord.setOnClickListener(this);
         withdrawCash.setOnClickListener(this);
     }
 
@@ -156,6 +159,11 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
             case R.id.consumption_record:
                 intent = new Intent(this, RecordFundActivity.class);
                 intent.putExtra("page", 2);
+                startActivityForResult(intent,Constant.REQUEST);
+                break;
+            case R.id.refund_record:
+                intent = new Intent(this, RecordFundActivity.class);
+                intent.putExtra("page", 3);
                 startActivityForResult(intent,Constant.REQUEST);
                 break;
         }
