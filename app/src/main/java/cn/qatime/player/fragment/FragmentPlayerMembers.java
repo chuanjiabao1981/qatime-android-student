@@ -40,6 +40,7 @@ public class FragmentPlayerMembers extends BaseFragment {
             }
         }
     };
+    private Announcements.DataBean.MembersBean owner;
 
     @Nullable
     @Override
@@ -60,10 +61,14 @@ public class FragmentPlayerMembers extends BaseFragment {
         if (accounts != null) {
             list.clear();
             list.addAll(accounts.getMembers());
-            for (Announcements.DataBean.MembersBean item : list) {
+            for (int i = 0; i < list.size(); i++) {
+                Announcements.DataBean.MembersBean item = list.get(i);
                 if (!StringUtils.isNullOrBlanK(accounts.getOwner())) {
                     if (accounts.getOwner().equals(item.getAccid())) {
                         item.setOwner(true);
+                        list.remove(i);
+                        owner = item;
+                        i--;
                     } else {
                         item.setOwner(false);
                     }
@@ -77,9 +82,10 @@ public class FragmentPlayerMembers extends BaseFragment {
             Collections.sort(list, new Comparator<Announcements.DataBean.MembersBean>() {
                 @Override
                 public int compare(Announcements.DataBean.MembersBean lhs, Announcements.DataBean.MembersBean rhs) {
-                    return rhs.isOwner() ? 1 : lhs.getFirstLetter().compareTo(rhs.getFirstLetter());
+                    return  lhs.getFirstLetter().compareTo(rhs.getFirstLetter());
                 }
             });
+            list.add(0, owner);
             hd.postDelayed(runnable, 200);
         }
     }
