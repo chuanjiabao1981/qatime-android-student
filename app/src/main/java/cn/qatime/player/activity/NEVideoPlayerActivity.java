@@ -249,7 +249,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             public void run() {
                 screenSwitchUtils.start(NEVideoPlayerActivity.this);
             }
-        }, 2000);
+        }, 1000);
     }
 
     @Override
@@ -806,8 +806,26 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     @Override
     public void refresh() {
         if (this.videoState == VideoState.PLAYING || this.videoState == VideoState.CLOSED) {
-            video1.seekTo(video1.getCurrentPosition());
-            video2.seekTo(video2.getCurrentPosition());
+            if (video1 != null) {
+                if (video1.isPlaying()) {
+                    video1.seekTo(video1.getCurrentPosition());
+                } else {
+                    video1.release_resource();
+                    if (StringUtils.isNullOrBlanK(board)) return;
+                    video1.setVideoPath(board);
+                    video1.start();
+                }
+            }
+            if (video2 != null) {
+                if (video2.isPlaying()) {
+                    video2.seekTo(video2.getCurrentPosition());
+                } else {
+                    video2.release_resource();
+                    if (StringUtils.isNullOrBlanK(camera)) return;
+                    video2.setVideoPath(camera);
+                    video2.start();
+                }
+            }
         }
     }
 
@@ -994,7 +1012,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     @Override
     public void sendMessage(IMMessage message) {
         Logger.e("message" + message);
-        sendTextMessage(message, (screenSwitchUtils.isPortrait() && isSubBig) | !screenSwitchUtils.isPortrait());
+        sendTextMessage(message, !screenSwitchUtils.isPortrait() || isSubBig);
     }
 
     @Override
