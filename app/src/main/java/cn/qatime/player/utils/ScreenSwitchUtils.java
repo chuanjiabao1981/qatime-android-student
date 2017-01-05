@@ -105,9 +105,9 @@ public class ScreenSwitchUtils {
      * 开始监听
      */
     public void start(Activity activity) {
-        canToggle = true;
         mActivity = activity;
         sm.registerListener(listener, sensor, SensorManager.SENSOR_DELAY_UI);
+        canToggle = true;
     }
 
     /**
