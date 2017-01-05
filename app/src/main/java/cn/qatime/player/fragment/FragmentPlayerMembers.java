@@ -74,15 +74,15 @@ public class FragmentPlayerMembers extends BaseFragment {
                     }
                 }
                 if (StringUtils.isNullOrBlanK(item.getName())) {
-                    item.setFirstLetter("");
+                    item.setFirstLetters("");
                 } else {
-                    item.setFirstLetter(StringUtils.getPYIndexStr(item.getName().substring(0, 1)));
+                    item.setFirstLetters(StringUtils.getPYIndexStr(item.getName().substring(0, 1)));
                 }
             }
             Collections.sort(list, new Comparator<Announcements.DataBean.MembersBean>() {
                 @Override
                 public int compare(Announcements.DataBean.MembersBean lhs, Announcements.DataBean.MembersBean rhs) {
-                    return  lhs.getFirstLetter().compareTo(rhs.getFirstLetter());
+                    return  lhs.getFirstLetters().compareTo(rhs.getFirstLetters());
                 }
             });
             list.add(0, owner);
