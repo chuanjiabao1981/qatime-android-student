@@ -22,7 +22,7 @@ import libraryextra.utils.StringUtils;
  * 基础类
  */
 public class BaseActivity extends AppCompatActivity {
-    private RequestQueue Queue;
+    private RequestQueue Queue= BaseApplication.getRequestQueue();
     private AlertDialog alertDialog;
     protected boolean destroyed = false;
 
@@ -30,7 +30,6 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PushAgent.getInstance(this).onAppStart();
-        Queue = BaseApplication.getRequestQueue();
     }
 
     public void setTitle(String text) {

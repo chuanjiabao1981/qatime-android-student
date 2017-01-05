@@ -17,14 +17,13 @@ import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
 
 public class BaseFragment extends Fragment {
-    private RequestQueue Queue;
+    private RequestQueue Queue= BaseApplication.getRequestQueue();
     protected boolean isLoad = false;
     private AlertDialog alertDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Queue = BaseApplication.getRequestQueue();
     }
 
     public void onShow() {
