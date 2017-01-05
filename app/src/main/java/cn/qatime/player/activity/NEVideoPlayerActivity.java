@@ -239,6 +239,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         getAnnouncementsData();
         initData();
 
+        throw new RuntimeException("模拟bug");
     }
 
     @Override
@@ -393,6 +394,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                     inputPanel.setMute(isMute);
                 }
                 if (!screenSwitchUtils.isPortrait() || isSubBig) {
+                    Logger.e("弹幕显示" + danmuView.getVisibility());
                     danMuController.addDanmuList(result);
                 }
             }
@@ -516,7 +518,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             mainVideo.setLayoutParams(param);
             mainView.setLayoutParams(param);
             if (ismain) {
-//                video1.setVideoScalingMode(NEVideoView.VIDEO_SCALING_MODE_FILL);
                 whole.removeView(danmuView);
                 mainVideo.addView(danmuView, 1);
             } else {
@@ -524,6 +525,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             }
 
             danmuView.setLayoutParams(param);
+            danmuView.setVisibility(View.VISIBLE);
             //横屏时会切换为小窗口,切换时已经对弹幕做了改变
 //            if (danmuView.getVisibility() == View.GONE) {
 //                danmuView.setVisibility(View.VISIBLE);
@@ -983,6 +985,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 danmuView.setVisibility(View.VISIBLE);
                 subVideo.setVisibility(View.VISIBLE);
             } else {
+                danmuView.setVisibility(View.GONE);
+                subVideo.setVisibility(View.GONE);
                 if (ismain) {
                     video2.setVisibility(View.VISIBLE);
                     window2.setVisibility(View.VISIBLE);
@@ -997,6 +1001,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 danmuView.setVisibility(View.GONE);
                 subVideo.setVisibility(View.GONE);
             } else {
+                danmuView.setVisibility(View.VISIBLE);
+                subVideo.setVisibility(View.VISIBLE);
                 if (ismain) {
                     video2.setVisibility(View.GONE);
                     window2.setVisibility(View.GONE);
