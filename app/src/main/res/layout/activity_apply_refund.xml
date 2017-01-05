@@ -25,7 +25,7 @@
                 android:textColor="#333" />
 
             <TextView
-                android:id="@+id/order_number"
+                android:id="@+id/order_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="28dp"
@@ -44,7 +44,7 @@
                 android:textColor="#333" />
 
             <TextView
-                android:id="@+id/build_time"
+                android:id="@+id/product_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="28dp"
@@ -63,7 +63,7 @@
                 android:textColor="#333" />
 
             <TextView
-                android:id="@+id/pay_time"
+                android:id="@+id/progress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="28dp"
@@ -83,7 +83,7 @@
                 android:textColor="#333" />
 
             <TextView
-                android:id="@+id/pay_type"
+                android:id="@+id/price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="28dp"
@@ -102,7 +102,7 @@
                 android:textColor="#333" />
 
             <TextView
-                android:id="@+id/pay_price"
+                android:id="@+id/used_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="28dp"
@@ -120,6 +120,7 @@
                 android:textColor="#333" />
 
             <TextView
+                android:id="@+id/refund_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="28dp"
@@ -137,12 +138,14 @@
                 android:textColor="#333" />
 
             <TextView
+                android:id="@+id/refund_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="28dp"
                 android:textColor="#666" />
         </LinearLayout>
         <EditText
+            android:id="@+id/reason"
             android:textSize="14sp"
             android:textColorHint="#ff999999"
             android:layout_height="100dp"
@@ -156,7 +159,7 @@
             android:gravity="start" />
     </LinearLayout>
     <TextView
-        android:id="@+id/reorder"
+        android:id="@+id/confirm"
         style="@style/button_full_width_style"
         android:layout_marginTop="10dp"
         android:text="@string/confirm" />

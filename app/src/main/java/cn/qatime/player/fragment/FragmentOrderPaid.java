@@ -26,8 +26,10 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.ApplyRefundActivity;
 import cn.qatime.player.activity.PersonalMyOrderPaidDetailActivity;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.MyOrderBean;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
@@ -68,7 +70,7 @@ public class FragmentOrderPaid extends BaseFragment {
             @Override
             public void convert(ViewHolder helper, final MyOrderBean.Data item, int position) {
                 StringBuilder sp = new StringBuilder();
-                sp.append(item.getProduct().getGrade()).append(item.getProduct().getSubject()).append("/共").append(item.getProduct().getLesson_count())
+                sp.append(item.getProduct().getGrade()).append(item.getProduct().getSubject()).append("/共").append(item.getProduct().getPreset_lesson_count())
                         .append("课/").append(item.getProduct().getTeacher_name());
                 helper.setText(R.id.classname, item.getProduct().getName())
                         .setText(R.id.describe, sp.toString());
@@ -91,11 +93,8 @@ public class FragmentOrderPaid extends BaseFragment {
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                // TODO: 2017/1/3 申请退款
-                                Intent intent = new Intent(getActivity(), ApplyRefundActivity.class);
-                                intent.putExtra("id", item.getProduct().getId());
-                                intent.putExtra("page", 0);
-                                startActivity(intent);
+                                //获取退款信息
+                                applyRefund(item);
                             }
                         });
             }
@@ -139,6 +138,44 @@ public class FragmentOrderPaid extends BaseFragment {
             }
         });
 
+    }
+
+    private void applyRefund(final MyOrderBean.Data item) {
+        Map<String, String> map = new HashMap<>();
+        map.put("order_id", item.getId());
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/refunds/info", map), null,
+                new VolleyListener(getActivity()) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        Intent intent = new Intent(getActivity(), ApplyRefundActivity.class);
+                        intent.putExtra("response", response.toString());
+                        intent.putExtra("order", item);
+                        startActivityForResult(intent, Constant.REQUEST);
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+//                        Toast.makeText(getActivity(), getResourceString(R.string.order_cancel_failed), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+                Logger.e(volleyError.getMessage());
+            }
+        });
+        addToRequestQueue(request);
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        initData(1);
     }
 
     @Override

@@ -10,14 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
-import com.bumptech.glide.Glide;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -44,7 +42,6 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -82,7 +79,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
                 StringBuilder sp = new StringBuilder();
                 sp.append(item.getProduct().getGrade())
                         .append(item.getProduct().getSubject())
-                        .append("/共").append(item.getProduct().getLesson_count()).append("课")
+                        .append("/共").append(item.getProduct().getPreset_lesson_count()).append("课")
                         .append("/").append(item.getProduct().getTeacher_name());
                 helper.setText(R.id.classname, item.getProduct().getName())
                         .setText(R.id.describe, sp.toString());
