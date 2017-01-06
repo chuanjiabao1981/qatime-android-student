@@ -179,11 +179,12 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
         payPopView.showPop();
         payPopView.setOnPayPSWVerifyListener(new PayPopView.OnPayPSWVerifyListener() {
             @Override
-            public void onSuccess() {
+            public void onSuccess(String ticket_token) {
                 payPopView.dismiss();
                 Intent intent = new Intent(WithdrawCashActivity.this, WithdrawConfirmActivity.class);
                 intent.putExtra("pay_type", payType);
                 intent.putExtra("amount", amount);
+                intent.putExtra("ticket_token",ticket_token);
                 startActivityForResult(intent, Constant.REQUEST);
             }
 

@@ -118,7 +118,11 @@ public class PayPopView {
                             @Override
                             protected void onSuccess(JSONObject response) {
                                 if (listener != null) {
-                                    listener.onSuccess();
+                                    try {
+                                        listener.onSuccess(response.getString("data"));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
                             }
 
@@ -215,7 +219,7 @@ public class PayPopView {
     }
 
     public interface OnPayPSWVerifyListener {
-        void onSuccess();
+        void onSuccess(String ticket_token);
 
         /**
          *

@@ -2,7 +2,6 @@ package cn.qatime.player.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
@@ -43,9 +42,6 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
     private Button withdrawCashNow;
     private String amount;
     private String payType;
-    private EditText code;
-    private TextView textGetcode;
-    private TimeCount time;
     private AlertDialog alertDialog;
 
     private void assignViews() {
@@ -53,10 +49,6 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
         name = (EditText) findViewById(R.id.name);
         withdrawCashNow = (Button) findViewById(R.id.withdraw_cash_now);
         amount = getIntent().getStringExtra("amount");
-        code = (EditText) findViewById(R.id.code);
-        textGetcode = (TextView) findViewById(R.id.text_getcode);
-        time = new TimeCount(60000, 1000);
-        code.setHint(getResourceString(R.string.hint_input_verification_code));
         payType = getIntent().getStringExtra("pay_type");
 
         if ("alipay".equals(payType)) {
@@ -68,7 +60,6 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
         }
 
         withdrawCashNow.setOnClickListener(this);
-        textGetcode.setOnClickListener(this);
     }
 
     @Override
@@ -102,9 +93,6 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
                         Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show();
                     }
                 }));
-
-
-                time.start();
                 break;
             case R.id.withdraw_cash_now:
                 if (StringUtils.isNullOrBlanK(account.getText().toString())) { //账号
@@ -119,10 +107,6 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
                     Toast.makeText(this, getResources().getString(R.string.input_real_name), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (StringUtils.isNullOrBlanK(code.getText().toString())) { //验证码
-                    Toast.makeText(this, getResources().getString(R.string.enter_the_verification_code), Toast.LENGTH_SHORT).show();
-                    return;
-                }
 
                 map = new HashMap<>();
                 map.put("send_to", BaseApplication.getProfile().getData().getUser().getLogin_mobile());
@@ -130,7 +114,7 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
                 map.put("pay_type", payType);
                 map.put("account", account.getText().toString().trim());
                 map.put("name", name.getText().toString().trim());
-                map.put("verify", code.getText().toString().trim());
+                map.put("ticket_token", getIntent().getStringExtra("ticket_token"));
                 addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/withdraws", map), null, new VolleyListener(this) {
                     @Override
                     protected void onTokenOut() {
@@ -159,8 +143,8 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
                         try {
                             JSONObject error = response.getJSONObject("error");
                             int code = error.getInt("code");
-                            if (code == 2003) {
-                                Toast.makeText(WithdrawConfirmActivity.this, getResources().getString(R.string.code_error), Toast.LENGTH_SHORT).show();
+                            if (code == 2007) {
+                                Toast.makeText(WithdrawConfirmActivity.this, "token验证失败", Toast.LENGTH_SHORT).show();
                             } else if (code == 3002) {//  "msg": "验证失败: Value 账户资金不足，无法提取!"
                                 Toast.makeText(WithdrawConfirmActivity.this, getResources().getString(R.string.amount_not_enough), Toast.LENGTH_SHORT).show();
                             } else if (code == 3003) {//  "msg": "APIErrors::WithdrawExisted"
@@ -208,24 +192,6 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_withdraw_confirm);
         assignViews();
-    }
-
-    class TimeCount extends CountDownTimer {
-        public TimeCount(long millisInFuture, long countDownInterval) {
-            super(millisInFuture, countDownInterval);
-        }
-
-        @Override
-        public void onFinish() {// 计时完毕
-            textGetcode.setText(getResourceString(R.string.getcode));
-            textGetcode.setEnabled(true);
-        }
-
-        @Override
-        public void onTick(long millisUntilFinished) {// 计时过程
-            textGetcode.setEnabled(false);//防止重复点击
-            textGetcode.setText(millisUntilFinished / 1000 + getResourceString(R.string.time_after_acquisition));
-        }
     }
 
     @Override

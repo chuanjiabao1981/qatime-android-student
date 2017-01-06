@@ -206,7 +206,7 @@ public class OrderPayActivity extends BaseActivity {
         payPopView.showPop();
         payPopView.setOnPayPSWVerifyListener(new PayPopView.OnPayPSWVerifyListener() {
             @Override
-            public void onSuccess() {
+            public void onSuccess(String ticket_token) {
                 // TODO: 2016/12/20 调用接口支付订单
                 payPopView.dismiss();
 
