@@ -7,7 +7,6 @@
     android:orientation="vertical">
 
     <include layout="@layout/layout_backbar" />
-
     <View
 
         android:layout_width="match_parent"
@@ -39,49 +38,13 @@
             android:src="@mipmap/personal_enter" />
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#dfdddd" />
 
-    <LinearLayout
-        android:id="@+id/learning_process"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#fff"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
-            style="@style/setting_text_style"
-            android:text="@string/learning_process" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-
-        <ImageView
-            style="@style/setting_icon_margin_right"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:src="@mipmap/personal_enter" />
-    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#dfdddd" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="10dp" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#dfdddd" />
 
     <LinearLayout
         android:id="@+id/check_update"
@@ -199,6 +162,35 @@
         <TextView
             style="@style/setting_text_style"
             android:text="@string/about_us" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+
+        <ImageView
+            style="@style/setting_icon_margin_right"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:src="@mipmap/personal_enter" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dfdddd" />
+
+    <LinearLayout
+        android:id="@+id/learning_process"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/setting_text_style"
+            android:text="@string/learning_process" />
 
         <View
             android:layout_width="0dp"

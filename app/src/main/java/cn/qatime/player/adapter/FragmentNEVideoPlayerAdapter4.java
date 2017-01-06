@@ -37,8 +37,8 @@ public class FragmentNEVideoPlayerAdapter4 extends CommonAdapter<Announcements.D
 
     @Override
     public void convert(ViewHolder holder, Announcements.DataBean.MembersBean item, int position) {
-        if (!letterMap.containsKey(item.getFirstLetter())) {
-            letterMap.put(item.getFirstLetter(), position);
+        if (!letterMap.containsKey(item.getFirstLetters())) {
+            letterMap.put(item.getFirstLetters(), position);
         }
         if (item.isOwner()) {
             ((TextView) holder.getView(R.id.name)).setTextColor(0xffbe0b0b);

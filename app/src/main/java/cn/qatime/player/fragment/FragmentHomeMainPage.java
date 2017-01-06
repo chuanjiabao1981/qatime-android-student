@@ -250,11 +250,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private void initGridTeacher() {
         teacherAdapter = new CommonAdapter<TeacherRecommendBean.DataBean>(getContext(), listRecommendTeacher, R.layout.item_grid_teacher) {
             @Override
-            public int getCount() {
-                return listRecommendTeacher.size();
-            }
-
-            @Override
             public void convert(ViewHolder holder, TeacherRecommendBean.DataBean item, int position) {
                 if (item != null) {
                     Glide.with(getActivity()).load(item.getTeacher().getAvatar_url()).error(R.mipmap.error_header).centerCrop().bitmapTransform(new GlideCircleTransform(getActivity())).crossFade().dontAnimate().into(((ImageView) holder.getView(R.id.teacher_img)));
@@ -303,7 +298,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                             page = 1; //一旦size小于5，说明没有更多推荐老师了，将page重置
                             while (listRecommendTeacher.size() < 5) {
                                 listRecommendTeacher.add(null);
-
                             }
                         }
                         teacherAdapter.notifyDataSetChanged();
