@@ -240,12 +240,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                 aliPay.setImageResource(R.drawable.shape_select_circle_select);
                 wechatPay.setImageResource(R.drawable.shape_select_circle_normal);
                 account.setImageResource(R.drawable.shape_select_circle_normal);
-
-                //TODO 集成完支付宝后，去掉下面这段
-                Toast.makeText(OrderConfirmActivity.this, getResourceString(R.string.not_support_alipay), Toast.LENGTH_SHORT).show();
-                wechatPay.setImageResource(R.drawable.shape_select_circle_select);
-                aliPay.setImageResource(R.drawable.shape_select_circle_normal);
-                payType = "weixin";
             }
         });
         wechatLayout.setOnClickListener(new View.OnClickListener() {
