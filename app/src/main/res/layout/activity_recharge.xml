@@ -31,7 +31,9 @@
                 android:hint="@string/recharge_num_hint"
                 android:inputType="numberDecimal"
                 android:paddingRight="20dp" />
+
             <TextView
+                android:id="@+id/textView11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -39,15 +41,14 @@
                 android:layout_marginRight="10dp"
                 android:text="元"
                 android:textColor="#666666"
-                android:textSize="16sp"
-                android:id="@+id/textView11" />
+                android:textSize="16sp" />
         </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="5dp"
+            android:orientation="horizontal"
             android:paddingLeft="32dp"
             android:paddingRight="32dp">
 
@@ -105,7 +106,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="5dp">
+                    android:padding="5dp"
+                    android:visibility="gone">
 
                     <ImageView
                         android:id="@+id/alipay"
@@ -136,16 +138,16 @@
 
         <Button
             android:id="@+id/recharge_now"
-            android:layout_marginTop="5dp"
             style="@style/button_full_width_style"
+            android:layout_marginTop="5dp"
             android:text="@string/recharge_now" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="6dp"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="6dp"
         android:layout_marginTop="12dp"
         android:gravity="center"
         android:orientation="horizontal">

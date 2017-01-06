@@ -239,7 +239,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         getAnnouncementsData();
         initData();
 
-//        throw new RuntimeException("模拟bug");
     }
 
     @Override
@@ -347,6 +346,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             @Override
             public void OnInputShow() {
                 if (isSubBig) {
+                    floatFragment.setSubOpen(true);
+                    isSubOpen = true;
                     changeSubSmall();
                     floatFragment.setSubBig(false);
                 }
@@ -375,6 +376,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                     inputPanel.goneInput();
                 }
                 if (isSubBig) {
+                    floatFragment.setSubOpen(true);
+                    isSubOpen = true;
                     changeSubSmall();
                     floatFragment.setSubBig(false);
                 }
@@ -525,16 +528,17 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             }
 
             danmuView.setLayoutParams(param);
-            danmuView.setVisibility(View.VISIBLE);
             //横屏时会切换为小窗口,切换时已经对弹幕做了改变
 //            if (danmuView.getVisibility() == View.GONE) {
 //                danmuView.setVisibility(View.VISIBLE);
 //            }
-            if (isSubBig) {
+            if (isSubBig) {//  横屏时会切换为小窗口,切换时已经对弹幕做了改变
                 floatFragment.setSubOpen(true);
                 isSubOpen = true;
                 changeSubSmall();
                 floatFragment.setSubBig(false);
+            } else {//  本来就小窗口时,弹幕开启
+                danmuView.setVisibility(View.VISIBLE);
             }
             //横屏时打开弹幕
             Logger.e("弹幕状态" + danMuController.getStatus().toString());
@@ -919,6 +923,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             danmuParam.addRule(RelativeLayout.BELOW, R.id.main_video);
             danmuView.setLayoutParams(danmuParam);
             danmuView.setVisibility(View.GONE);
+        } else {
+            if (danmuView.getVisibility() == View.GONE) {
+                danmuView.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -985,8 +993,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 danmuView.setVisibility(View.VISIBLE);
                 subVideo.setVisibility(View.VISIBLE);
             } else {
-                danmuView.setVisibility(View.GONE);
-                subVideo.setVisibility(View.GONE);
                 if (ismain) {
                     video2.setVisibility(View.VISIBLE);
                     window2.setVisibility(View.VISIBLE);
@@ -1001,8 +1007,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 danmuView.setVisibility(View.GONE);
                 subVideo.setVisibility(View.GONE);
             } else {
-                danmuView.setVisibility(View.VISIBLE);
-                subVideo.setVisibility(View.VISIBLE);
                 if (ismain) {
                     video2.setVisibility(View.GONE);
                     window2.setVisibility(View.GONE);
