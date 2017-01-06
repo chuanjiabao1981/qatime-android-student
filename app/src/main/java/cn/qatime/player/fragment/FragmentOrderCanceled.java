@@ -8,11 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.android.volley.VolleyError;
-import com.bumptech.glide.Glide;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -70,12 +68,12 @@ public class FragmentOrderCanceled extends BaseFragment {
             @Override
             public void convert(ViewHolder helper, final MyOrderBean.Data item, final int position) {
                 StringBuilder sp = new StringBuilder();
-                sp.append(item.getProduct().getGrade()).append(item.getProduct().getSubject()).append("/共").append(item.getProduct().getLesson_count())
+                sp.append(item.getProduct().getGrade()).append(item.getProduct().getSubject()).append("/共").append(item.getProduct().getPreset_lesson_count())
                         .append("课/").append(item.getProduct().getTeacher_name());
                 helper.setText(R.id.classname, item.getProduct().getName())
                         .setText(R.id.describe, sp.toString());
                 if (item.getStatus().equals("refunded")) {//交易关闭
-                    helper.setText(R.id.status, getResourceString(R.string.deal_closed));
+                    helper.setText(R.id.status, "已退款");
                 } else if (item.getStatus().equals("canceled")) {//交易关闭
                     helper.setText(R.id.status, getResourceString(R.string.deal_closed));
                 } else if (item.getStatus().equals("expired")) {//交易关闭
@@ -83,7 +81,7 @@ public class FragmentOrderCanceled extends BaseFragment {
                 } else {//已取消
                     helper.setText(R.id.status, "        ");
                 }
-                String price = df.format(item.getProduct().getCurrent_price());
+                String price = item.getAmount();
                 if (price.startsWith(".")) {
                     price = "0" + price;
                 }
@@ -152,6 +150,7 @@ public class FragmentOrderCanceled extends BaseFragment {
                 bean.Preset_lesson_count = list.get(position - 1).getProduct().getPreset_lesson_count();
                 bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
                 bean.current_price = list.get(position - 1).getProduct().getCurrent_price();
+                bean.amount = list.get(position-1).getAmount();
                 intent.putExtra("data", bean);
                 startActivity(intent);
             }

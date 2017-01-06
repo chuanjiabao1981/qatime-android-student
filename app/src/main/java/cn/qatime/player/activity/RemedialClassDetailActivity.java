@@ -214,9 +214,10 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                         name.setText(data.getData().getName());
                         title.setText(data.getData().getName());
                         if (data.getData() != null) {
-                            String price = null;
+                            String price ;
                             if (Constant.CourseStatus.finished.equals(data.getData().getStatus()) || Constant.CourseStatus.completed.equals(data.getData().getStatus())) {
                                 price = df.format(data.getData().getPrice());
+                                // TODO: 2017/1/6 已结束的课程 不允许试听、购买（audition auditionStart pay startStudy）
                             } else {
                                 price = df.format(data.getData().getCurrent_price());
                             }

@@ -31,6 +31,7 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.CityBean;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.PinyinUtils;
 import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -87,14 +88,16 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
                             for (CityBean.Data item : list) {
                                 if (StringUtils.isNullOrBlanK(item.getName())) {
                                     item.setFirstLetter("");
+                                    item.setFirstLetters("");
                                 } else {
-                                    item.setFirstLetter(StringUtils.getPYIndexStr(item.getName().substring(0, 1)));
+                                    item.setFirstLetter(PinyinUtils.getPinyinFirstLetter(item.getName()).toUpperCase());
+                                    item.setFirstLetters(PinyinUtils.getPinyinFirstLetters(item.getName()));
                                 }
                             }
                             Collections.sort(list, new Comparator<CityBean.Data>() {
                                 @Override
                                 public int compare(CityBean.Data lhs, CityBean.Data rhs) {
-                                    return lhs.getFirstLetter().compareTo(rhs.getFirstLetter());
+                                    return lhs.getFirstLetters().compareTo(rhs.getFirstLetters());
                                 }
                             });
                             int position = 2;

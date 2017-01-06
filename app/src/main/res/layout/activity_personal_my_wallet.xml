@@ -188,6 +188,36 @@
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="#dfdddd" />
+
+        <LinearLayout
+            android:id="@+id/refund_record"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/setting_text_style"
+                android:text="@string/refund_record" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:background="#ffffff" />
+
+            <ImageView
+                style="@style/setting_icon_margin_right"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:src="@mipmap/personal_enter" />
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#dfdddd" />
     </LinearLayout>
 
     <LinearLayout

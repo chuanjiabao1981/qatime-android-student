@@ -128,7 +128,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                         if (payType.equals("weixin")) {
                             if (data != null) {
                                 Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
-                                intent.putExtra("price", priceNumber);
+                                intent.putExtra("price",   data.getData().getAmount());
                                 intent.putExtra("id", data.getData().getId());
                                 intent.putExtra("time", data.getData().getCreated_at());
                                 intent.putExtra("type", payType);
@@ -142,7 +142,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                         } else if (payType.equals("alipay")) {
                             if (data != null) {
                                 Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
-                                intent.putExtra("price", priceNumber);
+                                intent.putExtra("price", data.getData().getAmount());
                                 intent.putExtra("id", data.getData().getId());
                                 intent.putExtra("time", data.getData().getCreated_at());
                                 intent.putExtra("type", payType);

@@ -18,6 +18,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.adapter.FragmentNEVideoPlayerAdapter4;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.bean.Announcements;
+import libraryextra.utils.PinyinUtils;
 import libraryextra.utils.StringUtils;
 
 public class FragmentPlayerMembers extends BaseFragment {
@@ -77,7 +78,7 @@ public class FragmentPlayerMembers extends BaseFragment {
                 if (StringUtils.isNullOrBlanK(item.getName())) {
                     item.setFirstLetters("");
                 } else {
-                    item.setFirstLetters(StringUtils.getPYIndexStr(item.getName().substring(0, 1)));
+                    item.setFirstLetters(PinyinUtils.getPinyinFirstLetters(item.getName()));
                 }
             }
             Collections.sort(list, new Comparator<Announcements.DataBean.MembersBean>() {
