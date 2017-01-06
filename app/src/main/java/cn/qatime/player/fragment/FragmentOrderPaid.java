@@ -79,17 +79,21 @@ public class FragmentOrderPaid extends BaseFragment {
                         .append("课/").append(item.getProduct().getTeacher_name());
                 helper.setText(R.id.classname, item.getProduct().getName())
                         .setText(R.id.describe, sp.toString());
-                if (item.getStatus().equals("shipped")) {//正在交易
-                    helper.setText(R.id.status, getResourceString(R.string.dealing));
-                } else if (item.getStatus().equals("paid")) {//正在交易
-                    helper.setText(R.id.status, getResourceString(R.string.dealing));
-                } else if (item.getStatus().equals("refunding")) {//正在交易
+
+                if (item.getStatus().equals("refunding")) {//正在交易
                     helper.setText(R.id.status, "退款中");
                     helper.setText(R.id.apply_refund, "取消退款");
-                } else if (item.getStatus().equals("completed")) {//交易完成
-                    helper.setText(R.id.status, getResourceString(R.string.deal_done));
-                } else {//
-                    helper.setText(R.id.status, "  ");
+                } else {
+                    helper.setText(R.id.apply_refund, "申请退款");
+                    if (item.getStatus().equals("shipped")) {//正在交易
+                        helper.setText(R.id.status, getResourceString(R.string.dealing));
+                    } else if (item.getStatus().equals("paid")) {//正在交易
+                        helper.setText(R.id.status, getResourceString(R.string.dealing));
+                    } else if (item.getStatus().equals("completed")) {//交易完成
+                        helper.setText(R.id.status, getResourceString(R.string.deal_done));
+                    } else {//
+                        helper.setText(R.id.status, "  ");
+                    }
                 }
                 String price = item.getAmount();
                 if (price.startsWith(".")) {
@@ -149,7 +153,7 @@ public class FragmentOrderPaid extends BaseFragment {
                 intent.putExtra("payType", list.get(position - 1).getPay_type());
                 intent.putExtra("created_at", list.get(position - 1).getCreated_at());
                 intent.putExtra("pay_at", list.get(position - 1).getPay_at());
-                startActivity(intent);
+                startActivityForResult(intent,Constant.REQUEST);
             }
         });
 
@@ -220,7 +224,10 @@ public class FragmentOrderPaid extends BaseFragment {
                     protected void onSuccess(JSONObject response) {
                         Intent intent = new Intent(getActivity(), ApplyRefundActivity.class);
                         intent.putExtra("response", response.toString());
-                        intent.putExtra("order", item);
+                        intent.putExtra("order_id", item.getId());
+                        intent.putExtra("name",item.getProduct().getName());
+                        intent.putExtra("preset_lesson_count",item.getProduct().getPreset_lesson_count());
+                        intent.putExtra("completed_lesson_count",item.getProduct().getCompleted_lesson_count());
                         startActivityForResult(intent, Constant.REQUEST);
                     }
 
@@ -247,7 +254,9 @@ public class FragmentOrderPaid extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //需要刷新数据
-        initData(1);
+        if(requestCode==Constant.REQUEST&&resultCode==Constant.RESPONSE){
+            initData(1);
+        }
     }
 
     @Override

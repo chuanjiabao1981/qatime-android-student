@@ -19,7 +19,6 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
-import cn.qatime.player.bean.MyOrderBean;
 import cn.qatime.player.bean.OrderRefundBean;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
@@ -37,7 +36,6 @@ import libraryextra.utils.VolleyListener;
 public class ApplyRefundActivity extends BaseActivity {
 
     private OrderRefundBean orderRefundBean;
-    private MyOrderBean.Data order;
     private TextView orderId;
     private TextView productName;
     private TextView progress;
@@ -72,12 +70,11 @@ public class ApplyRefundActivity extends BaseActivity {
     private void initView() {
         setTitle("退款申请");
         String response = getIntent().getStringExtra("response");
-        order = (MyOrderBean.Data) getIntent().getSerializableExtra("order");
         orderRefundBean = JsonUtils.objectFromJson(response, OrderRefundBean.class);
 
-        orderId.setText(order.getId());
-        productName.setText(order.getProduct().getName());
-        progress.setText(order.getProduct().getCompleted_lesson_count() + "/" + order.getProduct().getPreset_lesson_count());
+        orderId.setText(getIntent().getStringExtra("order_id"));
+        productName.setText(getIntent().getStringExtra("name"));
+        progress.setText(getIntent().getIntExtra("completed_lesson_count",0) + "/" + getIntent().getIntExtra("preset_lesson_count",0));
         price.setText("￥" + orderRefundBean.getData().getAmount());
         usedAmount.setText("￥" + (Double.valueOf(orderRefundBean.getData().getAmount()) - Double.valueOf(orderRefundBean.getData().getRefund_amount())));
         String pay_type = orderRefundBean.getData().getPay_type();
@@ -108,7 +105,7 @@ public class ApplyRefundActivity extends BaseActivity {
         }
 
         Map<String, String> map = new HashMap<>();
-        map.put("order_id", order.getId());
+        map.put("order_id", getIntent().getStringExtra("order_id"));
         map.put("reason", reason.getText().toString());
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST,UrlUtils.getUrl(UrlUtils.urlpayment+ BaseApplication.getUserId() + "/refunds", map), null,
                 new VolleyListener(ApplyRefundActivity.this) {

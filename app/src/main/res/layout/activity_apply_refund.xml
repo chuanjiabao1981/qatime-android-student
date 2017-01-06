@@ -145,19 +145,28 @@
                 android:layout_marginLeft="28dp"
                 android:textColor="#666" />
         </LinearLayout>
+
         <EditText
             android:id="@+id/reason"
             android:textSize="14sp"
-            android:textColorHint="#ff999999"
+            android:textColorHint="#cccccc"
             android:layout_height="100dp"
-            android:padding="12dp"
+            android:padding="5dp"
             android:layout_margin="5dp"
             android:layout_width="match_parent"
             android:background="@drawable/shape_input"
             android:textColor="#ff333333"
+            android:maxLength="20"
             android:hint="请输入退款原因（20字以内）"
             android:singleLine="true"
             android:gravity="start" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:textSize="12sp"
+            android:text="说明：退款过程中您将不能进行此课程的学习"
+            android:textColor="#999999"/>
     </LinearLayout>
     <TextView
         android:id="@+id/confirm"

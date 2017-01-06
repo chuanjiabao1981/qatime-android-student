@@ -202,7 +202,11 @@
         </LinearLayout>
 
     </LinearLayout>
-
+    <TextView
+        android:id="@+id/button_refund"
+        style="@style/button_full_width_style"
+        android:layout_marginTop="10dp"
+        android:text="申请退款" />
 </LinearLayout>
 
 
