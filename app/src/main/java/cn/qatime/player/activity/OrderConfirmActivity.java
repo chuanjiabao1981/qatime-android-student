@@ -153,7 +153,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                             //余额支付成功  status---failed交易失败  shipped交易成功
 //                            try {
                             Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
-                            intent.putExtra("price", priceNumber);
+                            intent.putExtra("price",  data.getData().getAmount());
                             intent.putExtra("id", data.getData().getId());
                             intent.putExtra("time", data.getData().getCreated_at());
                             intent.putExtra("type", payType);
@@ -161,15 +161,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                             intent.putExtra("data", app_pay_params);
                             startActivity(intent);
                             pay.setEnabled(true);
-//                                if (response.getJSONObject("data").getString("status").equals("shipped")) {
-//                                    EventBus.getDefault().post(PayResultState.SUCCESS);
-//                                    finish();
-//                                } else {
-//                                    Toast.makeText(OrderConfirmActivity.this, "余额不足", Toast.LENGTH_SHORT).show();
-//                                }
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
                         }
                         pay.setEnabled(true);
                     }

@@ -128,7 +128,7 @@ public class OrderPayActivity extends BaseActivity {
         } else {
             type.setText(getResourceString(R.string.pay_account));
         }
-        String price = getIntent().getStringExtra("price");
+        amount = getIntent().getStringExtra("price");
         this.price.setText("￥" + amount);
     }
 
