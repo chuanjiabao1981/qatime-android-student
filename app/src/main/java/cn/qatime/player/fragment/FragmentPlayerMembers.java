@@ -11,6 +11,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 import cn.qatime.player.R;
@@ -61,14 +62,14 @@ public class FragmentPlayerMembers extends BaseFragment {
         if (accounts != null) {
             list.clear();
             list.addAll(accounts.getMembers());
-            for (int i = 0; i < list.size(); i++) {
-                Announcements.DataBean.MembersBean item = list.get(i);
+            Iterator<Announcements.DataBean.MembersBean> it = list.iterator();
+            while (it.hasNext()) {
+                Announcements.DataBean.MembersBean item = it.next();
                 if (!StringUtils.isNullOrBlanK(accounts.getOwner())) {
                     if (accounts.getOwner().equals(item.getAccid())) {
                         item.setOwner(true);
-                        list.remove(i);
                         owner = item;
-                        i--;
+                        it.remove();
                     } else {
                         item.setOwner(false);
                     }
@@ -82,10 +83,12 @@ public class FragmentPlayerMembers extends BaseFragment {
             Collections.sort(list, new Comparator<Announcements.DataBean.MembersBean>() {
                 @Override
                 public int compare(Announcements.DataBean.MembersBean lhs, Announcements.DataBean.MembersBean rhs) {
-                    return  lhs.getFirstLetters().compareTo(rhs.getFirstLetters());
+                    return lhs.getFirstLetters().compareTo(rhs.getFirstLetters());
                 }
             });
-            list.add(0, owner);
+            if (owner != null) {
+                list.add(0, owner);
+            }
             hd.postDelayed(runnable, 200);
         }
     }

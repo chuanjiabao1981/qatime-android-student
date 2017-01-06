@@ -184,6 +184,7 @@ public class ScreenSwitchUtils {
                 }
             }
             if (rotateHandler != null) {
+                rotateHandler.removeMessages(888);
                 rotateHandler.obtainMessage(888, orientation, 0).sendToTarget();
             }
         }

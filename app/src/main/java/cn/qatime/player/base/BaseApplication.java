@@ -98,7 +98,7 @@ public class BaseApplication extends Application {
         currentCity = SPUtils.getObject(this, "current_city", CityBean.Data.class);
         shakeStatus = (boolean) SPUtils.get(this, "shake_status", true);
         voiceStatus = (boolean) SPUtils.get(this, "voice_status", true);
-
+//        CrashHandler.getInstance().init(this);
         //y友盟统计
         MobclickAgent.setDebugMode(Configure.isDebug);
         initUmengPush();

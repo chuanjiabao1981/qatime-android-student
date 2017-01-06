@@ -296,8 +296,9 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
                     subSwitch.setImageResource(R.mipmap.float_subvideo_close);
                     if (!callback.isPortrait()) {
                         viewChange.setVisibility(View.GONE);
-                    } else {
                         danmuSwitch.setVisibility(View.VISIBLE);
+                    } else {
+                        danmuSwitch.setVisibility(View.GONE);
                         viewChange.setVisibility(View.VISIBLE);
                     }
                     ivSwitch.setVisibility(View.VISIBLE);
