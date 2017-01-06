@@ -91,7 +91,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
                                     item.setFirstLetters("");
                                 } else {
                                     item.setFirstLetter(PinyinUtils.getPinyinFirstLetter(item.getName()).toUpperCase());
-                                    item.setFirstLetter(PinyinUtils.getPinyinFirstLetters(item.getName()));
+                                    item.setFirstLetters(PinyinUtils.getPinyinFirstLetters(item.getName()));
                                 }
                             }
                             Collections.sort(list, new Comparator<CityBean.Data>() {

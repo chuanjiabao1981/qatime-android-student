@@ -239,7 +239,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         getAnnouncementsData();
         initData();
 
-        throw new RuntimeException("模拟bug");
+//        throw new RuntimeException("模拟bug");
     }
 
     @Override
