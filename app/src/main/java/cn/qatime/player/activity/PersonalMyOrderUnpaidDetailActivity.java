@@ -112,8 +112,10 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         String payType = data.getPay_type();//支付方式
         if (payType.equals("weixin")) {
             paytype.setText(getResourceString(R.string.wechat_payment));
-        } else {
+        } else if (payType.equals("alipay")) {
             paytype.setText(getResourceString(R.string.alipay_payment));
+        } else {
+            paytype.setText(getResourceString(R.string.account_payment));
         }
         progress.setText("共" + data.getProduct().getPreset_lesson_count() + "课");
         PersonalMyOrderUnpaidDetailActivity.this.payprice.setText(data.getAmount());

@@ -6,9 +6,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -68,6 +70,7 @@ public class ApplyRefundActivity extends BaseActivity {
     }
 
     private void initView() {
+        setTitle("退款申请");
         String response = getIntent().getStringExtra("response");
         order = (MyOrderBean.Data) getIntent().getSerializableExtra("order");
         orderRefundBean = JsonUtils.objectFromJson(response, OrderRefundBean.class);
@@ -77,7 +80,14 @@ public class ApplyRefundActivity extends BaseActivity {
         progress.setText(order.getProduct().getCompleted_lesson_count() + "/" + order.getProduct().getPreset_lesson_count());
         price.setText("￥" + orderRefundBean.getData().getAmount());
         usedAmount.setText("￥" + (Double.valueOf(orderRefundBean.getData().getAmount()) - Double.valueOf(orderRefundBean.getData().getRefund_amount())));
-        refundType.setText("退至余额");
+        String pay_type = orderRefundBean.getData().getPay_type();
+        if ("weixin".equals(pay_type)) {
+            refundType.setText("退至微信");
+        } else if ("alipay".equals(pay_type)) {
+            refundType.setText("退至支付宝");
+        } else {
+            refundType.setText("退至余额");
+        }
         refundAmount.setText("￥" + orderRefundBean.getData().getRefund_amount());
 
         confirm.setOnClickListener(new View.OnClickListener() {
@@ -99,11 +109,12 @@ public class ApplyRefundActivity extends BaseActivity {
 
         Map<String, String> map = new HashMap<>();
         map.put("order_id", order.getId());
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlpayment + "/users/" + BaseApplication.getUserId() + "/refunds/info", map), null,
+        map.put("reason", reason.getText().toString());
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST,UrlUtils.getUrl(UrlUtils.urlpayment+ BaseApplication.getUserId() + "/refunds", map), null,
                 new VolleyListener(ApplyRefundActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        // TODO: 2017/1/5 到退款详情页
+                        Toast.makeText(ApplyRefundActivity.this, "退款申请成功", Toast.LENGTH_SHORT).show();
                         setResult(Constant.RESPONSE);
                         finish();
                     }
@@ -111,6 +122,13 @@ public class ApplyRefundActivity extends BaseActivity {
                     @Override
                     protected void onError(JSONObject response) {
 //                        Toast.makeText(getActivity(), getResourceString(R.string.order_cancel_failed), Toast.LENGTH_SHORT).show();
+                        try {
+                            if(response.getJSONObject("error").getInt("code")==3002){
+                                Toast.makeText(ApplyRefundActivity.this, "暂无法申请退款", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
@@ -124,7 +142,7 @@ public class ApplyRefundActivity extends BaseActivity {
                 Logger.e(volleyError.getMessage());
             }
         });
-//        addToRequestQueue(request);
+        addToRequestQueue(request);
 
     }
 }

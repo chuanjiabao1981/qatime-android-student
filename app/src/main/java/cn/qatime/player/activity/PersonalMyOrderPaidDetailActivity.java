@@ -96,13 +96,17 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
         String payType = getIntent().getStringExtra("payType");//支付方式
         if (payType.equals("weixin")) {
             paytype.setText(getResourceString(R.string.wechat_payment));
-        } else {
+        } else if (payType.equals("alipay")) {
             paytype.setText(getResourceString(R.string.alipay_payment));
+        } else {
+            paytype.setText(getResourceString(R.string.account_payment));
         }
         if (data.status.equals("paid")) {//正在交易
             status.setImageResource(R.mipmap.paying);
         } else if (data.status.equals("shipped")) {//正在交易
             status.setImageResource(R.mipmap.paying);
+        }else if (data.status.equals("refunding")) {//退款中
+            status.setImageResource(R.mipmap.refunding);
         } else {//交易完成
             status.setImageResource(R.mipmap.complete_pay);
         }

@@ -73,7 +73,7 @@ public class FragmentOrderCanceled extends BaseFragment {
                 helper.setText(R.id.classname, item.getProduct().getName())
                         .setText(R.id.describe, sp.toString());
                 if (item.getStatus().equals("refunded")) {//交易关闭
-                    helper.setText(R.id.status, getResourceString(R.string.deal_closed));
+                    helper.setText(R.id.status, "已退款");
                 } else if (item.getStatus().equals("canceled")) {//交易关闭
                     helper.setText(R.id.status, getResourceString(R.string.deal_closed));
                 } else if (item.getStatus().equals("expired")) {//交易关闭

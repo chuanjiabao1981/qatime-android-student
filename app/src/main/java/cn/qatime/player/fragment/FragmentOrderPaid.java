@@ -3,13 +3,18 @@ package cn.qatime.player.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -78,6 +83,9 @@ public class FragmentOrderPaid extends BaseFragment {
                     helper.setText(R.id.status, getResourceString(R.string.dealing));
                 } else if (item.getStatus().equals("paid")) {//正在交易
                     helper.setText(R.id.status, getResourceString(R.string.dealing));
+                } else if (item.getStatus().equals("refunding")) {//正在交易
+                    helper.setText(R.id.status, "退款中");
+                    helper.setText(R.id.apply_refund, "取消退款");
                 } else if (item.getStatus().equals("completed")) {//交易完成
                     helper.setText(R.id.status, getResourceString(R.string.deal_done));
                 } else {//
@@ -93,9 +101,15 @@ public class FragmentOrderPaid extends BaseFragment {
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                //获取退款信息
-                                applyRefund(item);
+                                if ("refunding".equals(item.getStatus())) {
+                                    //取消退款
+                                    dialog(item);
+                                } else {
+                                    //获取退款信息
+                                    applyRefund(item);
+                                }
                             }
+
                         });
             }
         };
@@ -130,7 +144,7 @@ public class FragmentOrderPaid extends BaseFragment {
                 bean.Preset_lesson_count = list.get(position - 1).getProduct().getPreset_lesson_count();
                 bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
                 bean.current_price = list.get(position - 1).getProduct().getCurrent_price();
-                bean.amount = list.get(position-1).getAmount();
+                bean.amount = list.get(position - 1).getAmount();
                 intent.putExtra("data", bean);
                 intent.putExtra("payType", list.get(position - 1).getPay_type());
                 intent.putExtra("created_at", list.get(position - 1).getCreated_at());
@@ -139,6 +153,62 @@ public class FragmentOrderPaid extends BaseFragment {
             }
         });
 
+    }
+
+    protected void dialog(final MyOrderBean.Data item) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog alertDialog = builder.create();
+        View view = View.inflate(getActivity(), R.layout.dialog_cancel_or_confirm, null);
+        TextView text = (TextView) view.findViewById(R.id.text);
+        text.setText("是否确认取消退款");
+        Button cancel = (Button) view.findViewById(R.id.cancel);
+        Button confirm = (Button) view.findViewById(R.id.confirm);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cancelRefund(item);
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.show();
+        alertDialog.setContentView(view);
+//        WindowManager.LayoutParams attributes = alertDialog.getWindow().getAttributes();
+//        attributes.width= ScreenUtils.getScreenWidth(getActivity())- DensityUtils.dp2px(getActivity(),20)*2;
+//        alertDialog.getWindow().setAttributes(attributes);
+    }
+
+    private void cancelRefund(MyOrderBean.Data item) {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.urlpayment + BaseApplication.getUserId() + "/refunds/" + item.getId() + "/cancel", null,
+                new VolleyListener(getActivity()) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        Toast.makeText(getActivity(), "取消退款申请成功", Toast.LENGTH_SHORT).show();
+                        initData(1);
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                        Toast.makeText(getActivity(), "取消退款申请失败", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+                Logger.e(volleyError.getMessage());
+            }
+        });
+        addToRequestQueue(request);
     }
 
     private void applyRefund(final MyOrderBean.Data item) {
@@ -176,6 +246,7 @@ public class FragmentOrderPaid extends BaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //需要刷新数据
         initData(1);
     }
 

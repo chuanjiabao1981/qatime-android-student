@@ -119,7 +119,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
                             @Override
                             public void onClick(View v) {
                                 String id = list.get(position).getId();
-                                dialog(position, id);
+                                dialog(id);
                             }
                         });
 
@@ -231,7 +231,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
         addToRequestQueue(request);
     }
 
-    protected void dialog(final int position, final String id) {
+    protected void dialog(final String id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final AlertDialog alertDialog = builder.create();
         View view = View.inflate(getActivity(), R.layout.dialog_cancel_or_confirm, null);
@@ -248,7 +248,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CancelOrder(position, id);
+                CancelOrder(id);
                 alertDialog.dismiss();
             }
         });
@@ -259,14 +259,12 @@ public class FragmentOrderUnpaid extends BaseFragment {
 //        alertDialog.getWindow().setAttributes(attributes);
     }
 
-    private void CancelOrder(final int position, String id) {
+    private void CancelOrder(String id) {
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.urlPaylist + "/" + id + "/cancel", null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        list.remove(position);
-                        Toast.makeText(getActivity(), getResourceString(R.string.order_cancel_success), Toast.LENGTH_SHORT).show();
-                        adapter.notifyDataSetChanged();
+                       initData(1);
                     }
 
                     @Override
