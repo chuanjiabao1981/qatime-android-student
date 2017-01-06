@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.netease.nimlib.p.b;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.attachment.FileAttachment;
@@ -29,6 +30,7 @@ import com.netease.nimlib.sdk.team.model.MemberChangeAttachment;
 import com.netease.nimlib.sdk.team.model.MuteMemberAttachment;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.UpdateTeamAttachment;
+import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -185,7 +187,9 @@ public class MessageAdapter extends BaseAdapter {
             textHolder.right.setVisibility(View.GONE);
             textHolder.left.setVisibility(View.VISIBLE);
             if (BaseApplication.getUserInfoProvide() != null) {
-                Glide.with(context).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_default).crossFade().dontAnimate().into((ImageView) textHolder.otherhead);
+                UserInfoProvider.UserInfo userinfo = BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount());
+                if (userinfo != null)
+                    Glide.with(context).load(userinfo.getAvatar()).placeholder(R.mipmap.head_default).crossFade().dontAnimate().into((ImageView) textHolder.otherhead);
             }
             textHolder.othercontent.setText(ExpressionUtil.getExpressionString(
                     context, item.getContent(), ExpressionUtil.emoji, cache, new GifDrawable.UpdateListener() {
@@ -199,7 +203,9 @@ public class MessageAdapter extends BaseAdapter {
             textHolder.right.setVisibility(View.VISIBLE);
             textHolder.left.setVisibility(View.GONE);
             if (BaseApplication.getUserInfoProvide() != null) {
-                Glide.with(context).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_default).crossFade().dontAnimate().into((ImageView) textHolder.headmine);
+                UserInfoProvider.UserInfo userinfo = BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount());
+                if (userinfo != null)
+                    Glide.with(context).load(userinfo.getAvatar()).placeholder(R.mipmap.head_default).crossFade().dontAnimate().into((ImageView) textHolder.headmine);
             }
             textHolder.timemine.setText(DateUtils.getTimeShowString(item.getTime(), false));
             textHolder.contentmine.setText(ExpressionUtil.getExpressionString(
@@ -336,7 +342,9 @@ public class MessageAdapter extends BaseAdapter {
                     othername.setText(message.getFromNick());
                 }
                 if (BaseApplication.getUserInfoProvide() != null) {
-                    Glide.with(context).load(BaseApplication.getUserInfoProvide().getUserInfo(message.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_default).crossFade().dontAnimate().into((ImageView) otherhead);
+                    UserInfoProvider.UserInfo userinfo = BaseApplication.getUserInfoProvide().getUserInfo(message.getFromAccount());
+                    if (userinfo != null)
+                        Glide.with(context).load(userinfo.getAvatar()).placeholder(R.mipmap.head_default).crossFade().dontAnimate().into((ImageView) otherhead);
                 }
                 othertime.setText(DateUtils.getTimeShowString(message.getTime(), false));
 
@@ -355,7 +363,9 @@ public class MessageAdapter extends BaseAdapter {
                 left.setVisibility(View.GONE);
 
                 if (BaseApplication.getUserInfoProvide() != null) {
-                    Glide.with(context).load(BaseApplication.getUserInfoProvide().getUserInfo(message.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_default).crossFade().dontAnimate().into((ImageView) headmine);
+                    UserInfoProvider.UserInfo userinfo = BaseApplication.getUserInfoProvide().getUserInfo(message.getFromAccount());
+                    if (userinfo != null)
+                        Glide.with(context).load(userinfo.getAvatar()).placeholder(R.mipmap.head_default).crossFade().dontAnimate().into((ImageView) headmine);
                 }
                 timemine.setText(DateUtils.getTimeShowString(message.getTime(), false));
 

@@ -124,7 +124,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                         if (payType.equals("weixin")) {
                             if (data != null) {
                                 Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
-                                intent.putExtra("price", priceNumber);
+                                intent.putExtra("price",   data.getData().getAmount());
                                 intent.putExtra("id", data.getData().getId());
                                 intent.putExtra("time", data.getData().getCreated_at());
                                 intent.putExtra("type", payType);
@@ -138,7 +138,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                         } else if (payType.equals("alipay")) {
                             if (data != null) {
                                 Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
-                                intent.putExtra("price", priceNumber);
+                                intent.putExtra("price", data.getData().getAmount());
                                 intent.putExtra("id", data.getData().getId());
                                 intent.putExtra("time", data.getData().getCreated_at());
                                 intent.putExtra("type", payType);
@@ -244,12 +244,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                 aliPay.setImageResource(R.drawable.shape_select_circle_select);
                 wechatPay.setImageResource(R.drawable.shape_select_circle_normal);
                 account.setImageResource(R.drawable.shape_select_circle_normal);
-
-                //TODO 集成完支付宝后，去掉下面这段
-                Toast.makeText(OrderConfirmActivity.this, getResourceString(R.string.not_support_alipay), Toast.LENGTH_SHORT).show();
-                wechatPay.setImageResource(R.drawable.shape_select_circle_select);
-                aliPay.setImageResource(R.drawable.shape_select_circle_normal);
-                payType = "weixin";
             }
         });
         wechatLayout.setOnClickListener(new View.OnClickListener() {

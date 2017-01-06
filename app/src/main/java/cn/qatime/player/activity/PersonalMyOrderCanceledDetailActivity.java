@@ -77,7 +77,7 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
         }
 
         if (data.status.equals("refunded")) {//交易关闭
-            status.setImageResource(R.mipmap.close_pay);
+            status.setImageResource(R.mipmap.refunded);
         } else if (data.status.equals("canceled")) {//交易关闭
             status.setImageResource(R.mipmap.close_pay);
         } else if (data.status.equals("expired")) {//交易关闭
@@ -101,17 +101,15 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
             String payType = getIntent().getStringExtra("payType");//支付方式
             if (payType.equals("weixin")) {
                 paytype.setText(getResourceString(R.string.wechat_payment));
-            } else {
+            } else if (payType.equals("alipay")) {
                 paytype.setText(getResourceString(R.string.alipay_payment));
+            } else {
+                paytype.setText(getResourceString(R.string.account_payment));
             }
         }
         progress.setText("共" + data.Preset_lesson_count + "课");
-        String price = df.format(data.current_price);
-        if (price.startsWith(".")) {
-            price = "0" + price;
-        }
-        PersonalMyOrderCanceledDetailActivity.this.payprice.setText(price);
-        payprice.setText("￥" + price + " ");
+        PersonalMyOrderCanceledDetailActivity.this.payprice.setText(data.amount);
+        payprice.setText("￥" + data.amount + " ");
     }
 
     public void initView() {

@@ -113,10 +113,6 @@ public class OrderPayActivity extends BaseActivity {
 
         }
 
-        amount = df.format(getIntent().getFloatExtra("price", 0f));
-        if (amount.startsWith(".")) {
-            amount = "0" + amount;
-        }
         code.setText(getIntent().getStringExtra("id"));
         SimpleDateFormat parseISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
         SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -132,6 +128,7 @@ public class OrderPayActivity extends BaseActivity {
         } else {
             type.setText(getResourceString(R.string.pay_account));
         }
+        String price = getIntent().getStringExtra("price");
         this.price.setText("￥" + amount);
     }
 
@@ -211,7 +208,7 @@ public class OrderPayActivity extends BaseActivity {
                 payPopView.dismiss();
 
 
-                
+
             }
 
             @Override
@@ -320,6 +317,7 @@ public class OrderPayActivity extends BaseActivity {
 
     @Subscribe
     public void onEvent(PayResultState state) {
+        //// TODO: 2017/1/6 QTA-151 支付密码支付 UI有修改，参数传递需重新确认！！！
         Intent intent = new Intent(this, OrderPayResultActivity.class);
         intent.putExtra("state", state);
         intent.putExtra("orderId", code.getText().toString().replace(getResourceString(R.string.order_number) + "：", ""));

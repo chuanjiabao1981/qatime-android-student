@@ -117,6 +117,7 @@
     <string name="cancel_order">取消订单</string>
     <string name="delete_order">删除订单</string>
     <string name="reorder">重新购买</string>
+    <string name="apply_refund">申请退款</string>
     <string name="pay">付款</string>
     <string name="deal_done">交易完成</string>//
     <string name="dealing">正在交易</string>//
@@ -475,6 +476,7 @@
     <string name="class_closed">已直播</string>
     <string name="please_talk_later">请稍候发言</string>
     <string name="update_desc">更新内容</string>
+    <string name="refund_record">退款记录</string>
     <string name="teach_type">授课方式：在线直播</string>
 
 </resources>

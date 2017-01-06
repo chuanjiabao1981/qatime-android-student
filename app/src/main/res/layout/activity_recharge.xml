@@ -8,38 +8,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="6dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="12dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/problem_phone"
-            android:textColor="#666666"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/phone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="6dp"
-            android:text="0353-2135828"
-            android:textColor="#3399FF"
-            android:textSize="16sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
 
         <include layout="@layout/layout_backbar" />
 
@@ -59,7 +31,9 @@
                 android:hint="@string/recharge_num_hint"
                 android:inputType="numberDecimal"
                 android:paddingRight="20dp" />
+
             <TextView
+                android:id="@+id/textView11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -73,12 +47,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="5dp"
+            android:orientation="horizontal"
             android:paddingLeft="32dp"
             android:paddingRight="32dp">
 
             <TextView
+                android:id="@+id/textView9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -112,8 +87,8 @@
                     <ImageView
                         android:layout_width="14dp"
                         android:layout_height="14dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="3dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="2dp"
                         android:src="@mipmap/wechat_pay" />
 
                     <TextView
@@ -131,22 +106,22 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="5dp">
+                    android:padding="5dp"
+                    android:visibility="gone">
 
                     <ImageView
                         android:id="@+id/alipay"
                         android:layout_width="14dp"
                         android:layout_height="14dp"
                         android:layout_marginLeft="10dp"
-                        android:padding="3dp"
                         android:background="@drawable/shape_select_circle_bg"
                         android:src="@drawable/shape_select_circle_normal" />
 
                     <ImageView
                         android:layout_width="14dp"
                         android:layout_height="14dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="3dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="2dp"
                         android:src="@mipmap/alipay" />
 
                     <TextView
@@ -163,8 +138,36 @@
 
         <Button
             android:id="@+id/recharge_now"
-            android:layout_marginTop="5dp"
             style="@style/button_full_width_style"
+            android:layout_marginTop="5dp"
             android:text="@string/recharge_now" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="6dp"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/problem_phone"
+            android:textColor="#666666"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:text="0353-2135828"
+            android:textColor="#3399FF"
+            android:textSize="16sp" />
+
     </LinearLayout>
 </RelativeLayout>
