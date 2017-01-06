@@ -81,7 +81,7 @@ public class FragmentOrderCanceled extends BaseFragment {
                 } else {//已取消
                     helper.setText(R.id.status, "        ");
                 }
-                String price = df.format(item.getProduct().getCurrent_price());
+                String price = item.getAmount();
                 if (price.startsWith(".")) {
                     price = "0" + price;
                 }
@@ -150,6 +150,7 @@ public class FragmentOrderCanceled extends BaseFragment {
                 bean.Preset_lesson_count = list.get(position - 1).getProduct().getPreset_lesson_count();
                 bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
                 bean.current_price = list.get(position - 1).getProduct().getCurrent_price();
+                bean.amount = list.get(position-1).getAmount();
                 intent.putExtra("data", bean);
                 startActivity(intent);
             }

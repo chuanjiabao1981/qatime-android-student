@@ -106,12 +106,8 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
             }
         }
         progress.setText("共" + data.Preset_lesson_count + "课");
-        String price = df.format(data.current_price);
-        if (price.startsWith(".")) {
-            price = "0" + price;
-        }
-        PersonalMyOrderCanceledDetailActivity.this.payprice.setText(price);
-        payprice.setText("￥" + price + " ");
+        PersonalMyOrderCanceledDetailActivity.this.payprice.setText(data.amount);
+        payprice.setText("￥" + data.amount + " ");
     }
 
     public void initView() {
