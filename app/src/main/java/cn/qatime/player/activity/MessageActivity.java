@@ -427,7 +427,10 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
             }
 
             if (needRefresh) {
-                isMute = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount()).isMute();
+                TeamMember teamMember = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
+                if (teamMember != null) {
+                    isMute = teamMember.isMute();
+                }
                 inputpanel.setMute(isMute);
                 sortMessages(items);
                 adapter.notifyDataSetChanged();

@@ -73,6 +73,7 @@ public class ScreenSwitchUtils {
 
         ;
     };
+    private boolean canToggle = false;
 
     /**
      * 返回ScreenSwitchUtils单例
@@ -106,12 +107,14 @@ public class ScreenSwitchUtils {
     public void start(Activity activity) {
         mActivity = activity;
         sm.registerListener(listener, sensor, SensorManager.SENSOR_DELAY_UI);
+        canToggle = true;
     }
 
     /**
      * 停止监听
      */
     public void stop() {
+        canToggle = false;
         sm.unregisterListener(listener);
         sm1.unregisterListener(listener1);
     }
@@ -120,16 +123,18 @@ public class ScreenSwitchUtils {
      * 手动横竖屏切换方向
      */
     public void toggleScreen() {
-        sm.unregisterListener(listener);
-        sm1.registerListener(listener1, sensor1, SensorManager.SENSOR_DELAY_UI);
-        if (isPortrait) {
-            isPortrait = false;
-            // 切换成横屏
-            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        } else {
-            isPortrait = true;
-            // 切换成竖屏
-            mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        if (canToggle) {
+            sm.unregisterListener(listener);
+            sm1.registerListener(listener1, sensor1, SensorManager.SENSOR_DELAY_UI);
+            if (isPortrait) {
+                isPortrait = false;
+                // 切换成横屏
+                mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            } else {
+                isPortrait = true;
+                // 切换成竖屏
+                mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            }
         }
     }
 

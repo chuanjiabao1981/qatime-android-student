@@ -22,7 +22,7 @@ import libraryextra.utils.StringUtils;
  * 基础类
  */
 public class BaseActivity extends AppCompatActivity {
-    private RequestQueue Queue;
+    private RequestQueue Queue= BaseApplication.getRequestQueue();
     private AlertDialog alertDialog;
     protected boolean destroyed = false;
 
@@ -30,7 +30,6 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PushAgent.getInstance(this).onAppStart();
-        Queue = BaseApplication.getRequestQueue();
     }
 
     public void setTitle(String text) {
@@ -103,11 +102,17 @@ public class BaseActivity extends AppCompatActivity {
         startActivity(intent);
 //        this.finish();
     }
-
     public <T> Request<T> addToRequestQueue(Request<T> request) {
+        request.setTag(this);
         return Queue.add(request);
     }
 
+    @Override
+    protected void onDestroy() {
+        cancelAll(this);
+        super.onDestroy();
+        destroyed = true;
+    }
     public void cancelAll(final Object tag) {
         Queue.cancelAll(tag);
     }
@@ -120,9 +125,5 @@ public class BaseActivity extends AppCompatActivity {
         return getResources().getString(id);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        destroyed = true;
-    }
+
 }
