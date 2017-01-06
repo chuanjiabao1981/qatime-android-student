@@ -67,7 +67,7 @@
             android:textSize="13sp"
             android:paddingTop="1dp"
             android:singleLine="true"
-            android:text="2011-11-11 11:11:11"
+            android:text="0000-00-00 00:00:00"
             android:textColor="#666666" />
 
     </LinearLayout>
@@ -89,7 +89,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:text="+￥500.00"
+            android:text="+￥0.00"
             android:textSize="13sp"
             android:paddingTop="1dp"
             android:textColor="#f00" />
