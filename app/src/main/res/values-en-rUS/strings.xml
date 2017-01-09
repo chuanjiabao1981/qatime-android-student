@@ -12,7 +12,7 @@
     <string name="message">Messages</string>//消息
     <string name="individual">Me</string>//个人
     <string name="latest">Latest</string>//最新
-    <string name="whole">Whole</string>//全部
+    <string name="whole">whole</string>//全部
     <string name="by_time">By Time</string>//按时间
     <string name="by_subject">Subject</string>//科目
     <string name="by_grade">Grade</string>//年级
@@ -227,12 +227,6 @@
     <string name="password_can_not_be_empty">Password can not be empty</string>
     <string name="alipay_payment">Alipay payment</string>
     <string name="audition_records">Audition records</string>
-    <string name="barrage_open">Open barrage</string>
-    <string name="barrage_close">Close barrage</string>
-    <string name="barrage_position">Barrage position</string>
-    <string name="barrage_size">Barrage size</string>
-    <string name="barrage_speed">Barrage speed</string>
-    <string name="barrage_transparent">Barrage transparent</string>
     <string name="buffering">Buffering</string>
     <string name="button_commit">Commit</string>
     <string name="class_init">Init</string>
@@ -251,9 +245,6 @@
     <string name="select_picture">Select pictures</string>
     <string name="remedial_class_message">Remedial class message</string>
     <string name="press_again_to_exit">Press again to exit</string>
-    <string name="position_top">Top</string>
-    <string name="position_bottom">Bottom</string>
-    <string name="pd">PD</string>
     <string name="payment_results_are_being_queried">Payment results are being queried</string>
     <string name="payment_result">Payment result</string>
     <string name="pay_success">Pay success</string>
@@ -270,7 +261,6 @@
     <string name="comment_content">Comment content</string>
     <string name="confirm_payment">Confirm payment</string>
     <string name="full_screen">Full screen</string>
-    <string name="hd">HD</string>
     <string name="deal_done">Deal done</string>
     <string name="dealing">Dealing</string>
 
@@ -351,5 +341,25 @@
     <string name="clean_cache">Clear cache</string>
     <string name="course_arrangement">course arrangement</string>
     <string name="input_login_password">Input login password</string>
+    <string name="Remedial_class">remedial class</string>
+    <string name="alert">alert</string>
+    <string name="app_name">qatime</string>
+    <string name="balance">balance</string>
+    <string name="bind">bind</string>
+    <string name="call_customer_service_phone"></string>
+    <string name="cancel_order_teacher"></string>
+    <string name="other_method_of_login">other method of login</string>
+    <string name="enter">direct enter</string>
+    <string name="failed_to_obtain_group_information">failed to obtain group information</string>
+    <string name="hader_can_not_be_empty">header can not be empty</string>
+    <string name="whole_country">whole country</string>
+    <string name="teacher_recommendation">teacher recommendation</string>
+    <string name="live_courses">live courses</string>
+    <string name="live_side_close">subvideo has closed</string>
+    <string name="live_side_open">subvideo has opened</string>
+    <string name="login_failed">login failed</string>
+    <string name="login_right_now">login right now</string>
+    <string name="make_sure_cancel_order"></string>
+    <string name="my_wallet">my wallet</string>
 </resources>
 

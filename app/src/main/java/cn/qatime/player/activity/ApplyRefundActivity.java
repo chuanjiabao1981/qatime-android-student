@@ -74,7 +74,7 @@ public class ApplyRefundActivity extends BaseActivity {
 
         orderId.setText(getIntent().getStringExtra("order_id"));
         productName.setText(getIntent().getStringExtra("name"));
-        progress.setText(getIntent().getIntExtra("completed_lesson_count",0) + "/" + getIntent().getIntExtra("preset_lesson_count",0));
+        progress.setText(getIntent().getIntExtra("completed_lesson_count", 0) + "/" + getIntent().getIntExtra("preset_lesson_count", 0));
         price.setText("￥" + orderRefundBean.getData().getAmount());
         usedAmount.setText("￥" + (Double.valueOf(orderRefundBean.getData().getAmount()) - Double.valueOf(orderRefundBean.getData().getRefund_amount())));
         String pay_type = orderRefundBean.getData().getPay_type();
@@ -107,7 +107,7 @@ public class ApplyRefundActivity extends BaseActivity {
         Map<String, String> map = new HashMap<>();
         map.put("order_id", getIntent().getStringExtra("order_id"));
         map.put("reason", reason.getText().toString());
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST,UrlUtils.getUrl(UrlUtils.urlpayment+ BaseApplication.getUserId() + "/refunds", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/refunds", map), null,
                 new VolleyListener(ApplyRefundActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -120,8 +120,8 @@ public class ApplyRefundActivity extends BaseActivity {
                     protected void onError(JSONObject response) {
 //                        Toast.makeText(getActivity(), getResourceString(R.string.order_cancel_failed), Toast.LENGTH_SHORT).show();
                         try {
-                            if(response.getJSONObject("error").getInt("code")==3002){
-                                Toast.makeText(ApplyRefundActivity.this, "暂无法申请退款", Toast.LENGTH_SHORT).show();
+                            if (response.getJSONObject("error").getInt("code") == 3002) {
+                                Toast.makeText(ApplyRefundActivity.this, "此订单无可退金额", Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
