@@ -473,5 +473,7 @@
     <string name="please_talk_later">请稍候发言</string>
     <string name="update_desc">更新内容</string>
     <string name="refund_record">退款记录</string>
+    <string name="notify_mode">通知方式</string>
+    <string name="course_message_notify">辅导班消息通知</string>
 
 </resources>

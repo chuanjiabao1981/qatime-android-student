@@ -97,7 +97,7 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
 
         String phoneP = getIntent().getStringExtra("phoneP");
         currentParentPhone.setText(phoneP);
-        if (!phoneP.equals("未绑定")) {
+        if (StringUtils.isPhone(phoneP)) {
             currentParentPhoneLayout.setVisibility(View.VISIBLE);
         } else {
             currentParentPhoneLayout.setVisibility(View.GONE);
@@ -108,15 +108,20 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        phone = newParentPhone.getText().toString().trim();
-        if (!StringUtils.isPhone(phone)) {//手机号不正确
-            Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         switch (v.getId()) {
 
             case R.id.text_getcode:
+                phone = newParentPhone.getText().toString().trim();
+                if (!StringUtils.isGoodPWD(password.getText().toString().trim())) {
+                    Toast.makeText(this, getResources().getString(R.string.password_6_16), Toast.LENGTH_LONG).show();
+                    return;
+                }
+                phone = newParentPhone.getText().toString().trim();
+                if (!StringUtils.isPhone(phone)) {//手机号不正确
+                    Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Map<String, String> map = new HashMap<>();
                 map.put("send_to", phone);
                 map.put("key", "send_captcha");
@@ -152,7 +157,11 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
                     Toast.makeText(this, getResources().getString(R.string.password_6_16), Toast.LENGTH_LONG).show();
                     return;
                 }
-
+                phone = newParentPhone.getText().toString().trim();
+                if (!StringUtils.isPhone(phone)) {//手机号不正确
+                    Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (StringUtils.isNullOrBlanK(code.getText().toString().trim())) { //验证码
                     Toast.makeText(this, getResources().getString(R.string.enter_the_verification_code), Toast.LENGTH_SHORT).show();
                     return;
