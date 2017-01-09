@@ -380,7 +380,7 @@ public class MainActivity extends BaseFragmentActivity {
          *                    {@link #MSG_CHATTING_ACCOUNT_ALL} 目前没有与任何人对话，但能看到消息提醒（比如在消息列表界面），不需要在状态栏做消息通知
          *                    {@link #MSG_CHATTING_ACCOUNT_NONE} 目前没有与任何人对话，需要状态栏消息通知
          */
-        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
+        NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.isChatMessageNotifyStatus()?MsgService.MSG_CHATTING_ACCOUNT_NONE:MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
         MobclickAgent.onResume(this);
     }
 
