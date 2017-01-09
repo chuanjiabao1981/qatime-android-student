@@ -165,7 +165,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:text="其他登录方式"
+            android:text="@string/other_method_of_login"
             android:textColor="#ccc"
             android:textSize="12sp" />
 
