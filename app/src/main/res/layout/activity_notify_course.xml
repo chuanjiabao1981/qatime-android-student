@@ -13,59 +13,6 @@
         android:layout_height="1px"
         android:background="#dfdddd" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#fff"
-        android:orientation="horizontal">
-
-        <TextView
-            android:text="@string/alert_mode"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingTop="15dp"
-            android:layout_width="wrap_content"
-            android:textColor="#333"
-            android:paddingBottom="15dp" />
-
-        <View
-            android:layout_width="30dp"
-            android:layout_height="0dp" />
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:layout_marginRight="10dp">
-
-            <CheckBox
-                android:id="@+id/sms"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:button="@null"
-                android:drawableLeft="@drawable/checkbox_selector"
-                android:drawablePadding="5dp"
-                android:layout_weight="1"
-                android:textColor="#333333"
-                android:checked="false"
-                android:text="@string/sms_notify" />
-
-            <CheckBox
-                android:id="@+id/sys"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:button="@null"
-                android:drawableLeft="@drawable/checkbox_selector"
-                android:drawablePadding="5dp"
-                android:layout_weight="1"
-                android:textColor="#333333"
-                android:checked="true"
-                android:text="@string/sys_notify" />
-        </LinearLayout>
-    </LinearLayout>
-
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
@@ -78,26 +25,70 @@
         android:orientation="horizontal">
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="15dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="15dp"
+            android:text="@string/alert_mode"
+            android:textColor="#333" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/sms"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:button="@null"
+                android:checked="false"
+                android:drawableLeft="@drawable/checkbox_selector"
+                android:drawablePadding="5dp"
+                android:text="@string/sms_notify"
+                android:textColor="#333333" />
+
+            <CheckBox
+                android:id="@+id/sys"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="45dp"
+                android:button="@null"
+                android:checked="true"
+                android:drawableLeft="@drawable/checkbox_selector"
+                android:drawablePadding="5dp"
+                android:text="@string/sys_notify"
+                android:textColor="#333333" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="horizontal">
+
+        <TextView
             style="@style/setting_text_style"
             android:text="@string/time_setting" />
-
-        <View
-            android:layout_width="30dp"
-            android:layout_height="0dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:layout_marginRight="10dp">
+            android:layout_marginRight="10dp"
+            android:gravity="right"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:textColor="#333333"
-                android:text="@string/advance" />
+                android:text="@string/advance"
+                android:textColor="#333333" />
 
             <LinearLayout
                 android:id="@+id/time"
@@ -133,8 +124,8 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:paddingLeft="10dp"
-                android:textColor="#333333"
-                android:text="@string/remind_me" />
+                android:text="@string/remind_me"
+                android:textColor="#333333" />
         </LinearLayout>
 
     </LinearLayout>
