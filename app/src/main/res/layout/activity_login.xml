@@ -32,10 +32,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="115dp"
                 android:src="@mipmap/logo"
-                custom:layout_heightPercent="30%"
-                custom:layout_widthPercent="30%h" />
+                custom:layout_widthPercent="70%" />
         </com.zhy.android.percent.support.PercentRelativeLayout>
 
 

@@ -354,7 +354,6 @@ public class FragmentPlayerMessage extends BaseFragment implements MessageAdapte
             }
             Logger.e("获取到消息");
             List<IMMessage> addedListItems = new ArrayList<>(messages.size());
-            boolean needScrollToBottom = ListViewUtil.isLastMessageVisible(messageListView);
             boolean needRefresh = false;
             for (IMMessage message : messages) {
                 //做一下去重
@@ -393,9 +392,7 @@ public class FragmentPlayerMessage extends BaseFragment implements MessageAdapte
             // incoming messages tip
             IMMessage lastMsg = messages.get(messages.size() - 1);
             if (isMyMessage(lastMsg)) {
-                if (needScrollToBottom) {
-                    ListViewUtil.scrollToBottom(messageListView);
-                }
+                ListViewUtil.scrollToBottom(messageListView);
             }
 
         }

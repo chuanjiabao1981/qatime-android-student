@@ -225,7 +225,7 @@ public class DanmuControl {
             danmaku.isLive = false;
             danmaku.time = mDanmakuView.getCurrentTime() + (i * ADD_DANMU_TIME);
             danmaku.textSize = DANMU_TEXT_SIZE/* * (mDanmakuContext.getDisplayer().getDensity() - 0.6f)*/;
-            danmaku.textColor = 0xffCCCCCC;
+            danmaku.textColor = 0xff999999;
             danmaku.textShadowColor = 0; // 重要：如果有图文混排，最好不要设置描边(设textShadowColor=0)，否则会进行两次复杂的绘制导致运行效率降低
             mDanmakuView.addDanmaku(danmaku);
         }
