@@ -64,7 +64,10 @@ public class FragmentOrderUnpaid extends BaseFragment {
 
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
-
+        View empty = View.inflate(getActivity(),R.layout.empty_view,null);
+        TextView textEmpty = (TextView) empty.findViewById(R.id.text_empty);
+        textEmpty.setText("未找到相关订单");
+        listView.setEmptyView(empty);
         listView.setMode(PullToRefreshBase.Mode.BOTH);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
