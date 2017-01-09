@@ -26,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,6 +58,7 @@ StartActivity extends BaseActivity implements View.OnClickListener {
         setContentView(R.layout.activity_start);
         ((TextView) findViewById(R.id.version)).setText("V " + AppUtils.getVersionName(this));
         GetGradeslist();//加载年纪列表
+        removeOldApk();
         checkUpdate();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -64,6 +66,16 @@ StartActivity extends BaseActivity implements View.OnClickListener {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
             }
+        }
+    }
+
+    /**
+     * 删除上次更新存储在本地的apk
+     */
+    private void removeOldApk() {
+        File fileName = new File(Environment.getExternalStorageDirectory() + "/qatime.apk");
+        if (fileName != null && fileName.exists() && fileName.isFile()) {
+            fileName.delete();
         }
     }
 
