@@ -86,6 +86,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     private View layoutView;
     private Button auditionStart;
     private TextView transferPrice;
+    private View handleLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +129,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         timeToStart = (TextView) findViewById(R.id.time_to_start);
         status = (TextView) findViewById(R.id.status);
         layoutView = findViewById(R.id.layout_view);
+        handleLayout = findViewById(R.id.handle_layout);
         audition.setOnClickListener(this);
         auditionStart.setOnClickListener(this);
         pay.setOnClickListener(this);
@@ -180,9 +182,31 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     @Override
                     protected void onSuccess(JSONObject response) {
                         data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
-                        Glide.with(getApplicationContext()).load(data.getData().getPublicize()).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
-                        status.setText(getStatus(data.getData().getStatus()));
+
                         if (data.getData() != null && data.getData().getLive_start_time() != null) {
+
+                            Glide.with(getApplicationContext()).load(data.getData().getPublicize()).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
+                            status.setText(getStatus(data.getData().getStatus()));
+                            name.setText(data.getData().getName());
+                            title.setText(data.getData().getName());
+                            studentnumber.setText("报名人数 " + data.getData().getBuy_tickets_count());
+                            String price;
+                            if (Constant.CourseStatus.finished.equals(data.getData().getStatus()) || Constant.CourseStatus.completed.equals(data.getData().getStatus())) {
+                                price = df.format(data.getData().getPrice());
+                            } else {
+                                price = df.format(data.getData().getCurrent_price());
+                            }
+                            if (price.startsWith(".")) {
+                                price = "0" + price;
+                            }
+                            RemedialClassDetailActivity.this.price.setText("￥" + price);
+                            if (Constant.CourseStatus.teaching.equals(data.getData().getStatus())) {
+                                transferPrice.setVisibility(View.VISIBLE);
+                            } else {
+                                transferPrice.setVisibility(View.GONE);
+                            }
+
+
                             try {
                                 if ("init".equals(data.getData().getStatus()) || "published".equals(data.getData().getStatus())) {
                                     long time = System.currentTimeMillis() - parse.parse(data.getData().getLive_start_time()).getTime();
@@ -200,6 +224,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                                     layoutView.setBackgroundColor(0xff00a0e9);
                                     progress.setText("[进度" + data.getData().getCompleted_lesson_count() + "/" + data.getData().getPreset_lesson_count() + "]");
                                 } else if (Constant.CourseStatus.finished.equals(data.getData().getStatus()) || Constant.CourseStatus.completed.equals(data.getData().getStatus())) {
+                                    handleLayout.setVisibility(View.GONE);//已结束的课程隐藏操作按钮
                                     progress.setVisibility(View.VISIBLE);
                                     timeToStart.setVisibility(View.GONE);
                                     layoutView.setBackgroundColor(0xff999999);
@@ -210,54 +235,33 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-                        }
-                        name.setText(data.getData().getName());
-                        title.setText(data.getData().getName());
-                        if (data.getData() != null) {
-                            String price ;
-                            if (Constant.CourseStatus.finished.equals(data.getData().getStatus()) || Constant.CourseStatus.completed.equals(data.getData().getStatus())) {
-                                price = df.format(data.getData().getPrice());
-                                // TODO: 2017/1/6 已结束的课程 不允许试听、购买（audition auditionStart pay startStudy）
-                            } else {
-                                price = df.format(data.getData().getCurrent_price());
-                            }
-                            if (price.startsWith(".")) {
-                                price = "0" + price;
-                            }
-                            RemedialClassDetailActivity.this.price.setText("￥" + price);
-                            if (Constant.CourseStatus.teaching.equals(data.getData().getStatus())) {
-                                transferPrice.setVisibility(View.VISIBLE);
-                            } else {
-                                transferPrice.setVisibility(View.GONE);
-                            }
-                        }
 
-                        studentnumber.setText("报名人数 " + data.getData().getBuy_tickets_count());
-                        if (data != null) {
                             ((FragmentClassDetailClassInfo) fragBaseFragments.get(0)).setData(data);
                             ((FragmentClassDetailTeacherInfo) fragBaseFragments.get(1)).setData(data);
                             ((FragmentClassDetailClassList) fragBaseFragments.get(2)).setData(data);
-                            if (data.getData() != null) {
-                                if (data.getData().getIs_tasting() || data.getData().isTasted()) {//显示进入试听按钮
-//                                    boolean hasPullAddress = !StringUtils.isNullOrBlanK(data.getData().getCamera()) && !StringUtils.isNullOrBlanK(data.getData().getBoard());//是否有拉流地址（本页代表已试听到期）
-                                    auditionStart.setVisibility(View.VISIBLE);
-                                    audition.setVisibility(View.GONE);
-                                    if (data.getData().isTasted()) {
-                                        auditionStart.setText(getResourceString(R.string.audition_over));
-                                        auditionStart.setEnabled(false);
-                                    }
-                                } else {
-                                    audition.setText(getResources().getString(R.string.Join_the_audition));
-                                    auditionStart.setVisibility(View.GONE);
-                                }
 
-                                if (data.getData().getIs_bought()) {
-                                    startStudyView.setVisibility(View.VISIBLE);
-                                    if (data.getData().getStatus().equals("completed") || data.getData().getStatus().equals("finished")) {
-                                        startStudy.setEnabled(false);
-                                    }
+                            if (data.getData().getIs_tasting() || data.getData().isTasted()) {//显示进入试听按钮
+                                auditionStart.setVisibility(View.VISIBLE);
+                                audition.setVisibility(View.GONE);
+                                if (data.getData().isTasted()) {
+                                    auditionStart.setText(getResourceString(R.string.audition_over));
+                                    auditionStart.setEnabled(false);
+                                }
+                            } else {//显示加入试听按钮
+                                audition.setText(getResources().getString(R.string.Join_the_audition));
+                                auditionStart.setVisibility(View.GONE);
+                                if(data.getData().getTaste_count() == 0){//试听数目为0则该课不支持试听
+                                    audition.setEnabled(false);
                                 }
                             }
+
+                            if (data.getData().getIs_bought()) {
+                                startStudyView.setVisibility(View.VISIBLE);
+                                if (data.getData().getStatus().equals("completed") || data.getData().getStatus().equals("finished")) {
+                                    startStudy.setEnabled(false);
+                                }
+                            }
+
                         }
                     }
 
@@ -470,7 +474,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
                     @Override
                     protected void onError(JSONObject response) {
-//                        Toast.makeText(RemedialClassDetailActivity.this, "该课程不支持试听", Toast.LENGTH_SHORT).show();
+//                            if(response.getJSONObject("error").getInt("code")==3004){//CourseTasteLimit
+//                                            }
+                        Toast.makeText(RemedialClassDetailActivity.this, "该课程暂不支持试听", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
