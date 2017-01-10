@@ -471,5 +471,12 @@
     <string name="other_method_of_login">其他登录方式</string>
     <string name="found_new_version">发现新版本</string>
     <string name="whole_country">全国</string>
+    <string name="change_city">切换城市</string>
+    <string name="current_change">当前选择</string>
+    <string name="location">定位</string>
+    <string name="recent_change">最近选择</string>
+    <string name="whole_city">全部城市</string>
+    <string name="playback_record">回放记录</string>
+    <string name="hd">高清</string>
 
 </resources>

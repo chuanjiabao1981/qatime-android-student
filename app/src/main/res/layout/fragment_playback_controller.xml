@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.android.percent.support.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/playback_control"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00000000">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/play_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/shape_video_toolbar">
+
+            <ImageView
+                android:id="@+id/play_exit"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:padding="13dp"
+                android:src="@mipmap/ic_play_exit" />
+
+            <ImageView
+                android:id="@+id/courses_list"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:padding="8dp"
+                android:src="@mipmap/playback_courses_list"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:background="#b3000000"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/play"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:padding="13dp"
+                android:src="@mipmap/nemediacontroller_play" />
+
+            <SeekBar
+                android:id="@+id/seekbar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:thumb="@mipmap/playback_thumb"
+                android:progressDrawable="@drawable/playback_controller_progressbar" />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:text="00:00:00"
+                android:textColor="#fff" />
+
+            <TextView
+                android:id="@+id/video_definition"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="@string/hd"
+                android:textColor="@color/white"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/zoom"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:padding="8dp"
+                android:src="@mipmap/zoom_big" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:background="#b3000000"
+        android:visibility="gone"
+        custom:layout_widthPercent="45%" />
+</com.zhy.android.percent.support.PercentRelativeLayout>

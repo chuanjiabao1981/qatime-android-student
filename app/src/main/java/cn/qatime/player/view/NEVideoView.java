@@ -78,7 +78,7 @@ public class NEVideoView extends SurfaceView {
     private boolean mHardwareDecoder = false;
     private boolean mPauseInBackground = false;
     private String mMediaType = "livestream";//直播livestream  点播videoondemand
-
+    private int mBufferStrategy = 0; //直播低延时
 
     private boolean isBackground;
 //    private NEVideoViewReceiver mReceiver;
@@ -168,7 +168,7 @@ public class NEVideoView extends SurfaceView {
             mMediaPlayer = neMediaPlayer;
 //            getLogPath();
 //            mMediaPlayer.setLogPath(mLogLevel, mLogPath);
-            mMediaPlayer.setBufferStrategy(0);//设置缓冲策略，0为直播低延时，1为点播抗抖动
+            mMediaPlayer.setBufferStrategy(mBufferStrategy);//设置缓冲策略，0为直播低延时，1为点播抗抖动
             mMediaPlayer.setHardwareDecoder(mHardwareDecoder);//设置是否开启硬件解码，0为软解，1为硬解
             mMediaPlayer.setOnPreparedListener(mPreparedListener);
             mIsPrepared = false;
@@ -347,50 +347,54 @@ public class NEVideoView extends SurfaceView {
                 mOnInfoListener.onInfo(mp, what, extra);
             }
 
-            if (mMediaPlayer != null) {
-                ImageView image1 = (ImageView) mBuffer.findViewById(R.id.buffer_image1);
+            try {
+                if (mMediaPlayer != null) {
+                    ImageView image1 = (ImageView) mBuffer.findViewById(R.id.buffer_image1);
 
-                if (what == NELivePlayer.NELP_BUFFERING_START) {
-//                    Logger.e(TAG, "onInfo: NELP_BUFFERING_START");
-                    if (mBuffer != null) {
-                        mBuffer.setVisibility(View.VISIBLE);
-                        if (image1 != null) {
-                            ((AnimationDrawable) image1.getBackground()).start();
-                        } else {
-                            ((AnimationDrawable) (mBuffer.findViewById(R.id.buffer_image2)).getBackground()).start();
+                    if (what == NELivePlayer.NELP_BUFFERING_START) {
+    //                    Logger.e(TAG, "onInfo: NELP_BUFFERING_START");
+                        if (mBuffer != null) {
+                            mBuffer.setVisibility(View.VISIBLE);
+                            if (image1 != null) {
+                                ((AnimationDrawable) image1.getBackground()).start();
+                            } else {
+                                ((AnimationDrawable) (mBuffer.findViewById(R.id.buffer_image2)).getBackground()).start();
+                            }
                         }
-                    }
-                } else if (what == NELivePlayer.NELP_BUFFERING_END) {
-//                    Logger.e(TAG, "onInfo: NELP_BUFFERING_END");
-                    if (mBuffer != null) {
-                        if (image1 != null) {
-                            ((AnimationDrawable) image1.getBackground()).stop();
-                        } else {
-                            ((AnimationDrawable) (mBuffer.findViewById(R.id.buffer_image2)).getBackground()).stop();
+                    } else if (what == NELivePlayer.NELP_BUFFERING_END) {
+    //                    Logger.e(TAG, "onInfo: NELP_BUFFERING_END");
+                        if (mBuffer != null) {
+                            if (image1 != null) {
+                                ((AnimationDrawable) image1.getBackground()).stop();
+                            } else {
+                                ((AnimationDrawable) (mBuffer.findViewById(R.id.buffer_image2)).getBackground()).stop();
+                            }
+                            mBuffer.setVisibility(View.GONE);
                         }
-                        mBuffer.setVisibility(View.GONE);
-                    }
-                } else if (what == NELivePlayer.NELP_FIRST_VIDEO_RENDERED) {
-//                    Logger.e(TAG, "onInfo: NELP_FIRST_VIDEO_RENDERED");
-                    if (mBuffer != null) {
-                        if (image1 != null) {
-                            ((AnimationDrawable) image1.getBackground()).stop();
-                        } else {
-                            ((AnimationDrawable) (mBuffer.findViewById(R.id.buffer_image2)).getBackground()).stop();
+                    } else if (what == NELivePlayer.NELP_FIRST_VIDEO_RENDERED) {
+    //                    Logger.e(TAG, "onInfo: NELP_FIRST_VIDEO_RENDERED");
+                        if (mBuffer != null) {
+                            if (image1 != null) {
+                                ((AnimationDrawable) image1.getBackground()).stop();
+                            } else {
+                                ((AnimationDrawable) (mBuffer.findViewById(R.id.buffer_image2)).getBackground()).stop();
+                            }
+                            mBuffer.setVisibility(View.GONE);
                         }
-                        mBuffer.setVisibility(View.GONE);
-                    }
-                } else if (what == NELivePlayer.NELP_FIRST_AUDIO_RENDERED) {
-                    if (mBuffer != null) {
-                        if (image1 != null) {
-                            ((AnimationDrawable) image1.getBackground()).stop();
-                        } else {
-                            ((AnimationDrawable) (mBuffer.findViewById(R.id.buffer_image2)).getBackground()).stop();
+                    } else if (what == NELivePlayer.NELP_FIRST_AUDIO_RENDERED) {
+                        if (mBuffer != null) {
+                            if (image1 != null) {
+                                ((AnimationDrawable) image1.getBackground()).stop();
+                            } else {
+                                ((AnimationDrawable) (mBuffer.findViewById(R.id.buffer_image2)).getBackground()).stop();
+                            }
+                            mBuffer.setVisibility(View.GONE);
                         }
-                        mBuffer.setVisibility(View.GONE);
+    //                    Logger.e(TAG, "onInfo: NELP_FIRST_AUDIO_RENDERED");
                     }
-//                    Logger.e(TAG, "onInfo: NELP_FIRST_AUDIO_RENDERED");
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
             return true;
@@ -591,6 +595,15 @@ public class NEVideoView extends SurfaceView {
         } else {
             mSeekWhenPrepared = msec;
         }
+    }
+
+
+    public int getmBufferStrategy() {
+        return mBufferStrategy;
+    }
+
+    public void setmBufferStrategy(int mBufferStrategy) {
+        this.mBufferStrategy = mBufferStrategy;
     }
 
     public boolean isPlaying() {
