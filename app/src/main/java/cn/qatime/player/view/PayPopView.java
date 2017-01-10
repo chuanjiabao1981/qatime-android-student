@@ -9,9 +9,9 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
+import com.orhanobut.logger.Logger;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,6 +35,10 @@ import libraryextra.utils.VolleyListener;
  * @Description:
  */
 public class PayPopView {
+    public static int WITHDRAW_CASH = 0;//提现
+    public static int PAY_ORDER = 1;//支付
+    private int type;
+    private String url;
     private String title;
     private String price;
     private PayEditText payEditText;
@@ -63,7 +67,8 @@ public class PayPopView {
     };
     private View view;
 
-    public PayPopView(String title, String price, BaseActivity activity) {
+    public PayPopView(int type, String title, String price, BaseActivity activity) {
+        this.type = type;
         this.title = title;
         this.price = price;
         this.activity = activity;
@@ -112,8 +117,14 @@ public class PayPopView {
             @Override
             public void onInputFinished(String password) {
                 Map<String, String> map = new HashMap<String, String>();
-                map.put("current_pament_password", password);
-                DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.cashAccounts + BaseApplication.getUserId() + "/password/ticket_token", map), null,
+                map.put("password", password);
+                if(type == WITHDRAW_CASH){
+                    url= UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/withdraws/ticket_token", map);
+                }else if(type == PAY_ORDER){
+                    // TODO: 2017/1/10 待修改
+                    url= UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/withdraws/ticket_token", map);
+                }
+                DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(url, null,
                         new VolleyListener(activity) {
                             @Override
                             protected void onSuccess(JSONObject response) {
@@ -127,6 +138,7 @@ public class PayPopView {
                             }
 
                             protected void onError(JSONObject response) {
+                                Logger.e(response.toString());
                                 payEditText.clear();
                                 try {
                                     int errorCode = response.getJSONObject("error").getInt("code");
@@ -222,7 +234,6 @@ public class PayPopView {
         void onSuccess(String ticket_token);
 
         /**
-         *
          * @param errorCode 0：serverError
          */
         void onError(int errorCode);

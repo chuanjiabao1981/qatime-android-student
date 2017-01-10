@@ -175,7 +175,7 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
             return;
         }
 
-        payPopView = new PayPopView("用户提现", "￥" + amount, WithdrawCashActivity.this);
+        payPopView = new PayPopView(PayPopView.WITHDRAW_CASH,"用户提现", "￥" + amount, WithdrawCashActivity.this);
         payPopView.showPop();
         payPopView.setOnPayPSWVerifyListener(new PayPopView.OnPayPSWVerifyListener() {
             @Override
@@ -193,10 +193,12 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
                 payPopView.dismiss();
                 if (errorCode == 2005) {
                     dialogPSWError();
+                } else if (errorCode == 2008) {
+                    dialogServerError("新支付密码未满24小时，暂不能使用");//未满24小时
                 } else if (errorCode == 0) {
                     Toast.makeText(WithdrawCashActivity.this, "请检查网络连接", Toast.LENGTH_SHORT).show();
                 } else {
-                    dialogServerError();
+                    dialogServerError("提现系统繁忙，请稍后再试");//系统繁忙
                 }
             }
         });
@@ -233,13 +235,13 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
         alertDialog.setContentView(view);
     }
 
-    private void dialogServerError() {
+    private void dialogServerError(String desc) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         alertDialog = builder.create();
         alertDialog.setCanceledOnTouchOutside(false);
         View view = View.inflate(this, R.layout.dialog_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("提现系统繁忙，请稍后再试");
+        text.setText(desc);
         Button confirm = (Button) view.findViewById(R.id.confirm);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
