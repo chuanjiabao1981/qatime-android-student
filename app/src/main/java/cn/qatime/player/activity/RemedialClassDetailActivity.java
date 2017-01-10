@@ -250,9 +250,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                             } else {//显示加入试听按钮
                                 audition.setText(getResources().getString(R.string.Join_the_audition));
                                 auditionStart.setVisibility(View.GONE);
-                                if(data.getData().getTaste_count() == 0){//试听数目为0则该课不支持试听
-                                    audition.setEnabled(false);
-                                }
+//                                if(data.getData().getTaste_count() == 0){//试听数目为0则该课不支持试听
+//                                    audition.setEnabled(false);
+//                                }
                             }
 
                             if (data.getData().getIs_bought()) {
@@ -475,8 +475,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     @Override
                     protected void onError(JSONObject response) {
 //                            if(response.getJSONObject("error").getInt("code")==3004){//CourseTasteLimit
+                        Toast.makeText(RemedialClassDetailActivity.this, "该课程不支持试听", Toast.LENGTH_SHORT).show();
 //                                            }
-                        Toast.makeText(RemedialClassDetailActivity.this, "该课程暂不支持试听", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
