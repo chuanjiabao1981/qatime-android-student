@@ -332,8 +332,10 @@ public class NEVideoView extends SurfaceView {
         }
     };
 
+    private int mCurrentBufferPercentage = 0;
     private OnBufferingUpdateListener mBufferingUpdateListener = new OnBufferingUpdateListener() {
         public void onBufferingUpdate(NELivePlayer mp, int percent) {
+            mCurrentBufferPercentage = percent;
             if (mOnBufferingUpdateListener != null)
                 mOnBufferingUpdateListener.onBufferingUpdate(mp, percent);
         }
@@ -352,7 +354,7 @@ public class NEVideoView extends SurfaceView {
                     ImageView image1 = (ImageView) mBuffer.findViewById(R.id.buffer_image1);
 
                     if (what == NELivePlayer.NELP_BUFFERING_START) {
-    //                    Logger.e(TAG, "onInfo: NELP_BUFFERING_START");
+                        //                    Logger.e(TAG, "onInfo: NELP_BUFFERING_START");
                         if (mBuffer != null) {
                             mBuffer.setVisibility(View.VISIBLE);
                             if (image1 != null) {
@@ -362,7 +364,7 @@ public class NEVideoView extends SurfaceView {
                             }
                         }
                     } else if (what == NELivePlayer.NELP_BUFFERING_END) {
-    //                    Logger.e(TAG, "onInfo: NELP_BUFFERING_END");
+                        //                    Logger.e(TAG, "onInfo: NELP_BUFFERING_END");
                         if (mBuffer != null) {
                             if (image1 != null) {
                                 ((AnimationDrawable) image1.getBackground()).stop();
@@ -372,7 +374,7 @@ public class NEVideoView extends SurfaceView {
                             mBuffer.setVisibility(View.GONE);
                         }
                     } else if (what == NELivePlayer.NELP_FIRST_VIDEO_RENDERED) {
-    //                    Logger.e(TAG, "onInfo: NELP_FIRST_VIDEO_RENDERED");
+                        //                    Logger.e(TAG, "onInfo: NELP_FIRST_VIDEO_RENDERED");
                         if (mBuffer != null) {
                             if (image1 != null) {
                                 ((AnimationDrawable) image1.getBackground()).stop();
@@ -390,7 +392,7 @@ public class NEVideoView extends SurfaceView {
                             }
                             mBuffer.setVisibility(View.GONE);
                         }
-    //                    Logger.e(TAG, "onInfo: NELP_FIRST_AUDIO_RENDERED");
+                        //                    Logger.e(TAG, "onInfo: NELP_FIRST_AUDIO_RENDERED");
                     }
                 }
             } catch (Exception e) {
@@ -660,5 +662,9 @@ public class NEVideoView extends SurfaceView {
         getHolder().setFixedSize(params.width, params.height);
     }
 
+    public int getBufferPercentage() {
+        if (mMediaPlayer != null) return mCurrentBufferPercentage;
+        return 0;
+    }
 }
 

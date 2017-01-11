@@ -3,8 +3,10 @@ package cn.qatime.player.fragment;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -17,7 +19,12 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
+
+import java.util.Locale;
+
 import cn.qatime.player.R;
+import cn.qatime.player.view.NEVideoView;
 
 /**
  * @author lungtify
@@ -41,13 +48,67 @@ public class PlayBackFloatFragment extends Fragment implements View.OnClickListe
     private ListView list;
 
     private final int sDefaultVanishTime = 5000;
-    private Handler hd = new Handler();
-    private Runnable runnable = new Runnable() {
+    private final int HIDE = 1001;
+    private final int PROGRESS = 1002;
+    private boolean mDragging;
+
+    @SuppressLint("HandlerLeak")
+    private Handler hd = new Handler() {
         @Override
-        public void run() {
-            vanish(false);
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case HIDE:
+                    vanish(false);
+                    break;
+                case PROGRESS:
+                    long pos = setProgress();
+                    if (!mDragging && showState) {
+                        msg = obtainMessage(PROGRESS);
+                        sendMessageDelayed(msg, 1000 - (pos % 1000));
+                        updatePausePlay();
+                    }
+                    break;
+            }
         }
     };
+    private NEVideoView mPlayer;
+    private int mDuration = 0;
+    private Runnable lastRunnable;
+    private TextView currentTime;
+
+    private long setProgress() {
+        if (mPlayer == null || mDragging)
+            return 0;
+
+        int position = mPlayer.getCurrentPosition();
+        int duration = mPlayer.getDuration();
+        if (seekbar != null) {
+            if (duration > 0) {
+                long pos = 1000L * position / duration;
+                seekbar.setProgress((int) pos);
+            }
+            int percent = mPlayer.getBufferPercentage();
+            seekbar.setSecondaryProgress(percent * 10);
+        }
+        mDuration = duration;
+        if (time != null && duration > 0)
+            time.setText(stringForTime(duration));
+        else
+            time.setText("--:--:--");
+        if (currentTime != null)
+            currentTime.setText(stringForTime(position));
+
+        return position;
+    }
+
+    private static String stringForTime(long position) {
+        int totalSeconds = (int) ((position / 1000.0) + 0.5);
+
+        int seconds = totalSeconds % 60;
+        int minutes = (totalSeconds / 60) % 60;
+        int hours = totalSeconds / 3600;
+        return String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds).toString();
+    }
 
     public PlayBackFloatFragment(Callback callback) {
         this.callback = callback;
@@ -61,10 +122,13 @@ public class PlayBackFloatFragment extends Fragment implements View.OnClickListe
         play = (ImageView) view.findViewById(R.id.play);
         seekbar = (SeekBar) view.findViewById(R.id.seekbar);
         time = (TextView) view.findViewById(R.id.time);
+        currentTime = (TextView) view.findViewById(R.id.current_time);
         videoDefinition = (TextView) view.findViewById(R.id.video_definition);
         zoom = (ImageView) view.findViewById(R.id.zoom);
         list = (ListView) view.findViewById(R.id.list);
+        seekbar.setMax(1000);
 
+        hd.sendEmptyMessageDelayed(HIDE, 1500);
     }
 
     @Nullable
@@ -90,17 +154,36 @@ public class PlayBackFloatFragment extends Fragment implements View.OnClickListe
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (!fromUser) return;
 
+                final long newposition = mDuration * progress / 1000;
+                String time = stringForTime(newposition);
+                hd.removeCallbacks(lastRunnable);
+                lastRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        mPlayer.seekTo(newposition);
+                    }
+                };
+                hd.postDelayed(lastRunnable, 200);
+                PlayBackFloatFragment.this.currentTime.setText(time);
+                Logger.e(mDuration + "**" + progress + "**" + newposition + "***" + (mDuration * progress / 1000));
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                hd.removeCallbacks(runnable);
+                mDragging = true;
+                hd.removeMessages(HIDE);
+                hd.removeMessages(PROGRESS);
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                mPlayer.seekTo((mDuration * seekBar.getProgress()) / 1000);
+                mDragging = false;
                 startVanishTimer();
+                hd.removeMessages(PROGRESS);
+                hd.sendEmptyMessageDelayed(PROGRESS, 1000);
             }
         });
     }
@@ -136,11 +219,11 @@ public class PlayBackFloatFragment extends Fragment implements View.OnClickListe
                 }
                 break;
             case R.id.play:
-                if (callback==null)return;
+                if (callback == null) return;
                 callback.playOrPause();
                 break;
             case R.id.courses_list:
-                hd.removeCallbacks(runnable);
+                hd.removeMessages(HIDE);
                 vanish(true);
                 break;
             case R.id.zoom:
@@ -154,8 +237,8 @@ public class PlayBackFloatFragment extends Fragment implements View.OnClickListe
         if (!showState) {
             return;
         }
-        hd.removeCallbacks(runnable);
-        hd.postDelayed(runnable, sDefaultVanishTime);
+        hd.removeMessages(HIDE);
+        hd.sendEmptyMessageDelayed(HIDE, sDefaultVanishTime);
     }
 
     /**
@@ -164,6 +247,7 @@ public class PlayBackFloatFragment extends Fragment implements View.OnClickListe
      * @param shouldWithList
      */
     private void vanish(boolean shouldWithList) {
+        hd.removeMessages(PROGRESS);
         showState = false;
         float[] arrayOfFloat1 = new float[2];
         arrayOfFloat1[0] = 0.0F;
@@ -226,6 +310,31 @@ public class PlayBackFloatFragment extends Fragment implements View.OnClickListe
         if (shouldWithList) {
             list.setVisibility(View.GONE);
         }
+        animatorSet.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                hd.sendEmptyMessage(PROGRESS);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+    }
+
+    private void updatePausePlay() {
+        setPlayOrPause(mPlayer != null && mPlayer.isPlaying());
     }
 
     public void setPortrait(boolean rotate) {
@@ -238,6 +347,21 @@ public class PlayBackFloatFragment extends Fragment implements View.OnClickListe
             zoom.setVisibility(View.GONE);
             videoDefinition.setVisibility(View.VISIBLE);
         }
+    }
+
+    /**
+     * @param isplaying 正在播放
+     */
+    public void setPlayOrPause(boolean isplaying) {
+        if (isplaying) {
+            play.setImageResource(R.mipmap.nemediacontroller_play);
+        } else {
+            play.setImageResource(R.mipmap.nemediacontroller_pause);
+        }
+    }
+
+    public void setMediaPlayer(NEVideoView mediaPlayer) {
+        this.mPlayer = mediaPlayer;
     }
 
     public interface Callback {

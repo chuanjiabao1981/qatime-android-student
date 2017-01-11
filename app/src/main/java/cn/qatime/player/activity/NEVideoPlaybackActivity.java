@@ -40,8 +40,9 @@ public class NEVideoPlaybackActivity extends BaseActivity implements PlayBackVid
 
         initView();
 
-        video.setVideoPath("http://vodb98fi13b.vod.126.net/vodb98fi13b/0de484f0121f46818f2e912773d08132_1484023388416_1484025548690_1314330-00002.mp4");
+        video.setVideoPath("http://192.168.1.125:8080/media/28.mp4");
         video.start();
+        Logger.e("*********" + (6311368 * 1000 / 1000.0));
     }
 
     private void initView() {
@@ -61,6 +62,7 @@ public class NEVideoPlaybackActivity extends BaseActivity implements PlayBackVid
         mainVideoParam.width = -1;
         mainVideoParam.height = screenW * 9 / 16;
         videolayout.setLayoutParams(mainVideoParam);
+        playBackFloatFragment.setMediaPlayer(video);
     }
 
     @Override
@@ -123,9 +125,29 @@ public class NEVideoPlaybackActivity extends BaseActivity implements PlayBackVid
     @Override
     public void playOrPause() {
         if (video.isPlaying()) {
+            playBackFloatFragment.setPlayOrPause(false);
             video.pause();
         } else {
             video.start();
+            playBackFloatFragment.setPlayOrPause(true);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        video.start();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        video.pause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        video.release_resource();
     }
 }

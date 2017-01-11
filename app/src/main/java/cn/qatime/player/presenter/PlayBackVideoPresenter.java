@@ -17,19 +17,19 @@ public class PlayBackVideoPresenter implements PlayBackFloatFragment.Callback {
 
     @Override
     public void fullScreen() {
-        if (vi==null)return;
+        if (vi == null) return;
         vi.fullScreen();
     }
 
     @Override
     public void exit() {
-        if (vi==null)return;
+        if (vi == null) return;
         vi.exit();
     }
 
     @Override
     public void playOrPause() {
-        if (vi==null)return;
+        if (vi == null) return;
         vi.playOrPause();
     }
 }
