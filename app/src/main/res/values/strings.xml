@@ -505,5 +505,6 @@
     <string name="go_for_buy">去逛逛</string>
     <string name="this_phone_number_already_regist">该手机号已注册,请直接登录</string>
     <string name="use_a_new_number">新号码注册</string>
+    <string name="this_month_non_lesson">本月暂无课程</string>
 
 </resources>
