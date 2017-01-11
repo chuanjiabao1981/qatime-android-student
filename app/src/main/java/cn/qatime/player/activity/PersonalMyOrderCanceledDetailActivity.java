@@ -100,16 +100,15 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
         } else {
             String payType = getIntent().getStringExtra("payType");//支付方式
             if (payType.equals("weixin")) {
-                paytype.setText(getResourceString(R.string.wechat_payment));
+                paytype.setText(getResourceString(R.string.wexin_payment));
             } else if (payType.equals("alipay")) {
                 paytype.setText(getResourceString(R.string.alipay_payment));
             } else {
                 paytype.setText(getResourceString(R.string.account_payment));
             }
         }
-        progress.setText("共" + data.Preset_lesson_count + "课");
-        PersonalMyOrderCanceledDetailActivity.this.payprice.setText(data.amount);
-        payprice.setText("￥" + data.amount + " ");
+        progress.setText(String.format(getString(R.string.lesson_count),data.Preset_lesson_count));
+        payprice.setText("￥" + data.amount);
     }
 
     public void initView() {

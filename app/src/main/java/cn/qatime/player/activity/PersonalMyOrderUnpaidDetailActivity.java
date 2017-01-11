@@ -111,15 +111,14 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         }
         String payType = data.getPay_type();//支付方式
         if (payType.equals("weixin")) {
-            paytype.setText(getResourceString(R.string.wechat_payment));
+            paytype.setText(getResourceString(R.string.wexin_payment));
         } else if (payType.equals("alipay")) {
             paytype.setText(getResourceString(R.string.alipay_payment));
         } else {
             paytype.setText(getResourceString(R.string.account_payment));
         }
-        progress.setText("共" + data.getProduct().getPreset_lesson_count() + "课");
-        PersonalMyOrderUnpaidDetailActivity.this.payprice.setText(data.getAmount());
-        payprice.setText("￥" + data.getAmount() + " ");
+        progress.setText(String.format(getResourceString(R.string.lesson_count),data.getProduct().getPreset_lesson_count()));
+        payprice.setText("￥" + data.getAmount());
     }
 
     public void initView() {
@@ -177,7 +176,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         final AlertDialog alertDialog = builder.create();
         View view = View.inflate(this, R.layout.dialog_cancel_or_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("是否确认取消此订单");
+        text.setText(R.string.confirm_cancel_order);
         Button cancel = (Button) view.findViewById(R.id.cancel);
         Button confirm = (Button) view.findViewById(R.id.confirm);
         cancel.setOnClickListener(new View.OnClickListener() {

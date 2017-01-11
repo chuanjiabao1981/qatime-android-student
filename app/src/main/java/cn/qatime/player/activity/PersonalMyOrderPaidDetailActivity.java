@@ -113,7 +113,7 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
         }
         String payType = getIntent().getStringExtra("payType");//支付方式
         if (payType.equals("weixin")) {
-            paytype.setText(getResourceString(R.string.wechat_payment));
+            paytype.setText(getResourceString(R.string.wexin_payment));
         } else if (payType.equals("alipay")) {
             paytype.setText(getResourceString(R.string.alipay_payment));
         } else {
@@ -122,9 +122,9 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
 
         if (data.status.equals("refunding")) {//退款中
             status.setImageResource(R.mipmap.refunding);
-            Refund.setText("取消退款");
+            Refund.setText(R.string.cancel_refund);
         } else {
-            Refund.setText("申请退款");
+            Refund.setText(R.string.apply_refund);
             if (data.status.equals("paid")) {//正在交易
                 status.setImageResource(R.mipmap.paying);
             } else if (data.status.equals("shipped")) {//正在交易
@@ -133,9 +133,8 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
                 status.setImageResource(R.mipmap.complete_pay);
             }
         }
-        progress.setText("共" + data.Preset_lesson_count + "课");
-        PersonalMyOrderPaidDetailActivity.this.payprice.setText(data.amount);
-        payprice.setText("￥" + data.amount + " ");
+        progress.setText(String.format(getString(R.string.lesson_count),data.Preset_lesson_count));
+        payprice.setText("￥" + data.amount);
 
         Refund.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -218,7 +217,7 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
         final AlertDialog alertDialog = builder.create();
         View view = View.inflate(PersonalMyOrderPaidDetailActivity.this, R.layout.dialog_cancel_or_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("是否确认取消退款申请");
+        text.setText(R.string.confirm_cancel_refund);
         Button cancel = (Button) view.findViewById(R.id.cancel);
         Button confirm = (Button) view.findViewById(R.id.confirm);
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -254,14 +253,14 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
                 new VolleyListener(PersonalMyOrderPaidDetailActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        Toast.makeText(PersonalMyOrderPaidDetailActivity.this, "取消退款申请成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PersonalMyOrderPaidDetailActivity.this, R.string.cancel_refund_success, Toast.LENGTH_SHORT).show();
                         setResult(Constant.RESPONSE);
                         finish();
                     }
 
                     @Override
                     protected void onError(JSONObject response) {
-                        Toast.makeText(PersonalMyOrderPaidDetailActivity.this, "取消退款申请失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PersonalMyOrderPaidDetailActivity.this, R.string.cancel_refund_error, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override

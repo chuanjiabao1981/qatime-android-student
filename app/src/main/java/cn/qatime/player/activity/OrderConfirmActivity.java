@@ -161,7 +161,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                                     EventBus.getDefault().post(PayResultState.SUCCESS);
                                     finish();
                                 } else {
-                                    Toast.makeText(OrderConfirmActivity.this, "余额不足", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(OrderConfirmActivity.this, R.string.amount_not_enough, Toast.LENGTH_SHORT).show();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -198,7 +198,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         alertDialog = builder.create();
         View view = View.inflate(this, R.layout.dialog_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("下单失败，请稍后再试");
+        text.setText(R.string.create_order_error);
         Button confirm = (Button) view.findViewById(R.id.confirm);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override

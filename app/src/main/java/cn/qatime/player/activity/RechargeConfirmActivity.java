@@ -155,13 +155,14 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
     private String getPayType(String pay_type) {
         switch (pay_type) {
             case "weixin":
-                return "微信支付";
+                return getString(R.string.wexin_payment);
             case "alipay":
-                return "支付宝";
+                return getString(R.string.alipay_payment);
             case "offline":
-                return "线下支付";
+                return getString(R.string.offline_payment);
+            default:
+                return getString(R.string.non_payment);
         }
-        return "未支付";
     }
 
     @Subscribe

@@ -217,7 +217,7 @@ public class RechargeActivity extends BaseActivity {
                     return;
                 }
                 if (Double.valueOf(amount) > Math.pow(10, 6)) {
-                    Toast.makeText(RechargeActivity.this, "金额不支持", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RechargeActivity.this, R.string.amount_not_allow, Toast.LENGTH_SHORT).show();
                     return;
                 }
 

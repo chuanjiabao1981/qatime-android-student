@@ -238,7 +238,7 @@
     <string name="within_ten_years">3-10 years</string>
     <string name="within_three_years">Within 3 years</string>
     <string name="within_twenty_years">10-20 years</string>
-    <string name="wechat_payment">Wechat payment</string>
+    <string name="wexin_payment">Wechat payment</string>
     <string name="viewing_mode">Viewing mode</string>
     <string name="system_message">System message</string>
     <string name="send">Send</string>

@@ -220,7 +220,7 @@
     <string name="pay_failure">支付结果未找到</string>
     <string name="pay_success">支付成功</string>
     <string name="button_commit">提交</string>
-    <string name="wechat_payment">微信支付</string>
+    <string name="wexin_payment">微信支付</string>
     <string name="alipay_payment">支付宝支付</string>
     <string name="pay_now">立即支付</string>
     <string name="confirm_payment">确认支付</string>
@@ -459,7 +459,7 @@
     <string name="unlogin_alert">您还未登录,请先登录!</string>
     <string name="hader_can_not_be_empty">头像不能为空</string>
     <string name="teacher_translate">老师</string>
-    <string name="change_pay_password">重置支付密码</string>
+    <string name="reset_pay_password">重置支付密码</string>
     <string name="please_talk_later">请稍候发言</string>
     <string name="update_desc">更新内容</string>
     <string name="refund_record">退款记录</string>
@@ -471,5 +471,39 @@
     <string name="other_method_of_login">其他登录方式</string>
     <string name="found_new_version">发现新版本</string>
     <string name="whole_country">全国</string>
+    <string name="refund_apply">退款申请</string>
+    <string name="refund_to_weixin">退至微信</string>
+    <string name="refund_to_alipay">退至支付宝</string>
+    <string name="refund_to_account">退至余额</string>
+    <string name="please_enter_refund_reason">请输入退款原因</string>
+    <string name="refund_application_successful">退款申请成功</string>
+    <string name="not_enough_amount_of_refund">此订单无可退金额</string>
+    <string name="switch_city">切换城市</string>
+    <string name="loading_location">正在获取您的位置...</string>
+    <string name="position_locate_error">暂未获取到您的位置信息</string>
+    <string name="position_locate_success">已获取到您的位置信息，是否\n切换为</string>
+    <string name="password_format_error">密码格式不正确</string>
+    <string name="create_order_error">下单失败，请稍后再试</string>
+    <string name="confirm_new_pay_password">确认新支付密码</string>
+    <string name="change_pay_password_success">支付密码修改成功</string>
+    <string name="token_error">授权token无效</string>
+    <string name="change_new_pay_password">设置新支付密码</string>
+    <string name="verify_owner">验证身份</string>
+    <string name="hint_input_login_password">输入账户登录密码</string>
+    <string name="please_reset_pay_password_first">请先点击忘记支付密码进行重置</string>
+    <string name="verify_pay_password">验证支付密码</string>
+    <string name="lesson_count">共%1$d课</string>
+    <string name="cancel_refund">取消退款</string>
+    <string name="confirm_cancel_refund">是否确认取消退款申请</string>
+    <string name="cancel_refund_success">取消退款申请成功</string>
+    <string name="cancel_refund_error">取消退款申请失败</string>
+    <string name="confirm_cancel_order">是否确认取消此订单</string>
+    <string name="amount_not_allow">金额不支持</string>
+    <string name="offline_payment">线下支付</string>
+    <string name="non_payment">未支付</string>
+    <string name="recharge_amount">充值金额</string>
+    <string name="go_for_buy">去逛逛</string>
+    <string name="this_phone_number_already_regist">该手机号已注册,请直接登录</string>
+    <string name="use_a_new_number">新号码注册</string>
 
 </resources>

@@ -57,9 +57,9 @@ public class  PayPSWForgetActivity extends BaseActivity implements View.OnClickL
     }
 
     private void initView() {
-        setTitle("验证身份");
+        setTitle(getString(R.string.verify_owner));
         assignViews();
-        password.setHint("输入账户登录密码");
+        password.setHint(R.string.hint_input_login_password);
         code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_verification_code));
 
         textGetcode.setOnClickListener(this);
@@ -137,9 +137,9 @@ public class  PayPSWForgetActivity extends BaseActivity implements View.OnClickL
                                 try {
                                     int errorCode = response.getJSONObject("error").getInt("code");
                                     if (errorCode == 2005) {
-                                        Toast.makeText(PayPSWForgetActivity.this, "密码验证失败", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(PayPSWForgetActivity.this, R.string.password_error, Toast.LENGTH_SHORT).show();
                                     } else if (errorCode == 2003) {
-                                        Toast.makeText(PayPSWForgetActivity.this, "无效的验证码", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(PayPSWForgetActivity.this,R.string.code_error, Toast.LENGTH_SHORT).show();
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
