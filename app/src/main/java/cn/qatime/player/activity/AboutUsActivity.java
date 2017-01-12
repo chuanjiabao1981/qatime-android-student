@@ -12,6 +12,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.utils.Constant;
 
 /**
  * @author luntify
@@ -35,6 +36,7 @@ public class AboutUsActivity extends BaseActivity {
         setTitle(getResources().getString(R.string.about_us));
         call = findViewById(R.id.call_phone);
         phone = (TextView) findViewById(R.id.phone);
+        phone.setText(Constant.phoneNumber);
         call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,7 +44,7 @@ public class AboutUsActivity extends BaseActivity {
 
                 View view = View.inflate(AboutUsActivity.this, R.layout.dialog_cancel_or_confirm, null);
                 TextView text = (TextView) view.findViewById(R.id.text);
-                text.setText(getResourceString(R.string.call_customer_service_phone) +  phone.getText());
+                text.setText(getResourceString(R.string.call_customer_service_phone) +   Constant.phoneNumber);
                 Button cancel = (Button) view.findViewById(R.id.cancel);
                 Button confirm = (Button) view.findViewById(R.id.confirm);
                 cancel.setOnClickListener(new View.OnClickListener() {
@@ -55,7 +57,7 @@ public class AboutUsActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         alertDialog.dismiss();
-                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
+                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.phoneNumber));
                         startActivity(intent);
                     }
                 });
