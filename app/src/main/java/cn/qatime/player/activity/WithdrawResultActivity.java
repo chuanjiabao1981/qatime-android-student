@@ -102,11 +102,11 @@ public class WithdrawResultActivity extends BaseActivity implements View.OnClick
     private String getPayType(String pay_type) {
         switch (pay_type) {
             case "bank":
-                return "银行卡";
+                return getString(R.string.bank_card);
             case "alipay":
-                return "支付宝";
+                return getString(R.string.alipay);
         }
-        return "银行卡";
+        return getString(R.string.bank_card);
     }
 
     @Override
