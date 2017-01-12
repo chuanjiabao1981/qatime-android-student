@@ -134,7 +134,7 @@
     <string name="teacher_detail">教师资料</string>
     <string name="course_list">课程列表</string>
     <!--//课程详情-->
-    <string name="student_number">学习人数</string>
+    <string name="student_number">报名人数 %1$d</string>
     <string name="Join_the_audition">加入试听</string>
     <string name="Joined_the_audition">已加入试听</string>
     <string name="purchase_now">立即报名</string>
@@ -186,7 +186,7 @@
     <string name="class_name">课程名称：</string>
     <string name="subject_type">科目类型：</string>
     <string name="teacher">授课教师：</string>
-    <string name="progress">课程进度：</string>
+    <string name="progress">[进度%1$d/%2$d]</string>
     <string name="teach_way">授课方式：</string>
     <string name="remain_class">剩余课时：</string>
     <string name="total_class_hours">课时总数：</string>
@@ -222,6 +222,7 @@
     <string name="button_commit">提交</string>
     <string name="wexin_payment">微信支付</string>
     <string name="alipay_payment">支付宝支付</string>
+    <string name="alipay">支付宝</string>
     <string name="pay_now">立即支付</string>
     <string name="confirm_payment">确认支付</string>
     <string name="payment_results_are_being_queried">正在查询支付结果</string>
@@ -343,7 +344,7 @@
     <string name="team_send_message_not_allow">您已不在该群，不能发送消息</string>
     <string name="team_not_exist">该群不存在</string>
     <string name="item_to_start_main">距开课</string>
-    <string name="team">群组</string>
+    <string name="team_group">群组</string>
     <string name="nolongger_alert">不再提醒</string>
     <string name="performance_optimization">性能优化</string>
     <string name="check_for_update_failed">检查更新失败</string>
@@ -351,7 +352,6 @@
     <string name="start_download">开始下载</string>
     <string name="alert">提示</string>
     <string name="call_customer_service_phone">是否拨打客服电话</string>
-    <string name="customer_service_phone_number">0353-2135828</string>
     <string name="call_right_now">立即拨打</string>
     <string name="failed_to_obtain_group_information">获取群组信息失败!</string>
     <string name="download_picture_fail">图片下载失败</string>
@@ -506,5 +506,47 @@
     <string name="this_phone_number_already_regist">该手机号已注册,请直接登录</string>
     <string name="use_a_new_number">新号码注册</string>
     <string name="this_month_non_lesson">本月暂无课程</string>
+    <string name="remedial_detail">辅导详情</string>
+    <string name="teacher_info">教师资料</string>
+    <string name="continue_buy_lasses_lesson">该辅导班已开课，是否继续购买</string>
+    <string name="the_course_not_support_audition">该课程不支持试听</string>
+    <string name="teaching">开课中</string>
+    <string name="completed">已结束</string>
+    <string name="bind_error">绑定失败</string>
+    <string name="change_pay_password_notify">新设置或修改后将在24小时内不能使用支付密码，是否继续</string>
+    <string name="continue_anyway">继续</string>
+    <string name="cancel_bind_weixin_notify">取消绑定后将不能使用提现到微信功能，是否继续</string>
+    <string name="clean_cache_success">成功清理缓存</string>
+    <string name="not_available">暂无</string>
+    <string name="teach_age">教龄</string>
+    <string name="apply_withdraw_error">提现系统繁忙，请稍候再试</string>
+    <string name="bank_card">银行卡</string>
+    <string name="student_translate">学生</string>
+    <string name="unsupported_type">不支持的类型</string>
+    <string name="join_the_class">" 加入了本班"</string>
+    <string name="has_been_removed_from_the_team">" 已被移出群"</string>
+    <string name="has_been_removed_from_the_group">" 已被移出讨论组"</string>
+    <string name="left_the_team">" 离开了群"</string>
+    <string name="left_the_group">" 离开了讨论组"</string>
+    <string name="dismiss_the_team">" 解散了群"</string>
+    <string name="name_update_to">"名称被更新为 "</string>
+    <string name="team_desc_update_to">"群介绍被更新为 "</string>
+    <string name="update_the_team_announcement">" 修改了群公告"</string>
+    <string name="team_authentication_update_to">群身份验证权限更新为</string>
+    <string name="team_extension_field_update_to">"群扩展字段被更新为 "</string>
+    <string name="team_server_extension_field_update_to">"群扩展字段(服务器)被更新为 "</string>
+    <string name="team_icon_has_updated">群头像已更新</string>
+    <string name="be_updated_to">"被更新为 "</string>
+    <string name="team_invite_permission_be_update_to">"群邀请他人权限被更新为 "</string>
+    <string name="team_info_permission_be_updated_to">"群资料修改权限被更新为 "</string>
+    <string name="team_invite_authentication_be_updated_to">"群被邀请人身份验证权限被更新为 "</string>
+    <string name="team_extension_update_mode_be_updated_to">"群扩展字段修改权限被更新为 "</string>
+    <string name="team">群</string>
+    <string name="unknown_notify">未知通知</string>
+    <string name="administrator_allow_someone_join_the_team">管理员通过用户 %1$s 的入群申请</string>
+    <string name="move_the_group_to">" 将群转移给 "</string>
+    <string name="bean_appointed_administrator">" 被任命为管理员"</string>
+    <string name="been_dropped_administrator">" 被撤销管理员身份"</string>
+    <string name="accept_the_team_invite">%1$s 接受了 %2$s 的入群邀请</string>
 
 </resources>

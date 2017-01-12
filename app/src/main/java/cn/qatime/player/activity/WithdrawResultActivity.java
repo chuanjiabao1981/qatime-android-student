@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.utils.Constant;
 
 /**
  * @author Tianhaoranly
@@ -49,6 +50,7 @@ public class WithdrawResultActivity extends BaseActivity implements View.OnClick
         }
         withdrawCashConfirm = (Button) findViewById(R.id.withdraw_cash_confirm);
         phone = (TextView) findViewById(R.id.phone);
+        phone.setText(Constant.phoneNumber);
         phone.setOnClickListener(this);
         withdrawCashConfirm.setOnClickListener(this);
     }
@@ -68,7 +70,7 @@ public class WithdrawResultActivity extends BaseActivity implements View.OnClick
                 if (alertDialogPhone == null) {
                     View view = View.inflate(WithdrawResultActivity.this, R.layout.dialog_cancel_or_confirm, null);
                     TextView text = (TextView) view.findViewById(R.id.text);
-                    text.setText(getResourceString(R.string.call_customer_service_phone) + phone.getText());
+                    text.setText(getResourceString(R.string.call_customer_service_phone) +  Constant.phoneNumber);
                     Button cancel = (Button) view.findViewById(R.id.cancel);
                     Button confirm = (Button) view.findViewById(R.id.confirm);
                     cancel.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +83,7 @@ public class WithdrawResultActivity extends BaseActivity implements View.OnClick
                         @Override
                         public void onClick(View v) {
                             alertDialogPhone.dismiss();
-                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
+                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" +  Constant.phoneNumber));
                             startActivity(intent);
                         }
                     });
@@ -102,11 +104,11 @@ public class WithdrawResultActivity extends BaseActivity implements View.OnClick
     private String getPayType(String pay_type) {
         switch (pay_type) {
             case "bank":
-                return "银行卡";
+                return getString(R.string.bank_card);
             case "alipay":
-                return "支付宝";
+                return getString(R.string.alipay);
         }
-        return "银行卡";
+        return getString(R.string.bank_card);
     }
 
     @Override

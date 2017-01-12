@@ -62,7 +62,7 @@ import libraryextra.view.SimpleViewPagerIndicator;
 public class RemedialClassDetailActivity extends BaseFragmentActivity implements View.OnClickListener {
     ImageView image;
     private int id;
-    private String[] mTitles = new String[]{"辅导详情", "教师资料", "课程安排"};
+    private String[] mTitles;
     private SimpleViewPagerIndicator mIndicator;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
     private Button audition;
@@ -137,6 +137,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
         mIndicator = (SimpleViewPagerIndicator) findViewById(R.id.id_stickynavlayout_indicator);
         mViewPager = (ViewPager) findViewById(R.id.id_stickynavlayout_viewpager);
+        mTitles = new String[]{getString(R.string.remedial_detail), getString(R.string.teacher_info), getString(R.string.course_arrangement)};
         mIndicator.setTitles(mTitles);
         mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
@@ -189,7 +190,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                             status.setText(getStatus(data.getData().getStatus()));
                             name.setText(data.getData().getName());
                             title.setText(data.getData().getName());
-                            studentnumber.setText("报名人数 " + data.getData().getBuy_tickets_count());
+                            studentnumber.setText(getString(R.string.student_number, data.getData().getBuy_tickets_count()));
                             String price;
                             if (Constant.CourseStatus.finished.equals(data.getData().getStatus()) || Constant.CourseStatus.completed.equals(data.getData().getStatus())) {
                                 price = df.format(data.getData().getPrice());
@@ -222,13 +223,13 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                                     progress.setVisibility(View.VISIBLE);
                                     timeToStart.setVisibility(View.GONE);
                                     layoutView.setBackgroundColor(0xff00a0e9);
-                                    progress.setText("[进度" + data.getData().getCompleted_lesson_count() + "/" + data.getData().getPreset_lesson_count() + "]");
+                                    progress.setText(getString(R.string.progress,data.getData().getCompleted_lesson_count(),data.getData().getPreset_lesson_count()));
                                 } else if (Constant.CourseStatus.finished.equals(data.getData().getStatus()) || Constant.CourseStatus.completed.equals(data.getData().getStatus())) {
                                     handleLayout.setVisibility(View.GONE);//已结束的课程隐藏操作按钮
                                     progress.setVisibility(View.VISIBLE);
                                     timeToStart.setVisibility(View.GONE);
                                     layoutView.setBackgroundColor(0xff999999);
-                                    progress.setText("[进度" + data.getData().getCompleted_lesson_count() + "/" + data.getData().getPreset_lesson_count() + "]");
+                                    progress.setText(getString(R.string.progress,data.getData().getCompleted_lesson_count(), data.getData().getPreset_lesson_count()));
                                 } else {
                                     layoutView.setVisibility(View.GONE);
                                 }
@@ -337,7 +338,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                             Button cancel = (Button) view.findViewById(R.id.cancel);
                             Button confirm = (Button) view.findViewById(R.id.confirm);
                             TextView text = (TextView) view.findViewById(R.id.text);
-                            text.setText("该辅导班已开课，是否继续购买");
+                            text.setText(R.string.continue_buy_lasses_lesson);
                             cancel.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -475,7 +476,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     @Override
                     protected void onError(JSONObject response) {
 //                            if(response.getJSONObject("error").getInt("code")==3004){//CourseTasteLimit
-                        Toast.makeText(RemedialClassDetailActivity.this, "该课程不支持试听", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RemedialClassDetailActivity.this, R.string.the_course_not_support_audition, Toast.LENGTH_SHORT).show();
 //                                            }
                     }
 
@@ -497,18 +498,18 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
     private String getStatus(String status) {
         if (status == null) {
-            return "招生中";
+            return getString(R.string.recruiting);
         }
-        if (status.equals("published")) {//直播中
-            return "招生中";
+        if (status.equals("published")) {
+            return getString(R.string.recruiting);
         } else if (status.equals("init")) {
-            return "招生中";
+            return getString(R.string.recruiting);
         } else if (status.equals("teaching")) {
-            return "开课中";
+            return getString(R.string.teaching);
         } else if (status.equals(Constant.CourseStatus.completed) || status.equals(Constant.CourseStatus.finished)) {//未开始
-            return "已结束";
+            return getString(R.string.completed);
         }
-        return "招生中";
+        return getString(R.string.recruiting);
     }
 
     @Subscribe

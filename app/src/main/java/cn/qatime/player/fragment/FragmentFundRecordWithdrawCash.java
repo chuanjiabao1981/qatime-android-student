@@ -61,16 +61,20 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fund_record_withdraw_cash, container, false);
         initview(view);
+        initOver=true;
         return view;
     }
 
     @Override
     public void onShow() {
         if (!isLoad) {
-            initData(1);
+            if(initOver){
+                initData(1);
+            }else{
+                super.onShow();
+            }
         }
     }
-
     private void initData(final int loadType) {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(page));
