@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -17,9 +18,22 @@ import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
 
 public class BaseFragment extends Fragment {
-    private RequestQueue Queue= BaseApplication.getRequestQueue();
+    private RequestQueue Queue = BaseApplication.getRequestQueue();
     protected boolean isLoad = false;
+    protected boolean initOver = false;
     private AlertDialog alertDialog;
+    private Handler hd = new Handler();
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            if (initOver) {
+                hd.removeCallbacks(this);
+                onShow();
+            } else {
+                hd.postDelayed(this, 200);
+            }
+        }
+    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -27,6 +41,8 @@ public class BaseFragment extends Fragment {
     }
 
     public void onShow() {
+        //如果还没initOver,等待initOver
+        hd.postDelayed(runnable, 200);
     }
 
     /**

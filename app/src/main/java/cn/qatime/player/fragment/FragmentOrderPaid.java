@@ -57,6 +57,7 @@ public class FragmentOrderPaid extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_order_paid, container, false);
         initview(view);
+        initOver=true;
         return view;
     }
 
@@ -265,7 +266,11 @@ public class FragmentOrderPaid extends BaseFragment {
     @Override
     public void onShow() {
         if (!isLoad) {
-            initData(1);
+            if (initOver) {
+                initData(1);
+            }else{
+                super.onShow();
+            }
         }
     }
 

@@ -58,6 +58,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_order_unpaid, container, false);
         EventBus.getDefault().register(this);
         initview(view);
+        initOver=true;
         return view;
 
     }
@@ -166,7 +167,11 @@ public class FragmentOrderUnpaid extends BaseFragment {
     @Override
     public void onShow() {
         if (!isLoad) {
-            initData(1);
+            if (initOver) {
+                initData(1);
+            }else{
+                super.onShow();
+            }
         }
     }
 
