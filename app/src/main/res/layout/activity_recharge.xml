@@ -4,76 +4,67 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:orientation="vertical">
 
         <include layout="@layout/layout_backbar" />
 
-        <LinearLayout
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="12dp"
+            android:layout_marginTop="10dp"
             android:paddingLeft="32dp"
             android:paddingRight="32dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:textColor="#666666"
-                android:text="@string/recharge_num"
-                android:textSize="14sp" />
-
-            <RelativeLayout
+            <EditText
+                android:id="@+id/recharge_num"
+                style="@style/activity_edit_text_style"
                 android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:hint="@string/recharge_num_hint"
+                android:inputType="numberDecimal"
+                android:paddingRight="20dp" />
+
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp">
-
-                <EditText
-                    android:id="@+id/recharge_num"
-                    style="@style/activity_edit_text_style"
-                    android:layout_width="match_parent"
-                    android:gravity="center_vertical"
-                    android:hint="@string/recharge_num_hint"
-                    android:inputType="numberDecimal"
-                    android:paddingRight="20dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:textColor="#666666"
-                    android:layout_marginRight="10dp"
-                    android:text="元"
-                    android:textSize="16sp" />
-            </RelativeLayout>
-        </LinearLayout>
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:text="元"
+                android:textColor="#666666"
+                android:textSize="16sp" />
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal"
             android:paddingLeft="32dp"
             android:paddingRight="32dp">
 
             <TextView
+                android:id="@+id/textView9"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_marginTop="12dp"
-                android:textColor="#666666"
+                android:paddingTop="5dp"
                 android:text="@string/recharge_manner"
+                android:textColor="#666666"
                 android:textSize="14sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="6dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -82,30 +73,31 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="6dp">
+                    android:padding="5dp">
 
                     <ImageView
                         android:id="@+id/wechat_pay"
                         android:layout_width="14dp"
                         android:layout_height="14dp"
+                        android:layout_marginLeft="10dp"
                         android:background="@drawable/shape_select_circle_bg"
                         android:padding="3dp"
                         android:src="@drawable/shape_select_circle_select" />
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="2dp"
                         android:src="@mipmap/wechat_pay" />
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="20dp"
+                        android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:textSize="14sp"
+                        android:text="@string/wexin_payment"
                         android:textColor="#666666"
-                        android:text="@string/wechat_payment" />
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -113,67 +105,69 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:padding="6dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="5dp"
+                    android:visibility="gone">
 
                     <ImageView
                         android:id="@+id/alipay"
                         android:layout_width="14dp"
                         android:layout_height="14dp"
+                        android:layout_marginLeft="10dp"
                         android:background="@drawable/shape_select_circle_bg"
-                        android:padding="3dp"
-                        android:src="@drawable/shape_select_circle_normal"/>
+                        android:src="@drawable/shape_select_circle_normal" />
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="2dp"
                         android:src="@mipmap/alipay" />
 
                     <TextView
+                        android:id="@+id/textView10"
                         android:layout_width="wrap_content"
-                        android:layout_height="20dp"
+                        android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:textSize="14sp"
+                        android:text="@string/alipay_payment"
                         android:textColor="#666666"
-                        android:text="@string/alipay_payment" />
+                        android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+
+        <Button
+            android:id="@+id/recharge_now"
+            style="@style/button_full_width_style"
+            android:layout_marginTop="5dp"
+            android:text="@string/recharge_now" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/recharge_now"
-        style="@style/button_full_width_style"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="@string/recharge_now" />
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_above="@id/recharge_now"-->
-    <!--android:layout_marginTop="12dp"-->
-    <!--android:layout_marginBottom="6dp"-->
-    <!--android:gravity="center"-->
-    <!--android:visibility="gone"-->
-    <!--android:orientation="horizontal">-->
+        android:layout_marginBottom="6dp"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-    <!--<TextView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:gravity="center"-->
-    <!--android:text="@string/problem_phone"-->
-    <!--android:textColor="#666666"-->
-    <!--android:textSize="14sp" />-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/problem_phone"
+            android:textColor="#666666"
+            android:textSize="14sp" />
 
-    <!--<TextView-->
-    <!--android:id="@+id/phone"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="0353-2135828"-->
-    <!--android:padding="6dp"-->
-    <!--android:textColor="#3399FF"-->
-    <!--android:textSize="16sp" />-->
+        <TextView
+            android:id="@+id/phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:text="0353-2135828"
+            android:textColor="#3399FF"
+            android:textSize="16sp" />
 
-    <!--</LinearLayout>-->
+    </LinearLayout>
 </RelativeLayout>

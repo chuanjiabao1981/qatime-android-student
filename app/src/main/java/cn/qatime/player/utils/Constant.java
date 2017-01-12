@@ -8,6 +8,7 @@ import android.os.Environment;
  * @Description 常量类
  */
 public class Constant {
+    public static String phoneNumber = "400-838-8010";
 
     public static String APP_ID = "wxf2dfbeb5f641ce40";//微信appid
 

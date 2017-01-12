@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,6 +50,7 @@ public class
 StartActivity extends BaseActivity implements View.OnClickListener {
     private AlertDialog alertDialog;
     private String downLoadLinks;
+    private boolean updateEnforce;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,7 @@ StartActivity extends BaseActivity implements View.OnClickListener {
         setContentView(R.layout.activity_start);
         ((TextView) findViewById(R.id.version)).setText("V " + AppUtils.getVersionName(this));
         GetGradeslist();//加载年纪列表
+        removeOldApk();
         checkUpdate();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -62,6 +66,16 @@ StartActivity extends BaseActivity implements View.OnClickListener {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
             }
+        }
+    }
+
+    /**
+     * 删除上次更新存储在本地的apk
+     */
+    private void removeOldApk() {
+        File fileName = new File(Environment.getExternalStorageDirectory() + "/qatime.apk");
+        if (fileName != null && fileName.exists() && fileName.isFile()) {
+            fileName.delete();
         }
     }
 
@@ -91,22 +105,23 @@ StartActivity extends BaseActivity implements View.OnClickListener {
                     Button down = (Button) view.findViewById(R.id.download);
                     View x = view.findViewById(R.id.image_x);
                     TextView newVersion = (TextView) view.findViewById(R.id.new_version);
-
                     TextView desc = (TextView) view.findViewById(R.id.desc);
+                    desc.setMovementMethod(ScrollingMovementMethod.getInstance());
                     alertDialog = builder.create();
                     try {
                         x.setOnClickListener(StartActivity.this);
-                        final boolean enforce = response.getJSONObject("data").getBoolean("enforce");
-                        if (enforce) {
+                        updateEnforce = response.getJSONObject("data").getBoolean("enforce");
+                        if (updateEnforce) {
                             TextView pleaseUpdate = (TextView) view.findViewById(R.id.please_update);
                             pleaseUpdate.setVisibility(View.VISIBLE);
+                            x.setVisibility(View.GONE);
 //                            Toast.makeText(StartActivity.this, "重大更新，请先进行升级", Toast.LENGTH_SHORT).show();
 //                            alertDialog.setCancelable(false);
                         }
                         alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                             @Override
                             public void onDismiss(DialogInterface dialog) {
-                                if (enforce) {
+                                if (updateEnforce) {
                                     finish();
                                 } else {
                                     startApp();
@@ -114,9 +129,9 @@ StartActivity extends BaseActivity implements View.OnClickListener {
                             }
                         });
                         String descStr = response.getJSONObject("data").getString("description");
-                        desc.setText(StringUtils.isNullOrBlanK(descStr) ? getResourceString(R.string.performance_optimization) : descStr);
+                        desc.setText(StringUtils.isNullOrBlanK(descStr) ?"\n": descStr);
                         downLoadLinks = response.getJSONObject("data").getString("download_links");
-                        newVersion.setText("V" + response.getJSONObject("data").getString("version"));
+                        newVersion.setText("(V" + response.getJSONObject("data").getString("version")+")");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -124,6 +139,7 @@ StartActivity extends BaseActivity implements View.OnClickListener {
                     alertDialog.show();
                     alertDialog.setContentView(view);
                     alertDialog.setCanceledOnTouchOutside(false);
+                    alertDialog.setCancelable(false);
                     alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable());
                 }
             }

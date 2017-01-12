@@ -191,13 +191,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="20dp"
                         android:gravity="center"
-                        android:text="@string/wechat_payment"
+                        android:text="@string/wexin_payment"
                         android:textColor="#666666" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/alipay_layout"
                     android:layout_width="match_parent"
+                    android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"

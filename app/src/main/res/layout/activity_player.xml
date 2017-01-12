@@ -18,7 +18,9 @@
             <RelativeLayout
                 android:id="@+id/window1"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="#000"
+                android:gravity="center">
 
                 <cn.qatime.player.view.NEVideoView
                     android:id="@+id/video1"
@@ -70,7 +72,9 @@
         <RelativeLayout
             android:id="@+id/window2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="#000"
+            android:gravity="center">
 
             <cn.qatime.player.view.NEVideoView
                 android:id="@+id/video2"
@@ -131,7 +135,8 @@
         android:id="@+id/floating_window"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:background="#00000000"
+        android:background="#000000"
+        android:gravity="center"
         android:visibility="gone" />
 
 </RelativeLayout>

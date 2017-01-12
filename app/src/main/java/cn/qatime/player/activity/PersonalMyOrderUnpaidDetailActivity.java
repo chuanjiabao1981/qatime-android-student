@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,7 +47,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
     private LinearLayout listitem;
     private TextView grade;
     private TextView teacher;
-//    private ImageView status;
+    //    private ImageView status;
     private TextView payprice;
     private int classid;
     DecimalFormat df = new DecimalFormat("#.00");
@@ -112,17 +111,14 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         }
         String payType = data.getPay_type();//支付方式
         if (payType.equals("weixin")) {
-            paytype.setText(getResourceString(R.string.wechat_payment));
-        } else {
+            paytype.setText(getResourceString(R.string.wexin_payment));
+        } else if (payType.equals("alipay")) {
             paytype.setText(getResourceString(R.string.alipay_payment));
+        } else {
+            paytype.setText(getResourceString(R.string.account_payment));
         }
-        progress.setText("共" + data.getProduct().getPreset_lesson_count() + "课");
-        String price = df.format(data.getProduct().getCurrent_price());
-        if (price.startsWith(".")) {
-            price = "0" + price;
-        }
-        PersonalMyOrderUnpaidDetailActivity.this.payprice.setText(price);
-        payprice.setText("￥" + price + " ");
+        progress.setText(String.format(getResourceString(R.string.lesson_count),data.getProduct().getPreset_lesson_count()));
+        payprice.setText("￥" + data.getAmount());
     }
 
     public void initView() {
@@ -161,7 +157,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
                 }
                 intent.putExtra("id", data.getId());
                 intent.putExtra("time", data.getCreated_at());
-                intent.putExtra("price", data.getProduct().getCurrent_price());
+                intent.putExtra("price", data.getAmount());
                 intent.putExtra("type", data.getPay_type());
                 startActivity(intent);
             }
@@ -180,7 +176,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         final AlertDialog alertDialog = builder.create();
         View view = View.inflate(this, R.layout.dialog_cancel_or_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("是否确认取消此订单");
+        text.setText(R.string.confirm_cancel_order);
         Button cancel = (Button) view.findViewById(R.id.cancel);
         Button confirm = (Button) view.findViewById(R.id.confirm);
         cancel.setOnClickListener(new View.OnClickListener() {

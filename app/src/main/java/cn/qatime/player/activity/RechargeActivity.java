@@ -2,6 +2,7 @@ package cn.qatime.player.activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -32,6 +33,7 @@ import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.bean.RechargeBean;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.JsonUtils;
@@ -54,8 +56,8 @@ public class RechargeActivity extends BaseActivity {
     private View wechatLayout;
     private View alipayLayout;
     private String payType = "weixin";
-//    private TextView phone;
-//    private AlertDialog alertDialogPhone;
+    private TextView phone;
+    private AlertDialog alertDialogPhone;
 
     private void assignViews() {
         rechargeNum = (EditText) findViewById(R.id.recharge_num);
@@ -64,21 +66,20 @@ public class RechargeActivity extends BaseActivity {
         wechatPay = (ImageView) findViewById(R.id.wechat_pay);
         alipay = (ImageView) findViewById(R.id.alipay);
         rechargeNow = (Button) findViewById(R.id.recharge_now);
-//        phone = (TextView) findViewById(R.id.phone);
-
-
+        phone = (TextView) findViewById(R.id.phone);
+        phone.setText(Constant.phoneNumber);
+        phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogPhone();
+            }
+        });
         alipayLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 payType = "alipay";
                 alipay.setImageResource(R.drawable.shape_select_circle_select);
                 wechatPay.setImageResource(R.drawable.shape_select_circle_normal);
-
-                //TODO 集成完支付宝后，去掉下面这段
-                Toast.makeText(RechargeActivity.this, getResourceString(R.string.not_support_alipay), Toast.LENGTH_SHORT).show();
-                wechatPay.setImageResource(R.drawable.shape_select_circle_select);
-                alipay.setImageResource(R.drawable.shape_select_circle_normal);
-                payType = "weixin";
             }
         });
         wechatLayout.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +91,36 @@ public class RechargeActivity extends BaseActivity {
             }
         });
 
+    }
+
+    private void dialogPhone() {
+        if (alertDialogPhone == null) {
+            View view = View.inflate(RechargeActivity.this, R.layout.dialog_cancel_or_confirm, null);
+            TextView text = (TextView) view.findViewById(R.id.text);
+            text.setText(getResourceString(R.string.call_customer_service_phone) +  Constant.phoneNumber);
+            Button cancel = (Button) view.findViewById(R.id.cancel);
+            Button confirm = (Button) view.findViewById(R.id.confirm);
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    alertDialogPhone.dismiss();
+                }
+            });
+            confirm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    alertDialogPhone.dismiss();
+                    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" +  Constant.phoneNumber));
+                    startActivity(intent);
+                }
+            });
+            AlertDialog.Builder builder = new AlertDialog.Builder(RechargeActivity.this);
+            alertDialogPhone = builder.create();
+            alertDialogPhone.show();
+            alertDialogPhone.setContentView(view);
+        } else {
+            alertDialogPhone.show();
+        }
     }
 
 
@@ -187,7 +218,7 @@ public class RechargeActivity extends BaseActivity {
                     return;
                 }
                 if (Double.valueOf(amount) > Math.pow(10, 6)) {
-                    Toast.makeText(RechargeActivity.this, "金额不支持", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RechargeActivity.this, R.string.amount_not_allow, Toast.LENGTH_SHORT).show();
                     return;
                 }
 

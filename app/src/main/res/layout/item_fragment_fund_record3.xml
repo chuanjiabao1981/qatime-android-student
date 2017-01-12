@@ -5,10 +5,7 @@
     android:background="#fff"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingBottom="8dp"
-    android:paddingLeft="6dp"
-    android:paddingRight="6dp"
-    android:paddingTop="8dp">
+    android:padding="10dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -37,15 +34,18 @@
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:paddingLeft="12dp">
+        android:paddingLeft="27dp"
+        android:paddingRight="27dp">
 
         <TextView
             android:id="@+id/type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:paddingTop="1dp"
             android:singleLine="true"
             android:text="课程"
             android:textColor="#666666" />
@@ -54,6 +54,8 @@
             android:id="@+id/mode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:paddingTop="1dp"
             android:singleLine="true"
             android:text="线下支付"
             android:textColor="#666666" />
@@ -62,25 +64,40 @@
             android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:paddingTop="1dp"
             android:singleLine="true"
-            android:text="2011-11-11 11:11:11"
+            android:text="0000-00-00 00:00:00"
             android:textColor="#666666" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_height="match_parent"
         android:gravity="right"
-        android:paddingRight="6dp">
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:paddingTop="1dp" />
 
         <TextView
             android:id="@+id/money_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:text="+￥500.00"
+            android:text="+￥0.00"
+            android:textSize="13sp"
+            android:paddingTop="1dp"
             android:textColor="#f00" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:paddingTop="1dp" />
     </LinearLayout>
 </LinearLayout>

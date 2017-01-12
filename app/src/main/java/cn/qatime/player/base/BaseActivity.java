@@ -13,10 +13,6 @@ import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.umeng.message.PushAgent;
-import com.orhanobut.logger.Logger;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
@@ -26,7 +22,7 @@ import libraryextra.utils.StringUtils;
  * 基础类
  */
 public class BaseActivity extends AppCompatActivity {
-    private RequestQueue Queue;
+    private RequestQueue Queue= BaseApplication.getRequestQueue();
     private AlertDialog alertDialog;
     protected boolean destroyed = false;
 
@@ -34,7 +30,6 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PushAgent.getInstance(this).onAppStart();
-        Queue = BaseApplication.getRequestQueue();
     }
 
     public void setTitle(String text) {
@@ -75,35 +70,30 @@ public class BaseActivity extends AppCompatActivity {
      */
     public void tokenOut() {
         BaseApplication.clearToken();
-        if (alertDialog == null) {
-           AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            alertDialog = builder.create();
-            View view = View.inflate(this, R.layout.dialog_confirm, null);
-            TextView text = (TextView) view.findViewById(R.id.text);
-            text.setText(getResourceString(R.string.login_has_expired));
-            Button confirm = (Button) view.findViewById(R.id.confirm);
-            confirm.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    alertDialog.dismiss();
-                    out();
-                }
-            });
-            alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    out();
-                }
-            });
-            alertDialog.show();
-            alertDialog.setContentView(view);
+        View view = View.inflate(this, R.layout.dialog_confirm, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        alertDialog = builder.create();
+        TextView text = (TextView) view.findViewById(R.id.text);
+        text.setText(getResourceString(R.string.login_has_expired));
+        Button confirm = (Button) view.findViewById(R.id.confirm);
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                out();
+            }
+        });
+        alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                out();
+            }
+        });
 //            WindowManager.LayoutParams attributes = alertDialog.getWindow().getAttributes();
 //            attributes.width= ScreenUtils.getScreenWidth(getApplicationContext())- DensityUtils.dp2px(getApplicationContext(),20)*2;
 //            alertDialog.getWindow().setAttributes(attributes);
-        }
-        if (!alertDialog.isShowing()) {
-            alertDialog.show();
-        }
+        alertDialog.show();
+        alertDialog.setContentView(view);
     }
 
     private void out() {
@@ -112,11 +102,17 @@ public class BaseActivity extends AppCompatActivity {
         startActivity(intent);
 //        this.finish();
     }
-
     public <T> Request<T> addToRequestQueue(Request<T> request) {
+        request.setTag(this);
         return Queue.add(request);
     }
 
+    @Override
+    protected void onDestroy() {
+        cancelAll(this);
+        super.onDestroy();
+        destroyed = true;
+    }
     public void cancelAll(final Object tag) {
         Queue.cancelAll(tag);
     }
@@ -129,9 +125,5 @@ public class BaseActivity extends AppCompatActivity {
         return getResources().getString(id);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        destroyed = true;
-    }
+
 }

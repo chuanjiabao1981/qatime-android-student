@@ -83,7 +83,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         if (!StringUtils.isNullOrBlanK(name)) {
             setTitle(name);
         } else {
-            setTitle(getResources().getString(R.string.team));
+            setTitle(getResources().getString(R.string.team_group));
         }
         sessionId = getIntent().getStringExtra("sessionId");
         sessionType = (SessionTypeEnum) getIntent().getSerializableExtra("sessionType");
@@ -427,7 +427,10 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
             }
 
             if (needRefresh) {
-                isMute = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount()).isMute();
+                TeamMember teamMember = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
+                if (teamMember != null) {
+                    isMute = teamMember.isMute();
+                }
                 inputpanel.setMute(isMute);
                 sortMessages(items);
                 adapter.notifyDataSetChanged();
@@ -599,7 +602,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
             if (!StringUtils.isNullOrBlanK(event.getName())) {
                 setTitle(event.getName());
             } else {
-                setTitle(getResources().getString(R.string.team));
+                setTitle(getResources().getString(R.string.team_group));
             }
         }
     }

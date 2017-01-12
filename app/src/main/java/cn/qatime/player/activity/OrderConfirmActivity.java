@@ -128,7 +128,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                         if (payType.equals("weixin")) {
                             if (data != null) {
                                 Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
-                                intent.putExtra("price", priceNumber);
+                                intent.putExtra("price",   data.getData().getAmount());
                                 intent.putExtra("id", data.getData().getId());
                                 intent.putExtra("time", data.getData().getCreated_at());
                                 intent.putExtra("type", payType);
@@ -142,7 +142,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                         } else if (payType.equals("alipay")) {
                             if (data != null) {
                                 Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
-                                intent.putExtra("price", priceNumber);
+                                intent.putExtra("price", data.getData().getAmount());
                                 intent.putExtra("id", data.getData().getId());
                                 intent.putExtra("time", data.getData().getCreated_at());
                                 intent.putExtra("type", payType);
@@ -161,7 +161,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                                     EventBus.getDefault().post(PayResultState.SUCCESS);
                                     finish();
                                 } else {
-                                    Toast.makeText(OrderConfirmActivity.this, "余额不足", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(OrderConfirmActivity.this, R.string.amount_not_enough, Toast.LENGTH_SHORT).show();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -198,7 +198,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         alertDialog = builder.create();
         View view = View.inflate(this, R.layout.dialog_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("下单失败，请稍后再试");
+        text.setText(R.string.create_order_error);
         Button confirm = (Button) view.findViewById(R.id.confirm);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -240,12 +240,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                 aliPay.setImageResource(R.drawable.shape_select_circle_select);
                 wechatPay.setImageResource(R.drawable.shape_select_circle_normal);
                 account.setImageResource(R.drawable.shape_select_circle_normal);
-
-                //TODO 集成完支付宝后，去掉下面这段
-                Toast.makeText(OrderConfirmActivity.this, getResourceString(R.string.not_support_alipay), Toast.LENGTH_SHORT).show();
-                wechatPay.setImageResource(R.drawable.shape_select_circle_select);
-                aliPay.setImageResource(R.drawable.shape_select_circle_normal);
-                payType = "weixin";
             }
         });
         wechatLayout.setOnClickListener(new View.OnClickListener() {

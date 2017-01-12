@@ -48,6 +48,8 @@ public class MyOrderBean implements Serializable {
     public class Data implements Serializable {
         private String id;
 
+        private String amount;
+
         private String pay_type;
 
         private String created_at;
@@ -64,6 +66,14 @@ public class MyOrderBean implements Serializable {
         private AppPayParamsBean app_pay_params;
 
         private Product product;
+
+        public String getAmount() {
+            return amount;
+        }
+
+        public void setAmount(String amount) {
+            this.amount = amount;
+        }
 
         public String getApp_pay_str() {
             return app_pay_str;

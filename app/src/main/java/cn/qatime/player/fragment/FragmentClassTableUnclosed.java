@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -124,7 +125,10 @@ public class FragmentClassTableUnclosed extends BaseFragment {
         listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResourceString(R.string.loading));
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
-        listView.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
+        View emptyView = View.inflate(getActivity(), R.layout.empty_view, null);
+        TextView textEmpty = (TextView) emptyView.findViewById(R.id.text_empty);
+        textEmpty.setText(R.string.this_month_non_lesson);
+        listView.setEmptyView(emptyView);
 
         adapter = new CommonAdapter<ClassTimeTableBean.DataEntity.LessonsEntity>(getActivity(), itemList, R.layout.item_fragment_remedial_class_time_table1) {
             @Override

@@ -53,13 +53,14 @@ public class FragmentTutorshipPreview extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tutorship_preview, container, false);
         initview(view);
+        initOver=true;
         return view;
     }
 
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
         listView.setMode(PullToRefreshBase.Mode.BOTH);
-        listView.setEmptyView(View.inflate(getActivity(),R.layout.empty_view,null));
+        listView.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
         listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResourceString(R.string.refreshing));
@@ -79,8 +80,8 @@ public class FragmentTutorshipPreview extends BaseFragment {
 
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
-                helper.setText(R.id.subject,item.getSubject());
-                helper.setText(R.id.teacher,"/"+ item.getTeacher_name());
+                helper.setText(R.id.subject, item.getSubject());
+                helper.setText(R.id.teacher, "/" + item.getTeacher_name());
                 try {
                     long time = System.currentTimeMillis() - parse.parse(item.getPreview_time()).getTime();
                     int value = 0;
@@ -121,7 +122,11 @@ public class FragmentTutorshipPreview extends BaseFragment {
 
     public void onShow() {
         if (!isLoad) {
-            initData(1);
+            if (initOver) {
+                initData(1);
+            }else{
+                super.onShow();
+            }
         }
     }
 
@@ -144,15 +149,18 @@ public class FragmentTutorshipPreview extends BaseFragment {
                         if (type == 1) {
                             list.clear();
                         }
-                        String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+                        String label = null;
+                        if (getActivity() != null) {
+                            label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+                        }
                         listView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
                         listView.onRefreshComplete();
 
                         try {
                             TutorialClassBean data = JsonUtils.objectFromJson(response.toString(), TutorialClassBean.class);
                             if (data != null) {
-                                for(TutorialClassBean.Data item : data.getData()){
-                                    if(item.isIs_bought()||item.isIs_tasting()){//只显示试听未过期或已购买
+                                for (TutorialClassBean.Data item : data.getData()) {
+                                    if (item.isIs_bought() || item.isIs_tasting()) {//只显示试听未过期或已购买
                                         list.add(item);
                                     }
                                 }

@@ -103,10 +103,7 @@ public class OrderPayActivity extends BaseActivity {
             aliPayData = getIntent().getStringExtra("data");
         }
 
-        String price = df.format(getIntent().getFloatExtra("price", 0f));
-        if (price.startsWith(".")) {
-            price = "0" + price;
-        }
+
         code.setText(getResourceString(R.string.order_number) + "：" + getIntent().getStringExtra("id"));
         SimpleDateFormat parseISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
         SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -122,6 +119,7 @@ public class OrderPayActivity extends BaseActivity {
         } else {
             type.setText(getResourceString(R.string.method_payment) + getResourceString(R.string.pay_account));
         }
+        String price = getIntent().getStringExtra("price");
         this.price.setText(getResourceString(R.string.amount_payment) + "：￥" + price);
     }
 
@@ -131,13 +129,14 @@ public class OrderPayActivity extends BaseActivity {
         time = (TextView) findViewById(R.id.time);
         type = (TextView) findViewById(R.id.type);
         phone = (TextView) findViewById(R.id.phone);
+        phone.setText(Constant.phoneNumber);
         price = (TextView) findViewById(R.id.price);
         commit = (Button) findViewById(R.id.commit);
         //拨打电话
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.phoneNumber));
                 startActivity(intent);
             }
         });
@@ -192,6 +191,7 @@ public class OrderPayActivity extends BaseActivity {
 
     @Subscribe
     public void onEvent(PayResultState state) {
+        //// TODO: 2017/1/6 QTA-151 支付密码支付 UI有修改，参数传递需重新确认！！！
         Intent intent = new Intent(this, OrderPayResultActivity.class);
         intent.putExtra("state", state);
         intent.putExtra("orderId", code.getText().toString().replace(getResourceString(R.string.order_number) + "：", ""));

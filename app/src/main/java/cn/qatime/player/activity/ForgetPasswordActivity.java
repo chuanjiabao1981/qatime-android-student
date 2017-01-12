@@ -14,7 +14,6 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONObject;
@@ -99,6 +98,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
             number.setVisibility(View.GONE);
             phone = BaseApplication.getProfile().getData().getUser().getLogin_mobile() + "";
             currentPhone.setText(phone);
+            getcode.setEnabled(true);
         } else {
             number.setVisibility(View.VISIBLE);
             currentPhoneView.setVisibility(View.GONE);
@@ -127,7 +127,6 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
 
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        Logger.e("验证码发送成功" + phone + "---" + response.toString());
                         Toast.makeText(getApplicationContext(), getResourceString(R.string.code_send_success), Toast.LENGTH_LONG).show();
                     }
 
@@ -145,10 +144,6 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
                 time.start();
                 break;
             case R.id.submit:
-                if (StringUtils.isNullOrBlanK(phone)) {
-                    Toast.makeText(this, "手机号不能为空", Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 if (!StringUtils.isPhone(phone)) {//手机号不正确
                     Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
                     return;
@@ -187,7 +182,6 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
                             Toast.makeText(ForgetPasswordActivity.this, getResourceString(R.string.phone_not_exist), Toast.LENGTH_SHORT).show();
                         } else {
                             if (statusLogin) {
-                                Logger.e("找回成功");
                                 BaseApplication.clearToken();
                                 Toast.makeText(ForgetPasswordActivity.this, getResourceString(R.string.change_password_success), Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(ForgetPasswordActivity.this, MainActivity.class);
