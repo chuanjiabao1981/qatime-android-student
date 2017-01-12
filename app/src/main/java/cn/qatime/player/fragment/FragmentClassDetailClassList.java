@@ -1,10 +1,12 @@
 package cn.qatime.player.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -14,7 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.NEVideoPlaybackActivity;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.bean.BannerRecommendBean;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.RemedialClassDetailBean;
@@ -25,6 +29,7 @@ public class FragmentClassDetailClassList extends BaseFragment {
 
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    private RemedialClassDetailBean.Data data;
 
     @Nullable
     @Override
@@ -63,24 +68,40 @@ public class FragmentClassDetailClassList extends BaseFragment {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                if (item.getStatus().equals("closed")||item.getStatus().equals("finished")||item.getStatus().equals("billing")||item.getStatus().equals("completed")) {
-                    ((TextView)holder.getView(R.id.status_color)).setTextColor(0xff999999);
-                    ((TextView)holder.getView(R.id.name)).setTextColor(0xff999999);
-                    ((TextView)holder.getView(R.id.status)).setTextColor(0xff999999);
+                if (isFinished(item)) {
+                    ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff999999);
+                    ((TextView) holder.getView(R.id.name)).setTextColor(0xff999999);
+                    ((TextView) holder.getView(R.id.status)).setTextColor(0xff999999);
+                    holder.getView(R.id.view_playback).setVisibility(View.VISIBLE);
                 } else {
-                    ((TextView)holder.getView(R.id.status_color)).setTextColor(0xff00a0e9);
-                    ((TextView)holder.getView(R.id.name)).setTextColor(0xff666666);
-                    ((TextView)holder.getView(R.id.status)).setTextColor(0xff666666);
+                    ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff00a0e9);
+                    ((TextView) holder.getView(R.id.name)).setTextColor(0xff666666);
+                    ((TextView) holder.getView(R.id.status)).setTextColor(0xff666666);
+                    holder.getView(R.id.view_playback).setVisibility(View.GONE);
                 }
 
             }
         };
         listView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (isFinished(list.get(position))) {
+                    Intent intent = new Intent(getActivity(), NEVideoPlaybackActivity.class);
+                    intent.putExtra("id", data.getId());
+                    startActivity(intent);
+                }
+            }
+        });
+    }
+
+    private boolean isFinished(RemedialClassDetailBean.Lessons item) {
+        return item.getStatus().equals("closed") || item.getStatus().equals("finished") || item.getStatus().equals("billing") || item.getStatus().equals("completed");
     }
 
     public void setData(RemedialClassDetailBean data) {
         if (data != null && data.getData() != null) {
+            this.data = data.getData();
             list.clear();
             list.addAll(data.getData().getLessons());
             if (adapter != null) {

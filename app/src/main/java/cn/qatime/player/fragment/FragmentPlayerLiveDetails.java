@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.NEVideoPlaybackActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.adapter.CommonAdapter;
@@ -52,11 +54,14 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
     private SimpleDateFormat parse2 = new SimpleDateFormat("yyyy-MM-dd");
     private Handler hd = new Handler();
     private View viewEmptyGone;
+    private TextView className;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = View.inflate(getActivity(), R.layout.fragment_nevideo_player3, null);
+
+        className = (TextView) view.findViewById(R.id.class_name);
         subject = (TextView) view.findViewById(R.id.subject);
         totalClass = (TextView) view.findViewById(R.id.total_class);
         grade = (TextView) view.findViewById(R.id.grade);
@@ -98,24 +103,40 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
                     holder.setText(R.id.status, getResourceString(R.string.class_over));//已结束
                 }
                 holder.setText(R.id.class_date, item.getClass_date());
-                if (item.getStatus().equals("closed") || item.getStatus().equals("finished") || item.getStatus().equals("billing") || item.getStatus().equals("completed")) {
+                if (isFinished(item)) {
                     ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.live_time)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.status)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.class_date)).setTextColor(0xff999999);
+                    holder.getView(R.id.view_playback).setVisibility(View.VISIBLE);
                 } else {
                     ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff00a0e9);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xff666666);
                     ((TextView) holder.getView(R.id.live_time)).setTextColor(0xff666666);
                     ((TextView) holder.getView(R.id.status)).setTextColor(0xff666666);
                     ((TextView) holder.getView(R.id.class_date)).setTextColor(0xff666666);
+                    holder.getView(R.id.view_playback).setVisibility(View.GONE);
                 }
 
             }
         };
         list.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (isFinished(classList.get(position))) {
+                    Intent intent = new Intent(getActivity(), NEVideoPlaybackActivity.class);
+                    intent.putExtra("id", data.getId());
+                    startActivity(intent);
+                }
+            }
+        });
+    }
+
+    private boolean isFinished(RemedialClassDetailBean.Lessons item) {
+        return item.getStatus().equals("closed") || item.getStatus().equals("finished") || item.getStatus().equals("billing") || item.getStatus().equals("completed");
     }
 
 
@@ -151,6 +172,7 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
         @Override
         public void run() {
             if (getActivity() != null && getActivity().getResources() != null) {
+                className.setText(data.getName());
                 subject.setText((data.getSubject() == null ? "" : data.getSubject()));
                 try {
                     classStartTime.setText((data.getLive_start_time() == null ? "" : parse2.format(parse1.parse(data.getLive_start_time()))));

@@ -3,20 +3,33 @@ package cn.qatime.player.activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
+
+import org.json.JSONObject;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.fragment.PlayBackFloatFragment;
 import cn.qatime.player.presenter.PlayBackVideoPresenter;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.PlayBackVideoInterface;
 import cn.qatime.player.utils.ScreenSwitchUtils;
+import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.view.NEVideoView;
+import libraryextra.adapter.CommonAdapter;
+import libraryextra.adapter.ViewHolder;
 import libraryextra.utils.ScreenUtils;
+import libraryextra.utils.StringUtils;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 
 /**
  * @author lungtify
@@ -31,18 +44,48 @@ public class NEVideoPlaybackActivity extends BaseActivity implements PlayBackVid
     private PlayBackFloatFragment playBackFloatFragment;
     private ScreenSwitchUtils screenSwitchUtils;
     private NEVideoView video;
+    private int id;
+    private CommonAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nevideo_playback);
+        id = getIntent().getIntExtra("id", 0);
         screenSwitchUtils = ScreenSwitchUtils.init(this.getApplicationContext());
 
         initView();
-
+        initData();
         video.setVideoPath("http://192.168.1.125:8080/media/28.mp4");
         video.start();
-        Logger.e("*********" + (6311368 * 1000 / 1000.0));
+    }
+
+    private void initData() {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass + "/" + id, null,
+                new VolleyListener(NEVideoPlaybackActivity.this) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+//                        data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+                }
+
+                , new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
     }
 
     private void initView() {
@@ -63,6 +106,37 @@ public class NEVideoPlaybackActivity extends BaseActivity implements PlayBackVid
         mainVideoParam.height = screenW * 9 / 16;
         videolayout.setLayoutParams(mainVideoParam);
         playBackFloatFragment.setMediaPlayer(video);
+
+        adapter = new CommonAdapter<String>(this, null, R.layout.item_playback) {
+            @Override
+            public void convert(ViewHolder holder, String item, int position) {
+                holder.setText(R.id.number, getNumber(position));
+
+                if (!StringUtils.isNullOrBlanK(video.getVideoPath()) && video.getVideoPath().equals(item)) {
+                    ((TextView) holder.getView(R.id.number)).setTextColor(0xffbef0f0);
+                    ((TextView) holder.getView(R.id.name)).setTextColor(0xffbef0f0);
+                } else {
+                    ((TextView) holder.getView(R.id.number)).setTextColor(0xff333333);
+                    ((TextView) holder.getView(R.id.name)).setTextColor(0xff333333);
+                }
+            }
+        };
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                video.setVideoPath("");
+                video.start();
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private String getNumber(int position) {
+        position += 1;
+        if (position < 10) {
+            return "0" + position;
+        }
+        return String.valueOf(position);
     }
 
     @Override

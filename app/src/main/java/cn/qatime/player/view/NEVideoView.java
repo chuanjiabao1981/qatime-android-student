@@ -81,6 +81,7 @@ public class NEVideoView extends SurfaceView {
     private int mBufferStrategy = 0; //直播低延时
 
     private boolean isBackground;
+    private String videoPath;
 //    private NEVideoViewReceiver mReceiver;
 
     public NEVideoView(Context context) {
@@ -121,6 +122,7 @@ public class NEVideoView extends SurfaceView {
     }
 
     public void setVideoPath(String path) { //设置视频文件路径
+        this.videoPath = path;
         isBackground = false; //指示是否在后台
         setVideoURI(Uri.parse(path));
     }
@@ -665,6 +667,10 @@ public class NEVideoView extends SurfaceView {
     public int getBufferPercentage() {
         if (mMediaPlayer != null) return mCurrentBufferPercentage;
         return 0;
+    }
+
+    public String getVideoPath() {
+        return videoPath;
     }
 }
 

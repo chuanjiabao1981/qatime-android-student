@@ -50,6 +50,7 @@
                 android:clickable="true"
                 android:padding="13dp"
                 android:src="@mipmap/nemediacontroller_play" />
+
             <TextView
                 android:id="@+id/current_time"
                 android:layout_width="wrap_content"
@@ -58,6 +59,7 @@
                 android:layout_marginRight="5dp"
                 android:text="--:--:--"
                 android:textColor="#fff" />
+
             <SeekBar
                 android:id="@+id/seekbar"
                 android:layout_width="0dp"
@@ -102,6 +104,8 @@
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:background="#b3000000"
+        android:divider="#00000000"
+        android:dividerHeight="5dp"
         android:visibility="gone"
         custom:layout_widthPercent="45%" />
 </com.zhy.android.percent.support.PercentRelativeLayout>

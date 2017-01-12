@@ -68,5 +68,14 @@
 
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/view_playback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="5dp"
+            android:text="@string/view_playback"
+            android:textColor="@color/colorPrimary"
+            android:textSize="12sp" />
     </LinearLayout>
 </LinearLayout>

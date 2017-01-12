@@ -478,5 +478,6 @@
     <string name="whole_city">全部城市</string>
     <string name="playback_record">回放记录</string>
     <string name="hd">高清</string>
+    <string name="view_playback">观看回放 ></string>
 
 </resources>

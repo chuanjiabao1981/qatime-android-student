@@ -25,6 +25,9 @@ import java.util.Locale;
 
 import cn.qatime.player.R;
 import cn.qatime.player.view.NEVideoView;
+import libraryextra.adapter.CommonAdapter;
+import libraryextra.adapter.ViewHolder;
+import libraryextra.utils.StringUtils;
 
 /**
  * @author lungtify
@@ -72,9 +75,10 @@ public class PlayBackFloatFragment extends Fragment implements View.OnClickListe
         }
     };
     private NEVideoView mPlayer;
-    private int mDuration = 0;
+    private long mDuration = 0;
     private Runnable lastRunnable;
     private TextView currentTime;
+    private CommonAdapter<String> adapter;
 
     private long setProgress() {
         if (mPlayer == null || mDragging)
@@ -129,6 +133,31 @@ public class PlayBackFloatFragment extends Fragment implements View.OnClickListe
         seekbar.setMax(1000);
 
         hd.sendEmptyMessageDelayed(HIDE, 1500);
+
+        adapter = new CommonAdapter<String>(getActivity(), null, R.layout.item_fragment_playback) {
+            @Override
+            public void convert(ViewHolder holder, String item, int position) {
+                holder.setText(R.id.number, getNumber(position));
+
+                if (!StringUtils.isNullOrBlanK(mPlayer.getVideoPath()) && mPlayer.getVideoPath().equals(item)) {
+                    ((TextView) holder.getView(R.id.number)).setTextColor(0xffbef0f0);
+                    ((TextView) holder.getView(R.id.name)).setTextColor(0xffbef0f0);
+                    holder.getView(R.id.root).setBackgroundColor(0xffffffff);
+                } else {
+                    holder.getView(R.id.root).setBackgroundColor(0x00000000);
+                    ((TextView) holder.getView(R.id.number)).setTextColor(0xff333333);
+                    ((TextView) holder.getView(R.id.name)).setTextColor(0xff333333);
+                }
+            }
+        };
+    }
+
+    private String getNumber(int position) {
+        position += 1;
+        if (position < 10) {
+            return "0" + position;
+        }
+        return String.valueOf(position);
     }
 
     @Nullable
@@ -156,7 +185,7 @@ public class PlayBackFloatFragment extends Fragment implements View.OnClickListe
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (!fromUser) return;
 
-                final long newposition = mDuration * progress / 1000;
+                final long newposition = (mDuration * progress) / 1000;
                 String time = stringForTime(newposition);
                 hd.removeCallbacks(lastRunnable);
                 lastRunnable = new Runnable() {
@@ -272,6 +301,7 @@ public class PlayBackFloatFragment extends Fragment implements View.OnClickListe
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     list.setVisibility(View.VISIBLE);
+                    adapter.notifyDataSetChanged();
                 }
 
                 @Override
@@ -339,6 +369,9 @@ public class PlayBackFloatFragment extends Fragment implements View.OnClickListe
 
     public void setPortrait(boolean rotate) {
         if (rotate) {//竖屏
+            if (list.getVisibility() == View.VISIBLE) {
+                showUp(true);
+            }
             coursesList.setVisibility(View.GONE);
             zoom.setVisibility(View.VISIBLE);
             videoDefinition.setVisibility(View.GONE);
