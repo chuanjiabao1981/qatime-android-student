@@ -45,6 +45,7 @@ public class NEVideoView extends SurfaceView {
     private static final int RESUME = 9;
     private static final int ERROR = -1;
     private static Context mContext = null;
+    private Definition definition = Definition.SD;//清晰度
 
     private int mCurrState = IDLE;
     private int mNextState = IDLE;
@@ -671,6 +672,21 @@ public class NEVideoView extends SurfaceView {
 
     public String getVideoPath() {
         return videoPath;
+    }
+
+    public Definition getDefinition() {
+        return definition;
+    }
+
+    public void setDefinition(Definition definition) {
+        this.definition = definition;
+    }
+
+    public enum Definition {
+        SD(0), HD(1), UHD(2);//标清高清超清
+
+        Definition(int i) {
+        }
     }
 }
 

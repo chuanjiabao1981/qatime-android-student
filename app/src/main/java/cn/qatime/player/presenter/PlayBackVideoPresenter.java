@@ -15,11 +15,6 @@ public class PlayBackVideoPresenter implements PlayBackFloatFragment.Callback {
         this.vi = playBackVideoInterface;
     }
 
-    @Override
-    public void fullScreen() {
-        if (vi == null) return;
-        vi.fullScreen();
-    }
 
     @Override
     public void exit() {

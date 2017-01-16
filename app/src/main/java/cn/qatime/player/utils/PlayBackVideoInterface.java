@@ -6,8 +6,6 @@ package cn.qatime.player.utils;
  * @Describe
  */
 public interface PlayBackVideoInterface {
-    void fullScreen();
-
     void exit();
 
     void playOrPause();
