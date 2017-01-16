@@ -1,8 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#ffffffff" />
-
-    <stroke
-        android:width="1px"
-        android:color="#ccc" />
-</shape>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <layer-list>
+            <!-- 相当于padding -->
+            <item >
+                <shape>
+                    <solid android:color="#ccc" />
+                </shape>
+            </item>
+            <!-- CONTENT LAYER -->
+            <!-- 相当于padding -->
+            <item android:bottom="1px" android:right="1px">
+                 <shape>
+                    <solid android:color="#fff" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    <item>
+        <layer-list>
+            <!-- SHADOW LAYER -->
+            <item>
+                <shape>
+                    <solid android:color="#ccc" />
+                </shape>
+            </item>
+            <!-- CONTENT LAYER -->
+            <!-- 相当于padding -->
+            <item android:bottom="1px" android:right="1px">
+                <shape>
+                    <solid android:color="#fff" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>
