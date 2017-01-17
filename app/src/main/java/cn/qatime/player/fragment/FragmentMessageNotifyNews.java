@@ -49,7 +49,7 @@ public class FragmentMessageNotifyNews extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = View.inflate(getActivity(), R.layout.fragment_message_notify_news, null);
         initview(view);
-        initOver=true;
+        initOver = true;
         return view;
     }
 
@@ -127,10 +127,10 @@ public class FragmentMessageNotifyNews extends BaseFragment {
     @Override
     public void onShow() {
         if (!isLoad) {
-            if(initOver){
+            if (initOver) {
                 page = 1;
                 initData(1);
-            }else {
+            } else {
                 super.onShow();
             }
 
