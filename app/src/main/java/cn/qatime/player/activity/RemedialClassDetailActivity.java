@@ -210,7 +210,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
                             try {
                                 if ("init".equals(data.getData().getStatus()) || "published".equals(data.getData().getStatus())) {
-                                    long time = System.currentTimeMillis() - parse.parse(data.getData().getLive_start_time()).getTime();
+                                    long time = parse.parse(data.getData().getLive_start_time()).getTime() - System.currentTimeMillis();
                                     int value = 0;
                                     if (time > 0) {
                                         value = (int) (time / (1000 * 3600 * 24));
@@ -223,13 +223,13 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                                     progress.setVisibility(View.VISIBLE);
                                     timeToStart.setVisibility(View.GONE);
                                     layoutView.setBackgroundColor(0xff00a0e9);
-                                    progress.setText(getString(R.string.progress,data.getData().getCompleted_lesson_count(),data.getData().getPreset_lesson_count()));
+                                    progress.setText(getString(R.string.progress, data.getData().getCompleted_lesson_count(), data.getData().getPreset_lesson_count()));
                                 } else if (Constant.CourseStatus.finished.equals(data.getData().getStatus()) || Constant.CourseStatus.completed.equals(data.getData().getStatus())) {
                                     handleLayout.setVisibility(View.GONE);//已结束的课程隐藏操作按钮
                                     progress.setVisibility(View.VISIBLE);
                                     timeToStart.setVisibility(View.GONE);
                                     layoutView.setBackgroundColor(0xff999999);
-                                    progress.setText(getString(R.string.progress,data.getData().getCompleted_lesson_count(), data.getData().getPreset_lesson_count()));
+                                    progress.setText(getString(R.string.progress, data.getData().getCompleted_lesson_count(), data.getData().getPreset_lesson_count()));
                                 } else {
                                     layoutView.setVisibility(View.GONE);
                                 }
@@ -295,12 +295,16 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         switch (v.getId()) {
             case R.id.audition_start:
                 if (BaseApplication.isLogined()) {
-                    intent = new Intent(RemedialClassDetailActivity.this, NEVideoPlayerActivity.class);
+                    if ("init".equals(data.getData().getStatus()) || "published".equals(data.getData().getStatus())) {
+                        Toast.makeText(this, R.string.published_course_unable_enter, Toast.LENGTH_SHORT).show();
+                    } else {
+                        intent = new Intent(RemedialClassDetailActivity.this, NEVideoPlayerActivity.class);
 //                    intent.putExtra("camera", data.getData().getCamera());
 //                    intent.putExtra("board", data.getData().getBoard());
-                    intent.putExtra("id", data.getData().getId());
-                    intent.putExtra("sessionId", data.getData().getChat_team_id());
-                    startActivity(intent);
+                        intent.putExtra("id", data.getData().getId());
+                        intent.putExtra("sessionId", data.getData().getChat_team_id());
+                        startActivity(intent);
+                    }
                 } else {
                     intent = new Intent(RemedialClassDetailActivity.this, LoginActivity.class);
                     intent.putExtra("sign", Constant.VISITORTOLOGIN);
@@ -318,12 +322,16 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 break;
             case R.id.start_study:
                 if (BaseApplication.isLogined()) {
-                    intent = new Intent(RemedialClassDetailActivity.this, NEVideoPlayerActivity.class);
+                    if ("init".equals(data.getData().getStatus()) || "published".equals(data.getData().getStatus())) {
+                        Toast.makeText(this, R.string.published_course_unable_enter, Toast.LENGTH_SHORT).show();
+                    } else {
+                        intent = new Intent(RemedialClassDetailActivity.this, NEVideoPlayerActivity.class);
 //                    intent.putExtra("camera", data.getData().getCamera());
 //                    intent.putExtra("board", data.getData().getBoard());
-                    intent.putExtra("id", data.getData().getId());
-                    intent.putExtra("sessionId", data.getData().getChat_team_id());
-                    startActivity(intent);
+                        intent.putExtra("id", data.getData().getId());
+                        intent.putExtra("sessionId", data.getData().getChat_team_id());
+                        startActivity(intent);
+                    }
                 } else {
                     intent = new Intent(RemedialClassDetailActivity.this, LoginActivity.class);
                     intent.putExtra("sign", Constant.VISITORTOLOGIN);

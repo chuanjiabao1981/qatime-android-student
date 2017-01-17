@@ -548,5 +548,6 @@
     <string name="bean_appointed_administrator">" 被任命为管理员"</string>
     <string name="been_dropped_administrator">" 被撤销管理员身份"</string>
     <string name="accept_the_team_invite">%1$s 接受了 %2$s 的入群邀请</string>
+    <string name="published_course_unable_enter">未开课不能进入</string>
 
 </resources>
