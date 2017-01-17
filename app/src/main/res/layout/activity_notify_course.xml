@@ -65,7 +65,10 @@
                 android:textColor="#333333" />
         </LinearLayout>
     </LinearLayout>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dfdddd" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -103,20 +106,21 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
                     android:text="00小时"
-                    android:textColor="#800f" />
+                    android:textColor="#00a2ee" />
 
                 <TextView
                     android:id="@+id/minute"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="00分钟"
-                    android:textColor="#800f" />
+                    android:textColor="#00a2ee" />
 
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="10dp"
                     android:layout_margin="2dp"
-                    android:src="@mipmap/screen_down" />
+                    android:src="@mipmap/screen_down"
+                    android:id="@+id/imageView5" />
             </LinearLayout>
 
             <TextView
