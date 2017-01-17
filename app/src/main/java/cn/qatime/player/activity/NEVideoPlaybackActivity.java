@@ -1,30 +1,22 @@
 package cn.qatime.player.activity;
 
 import android.os.Bundle;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.bean.PlayBackBean;
 import cn.qatime.player.fragment.PlayBackFloatFragment;
 import cn.qatime.player.presenter.PlayBackVideoPresenter;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.PlayBackVideoInterface;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.view.NEVideoView;
-import libraryextra.adapter.CommonAdapter;
-import libraryextra.adapter.ViewHolder;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.StringUtils;
@@ -42,28 +34,30 @@ public class NEVideoPlaybackActivity extends BaseActivity implements PlayBackVid
     RelativeLayout videolayout;
     private PlayBackFloatFragment playBackFloatFragment;
     private NEVideoView video;
-    private int courseId;
+    private int lessonId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nevideo_playback);
-        courseId = getIntent().getIntExtra("id", 0);
-        courseId = 39;
+        lessonId = getIntent().getIntExtra("id", 0);
 
         initView();
-        if (courseId != 0) {
+        if (lessonId != 0) {
             initData();
         }
-//        video.setVideoPath("http://192.168.1.125:8080/media/28.mp4");
-//        video.start();
     }
 
     private void initData() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass + "/" + courseId + "/replays", null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.lessons + "/" + lessonId + "/replay", null,
                 new VolleyListener(NEVideoPlaybackActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
+                        PlayBackBean data = JsonUtils.objectFromJson(response.toString(), PlayBackBean.class);
+                        if (data != null && data.getData() != null && data.getData().getReplay() != null && !StringUtils.isNullOrBlanK(data.getData().getReplay().getOrig_url())) {
+                            video.setVideoPath(data.getData().getReplay().getOrig_url());
+                            video.start();
+                        }
                     }
 
                     @Override

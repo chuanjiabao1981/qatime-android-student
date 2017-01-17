@@ -478,8 +478,9 @@
     <string name="whole_city">全部城市</string>
     <string name="playback_record">回放记录</string>
     <string name="hd">高清</string>
-    <string name="view_playback">观看回放 ></string>
     <string name="sd">标清</string>
     <string name="uhd">超清</string>
+    <string name="no_playback_video">暂无回放视频</string>
+    <string name="have_no_left_playback_count">回放次数已耗尽</string>
 
 </resources>

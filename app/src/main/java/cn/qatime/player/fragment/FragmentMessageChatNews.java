@@ -316,10 +316,10 @@ public class FragmentMessageChatNews extends BaseFragment {
 //            items.addAll(loadedRecents);
             loadedRecents = null;
         }
-        refreshMessages(true);
+        refreshMessages();
     }
 
-    private void refreshMessages(boolean unreadChanged) {
+    private void refreshMessages() {
         sortRecentContacts(items);
         adapter.notifyDataSetChanged();
 
@@ -389,7 +389,7 @@ public class FragmentMessageChatNews extends BaseFragment {
             userInfoObserver = new UserInfoObservable.UserInfoObserver() {
                 @Override
                 public void onUserInfoChanged(List<String> accounts) {
-                    refreshMessages(false);
+                    refreshMessages();
                 }
             };
         }
@@ -487,7 +487,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                 }
             }
 
-            refreshMessages(true);
+            refreshMessages();
         }
     };
 
@@ -510,13 +510,13 @@ public class FragmentMessageChatNews extends BaseFragment {
                     if (TextUtils.equals(item.getContactId(), recentContact.getContactId())
                             && item.getSessionType() == recentContact.getSessionType()) {
                         items.remove(item);
-                        refreshMessages(true);
+                        refreshMessages();
                         break;
                     }
                 }
             } else {
                 items.clear();
-                refreshMessages(true);
+                refreshMessages();
             }
         }
     };
