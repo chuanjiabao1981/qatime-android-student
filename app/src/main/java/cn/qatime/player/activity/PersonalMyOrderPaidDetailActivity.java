@@ -47,7 +47,7 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
     private TextView name;
     private TextView grade;
     private TextView teacher;
-    private TextView Refund;
+    private TextView refund;
     private ImageView status;
     private TextView payprice;
     private int classid;
@@ -122,9 +122,13 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
 
         if (data.status.equals("refunding")) {//退款中
             status.setImageResource(R.mipmap.refunding);
-            Refund.setText(R.string.cancel_refund);
+            refund.setText(R.string.cancel_refund);
+            refund.setTextColor(0xffaaaaaa);
+            refund.setBackgroundResource(R.drawable.button_background_light);
         } else {
-            Refund.setText(R.string.apply_refund);
+            refund.setText(R.string.apply_refund);
+            refund.setTextColor(0xffbe0b0b);
+            refund.setBackgroundResource(R.drawable.button_background_normal);
             if (data.status.equals("paid")) {//正在交易
                 status.setImageResource(R.mipmap.paying);
             } else if (data.status.equals("shipped")) {//正在交易
@@ -136,7 +140,7 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
         progress.setText(String.format(getString(R.string.lesson_count),data.Preset_lesson_count));
         payprice.setText("￥" + data.amount);
 
-        Refund.setOnClickListener(new View.OnClickListener() {
+        refund.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if ("refunding".equals(data.status)) {
@@ -156,7 +160,7 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
         grade = (TextView) findViewById(R.id.grade);
         status = (ImageView) findViewById(R.id.status);
         teacher = (TextView) findViewById(R.id.teacher);
-        Refund = (TextView) findViewById(R.id.button_refund);
+        refund = (TextView) findViewById(R.id.button_refund);
         progress = (TextView) findViewById(R.id.progress);//进度
         ordernumber = (TextView) findViewById(R.id.order_number);//订单编号
         buildtime = (TextView) findViewById(R.id.build_time);//创建时间
