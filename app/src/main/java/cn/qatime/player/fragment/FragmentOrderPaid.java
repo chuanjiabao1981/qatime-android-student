@@ -84,11 +84,17 @@ public class FragmentOrderPaid extends BaseFragment {
                 helper.setText(R.id.classname, item.getProduct().getName())
                         .setText(R.id.describe, sp.toString());
 
+                TextView refund = helper.getView(R.id.apply_refund);
                 if (item.getStatus().equals("refunding")) {//正在交易
                     helper.setText(R.id.status, "退款中");
-                    helper.setText(R.id.apply_refund, "取消退款");
+                    refund.setText(R.string.cancel_refund);
+                    refund.setTextColor(0xffaaaaaa);
+                    refund.setBackgroundResource(R.drawable.button_background_light);
+                    //                    android:background="@drawable/button_background"
                 } else {
-                    helper.setText(R.id.apply_refund, "申请退款");
+                    refund.setText(R.string.apply_refund);
+                    refund.setTextColor(0xffbe0b0b);
+                    refund.setBackgroundResource(R.drawable.button_background_normal);
                     if (item.getStatus().equals("shipped")) {//正在交易
                         helper.setText(R.id.status, getResourceString(R.string.dealing));
                     } else if (item.getStatus().equals("paid")) {//正在交易
@@ -105,7 +111,7 @@ public class FragmentOrderPaid extends BaseFragment {
                 }
                 helper.setText(R.id.price, "￥" + price);
 
-                helper.getView(R.id.apply_refund).setOnClickListener(
+                refund.setOnClickListener(
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {

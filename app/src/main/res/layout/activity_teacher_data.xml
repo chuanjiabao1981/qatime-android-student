@@ -189,7 +189,8 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="3dp"
                     android:paddingTop="6dp"
-                    android:src="@mipmap/person_info" />
+                    android:src="@mipmap/person_info"
+                    android:id="@+id/imageView4" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -212,9 +213,9 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1px"
+                android:layout_height="10dp"
                 android:layout_marginTop="10dp"
-                android:background="#cdcdcd" />
+                android:background="#f7f7f7" />
 
             <LinearLayout
                 android:layout_width="wrap_content"

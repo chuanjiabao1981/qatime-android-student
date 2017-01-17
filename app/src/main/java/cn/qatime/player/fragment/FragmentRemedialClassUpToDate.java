@@ -78,7 +78,7 @@ public class FragmentRemedialClassUpToDate extends BaseFragment {
 //                Glide.with(getActivity()).load(R.mipmap.four).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.image)));
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.image)));
                 try {
-                    long time = System.currentTimeMillis() - parse.parse(item.getPreview_time()).getTime();
+                    long time = parse.parse(item.getPreview_time()).getTime()-System.currentTimeMillis();
                     int value = 0;
                     if (time > 0) {
                         value = (int) (time / (1000 * 3600 * 24));

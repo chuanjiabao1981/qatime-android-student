@@ -300,7 +300,7 @@
     <string name="learning_process">学习流程</string>
     <string name="feedback">意见反馈</string>
     <string name="current_version">V</string>
-    <string name="notify_message">消息提醒</string>
+    <string name="notify_message">系统通知</string>
     <string name="notify_classes">课程提醒</string>
     <string name="voice">声音</string>
     <string name="shake">震动</string>
@@ -548,5 +548,7 @@
     <string name="bean_appointed_administrator">" 被任命为管理员"</string>
     <string name="been_dropped_administrator">" 被撤销管理员身份"</string>
     <string name="accept_the_team_invite">%1$s 接受了 %2$s 的入群邀请</string>
+    <string name="published_course_unable_enter">尚未开课不能</string>
+    <string name="study">学习</string>
 
 </resources>
