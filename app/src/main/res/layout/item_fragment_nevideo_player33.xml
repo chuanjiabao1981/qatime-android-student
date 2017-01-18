@@ -77,6 +77,5 @@
                 android:textSize="12sp" />
         </RelativeLayout>
 
-
     </LinearLayout>
 </LinearLayout>

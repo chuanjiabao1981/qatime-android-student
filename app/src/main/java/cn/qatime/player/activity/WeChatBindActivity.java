@@ -334,12 +334,16 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
                     e.printStackTrace();
                 }
                 Logger.e("注册失败--" + result);
-                if (result.contains("已经被使用")) {
-                    dialogReTry();
-                } else if (result.contains("与确认值不匹配")) {
-                    Toast.makeText(WeChatBindActivity.this, getResourceString(R.string.code_error), Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(WeChatBindActivity.this, getResourceString(R.string.register_failed), Toast.LENGTH_SHORT).show();
+                JSONObject error = null;
+                try {
+                    error = response.getJSONObject("error");
+                    if (error.getString("msg").contains("Captcha confirmation")) {
+                        Toast.makeText(WeChatBindActivity.this, getResourceString(R.string.code_error), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(WeChatBindActivity.this, getResourceString(R.string.phone_already_bind), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
 

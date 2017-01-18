@@ -164,13 +164,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             return;
         }
         if (!StringUtils.isGoodPWD(password.getText().toString().trim())) {
-            Toast.makeText(this, "密码格式不正确", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.password_format_error, Toast.LENGTH_SHORT).show();
             login.setClickable(true);
             return;
         }
         if (checklayout.getVisibility() == View.VISIBLE) {
             if (!CheckUtil.checkNum(checkcode.getText().toString().trim(), checkNum)) {
-                Toast.makeText(this, "验证码不正确!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.verification_code_is_incorrect, Toast.LENGTH_SHORT).show();
                 initCheckNum();
                 checkcode.setText("");
                 return;
@@ -213,7 +213,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                     }
                                 }
                             } else {
-                                Logger.e("登录", response.toString());
                                 SPUtils.put(LoginActivity.this, "username", username.getText().toString());
                                 profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
                                 if (profile != null && profile.getData() != null && profile.getData().getUser() != null && profile.getData().getUser().getId() != 0) {
@@ -262,7 +261,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                     }
                                 }
                                 if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
-                                    Logger.e("登录", response.toString());
                                     //登录成功且有个人信息  设置profile
                                     BaseApplication.setProfile(profile);
                                     SPUtils.put(LoginActivity.this, "username", username.getText().toString());

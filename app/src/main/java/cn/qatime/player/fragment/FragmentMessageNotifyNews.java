@@ -49,6 +49,7 @@ public class FragmentMessageNotifyNews extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = View.inflate(getActivity(), R.layout.fragment_message_notify_news, null);
         initview(view);
+        initOver = true;
         return view;
     }
 
@@ -126,9 +127,13 @@ public class FragmentMessageNotifyNews extends BaseFragment {
     @Override
     public void onShow() {
         if (!isLoad) {
-            isLoad = true;
-            page = 1;
-            initData(1);
+            if (initOver) {
+                page = 1;
+                initData(1);
+            } else {
+                super.onShow();
+            }
+
         }
     }
 
@@ -143,6 +148,7 @@ public class FragmentMessageNotifyNews extends BaseFragment {
                         if (type == 1) {
                             list.clear();
                         }
+                        isLoad = true;
                         SystemNotifyBean data = JsonUtils.objectFromJson(response.toString(), SystemNotifyBean.class);
                         if (data != null && data.getData() != null) {
                             list.addAll(data.getData());

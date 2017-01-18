@@ -65,13 +65,18 @@ public class FragmentFundRecordRefund extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_fund_record_refund, container, false);
         EventBus.getDefault().register(this);
         initview(view);
+        initOver=true;
         return view;
     }
 
     @Override
     public void onShow() {
         if (!isLoad) {
-            initData(1);
+            if(initOver){
+                initData(1);
+            }else{
+                super.onShow();
+            }
         }
     }
 

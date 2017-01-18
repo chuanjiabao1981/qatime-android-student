@@ -129,7 +129,7 @@ StartActivity extends BaseActivity implements View.OnClickListener {
                             }
                         });
                         String descStr = response.getJSONObject("data").getString("description");
-                        desc.setText(StringUtils.isNullOrBlanK(descStr) ?"无": descStr);
+                        desc.setText(StringUtils.isNullOrBlanK(descStr) ?"\n": descStr);
                         downLoadLinks = response.getJSONObject("data").getString("download_links");
                         newVersion.setText("(V" + response.getJSONObject("data").getString("version")+")");
                     } catch (JSONException e) {

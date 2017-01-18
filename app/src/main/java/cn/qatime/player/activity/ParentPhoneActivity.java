@@ -199,9 +199,9 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
                         Logger.e(response.toString());
                         try {
                             JSONObject error = response.getJSONObject("error");
-                            if (error.getString("msg").contains("是无效的")) {
+                            if (error.getString("msg").contains("Current password")) {
                                 Toast.makeText(ParentPhoneActivity.this, getResourceString(R.string.password_error), Toast.LENGTH_SHORT).show();
-                            } else if (error.getString("msg").contains("与确认值不匹配")) {
+                            } else if (error.getString("msg").contains("Captcha confirmation")) {
                                 Toast.makeText(ParentPhoneActivity.this, getResourceString(R.string.code_error), Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(ParentPhoneActivity.this, getResourceString(R.string.bind_parent_phone_failed), Toast.LENGTH_SHORT).show();

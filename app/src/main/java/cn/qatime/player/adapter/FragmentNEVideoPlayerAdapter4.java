@@ -43,11 +43,11 @@ public class FragmentNEVideoPlayerAdapter4 extends CommonAdapter<Announcements.D
         if (item.isOwner()) {
             ((TextView) holder.getView(R.id.name)).setTextColor(0xffbe0b0b);
             ((TextView) holder.getView(R.id.role)).setTextColor(0xffbe0b0b);
-            ((TextView) holder.getView(R.id.role)).setText("老师");
+            ((TextView) holder.getView(R.id.role)).setText(R.string.teacher_translate);
         } else {
             ((TextView) holder.getView(R.id.name)).setTextColor(0xff666666);
             ((TextView) holder.getView(R.id.role)).setTextColor(0xff999999);
-            ((TextView) holder.getView(R.id.role)).setText("学生");
+            ((TextView) holder.getView(R.id.role)).setText(R.string.student_translate);
         }
 
         holder.setText(R.id.name, item.getName());

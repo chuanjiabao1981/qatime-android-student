@@ -48,8 +48,8 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
     private ListViewForScrollView list;
     private RemedialClassDetailBean.Data data;
     private CommonAdapter<RemedialClassDetailBean.Lessons> adapter;
-    private List<RemedialClassDetailBean.Lessons> classList = new ArrayList<>();
 
+    private List<RemedialClassDetailBean.Lessons> classList = new ArrayList<>();
     private SimpleDateFormat parse1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private SimpleDateFormat parse2 = new SimpleDateFormat("yyyy-MM-dd");
     private Handler hd = new Handler();
@@ -60,7 +60,6 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = View.inflate(getActivity(), R.layout.fragment_nevideo_player3, null);
-
         className = (TextView) view.findViewById(R.id.class_name);
         subject = (TextView) view.findViewById(R.id.subject);
         totalClass = (TextView) view.findViewById(R.id.total_class);

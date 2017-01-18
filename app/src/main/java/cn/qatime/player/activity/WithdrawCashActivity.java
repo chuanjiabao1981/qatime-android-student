@@ -155,7 +155,7 @@ public class WithdrawCashActivity extends BaseActivity {
                     return;
                 }
                 if (Double.valueOf(amount) > Math.pow(10, 6)) {
-                    Toast.makeText(WithdrawCashActivity.this, "金额不支持", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(WithdrawCashActivity.this, R.string.amount_not_allow, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (Double.valueOf(amount) > Double.valueOf(BaseApplication.getCashAccount().getData().getBalance())) {

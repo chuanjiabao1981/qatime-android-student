@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
-import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONException;
@@ -112,7 +111,6 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
 
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        Logger.e("验证码发送成功" + email + "---" + response.toString());
                         Toast.makeText(getApplicationContext(), getResourceString(R.string.code_send_success), Toast.LENGTH_LONG).show();
                     }
 
@@ -120,7 +118,7 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
                     protected void onError(JSONObject response) {
                         Toast.makeText(getApplicationContext(), getResourceString(R.string.code_send_failed), Toast.LENGTH_LONG).show();
                     }
-                }, new VolleyErrorListener(){
+                }, new VolleyErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         super.onErrorResponse(volleyError);
@@ -155,7 +153,6 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
 
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        Logger.e("验证成功");
                         Toast.makeText(BindEmailActivity.this, getResourceString(R.string.bind_email_success), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(BindEmailActivity.this, SecurityManagerActivity.class);
                         startActivity(intent);
@@ -165,16 +162,16 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
                     protected void onError(JSONObject response) {
                         try {
                             JSONObject error = response.getJSONObject("error");
-                            if (error.getString("msg").contains("与确认值不匹配")) {
+                            if (error.getString("msg").contains("Captcha confirmation")) {
                                 Toast.makeText(BindEmailActivity.this, getResourceString(R.string.code_error), Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(BindEmailActivity.this, getResourceString(R.string.email_already_bind), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(BindEmailActivity.this, getResourceString(R.string.phone_already_bind), Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
-                }, new VolleyErrorListener(){
+                }, new VolleyErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         super.onErrorResponse(volleyError);

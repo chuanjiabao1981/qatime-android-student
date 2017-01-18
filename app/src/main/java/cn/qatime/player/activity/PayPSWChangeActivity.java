@@ -50,7 +50,7 @@ public class PayPSWChangeActivity extends BaseActivity implements View.OnClickLi
         customKeyboard = (CustomKeyboard) findViewById(R.id.KeyboardView_pay);
 
 
-        setTitle("设置新支付密码");
+        setTitle(getString(R.string.change_new_pay_password));
         payEditText.setOnClickListener(this);
         over.setOnClickListener(this);
         over.setEnabled(false);
@@ -95,7 +95,7 @@ public class PayPSWChangeActivity extends BaseActivity implements View.OnClickLi
                     payEditText.clear();
                     over.setVisibility(View.VISIBLE);
                     over.setEnabled(false);
-                    setTitle("确认新支付密码");
+                    setTitle(getString(R.string.confirm_new_pay_password));
                 } else {
                     over.setEnabled(true);
                 }
@@ -135,7 +135,7 @@ public class PayPSWChangeActivity extends BaseActivity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.over:
                 if (!tempPassword.equals(payEditText.getText())) {
-                    Toast.makeText(PayPSWChangeActivity.this, "两次密码不一致，请重新输入", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PayPSWChangeActivity.this,R.string.password_and_repassword_are_incongruous, Toast.LENGTH_SHORT).show();
                     reset();
                     return;
                 }
@@ -146,7 +146,7 @@ public class PayPSWChangeActivity extends BaseActivity implements View.OnClickLi
                         new VolleyListener(PayPSWChangeActivity.this) {
                             @Override
                             protected void onSuccess(JSONObject response) {
-                                Toast.makeText(PayPSWChangeActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(PayPSWChangeActivity.this, R.string.change_pay_password_success, Toast.LENGTH_SHORT).show();
                                 BaseApplication.getCashAccount().getData().setHas_password(true);
                                 finish();
                             }
@@ -155,7 +155,7 @@ public class PayPSWChangeActivity extends BaseActivity implements View.OnClickLi
                                 try {
                                     int errorCode = response.getJSONObject("error").getInt("code");
                                     if (errorCode == 2007) {
-                                        Toast.makeText(PayPSWChangeActivity.this, "授权token无效", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(PayPSWChangeActivity.this, R.string.token_error, Toast.LENGTH_SHORT).show();
                                     }
                                     finish();
                                 } catch (JSONException e) {
@@ -187,6 +187,6 @@ public class PayPSWChangeActivity extends BaseActivity implements View.OnClickLi
         over.setVisibility(View.INVISIBLE);
         tempPassword = "";
         payEditText.clear();
-        setTitle("设置新支付密码");
+        setTitle(getString(R.string.change_new_pay_password));
     }
 }

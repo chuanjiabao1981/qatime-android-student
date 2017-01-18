@@ -126,7 +126,7 @@
     <string name="teacher_detail">Teacher detail</string>//教师详情
     <string name="course_list">Course list</string>//课程列表
     //课程详情
-    <string name="student_number">Students</string>
+    <string name="student_number">Students %1$d</string>
     <string name="Joined_the_audition">Joined</string>已加入试听
     <string name="purchased">purchased</string>已购买
     <string name="Join_the_audition">Join the audition</string>//加入试听
@@ -158,7 +158,7 @@
     <string name="class_name">Name:</string>//名称
     <string name="subject_type">Subject:</string>//科目类型
     <string name="teacher">Teacher:</string>//授课教师
-    <string name="progress">Progress:</string>//课程进度
+    <string name="progress">Progress:%1$d/%2$d</string>//课程进度
     <string name="teach_way">Teaching mode:</string>//授课方式
     <string name="remain_class">Residual class:</string>//剩余课时
     <string name="class_end_time">End time:</string>//结束时间
@@ -238,7 +238,7 @@
     <string name="within_ten_years">3-10 years</string>
     <string name="within_three_years">Within 3 years</string>
     <string name="within_twenty_years">10-20 years</string>
-    <string name="wechat_payment">Wechat payment</string>
+    <string name="wexin_payment">Wechat payment</string>
     <string name="viewing_mode">Viewing mode</string>
     <string name="system_message">System message</string>
     <string name="send">Send</string>

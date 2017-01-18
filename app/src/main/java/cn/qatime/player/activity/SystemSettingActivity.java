@@ -124,7 +124,6 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 startActivity(intent);
                 break;
             case R.id.check_update:
-                //TODO 检查版本，进行更新
                 Map<String, String> map = new HashMap<>();
                 map.put("category", "student_client");
                 map.put("platform", "android");
@@ -158,7 +157,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
 //                                    x.setVisibility(View.GONE);
 //                                }
                                 String descStr = response.getJSONObject("data").getString("description");
-                                desc.setText(StringUtils.isNullOrBlanK(descStr) ? "无" : descStr);
+                                desc.setText(StringUtils.isNullOrBlanK(descStr) ? "\n" : descStr);
                                 downLoadLinks = response.getJSONObject("data").getString("download_links");
                                 newVersion.setText("(V" + response.getJSONObject("data").getString("version")+")");
                             } catch (JSONException e) {
@@ -187,7 +186,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 break;
             case R.id.clean_cache:
                 //TODO 弹出对话框提示
-                Toast.makeText(SystemSettingActivity.this, "成功清理缓存" + cacheSize.getText().toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(SystemSettingActivity.this, getString(R.string.clean_cache_success) + cacheSize.getText().toString(), Toast.LENGTH_SHORT).show();
                 DataCleanUtils.clearAllCache(this);
                 setCache();
                 break;

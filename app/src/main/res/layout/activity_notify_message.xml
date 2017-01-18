@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#f7f7f7"
     android:orientation="vertical">
 
@@ -50,9 +51,9 @@
                 android:id="@+id/shake"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="45dp"
                 android:button="@null"
                 android:checked="true"
-                android:layout_marginLeft="45dp"
                 android:drawableLeft="@drawable/checkbox_selector"
                 android:drawablePadding="5dp"
                 android:text="@string/shake"
@@ -90,7 +91,11 @@
             <android.support.v7.widget.SwitchCompat
                 android:id="@+id/notify_status"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:minWidth="40dp"
+                android:minHeight="20dp"
+                android:thumb="@drawable/switch_thumb_selector" />
         </LinearLayout>
     </LinearLayout>
 

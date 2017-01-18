@@ -60,7 +60,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="课程进度"
+                android:text="可退课时"
                 android:textColor="#333" />
 
             <TextView
@@ -80,7 +80,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="订单总价"
+                android:text="实付金额"
                 android:textColor="#333" />
 
             <TextView

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -151,7 +150,7 @@ public class TeacherDataActivity extends BaseActivity {
                                     setTitle(name);
                                     TeacherDataActivity.this.name.setText(name);
                                 }
-                                describe.setText(StringUtils.isNullOrBlanK(bean.getData().getDesc()) ? "暂无" : bean.getData().getDesc());
+                                describe.setText(StringUtils.isNullOrBlanK(bean.getData().getDesc()) ? getString(R.string.not_available) : bean.getData().getDesc());
                                 teachAge.setText(getTeachingYear(bean.getData().getTeaching_years()));
                                 category.setText(bean.getData().getCategory());
                                 subject.setText(bean.getData().getSubject());
@@ -212,11 +211,11 @@ public class TeacherDataActivity extends BaseActivity {
     private String getTeachingYear(String teaching_years) {
         switch (teaching_years) {
             case "within_three_years":
-                return getResourceString(R.string.within_three_years) + "教龄";
+                return getResourceString(R.string.within_three_years) + getString(R.string.teach_age);
             case "within_ten_years":
-                return getResourceString(R.string.within_ten_years) + "教龄";
+                return getResourceString(R.string.within_ten_years) + getString(R.string.teach_age);
             case "within_twenty_years":
-                return getResourceString(R.string.within_twenty_years) + "教龄";
+                return getResourceString(R.string.within_twenty_years) + getString(R.string.teach_age);
         }
         return "";
     }

@@ -50,13 +50,14 @@ public class FragmentTutorshipTeaching extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tutorship_teaching, container, false);
         initview(view);
+        initOver = true;
         return view;
     }
 
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
         listView.setMode(PullToRefreshBase.Mode.BOTH);
-        listView.setEmptyView(View.inflate(getActivity(),R.layout.empty_view,null));
+        listView.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
         listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResourceString(R.string.refreshing));
@@ -80,7 +81,6 @@ public class FragmentTutorshipTeaching extends BaseFragment {
                         startActivity(intent);
                     }
                 });
-
 
 
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
@@ -120,7 +120,11 @@ public class FragmentTutorshipTeaching extends BaseFragment {
 
     public void onShow() {
         if (!isLoad) {
-            initData(1);
+            if (initOver) {
+                initData(1);
+            } else {
+                super.onShow();
+            }
         }
     }
 
@@ -152,8 +156,8 @@ public class FragmentTutorshipTeaching extends BaseFragment {
                         try {
                             TutorialClassBean data = JsonUtils.objectFromJson(response.toString(), TutorialClassBean.class);
                             if (data != null) {
-                                for(TutorialClassBean.Data item : data.getData()){
-                                    if(item.isIs_bought()||item.isIs_tasting()){//只显示试听未过期或已购买
+                                for (TutorialClassBean.Data item : data.getData()) {
+                                    if (item.isIs_bought() || item.isIs_tasting()) {//只显示试听未过期或已购买
                                         list.add(item);
                                     }
                                 }
