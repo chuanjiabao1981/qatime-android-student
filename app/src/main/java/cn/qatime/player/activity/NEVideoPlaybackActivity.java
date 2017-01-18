@@ -41,8 +41,12 @@ public class NEVideoPlaybackActivity extends BaseActivity implements PlayBackVid
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nevideo_playback);
         lessonId = getIntent().getIntExtra("id", 0);
+        String name = getIntent().getStringExtra("name");
 
         initView();
+        if (!StringUtils.isNullOrBlanK(name)) {
+            playBackFloatFragment.setName(name);
+        }
         if (lessonId != 0) {
             initData();
         }

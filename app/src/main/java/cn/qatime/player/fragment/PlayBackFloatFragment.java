@@ -78,6 +78,8 @@ public class PlayBackFloatFragment extends Fragment implements View.OnClickListe
     private TextView sd;
     private TextView hds;
     private TextView uhd;
+    private TextView name;
+    private String nameValue;
 
     private long setProgress() {
         if (mPlayer == null || mDragging)
@@ -119,6 +121,7 @@ public class PlayBackFloatFragment extends Fragment implements View.OnClickListe
 
     private void assignViews(View view) {
         playExit = (ImageView) view.findViewById(R.id.play_exit);
+        name = (TextView) view.findViewById(R.id.name);
         playToolbar = (RelativeLayout) view.findViewById(R.id.play_toolbar);
         bottomLayout = (LinearLayout) view.findViewById(R.id.bottom_layout);
         play = (ImageView) view.findViewById(R.id.play);
@@ -134,7 +137,9 @@ public class PlayBackFloatFragment extends Fragment implements View.OnClickListe
         seekbar.setMax(1000);
 
         hd.sendEmptyMessageDelayed(HIDE, 1500);
-
+        if (!StringUtils.isNullOrBlanK(nameValue)) {
+            name.setText(nameValue);
+        }
     }
 
 
@@ -280,7 +285,7 @@ public class PlayBackFloatFragment extends Fragment implements View.OnClickListe
      * 消失
      */
     private void vanish() {
-        if (definition.getVisibility()==View.VISIBLE){
+        if (definition.getVisibility() == View.VISIBLE) {
             definition.setVisibility(View.GONE);
         }
         hd.removeMessages(PROGRESS);
@@ -358,6 +363,13 @@ public class PlayBackFloatFragment extends Fragment implements View.OnClickListe
 
     public void setMediaPlayer(NEVideoView mediaPlayer) {
         this.mPlayer = mediaPlayer;
+    }
+
+    public void setName(String value) {
+        this.nameValue = value;
+        if (name != null) {
+            name.setText(value);
+        }
     }
 
     public interface Callback {
