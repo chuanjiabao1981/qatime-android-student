@@ -184,8 +184,8 @@
 
 
     <!--<style name="MediaController_SeekBar" parent="android:Widget.SeekBar">-->
-    <!--<item name="android:progressDrawable">@drawable/nemediacontroller_progressbar</item>-->
-    <!--<item name="android:indeterminateDrawable">@drawable/nemediacontroller_progressbar</item>-->
+    <!--<item name="android:progressDrawable">@drawable/playback_controller_progressbar</item>-->
+    <!--<item name="android:indeterminateDrawable">@drawable/playback_controller_progressbar</item>-->
     <!--<item name="android:minHeight">5dip</item>-->
     <!--<item name="android:maxHeight">5dip</item>-->
     <!--<item name="android:thumb">@drawable/nemediacontroller_progressbar_thumb</item>-->

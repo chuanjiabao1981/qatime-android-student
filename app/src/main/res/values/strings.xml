@@ -471,6 +471,16 @@
     <string name="other_method_of_login">其他登录方式</string>
     <string name="found_new_version">发现新版本</string>
     <string name="whole_country">全国</string>
+    <string name="current_change">当前选择</string>
+    <string name="location">定位</string>
+    <string name="recent_change">最近选择</string>
+    <string name="whole_city">全部城市</string>
+    <string name="playback_record">回放记录</string>
+    <string name="hd">高清</string>
+    <string name="sd">标清</string>
+    <string name="uhd">超清</string>
+    <string name="no_playback_video">暂无回放视频</string>
+    <string name="have_no_left_playback_count">回放次数已耗尽</string>
     <string name="refund_apply">退款申请</string>
     <string name="refund_to_weixin">退至微信</string>
     <string name="refund_to_alipay">退至支付宝</string>

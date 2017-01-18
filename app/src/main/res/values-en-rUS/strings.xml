@@ -361,5 +361,13 @@
     <string name="login_right_now">login right now</string>
     <string name="make_sure_cancel_order"></string>
     <string name="my_wallet">my wallet</string>
+    <string name="change_city">change city</string>
+    <string name="current_change">current change</string>
+    <string name="landing">logining</string>
+    <string name="location">location</string>
+    <string name="minute">minute</string>
+    <string name="my_record_fund"></string>
+    <string name="recent_change">recent change</string>
+    <string name="whole_city">whole city</string>
 </resources>
 
