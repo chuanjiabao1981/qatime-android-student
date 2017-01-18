@@ -287,29 +287,33 @@ public class FragmentMessageChatNews extends BaseFragment {
             return;
         }
         items.clear();
-        for (TutorialClassBean.Data data : courses.getData()) {
-            for (RecentContact item : loadedRecents) {
+        for (RecentContact item : loadedRecents) {
+            MessageListBean bean = new MessageListBean();
+            for (TutorialClassBean.Data data : courses.getData()) {
                 if (data != null && !StringUtils.isNullOrBlanK(data.getChat_team_id()) && data.getChat_team_id().equals(item.getContactId())) {
-                    Team team = TeamDataCache.getInstance().getTeamById(item.getContactId());
-                    MessageListBean bean = new MessageListBean();
-                    bean.setMute(team.mute());
                     bean.setContactId(item.getContactId());
+                    Team team = TeamDataCache.getInstance().getTeamById(item.getContactId());
+                    bean.setMute(team.mute());
                     bean.setSessionType(item.getSessionType());
-                    bean.setName(data.getName());
+                    bean.setUnreadCount(item.getUnreadCount());
+                    bean.setTime(item.getTime());
+                    bean.setRecentMessageId(item.getRecentMessageId());
+//                    bean.setCamera(data.getCamera());
+//                    bean.setBoard(data.getBoard());
                     if (StringUtils.isNullOrBlanK(bean.getName())) {
                         bean.setName(item.getContent().replace("讨论组", ""));
                     }
                     bean.setCourseId(data.getId());
-                    bean.setUnreadCount(item.getUnreadCount());
-//                    bean.setCamera(data.getCamera());
-//                    bean.setBoard(data.getBoard());
-                    bean.setTime(item.getTime());
-                    bean.setRecentMessageId(item.getRecentMessageId());
+                    bean.setName(data.getName());
                     bean.setOwner(data.getChat_team_owner());
-                    if (!items.contains(bean)) {
+                    if (!items.contains(bean)) {//依据contactId判断
                         items.add(bean);
                     }
+                    break;
                 }
+            }
+            if (bean.getUnreadCount() != 0 && !StringUtils.isNullOrBlanK(bean.getContactId())) {//如果未读数不为0并且不再items中显示的话(contactId未赋值)，则将未读消息数清空
+                NIMClient.getService(MsgService.class).clearUnreadCount(item.getContactId(), item.getSessionType());
             }
         }
         if (loadedRecents != null) {
@@ -447,7 +451,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                     boolean haveData = false;
                     if (courses != null && courses.getData() != null) {
                         for (TutorialClassBean.Data data : courses.getData()) {
-                            if(data!=null&&bean!=null){
+                            if (data != null && bean != null) {
                                 if (data.getChat_team_id().equals(bean.getContactId())) {
                                     haveData = true;
                                 }

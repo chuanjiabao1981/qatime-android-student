@@ -30,6 +30,7 @@ import libraryextra.utils.StringUtils;
 import libraryextra.view.GridViewForScrollView;
 
 public class FragmentPlayerLiveDetails extends BaseFragment {
+    private TextView className;
     private TextView subject;
     private TextView totalClass;
     private TextView grade;
@@ -46,8 +47,8 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
     private GridViewForScrollView list;
     private RemedialClassDetailBean.Data data;
     private CommonAdapter<RemedialClassDetailBean.Lessons> adapter;
-    private List<RemedialClassDetailBean.Lessons> classList = new ArrayList<>();
 
+    private List<RemedialClassDetailBean.Lessons> classList = new ArrayList<>();
     private SimpleDateFormat parse1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private SimpleDateFormat parse2 = new SimpleDateFormat("yyyy-MM-dd");
     private Handler hd = new Handler();
@@ -57,6 +58,7 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = View.inflate(getActivity(), R.layout.fragment_nevideo_player3, null);
+        className = (TextView) view.findViewById(R.id.class_name);
         subject = (TextView) view.findViewById(R.id.subject);
         totalClass = (TextView) view.findViewById(R.id.total_class);
         grade = (TextView) view.findViewById(R.id.grade);
@@ -151,6 +153,7 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
         @Override
         public void run() {
             if (getActivity() != null && getActivity().getResources() != null) {
+                className.setText(data.getName());
                 subject.setText((data.getSubject() == null ? "" : data.getSubject()));
                 try {
                     classStartTime.setText((data.getLive_start_time() == null ? "" : parse2.format(parse1.parse(data.getLive_start_time()))));
