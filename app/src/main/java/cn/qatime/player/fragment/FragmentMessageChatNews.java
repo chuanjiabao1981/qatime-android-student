@@ -310,7 +310,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                     break;
                 }
             }
-            if (bean.getUnreadCount() != 0 && !StringUtils.isNullOrBlanK(bean.getContactId())) {//如果未读数不为0并且不再items中显示的话(contactId未赋值)，则将未读消息数清空
+            if (item.getUnreadCount() != 0 && StringUtils.isNullOrBlanK(bean.getContactId())) {//如果未读数不为0并且不再items中显示的话(contactId未赋值)，则将未读消息数清空
                 NIMClient.getService(MsgService.class).clearUnreadCount(item.getContactId(), item.getSessionType());
             }
         }
