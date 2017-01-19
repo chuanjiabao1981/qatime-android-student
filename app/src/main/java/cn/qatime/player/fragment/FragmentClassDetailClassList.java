@@ -19,7 +19,6 @@ import java.util.List;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.NEVideoPlaybackActivity;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.bean.BannerRecommendBean;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.RemedialClassDetailBean;
@@ -43,7 +42,6 @@ public class FragmentClassDetailClassList extends BaseFragment {
 
     private void initview(View view) {
         ListView listView = (ListView) view.findViewById(R.id.id_stickynavlayout_innerscrollview);
-        listView.setDividerHeight(0);
         listView.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
         adapter = new CommonAdapter<RemedialClassDetailBean.Lessons>(getActivity(), list, R.layout.item_fragment_remedial_class_detail3) {
 

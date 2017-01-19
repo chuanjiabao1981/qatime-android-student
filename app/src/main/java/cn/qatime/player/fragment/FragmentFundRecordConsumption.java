@@ -144,6 +144,7 @@ public class FragmentFundRecordConsumption extends BaseFragment {
                 try {
                     helper.setText(R.id.time, parse.format(parseISO.parse(item.getCreated_at())));
                 } catch (ParseException e) {
+                    helper.setText(R.id.time, item.getCreated_at());
                     e.printStackTrace();
                 }
                 helper.setText(R.id.mode, getChangeType(item.getChange_type()));

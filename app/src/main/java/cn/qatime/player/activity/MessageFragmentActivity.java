@@ -37,7 +37,7 @@ public class MessageFragmentActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_fragment);
-        setTitle(R.string.message);
+        setTitle(getResourceString(R.string.message));
         initview();
         parseIntent();
     }

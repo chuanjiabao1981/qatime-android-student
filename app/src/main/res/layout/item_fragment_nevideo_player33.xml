@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:baselineAligned="false"
     android:orientation="horizontal">
 
     <TextView
@@ -9,29 +10,30 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:padding="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="5dp"
         android:text="◇"
         android:textSize="16sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="3dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingRight="10dp">
 
 
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:singleLine="true"
             android:text="第一课，北京的天为什么一直是灰蒙蒙的，物理角度解其中缘。"
             android:textColor="#666" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/class_date"
@@ -60,8 +62,7 @@
                 android:id="@+id/status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="3dp"
+                android:layout_marginTop="2dp"
                 android:text="已结束"
                 android:textColor="#999"
                 android:textSize="12sp" />
@@ -71,11 +72,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:layout_marginTop="2dp"
                 android:paddingRight="5dp"
                 android:text="还可回放0次>"
                 android:textColor="@color/colorPrimary"
                 android:textSize="12sp" />
         </RelativeLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="10dp"
+            android:background="#dfdddd" />
     </LinearLayout>
 </LinearLayout>

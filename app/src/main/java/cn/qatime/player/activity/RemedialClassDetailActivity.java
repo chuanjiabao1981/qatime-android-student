@@ -210,7 +210,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
                             try {
                                 if ("init".equals(data.getData().getStatus()) || "published".equals(data.getData().getStatus())) {
-                                    long time = parse.parse(data.getData().getLive_start_time()).getTime() - System.currentTimeMillis();
+                                    long time = System.currentTimeMillis() - parse.parse(data.getData().getLive_start_time()).getTime();
                                     int value = 0;
                                     if (time > 0) {
                                         value = (int) (time / (1000 * 3600 * 24));
@@ -296,7 +296,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
             case R.id.audition_start:
                 if (BaseApplication.isLogined()) {
                     if ("init".equals(data.getData().getStatus()) || "published".equals(data.getData().getStatus())) {
-                        Toast.makeText(this, getString(R.string.published_course_unable_enter)+getString(R.string.audition), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.published_course_unable_enter) + getString(R.string.audition), Toast.LENGTH_SHORT).show();
                     } else {
                         intent = new Intent(RemedialClassDetailActivity.this, NEVideoPlayerActivity.class);
 //                    intent.putExtra("camera", data.getData().getCamera());
@@ -323,7 +323,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
             case R.id.start_study:
                 if (BaseApplication.isLogined()) {
                     if ("init".equals(data.getData().getStatus()) || "published".equals(data.getData().getStatus())) {
-                        Toast.makeText(this, getString(R.string.published_course_unable_enter)+getString(R.string.study), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.published_course_unable_enter) + getString(R.string.study), Toast.LENGTH_SHORT).show();
                     } else {
                         intent = new Intent(RemedialClassDetailActivity.this, NEVideoPlayerActivity.class);
 //                    intent.putExtra("camera", data.getData().getCamera());
