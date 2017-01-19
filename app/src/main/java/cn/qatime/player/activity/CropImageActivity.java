@@ -32,7 +32,7 @@ public class CropImageActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crop_image);
-        setTitle(getResources().getString(R.string.clip_photo));
+        setTitles(getResources().getString(R.string.clip_photo));
         String id = getIntent().getStringExtra("id");
         if (StringUtils.isNullOrBlanK(id)) {
             finish();

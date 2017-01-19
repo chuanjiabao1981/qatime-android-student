@@ -47,7 +47,7 @@ public class NotifyMessageActivity extends BaseActivity implements CompoundButto
 
     private void initView() {
         setContentView(R.layout.activity_notify_message);
-        setTitle(getResourceString(R.string.notify_message));
+        setTitles(getResourceString(R.string.notify_message));
         assignViews();
         boolean shakeStatus = (boolean) SPUtils.get(this, "shake_status", true);
         shake.setChecked(shakeStatus);

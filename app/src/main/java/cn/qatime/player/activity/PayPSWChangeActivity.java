@@ -50,7 +50,7 @@ public class PayPSWChangeActivity extends BaseActivity implements View.OnClickLi
         customKeyboard = (CustomKeyboard) findViewById(R.id.KeyboardView_pay);
 
 
-        setTitle(getString(R.string.change_new_pay_password));
+        setTitles(getString(R.string.change_new_pay_password));
         payEditText.setOnClickListener(this);
         over.setOnClickListener(this);
         over.setEnabled(false);
@@ -95,7 +95,7 @@ public class PayPSWChangeActivity extends BaseActivity implements View.OnClickLi
                     payEditText.clear();
                     over.setVisibility(View.VISIBLE);
                     over.setEnabled(false);
-                    setTitle(getString(R.string.confirm_new_pay_password));
+                    setTitles(getString(R.string.confirm_new_pay_password));
                 } else {
                     over.setEnabled(true);
                 }
@@ -187,6 +187,6 @@ public class PayPSWChangeActivity extends BaseActivity implements View.OnClickLi
         over.setVisibility(View.INVISIBLE);
         tempPassword = "";
         payEditText.clear();
-        setTitle(getString(R.string.change_new_pay_password));
+        setTitles(getString(R.string.change_new_pay_password));
     }
 }

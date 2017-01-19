@@ -32,7 +32,7 @@ public class BaseActivity extends AppCompatActivity {
         PushAgent.getInstance(this).onAppStart();
     }
 
-    public void setTitle(String text) {
+    public void setTitles(String text) {
         if (StringUtils.isNullOrBlanK(text)) {
             throw new IllegalStateException("text can not be a null object");
         }

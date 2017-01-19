@@ -43,7 +43,7 @@ public class OrderPayResultActivity extends BaseActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_pay_result);
-        setTitle(getResources().getString(R.string.payment_result));
+        setTitles(getResources().getString(R.string.payment_result));
         assignViews();
 
     }

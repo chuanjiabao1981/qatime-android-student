@@ -38,7 +38,7 @@ public class NotifySettingActivity extends BaseActivity implements View.OnClickL
 
     private void initView() {
         setContentView(R.layout.activity_notify_setting);
-        setTitle(getResourceString(R.string.notify_setting));
+        setTitles(getResourceString(R.string.notify_setting));
         assignViews();
 
         notifyClasses.setOnClickListener(this);

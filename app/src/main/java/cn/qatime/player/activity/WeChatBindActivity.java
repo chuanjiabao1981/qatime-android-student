@@ -128,7 +128,7 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bind_wechat);
-        setTitle("绑定");
+        setTitles("绑定");
         openid = getIntent().getStringExtra("openid");
         assignViews();
         String gradeString = FileUtil.readFile(getFilesDir() + "/grade.txt");

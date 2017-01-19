@@ -68,7 +68,7 @@ public class ApplyRefundActivity extends BaseActivity {
     }
 
     private void initView() {
-        setTitle(getString(R.string.refund_apply));
+        setTitles(getString(R.string.refund_apply));
         String response = getIntent().getStringExtra("response");
         orderRefundBean = JsonUtils.objectFromJson(response, OrderRefundBean.class);
 

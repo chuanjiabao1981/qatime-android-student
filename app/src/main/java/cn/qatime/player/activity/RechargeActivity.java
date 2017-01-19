@@ -128,7 +128,7 @@ public class RechargeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recharge);
-        setTitle(getResourceString(R.string.recharge_choice));
+        setTitles(getResourceString(R.string.recharge_choice));
         EventBus.getDefault().register(this);
         assignViews();
         initListener();

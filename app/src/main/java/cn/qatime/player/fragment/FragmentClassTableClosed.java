@@ -16,6 +16,7 @@ import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
@@ -88,21 +89,20 @@ public class FragmentClassTableClosed extends BaseFragment {
                         });
 ////                helper.setText(R.id.course, item.getCourse_name());
                 helper.setText(R.id.classname, item.getName());
-
                 try {
                     Date date = parse.parse(item.getClass_date());
-                    helper.setText(R.id.class_date, date.getMonth() + "-" + date.getDay() + "  ");
-                    helper.setText(R.id.status, getStatus(item.getStatus()));
+                    helper.setText(R.id.class_date, getMonth(date.getMonth()) + "-" + getDay(date.getDate()) + "  ");
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                helper.setText(R.id.status, getStatus(item.getStatus()));
                 helper.setText(R.id.live_time, item.getLive_time());
                 helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
                 String status = item.getStatus();
 
-                boolean showEnter = "ready".equals(status)||"paused".equals(status)||"closed".equals(status)||"paused_inner".equals(status)||"teaching".equals(status);//是否是待上课、已直播、直播中
+                boolean showEnter = "ready".equals(status) || "paused".equals(status) || "closed".equals(status) || "paused_inner".equals(status) || "teaching".equals(status);//是否是待上课、已直播、直播中
                 //进入状态
                 helper.getView(R.id.enter).setVisibility(showEnter ? View.VISIBLE : View.GONE);//进入播放器按钮显示或隐藏
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
@@ -135,6 +135,21 @@ public class FragmentClassTableClosed extends BaseFragment {
                 startActivity(intent);
             }
         });
+    }
+
+    private String getDay(int day) {
+        if (day < 10) {
+            return "0" + day;
+        }
+        return String.valueOf(day);
+    }
+
+    private String getMonth(int month) {
+        month += 1;
+        if (month < 10) {
+            return "0" + month;
+        }
+        return String.valueOf(month);
     }
 
     private String getStatus(String status) {

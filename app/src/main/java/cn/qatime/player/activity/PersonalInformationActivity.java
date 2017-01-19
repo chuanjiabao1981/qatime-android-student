@@ -50,7 +50,7 @@ public class PersonalInformationActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_information);
-        setTitle(getResources().getString(R.string.personal_information));
+        setTitles(getResources().getString(R.string.personal_information));
         setRightImage(R.mipmap.personal_change_information, new View.OnClickListener() {
             @Override
             public void onClick(View v) {

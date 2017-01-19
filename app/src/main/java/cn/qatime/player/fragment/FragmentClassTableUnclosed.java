@@ -146,13 +146,14 @@ public class FragmentClassTableUnclosed extends BaseFragment {
 //                        });
 //                helper.setText(R.id.course, item.getCourse_name());
                 helper.setText(R.id.classname, item.getName());
+
                 try {
                     Date date = parse.parse(item.getClass_date());
-                    helper.setText(R.id.class_date, date.getMonth() + "-" + date.getDay() + "  ");
-                    helper.setText(R.id.status, getStatus(item.getStatus()));
+                    helper.setText(R.id.class_date, getMonth(date.getMonth()) + "-" + getDay(date.getDay()) + "  ");
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                helper.setText(R.id.status, getStatus(item.getStatus()));
                 helper.setText(R.id.live_time, item.getLive_time());
                 // TODO: 2016/11/16 接口暂无年级
                 helper.setText(R.id.grade, item.getGrade());
@@ -193,6 +194,21 @@ public class FragmentClassTableUnclosed extends BaseFragment {
                 startActivity(intent);
             }
         });
+    }
+
+    private String getDay(int day) {
+        if (day < 10) {
+            return "0" + day;
+        }
+        return String.valueOf(day);
+    }
+
+    private String getMonth(int month) {
+        month += 1;
+        if (month < 10) {
+            return "0" + month;
+        }
+        return String.valueOf(month);
     }
 
     private String getStatus(String status) {

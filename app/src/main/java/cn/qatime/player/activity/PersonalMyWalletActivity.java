@@ -69,7 +69,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_personal_my_wallet);
-        setTitle(getResourceString(R.string.my_wallet));
+        setTitles(getResourceString(R.string.my_wallet));
 //        setRightText("说明", new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

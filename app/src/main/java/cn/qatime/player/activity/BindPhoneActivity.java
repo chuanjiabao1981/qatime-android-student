@@ -79,7 +79,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void initView() {
-        setTitle(getResources().getString(R.string.bind_phone_number));
+        setTitles(getResources().getString(R.string.bind_phone_number));
 
         assignViews();
 

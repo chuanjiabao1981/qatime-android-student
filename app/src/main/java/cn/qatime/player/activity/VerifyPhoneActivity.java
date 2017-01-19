@@ -57,7 +57,7 @@ public class VerifyPhoneActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void initView() {
-        setTitle(getResources().getString(R.string.verify_phone_number));
+        setTitles(getResources().getString(R.string.verify_phone_number));
         assignViews();
 
         currentPhone.setText(BaseApplication.getProfile().getData().getUser().getLogin_mobile() + "");

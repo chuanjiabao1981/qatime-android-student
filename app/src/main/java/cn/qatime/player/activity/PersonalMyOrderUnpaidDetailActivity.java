@@ -59,7 +59,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_my_order_unpaid_detail);
-        setTitle(getResources().getString(R.string.detail_of_order));
+        setTitles(getResources().getString(R.string.detail_of_order));
         initView();
         EventBus.getDefault().register(this);
         data = (MyOrderBean.Data) getIntent().getSerializableExtra("data");
