@@ -59,7 +59,7 @@ public class WithdrawResultActivity extends BaseActivity implements View.OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_withdraw_result);
-        setTitle(getResourceString(R.string.recharge_confirm));
+        setTitles(getResourceString(R.string.recharge_confirm));
         assignViews();
     }
 

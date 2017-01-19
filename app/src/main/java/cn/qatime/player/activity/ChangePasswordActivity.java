@@ -57,7 +57,7 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
     }
 
     private void initView() {
-        setTitle(getResources().getString(R.string.change_password));
+        setTitles(getResources().getString(R.string.change_password));
         assignViews();
 
         password.setHint(StringUtils.getSpannedString(this, R.string.hint_input_current_password));

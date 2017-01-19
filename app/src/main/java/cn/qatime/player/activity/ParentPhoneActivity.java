@@ -88,7 +88,7 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void initView() {
-        setTitle(getResources().getString(R.string.parent_phone_number));
+        setTitles(getResources().getString(R.string.parent_phone_number));
         assignViews();
 
         password.setHint(StringUtils.getSpannedString(this, R.string.hint_input_password));

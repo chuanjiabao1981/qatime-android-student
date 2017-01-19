@@ -42,7 +42,7 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_my_order_canceled_detail);
-        setTitle(getResources().getString(R.string.detail_of_order));
+        setTitles(getResources().getString(R.string.detail_of_order));
         initView();
 
         OrderDetailBean data = (OrderDetailBean) getIntent().getSerializableExtra("data");

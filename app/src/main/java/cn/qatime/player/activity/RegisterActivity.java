@@ -69,7 +69,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        setTitle(getResources().getString(R.string.set_for_login));
+        setTitles(getResources().getString(R.string.set_for_login));
         initView();
         time = new TimeCount(60000, 1000);
     }

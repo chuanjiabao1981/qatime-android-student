@@ -49,7 +49,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
         setContentView(R.layout.activity_forget_password);
 
         initView();
-        setTitle(getResources().getString(R.string.find_password));
+        setTitles(getResources().getString(R.string.find_password));
         time = new TimeCount(60000, 1000);
 
     }

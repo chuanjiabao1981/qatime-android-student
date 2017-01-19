@@ -60,7 +60,7 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recharge_confirm);
-        setTitle(getResourceString(R.string.recharge_confirm));
+        setTitles(getResourceString(R.string.recharge_confirm));
         assignViews();
 
         api = WXAPIFactory.createWXAPI(this, null);

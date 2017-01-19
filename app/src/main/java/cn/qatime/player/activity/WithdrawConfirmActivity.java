@@ -60,11 +60,11 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
         payType = getIntent().getStringExtra("pay_type");
 
         if ("alipay".equals(payType)) {
-            setTitle(getResourceString(R.string.withdraw_cash_to_alipay));
+            setTitles(getResourceString(R.string.withdraw_cash_to_alipay));
             account.setHint(getResourceString(R.string.hint_input_alipay_account));
         } else if ("bank".equals(payType)) {
             account.setHint(getResourceString(R.string.hint_input_bank_card_account));
-            setTitle(getResourceString(R.string.withdraw_cash_to_bank));
+            setTitles(getResourceString(R.string.withdraw_cash_to_bank));
         }
 
         withdrawCashNow.setOnClickListener(this);

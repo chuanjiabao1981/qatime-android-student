@@ -51,7 +51,7 @@ public class PayPSWVerifyActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void initView() {
-        setTitle(getString(R.string.verify_pay_password));
+        setTitles(getString(R.string.verify_pay_password));
         payEditText = (PayEditText) findViewById(R.id.PayEditText_pay);
         customKeyboard = (CustomKeyboard) findViewById(R.id.KeyboardView_pay);
         forget = findViewById(R.id.forget_pay_password);

@@ -70,7 +70,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_select);
-        setTitle(getString(R.string.switch_city));
+        setTitles(getString(R.string.switch_city));
         assignViews();
         initView();
         initData();

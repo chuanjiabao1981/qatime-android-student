@@ -60,7 +60,7 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_my_order_paid_detail);
-        setTitle(getResources().getString(R.string.detail_of_order));
+        setTitles(getResources().getString(R.string.detail_of_order));
         initView();
         data = (OrderDetailBean) getIntent().getSerializableExtra("data");
         if (data != null) {

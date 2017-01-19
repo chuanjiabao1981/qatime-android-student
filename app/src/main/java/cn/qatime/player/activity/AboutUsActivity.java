@@ -33,7 +33,7 @@ public class AboutUsActivity extends BaseActivity {
     }
 
     private void initView() {
-        setTitle(getResources().getString(R.string.about_us));
+        setTitles(getResources().getString(R.string.about_us));
         call = findViewById(R.id.call_phone);
         phone = (TextView) findViewById(R.id.phone);
         phone.setText(Constant.phoneNumber);

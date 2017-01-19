@@ -68,7 +68,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_confirm);
-        setTitle(getResources().getString(R.string.order_confirm));
+        setTitles(getResources().getString(R.string.order_confirm));
         initView();
 
         EventBus.getDefault().register(this);

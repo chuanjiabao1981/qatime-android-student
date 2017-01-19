@@ -57,7 +57,7 @@ public class  PayPSWForgetActivity extends BaseActivity implements View.OnClickL
     }
 
     private void initView() {
-        setTitle(getString(R.string.verify_owner));
+        setTitles(getString(R.string.verify_owner));
         assignViews();
         password.setHint(R.string.hint_input_login_password);
         code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_verification_code));

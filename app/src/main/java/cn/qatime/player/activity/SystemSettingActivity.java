@@ -76,7 +76,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
     }
 
     private void initView() {
-        setTitle(getResources().getString(R.string.system_setting));
+        setTitles(getResources().getString(R.string.system_setting));
         assignViews();
 
         version = (TextView) findViewById(R.id.version);

@@ -27,7 +27,7 @@ public class RechargeProcessActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recharge_process);
-        setTitle(getResourceString(R.string.recharge_process));
+        setTitles(getResourceString(R.string.recharge_process));
         phone = (TextView) findViewById(R.id.phone);
         phone.setText(Constant.phoneNumber);
         phone.setOnClickListener(new View.OnClickListener() {

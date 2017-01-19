@@ -147,7 +147,7 @@ public class TeacherDataActivity extends BaseActivity {
                             if (bean != null && bean.getData() != null) {
                                 String name = bean.getData().getName();
                                 if (name != null) {
-                                    setTitle(name);
+                                    setTitles(name);
                                     TeacherDataActivity.this.name.setText(name);
                                 }
                                 describe.setText(StringUtils.isNullOrBlanK(bean.getData().getDesc()) ? getString(R.string.not_available) : bean.getData().getDesc());

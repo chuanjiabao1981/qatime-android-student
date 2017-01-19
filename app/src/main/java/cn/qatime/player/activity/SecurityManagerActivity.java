@@ -153,7 +153,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
 
 
     private void initView() {
-        setTitle(getResources().getString(R.string.security_management));
+        setTitles(getResources().getString(R.string.security_management));
         assignViews();
 
         enableClick(false);

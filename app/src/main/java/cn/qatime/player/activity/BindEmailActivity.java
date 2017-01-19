@@ -79,7 +79,7 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void initView() {
-        setTitle(getResources().getString(R.string.bind_email));
+        setTitles(getResources().getString(R.string.bind_email));
         assignViews();
 
         inputNewEmail.setHint(StringUtils.getSpannedString(this, R.string.hint_input_email));

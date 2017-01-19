@@ -102,7 +102,7 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
 
     private void initView() {
         setContentView(R.layout.activity_notify_course);
-        setTitle(getResourceString(R.string.notify_classes));
+        setTitles(getResourceString(R.string.notify_classes));
         assignViews();
         initStatus();
 

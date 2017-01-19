@@ -31,7 +31,7 @@ public class BaseFragmentActivity extends FragmentActivity {
         PushAgent.getInstance(this).onAppStart();
     }
 
-    public void setTitle(String text) {
+    public void setTitles(String text) {
         if (StringUtils.isNullOrBlanK(text)) {
             throw new IllegalArgumentException("text can not be a null object");
         }
