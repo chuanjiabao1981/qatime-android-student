@@ -27,6 +27,7 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -128,7 +129,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                         if (payType.equals("weixin")) {
                             if (data != null) {
                                 Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
-                                intent.putExtra("price",   data.getData().getAmount());
+                                intent.putExtra("price", data.getData().getAmount());
                                 intent.putExtra("id", data.getData().getId());
                                 intent.putExtra("time", data.getData().getCreated_at());
                                 intent.putExtra("type", payType);
@@ -254,10 +255,18 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         accountLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                payType = "account";
-                account.setImageResource(R.drawable.shape_select_circle_select);
-                aliPay.setImageResource(R.drawable.shape_select_circle_normal);
-                wechatPay.setImageResource(R.drawable.shape_select_circle_normal);
+                if (priceNumber < Double.valueOf(BaseApplication.getCashAccount().getData().getBalance())) {
+                    payType = "account";
+                    account.setImageResource(R.drawable.shape_select_circle_select);
+                    aliPay.setImageResource(R.drawable.shape_select_circle_normal);
+                    wechatPay.setImageResource(R.drawable.shape_select_circle_normal);
+                } else {
+                    Toast.makeText(OrderConfirmActivity.this, R.string.amount_not_enough, Toast.LENGTH_SHORT).show();
+                    payType = "weixin";
+                    wechatPay.setImageResource(R.drawable.shape_select_circle_select);
+                    aliPay.setImageResource(R.drawable.shape_select_circle_normal);
+                    account.setImageResource(R.drawable.shape_select_circle_normal);
+                }
             }
         });
     }
