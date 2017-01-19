@@ -145,8 +145,6 @@ public class FragmentMessageChatNews extends BaseFragment {
     private void initView(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
         listView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
-        listView.getRefreshableView().setDividerHeight(1);
-
     }
 
     @Override
