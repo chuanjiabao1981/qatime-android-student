@@ -21,6 +21,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.orhanobut.logger.Logger;
 
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -34,6 +35,7 @@ import cn.qatime.player.activity.PersonalMyOrderPaidDetailActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.MyOrderBean;
+import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -268,7 +270,10 @@ public class FragmentOrderPaid extends BaseFragment {
             initData(1);
         }
     }
-
+    @Subscribe
+    public void onEvent(PayResultState code) {
+        initData(1);
+    }
     @Override
     public void onShow() {
         if (!isLoad) {

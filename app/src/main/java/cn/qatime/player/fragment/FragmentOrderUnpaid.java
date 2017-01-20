@@ -296,13 +296,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
 
     @Subscribe
     public void onEvent(PayResultState code) {
-//        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
-//
-//            finish();
-//        }
-        if (!isLoad) {
             initData(1);
-        }
     }
 
 
