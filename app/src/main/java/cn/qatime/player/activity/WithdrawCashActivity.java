@@ -175,7 +175,7 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
             return;
         }
 
-        payPopView = new PayPopView(PayPopView.WITHDRAW_CASH,"用户提现", "￥" + amount, WithdrawCashActivity.this);
+        payPopView = new PayPopView("用户提现", "￥" + amount, WithdrawCashActivity.this);
         payPopView.showPop();
         payPopView.setOnPayPSWVerifyListener(new PayPopView.OnPayPSWVerifyListener() {
             @Override

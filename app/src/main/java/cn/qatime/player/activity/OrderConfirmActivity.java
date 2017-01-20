@@ -121,15 +121,15 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                 new VolleyListener(OrderConfirmActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        OrderConfirmBean data = JsonUtils.objectFromJson(response.toString(), OrderConfirmBean.class);
+                        OrderConfirmBean confirmBean = JsonUtils.objectFromJson(response.toString(), OrderConfirmBean.class);
                         if (payType.equals("weixin")) {
-                            if (data != null) {
+                            if (confirmBean != null) {
                                 Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
-                                intent.putExtra("price", data.getData().getAmount());
-                                intent.putExtra("id", data.getData().getId());
-                                intent.putExtra("time", data.getData().getCreated_at());
+                                intent.putExtra("price", confirmBean.getData().getAmount());
+                                intent.putExtra("id", confirmBean.getData().getId());
+                                intent.putExtra("time", confirmBean.getData().getCreated_at());
                                 intent.putExtra("type", payType);
-                                AppPayParamsBean app_pay_params = data.getData().getApp_pay_params();
+                                AppPayParamsBean app_pay_params = confirmBean.getData().getApp_pay_params();
                                 intent.putExtra("data", app_pay_params);
                                 startActivity(intent);
                                 pay.setEnabled(true);
@@ -137,13 +137,13 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                                 dialog();
                             }
                         } else if (payType.equals("alipay")) {
-                            if (data != null) {
+                            if (confirmBean != null) {
                                 Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
-                                intent.putExtra("price", data.getData().getAmount());
-                                intent.putExtra("id", data.getData().getId());
-                                intent.putExtra("time", data.getData().getCreated_at());
+                                intent.putExtra("price", confirmBean.getData().getAmount());
+                                intent.putExtra("id", confirmBean.getData().getId());
+                                intent.putExtra("time", confirmBean.getData().getCreated_at());
                                 intent.putExtra("type", payType);
-                                String app_pay_params = data.getData().getApp_pay_str();
+                                String app_pay_params = confirmBean.getData().getApp_pay_str();
                                 intent.putExtra("data", app_pay_params);
                                 startActivity(intent);
                                 pay.setEnabled(true);
@@ -154,14 +154,12 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                             //余额支付成功  status---failed交易失败  shipped交易成功
 //                            try {
                             Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
-                            intent.putExtra("price",  data.getData().getAmount());
-                            intent.putExtra("id", data.getData().getId());
-                            intent.putExtra("time", data.getData().getCreated_at());
+                            intent.putExtra("price",  confirmBean.getData().getAmount());
+                            intent.putExtra("id", confirmBean.getData().getId());
+                            intent.putExtra("time", confirmBean.getData().getCreated_at());
+                            intent.putExtra("data", name.getText().toString());
                             intent.putExtra("type", payType);
-                            String app_pay_params = data.getData().getApp_pay_str();
-                            intent.putExtra("data", app_pay_params);
                             startActivity(intent);
-                            pay.setEnabled(true);
                         }
                         pay.setEnabled(true);
                     }

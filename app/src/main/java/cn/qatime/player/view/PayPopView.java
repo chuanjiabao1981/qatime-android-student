@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.orhanobut.logger.Logger;
@@ -35,9 +36,7 @@ import libraryextra.utils.VolleyListener;
  * @Description:
  */
 public class PayPopView {
-    public static int WITHDRAW_CASH = 0;//提现
-    public static int PAY_ORDER = 1;//支付
-    private int type;
+    private int method;
     private String url;
     private String title;
     private String price;
@@ -67,8 +66,33 @@ public class PayPopView {
     };
     private View view;
 
-    public PayPopView(int type, String title, String price, BaseActivity activity) {
-        this.type = type;
+    /**
+     * 订单支付构造
+     *
+     * @param orderId
+     * @param title
+     * @param price
+     * @param activity
+     */
+    public PayPopView(String orderId, String title, String price, BaseActivity activity) {
+        method = Request.Method.POST;
+        url = UrlUtils.urlPayResult + orderId + "/pay/ticket_token";
+        this.title = title;
+        this.price = price;
+        this.activity = activity;
+        init();
+    }
+
+    /**
+     * 提现构造
+     *
+     * @param title
+     * @param price
+     * @param activity
+     */
+    public PayPopView(String title, String price, BaseActivity activity) {
+        method = Request.Method.GET;
+        url = UrlUtils.urlpayment + BaseApplication.getUserId() + "/withdraws/ticket_token";
         this.title = title;
         this.price = price;
         this.activity = activity;
@@ -118,13 +142,7 @@ public class PayPopView {
             public void onInputFinished(String password) {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("password", password);
-                if(type == WITHDRAW_CASH){
-                    url= UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/withdraws/ticket_token", map);
-                }else if(type == PAY_ORDER){
-                    // TODO: 2017/1/10 待修改
-                    url= UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/withdraws/ticket_token", map);
-                }
-                DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(url, null,
+                DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(method,UrlUtils.getUrl(url, map), null,
                         new VolleyListener(activity) {
                             @Override
                             protected void onSuccess(JSONObject response) {

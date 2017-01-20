@@ -13,6 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
@@ -21,19 +23,26 @@ import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
-import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.PayResult;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.view.PayPopView;
 import libraryextra.bean.AppPayParamsBean;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 
 
 public class OrderPayActivity extends BaseActivity {
@@ -83,6 +92,7 @@ public class OrderPayActivity extends BaseActivity {
     private AlertDialog alertDialog;
     private PayPopView payPopView;
     private String amount;
+    private String orderName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +120,7 @@ public class OrderPayActivity extends BaseActivity {
         } else if (payType.equals("alipay")) {
             aliPayData = getIntent().getStringExtra("data");
         } else if (payType.equals("account")) {
-
+            orderName = getIntent().getStringExtra("data");
         }
 
         code.setText(getIntent().getStringExtra("id"));
@@ -200,16 +210,13 @@ public class OrderPayActivity extends BaseActivity {
 
     private void showPSWPop() {
 //        if (BaseApplication.getCashAccount().getData().isHas_password()) {
-        payPopView = new PayPopView(PayPopView.PAY_ORDER,"商品名称", "￥" + amount, OrderPayActivity.this);
+        payPopView = new PayPopView(getIntent().getStringExtra("id"), orderName, "￥" + amount, OrderPayActivity.this);
         payPopView.showPop();
         payPopView.setOnPayPSWVerifyListener(new PayPopView.OnPayPSWVerifyListener() {
             @Override
             public void onSuccess(String ticket_token) {
-                // TODO: 2016/12/20 调用接口支付订单
                 payPopView.dismiss();
-
-
-
+                accountPayOrder(ticket_token);
             }
 
             @Override
@@ -217,16 +224,14 @@ public class OrderPayActivity extends BaseActivity {
                 payPopView.dismiss();
                 if (errorCode == 2005) {
                     dialogPSWError();
+                } else if (errorCode == 206) {
+                    Toast.makeText(OrderPayActivity.this, "暂未设置过支付密码", Toast.LENGTH_SHORT).show();
                 } else if (errorCode == 2008) {
                     dialogServerError("新支付密码未满24小时，暂不能使用");//未满24小时
                 } else if (errorCode == 0) {
                     Toast.makeText(OrderPayActivity.this, "请检查网络连接", Toast.LENGTH_SHORT).show();
                 } else {
-                    if(BaseApplication.getCashAccount().getData().isHas_password()){
-                        dialogServerError("支付系统繁忙，请稍后再试");//系统繁忙
-                    }else{
-                        Toast.makeText(OrderPayActivity.this, "暂未设置过支付密码", Toast.LENGTH_SHORT).show();
-                    }
+                    dialogServerError("支付系统繁忙，请稍后再试");//系统繁忙
                 }
             }
         });
@@ -234,6 +239,44 @@ public class OrderPayActivity extends BaseActivity {
 //            dialogNotify();
 //            Toast.makeText(OrderPayActivity.this, "请先设置支付密码", Toast.LENGTH_SHORT).show();
 //        }
+    }
+
+    private void accountPayOrder(String ticket_token) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("ticket_token", ticket_token);
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlPayResult + getIntent().getStringExtra("id") + "/pay", map), null,
+                new VolleyListener(OrderPayActivity.this) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        EventBus.getDefault().post(PayResultState.SUCCESS);
+                    }
+
+                    protected void onError(JSONObject response) {
+//                        2007 tocken error;
+                        try {
+                            if(response.getJSONObject("error").getInt("code")==2007){
+                                Toast.makeText(OrderPayActivity.this, R.string.token_error, Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(OrderPayActivity.this, R.string.server_error, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(OrderPayActivity.this, R.string.server_error, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+                Toast.makeText(OrderPayActivity.this, R.string.server_error, Toast.LENGTH_SHORT).show();
+            }
+        });
+        addToRequestQueue(request);
     }
 
     private void dialogNotify() {
