@@ -193,8 +193,12 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
                 payPopView.dismiss();
                 if (errorCode == 2005) {
                     dialogPSWError();
+                } else if (errorCode == 2006) {
+                    Toast.makeText(WithdrawCashActivity.this, "暂未设置过支付密码", Toast.LENGTH_SHORT).show();
                 } else if (errorCode == 2008) {
                     dialogServerError("新支付密码未满24小时，暂不能使用");//未满24小时
+                }else if (errorCode == 2009) {
+                    dialogServerError("密码错误次数过多，暂不能使用");//未满24小时
                 } else if (errorCode == 0) {
                     Toast.makeText(WithdrawCashActivity.this, "请检查网络连接", Toast.LENGTH_SHORT).show();
                 } else {
