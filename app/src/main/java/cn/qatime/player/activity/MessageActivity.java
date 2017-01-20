@@ -81,9 +81,9 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         EventBus.getDefault().register(this);
         String name = getIntent().getStringExtra("name");
         if (!StringUtils.isNullOrBlanK(name)) {
-            setTitle(name);
+            setTitles(name);
         } else {
-            setTitle(getResources().getString(R.string.team));
+            setTitles(getResources().getString(R.string.team_group));
         }
         sessionId = getIntent().getStringExtra("sessionId");
         sessionType = (SessionTypeEnum) getIntent().getSerializableExtra("sessionType");
@@ -600,9 +600,9 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
                 adapter.setOwner(event.getChat_team_owner());
             }
             if (!StringUtils.isNullOrBlanK(event.getName())) {
-                setTitle(event.getName());
+                setTitles(event.getName());
             } else {
-                setTitle(getResources().getString(R.string.team));
+                setTitles(getResources().getString(R.string.team_group));
             }
         }
     }

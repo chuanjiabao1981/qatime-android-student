@@ -22,7 +22,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="交易编号"
+                android:text="订单编号"
                 android:textColor="#333" />
 
             <TextView
@@ -41,7 +41,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="商品名称"
+                android:text="课程名称"
                 android:textColor="#333" />
 
             <TextView
@@ -60,7 +60,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="课程进度"
+                android:text="可退课时"
                 android:textColor="#333" />
 
             <TextView
@@ -80,7 +80,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="订单总价"
+                android:text="实付金额"
                 android:textColor="#333" />
 
             <TextView
@@ -109,6 +109,7 @@
                 android:layout_marginLeft="28dp"
                 android:textColor="#666" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -127,6 +128,7 @@
                 android:layout_marginLeft="28dp"
                 android:textColor="#666" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -148,26 +150,28 @@
 
         <EditText
             android:id="@+id/reason"
-            android:textSize="14sp"
-            android:textColorHint="#cccccc"
-            android:layout_height="100dp"
-            android:padding="5dp"
-            android:layout_margin="5dp"
             android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_margin="5dp"
             android:background="@drawable/shape_input"
-            android:textColor="#ff333333"
-            android:maxLength="20"
+            android:gravity="start"
             android:hint="请输入退款原因（20字以内）"
+            android:maxLength="20"
+            android:padding="5dp"
             android:singleLine="true"
-            android:gravity="start" />
+            android:textColor="#ff333333"
+            android:textColorHint="#cccccc"
+            android:textSize="14sp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:textSize="12sp"
             android:text="说明：退款过程中您将不能进行此课程的学习"
-            android:textColor="#999999"/>
+            android:textColor="#999999"
+            android:textSize="12sp" />
     </LinearLayout>
+
     <TextView
         android:id="@+id/confirm"
         style="@style/button_full_width_style"

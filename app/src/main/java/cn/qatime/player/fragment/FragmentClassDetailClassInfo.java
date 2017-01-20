@@ -51,7 +51,7 @@ public class FragmentClassDetailClassInfo extends BaseFragment {
 
     public void setData(RemedialClassDetailBean bean) {
         if (bean != null && bean.getData() != null) {
-            subject.setText((bean.getData().getSubject() == null ? "" : bean.getData().getSubject()));
+            subject.setText((StringUtils.isNullOrBlanK(bean.getData().getSubject()) ? "" : bean.getData().getSubject()));
             try {
                 classStartTime.setText((bean.getData().getLive_start_time() == null ? "" : parse2.format(parse1.parse(bean.getData().getLive_start_time()))));
                 classEndTime.setText(parse2.format(parse1.parse(bean.getData().getLive_end_time())));

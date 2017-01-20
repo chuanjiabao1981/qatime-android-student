@@ -57,7 +57,7 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class_time_table);
-        setTitle(getResources().getString(R.string.all_course));
+        setTitles(getResources().getString(R.string.all_course));
         initview();
         initData();
     }

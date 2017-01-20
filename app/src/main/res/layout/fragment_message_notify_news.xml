@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#00000000"
     android:orientation="vertical">
 
     <com.handmark.pulltorefresh.library.PullToRefreshListView
@@ -10,8 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#f7f7f7"
+        android:dividerHeight="1px"
+        android:divider="#dfdddd"
         android:cacheColorHint="#00000000"
         android:listSelector="#00000000"
-        android:scrollbars="none" />
+        android:scrollbars="none"  />
 
 </LinearLayout>

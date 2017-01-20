@@ -8,16 +8,28 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.bean.NotifyStatusBean;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
+import libraryextra.utils.JsonUtils;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 import libraryextra.view.WheelView;
-import libraryextra.utils.SPUtils;
 
 /**
  * Created by lenovo on 2016/8/22.
@@ -34,6 +46,17 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
     private String minute;
     private View time;
     private AlertDialog alertDialog;
+    private WheelView wheelHours;
+    private WheelView wheelMinutes;
+    private String emailStatus;
+    /**
+     * 状态是否初始化完成
+     */
+    private boolean initOver=false;
+    /**
+     * 状态是否改变
+     */
+    private boolean hasChanged = false;
 
 
     private void assignViews() {
@@ -75,22 +98,16 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
             str += getResourceString(R.string.minute);
             al_minute.add(str);
         }
-        hour = (String) SPUtils.get(this, "notify_hour", "00小时");
-        minute = (String) SPUtils.get(this, "notify_minute", "00分钟");
-        textHours.setText(hour);
-        textMinute.setText(minute);
     }
 
     private void initView() {
         setContentView(R.layout.activity_notify_course);
-        setTitle(getResourceString(R.string.notify_classes));
+        setTitles(getResourceString(R.string.notify_classes));
         assignViews();
-        sms.setChecked((Boolean) SPUtils.get(this, "notify_sms", false));
-        sys.setChecked((Boolean) SPUtils.get(this, "notify_sys", true));
+        initStatus();
 
-
-        sms.setOnCheckedChangeListener(this);
         sys.setOnCheckedChangeListener(this);
+        sms.setOnCheckedChangeListener(this);
         time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,17 +116,57 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
         });
     }
 
+    private void initStatus() {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlUser + BaseApplication.getUserId() + "/notifications/settings", null,
+                new VolleyListener(NotifyCourseActivity.this) {
+
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        NotifyStatusBean notifyStatusBean = JsonUtils.objectFromJson(response.toString(), NotifyStatusBean.class);
+                        if (notifyStatusBean.getData() != null) {
+                            sms.setChecked(notifyStatusBean.getData().isMessage());
+                            sys.setChecked(notifyStatusBean.getData().isNotice());
+                            int before_hours = notifyStatusBean.getData().getBefore_hours();
+                            int before_minutes = notifyStatusBean.getData().getBefore_minutes();
+                            emailStatus = notifyStatusBean.getData().isMessage() ? "1" : "0";
+                            hour = (before_hours < 10 ? "0" : "") + before_hours + getResourceString(R.string.hour);
+                            minute = (before_minutes < 10 ? "0" : "") + before_minutes +  getResourceString(R.string.minute);
+                            textHours.setText(hour);
+                            textMinute.setText(minute);
+                            initOver = true;
+                        }
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
+    }
+
     private void showTimePickerDialog() {
         if (alertDialog == null) {
-            final View view = View.inflate(NotifyCourseActivity.this, R.layout.dialog_time_picker, null);
-            final WheelView hours = (WheelView) view.findViewById(R.id.dialog_hours);
-            hours.setOffset(1);
-            hours.setItems(al_hours);
-            hours.setSeletion(al_hours.indexOf(hour));
-            final WheelView minutes = (WheelView) view.findViewById(R.id.dialog_minute);
-            minutes.setOffset(1);
-            minutes.setItems(al_minute);
-            minutes.setSeletion(al_minute.indexOf(minute));
+            View view = View.inflate(NotifyCourseActivity.this, R.layout.dialog_time_picker, null);
+            wheelHours = (WheelView) view.findViewById(R.id.dialog_hours);
+            wheelHours.setOffset(1);
+            wheelHours.setItems(al_hours);
+            wheelHours.setSeletion(al_hours.indexOf(hour));
+            wheelMinutes = (WheelView) view.findViewById(R.id.dialog_minute);
+            wheelMinutes.setOffset(1);
+            wheelMinutes.setItems(al_minute);
+            wheelMinutes.setSeletion(al_minute.indexOf(minute));
             AlertDialog.Builder builder = new AlertDialog.Builder(NotifyCourseActivity.this);
             alertDialog = builder.create();
             alertDialog.show();
@@ -117,44 +174,68 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
             alertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
-                    textHours.setText(hours.getSeletedItem());
-                    textMinute.setText(minutes.getSeletedItem());
+                    if(initOver){
+                        hasChanged = true;
+                    }
+                    textHours.setText(wheelHours.getSeletedItem());
+                    textMinute.setText(wheelMinutes.getSeletedItem());
                 }
             });
-//            WindowManager.LayoutParams attributes = alertDialog.getWindow().getAttributes();
-//            attributes.width= ScreenUtils.getScreenWidth(getApplicationContext())- DensityUtils.dp2px(getApplicationContext(),20)*2;
-//            alertDialog.getWindow().setAttributes(attributes);
+            wheelHours.setonItemClickListener(new WheelView.OnItemClickListener() {
+                @Override
+                public void onItemClick() {
+                    alertDialog.dismiss();
+                }
+            });
+            wheelMinutes.setonItemClickListener(new WheelView.OnItemClickListener() {
+                @Override
+                public void onItemClick() {
+                    alertDialog.dismiss();
+                }
+            });
         } else {
             alertDialog.show();
         }
     }
 
     @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()) {
+    public void finish() {
+        if (hasChanged) {
+            Map<String, String> map = new HashMap<>();
+            map.put("notice", sys.isChecked() ? "1" : "0");
+            map.put("message", sms.isChecked() ? "1" : "0");
+            map.put("email", emailStatus);
+            map.put("before_hours", textHours.getText().toString().replace(getResourceString(R.string.hour), ""));
+            map.put("before_minutes", textMinute.getText().toString().replace(getResourceString(R.string.minute), ""));
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getUserId() + "/notifications/settings", map), null,
+                    new VolleyListener(NotifyCourseActivity.this) {
 
-            case R.id.sms:
+                        @Override
+                        protected void onSuccess(JSONObject response) {
+                            Logger.e("保存成功");
+                        }
 
-                Logger.e("sms click");
+                        @Override
+                        protected void onError(JSONObject response) {
 
-                SPUtils.put(this, "notify_sms", isChecked);
-                break;
-            case R.id.sys:
-                Logger.e("sys click");
+                        }
 
-                SPUtils.put(this, "notify_sys", isChecked);
-                break;
+                        @Override
+                        protected void onTokenOut() {
+                            tokenOut();
+                        }
+
+                    }, new VolleyErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    super.onErrorResponse(volleyError);
+                }
+            });
+            addToRequestQueue(request);
         }
+        super.finish();
     }
 
-    @Override
-    protected void onStop() {
-        hour = textHours.getText().toString();
-        minute = textMinute.getText().toString();
-        SPUtils.put(this, "notify_hour", hour);
-        SPUtils.put(this, "notify_minute", minute);
-        super.onStop();
-    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -165,5 +246,12 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
     protected void onPause() {
         super.onPause();
         MobclickAgent.onPause(this);
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if(initOver){
+            hasChanged = true;
+        }
     }
 }

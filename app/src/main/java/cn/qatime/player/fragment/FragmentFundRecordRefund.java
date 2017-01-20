@@ -65,13 +65,18 @@ public class FragmentFundRecordRefund extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_fund_record_refund, container, false);
         EventBus.getDefault().register(this);
         initview(view);
+        initOver=true;
         return view;
     }
 
     @Override
     public void onShow() {
         if (!isLoad) {
-            initData(1);
+            if(initOver){
+                initData(1);
+            }else{
+                super.onShow();
+            }
         }
     }
 
@@ -124,7 +129,6 @@ public class FragmentFundRecordRefund extends BaseFragment {
 
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
-        listView.getRefreshableView().setDividerHeight(2);
         listView.setMode(PullToRefreshBase.Mode.BOTH);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
@@ -132,6 +136,10 @@ public class FragmentFundRecordRefund extends BaseFragment {
         listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResourceString(R.string.loading));
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
+        View empty = View.inflate(getActivity(),R.layout.empty_view,null);
+        TextView textEmpty = (TextView) empty.findViewById(R.id.text_empty);
+        textEmpty.setText("未找到相关订单");
+        listView.setEmptyView(empty);
 
         adapter = new CommonAdapter<RefundRecordBean.DataBean>(getActivity(), data, R.layout.item_fragment_fund_record4) {
 

@@ -75,7 +75,7 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_withdraw_cash);
-        setTitle(getResourceString(R.string.withdraw_cash));
+        setTitles(getResourceString(R.string.withdraw_cash));
         assignViews();
         initListener();
     }

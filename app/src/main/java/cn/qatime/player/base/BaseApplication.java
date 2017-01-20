@@ -61,6 +61,18 @@ public class BaseApplication extends Application {
     private boolean voiceStatus;
     private boolean shakeStatus;
     private static CashAccountBean cashAccount;
+    /**
+     * 是否进行聊天消息通知栏提醒
+     */
+    public static   boolean chatMessageNotifyStatus;
+
+    public static boolean isChatMessageNotifyStatus() {
+        return chatMessageNotifyStatus;
+    }
+
+    public static void setChatMessageNotifyStatus(boolean chatMessageNotifyStatus) {
+      BaseApplication.chatMessageNotifyStatus = chatMessageNotifyStatus;
+    }
 
     public static RequestQueue getRequestQueue() {
         if (Queue == null) {
@@ -98,6 +110,7 @@ public class BaseApplication extends Application {
         currentCity = SPUtils.getObject(this, "current_city", CityBean.Data.class);
         shakeStatus = (boolean) SPUtils.get(this, "shake_status", true);
         voiceStatus = (boolean) SPUtils.get(this, "voice_status", true);
+        chatMessageNotifyStatus = (boolean) SPUtils.get(this, "notify_status", true);
 //        CrashHandler.getInstance().init(this);
         //y友盟统计
         MobclickAgent.setDebugMode(Configure.isDebug);

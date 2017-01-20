@@ -21,6 +21,7 @@ import cn.qatime.player.fragment.FragmentFundRecordRecharge;
 import cn.qatime.player.fragment.FragmentFundRecordRefund;
 import cn.qatime.player.fragment.FragmentFundRecordWithdrawCash;
 import cn.qatime.player.fragment.FragmentFundRecordConsumption;
+import cn.qatime.player.utils.Constant;
 import libraryextra.view.FragmentLayoutWithLine;
 
 /**
@@ -39,14 +40,14 @@ public class RecordFundActivity extends BaseFragmentActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record_fund);
-        setTitle(getResources().getString(R.string.my_record_fund));
+        setTitles(getResources().getString(R.string.my_record_fund));
         setRightImage(R.mipmap.phone, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (alertDialog == null) {
                     View view = View.inflate(RecordFundActivity.this, R.layout.dialog_cancel_or_confirm, null);
                     TextView text = (TextView) view.findViewById(R.id.text);
-                    text.setText(getResourceString(R.string.call_customer_service_phone) + "0353-2135828");
+                    text.setText(getResourceString(R.string.call_customer_service_phone) +  Constant.phoneNumber);
                     Button cancel = (Button) view.findViewById(R.id.cancel);
                     Button confirm = (Button) view.findViewById(R.id.confirm);
                     cancel.setOnClickListener(new View.OnClickListener() {
@@ -58,7 +59,7 @@ public class RecordFundActivity extends BaseFragmentActivity{
                     confirm.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:0353-2135828"));
+                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+ Constant.phoneNumber));
                             startActivity(intent);
                             alertDialog.dismiss();
                         }

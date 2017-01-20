@@ -22,7 +22,7 @@ public class LearningProcessActivity extends BaseActivity {
 
     private void initView() {
         setContentView(R.layout.activity_learning_process);
-        setTitle(getResourceString(R.string.learning_process));
+        setTitles(getResourceString(R.string.learning_process));
     }
     @Override
     protected void onResume() {

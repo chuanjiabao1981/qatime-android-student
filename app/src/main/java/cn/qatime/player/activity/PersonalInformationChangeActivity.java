@@ -76,7 +76,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_information_change);
-        setTitle(getResources().getString(R.string.change_information));
+        setTitles(getResources().getString(R.string.change_information));
         initView();
         //获取基本数据信息,对应id与学校 年级
 //        String school = FileUtil.readFile(getCacheDir() + "/school.txt");

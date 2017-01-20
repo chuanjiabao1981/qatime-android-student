@@ -184,7 +184,6 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
                             }
                         }
                     }.run();
-                    Logger.e("断");
                 } else {
                     new Runnable() {
                         @Override

@@ -7,8 +7,10 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.NEVideoPlaybackActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.adapter.CommonAdapter;
@@ -27,7 +30,7 @@ import libraryextra.bean.SchoolBean;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
-import libraryextra.view.GridViewForScrollView;
+import libraryextra.view.ListViewForScrollView;
 
 import static cn.qatime.player.R.id.status;
 
@@ -35,7 +38,6 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
     private TextView subject;
     private TextView totalClass;
     private TextView grade;
-    private TextView classType;
     private TextView classStartTime;
     private TextView classEndTime;
     private TextView courseDescribe;
@@ -45,24 +47,25 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
     private TextView school;
     private TextView teacherDescribe;
     private ImageView image;
-    private GridViewForScrollView list;
+    private ListViewForScrollView list;
     private RemedialClassDetailBean.Data data;
     private CommonAdapter<RemedialClassDetailBean.Lessons> adapter;
-    private List<RemedialClassDetailBean.Lessons> classList = new ArrayList<>();
 
+    private List<RemedialClassDetailBean.Lessons> classList = new ArrayList<>();
     private SimpleDateFormat parse1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private SimpleDateFormat parse2 = new SimpleDateFormat("yyyy-MM-dd");
     private Handler hd = new Handler();
     private View viewEmptyGone;
+    private TextView className;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = View.inflate(getActivity(), R.layout.fragment_nevideo_player3, null);
+        className = (TextView) view.findViewById(R.id.class_name);
         subject = (TextView) view.findViewById(R.id.subject);
         totalClass = (TextView) view.findViewById(R.id.total_class);
         grade = (TextView) view.findViewById(R.id.grade);
-        classType = (TextView) view.findViewById(R.id.class_type);
         classStartTime = (TextView) view.findViewById(R.id.class_start_time);
         classEndTime = (TextView) view.findViewById(R.id.class_end_time);
         courseDescribe = (TextView) view.findViewById(R.id.course_describe);
@@ -72,7 +75,7 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
         school = (TextView) view.findViewById(R.id.school);
         teacherDescribe = (TextView) view.findViewById(R.id.teacher_describe);
         image = (ImageView) view.findViewById(R.id.image);
-        list = (GridViewForScrollView) view.findViewById(R.id.list);
+        list = (ListViewForScrollView) view.findViewById(R.id.list);
         viewEmptyGone = view.findViewById(R.id.view_empty_gone);
         initList();
         return view;
@@ -102,24 +105,53 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
                     holder.setText(status, getResourceString(R.string.class_over));//已结束
                 }
                 holder.setText(R.id.class_date, item.getClass_date());
-                if (item.getStatus().equals("closed") || item.getStatus().equals("finished") || item.getStatus().equals("billing") || item.getStatus().equals("completed")) {
+                holder.setText(R.id.view_playback, "还可回放" + item.getLeft_replay_times() + "次>");
+                if (isFinished(item)) {
                     ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.live_time)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.status)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.class_date)).setTextColor(0xff999999);
+                    holder.getView(R.id.view_playback).setVisibility(data.getIs_bought() ? View.VISIBLE : View.GONE);
                 } else {
                     ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff00a0e9);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xff666666);
                     ((TextView) holder.getView(R.id.live_time)).setTextColor(0xff666666);
                     ((TextView) holder.getView(R.id.status)).setTextColor(0xff666666);
                     ((TextView) holder.getView(R.id.class_date)).setTextColor(0xff666666);
+                    holder.getView(R.id.view_playback).setVisibility(View.GONE);
                 }
 
             }
         };
         list.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                RemedialClassDetailBean.Lessons item = classList.get(position);
+                if (isFinished(item)) {
+                    if (data.getIs_bought()) {
+                        if (!item.isReplayable()) {
+                            Toast.makeText(getActivity(), getResourceString(R.string.no_playback_video), Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if (item.getLeft_replay_times() <= 0) {
+                            Toast.makeText(getActivity(), getResourceString(R.string.have_no_left_playback_count), Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        Intent intent = new Intent(getActivity(), NEVideoPlaybackActivity.class);
+                        intent.putExtra("id", item.getId());
+                        intent.putExtra("name", item.getName());
+                        startActivity(intent);
+                    }
+                }
+            }
+        });
+    }
+
+    private boolean isFinished(RemedialClassDetailBean.Lessons item) {
+        return item.getStatus().equals("closed") || item.getStatus().equals("finished") || item.getStatus().equals("billing") || item.getStatus().equals("completed");
     }
 
 
@@ -155,6 +187,7 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
         @Override
         public void run() {
             if (getActivity() != null && getActivity().getResources() != null) {
+                className.setText(data.getName());
                 subject.setText((data.getSubject() == null ? "" : data.getSubject()));
                 try {
                     classStartTime.setText((data.getLive_start_time() == null ? "" : parse2.format(parse1.parse(data.getLive_start_time()))));

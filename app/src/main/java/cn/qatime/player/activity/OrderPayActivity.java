@@ -88,7 +88,7 @@ public class OrderPayActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_pay);
-        setTitle(getResourceString(R.string.pay_confirm));
+        setTitles(getResourceString(R.string.pay_confirm));
         initView();
         payType = getIntent().getStringExtra("type");
         api = WXAPIFactory.createWXAPI(this, null);
@@ -138,13 +138,14 @@ public class OrderPayActivity extends BaseActivity {
         time = (TextView) findViewById(R.id.time);
         type = (TextView) findViewById(R.id.type);
         phone = (TextView) findViewById(R.id.phone);
+        phone.setText(Constant.phoneNumber);
         price = (TextView) findViewById(R.id.price);
         commit = (Button) findViewById(R.id.commit);
         //拨打电话
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.phoneNumber));
                 startActivity(intent);
             }
         });

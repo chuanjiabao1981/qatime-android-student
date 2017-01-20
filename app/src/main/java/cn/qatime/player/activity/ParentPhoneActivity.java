@@ -88,7 +88,7 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void initView() {
-        setTitle(getResources().getString(R.string.parent_phone_number));
+        setTitles(getResources().getString(R.string.parent_phone_number));
         assignViews();
 
         password.setHint(StringUtils.getSpannedString(this, R.string.hint_input_password));
@@ -97,7 +97,7 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
 
         String phoneP = getIntent().getStringExtra("phoneP");
         currentParentPhone.setText(phoneP);
-        if (!phoneP.equals("未绑定")) {
+        if (StringUtils.isPhone(phoneP)) {
             currentParentPhoneLayout.setVisibility(View.VISIBLE);
         } else {
             currentParentPhoneLayout.setVisibility(View.GONE);
@@ -108,15 +108,20 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        phone = newParentPhone.getText().toString().trim();
-        if (!StringUtils.isPhone(phone)) {//手机号不正确
-            Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         switch (v.getId()) {
 
             case R.id.text_getcode:
+                phone = newParentPhone.getText().toString().trim();
+                if (!StringUtils.isGoodPWD(password.getText().toString().trim())) {
+                    Toast.makeText(this, getResources().getString(R.string.password_6_16), Toast.LENGTH_LONG).show();
+                    return;
+                }
+                phone = newParentPhone.getText().toString().trim();
+                if (!StringUtils.isPhone(phone)) {//手机号不正确
+                    Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Map<String, String> map = new HashMap<>();
                 map.put("send_to", phone);
                 map.put("key", "send_captcha");
@@ -152,7 +157,11 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
                     Toast.makeText(this, getResources().getString(R.string.password_6_16), Toast.LENGTH_LONG).show();
                     return;
                 }
-
+                phone = newParentPhone.getText().toString().trim();
+                if (!StringUtils.isPhone(phone)) {//手机号不正确
+                    Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (StringUtils.isNullOrBlanK(code.getText().toString().trim())) { //验证码
                     Toast.makeText(this, getResources().getString(R.string.enter_the_verification_code), Toast.LENGTH_SHORT).show();
                     return;
@@ -190,9 +199,9 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
                         Logger.e(response.toString());
                         try {
                             JSONObject error = response.getJSONObject("error");
-                            if (error.getString("msg").contains("是无效的")) {
+                            if (error.getString("msg").contains("Current password")) {
                                 Toast.makeText(ParentPhoneActivity.this, getResourceString(R.string.password_error), Toast.LENGTH_SHORT).show();
-                            } else if (error.getString("msg").contains("与确认值不匹配")) {
+                            } else if (error.getString("msg").contains("Captcha confirmation")) {
                                 Toast.makeText(ParentPhoneActivity.this, getResourceString(R.string.code_error), Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(ParentPhoneActivity.this, getResourceString(R.string.bind_parent_phone_failed), Toast.LENGTH_SHORT).show();

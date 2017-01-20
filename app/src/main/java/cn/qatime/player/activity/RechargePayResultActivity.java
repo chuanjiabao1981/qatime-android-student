@@ -67,11 +67,11 @@ public class RechargePayResultActivity extends BaseActivity implements View.OnCl
         }
         price.setText(getIntent().getStringExtra("price"));
         orderId.setText(getIntent().getStringExtra("orderId"));
-        payDsc.setText("充值金额");
+        payDsc.setText(R.string.recharge_amount);
     }
 
     private void payFailed() {
-        viewOrder.setText("充值记录");
+        viewOrder.setText(R.string.recharge_record);
         loading.setVisibility(View.GONE);
         image.setImageResource(R.mipmap.pay_faild);
         RechargePayResultActivity.this.status.setText(getResources().getString(R.string.recharge_failure));
@@ -82,7 +82,7 @@ public class RechargePayResultActivity extends BaseActivity implements View.OnCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_pay_result);
-        setTitle("充值结果");
+        setTitles("充值结果");
         assignViews();
 
     }
@@ -116,7 +116,7 @@ public class RechargePayResultActivity extends BaseActivity implements View.OnCl
                                     rechargeStatus = true;
                                     loading.setVisibility(View.GONE);
                                     look.setVisibility(View.GONE);
-                                    viewOrder.setText("去逛逛");
+                                    viewOrder.setText(R.string.go_for_buy);
                                     image.setImageResource(R.mipmap.pay_success);
                                     RechargePayResultActivity.this.status.setText(getResources().getString(R.string.recharge_success));
                                     failedLayout.setVisibility(View.GONE);
@@ -172,6 +172,7 @@ public class RechargePayResultActivity extends BaseActivity implements View.OnCl
                 break;
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();

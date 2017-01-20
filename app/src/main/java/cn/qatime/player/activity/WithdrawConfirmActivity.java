@@ -52,11 +52,11 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
         payType = getIntent().getStringExtra("pay_type");
 
         if ("alipay".equals(payType)) {
-            setTitle(getResourceString(R.string.withdraw_cash_to_alipay));
+            setTitles(getResourceString(R.string.withdraw_cash_to_alipay));
             account.setHint(getResourceString(R.string.hint_input_alipay_account));
         } else if ("bank".equals(payType)) {
             account.setHint(getResourceString(R.string.hint_input_bank_card_account));
-            setTitle(getResourceString(R.string.withdraw_cash_to_bank));
+            setTitles(getResourceString(R.string.withdraw_cash_to_bank));
         }
 
         withdrawCashNow.setOnClickListener(this);
@@ -172,7 +172,7 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
         alertDialog = builder.create();
         View view = View.inflate(this, R.layout.dialog_confirm, null);
         TextView tv = (TextView) view.findViewById(R.id.text);
-        tv.setText("提现系统繁忙，请稍候再试");
+        tv.setText(R.string.apply_withdraw_error);
         Button confirm = (Button) view.findViewById(R.id.confirm);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override

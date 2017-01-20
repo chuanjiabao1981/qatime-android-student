@@ -53,13 +53,14 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
         amount = (TextView) findViewById(R.id.amount);
         rechargeConfirm = (Button) findViewById(R.id.recharge_confirm);
         phone = (TextView) findViewById(R.id.phone);
+        phone.setText(Constant.phoneNumber);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recharge_confirm);
-        setTitle(getResourceString(R.string.recharge_confirm));
+        setTitles(getResourceString(R.string.recharge_confirm));
         assignViews();
 
         api = WXAPIFactory.createWXAPI(this, null);
@@ -97,7 +98,7 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
                 if (alertDialogPhone == null) {
                     View view = View.inflate(RechargeConfirmActivity.this, R.layout.dialog_cancel_or_confirm, null);
                     TextView text = (TextView) view.findViewById(R.id.text);
-                    text.setText(getResourceString(R.string.call_customer_service_phone) + phone.getText());
+                    text.setText(getResourceString(R.string.call_customer_service_phone) + Constant.phoneNumber);
                     Button cancel = (Button) view.findViewById(R.id.cancel);
                     Button confirm = (Button) view.findViewById(R.id.confirm);
                     cancel.setOnClickListener(new View.OnClickListener() {
@@ -110,7 +111,7 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
                         @Override
                         public void onClick(View v) {
                             alertDialogPhone.dismiss();
-                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
+                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" +  Constant.phoneNumber));
                             startActivity(intent);
                         }
                     });
@@ -155,13 +156,14 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
     private String getPayType(String pay_type) {
         switch (pay_type) {
             case "weixin":
-                return "微信支付";
+                return getString(R.string.wexin_payment);
             case "alipay":
-                return "支付宝";
+                return getString(R.string.alipay_payment);
             case "offline":
-                return "线下支付";
+                return getString(R.string.offline_payment);
+            default:
+                return getString(R.string.non_payment);
         }
-        return "未支付";
     }
 
     @Subscribe

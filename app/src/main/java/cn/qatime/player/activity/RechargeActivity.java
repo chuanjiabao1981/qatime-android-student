@@ -33,6 +33,7 @@ import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.bean.RechargeBean;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.JsonUtils;
@@ -66,7 +67,7 @@ public class RechargeActivity extends BaseActivity {
         alipay = (ImageView) findViewById(R.id.alipay);
         rechargeNow = (Button) findViewById(R.id.recharge_now);
         phone = (TextView) findViewById(R.id.phone);
-
+        phone.setText(Constant.phoneNumber);
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,7 +97,7 @@ public class RechargeActivity extends BaseActivity {
         if (alertDialogPhone == null) {
             View view = View.inflate(RechargeActivity.this, R.layout.dialog_cancel_or_confirm, null);
             TextView text = (TextView) view.findViewById(R.id.text);
-            text.setText(getResourceString(R.string.call_customer_service_phone) + phone.getText());
+            text.setText(getResourceString(R.string.call_customer_service_phone) +  Constant.phoneNumber);
             Button cancel = (Button) view.findViewById(R.id.cancel);
             Button confirm = (Button) view.findViewById(R.id.confirm);
             cancel.setOnClickListener(new View.OnClickListener() {
@@ -109,7 +110,7 @@ public class RechargeActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     alertDialogPhone.dismiss();
-                    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
+                    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" +  Constant.phoneNumber));
                     startActivity(intent);
                 }
             });
@@ -127,7 +128,7 @@ public class RechargeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recharge);
-        setTitle(getResourceString(R.string.recharge_choice));
+        setTitles(getResourceString(R.string.recharge_choice));
         EventBus.getDefault().register(this);
         assignViews();
         initListener();
@@ -217,7 +218,7 @@ public class RechargeActivity extends BaseActivity {
                     return;
                 }
                 if (Double.valueOf(amount) > Math.pow(10, 6)) {
-                    Toast.makeText(RechargeActivity.this, "金额不支持", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RechargeActivity.this, R.string.amount_not_allow, Toast.LENGTH_SHORT).show();
                     return;
                 }
 

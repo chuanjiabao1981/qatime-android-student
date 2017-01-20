@@ -80,7 +80,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_perfect);
-        setTitle(getResources().getString(R.string.information_perfect));
+        setTitles(getResources().getString(R.string.information_perfect));
         assignViews();
 
         String gradeString = FileUtil.readFile(getFilesDir() + "/grade.txt");
