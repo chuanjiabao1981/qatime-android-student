@@ -223,12 +223,12 @@
                 <LinearLayout
                     android:id="@+id/alipay_layout"
                     android:layout_width="match_parent"
-                    android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
+                    android:paddingTop="5dp"
+                    android:visibility="gone">
 
                     <ImageView
                         android:id="@+id/alipay"
@@ -290,25 +290,24 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_marginTop="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:text="@string/amount_payment"
                 android:textColor="#333333" />
 
             <TextView
                 android:id="@+id/pay_price"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_centerInParent="true"
                 android:gravity="center_horizontal"
                 android:text="00"
                 android:textColor="#be0b0b"
@@ -317,10 +316,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
                 android:text="@string/yuan"
                 android:textColor="#333333" />
-        </LinearLayout>
+        </RelativeLayout>
 
 
         <Button

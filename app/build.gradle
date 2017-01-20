@@ -57,8 +57,8 @@ android {
     }
     productFlavors {
         flavors_debug {
-            applicationId "cn.qatime.player"
-            manifestPlaceholders = [package_name : "cn.qatime.player",
+            applicationId "cn.qatime.player.debug"
+            manifestPlaceholders = [package_name : "cn.qatime.player.debug",
                                     yunxin_appkey: properties.getProperty("YunXinDebugAppKey"),
                                     amap_apikey  : properties.getProperty("amapDebugKey")]
         }
