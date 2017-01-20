@@ -112,6 +112,7 @@ public class RechargePayResultActivity extends BaseActivity implements View.OnCl
                                 case "paid":
                                 case "shipped":
                                 case "completed":
+                                case "received":
                                     //  支付成功
                                     rechargeStatus = true;
                                     loading.setVisibility(View.GONE);

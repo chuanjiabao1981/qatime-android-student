@@ -153,7 +153,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="6dp"
-            android:text="@string/customer_service_phone_number"
             android:textColor="#3399FF"
             android:textSize="16sp" />
 

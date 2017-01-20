@@ -23,6 +23,8 @@ import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.RemedialClassDetailBean;
 
+import static cn.qatime.player.R.id.status;
+
 public class FragmentClassDetailClassList extends BaseFragment {
     private CommonAdapter<RemedialClassDetailBean.Lessons> adapter;
     private List<RemedialClassDetailBean.Lessons> list = new ArrayList<>();
@@ -74,7 +76,7 @@ public class FragmentClassDetailClassList extends BaseFragment {
                     ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.live_time)).setTextColor(0xff999999);
-                    ((TextView) holder.getView(R.id.status)).setTextColor(0xff999999);
+                    ((TextView) holder.getView(status)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.class_date)).setTextColor(0xff999999);
                     holder.getView(R.id.view_playback).setVisibility(data.getIs_bought() ? View.VISIBLE : View.GONE);
                 } else {
