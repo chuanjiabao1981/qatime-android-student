@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.common.Const;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
@@ -65,6 +66,7 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
         rechargeNum.setHint(getString(R.string.withdraw_num_hint) + "(" + price + "可用)");
 
         phone = (TextView) findViewById(R.id.phone);
+        phone.setText(Constant.phoneNumber);
         phone.setOnClickListener(this);
 
         toAlipayLayout.setOnClickListener(this);
