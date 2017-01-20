@@ -229,11 +229,6 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
 
     @Subscribe
     public void onEvent(PayResultState state) {
-        Intent intent = new Intent(this, OrderPayResultActivity.class);
-        intent.putExtra("orderId", ordernumber.getText().toString());
-        intent.putExtra("price", payprice.getText().toString());
-        intent.putExtra("state", state);
-        startActivity(intent);
         setResult(Constant.RESPONSE);//支付成功刷新订单
         finish();
     }

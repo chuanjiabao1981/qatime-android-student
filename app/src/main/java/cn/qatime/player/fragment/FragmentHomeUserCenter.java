@@ -15,9 +15,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
-
-import java.text.DecimalFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.PersonalInformationActivity;
@@ -29,6 +29,7 @@ import cn.qatime.player.activity.SystemSettingActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.CashAccountBean;
+import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -51,6 +52,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        EventBus.getDefault().register(this);
         View view = inflater.inflate(R.layout.fragment_home_user_center, container, false);
         assignViews(view);
         newVersion.setVisibility(BaseApplication.newVersion ? View.VISIBLE : View.INVISIBLE);
@@ -90,8 +92,12 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
                 startActivityForResult(intent, Constant.REQUEST);
                 break;
             case R.id.my_wallet:
-                intent = new Intent(getActivity(), PersonalMyWalletActivity.class);
-                startActivityForResult(intent, Constant.REQUEST);
+                if (BaseApplication.getCashAccount() != null && BaseApplication.getCashAccount().getData() != null) {
+                    intent = new Intent(getActivity(), PersonalMyWalletActivity.class);
+                    startActivityForResult(intent, Constant.REQUEST);
+                } else {
+                    Toast.makeText(getActivity(), "钱包信息异常，请检查网络连接后重试", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.my_order:
                 intent = new Intent(getActivity(), PersonalMyOrderActivity.class);
@@ -125,6 +131,11 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
                 refreshCashAccount();
             }
         }
+    }
+
+    @Subscribe
+    public void onEvent(PayResultState state) {
+        refreshCashAccount();
     }
 
     private void refreshCashAccount() {
@@ -165,5 +176,11 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
         security = (LinearLayout) view.findViewById(R.id.security);
         setting = (LinearLayout) view.findViewById(R.id.setting);
         newVersion = (TextView) view.findViewById(R.id.new_version);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

@@ -246,9 +246,7 @@ public class FragmentFundRecordRefund extends BaseFragment {
     @Subscribe
     public void onEvent(PayResultState code) {
         //充值成功刷新订单
-        if (!isLoad) {
             initData(1);
-        }
     }
 
 

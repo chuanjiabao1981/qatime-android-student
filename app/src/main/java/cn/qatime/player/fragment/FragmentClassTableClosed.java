@@ -102,7 +102,7 @@ public class FragmentClassTableClosed extends BaseFragment {
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
                 String status = item.getStatus();
 
-                boolean showEnter = "ready".equals(status) || "paused".equals(status) || "closed".equals(status) || "paused_inner".equals(status) || "teaching".equals(status);//是否是待上课、已直播、直播中
+                boolean showEnter = "ready".equals(status)||"paused".equals(status)||"closed".equals(status)||"teaching".equals(status);//是否是待上课、已直播、直播中
                 //进入状态
                 helper.getView(R.id.enter).setVisibility(showEnter ? View.VISIBLE : View.GONE);//进入播放器按钮显示或隐藏
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
@@ -161,13 +161,11 @@ public class FragmentClassTableClosed extends BaseFragment {
             return getResourceString(R.string.class_ready);
         } else if (status.equals("teaching")) {//直播中
             return getResourceString(R.string.class_teaching);
-        } else if (status.equals("closed")) {//直播中
+        } else if (status.equals("closed")) {//已直播  。。。
+            return getResourceString(R.string.class_closed);
+        } else if (status.equals("paused")) {//直播中   .....
             return getResourceString(R.string.class_teaching);
-        } else if (status.equals("paused")) {//直播中
-            return getResourceString(R.string.class_teaching);
-        } else if (status.equals("paused_inner")) {//暂停中
-            return getResourceString(R.string.class_paused_inner);
-        } else {
+        }  else {
             return getResourceString(R.string.class_over);//已结束
         }
     }

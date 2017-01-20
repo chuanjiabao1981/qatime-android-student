@@ -195,6 +195,7 @@
     <string name="status_preview">当前状态：招生中</string>
     <string name="status_teaching">当前状态：已开课</string>
     <string name="status_over">当前状态：已结束</string>
+    <string name="current_status">当前状态：</string>
     <string name="grade_type">授课类型：</string>
     <!--//课程详情2-->
     <string name="teacher_name">老师姓名：</string>
@@ -389,8 +390,8 @@
     <string name="order_create_failed">订单生成失败</string>
     <string name="order_cancel_failed">订单取消失败,请稍后再试</string>
     <string name="order_cancel_success">订单已成功取消</string>
-    <string name="pay_wexin"> ：微信支付</string>
-    <string name="pay_alipay"> ：支付宝支付</string>
+    <string name="pay_wexin">微信支付</string>
+    <string name="pay_alipay">支付宝支付</string>
     <string name="not_support_alipay">暂不支持支付宝支付</string>
     <string name="subject">科目</string>
     <string name="is_null">为空</string>
@@ -431,7 +432,7 @@
     <string name="recharge_failure">充值结果未找到</string>
     <string name="recharge_success">充值成功</string>
     <string name="account_payment">余额支付</string>
-    <string name="pay_account">：余额支付</string>
+    <string name="pay_account">余额支付</string>
     <string name="recharge_num_hint"><font size="14">请输入想要充值的金额</font></string>
     <string name="my_record_fund">资金记录</string>
     <string name="withdraw_cash">提现</string>
@@ -440,7 +441,8 @@
     <string name="withdraw_cash_manner">提现方式</string>
     <string name="recharge_manner">充值方式</string>
     <string name="transfer_accounts">转账</string>
-    <string name="withdraw_num_hint">请输入想要提现的金额</string>
+    <string name="wechat_wallet">微信钱包</string>
+    <string name="withdraw_num_hint">请输入提现金额</string>
     <string name="withdraw_cash_record">提现记录</string>
     <string name="hint_input_alipay_account">请输入完整的支付宝账号</string>
     <string name="hint_input_bank_card_account">请输入完整的银行卡卡号</string>
@@ -460,6 +462,9 @@
     <string name="hader_can_not_be_empty">头像不能为空</string>
     <string name="teacher_translate">老师</string>
     <string name="reset_pay_password">重置支付密码</string>
+    <string name="change_pay_password">重置支付密码</string>
+    <string name="support_automatic_transfer">(已支持自动转账)</string>
+    <string name="class_closed">已直播</string>
     <string name="please_talk_later">请稍候发言</string>
     <string name="update_desc">更新内容</string>
     <string name="refund_record">退款记录</string>
@@ -560,5 +565,6 @@
     <string name="accept_the_team_invite">%1$s 接受了 %2$s 的入群邀请</string>
     <string name="published_course_unable_enter">尚未开课不能</string>
     <string name="study">学习</string>
+    <string name="teach_type">授课方式：在线直播</string>
 
 </resources>

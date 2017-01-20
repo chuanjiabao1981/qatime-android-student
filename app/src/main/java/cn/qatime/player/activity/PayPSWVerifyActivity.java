@@ -107,9 +107,16 @@ public class PayPSWVerifyActivity extends BaseActivity implements View.OnClickLi
                                     int errorCode = response.getJSONObject("error").getInt("code");
                                     if (errorCode == 2005) {
                                         Toast.makeText(PayPSWVerifyActivity.this, R.string.password_error, Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(PayPSWVerifyActivity.this, R.string.please_reset_pay_password_first, Toast.LENGTH_SHORT).show();
+                                    } else if (errorCode == 2006) {
+                                        Toast.makeText(PayPSWVerifyActivity.this, "暂未设置过支付密码", Toast.LENGTH_SHORT).show();
+                                    } else if (errorCode == 2008) {
+                                        Toast.makeText(PayPSWVerifyActivity.this, "新支付密码未满24小时，暂不能使用", Toast.LENGTH_SHORT).show();
+                                    }else if (errorCode == 2009) {
+                                        Toast.makeText(PayPSWVerifyActivity.this, "密码错误次数过多，暂不能使用", Toast.LENGTH_SHORT).show();
+                                    }  else {
+                                        Toast.makeText(PayPSWVerifyActivity.this, "请检查网络连接", Toast.LENGTH_SHORT).show();
                                     }
+
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }

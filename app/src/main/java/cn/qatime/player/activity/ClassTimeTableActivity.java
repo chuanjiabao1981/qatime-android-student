@@ -133,7 +133,7 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
-        listView.setEmptyView(View.inflate(ClassTimeTableActivity.this,R.layout.empty_view,null));
+        listView.setEmptyView(View.inflate(ClassTimeTableActivity.this, R.layout.empty_view, null));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -148,7 +148,7 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
             public void convert(ViewHolder helper, final ClassTimeTableBean.DataEntity.LessonsEntity item, int position) {
                 Glide.with(ClassTimeTableActivity.this).load(item.getCourse_publicize()).placeholder(R.mipmap.error_header_rect).centerCrop().crossFade().dontAnimate().into((ImageView) helper.getView(R.id.image));
 //                helper.setText(R.id.course, item.getCourse_name());
-                helper.setText(R.id.classname,  item.getName());
+                helper.setText(R.id.classname, item.getName());
                 try {
                     Date date = parse.parse(item.getClass_date());
                     helper.setText(R.id.class_date, date.getMonth() + "-" + date.getDay() + "  ");
@@ -162,7 +162,7 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
                 String status = item.getStatus();
 
-                boolean showEnter = "ready".equals(status)||"paused".equals(status)||"closed".equals(status)||"paused_inner".equals(status)||"teaching".equals(status);//是否是待上课、已直播、直播中
+                boolean showEnter = "ready".equals(status) || "paused".equals(status) || "closed".equals(status) || "teaching".equals(status);//是否是待上课、已直播、直播中
                 //进入状态
                 helper.getView(R.id.enter).setVisibility(showEnter ? View.VISIBLE : View.GONE);//进入播放器按钮显示或隐藏
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
@@ -245,12 +245,10 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
             return getResourceString(R.string.class_ready);
         } else if (status.equals("teaching")) {//直播中
             return getResourceString(R.string.class_teaching);
-        } else if (status.equals("closed")) {//直播中
-            return getResourceString(R.string.class_teaching);
+        } else if (status.equals("closed")) {//已直播
+            return getResourceString(R.string.class_closed);
         } else if (status.equals("paused")) {//直播中
             return getResourceString(R.string.class_teaching);
-        } else if (status.equals("paused_inner")) {//暂停中
-            return getResourceString(R.string.class_paused_inner);
         } else {
             return getResourceString(R.string.class_over);//已结束
         }

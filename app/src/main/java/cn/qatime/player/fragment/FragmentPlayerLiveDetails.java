@@ -32,6 +32,8 @@ import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.view.ListViewForScrollView;
 
+import static cn.qatime.player.R.id.status;
+
 public class FragmentPlayerLiveDetails extends BaseFragment {
     private TextView subject;
     private TextView totalClass;
@@ -88,17 +90,19 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
                 holder.setText(R.id.name, item.getName());
                 holder.setText(R.id.live_time, item.getLive_time());
                 if (item.getStatus().equals("missed")) {
-                    holder.setText(R.id.status, getResourceString(R.string.class_missed));
+                    holder.setText(status, getResourceString(R.string.class_missed));
                 } else if (item.getStatus().equals("init")) {//未开始
-                    holder.setText(R.id.status, getResourceString(R.string.class_init));
+                    holder.setText(status, getResourceString(R.string.class_init));
                 } else if (item.getStatus().equals("ready")) {//待开课
-                    holder.setText(R.id.status, getResourceString(R.string.class_ready));
+                    holder.setText(status, getResourceString(R.string.class_ready));
                 } else if (item.getStatus().equals("teaching")) {//直播中
-                    holder.setText(R.id.status, getResourceString(R.string.class_teaching));
+                    holder.setText(status, getResourceString(R.string.class_teaching));
+                } else if (item.getStatus().equals("closed")) {//已直播
+                    holder.setText(status, getResourceString(R.string.class_closed));
                 } else if (item.getStatus().equals("paused")) {
-                    holder.setText(R.id.status, getResourceString(R.string.class_teaching));
+                    holder.setText(status, getResourceString(R.string.class_teaching));
                 } else {//closed finished billing completed
-                    holder.setText(R.id.status, getResourceString(R.string.class_over));//已结束
+                    holder.setText(status, getResourceString(R.string.class_over));//已结束
                 }
                 holder.setText(R.id.class_date, item.getClass_date());
                 holder.setText(R.id.view_playback, "还可回放" + item.getLeft_replay_times() + "次>");
