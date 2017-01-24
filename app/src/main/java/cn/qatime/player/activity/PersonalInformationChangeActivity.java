@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -34,6 +35,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.ImageUtil;
 import cn.qatime.player.utils.UpLoadUtil;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.GradeBean;
@@ -56,7 +58,6 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     TextView women;
     TextView textGrade;
     TextView complete;
-    private Uri captureUri;
     private EditText describe;
     private TextView birthday;
     private View birthdayView;
@@ -302,16 +303,14 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         if (requestCode == Constant.REQUEST_PICTURE_SELECT) {
             if (resultCode == Constant.RESPONSE_CAMERA) {//拍照返回的照片
                 if (data != null) {
-                    Bundle bundle = data.getExtras();
-                    Bitmap bitmap = (Bitmap) bundle.get("data");// 获取相机返回的数据，并转换为Bitmap图片格式
-                    if (data.getData() != null) {
-                        captureUri = data.getData();
-                    } else {
-                        captureUri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
-                    }
-                    if (captureUri != null && !StringUtils.isNullOrBlanK(captureUri.toString())) {
+                    String url = data.getStringExtra("url");
+
+                    if (url != null && !StringUtils.isNullOrBlanK(url)) {
+                        Bitmap bitmap = BitmapFactory.decodeFile(url);
+                        Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
+                        bitmap.recycle();
                         Intent intent = new Intent(PersonalInformationChangeActivity.this, CropImageActivity.class);
-                        intent.putExtra("id", captureUri.toString());
+                        intent.putExtra("id", uri.toString());
                         startActivityForResult(intent, Constant.PHOTO_CROP);
                     }
                 }

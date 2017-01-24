@@ -38,7 +38,7 @@ public class PersonalInformationActivity extends BaseActivity {
     TextView sex;
     TextView birthday;
     TextView grade;
-    TextView school;
+//    TextView school;
     TextView describe;
 
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
@@ -155,18 +155,18 @@ public class PersonalInformationActivity extends BaseActivity {
 //            region.setText("");}
 
 
-        SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getCacheDir() + "/school.txt").toString(), SchoolBean.class);
+//        SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getCacheDir() + "/school.txt").toString(), SchoolBean.class);
 
-        if (schoolBean != null && schoolBean.getData() != null) {
-            for (int i = 0; i < schoolBean.getData().size(); i++) {
-                if (bean.getData().getSchool() == schoolBean.getData().get(i).getId()) {
-                    school.setText(schoolBean.getData().get(i).getName());
-                    break;
-                }
-            }
-        } else {
-            school.setText("");
-        }
+//        if (schoolBean != null && schoolBean.getData() != null) {
+//            for (int i = 0; i < schoolBean.getData().size(); i++) {
+//                if (bean.getData().getSchool() == schoolBean.getData().get(i).getId()) {
+//                    school.setText(schoolBean.getData().get(i).getName());
+//                    break;
+//                }
+//            }
+//        } else {
+//            school.setText("");
+//        }
         if (!StringUtils.isNullOrBlanK(bean.getData().getDesc())) {
             describe.setText(bean.getData().getDesc());
         } else {
@@ -180,7 +180,7 @@ public class PersonalInformationActivity extends BaseActivity {
         sex = (TextView) findViewById(R.id.sex);
         birthday = (TextView) findViewById(R.id.birthday);
         grade = (TextView) findViewById(R.id.grade);
-        school = (TextView) findViewById(R.id.school);
+//        school = (TextView) findViewById(R.id.school);
         describe = (TextView) findViewById(R.id.describe);
     }
 

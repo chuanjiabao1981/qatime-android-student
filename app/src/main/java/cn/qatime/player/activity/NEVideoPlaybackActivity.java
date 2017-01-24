@@ -2,6 +2,7 @@ package cn.qatime.player.activity;
 
 import android.os.Bundle;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 import com.android.volley.VolleyError;
@@ -39,7 +40,9 @@ public class NEVideoPlaybackActivity extends BaseActivity implements PlayBackVid
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_nevideo_playback);
+
         lessonId = getIntent().getIntExtra("id", 0);
         String name = getIntent().getStringExtra("name");
 

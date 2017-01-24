@@ -3,9 +3,12 @@ package cn.qatime.player.activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +50,7 @@ import cn.qatime.player.bean.InputPanel;
 import cn.qatime.player.bean.VideoState;
 import cn.qatime.player.fragment.VideoFloatFragment;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.ImageUtil;
 import cn.qatime.player.utils.ScreenSwitchUtils;
 import libraryextra.bean.Announcements;
 import cn.qatime.player.fragment.FragmentPlayerAnnouncements;
@@ -594,7 +598,17 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Constant.RESPONSE_PICTURE_SELECT) {//选择照片返回的照片
+        if (resultCode == Constant.RESPONSE_CAMERA) {//拍照返回的照片
+            if (data != null) {
+                String url = data.getStringExtra("url");
+                if (url != null && !StringUtils.isNullOrBlanK(url)) {
+                    File file = new File(url);
+                    if (file.exists()) {
+                        sendMessage(MessageBuilder.createImageMessage(sessionId, sessionType, file, file.getName()));
+                    }
+                }
+            }
+        } else if (resultCode == Constant.RESPONSE_PICTURE_SELECT) {//选择照片返回的照片
             if (data != null) {
                 ImageItem image = (ImageItem) data.getSerializableExtra("data");
                 if (image != null && !StringUtils.isNullOrBlanK(image.imagePath)) {
@@ -637,7 +651,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
         super.onPause();
         MobclickAgent.onPause(this);
-        NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.isChatMessageNotifyStatus()?MsgService.MSG_CHATTING_ACCOUNT_NONE:MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
+        NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.isChatMessageNotifyStatus() ? MsgService.MSG_CHATTING_ACCOUNT_NONE : MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
     }
 
 

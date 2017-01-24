@@ -3,6 +3,9 @@ package cn.qatime.player.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,6 +23,7 @@ import android.widget.Toast;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +54,7 @@ public class PictureSelectActivity extends BaseActivity {
     private PictureSelectAdapter adapter;
     private int REQUEST_CODE_SOME_FEATURES_PERMISSIONS = 1;
     private boolean cameraGone;
+    private String capturePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,8 +102,16 @@ public class PictureSelectActivity extends BaseActivity {
                 } else {
                     if (position == 0) {
                         // ##########拍照##########
-                        Intent newIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(newIntent, Constant.REQUEST_CAMERA);
+                        Intent getImageByCamera = new Intent("android.media.action.IMAGE_CAPTURE");
+                        String out_file_path = Constant.CACHEPATH;
+                        File dir = new File(out_file_path);
+                        if (!dir.exists()) {
+                            dir.mkdirs();
+                        }
+                        capturePath = out_file_path + "/" + System.currentTimeMillis() + ".jpg";
+                        getImageByCamera.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(capturePath)));
+                        getImageByCamera.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
+                        startActivityForResult(getImageByCamera, Constant.REQUEST_CAMERA);
                     } else {
                         Intent data = new Intent();
                         data.putExtra("data", detailList.get(position - 1));
@@ -113,7 +126,13 @@ public class PictureSelectActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constant.REQUEST_CAMERA) {//拍照返回
-            setResult(Constant.RESPONSE_CAMERA, data);
+            if (data == null) {
+                data = new Intent();
+            }
+            if (new File(capturePath).exists()) {
+                data.putExtra("url", capturePath);
+                setResult(Constant.RESPONSE_CAMERA, data);
+            }
             finish();
         }
     }
@@ -152,10 +171,11 @@ public class PictureSelectActivity extends BaseActivity {
                     }
                 }
                 Logger.e(detailList.size() + "张图");
-                hd.sendEmptyMessage(1);
+               hd.sendEmptyMessage(1);
             }
         }).start();
     }
+
     @Override
     protected void onResume() {
         super.onResume();

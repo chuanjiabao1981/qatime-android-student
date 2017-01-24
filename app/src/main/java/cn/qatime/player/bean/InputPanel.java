@@ -300,7 +300,7 @@ public class InputPanel implements View.OnClickListener {
             case R.id.image_select://选择照片
                 closeEmojiAndInput();
                 Intent intent = new Intent(context, PictureSelectActivity.class);
-                intent.putExtra("gonecamera", true);
+//                intent.putExtra("gonecamera", true);
                 context.startActivityForResult(intent, Constant.REQUEST);
                 break;
         }

@@ -1,8 +1,11 @@
 package cn.qatime.player.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -46,6 +49,7 @@ import cn.qatime.player.bean.InputPanel;
 import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.ImageUtil;
 import cn.qatime.player.view.listview.AutoRefreshListView;
 import cn.qatime.player.view.listview.ListViewUtil;
 import cn.qatime.player.view.listview.MessageListView;
@@ -164,7 +168,17 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Constant.RESPONSE_PICTURE_SELECT) {//选择照片返回的照片
+        if (resultCode == Constant.RESPONSE_CAMERA) {//拍照返回的照片
+            if (data != null) {
+                String url = data.getStringExtra("url");
+                if (url != null && !StringUtils.isNullOrBlanK(url)) {
+                    File file = new File(url);
+                    if (file.exists()) {
+                        sendMessage(MessageBuilder.createImageMessage(sessionId, sessionType, file, file.getName()));
+                    }
+                }
+            }
+        } else if (resultCode == Constant.RESPONSE_PICTURE_SELECT) {//选择照片返回的照片
             if (data != null) {
                 ImageItem image = (ImageItem) data.getSerializableExtra("data");
                 if (image != null && !StringUtils.isNullOrBlanK(image.imagePath)) {
