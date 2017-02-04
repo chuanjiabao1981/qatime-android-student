@@ -1,11 +1,8 @@
 package cn.qatime.player.activity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -49,7 +46,6 @@ import cn.qatime.player.bean.InputPanel;
 import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.utils.Constant;
-import cn.qatime.player.utils.ImageUtil;
 import cn.qatime.player.view.listview.AutoRefreshListView;
 import cn.qatime.player.view.listview.ListViewUtil;
 import cn.qatime.player.view.listview.MessageListView;
@@ -76,6 +72,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
     private MessageAdapter adapter;
     private View rootView;
     private InputPanel inputpanel;
+    private MessageLoader messageLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +98,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
 //                intent.putExtra("board", board);
                 intent.putExtra("id", courseId);
                 intent.putExtra("sessionId", sessionId);
-                startActivity(intent);
+                startActivityForResult(intent, Constant.REQUEST);
             }
         });
         registerObservers(true);
@@ -126,7 +123,8 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         adapter.setOwner(getIntent().getStringExtra("owner"));
         messageListView.setAdapter(adapter);
 
-        messageListView.setOnRefreshListener(new MessageLoader(remote));
+        messageLoader = new MessageLoader(remote);
+        messageListView.setOnRefreshListener(messageLoader);
 
         inputpanel = new InputPanel(this, this, rootView, true, sessionId);
         inputpanel.setMute(isMute);
@@ -194,6 +192,8 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
                     }
                 }
             }
+        }else{
+            messageLoader.onRefreshFromEnd();
         }
     }
 
