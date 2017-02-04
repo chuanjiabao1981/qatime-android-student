@@ -89,6 +89,7 @@ public class FragmentTutorshipTeaching extends BaseFragment {
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
                 helper.setText(R.id.progress, "进度" + item.getCompleted_lesson_count() + "/" + item.getPreset_lesson_count());
                 helper.setText(R.id.grade, item.getGrade());
+                helper.getView(R.id.taste).setVisibility(item.isIs_bought()?View.GONE : View.VISIBLE);
             }
 
 
