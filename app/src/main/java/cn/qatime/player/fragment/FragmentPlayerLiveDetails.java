@@ -112,7 +112,7 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
                     ((TextView) holder.getView(R.id.live_time)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.status)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.class_date)).setTextColor(0xff999999);
-                    holder.getView(R.id.view_playback).setVisibility(data.getIs_bought() ? View.VISIBLE : View.GONE);
+                    holder.getView(R.id.view_playback).setVisibility(data.getIs_bought()&&item.isReplayable() ? View.VISIBLE : View.GONE);
                 } else {
                     ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff00a0e9);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xff666666);
@@ -133,7 +133,7 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
                 if (isFinished(item)) {
                     if (data.getIs_bought()) {
                         if (!item.isReplayable()) {
-                            Toast.makeText(getActivity(), getResourceString(R.string.no_playback_video), Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(getActivity(), getResourceString(R.string.no_playback_video), Toast.LENGTH_SHORT).show();
                             return;
                         }
                         if (item.getLeft_replay_times() <= 0) {
