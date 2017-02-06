@@ -2,6 +2,7 @@ package cn.qatime.player.activity;
 
 import android.os.Bundle;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
@@ -40,7 +41,7 @@ public class NEVideoPlaybackActivity extends BaseActivity implements PlayBackVid
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_nevideo_playback);
 
         lessonId = getIntent().getIntExtra("id", 0);
@@ -97,10 +98,10 @@ public class NEVideoPlaybackActivity extends BaseActivity implements PlayBackVid
         playBackFloatFragment = new PlayBackFloatFragment(playBackVideoPresenter);
         getSupportFragmentManager().beginTransaction().replace(R.id.control, playBackFloatFragment).commit();
 
-        ViewGroup.LayoutParams mainVideoParam = videolayout.getLayoutParams();
-        mainVideoParam.width = -1;
-        mainVideoParam.height = screenW * 9 / 16;
-        videolayout.setLayoutParams(mainVideoParam);
+//        ViewGroup.LayoutParams mainVideoParam = videolayout.getLayoutParams();
+//        mainVideoParam.width = -1;
+//        mainVideoParam.height = screenW * 9 / 16;
+//        videolayout.setLayoutParams(mainVideoParam);
         playBackFloatFragment.setMediaPlayer(video);
 
     }
