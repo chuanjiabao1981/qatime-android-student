@@ -143,25 +143,31 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
-
-                <ImageView
-                    android:id="@+id/refresh_teacher"
-                    android:layout_width="30dp"
-                    android:layout_height="match_parent"
-                    android:padding="10dp"
-                    android:src="@mipmap/home_main_page_refresh" />
             </LinearLayout>
 
-            <libraryextra.view.GridViewForScrollView
-                android:id="@+id/gridview_teacher"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <HorizontalScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
                 android:background="#fff"
-                android:gravity="center"
-                android:numColumns="5"
-                android:paddingBottom="9dp"
+                android:scrollbars="none"
                 android:paddingLeft="10dp"
-                android:paddingRight="10dp" />
+                android:paddingRight="10dp"
+                android:paddingBottom="9dp">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <libraryextra.view.GridViewForScrollView
+                        android:id="@+id/gridview_teacher"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:numColumns="auto_fit"
+                        android:stretchMode="spacingWidthUniform" />
+                </LinearLayout>
+            </HorizontalScrollView>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
