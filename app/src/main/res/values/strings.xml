@@ -442,7 +442,7 @@
     <string name="recharge_manner">充值方式</string>
     <string name="transfer_accounts">转账</string>
     <string name="wechat_wallet">微信钱包</string>
-    <string name="withdraw_num_hint">请输入提现金额(%s$1可用)</string>
+    <string name="withdraw_num_hint">请输入提现金额(%1$s可用)</string>
     <string name="withdraw_cash_record">提现记录</string>
     <string name="hint_input_alipay_account">请输入完整的支付宝账号</string>
     <string name="hint_input_bank_card_account">请输入完整的银行卡卡号</string>
@@ -581,7 +581,7 @@
     <string name="mute">禁言</string>
     <string name="unmute">解除禁言</string>
     <string name="no_desc">暂无简介</string>
-    <string name="playback_count">还可回放%d$1次></string>
+    <string name="playback_count">还可回放%1$d次></string>
     <string name="not_found_related_order">未找到相关订单</string>
     <string name="pay_offline">线下支付</string>
     <string name="unpaid">未支付</string>
