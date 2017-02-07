@@ -21,7 +21,7 @@
         <TextView
             android:id="@+id/tab_text1"
             android:layout_width="wrap_content"
-            android:layout_height="18dp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:text="@string/home_page"
             style="@style/tab_menu_text_color_select" />
@@ -41,7 +41,7 @@
         <TextView
             android:id="@+id/tab_text2"
             android:layout_width="wrap_content"
-            android:layout_height="18dp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:text="@string/Remedial_class"
             style="@style/tab_menu_text_color_normal" />
@@ -61,7 +61,7 @@
         <TextView
             android:id="@+id/tab_text3"
             android:layout_width="wrap_content"
-            android:layout_height="18dp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:text="@string/time_table"
             style="@style/tab_menu_text_color_normal" />
@@ -82,7 +82,7 @@
         <!--<TextView-->
             <!--android:id="@+id/tab_text3"-->
             <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="18dp"-->
+            <!--android:layout_height="wrap_content"-->
             <!--android:gravity="center_vertical"-->
             <!--android:text="@string/message"-->
             <!--style="@style/tab_menu_text_color_normal" />-->
@@ -104,7 +104,7 @@
         <TextView
             android:id="@+id/tab_text4"
             android:layout_width="wrap_content"
-            android:layout_height="18dp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:text="@string/individual"
             style="@style/tab_menu_text_color_normal" />
