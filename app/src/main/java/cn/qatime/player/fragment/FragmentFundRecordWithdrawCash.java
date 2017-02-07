@@ -133,7 +133,7 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
         View empty = View.inflate(getActivity(),R.layout.empty_view,null);
         TextView textEmpty = (TextView) empty.findViewById(R.id.text_empty);
-        textEmpty.setText("未找到相关订单");
+        textEmpty.setText(R.string.not_found_related_order);
         listView.setEmptyView(empty);
 
         adapter = new CommonAdapter<WithdrawCashRecordBean.DataBean>(getActivity(), data, R.layout.item_fragment_fund_record2) {
@@ -183,7 +183,7 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
                     final AlertDialog alertDialog = builder.create();
                     View view = View.inflate(getActivity(), R.layout.dialog_cancel_or_confirm, null);
                     TextView text = (TextView) view.findViewById(R.id.text);
-                    text.setText("是否放弃此提现");
+                    text.setText(R.string.confirm_cancel_withdraw);
                     Button cancel = (Button) view.findViewById(R.id.cancel);
                     Button confirm = (Button) view.findViewById(R.id.confirm);
                     cancel.setOnClickListener(new View.OnClickListener() {
@@ -227,7 +227,7 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
             @Override
             protected void onSuccess(JSONObject response) {
                 if (!response.isNull("data")) {
-                    Toast.makeText(getActivity(), "提现取消成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.withdraw_cancel_success, Toast.LENGTH_SHORT).show();
                     getActivity().setResult(Constant.RESPONSE);
                     initData(1);
                 } else {
@@ -250,25 +250,24 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
     private String getPayType(String pay_type) {
         switch (pay_type) {
             case "bank":
-                return "银行卡";
+                return getString(R.string.bank_card);
             case "alipay":
-                return "支付宝";
+                return getString(R.string.alipay);
         }
-        return "银行卡";
+        return getString(R.string.bank_card);
     }
 
     private String getStatus(String status) {
         switch (status) {
             case "init":
-                return "审核中";
+                return getString(R.string.under_review);
             case "allowed":
-                return "审核通过";
+                return getString(R.string.review_success);
             case "refused":
-                return "审核失败";
+                return getString(R.string.review_failed);
             case "cancel  ":
-                return "已取消";
             default:
-                return "已取消";
+                return getString(R.string.cancelled);
         }
     }
 

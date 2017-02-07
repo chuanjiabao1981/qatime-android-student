@@ -266,18 +266,18 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 
     private String getStatus(String status) {
         if (status == null) {
-            return "招生中";
+            return getString(R.string.recruiting);
         }
-        if (status.equals("published")) {//直播中
-            return "招生中";
+        if (status.equals("published")) {
+            return getString(R.string.recruiting);
         } else if (status.equals("init")) {
-            return "招生中";
+            return getString(R.string.recruiting);
         } else if (status.equals("teaching")) {
-            return "开课中";
+            return getString(R.string.teaching);
         } else if (status.equals(Constant.CourseStatus.completed) || status.equals(Constant.CourseStatus.finished)) {//未开始
-            return "已结束";
+            return getString(R.string.completed);
         }
-        return "招生中";
+        return getString(R.string.recruiting);
     }
 
     @Subscribe

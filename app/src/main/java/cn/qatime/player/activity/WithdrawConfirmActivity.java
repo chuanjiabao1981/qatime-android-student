@@ -144,7 +144,7 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
                             JSONObject error = response.getJSONObject("error");
                             int code = error.getInt("code");
                             if (code == 2007) {
-                                Toast.makeText(WithdrawConfirmActivity.this, "token验证失败", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(WithdrawConfirmActivity.this,R.string.token_error, Toast.LENGTH_SHORT).show();
                             } else if (code == 3002) {//  "msg": "验证失败: Value 账户资金不足，无法提取!"
                                 Toast.makeText(WithdrawConfirmActivity.this, getResources().getString(R.string.amount_not_enough), Toast.LENGTH_SHORT).show();
                             } else if (code == 3003) {//  "msg": "APIErrors::WithdrawExisted"

@@ -96,7 +96,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
                     intent = new Intent(getActivity(), PersonalMyWalletActivity.class);
                     startActivityForResult(intent, Constant.REQUEST);
                 } else {
-                    Toast.makeText(getActivity(), "钱包信息异常，请检查网络连接后重试", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.get_wallet_info_error, Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.my_order:
@@ -123,7 +123,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
             Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).placeholder(R.mipmap.personal_information_head).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
-            name.setText(StringUtils.isNullOrBlanK(BaseApplication.getProfile().getData().getUser().getName()) ? "姓名" : BaseApplication.getProfile().getData().getUser().getName());
+            name.setText(StringUtils.isNullOrBlanK(BaseApplication.getProfile().getData().getUser().getName()) ? " " : BaseApplication.getProfile().getData().getUser().getName());
             CashAccountBean cashAccount = BaseApplication.getCashAccount();
             if (cashAccount != null && cashAccount.getData() != null) {
                 initData();

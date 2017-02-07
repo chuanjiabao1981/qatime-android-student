@@ -185,7 +185,6 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 }));
                 break;
             case R.id.clean_cache:
-                //TODO 弹出对话框提示
                 Toast.makeText(SystemSettingActivity.this, getString(R.string.clean_cache_success) + cacheSize.getText().toString(), Toast.LENGTH_SHORT).show();
                 DataCleanUtils.clearAllCache(this);
                 setCache();
@@ -205,7 +204,6 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 break;
             case R.id.download:
                 alertDialog.dismiss();
-                //TODO 更新版本
                 Toast.makeText(SystemSettingActivity.this, getResourceString(R.string.start_download), Toast.LENGTH_SHORT).show();
                 DownFileUtil downFileUtil = new DownFileUtil(this, downLoadLinks, "qatime.apk", "", "qatime.apk") {
                     @Override

@@ -136,7 +136,7 @@ public class FragmentFundRecordRecharge extends BaseFragment {
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
         View empty = View.inflate(getActivity(),R.layout.empty_view,null);
         TextView textEmpty = (TextView) empty.findViewById(R.id.text_empty);
-        textEmpty.setText("未找到相关订单");
+        textEmpty.setText(R.string.not_found_related_order);
         listView.setEmptyView(empty);
 
         adapter = new CommonAdapter<RechargeRecordBean.DataBean>(getActivity(), data, R.layout.item_fragment_fund_record1) {
@@ -212,23 +212,23 @@ public class FragmentFundRecordRecharge extends BaseFragment {
     private String getPayType(String pay_type) {
         switch (pay_type) {
             case "weixin":
-                return "微信支付";
+                return getResourceString(R.string.pay_wexin);
             case "alipay":
-                return "支付宝";
+                return getResourceString(R.string.alipay);
             case "offline":
-                return "线下支付";
+            default:
+                return getResourceString(R.string.pay_offline);
         }
-        return "微信支付";
     }
 
     private String getStatus(String status) {
         switch (status) {
             case "unpaid":
-                return "未支付";
+                return getString(R.string.unpaid);
             case "received":
-                return "充值成功";
+                return getString(R.string.recharge_success);
             default:
-                return "交易关闭";
+                return getString(R.string.deal_closed);
         }
     }
 

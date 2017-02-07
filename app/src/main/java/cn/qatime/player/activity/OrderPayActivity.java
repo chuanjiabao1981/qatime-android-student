@@ -225,15 +225,15 @@ public class OrderPayActivity extends BaseActivity {
                 if (errorCode == 2005) {
                     dialogPSWError();
                 } else if (errorCode == 2006) {
-                    Toast.makeText(OrderPayActivity.this, "暂未设置过支付密码", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OrderPayActivity.this, R.string.pay_password_not_set, Toast.LENGTH_SHORT).show();
                 } else if (errorCode == 2008) {
-                    dialogServerError("新支付密码未满24小时，暂不能使用");//未满24小时
+                    dialogServerError(getString(R.string.pay_password_not_enough_24));//未满24小时
                 }else if (errorCode == 2009) {
-                    dialogServerError("密码错误次数过多，暂不能使用");//未满24小时
+                    dialogServerError(getString(R.string.pay_password_too_many_mistake));//错误次数太多
                 } else if (errorCode == 0) {
-                    Toast.makeText(OrderPayActivity.this, "请检查网络连接", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(OrderPayActivity.this, R.string.server_error, Toast.LENGTH_SHORT).show();
                 } else {
-                    dialogServerError("支付系统繁忙，请稍后再试");//系统繁忙
+                    dialogServerError(getString(R.string.pay_server_error));//支付系统繁忙
                 }
             }
         });
@@ -287,10 +287,10 @@ public class OrderPayActivity extends BaseActivity {
         alertDialog.setCanceledOnTouchOutside(false);
         View view = View.inflate(this, R.layout.dialog_cancel_or_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("新设置或修改后将在24小时内不能使用支付密码，是否继续");
+        text.setText(R.string.change_pay_password_notify);
         Button cancel = (Button) view.findViewById(R.id.cancel);
         Button confirm = (Button) view.findViewById(R.id.confirm);
-        confirm.setText("继续");
+        confirm.setText(R.string.continue_anyway);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -332,11 +332,11 @@ public class OrderPayActivity extends BaseActivity {
         alertDialog.setCanceledOnTouchOutside(false);
         View view = View.inflate(this, R.layout.dialog_cancel_or_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("支付密码输入不正确");
+        text.setText(R.string.pay_password_error);
         Button cancel = (Button) view.findViewById(R.id.cancel);
         Button confirm = (Button) view.findViewById(R.id.confirm);
-        cancel.setText("重试");
-        confirm.setText("找回密码");
+        cancel.setText(R.string.try_again);
+        confirm.setText(R.string.forget_password);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -365,7 +365,6 @@ public class OrderPayActivity extends BaseActivity {
 
     @Subscribe
     public void onEvent(PayResultState state) {
-        //// TODO: 2017/1/6 QTA-151 支付密码支付 UI有修改，参数传递需重新确认！！！
         Intent intent = new Intent(this, OrderPayResultActivity.class);
         intent.putExtra("state", state);
         intent.putExtra("orderId", code.getText().toString().replace(getResourceString(R.string.order_number) + "：", ""));

@@ -67,7 +67,7 @@ public class FragmentOrderPaid extends BaseFragment {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
         View empty = View.inflate(getActivity(),R.layout.empty_view,null);
         TextView textEmpty = (TextView) empty.findViewById(R.id.text_empty);
-        textEmpty.setText("未找到相关订单");
+        textEmpty.setText(R.string.not_found_related_order);
         listView.setEmptyView(empty);
         listView.setMode(PullToRefreshBase.Mode.BOTH);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
@@ -88,7 +88,7 @@ public class FragmentOrderPaid extends BaseFragment {
 
                 TextView refund = helper.getView(R.id.apply_refund);
                 if (item.getStatus().equals("refunding")) {//正在交易
-                    helper.setText(R.id.status, "退款中");
+                    helper.setText(R.id.status, getString(R.string.refunding));
                     refund.setText(R.string.cancel_refund);
                     refund.setTextColor(0xffaaaaaa);
                     refund.setBackgroundResource(R.drawable.button_background_light);
@@ -176,7 +176,7 @@ public class FragmentOrderPaid extends BaseFragment {
         final AlertDialog alertDialog = builder.create();
         View view = View.inflate(getActivity(), R.layout.dialog_cancel_or_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("是否确认取消退款申请");
+        text.setText(R.string.confirm_cancel_refund);
         Button cancel = (Button) view.findViewById(R.id.cancel);
         Button confirm = (Button) view.findViewById(R.id.confirm);
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -204,13 +204,13 @@ public class FragmentOrderPaid extends BaseFragment {
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        Toast.makeText(getActivity(), "取消退款申请成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.cancel_refund_success, Toast.LENGTH_SHORT).show();
                         initData(1);
                     }
 
                     @Override
                     protected void onError(JSONObject response) {
-                        Toast.makeText(getActivity(), "取消退款申请失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.cancel_refund_error, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override

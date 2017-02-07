@@ -18,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.common.Const;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
@@ -63,7 +62,7 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
             }
         }
         price = "￥" + price;
-        rechargeNum.setHint(getString(R.string.withdraw_num_hint) + "(" + price + "可用)");
+        rechargeNum.setHint(getString(R.string.withdraw_num_hint,price));
 
         phone = (TextView) findViewById(R.id.phone);
         phone.setText(Constant.phoneNumber);
@@ -169,7 +168,7 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
             return;
         }
         if (Double.valueOf(amount) > Math.pow(10, 6)) {
-            Toast.makeText(WithdrawCashActivity.this, "金额不支持", Toast.LENGTH_SHORT).show();
+            Toast.makeText(WithdrawCashActivity.this, R.string.amount_not_allow, Toast.LENGTH_SHORT).show();
             return;
         }
         if (Double.valueOf(amount) > Double.valueOf(BaseApplication.getCashAccount().getData().getBalance())) {
@@ -177,7 +176,7 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
             return;
         }
 
-        payPopView = new PayPopView("用户提现", "￥" + amount, WithdrawCashActivity.this);
+        payPopView = new PayPopView(getString(R.string.user_withdraw), "￥" + amount, WithdrawCashActivity.this);
         payPopView.showPop();
         payPopView.setOnPayPSWVerifyListener(new PayPopView.OnPayPSWVerifyListener() {
             @Override
@@ -196,15 +195,15 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
                 if (errorCode == 2005) {
                     dialogPSWError();
                 } else if (errorCode == 2006) {
-                    Toast.makeText(WithdrawCashActivity.this, "暂未设置过支付密码", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(WithdrawCashActivity.this,  R.string.pay_password_not_set, Toast.LENGTH_SHORT).show();
                 } else if (errorCode == 2008) {
-                    dialogServerError("新支付密码未满24小时，暂不能使用");//未满24小时
+                    dialogServerError(getString(R.string.pay_password_not_enough_24));//未满24小时
                 }else if (errorCode == 2009) {
-                    dialogServerError("密码错误次数过多，暂不能使用");//未满24小时
+                    dialogServerError(getString(R.string.pay_password_too_many_mistake));//错误太多
                 } else if (errorCode == 0) {
-                    Toast.makeText(WithdrawCashActivity.this, "请检查网络连接", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(WithdrawCashActivity.this, R.string.server_error, Toast.LENGTH_SHORT).show();
                 } else {
-                    dialogServerError("提现系统繁忙，请稍后再试");//系统繁忙
+                    dialogServerError(getString(R.string.withdraw_server_error));//提现系统繁忙
                 }
             }
         });
@@ -220,10 +219,10 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
         alertDialog.setCanceledOnTouchOutside(false);
         View view = View.inflate(this, R.layout.dialog_cancel_or_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("新设置或修改后将在24小时内不能使用支付密码，是否继续");
+        text.setText(R.string.change_pay_password_notify);
         Button cancel = (Button) view.findViewById(R.id.cancel);
         Button confirm = (Button) view.findViewById(R.id.confirm);
-        confirm.setText("继续");
+        confirm.setText(R.string.continue_anyway);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -265,11 +264,11 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
         alertDialog.setCanceledOnTouchOutside(false);
         View view = View.inflate(this, R.layout.dialog_cancel_or_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("支付密码输入不正确");
+        text.setText(R.string.pay_password_error);
         Button cancel = (Button) view.findViewById(R.id.cancel);
         Button confirm = (Button) view.findViewById(R.id.confirm);
-        cancel.setText("重试");
-        confirm.setText("找回密码");
+        cancel.setText(R.string.try_again);
+        confirm.setText(R.string.forget_password);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -128,7 +128,7 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bind_wechat);
-        setTitles("绑定");
+        setTitles(getString(R.string.bind));
         openid = getIntent().getStringExtra("openid");
         assignViews();
         String gradeString = FileUtil.readFile(getFilesDir() + "/grade.txt");
@@ -366,9 +366,9 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
         alertDialog = new AlertDialog.Builder(WeChatBindActivity.this).create();
         View view = View.inflate(WeChatBindActivity.this, R.layout.dialog_cancel_or_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("该手机号已注册,请登录进入\n个人中心>安全设置绑定");
-        ((TextView) view.findViewById(R.id.cancel)).setText("新号码注册");
-        ((TextView) view.findViewById(R.id.confirm)).setText("登录");
+        text.setText(R.string.wechat_bind_error_alerady_used);
+        ((TextView) view.findViewById(R.id.cancel)).setText(R.string.new_phone_to_regist);
+        ((TextView) view.findViewById(R.id.confirm)).setText(R.string.login);
         Button cancel = (Button) view.findViewById(R.id.cancel);
         Button confirm = (Button) view.findViewById(R.id.confirm);
         cancel.setOnClickListener(new View.OnClickListener() {

@@ -167,7 +167,7 @@
     <string name="status_over">Status:Ended</string>//当前状态:已结束
     <string name="grade_type">Grade:</string>//年级类型
     //课程详情2
-    <string name="teacher_name">Teacher：</string>
+    <string name="teacher_name">teacher name</string>
     <string name="teacher_years">Coaching age：</string>
     <string name="teacher_subject">Subject：</string>
     <string name="teacher_school">School：</string>
@@ -370,5 +370,6 @@
     <string name="recent_change">recent change</string>
     <string name="whole_city">whole city</string>
     <string name="class_closed">class closed</string>
+    <string name="new_phone_to_regist">新号码注册</string>
 </resources>
 

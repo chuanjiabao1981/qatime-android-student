@@ -105,7 +105,7 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
                     holder.setText(status, getResourceString(R.string.class_over));//已结束
                 }
                 holder.setText(R.id.class_date, item.getClass_date());
-                holder.setText(R.id.view_playback, "还可回放" + item.getLeft_replay_times() + "次>");
+                holder.setText(R.id.view_playback, getString(R.string.playback_count,item.getLeft_replay_times()));
                 if (isFinished(item)) {
                     ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xff999999);
@@ -196,8 +196,8 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
                     e.printStackTrace();
                 }
                 grade.setText((data.getGrade() == null ? "" : data.getGrade()));
-                totalClass.setText("共" + data.getPreset_lesson_count() + "课");
-                courseDescribe.setText(StringUtils.isNullOrBlanK(data.getDescription()) ? "暂无简介" : data.getDescription());
+                totalClass.setText(getString(R.string.lesson_count,data.getPreset_lesson_count()));
+                courseDescribe.setText(StringUtils.isNullOrBlanK(data.getDescription()) ?  getString(R.string.no_desc) : data.getDescription());
             }
         }
     };
@@ -219,7 +219,7 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
                         teachingYears.setText(getResourceString(R.string.teacher_years) + " " + getResourceString(R.string.more_than_ten_years));
                     }
                 }
-                teacherDescribe.setText(StringUtils.isNullOrBlanK(data.getTeacher().getDesc()) ? "暂无简介" : data.getTeacher().getDesc());
+                teacherDescribe.setText(StringUtils.isNullOrBlanK(data.getTeacher().getDesc()) ?  getString(R.string.no_desc)  : data.getTeacher().getDesc());
 
                 SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getCacheDir() + "/school.txt").toString(), SchoolBean.class);
                 if (schoolBean != null && schoolBean.getData() != null) {
@@ -230,7 +230,7 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
                         }
                     }
                 } else {
-                    school.setText(getResourceString(R.string.teacher_school) + " 暂无");
+                    school.setText(getResourceString(R.string.teacher_school) +  getString(R.string.not_available) );
                 }
 
                 Glide.with(getActivity()).load(data.getTeacher().getAvatar_url()).placeholder(R.mipmap.error_header_rect).crossFade().into(image);

@@ -82,7 +82,7 @@ public class RechargePayResultActivity extends BaseActivity implements View.OnCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_pay_result);
-        setTitles("充值结果");
+        setTitles(getString(R.string.recharge_result));
         assignViews();
 
     }

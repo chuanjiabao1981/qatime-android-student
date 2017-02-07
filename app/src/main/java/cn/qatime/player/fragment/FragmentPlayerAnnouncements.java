@@ -55,7 +55,7 @@ public class FragmentPlayerAnnouncements extends BaseFragment {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
         View empty = View.inflate(getActivity(), R.layout.empty_view, null);
         TextView textEmpty = (TextView) empty.findViewById(R.id.text_empty);
-        textEmpty.setText("暂无辅导班公告");
+        textEmpty.setText(R.string.no_course_announcements);
         listView.setEmptyView(empty);
         listView.setMode(PullToRefreshBase.Mode.MANUAL_REFRESH_ONLY);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));

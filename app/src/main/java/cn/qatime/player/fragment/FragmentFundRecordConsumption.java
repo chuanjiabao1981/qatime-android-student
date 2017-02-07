@@ -59,16 +59,18 @@ public class FragmentFundRecordConsumption extends BaseFragment {
         initOver = true;
         return view;
     }
+
     @Override
     public void onShow() {
         if (!isLoad) {
-            if(initOver){
+            if (initOver) {
                 initData(1);
-            }else{
+            } else {
                 super.onShow();
             }
         }
     }
+
     private void initData(final int loadType) {
         Map<String, String> map = new HashMap<>();
         map.put("start_date", "0");
@@ -127,9 +129,9 @@ public class FragmentFundRecordConsumption extends BaseFragment {
         listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResourceString(R.string.loading));
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
-        View empty = View.inflate(getActivity(),R.layout.empty_view,null);
+        View empty = View.inflate(getActivity(), R.layout.empty_view, null);
         TextView textEmpty = (TextView) empty.findViewById(R.id.text_empty);
-        textEmpty.setText("未找到相关订单");
+        textEmpty.setText(R.string.not_found_related_order);
         listView.setEmptyView(empty);
 
         adapter = new CommonAdapter<ConsumptionRecordBean.DataBean>(getActivity(), data, R.layout.item_fragment_fund_record3) {
@@ -171,13 +173,13 @@ public class FragmentFundRecordConsumption extends BaseFragment {
     private String getChangeType(String change_type) {
         switch (change_type) {
             case "weixin":
-                return "微信支付";
+                return getResourceString(R.string.pay_wexin);
             case "alipay":
-                return "支付宝";
+                return getResourceString(R.string.alipay);
             case "account":
-                return "余额支付";
+            default:
+                return getResourceString(R.string.pay_account);
         }
-        return "余额支付";
     }
 
 

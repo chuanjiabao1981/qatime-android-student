@@ -685,7 +685,7 @@ public class MessageAdapter extends BaseAdapter {
     }
 
     private String buildMuteTeamNotification(MuteMemberAttachment a) {
-        return buildMemberListString(a.getTargets(), null) + "被" + (a.isMute() ? "禁言" : "解除禁言");
+        return buildMemberListString(a.getTargets(), null) + context.getString(R.string.be) + (a.isMute() ? context.getString(R.string.mute) : context.getString(R.string.unmute));
     }
 
     // 判断消息方向，是否是接收到的消息

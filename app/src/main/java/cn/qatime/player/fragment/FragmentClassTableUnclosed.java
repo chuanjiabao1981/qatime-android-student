@@ -155,7 +155,6 @@ public class FragmentClassTableUnclosed extends BaseFragment {
                 }
                 helper.setText(R.id.status, getStatus(item.getStatus()));
                 helper.setText(R.id.live_time, item.getLive_time());
-                // TODO: 2016/11/16 接口暂无年级
                 helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());

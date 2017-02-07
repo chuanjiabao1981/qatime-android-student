@@ -19,7 +19,6 @@
             style="@style/activity_edit_text_style"
             android:layout_width="match_parent"
             android:gravity="center_vertical"
-            android:hint="@string/withdraw_num_hint"
             android:inputType="numberDecimal"
             android:paddingRight="20dp" />
 

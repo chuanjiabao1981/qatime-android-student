@@ -138,7 +138,7 @@
     <string name="Join_the_audition">加入试听</string>
     <string name="Joined_the_audition">已加入试听</string>
     <string name="purchase_now">立即报名</string>
-    <string name="purchased">已购买</string>
+    <string name="purchased">人报名</string>
     <string name="no_tutorial_classes_ID">没有辅导班ID</string>
     <!--//登录-->
     <string name="account">请输入账号</string>
@@ -198,7 +198,7 @@
     <string name="current_status">当前状态：</string>
     <string name="grade_type">授课类型：</string>
     <!--//课程详情2-->
-    <string name="teacher_name">老师姓名：</string>
+    <string name="teacher_name">教师名</string>
     <string name="teacher_years">执教年龄 </string>
     <string name="within_three_years">3年以内</string>
     <string name="within_ten_years">3-10年</string>
@@ -272,7 +272,7 @@
     //安全管理
     <string name="bind_phone_number">绑定手机</string>
     <string name="parent_phone_number">家长手机</string>
-    <string name="bind">绑 定</string>
+    <string name="bind">绑定</string>
     <string name="bind_email">绑定邮箱</string>
     <string name="bind_rightnow">马上绑定</string>
     <string name="bind_wechat">绑定微信</string>
@@ -442,7 +442,7 @@
     <string name="recharge_manner">充值方式</string>
     <string name="transfer_accounts">转账</string>
     <string name="wechat_wallet">微信钱包</string>
-    <string name="withdraw_num_hint">请输入提现金额</string>
+    <string name="withdraw_num_hint">请输入提现金额(%s$1可用)</string>
     <string name="withdraw_cash_record">提现记录</string>
     <string name="hint_input_alipay_account">请输入完整的支付宝账号</string>
     <string name="hint_input_bank_card_account">请输入完整的银行卡卡号</string>
@@ -532,7 +532,7 @@
     <string name="continue_anyway">继续</string>
     <string name="cancel_bind_weixin_notify">取消绑定后将不能使用提现到微信功能，是否继续</string>
     <string name="clean_cache_success">成功清理缓存</string>
-    <string name="not_available">暂无</string>
+    <string name="not_available"> 暂无</string>
     <string name="teach_age">教龄</string>
     <string name="apply_withdraw_error">提现系统繁忙，请稍候再试</string>
     <string name="bank_card">银行卡</string>
@@ -566,5 +566,40 @@
     <string name="published_course_unable_enter">尚未开课不能</string>
     <string name="study">学习</string>
     <string name="teach_type">授课方式：在线直播</string>
+    <string name="pay_password_not_set">暂未设置过支付密码</string>
+    <string name="pay_password_not_enough_24">新支付密码未满24小时，暂不能使用</string>
+    <string name="pay_password_too_many_mistake">密码错误次数过多，暂不能使用</string>
+    <string name="pay_server_error">支付系统繁忙，请稍后再试</string>
+    <string name="pay_password_error">支付密码输入不正确</string>
+    <string name="try_again">重试</string>
+    <string name="recharge_result">充值结果</string>
+    <string name="wechat_bind_error_alerady_used"><![CDATA[该手机号已注册,请登录进入\n个人中心>安全设置绑定]]></string>
+    <string name="new_phone_to_regist"><新号码></新号码>注册</string>
+    <string name="user_withdraw">用户提现</string>
+    <string name="withdraw_server_error">提现系统繁忙，请稍后再试</string>
+    <string name="be">被</string>
+    <string name="mute">禁言</string>
+    <string name="unmute">解除禁言</string>
+    <string name="no_desc">暂无简介</string>
+    <string name="playback_count">还可回放%d$1次></string>
+    <string name="not_found_related_order">未找到相关订单</string>
+    <string name="pay_offline">线下支付</string>
+    <string name="unpaid">未支付</string>
+    <string name="refunding">退款中</string>
+    <string name="refunded">已退款</string>
+    <string name="confirm_cancel_withdraw">是否放弃此提现</string>
+    <string name="withdraw_cancel_success">提现取消成功</string>
+    <string name="under_review">审核中</string>
+    <string name="review_success">审核通过</string>
+    <string name="review_failed">审核失败</string>
+    <string name="no_course_name">暂无辅导班数据</string>
+    <string name="lastest">最新</string>
+    <string name="hottest">最热</string>
+    <string name="no_course_announcements">暂无辅导班公告</string>
+    <string name="get_order_info_error">订单信息获取失败</string>
+    <string name="start_time">开始时间</string>
+    <string name="end_time">结束时间</string>
+    <string name="tasting">试听中</string>
+    <string name="tasted">已试听</string>
 
 </resources>

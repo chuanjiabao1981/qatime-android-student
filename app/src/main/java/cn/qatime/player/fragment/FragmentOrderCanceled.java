@@ -60,7 +60,7 @@ public class FragmentOrderCanceled extends BaseFragment {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
         View empty = View.inflate(getActivity(),R.layout.empty_view,null);
         TextView textEmpty = (TextView) empty.findViewById(R.id.text_empty);
-        textEmpty.setText("未找到相关订单");
+        textEmpty.setText(R.string.not_found_related_order);
         listView.setEmptyView(empty);
         listView.setMode(PullToRefreshBase.Mode.BOTH);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
@@ -78,7 +78,7 @@ public class FragmentOrderCanceled extends BaseFragment {
                 helper.setText(R.id.classname, item.getProduct().getName())
                         .setText(R.id.describe, sp.toString());
                 if (item.getStatus().equals("refunded")) {//交易关闭
-                    helper.setText(R.id.status, "已退款");
+                    helper.setText(R.id.status, getString(R.string.refunded));
                 } else if (item.getStatus().equals("canceled")) {//交易关闭
                     helper.setText(R.id.status, getResourceString(R.string.deal_closed));
                 } else if (item.getStatus().equals("expired")) {//交易关闭

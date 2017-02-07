@@ -67,7 +67,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
         View empty = View.inflate(getActivity(),R.layout.empty_view,null);
         TextView textEmpty = (TextView) empty.findViewById(R.id.text_empty);
-        textEmpty.setText("未找到相关订单");
+        textEmpty.setText(R.string.not_found_related_order);
         listView.setEmptyView(empty);
         listView.setMode(PullToRefreshBase.Mode.BOTH);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
@@ -211,7 +211,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
 
                     @Override
                     protected void onError(JSONObject response) {
-                        Toast.makeText(getActivity(), "订单信息获取失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.get_order_info_error, Toast.LENGTH_SHORT).show();
                         String label = DateUtils.formatDateTime(
                                 getActivity(),
                                 System.currentTimeMillis(),
@@ -233,7 +233,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
                 listView.onRefreshComplete();
-                Toast.makeText(getActivity(), "请检查网络联接", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.server_error, Toast.LENGTH_SHORT).show();
             }
         });
         addToRequestQueue(request);

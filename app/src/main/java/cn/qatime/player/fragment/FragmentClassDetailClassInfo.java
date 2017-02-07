@@ -59,8 +59,8 @@ public class FragmentClassDetailClassInfo extends BaseFragment {
                 e.printStackTrace();
             }
             grade.setText((bean.getData().getGrade() == null ? "" : bean.getData().getGrade()));
-            totalclass.setText("共" + bean.getData().getPreset_lesson_count() + "课");
-            describe.setText(StringUtils.isNullOrBlanK(bean.getData().getDescription()) ? "暂无简介" : bean.getData().getDescription());
+            totalclass.setText(getString(R.string.lesson_count, bean.getData().getPreset_lesson_count()));
+            describe.setText(StringUtils.isNullOrBlanK(bean.getData().getDescription()) ? getString(R.string.no_desc) : bean.getData().getDescription());
         }
     }
 }

@@ -62,7 +62,7 @@ public class FragmentClassDetailTeacherInfo extends BaseFragment {
                     teachingyears.setText(getResourceString(R.string.teacher_years) + " " + getResourceString(R.string.more_than_ten_years));
                 }
             }
-            describe.setText(StringUtils.isNullOrBlanK(data.getData().getTeacher().getDesc()) ? "暂无简介" : data.getData().getTeacher().getDesc());
+            describe.setText(StringUtils.isNullOrBlanK(data.getData().getTeacher().getDesc()) ? getString(R.string.no_desc):data.getData().getTeacher().getDesc());
 
             SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getCacheDir() + "/school.txt").toString(), SchoolBean.class);
             if (schoolBean != null && schoolBean.getData() != null) {
@@ -73,7 +73,7 @@ public class FragmentClassDetailTeacherInfo extends BaseFragment {
                     }
                 }
             } else {
-                school.setText(getResourceString(R.string.teacher_school) + " 暂无");
+                school.setText(getResourceString(R.string.teacher_school) + R.string.not_available);
             }
 
             Glide.with(this).load(data.getData().getTeacher().getAvatar_url()).placeholder(R.mipmap.error_header_rect).crossFade().into(image);

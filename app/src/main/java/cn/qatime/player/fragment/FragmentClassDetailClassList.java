@@ -71,7 +71,7 @@ public class FragmentClassDetailClassList extends BaseFragment {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                holder.setText(R.id.view_playback, "还可回放" + item.getLeft_replay_times() + "次>");
+                holder.setText(R.id.view_playback, getString(R.string.playback_count,item.getLeft_replay_times()));
                 if (isFinished(item)) {
                     ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xff999999);

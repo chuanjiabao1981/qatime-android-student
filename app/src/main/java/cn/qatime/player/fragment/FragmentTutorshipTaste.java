@@ -95,11 +95,11 @@ public class FragmentTutorshipTaste extends BaseFragment {
                 //试听状态
                 TextView taste = helper.getView(R.id.taste);
                 if (!item.isTasted()) {//tasted为true为已经试听
-                    taste.setText("试听中");
+                    taste.setText(R.string.tasting);
                     taste.setBackgroundColor(0xffff9966);
                     helper.getView(R.id.enter).setEnabled(true);//按钮是否能被点击
                 } else {
-                    taste.setText("已试听");
+                    taste.setText(R.string.tasted);
                     taste.setBackgroundColor(0xffcccccc);
                     helper.getView(R.id.enter).setEnabled(false);//按钮是否能被点击
                 }
@@ -133,7 +133,7 @@ public class FragmentTutorshipTaste extends BaseFragment {
                     helper.getView(R.id.progress).setVisibility(View.VISIBLE);
                     helper.getView(R.id.teaching_time).setVisibility(View.GONE);
                     helper.getView(R.id.class_over).setVisibility(View.GONE);
-                    helper.setText(R.id.progress, "进度" + item.getCompleted_lesson_count() + "/" + item.getPreset_lesson_count());
+                    helper.setText(R.id.progress,getString(R.string.progress, item.getCompleted_lesson_count(), item.getPreset_lesson_count()));
                 }
             }
         };

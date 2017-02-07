@@ -65,16 +65,16 @@ public class FragmentFundRecordRefund extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_fund_record_refund, container, false);
         EventBus.getDefault().register(this);
         initview(view);
-        initOver=true;
+        initOver = true;
         return view;
     }
 
     @Override
     public void onShow() {
         if (!isLoad) {
-            if(initOver){
+            if (initOver) {
                 initData(1);
-            }else{
+            } else {
                 super.onShow();
             }
         }
@@ -136,9 +136,9 @@ public class FragmentFundRecordRefund extends BaseFragment {
         listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResourceString(R.string.loading));
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
-        View empty = View.inflate(getActivity(),R.layout.empty_view,null);
+        View empty = View.inflate(getActivity(), R.layout.empty_view, null);
         TextView textEmpty = (TextView) empty.findViewById(R.id.text_empty);
-        textEmpty.setText("未找到相关订单");
+        textEmpty.setText(R.string.not_found_related_order);
         listView.setEmptyView(empty);
 
         adapter = new CommonAdapter<RefundRecordBean.DataBean>(getActivity(), data, R.layout.item_fragment_fund_record4) {
@@ -188,12 +188,13 @@ public class FragmentFundRecordRefund extends BaseFragment {
         });
 
     }
-    protected void dialog(final  RefundRecordBean.DataBean item) {
+
+    protected void dialog(final RefundRecordBean.DataBean item) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final AlertDialog alertDialog = builder.create();
         View view = View.inflate(getActivity(), R.layout.dialog_cancel_or_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("是否确认取消退款申请");
+        text.setText(R.string.confirm_cancel_refund);
         Button cancel = (Button) view.findViewById(R.id.cancel);
         Button confirm = (Button) view.findViewById(R.id.confirm);
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -216,19 +217,20 @@ public class FragmentFundRecordRefund extends BaseFragment {
 //        alertDialog.getWindow().setAttributes(attributes);
     }
 
-    private void cancelRefund( RefundRecordBean.DataBean item) {
+    private void cancelRefund(RefundRecordBean.DataBean item) {
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.urlpayment + BaseApplication.getUserId() + "/refunds/" + item.getTransaction_no() + "/cancel", null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        Toast.makeText(getActivity(), "取消退款申请成功", Toast.LENGTH_SHORT).show();
-                        initData(1);
+                        Toast.makeText(getActivity(), R.string.cancel_refund_success, Toast.LENGTH_SHORT).show();
+                       initData(1);
                     }
 
                     @Override
                     protected void onError(JSONObject response) {
-                        Toast.makeText(getActivity(), "取消退款申请失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.cancel_refund_error, Toast.LENGTH_SHORT).show();
                     }
+
 
                     @Override
                     protected void onTokenOut() {
@@ -243,10 +245,11 @@ public class FragmentFundRecordRefund extends BaseFragment {
         });
         addToRequestQueue(request);
     }
+
     @Subscribe
     public void onEvent(PayResultState code) {
         //充值成功刷新订单
-            initData(1);
+        initData(1);
     }
 
 
@@ -259,25 +262,24 @@ public class FragmentFundRecordRefund extends BaseFragment {
     private String getPayType(String pay_type) {
         switch (pay_type) {
             case "weixin":
-                return "退至微信";
+                return getString(R.string.refund_to_weixin);
             case "alipay":
-                return "退至支付宝";
+                return getString(R.string.refund_to_alipay);
             case "offline":
-                return "退至余额";
+                default:
+                return getString(R.string.refund_to_account);
         }
-        return "退至余额";
     }
 
     private String getStatus(String status) {
         switch (status) {
             case "init":
-                return "退款中";
+                return getString(R.string.refunding);
             case "cancel":
-                return "已取消";
+                return getString(R.string.cancelled);
             case "refunded":
-                return "已退款";
             default:
-                return "已退款";
+                return getString(R.string.refunded);
         }
     }
 
