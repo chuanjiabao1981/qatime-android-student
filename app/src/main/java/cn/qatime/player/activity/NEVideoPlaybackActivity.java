@@ -1,8 +1,6 @@
 package cn.qatime.player.activity;
 
 import android.os.Bundle;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 

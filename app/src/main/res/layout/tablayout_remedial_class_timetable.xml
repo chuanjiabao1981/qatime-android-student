@@ -24,7 +24,7 @@
             <TextView
                 android:id="@+id/tab_text1"
                 android:layout_width="wrap_content"
-                android:layout_height="18.0dip"
+                android:layout_height="18.0dp"
                 android:gravity="center_vertical"
                 android:text="@string/course_to_be_done"
                 style="@style/tab_text_color_select" />
@@ -39,7 +39,7 @@
             <TextView
                 android:id="@+id/tab_text2"
                 android:layout_width="wrap_content"
-                android:layout_height="18.0dip"
+                android:layout_height="18.0dp"
                 android:gravity="center_vertical"
                 android:text="@string/course_finished"
                 style="@style/tab_text_color_normal" />

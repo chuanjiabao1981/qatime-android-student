@@ -48,9 +48,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
     private String imageUrl = "";
     private GradeBean gradeBean;
     private CustomProgressDialog progress;
-    private Uri captureUri;
     private AlertDialog alertDialog;
-    private Profile profile;
 
     private LinearLayout information;
     private ImageView headSculpture;
