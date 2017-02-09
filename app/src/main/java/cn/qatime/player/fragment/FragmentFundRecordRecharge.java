@@ -16,6 +16,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -180,6 +182,15 @@ public class FragmentFundRecordRecharge extends BaseFragment {
                 RechargeRecordBean.DataBean dataBean = data.get(position - 1);
                 String status = dataBean.getStatus();
                 if ("unpaid".equals(status)) {//如果是未支付进行跳转
+                    if (dataBean.getPay_type().equals("weixin")) {
+                        IWXAPI api = WXAPIFactory.createWXAPI(getActivity(), null);
+                        if (!api.isWXAppInstalled()) {
+                            Toast.makeText(getActivity(), R.string.wechat_not_installed, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    } else if (dataBean.getPay_type().equals("alipay")) {
+                        return;
+                    }
                     Intent intent = new Intent(getActivity(), RechargeConfirmActivity.class);
                     intent.putExtra("id", dataBean.getId());
                     intent.putExtra("amount", dataBean.getAmount());

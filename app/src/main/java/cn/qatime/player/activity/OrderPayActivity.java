@@ -163,11 +163,11 @@ public class OrderPayActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (payType.equals("weixin")) {
-                    if (!api.isWXAppInstalled()) {
-                        Toast.makeText(OrderPayActivity.this, R.string.wechat_not_installed, Toast.LENGTH_SHORT).show();
-                    } else if (!api.isWXAppSupportAPI()) {
-                        Toast.makeText(OrderPayActivity.this, R.string.wechat_not_support, Toast.LENGTH_SHORT).show();
-                    } else {
+//                    if (!api.isWXAppInstalled()) {
+//                        Toast.makeText(OrderPayActivity.this, R.string.wechat_not_installed, Toast.LENGTH_SHORT).show();
+//                    } else if (!api.isWXAppSupportAPI()) {
+//                        Toast.makeText(OrderPayActivity.this, R.string.wechat_not_support, Toast.LENGTH_SHORT).show();
+//                    } else {
                         PayReq request = new PayReq();
                         request.appId = weixinData.getAppid();
 
@@ -184,7 +184,7 @@ public class OrderPayActivity extends BaseActivity {
 
                         request.sign = weixinData.getSign();
                         api.sendReq(request);
-                    }
+//                    }
 
                 } else if (payType.equals("alipay")) {
                     Runnable payRunnable = new Runnable() {
