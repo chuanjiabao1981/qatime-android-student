@@ -162,6 +162,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
                     return;
                 } else if (data.getPay_type().equals("account")) {
                     if (Double.valueOf(data.getAmount()) > Double.valueOf(BaseApplication.getCashAccount().getData().getBalance())) {
+                        Toast.makeText(PersonalMyOrderUnpaidDetailActivity.this, R.string.amount_not_enough, Toast.LENGTH_SHORT).show();
                         return;
                     }
                 }

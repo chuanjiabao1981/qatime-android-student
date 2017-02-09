@@ -125,6 +125,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
             return;
         } else if (payType.equals("account")) {
             if (priceNumber > Double.valueOf(BaseApplication.getCashAccount().getData().getBalance())) {
+                Toast.makeText(this, R.string.amount_not_enough, Toast.LENGTH_SHORT).show();
                 return;
             }
         }

@@ -118,6 +118,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
                                     return;
                                 } else if (item.getPay_type().equals("account")) {
                                     if (Double.valueOf(item.getAmount()) > Double.valueOf(BaseApplication.getCashAccount().getData().getBalance())) {
+                                        Toast.makeText(getActivity(), R.string.amount_not_enough, Toast.LENGTH_SHORT).show();
                                         return;
                                     }
                                 }
