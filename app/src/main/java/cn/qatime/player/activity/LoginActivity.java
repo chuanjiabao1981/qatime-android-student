@@ -144,9 +144,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 break;
             case R.id.wechat_login://微信登录
                 if (!api.isWXAppInstalled()) {
-                    Toast.makeText(this, R.string.wechat_not_installed, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.login_failed_wechat_not_installed, Toast.LENGTH_SHORT).show();
                 } else if (!api.isWXAppSupportAPI()) {
-                    Toast.makeText(this, R.string.wechat_not_support, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.login_failed_wechat_not_support, Toast.LENGTH_SHORT).show();
                 } else {
                     SendAuth.Req req = new SendAuth.Req();
                     req.scope = "snsapi_userinfo";
