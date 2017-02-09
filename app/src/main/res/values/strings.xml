@@ -601,5 +601,9 @@
     <string name="end_time">结束时间</string>
     <string name="tasting">试听中</string>
     <string name="tasted">已试听</string>
+    <string name="wechat_not_installed">操作失败，尚未安装微信</string>
+    <string name="wechat_not_support">操作失败，不支持的微信客户端</string>
+    <string name="login_failed_wechat_not_installed" >登录失败，请使用手机号登录</string>
+    <string name="login_failed_wechat_not_support" >登录失败，不支持的微信客户端</string>
 
 </resources>
