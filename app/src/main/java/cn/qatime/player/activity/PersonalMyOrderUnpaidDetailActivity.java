@@ -12,6 +12,8 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -24,6 +26,7 @@ import java.text.SimpleDateFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.MyOrderBean;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.Constant;
@@ -149,6 +152,20 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //TODO: 2016/9/1 付款
+                if (data.getPay_type().equals("weixin")) {
+                    IWXAPI api = WXAPIFactory.createWXAPI(PersonalMyOrderUnpaidDetailActivity.this, null);
+                    if (!api.isWXAppInstalled()) {
+                        Toast.makeText(PersonalMyOrderUnpaidDetailActivity.this, R.string.wechat_not_installed, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                } else if (data.getPay_type().equals("alipay")) {
+                    return;
+                } else if (data.getPay_type().equals("account")) {
+                    if (Double.valueOf(data.getAmount()) > Double.valueOf(BaseApplication.getCashAccount().getData().getBalance())) {
+                        return;
+                    }
+                }
+
                 Intent intent = new Intent(PersonalMyOrderUnpaidDetailActivity.this, OrderPayActivity.class);
                 if (data.getPay_type().equals("weixin")) {
                     intent.putExtra("data", data.getApp_pay_params());

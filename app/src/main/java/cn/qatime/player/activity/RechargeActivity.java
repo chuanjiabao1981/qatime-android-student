@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -219,6 +221,16 @@ public class RechargeActivity extends BaseActivity {
                 }
                 if (Double.valueOf(amount) > Math.pow(10, 6)) {
                     Toast.makeText(RechargeActivity.this, R.string.amount_not_allow, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (payType.equals("weixin")) {
+                    IWXAPI api = WXAPIFactory.createWXAPI(RechargeActivity.this, null);
+                    if (!api.isWXAppInstalled()) {
+                        Toast.makeText(RechargeActivity.this, R.string.wechat_not_installed, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                } else if (payType.equals("alipay")) {
                     return;
                 }
 

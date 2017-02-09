@@ -20,6 +20,8 @@ import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.orhanobut.logger.Logger;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -33,6 +35,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.OrderPayActivity;
 import cn.qatime.player.activity.PersonalMyOrderUnpaidDetailActivity;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.MyOrderBean;
 import cn.qatime.player.bean.PayResultState;
@@ -105,6 +108,19 @@ public class FragmentOrderUnpaid extends BaseFragment {
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                if (item.getPay_type().equals("weixin")) {
+                                    IWXAPI api = WXAPIFactory.createWXAPI(getActivity(), null);
+                                    if (!api.isWXAppInstalled()) {
+                                        Toast.makeText(getActivity(), R.string.wechat_not_installed, Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
+                                } else if (item.getPay_type().equals("alipay")) {
+                                    return;
+                                } else if (item.getPay_type().equals("account")) {
+                                    if (Double.valueOf(item.getAmount()) > Double.valueOf(BaseApplication.getCashAccount().getData().getBalance())) {
+                                        return;
+                                    }
+                                }
                                 Intent intent = new Intent(getActivity(), OrderPayActivity.class);
                                 if (item.getPay_type().equals("weixin")) {
                                     intent.putExtra("data", item.getApp_pay_params());

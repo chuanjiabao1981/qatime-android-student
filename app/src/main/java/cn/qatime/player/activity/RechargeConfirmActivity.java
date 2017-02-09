@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
 import com.tencent.mm.sdk.modelpay.PayReq;
@@ -128,11 +127,11 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
                 // TODO: 2016/9/27  调用api充值
                 if ("weixin".equals(getIntent().getStringExtra("pay_type"))) {//微信支付
                     Logger.e("微信支付");
-                    if (!api.isWXAppInstalled()) {
-                        Toast.makeText(this, R.string.wechat_not_installed, Toast.LENGTH_SHORT).show();
-                    } else if (!api.isWXAppSupportAPI()) {
-                        Toast.makeText(this, R.string.wechat_not_support, Toast.LENGTH_SHORT).show();
-                    } else {
+//                    if (!api.isWXAppInstalled()) {
+//                        Toast.makeText(this, R.string.wechat_not_installed, Toast.LENGTH_SHORT).show();
+//                    } else if (!api.isWXAppSupportAPI()) {
+//                        Toast.makeText(this, R.string.wechat_not_support, Toast.LENGTH_SHORT).show();
+//                    } else {
                         PayReq request = new PayReq();
 
                         request.appId = data.getAppid();
@@ -150,7 +149,7 @@ public class RechargeConfirmActivity extends BaseActivity implements View.OnClic
                         request.sign = data.getSign();
 
                         api.sendReq(request);
-                    }
+//                    }
                 } else {//支付宝支付
                     // TODO: 2016/9/28 支付宝
                     Logger.e("支付宝支付");
