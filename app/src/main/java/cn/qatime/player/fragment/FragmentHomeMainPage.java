@@ -310,6 +310,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                                 listRecommendTeacher.add(null);
                             }
                         }
+                        horizontalLayout();
                         teacherAdapter.notifyDataSetChanged();
                     }
 
@@ -413,7 +414,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                             listRecommendClass.add(null);
                         }
                         classAdapter.notifyDataSetChanged();
-                        horizontalLayout();
                     }
 
                     @Override

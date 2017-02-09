@@ -197,10 +197,16 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
                     dialogCancel();
                 } else {
                     //绑定
-                    SendAuth.Req req = new SendAuth.Req();
-                    req.scope = "snsapi_userinfo";
-                    req.state = "wechat_info";
-                    api.sendReq(req);
+                    if (!api.isWXAppInstalled()) {
+                        Toast.makeText(this, R.string.wechat_not_installed, Toast.LENGTH_SHORT).show();
+                    } else if (!api.isWXAppSupportAPI()) {
+                        Toast.makeText(this, R.string.wechat_not_support, Toast.LENGTH_SHORT).show();
+                    } else {
+                        SendAuth.Req req = new SendAuth.Req();
+                        req.scope = "snsapi_userinfo";
+                        req.state = "wechat_info";
+                        api.sendReq(req);
+                    }
                 }
                 break;
             case R.id.parent_phone_number://家长手机

@@ -424,7 +424,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
                 return;
             }
             Logger.e("获取到消息");
-            boolean needScrollToBottom = ListViewUtil.isLastMessageVisible(messageListView);
+//            boolean needScrollToBottom = ListViewUtil.isLastMessageVisible(messageListView);
             boolean needRefresh = false;
             for (IMMessage message : messages) {
                 //做一下去重
@@ -454,9 +454,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
             // incoming messages tip
             IMMessage lastMsg = messages.get(messages.size() - 1);
             if (isMyMessage(lastMsg)) {
-                if (needScrollToBottom) {
                     ListViewUtil.scrollToBottom(messageListView);
-                }
             }
         }
     };

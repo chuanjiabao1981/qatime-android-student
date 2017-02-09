@@ -163,22 +163,29 @@ public class OrderPayActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (payType.equals("weixin")) {
-                    PayReq request = new PayReq();
+                    if (!api.isWXAppInstalled()) {
+                        Toast.makeText(OrderPayActivity.this, R.string.wechat_not_installed, Toast.LENGTH_SHORT).show();
+                    } else if (!api.isWXAppSupportAPI()) {
+                        Toast.makeText(OrderPayActivity.this, R.string.wechat_not_support, Toast.LENGTH_SHORT).show();
+                    } else {
+                        PayReq request = new PayReq();
+                        request.appId = weixinData.getAppid();
 
-                    request.appId = weixinData.getAppid();
 
-                    request.partnerId = weixinData.getPartnerid();
+                        request.partnerId = weixinData.getPartnerid();
 
-                    request.prepayId = weixinData.getPrepayid();
+                        request.prepayId = weixinData.getPrepayid();
 
-                    request.packageValue = weixinData.getPackage();
+                        request.packageValue = weixinData.getPackage();
 
-                    request.nonceStr = weixinData.getNoncestr();
+                        request.nonceStr = weixinData.getNoncestr();
 
-                    request.timeStamp = weixinData.getTimestamp();
+                        request.timeStamp = weixinData.getTimestamp();
 
-                    request.sign = weixinData.getSign();
-                    api.sendReq(request);
+                        request.sign = weixinData.getSign();
+                        api.sendReq(request);
+                    }
+
                 } else if (payType.equals("alipay")) {
                     Runnable payRunnable = new Runnable() {
                         @Override
@@ -228,7 +235,7 @@ public class OrderPayActivity extends BaseActivity {
                     Toast.makeText(OrderPayActivity.this, R.string.pay_password_not_set, Toast.LENGTH_SHORT).show();
                 } else if (errorCode == 2008) {
                     dialogServerError(getString(R.string.pay_password_not_enough_24));//未满24小时
-                }else if (errorCode == 2009) {
+                } else if (errorCode == 2009) {
                     dialogServerError(getString(R.string.pay_password_too_many_mistake));//错误次数太多
                 } else if (errorCode == 0) {
                     Toast.makeText(OrderPayActivity.this, R.string.server_error, Toast.LENGTH_SHORT).show();
@@ -256,9 +263,9 @@ public class OrderPayActivity extends BaseActivity {
                     protected void onError(JSONObject response) {
 //                        2007 tocken error;
                         try {
-                            if(response.getJSONObject("error").getInt("code")==2007){
+                            if (response.getJSONObject("error").getInt("code") == 2007) {
                                 Toast.makeText(OrderPayActivity.this, R.string.token_error, Toast.LENGTH_SHORT).show();
-                            }else{
+                            } else {
                                 Toast.makeText(OrderPayActivity.this, R.string.server_error, Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
