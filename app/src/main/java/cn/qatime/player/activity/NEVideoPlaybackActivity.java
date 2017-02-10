@@ -18,7 +18,6 @@ import cn.qatime.player.utils.PlayBackVideoInterface;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.view.NEVideoView;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -85,8 +84,6 @@ public class NEVideoPlaybackActivity extends BaseActivity implements PlayBackVid
     }
 
     private void initView() {
-        int screenW = ScreenUtils.getScreenWidth(NEVideoPlaybackActivity.this);
-
         video = (NEVideoView) findViewById(R.id.video);
         video.setmBufferStrategy(1);
         control = (RelativeLayout) findViewById(R.id.control);
@@ -96,51 +93,10 @@ public class NEVideoPlaybackActivity extends BaseActivity implements PlayBackVid
         playBackFloatFragment = new PlayBackFloatFragment(playBackVideoPresenter);
         getSupportFragmentManager().beginTransaction().replace(R.id.control, playBackFloatFragment).commit();
 
-//        ViewGroup.LayoutParams mainVideoParam = videolayout.getLayoutParams();
-//        mainVideoParam.width = -1;
-//        mainVideoParam.height = screenW * 9 / 16;
-//        videolayout.setLayoutParams(mainVideoParam);
         playBackFloatFragment.setMediaPlayer(video);
 
     }
 
-
-//
-//    @Override
-//    public void onConfigurationChanged(Configuration newConfig) {
-//        super.onConfigurationChanged(newConfig);
-//        if (screenSwitchUtils.isPortrait()) {//竖屏
-//            playBackFloatFragment.setPortrait(true);
-//            ViewGroup.LayoutParams params = videolayout.getLayoutParams();
-//            params.width = -1;
-//            params.height = ScreenUtils.getScreenWidth(NEVideoPlaybackActivity.this) * 9 / 16;
-//            videolayout.setLayoutParams(params);
-//        } else {//横屏
-//            playBackFloatFragment.setPortrait(false);
-//            ViewGroup.LayoutParams params = videolayout.getLayoutParams();
-//            params.width = -1;
-//            params.height = -1;
-//            videolayout.setLayoutParams(params);
-//        }
-//    }
-
-//    @Override
-//    public void onBackPressed() {
-//        if (!screenSwitchUtils.isPortrait()) {
-//            Logger.e("orta 返回竖屏");
-//            screenSwitchUtils.toggleScreen();
-//            return;
-//        }
-//        super.onBackPressed();
-//    }
-
-    //    @Override
-//    public void fullScreen() {
-//        if (screenSwitchUtils != null) {
-//            screenSwitchUtils.toggleScreen();
-//        }
-//    }
-//
     @Override
     public void exit() {
         onBackPressed();

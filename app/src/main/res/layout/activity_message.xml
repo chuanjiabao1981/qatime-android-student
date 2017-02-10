@@ -7,34 +7,36 @@
 
     <include layout="@layout/layout_backbar" />
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/tip"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="#fff"
-        android:layout_weight="1">
+        android:layout_height="wrap_content"
+        android:background="#ff723f"
+        android:gravity="center"
+        android:padding="5dp"
+        android:textColor="#fff"
+        android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/tip"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#ff723f"
-            android:gravity="center"
-            android:padding="5dp"
-            android:textColor="#fff"
-            android:visibility="gone" />
+    <!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="0dp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:background="#fff">-->
 
-        <cn.qatime.player.view.listview.MessageListView
-            android:id="@+id/list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:cacheColorHint="#00000000"
-            android:divider="#00000000"
-            android:dividerHeight="0dp"
-            android:listSelector="#00000000"
-            android:paddingBottom="5dp"
-            android:scrollbars="none"
-            android:transcriptMode="normal" />
-    </RelativeLayout>
+
+    <!--<cn.qatime.player.view.listview.MessageListView-->
+    <!--android:id="@+id/list"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:cacheColorHint="#00000000"-->
+    <!--android:divider="#00000000"-->
+    <!--android:dividerHeight="0dp"-->
+    <!--android:listSelector="#00000000"-->
+    <!--android:paddingBottom="5dp"-->
+    <!--android:scrollbars="none"-->
+    <!--android:transcriptMode="normal" />-->
+    <!--</RelativeLayout>-->
+    <include layout="@layout/message_list_view_container" />
 
     <include layout="@layout/message_input_layout" />
 </LinearLayout>
