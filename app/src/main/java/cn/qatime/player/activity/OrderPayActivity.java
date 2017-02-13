@@ -34,6 +34,7 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.PayResult;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.Constant;
@@ -205,7 +206,11 @@ public class OrderPayActivity extends BaseActivity {
                     payThread.start();
                 } else if (payType.equals("account")) {
                     Logger.e("钱包支付");
-                    showPSWPop();
+                    if(BaseApplication.getCashAccount().getData().isHas_password()){
+                        showPSWPop();
+                    }else{
+                        Toast.makeText(OrderPayActivity.this, R.string.pay_password_not_set, Toast.LENGTH_SHORT).show();
+                    }
 //                    Intent intent = new Intent(OrderPayActivity.this,OrderPayResultActivity.class);
 //                    intent.putExtra("state",PayResultState.SUCCESS);
 //                    startActivity(intent);

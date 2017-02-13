@@ -288,6 +288,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
+                    android:imeOptions="actionDone"
+                    android:inputType="textMultiLine"
                     android:gravity="top"
                     android:hint="@string/hint_profiles"
                     android:textColor="#666"
