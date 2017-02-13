@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.netease.neliveplayer.util.NimUIKit;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -17,7 +16,9 @@ import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.attachment.AudioAttachment;
-import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
+import com.netease.nimlib.sdk.msg.attachment.FileAttachment;
+import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum;
+import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.AttachmentProgress;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
@@ -33,8 +34,6 @@ import cn.qatime.player.adapter.BaseFetchLoadAdapter;
 import cn.qatime.player.adapter.MsgAdapter;
 import cn.qatime.player.audio.MessageAudioControl;
 import cn.qatime.player.config.UserPreferences;
-import cn.qatime.player.im.observer.UserInfoObservable;
-import cn.qatime.player.view.listview.ListViewUtil;
 import cn.qatime.player.view.loadmore.MsgListFetchLoadMoreView;
 
 /**
@@ -50,6 +49,7 @@ public class MessageListPanel {
     private List<IMMessage> items;
     private MsgAdapter adapter;
     private IMMessage anchor;
+    private Handler uiHandler;
 
     public MessageListPanel(Container container, View rootView) {
         this.container = container;
@@ -59,7 +59,7 @@ public class MessageListPanel {
 
     private void init() {
         initListView();
-//        this.uiHandler = new Handler();
+        this.uiHandler = new Handler();
 
         registerObservers(true);
     }
@@ -68,20 +68,12 @@ public class MessageListPanel {
         MsgServiceObserve service = NIMClient.getService(MsgServiceObserve.class);
         service.observeMsgStatus(messageStatusObserver, register);
         service.observeAttachmentProgress(attachmentProgressObserver, register);
-//        service.observeRevokeMessage(revokeMessageObserver, register);
-//        if (register) {
-//            registerUserInfoObserver();
-//        } else {
-//            unregisterUserInfoObserver();
-//        }
-
-//        MessageListPanelHelper.getInstance().registerObserver(incomingLocalMessageObserver, register);
     }
 
     /**
      * 消息状态变化观察者
      */
-    Observer<IMMessage> messageStatusObserver = new Observer<IMMessage>() {
+    private Observer<IMMessage> messageStatusObserver = new Observer<IMMessage>() {
         @Override
         public void onEvent(IMMessage message) {
             if (isMyMessage(message)) {
@@ -92,7 +84,7 @@ public class MessageListPanel {
     /**
      * 消息附件上传/下载进度观察者
      */
-    Observer<AttachmentProgress> attachmentProgressObserver = new Observer<AttachmentProgress>() {
+    private Observer<AttachmentProgress> attachmentProgressObserver = new Observer<AttachmentProgress>() {
         @Override
         public void onEvent(AttachmentProgress progress) {
             onAttachmentProgressChange(progress);
@@ -121,7 +113,7 @@ public class MessageListPanel {
         adapter = new MsgAdapter(messageListView, items);
         adapter.setFetchMoreView(new MsgListFetchLoadMoreView());
         adapter.setLoadMoreView(new MsgListFetchLoadMoreView());
-//        adapter.setEventListener(new MsgItemEventListener());
+        adapter.setEventListener(new MsgItemEventListener());
         initFetchLoadListener();
         messageListView.setAdapter(adapter);
 
@@ -188,7 +180,7 @@ public class MessageListPanel {
     }
 
     public void setOwner(String owner) {
-
+        adapter.setOwner(owner);
     }
 
     public void onResume() {
@@ -201,7 +193,23 @@ public class MessageListPanel {
     }
 
     public boolean onBackPressed() {
+        uiHandler.removeCallbacks(null);
+        MessageAudioControl.getInstance(container.activity).stopAudio(); // 界面返回，停止语音播放
+//        if (voiceTrans != null && voiceTrans.isShow()) {
+//            voiceTrans.hide();
+//            return true;
+//        }
         return false;
+    }
+
+    public void onMsgSend(IMMessage message) {
+        List<IMMessage> addedListItems = new ArrayList<>(1);
+        addedListItems.add(message);
+        adapter.updateShowTimeItem(addedListItems, false, true);
+
+        adapter.appendData(message);
+
+        doScrollToBottom();
     }
 
     private class MessageLoader implements BaseFetchLoadAdapter.RequestFetchMoreListener {
@@ -280,12 +288,16 @@ public class MessageListPanel {
             for (IMMessage message : messages) {
                 result.add(message);
             }
-            if (direction == QueryDirectionEnum.QUERY_NEW) {
-                items.addAll(result);
+            // 在更新前，先确定一些标记
+            List<IMMessage> total = new ArrayList<>();
+            total.addAll(items);
+            boolean isBottomLoad = direction == QueryDirectionEnum.QUERY_NEW;
+            if (isBottomLoad) {
+                total.addAll(messages);
             } else {
-                items.addAll(0, result);
+                total.addAll(0, messages);
             }
-            adapter.updateShowTimeItem(items, true, firstLoad); // 更新要显示时间的消息
+            adapter.updateShowTimeItem(total, true, firstLoad); // 更新要显示时间的消息
 
             // 顶部加载
             int count = messages.size();
@@ -392,12 +404,73 @@ public class MessageListPanel {
     }
 
     public void scrollToBottom() {
-//        uiHandler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                doScrollToBottom();
-//            }
-//        }, 200);
+        uiHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doScrollToBottom();
+            }
+        }, 200);
     }
 
+    private class MsgItemEventListener implements MsgAdapter.ViewHolderEventListener {
+        @Override
+        public boolean onViewHolderLongClick(View clickView, View viewHolderView, IMMessage item) {
+            if (container.proxy.isLongClickEnabled()) {
+                showLongClickAction(item);
+            }
+            return false;
+        }
+
+        @Override
+        public void onFailedBtnClick(IMMessage message) {
+            if (message.getDirect() == MsgDirectionEnum.Out) {
+                // 发出的消息，如果是发送失败，直接重发，否则有可能是漫游到的多媒体消息，但文件下载
+                if (message.getStatus() == MsgStatusEnum.fail) {
+                    resendMessage(message); // 重发
+                } else {
+                    if (message.getAttachment() instanceof FileAttachment) {
+                        FileAttachment attachment = (FileAttachment) message.getAttachment();
+                        if (TextUtils.isEmpty(attachment.getPath())
+                                && TextUtils.isEmpty(attachment.getThumbPath())) {
+                            showReDownloadConfirmDlg(message);
+                        }
+                    } else {
+                        resendMessage(message);
+                    }
+                }
+            } else {
+                showReDownloadConfirmDlg(message);
+            }
+        }
+    }
+
+    private void showLongClickAction(IMMessage message) {
+
+    }
+
+    // 重新下载(对话框提示)
+    private void showReDownloadConfirmDlg(final IMMessage message) {
+        if (message.getAttachment() != null && message.getAttachment() instanceof FileAttachment)
+            NIMClient.getService(MsgService.class).downloadAttachment(message, true);
+    }
+
+    // 重发消息到服务器
+    private void resendMessage(IMMessage message) {
+        // 重置状态为unsent
+        int index = getItemIndex(message.getUuid());
+        if (index >= 0 && index < items.size()) {
+            IMMessage item = items.get(index);
+            item.setStatus(MsgStatusEnum.sending);
+            deleteItem(item, true);
+            onMsgSend(item);
+        }
+
+        NIMClient.getService(MsgService.class).sendMessage(message, true);
+    }
+
+    // 删除消息
+    private void deleteItem(IMMessage messageItem, boolean isRelocateTime) {
+        NIMClient.getService(MsgService.class).deleteChattingHistory(messageItem);
+        adapter.deleteItem(messageItem, isRelocateTime);
+    }
 }

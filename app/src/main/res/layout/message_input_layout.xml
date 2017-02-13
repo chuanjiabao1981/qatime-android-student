@@ -12,16 +12,58 @@
         android:orientation="horizontal"
         android:padding="5dp">
 
-        <EditText
-            android:id="@+id/content"
+        <FrameLayout
+            android:id="@+id/switchLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginBottom="2dp"
+            android:layout_marginRight="6dp">
+
+            <ImageView
+                android:id="@+id/buttonAudioMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/message_button_bottom_audio_selector"
+                android:scaleType="center" />
+
+            <ImageView
+                android:id="@+id/buttonTextMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/message_button_bottom_text_selector"
+                android:scaleType="center"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <FrameLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:autoLink="web|email|phone"
-            android:background="@drawable/shape_input_radius"
-            android:maxLines="3"
-            android:minHeight="40dp"
-            android:textSize="14sp" />
+            android:layout_weight="1">
+
+            <EditText
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="web|email|phone"
+                android:background="@drawable/shape_input_radius"
+                android:maxLines="3"
+                android:minHeight="40dp"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/audioRecord"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="web|email|phone"
+                android:background="@drawable/shape_input_radius"
+                android:minHeight="40dp"
+                android:text="按住 说话"
+                android:textSize="14sp"
+                android:visibility="gone" />
+        </FrameLayout>
+
 
         <ImageView
             android:id="@+id/emoji"
@@ -53,7 +95,6 @@
                 android:text="发送"
                 android:textColor="#fff"
                 android:visibility="gone" />
-
 
         </RelativeLayout>
 

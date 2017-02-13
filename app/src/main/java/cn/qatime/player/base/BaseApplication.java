@@ -43,6 +43,7 @@ import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.im.LoginSyncDataStatusObserver;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
+import cn.qatime.player.utils.StorageUtil;
 import custom.Configure;
 import libraryextra.bean.CityBean;
 import libraryextra.bean.Profile;
@@ -64,14 +65,14 @@ public class BaseApplication extends Application {
     /**
      * 是否进行聊天消息通知栏提醒
      */
-    public static   boolean chatMessageNotifyStatus;
+    public static boolean chatMessageNotifyStatus;
 
     public static boolean isChatMessageNotifyStatus() {
         return chatMessageNotifyStatus;
     }
 
     public static void setChatMessageNotifyStatus(boolean chatMessageNotifyStatus) {
-      BaseApplication.chatMessageNotifyStatus = chatMessageNotifyStatus;
+        BaseApplication.chatMessageNotifyStatus = chatMessageNotifyStatus;
     }
 
     public static RequestQueue getRequestQueue() {
@@ -116,6 +117,8 @@ public class BaseApplication extends Application {
         MobclickAgent.setDebugMode(Configure.isDebug);
         initUmengPush();
         initYunxin();
+
+        StorageUtil.init(context, null);
     }
 
     private void initUmengPush() {

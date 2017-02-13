@@ -24,6 +24,7 @@ public class MsgAdapter extends BaseMultiItemFetchLoadAdapter<IMMessage, BaseVie
     private ViewHolderEventListener eventListener;
     private Map<String, Float> progresses; // 有文件传输，需要显示进度条的消息ID map
     private String messageId;
+    private String owner;
 
     public MsgAdapter(RecyclerView recyclerView, List<IMMessage> data) {
         super(recyclerView, data);
@@ -210,6 +211,14 @@ public class MsgAdapter extends BaseMultiItemFetchLoadAdapter<IMMessage, BaseVie
             default:
                 return false;
         }
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public String getOwner() {
+        return owner;
     }
 
     public interface ViewHolderEventListener {

@@ -4,7 +4,7 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.view.View;
 import android.widget.ListView;
-
+@Deprecated
 public class ListViewUtil {
 
 	public static boolean isLastMessageVisible(ListView messageListView) {

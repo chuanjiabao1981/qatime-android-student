@@ -13,6 +13,7 @@ import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
 
 import cn.qatime.player.R;
 import cn.qatime.player.adapter.BaseMultiItemFetchLoadAdapter;
+import libraryextra.utils.ScreenUtils;
 
 public abstract class MsgViewHolderThumbBase extends MsgViewHolderBase {
 
@@ -77,13 +78,6 @@ public abstract class MsgViewHolderThumbBase extends MsgViewHolderBase {
     private void loadThumbnailImage(String thumbPath) {
         setImageSize();
         Glide.with(context).load(thumbPath).crossFade().placeholder(R.mipmap.message_error_image).centerCrop().into(thumbnail);
-//        if (path != null) {
-//            //thumbnail.loadAsPath(thumbPath, getImageMaxEdge(), getImageMaxEdge(), maskBg());
-//            thumbnail.loadAsPath(isOriginal, path, message.getUuid(), getImageMaxEdge(), getImageMaxEdge(), maskBg());
-//        }
-//        else {
-//            thumbnail.loadAsResource(R.drawable.nim_image_default, maskBg());
-//        }
     }
 
     private void setImageSize() {
@@ -103,13 +97,10 @@ public abstract class MsgViewHolderThumbBase extends MsgViewHolderBase {
 //
 //        if (bounds != null) {
 //            ImageUtil.ImageSize imageSize = ImageUtil.getThumbnailDisplaySize(bounds[0], bounds[1], getImageMaxEdge(), getImageMinEdge());
-//            setLayoutParams(imageSize.width, imageSize.height, thumbnail);
+            setLayoutParams(ScreenUtils.getScreenWidth(context) / 3, ScreenUtils.getScreenWidth(context) / 3, thumbnail);
 //        }
     }
 
-//    private int maskBg() {
-//        return R.drawable.nim_message_item_round_bg;
-//    }
 //
 //    public static int getImageMaxEdge() {
 //        return (int) (165.0 / 320.0 * ScreenUtil.screenWidth);

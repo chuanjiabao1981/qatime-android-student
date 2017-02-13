@@ -9,4 +9,6 @@ package cn.qatime.player.bean;
 public interface ModuleProxy {
     // 应当收起输入区
     void shouldCollapseInputPanel();
+
+    boolean isLongClickEnabled();
 }

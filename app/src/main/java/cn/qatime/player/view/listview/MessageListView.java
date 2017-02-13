@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 
+@Deprecated
 public class MessageListView extends AutoRefreshListView {
 
 	private IViewReclaimer viewReclaimer;

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.netease.neliveplayer.util.NimUIKit;
-import com.netease.neliveplayer.util.storage.StorageUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.attachment.AudioAttachment;
@@ -18,6 +17,7 @@ import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.adapter.BaseMultiItemFetchLoadAdapter;
+import cn.qatime.player.utils.StorageUtil;
 
 public class MessageAudioControl extends BaseAudioControl<IMMessage> {
     private static MessageAudioControl mMessageAudioControl = null;
@@ -36,7 +36,7 @@ public class MessageAudioControl extends BaseAudioControl<IMMessage> {
         if (mMessageAudioControl == null) {
             synchronized (MessageAudioControl.class) {
                 if (mMessageAudioControl == null) {
-                    mMessageAudioControl = new MessageAudioControl(NimUIKit.getContext());
+                    mMessageAudioControl = new MessageAudioControl(context);
                 }
             }
         }

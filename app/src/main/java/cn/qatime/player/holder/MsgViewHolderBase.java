@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.attachment.FileAttachment;
@@ -18,12 +19,15 @@ import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 
 import cn.qatime.player.R;
 import cn.qatime.player.adapter.BaseMultiItemFetchLoadAdapter;
 import cn.qatime.player.adapter.MsgAdapter;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.im.cache.TeamDataCache;
 import libraryextra.utils.DateUtils;
+import libraryextra.utils.StringUtils;
 
 /**
  * 会话窗口消息列表项的ViewHolder基类，负责每个消息项的外层框架，包括头像，昵称，发送/接收进度条，重发按钮等。<br>
@@ -169,7 +173,7 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
 //        readReceiptTextView = findViewById(R.id.textViewAlreadyRead);
 
         // 这里只要inflate出来后加入一次即可
-        if(contentContainer.getChildCount() == 0) {
+        if (contentContainer.getChildCount() == 0) {
             View.inflate(view.getContext(), getContentResId(), contentContainer);
         }
         inflateContentView();
@@ -242,7 +246,9 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
             show.setVisibility(View.GONE);
         } else {
             show.setVisibility(View.VISIBLE);
-//            show.loadBuddyAvatar(message.getFromAccount());
+            UserInfoProvider.UserInfo userinfo = BaseApplication.getUserInfoProvide().getUserInfo(message.getFromAccount());
+            if (userinfo != null)
+                Glide.with(context).load(userinfo.getAvatar()).placeholder(R.mipmap.head_default).crossFade().dontAnimate().into(show);
         }
 
     }
@@ -314,11 +320,22 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
 //        }
     }
 
-    public void setNameTextView() {
+    private void setNameTextView() {
         if (message.getSessionType() == SessionTypeEnum.Team && isReceivedMessage() && !isMiddleItem()) {
             nameTextView.setVisibility(View.VISIBLE);
-            nameTextView.setText(TeamDataCache.getInstance().getTeamMemberDisplayName(message.getSessionId(), message
-                    .getFromAccount()));
+            String name = TeamDataCache.getInstance().getTeamMemberDisplayName(message.getSessionId(), message.getFromAccount());
+            String owner = getMsgAdapter().getOwner();
+            if (!StringUtils.isNullOrBlanK(owner)) {
+                if (owner.equals(name)) {
+                    nameTextView.setText(name + "(" + context.getString(R.string.teacher_translate) + ")");
+                    nameTextView.setTextColor(0xffbe0b0b);
+                } else {
+                    nameTextView.setText(name);
+                    nameTextView.setTextColor(0xff333333);
+                }
+            } else {
+                nameTextView.setText(name);
+            }
         } else {
             nameTextView.setVisibility(View.GONE);
         }
@@ -332,7 +349,7 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
         LinearLayout bodyContainer = (LinearLayout) view.findViewById(R.id.message_item_body);
 
         // 调整container的位置
-        int index = isReceivedMessage() ? 0 : 3;
+        int index = isReceivedMessage() ? 0 : 2;
         if (bodyContainer.getChildAt(index) != contentContainer) {
             bodyContainer.removeView(contentContainer);
             bodyContainer.addView(contentContainer, index);
