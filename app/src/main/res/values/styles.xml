@@ -51,7 +51,7 @@
         <item name="android:background">@drawable/shape_top_tab</item>
     </style>
 
-    <style name="tab_item_height"> //二级导航高度
+    <style name="tab_item_height">//二级导航高度
         <item name="android:layout_height">36dp</item>
         <item name="android:gravity">center</item>
     </style>
@@ -79,17 +79,19 @@
         <item name="android:textColorHint">#ff999999</item>
     </style>
 
-    <style name="button_style_with_edit"> //输入框旁边的小按钮
+    <style name="button_style_with_edit">//输入框旁边的小按钮
         <item name="android:layout_height">45dp</item>
         <item name="android:clickable">true</item>
-        <item name="android:background">@drawable/button_bg_selector_red_with_stork_no_corners</item>
+        <item name="android:background">@drawable/button_bg_selector_red_with_stork_no_corners
+        </item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">14sp</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:textColor">@drawable/text_selector_white_red</item>
     </style>
-    <style name="button_style"> //小按钮
+
+    <style name="button_style">//小按钮
         <item name="android:layout_height">40dp</item>
         <item name="android:clickable">true</item>
         <item name="android:background">@drawable/button_bg_selector_red_with_stork</item>
@@ -100,7 +102,7 @@
         <item name="android:textColor">@drawable/text_selector_white_red</item>
     </style>
 
-    <style name="button_full_width_style"> //跨整个屏幕的按钮
+    <style name="button_full_width_style">//跨整个屏幕的按钮
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">40dp</item>
         <item name="android:layout_marginBottom">10dp</item>
@@ -112,7 +114,7 @@
         <item name="android:textColor">@drawable/text_selector_white_red</item>
     </style>
 
-    <style name="setting_text_style"> //设置文字
+    <style name="setting_text_style">//设置文字
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">#333</item>
@@ -146,11 +148,11 @@
         <item name="android:textSize">14.0sp</item>
     </style>
 
-    <style name="tab_menu_height">  //菜单栏高度
+    <style name="tab_menu_height">//菜单栏高度
         <item name="android:layout_height">48dp</item>
     </style>
 
-    <style name="tab_menu_icon_size">   //菜单栏图片尺寸
+    <style name="tab_menu_icon_size">//菜单栏图片尺寸
         <item name="android:layout_width">24dp</item>
         <item name="android:layout_height">24dp</item>
         <item name="android:scaleType">fitCenter</item>
@@ -171,26 +173,15 @@
         <item name="android:layout_marginRight">10dp</item>
     </style>
 
-    <!--<style name="dialog_button_style">-->
-        <!--<item name="android:layout_marginLeft">12dp</item>-->
-        <!--<item name="android:layout_marginTop">12dp</item>-->
-        <!--<item name="android:layout_marginRight">12dp</item>-->
-        <!--<item name="android:layout_marginBottom">12dp</item>-->
-        <!--<item name="android:textColor">#fff</item>-->
-        <!--<item name="android:textSize">12sp</item>-->
-        <!--<item name="android:background">@drawable/dialog_button_background_selector</item>-->
-        <!--<item name="android:layout_height">36dp</item>-->
-    <!--</style>-->
+    <style name="scroll_view" parent="@android:style/Widget.ScrollView">
+        <item name="android:scrollbarThumbVertical">@drawable/scrollbar_handle_holo_dark</item>
+        <item name="android:scrollbarThumbHorizontal">@drawable/scrollbar_handle_holo_dark</item>
+    </style>
 
-
-    <!--<style name="MediaController_SeekBar" parent="android:Widget.SeekBar">-->
-    <!--<item name="android:progressDrawable">@drawable/playback_controller_progressbar</item>-->
-    <!--<item name="android:indeterminateDrawable">@drawable/playback_controller_progressbar</item>-->
-    <!--<item name="android:minHeight">5dip</item>-->
-    <!--<item name="android:maxHeight">5dip</item>-->
-    <!--<item name="android:thumb">@drawable/nemediacontroller_progressbar_thumb</item>-->
-    <!--<item name="android:thumbOffset">8dip</item>-->
-    <!--<item name="android:paddingLeft">8dip</item>-->
-    <!--<item name="android:paddingRight">8dip</item>-->
-    <!--</style>-->
+    <style name="recycler_view" parent="scroll_view">
+        <item name="android:fadingEdge">none</item>
+        <item name="android:focusable">false</item>
+        <item name="android:overScrollMode">ifContentScrolls</item>
+        <item name="android:cacheColorHint">@android:color/transparent</item>
+    </style>
 </resources>

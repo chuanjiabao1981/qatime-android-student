@@ -3,12 +3,9 @@ package cn.qatime.player.activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +18,8 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.netease.neliveplayer.NELivePlayer;
 import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.team.model.Team;
@@ -36,7 +33,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,8 +45,6 @@ import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.bean.InputPanel;
 import cn.qatime.player.bean.VideoState;
 import cn.qatime.player.fragment.VideoFloatFragment;
-import cn.qatime.player.utils.Constant;
-import cn.qatime.player.utils.ImageUtil;
 import cn.qatime.player.utils.ScreenSwitchUtils;
 import libraryextra.bean.Announcements;
 import cn.qatime.player.fragment.FragmentPlayerAnnouncements;
@@ -64,7 +58,6 @@ import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VideoActivityInterface;
 import cn.qatime.player.view.NEVideoView;
 import cn.qatime.player.view.VideoLayout;
-import libraryextra.bean.ImageItem;
 import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.ScreenUtils;
@@ -346,17 +339,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         }
         inputPanel = new InputPanel(this, this, rootView, false, sessionId);
         inputPanel.setMute(isMute);
-        inputPanel.setOnInputShowListener(new InputPanel.OnInputShowListener() {
-            @Override
-            public void OnInputShow() {
-                if (isSubBig) {
-                    floatFragment.setSubOpen(true);
-                    isSubOpen = true;
-                    changeSubSmall();
-                    floatFragment.setSubBig(false);
-                }
-            }
-        });
 
         fragBaseFragments.add(new FragmentPlayerAnnouncements());
         fragBaseFragments.add(new FragmentPlayerMessage());
@@ -419,6 +401,20 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         });
         fragment2.setSessionId(sessionId);
         fragment2.requestTeamInfo();
+
+        inputPanel.setOnInputShowListener(new InputPanel.OnInputShowListener() {
+            @Override
+            public void OnInputShow() {
+                if (isSubBig) {
+                    floatFragment.setSubOpen(true);
+                    isSubOpen = true;
+                    changeSubSmall();
+                    floatFragment.setSubBig(false);
+                }
+                fragment2.scrollToBottom();
+            }
+        });
+
     }
 
     /**
@@ -427,7 +423,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
      * @param message       聊天內容
      * @param isSendToDanmu 是否将消息展示弹幕
      */
-    private void sendTextMessage(IMMessage message, boolean isSendToDanmu) {
+    private void sendMessages(IMMessage message, boolean isSendToDanmu) {
         if (StringUtils.isNullOrBlanK(sessionId)) {
             Toast.makeText(NEVideoPlayerActivity.this, getResourceString(R.string.team_not_exist), Toast.LENGTH_SHORT).show();
             return;
@@ -444,8 +440,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         if (isSendToDanmu) {
             danMuController.addDanmu(message, 0);
         }
-        fragment2.items.add(message);
-        fragment2.scrollToBottom();
+        fragment2.onMsgSend(message);
     }
 
     private void initData() {
@@ -598,49 +593,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Constant.RESPONSE_CAMERA) {//拍照返回的照片
-            if (data != null) {
-                String url = data.getStringExtra("url");
-                if (url != null && !StringUtils.isNullOrBlanK(url)) {
-                    File file = new File(url);
-                    if (file.exists()) {
-                        sendMessage(MessageBuilder.createImageMessage(sessionId, sessionType, file, file.getName()));
-                    }
-                }
-            }
-        } else if (resultCode == Constant.RESPONSE_PICTURE_SELECT) {//选择照片返回的照片
-            if (data != null) {
-                ImageItem image = (ImageItem) data.getSerializableExtra("data");
-                if (image != null && !StringUtils.isNullOrBlanK(image.imagePath)) {
-                    if (!inputPanel.isAllowSendMessage()) {
-                        return;
-                    }
-                    if (inputPanel.checkMute()) {
-                        return;
-                    }
-                    File file = new File(image.imagePath);
-                    if (file.exists()) {
-                        IMMessage message = MessageBuilder.createImageMessage(sessionId, sessionType, file, file.getName());
-                        if (limitMessage.size() >= 1) {
-                            if (message.getTime() - limitMessage.get(0).getTime() < 2000) {
-                                Toast.makeText(this, getResources().getString(R.string.please_talk_later), Toast.LENGTH_SHORT).show();
-                                return;
-                            } else {
-                                limitMessage.add(message);
-                                if (limitMessage.size() > 1) {
-                                    limitMessage.remove(0);
-                                }
-                            }
-                        } else {
-                            limitMessage.add(message);
-                        }
-                        NIMClient.getService(MsgService.class).sendMessage(message, true);
-                        fragment2.items.add(message);
-                        fragment2.scrollToBottom();
-                    }
-                }
-            }
-        }
+        inputPanel.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -648,7 +601,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         video1.pause();
         video2.pause();
         floatFragment.setPlaying(false);
-
+        inputPanel.onPause();
         super.onPause();
         MobclickAgent.onPause(this);
         NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.isChatMessageNotifyStatus() ? MsgService.MSG_CHATTING_ACCOUNT_NONE : MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
@@ -1036,7 +989,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     @Override
     public void sendMessage(IMMessage message) {
         Logger.e("message" + message);
-        sendTextMessage(message, !screenSwitchUtils.isPortrait() || isSubBig);
+        sendMessages(message, message.getMsgType() == MsgTypeEnum.text && !screenSwitchUtils.isPortrait() || isSubBig);
     }
 
     @Override
@@ -1074,6 +1027,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
      */
     @Override
     public void ChatMessage(IMMessage message) {
-        sendTextMessage(message, isSubBig);
+        sendMessages(message, message.getMsgType() == MsgTypeEnum.text && isSubBig);
     }
 }

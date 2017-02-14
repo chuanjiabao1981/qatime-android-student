@@ -51,6 +51,7 @@ import libraryextra.utils.StringUtils;
  * @Time 2016/9/22 11:18
  * @Describe
  */
+@Deprecated
 public class MessageAdapter extends BaseAdapter {
     private static ThreadLocal<String> teamId = new ThreadLocal<>();
     private final List<IMMessage> items;
