@@ -48,7 +48,6 @@ public class MessageListPanel {
     private RecyclerView messageListView;
     private List<IMMessage> items;
     private MsgAdapter adapter;
-    private IMMessage anchor;
     private Handler uiHandler;
 
     public MessageListPanel(Container container, View rootView) {
@@ -237,7 +236,7 @@ public class MessageListPanel {
 
         private IMMessage anchor() {
             if (items.size() == 0) {
-                return anchor == null ? MessageBuilder.createEmptyMessage(container.account, SessionTypeEnum.Team, 0) : anchor;
+                return MessageBuilder.createEmptyMessage(container.account, SessionTypeEnum.Team, 0);
             } else {
                 int index = (direction == QueryDirectionEnum.QUERY_NEW ? items.size() - 1 : 0);
                 return items.get(index);
@@ -284,10 +283,6 @@ public class MessageListPanel {
                 }
             }
 
-            List<IMMessage> result = new ArrayList<>();
-            for (IMMessage message : messages) {
-                result.add(message);
-            }
             // 在更新前，先确定一些标记
             List<IMMessage> total = new ArrayList<>();
             total.addAll(items);
@@ -399,7 +394,7 @@ public class MessageListPanel {
         registerObservers(false);
     }
 
-    private boolean isMyMessage(IMMessage message) {
+    public boolean isMyMessage(IMMessage message) {
         return message.getSessionType() == SessionTypeEnum.Team && message.getSessionId() != null && message.getSessionId().equals(container.account);
     }
 

@@ -316,9 +316,11 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
         switch (v.getId()) {
             case R.id.buttonAudioMessage:
                 switchToAudioLayout();
+                onInputShowListener.OnInputShow();
                 break;
             case R.id.buttonTextMessage:
                 switchToTextLayout();// 显示文本发送的布局
+                onInputShowListener.OnInputShow();
                 break;
             case R.id.send://发送按钮
                 if (!isAllowSendMessage()) {
@@ -613,7 +615,7 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
 
         private final int position;
 
-        public ItemClickListener(int position) {
+        ItemClickListener(int position) {
             this.position = position;
         }
 
@@ -671,7 +673,7 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
     }
 
 
-    public boolean isAllowSendMessage() {
+    private boolean isAllowSendMessage() {
         if (team == null || !team.isMyTeam()) {
             Toast.makeText(context, R.string.team_send_message_not_allow, Toast.LENGTH_SHORT).show();
             return false;

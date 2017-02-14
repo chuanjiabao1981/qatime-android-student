@@ -46,18 +46,13 @@ import libraryextra.utils.StringUtils;
 public class MessageActivity extends BaseActivity implements InputPanel.InputPanelListener, ModuleProxy {
     private String sessionId;//聊天对象id
     private SessionTypeEnum sessionType;
-//    private MessageListView messageListView;
-
-    //    private List<IMMessage> items = new ArrayList<>();
     private Team team;
     private TextView tipText;
 
     private int courseId;
     private boolean isMute = false;//当前用户 是否被禁言
-    //    private MessageAdapter adapter;
     private View rootView;
     private InputPanel inputpanel;
-    //    private MessageLoader messageLoader;
     private MessageListPanel messageListPanel;
 
     @Override
@@ -99,20 +94,6 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         tipText = (TextView) findViewById(R.id.tip);
         Container container = new Container(this, sessionId, this);
         messageListPanel = new MessageListPanel(container, rootView);
-//        messageListView = (MessageListView) findViewById(R.id.list);
-//        messageListView.requestDisallowInterceptTouchEvent(true);
-//        messageListView.setMode(AutoRefreshListView.Mode.START);
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-//            messageListView.setOverScrollMode(View.OVER_SCROLL_NEVER);
-//        }
-//
-//        adapter = new MessageAdapter(this, items, this);
-//        adapter.setOwner(getIntent().getStringExtra("owner"));
-//        messageListView.setAdapter(adapter);
-//
-//        messageLoader = new MessageLoader(remote);
-//        messageListView.setOnRefreshListener(messageLoader);
 
         inputpanel = new InputPanel(this, this, rootView, true, sessionId);
         inputpanel.setMute(isMute);
@@ -122,12 +103,6 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
                 messageListPanel.scrollToBottom();
             }
         });
-//        messageListView.setListViewEventListener(new MessageListView.OnListViewEventListener() {
-//            @Override
-//            public void onListViewStartScroll() {
-//                shouldCollapseInputPanel();
-//            }
-//        });
     }
 
     /**
@@ -186,68 +161,9 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
             }
             messageListPanel.onIncomingMessage(messages);
 //
-//            Logger.e("获取到消息");
-//            boolean needScrollToBottom = ListViewUtil.isLastMessageVisible(messageListView);
-//            boolean needRefresh = false;
-//            for (IMMessage message : messages) {
-//                //做一下去重
-//                for (IMMessage item : items) {
-//                    if (item.isTheSame(message)) {
-//                        items.remove(item);
-//                        break;
-//                    }
-//                }
-//                if (isMyMessage(message) && (message.getMsgType() == MsgTypeEnum.text || message.getMsgType() == MsgTypeEnum.notification || message.getMsgType() == MsgTypeEnum.image)) {
-//                    items.add(message);
-//                    needRefresh = true;
-//                }
-//            }
-//
-//            if (needRefresh) {
-//                TeamMember teamMember = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
-//                if (teamMember != null) {
-//                    isMute = teamMember.isMute();
-//                }
-//                inputpanel.setMute(isMute);
-//                sortMessages(items);
-//                adapter.notifyDataSetChanged();
-//            }
-//
-//
-//            // incoming messages tip
-//            IMMessage lastMsg = messages.get(messages.size() - 1);
-//            if (isMyMessage(lastMsg)) {
-//                if (needScrollToBottom) {
-//                    ListViewUtil.scrollToBottom(messageListView);
-//                }
-//            }
         }
     };
 
-    /**
-     * **************************** 排序 ***********************************
-     */
-//    private void sortMessages(List<IMMessage> list) {
-//        if (list.size() == 0) {
-//            return;
-//        }
-//        Collections.sort(list, comp);
-//    }
-
-//    private static Comparator<IMMessage> comp = new Comparator<IMMessage>() {
-//
-//        @Override
-//        public int compare(IMMessage o1, IMMessage o2) {
-//            long time = o1.getTime() - o2.getTime();
-//            return time == 0 ? 0 : (time < 0 ? -1 : 1);
-//        }
-//    };
-
-//    public boolean isMyMessage(IMMessage message) {
-//        return message.getSessionType() == sessionType
-//                && message.getSessionId() != null
-//                && message.getSessionId().equals(sessionId);
-//    }
 
     /**
      * 请求群基本信息
@@ -388,16 +304,6 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
             }
         }
     }
-
-//    private int getItemIndex(String uuid) {
-//        for (int i = 0; i < items.size(); i++) {
-//            IMMessage message = items.get(i);
-//            if (TextUtils.equals(message.getUuid(), uuid)) {
-//                return i;
-//            }
-//        }
-//        return -1;
-//    }
 
     @Override
     protected void onDestroy() {
