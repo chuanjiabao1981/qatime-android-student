@@ -28,14 +28,25 @@
             android:text="@string/timer_default"
             android:textColor="@color/white" />
 
-        <TextView
-            android:id="@+id/timer_tip"
+        <ImageView
+            android:id="@+id/alert_image"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/timer_tip"
+            android:layout_below="@id/timer" />
+
+        <TextView
+            android:id="@id/timer_tip"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_gravity="center"
+            android:layout_centerHorizontal="true"
             android:layout_marginBottom="15dp"
             android:gravity="center_horizontal"
+            android:paddingBottom="3dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="3dp"
             android:text="@string/recording_cancel"
             android:textColor="@color/white" />
     </RelativeLayout>
