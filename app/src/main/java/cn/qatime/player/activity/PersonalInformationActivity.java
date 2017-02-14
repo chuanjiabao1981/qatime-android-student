@@ -24,9 +24,7 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
-import libraryextra.bean.SchoolBean;
 import libraryextra.transformation.GlideCircleTransform;
-import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -129,7 +127,7 @@ public class PersonalInformationActivity extends BaseActivity {
         if (!StringUtils.isNullOrBlanK(bean.getData().getGender())) {
             if (bean.getData().getGender().equals("male")) {
                 sex.setText(getResources().getString(R.string.male));
-            } else if (bean.getData().getGender().equals("male")) {
+            } else if (bean.getData().getGender().equals("female")) {
                 sex.setText(getResources().getString(R.string.female));
             }
         } else {

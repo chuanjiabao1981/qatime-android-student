@@ -35,7 +35,6 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.Constant;
-import cn.qatime.player.utils.ImageUtil;
 import cn.qatime.player.utils.UpLoadUtil;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.GradeBean;

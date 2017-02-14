@@ -160,7 +160,6 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
                 return;
             }
             messageListPanel.onIncomingMessage(messages);
-//
         }
     };
 

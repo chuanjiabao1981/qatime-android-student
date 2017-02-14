@@ -12,6 +12,8 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -113,7 +115,20 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        // TODO: 2016/10/8 余额支付验证
+        if (payType.equals("weixin")) {
+            IWXAPI api = WXAPIFactory.createWXAPI(this, null);
+            if (!api.isWXAppInstalled()) {
+                Toast.makeText(this, R.string.wechat_not_installed, Toast.LENGTH_SHORT).show();
+                return;
+            }
+        } else if (payType.equals("alipay")) {
+            return;
+        } else if (payType.equals("account")) {
+            if (priceNumber > Double.valueOf(BaseApplication.getCashAccount().getData().getBalance())) {
+                Toast.makeText(this, R.string.amount_not_enough, Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
         pay.setEnabled(false);
         Map<String, String> map = new HashMap<>();
         map.put("pay_type", payType);
@@ -154,7 +169,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                             //余额支付成功  status---failed交易失败  shipped交易成功
 //                            try {
                             Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
-                            intent.putExtra("price",  confirmBean.getData().getAmount());
+                            intent.putExtra("price", confirmBean.getData().getAmount());
                             intent.putExtra("id", confirmBean.getData().getId());
                             intent.putExtra("time", confirmBean.getData().getCreated_at());
                             intent.putExtra("data", name.getText().toString());
@@ -248,18 +263,10 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         accountLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (priceNumber < Double.valueOf(BaseApplication.getCashAccount().getData().getBalance())) {
-                    payType = "account";
-                    account.setImageResource(R.drawable.shape_select_circle_select);
-                    aliPay.setImageResource(R.drawable.shape_select_circle_normal);
-                    wechatPay.setImageResource(R.drawable.shape_select_circle_normal);
-                } else {
-                    Toast.makeText(OrderConfirmActivity.this, R.string.amount_not_enough, Toast.LENGTH_SHORT).show();
-                    payType = "weixin";
-                    wechatPay.setImageResource(R.drawable.shape_select_circle_select);
-                    aliPay.setImageResource(R.drawable.shape_select_circle_normal);
-                    account.setImageResource(R.drawable.shape_select_circle_normal);
-                }
+                payType = "account";
+                account.setImageResource(R.drawable.shape_select_circle_select);
+                aliPay.setImageResource(R.drawable.shape_select_circle_normal);
+                wechatPay.setImageResource(R.drawable.shape_select_circle_normal);
             }
         });
     }

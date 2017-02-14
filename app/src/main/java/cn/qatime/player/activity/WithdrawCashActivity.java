@@ -357,7 +357,11 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
                 toBank.setImageResource(R.drawable.shape_select_circle_normal);
                 break;
             case R.id.recharge_now:
-                showPSWPop();
+                if(BaseApplication.getCashAccount().getData().isHas_password()){
+                    showPSWPop();
+                }else{
+                    Toast.makeText(WithdrawCashActivity.this, R.string.pay_password_not_set, Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }
