@@ -603,8 +603,8 @@
     <string name="tasted">已试听</string>
     <string name="wechat_not_installed">操作失败，尚未安装微信</string>
     <string name="wechat_not_support">操作失败，不支持的微信客户端</string>
-    <string name="login_failed_wechat_not_installed" >登录失败，请使用手机号登录</string>
-    <string name="login_failed_wechat_not_support" >登录失败，不支持的微信客户端</string>
+    <string name="login_failed_wechat_not_installed">登录失败，请使用手机号登录</string>
+    <string name="login_failed_wechat_not_support">登录失败，不支持的微信客户端</string>
 
     <!-- 语音 -->
     <string name="record_audio">按住 说话</string>
@@ -613,9 +613,9 @@
     <string name="recording_error">录音失败，请重试</string>
     <string name="recording_init_failed">初始化录音失败</string>
     <string name="recording_cancel">手指上滑，取消发送</string>
+    <string name="recording_too_short">录音时间太短</string>
     <string name="timer_default">00:00</string>
     <string name="recording_cancel_tip">松开手指，取消发送</string>
-    <string name="recording_max_time">录音达到最大时间，是否发送？</string>
 
     <string name="load_failed">加载失败，请点我重试</string>
     <string name="load_end">没有更多数据</string>
