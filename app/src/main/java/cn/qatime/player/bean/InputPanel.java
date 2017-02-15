@@ -86,7 +86,7 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
     private boolean started = false;//录音是否开始
     private boolean cancelled = false;//录音是否可取消
     // 语音
-    protected AudioRecorder audioMessageHelper;
+    private AudioRecorder audioMessageHelper;
     private Chronometer time;
     private TextView timerTip;
     private RelativeLayout audioAnimLayout;
@@ -100,7 +100,6 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
         if (audioMessageHelper != null) {
             onEndAudioRecord(true);
         }
-        hd.removeCallbacks(getVoiceLevel);
     }
 
     public interface InputPanelListener {
@@ -452,14 +451,12 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
                         tooShortAudioRecord();
                     } else {
                         onEndAudioRecord(isCancelled(v, event));
-                        hd.removeCallbacks(getVoiceLevel);//取消获取声音
                     }
                     start = 0;
                     end = 0;
                 } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
                     touched = false;
                     cancelAudioRecord(isCancelled(v, event));
-                    hd.removeCallbacks(getVoiceLevel);//取消获取声音
                 }
 
                 return false;
@@ -524,15 +521,18 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
         audioRecord.setText(R.string.record_audio_end);
         audioRecord.setBackgroundResource(R.drawable.shape_input_radius);
 
-        hd.post(getVoiceLevel);
+        updateTimerTip(RecorderState.NORMAL);
         playAudioRecordAnim();
     }
+
 
     private Runnable getVoiceLevel = new Runnable() {
         @Override
         public void run() {
+
             updateTimerTip(RecorderState.NORMAL); // 初始化语音动画状态
-            hd.postDelayed(this, 100);
+//            Logger.e("getVoiceLevel");
+//                hd.postDelayed(this, 200);
         }
     };
 
@@ -544,6 +544,7 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
     private void onEndAudioRecord(boolean cancel) {
         context.getWindow().setFlags(0, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        hd.removeCallbacks(getVoiceLevel);
         audioMessageHelper.completeRecord(cancel);
         stopAudioRecordAnim();
         audioRecord.setText(R.string.record_audio);
@@ -595,18 +596,40 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
     private void updateTimerTip(RecorderState state) {
         if (state == RecorderState.CANCEL) {
             time.setVisibility(View.VISIBLE);
+            hd.removeCallbacks(getVoiceLevel);
             alertImage.setImageResource(R.mipmap.record_cancel);
             timerTip.setText(R.string.recording_cancel_tip);
+            timerTip.setBackgroundResource(R.drawable.shape_timer_tip);
         } else if (state == RecorderState.TOOSHORT) {
             time.setVisibility(View.INVISIBLE);
+            hd.removeCallbacks(getVoiceLevel);
             alertImage.setImageResource(R.mipmap.record_too_short);
             timerTip.setText(R.string.recording_too_short);
+            timerTip.setBackgroundResource(0);
         } else if (state == RecorderState.NORMAL) {
             time.setVisibility(View.VISIBLE);
+            hd.postDelayed(getVoiceLevel, 300);
             timerTip.setText(R.string.recording_cancel);
-            alertImage.setImageResource(R.mipmap.record1);
-            Logger.e("level" + audioMessageHelper.getCurrentRecordMaxAmplitude());
+            timerTip.setBackgroundResource(0);
+            alertImage.setImageResource(getVoice(audioMessageHelper.getCurrentRecordMaxAmplitude()));
         }
+    }
+
+    private int getVoice(int amplitude) {
+        if (amplitude > 20000) {
+            return R.mipmap.record7;
+        } else if (amplitude <= 15000 && amplitude > 10000) {
+            return R.mipmap.record6;
+        } else if (amplitude <= 10000 && amplitude > 8000) {
+            return R.mipmap.record5;
+        } else if (amplitude <= 8000 && amplitude > 5000) {
+            return R.mipmap.record4;
+        } else if (amplitude <= 5000 && amplitude > 3000) {
+            return R.mipmap.record3;
+        } else if (amplitude <= 3000 && amplitude > 1000) {
+            return R.mipmap.record2;
+        } else
+            return R.mipmap.record1;
     }
 
     @Override

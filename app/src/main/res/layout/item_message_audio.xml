@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right|center_vertical"
             android:paddingLeft="2dip"
-            android:textColor="@color/color_black_333333"
+            android:textColor="#666"
             android:textSize="12sp" />
     </FrameLayout>
 
