@@ -25,7 +25,15 @@ import libraryextra.utils.StringUtils;
 public class PictureSelectAdapter extends BaseAdapter {
     private final List<ImageItem> list;
     private final Context context;
-    private final boolean cameraGone;
+    private  boolean cameraGone;
+
+    public boolean isCameraGone() {
+        return cameraGone;
+    }
+
+    public void setCameraGone(boolean cameraGone) {
+        this.cameraGone = cameraGone;
+    }
 
     public PictureSelectAdapter(Context context, List<ImageItem> list, boolean cameraGone) {
         this.context = context;

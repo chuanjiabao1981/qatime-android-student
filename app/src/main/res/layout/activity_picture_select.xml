@@ -53,4 +53,11 @@
             android:text="0张"
             android:textColor="@android:color/white" />
     </RelativeLayout>
+    <ViewStub
+        android:id="@+id/floder_stub"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="48dp"
+        android:layout="@layout/list_dir"
+        android:layout_above="@id/id_bottom_ly"/>
 </RelativeLayout>
