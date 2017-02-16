@@ -108,10 +108,8 @@ public class FragmentClassDetailTeacherInfo extends BaseFragment {
                 }
             });
             String body =StringUtils.isNullOrBlanK(data.getData().getTeacher().getDesc()) ? getString(R.string.no_desc):data.getData().getTeacher().getDesc();
-            body = body.replace("\r\n", "<br />");
-            body="<android>"+body+"</android>";//添加一个自定义的标签
-            String css = "<style>android {color:#999999;}</style>";//默认color（android标签下以及所有未设置颜色的标签）
-            Logger.e(css+body);
+            body = body.replace("\r\n", "<br>");
+            String css = "<style>* {color:#999999;}</style>";//默认color（android标签下以及所有未设置颜色的标签）
             describe.loadDataWithBaseURL(null,css+body,"text/html","UTF-8",null);
         }
 

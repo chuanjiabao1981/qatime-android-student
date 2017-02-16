@@ -82,9 +82,8 @@ public class FragmentClassDetailClassInfo extends BaseFragment {
             grade.setText((bean.getData().getGrade() == null ? "" : bean.getData().getGrade()));
             totalclass.setText(getString(R.string.lesson_count, bean.getData().getPreset_lesson_count()));
             String body =StringUtils.isNullOrBlanK(bean.getData().getDescription()) ? getString(R.string.no_desc) : bean.getData().getDescription();
-            body = body.replace("\r\n", "<br />");
-            body="<android>"+body+"</android>";
-            String css = "<style>android {color:#999999;}</style>";//默认color
+            body = body.replace("\r\n", "<br>");
+            String css = "<style>* {color:#999999;}</style>";//默认color
             describe.loadDataWithBaseURL(null,css+body,"text/html","UTF-8",null);
         }
     }
