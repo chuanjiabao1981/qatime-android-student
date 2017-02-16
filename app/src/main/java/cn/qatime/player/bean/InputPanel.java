@@ -36,6 +36,7 @@ import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.team.model.Team;
+import com.orhanobut.logger.Logger;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -85,10 +86,14 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
     private boolean started = false;//录音是否开始
     private boolean cancelled = false;//录音是否可取消
     // 语音
-    protected AudioRecorder audioMessageHelper;
+    private AudioRecorder audioMessageHelper;
     private Chronometer time;
     private TextView timerTip;
     private RelativeLayout audioAnimLayout;
+
+    private long start = 0;
+    private long end = 0;
+    private ImageView alertImage;
 
     public void onPause() {
         // 停止录音
@@ -182,6 +187,7 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
         audioRecord = (Button) rootView.findViewById(R.id.audioRecord);
         audioAnimLayout = (RelativeLayout) rootView.findViewById(R.id.layoutPlayAudio);
         time = (Chronometer) rootView.findViewById(R.id.timer);
+        alertImage = (ImageView) rootView.findViewById(R.id.alert_image);
         timerTip = (TextView) rootView.findViewById(R.id.timer_tip);
 
         inputEmojiLayout = (LinearLayout) rootView.findViewById(R.id.input_emoji_layout);
@@ -427,17 +433,27 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
      * ****************************** 语音 ***********************************
      */
     private void initAudioRecordButton() {
+
         audioRecord.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     touched = true;
                     initAudioRecord();
                     onStartAudioRecord();
+                    start = System.currentTimeMillis();
                 } else if (event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP) {
                     touched = false;
-                    onEndAudioRecord(isCancelled(v, event));
+                    end = System.currentTimeMillis();
+                    if (end - start < 800) {
+                        tooShortAudioRecord();
+                    } else {
+                        onEndAudioRecord(isCancelled(v, event));
+                    }
+                    start = 0;
+                    end = 0;
                 } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
                     touched = false;
                     cancelAudioRecord(isCancelled(v, event));
@@ -446,6 +462,24 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
                 return false;
             }
         });
+    }
+
+    private void tooShortAudioRecord() {
+        context.getWindow().setFlags(0, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        updateTimerTip(RecorderState.TOOSHORT);
+        time.stop();
+        time.setBase(SystemClock.elapsedRealtime());
+        audioMessageHelper.completeRecord(true);
+        hd.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                audioAnimLayout.setVisibility(GONE);
+            }
+        }, 500);
+
+
+        audioRecord.setText(R.string.record_audio);
+        audioRecord.setBackgroundResource(R.drawable.shape_input_radius);
     }
 
     // 上滑取消录音判断
@@ -462,7 +496,7 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
      */
     private void initAudioRecord() {
         if (audioMessageHelper == null) {
-            audioMessageHelper = new AudioRecorder(context, RecordType.AAC, AudioRecorder.DEFAULT_MAX_AUDIO_RECORD_TIME_SECOND, this);
+            audioMessageHelper = new AudioRecorder(context, RecordType.AAC, 60, this);
         }
     }
 
@@ -487,9 +521,20 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
         audioRecord.setText(R.string.record_audio_end);
         audioRecord.setBackgroundResource(R.drawable.shape_input_radius);
 
-        updateTimerTip(false); // 初始化语音动画状态
+        updateTimerTip(RecorderState.NORMAL);
         playAudioRecordAnim();
     }
+
+
+    private Runnable getVoiceLevel = new Runnable() {
+        @Override
+        public void run() {
+
+            updateTimerTip(RecorderState.NORMAL); // 初始化语音动画状态
+//            Logger.e("getVoiceLevel");
+//                hd.postDelayed(this, 200);
+        }
+    };
 
     /**
      * 结束语音录制
@@ -499,10 +544,11 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
     private void onEndAudioRecord(boolean cancel) {
         context.getWindow().setFlags(0, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        hd.removeCallbacks(getVoiceLevel);
         audioMessageHelper.completeRecord(cancel);
+        stopAudioRecordAnim();
         audioRecord.setText(R.string.record_audio);
         audioRecord.setBackgroundResource(R.drawable.shape_input_radius);
-        stopAudioRecordAnim();
     }
 
     /**
@@ -521,7 +567,7 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
         }
 
         cancelled = cancel;
-        updateTimerTip(cancel);
+        updateTimerTip(cancel ? RecorderState.CANCEL : RecorderState.NORMAL);
     }
 
     /**
@@ -545,14 +591,45 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
     /**
      * 正在进行语音录制和取消语音录制，界面展示
      *
-     * @param cancel
+     * @param state
      */
-    private void updateTimerTip(boolean cancel) {
-        if (cancel) {
+    private void updateTimerTip(RecorderState state) {
+        if (state == RecorderState.CANCEL) {
+            time.setVisibility(View.VISIBLE);
+            hd.removeCallbacks(getVoiceLevel);
+            alertImage.setImageResource(R.mipmap.record_cancel);
             timerTip.setText(R.string.recording_cancel_tip);
-        } else {
+            timerTip.setBackgroundResource(R.drawable.shape_timer_tip);
+        } else if (state == RecorderState.TOOSHORT) {
+            time.setVisibility(View.INVISIBLE);
+            hd.removeCallbacks(getVoiceLevel);
+            alertImage.setImageResource(R.mipmap.record_too_short);
+            timerTip.setText(R.string.recording_too_short);
+            timerTip.setBackgroundResource(0);
+        } else if (state == RecorderState.NORMAL) {
+            time.setVisibility(View.VISIBLE);
+            hd.postDelayed(getVoiceLevel, 300);
             timerTip.setText(R.string.recording_cancel);
+            timerTip.setBackgroundResource(0);
+            alertImage.setImageResource(getVoice(audioMessageHelper.getCurrentRecordMaxAmplitude()));
         }
+    }
+
+    private int getVoice(int amplitude) {
+        if (amplitude > 20000) {
+            return R.mipmap.record7;
+        } else if (amplitude <= 15000 && amplitude > 10000) {
+            return R.mipmap.record6;
+        } else if (amplitude <= 10000 && amplitude > 8000) {
+            return R.mipmap.record5;
+        } else if (amplitude <= 8000 && amplitude > 5000) {
+            return R.mipmap.record4;
+        } else if (amplitude <= 5000 && amplitude > 3000) {
+            return R.mipmap.record3;
+        } else if (amplitude <= 3000 && amplitude > 1000) {
+            return R.mipmap.record2;
+        } else
+            return R.mipmap.record1;
     }
 
     @Override
@@ -583,7 +660,13 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
     }
 
     @Override
-    public void onRecordReachedMaxTime(int i) {
+    public void onRecordReachedMaxTime(int maxTime) {
+        stopAudioRecordAnim();
+        audioMessageHelper.handleEndRecord(true, maxTime);
+    }
+
+    private enum RecorderState {
+        TOOSHORT, NORMAL, CANCEL
 
     }
 
@@ -640,6 +723,7 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
                 content.append(sp);
             }
         }
+
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
