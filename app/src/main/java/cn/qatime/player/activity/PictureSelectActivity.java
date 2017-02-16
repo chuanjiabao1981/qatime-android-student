@@ -56,7 +56,7 @@ public class PictureSelectActivity extends BaseActivity {
     private Handler hd = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            selected(imagesBucketList.get(0 ));//选中第一个
+            selected(imagesBucketList.get(0));//选中第一个
             /**
              * 为底部的布局设置点击事件，弹出popupWindow
              */
@@ -82,6 +82,7 @@ public class PictureSelectActivity extends BaseActivity {
     private boolean mIsFolderViewInit;
     private boolean mIsFolderViewShow;
     private ListView mFolderListView;
+    private CommonAdapter<ImageBucket> folderAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +117,7 @@ public class PictureSelectActivity extends BaseActivity {
 
     private void initView() {
         bottomLyout = findViewById(R.id.id_bottom_ly);
-        chooseDir =  (TextView) findViewById(R.id.id_choose_dir);
+        chooseDir = (TextView) findViewById(R.id.id_choose_dir);
         totalCount = (TextView) findViewById(R.id.id_total_count);
 
         gridView = (GridView) findViewById(R.id.gridView);
@@ -204,6 +205,7 @@ public class PictureSelectActivity extends BaseActivity {
                 }
                 firstBucket.bucketName = "所有图片";
                 firstBucket.count = firstBucket.imageList.size();
+                firstBucket.setIsSelected(true);
                 imagesBucketList.add(0, firstBucket);
 
                 hd.sendEmptyMessage(1);//通知bottomlayout可以点击了
@@ -211,10 +213,10 @@ public class PictureSelectActivity extends BaseActivity {
         }).start();
     }
 
-    private void getImages(ImageBucket floder) {
+    private void getImages(ImageBucket folder) {
         detailList.clear();
-        for (int j = 0; j < floder.imageList.size(); j++) {
-            detailList.add(floder.imageList.get(j));
+        for (int j = 0; j < folder.imageList.size(); j++) {
+            detailList.add(folder.imageList.get(j));
         }
         Logger.e(detailList.size() + "张图");
         adapter.notifyDataSetChanged();
@@ -232,10 +234,10 @@ public class PictureSelectActivity extends BaseActivity {
         MobclickAgent.onPause(this);
     }
 
-    public void selected(ImageBucket floder) {
-        getImages(floder);
-        chooseDir.setText(floder.bucketName);
-        totalCount.setText(floder.count+"张");
+    public void selected(ImageBucket folder) {
+        getImages(folder);
+        chooseDir.setText(folder.bucketName);
+        totalCount.setText(folder.count + "张");
     }
 
     /**
@@ -243,34 +245,41 @@ public class PictureSelectActivity extends BaseActivity {
      */
     private void initFolderList() {
         //初始化文件夹列表
-        if(!mIsFolderViewInit) {
+        if (!mIsFolderViewInit) {
             ViewStub folderStub = (ViewStub) findViewById(R.id.floder_stub);
             folderStub.inflate();
 
 
             View dimLayout = findViewById(R.id.dim_layout);
             mFolderListView = (ListView) findViewById(R.id.id_list_dir);
-            mFolderListView.setAdapter(new CommonAdapter<ImageBucket>(PictureSelectActivity.this, imagesBucketList,
-                    R.layout.list_dir_item)
-            {
+            folderAdapter = new CommonAdapter<ImageBucket>(PictureSelectActivity.this, imagesBucketList,
+                    R.layout.list_dir_item) {
                 @Override
                 public void convert(ViewHolder holder, ImageBucket item, int position) {
                     holder.setText(R.id.id_dir_item_name, item.bucketName);
                     holder.setImageByUrl(R.id.id_dir_item_image,
                             item.getFirstImagePath());
-                    holder.setText(R.id.id_dir_item_count, item.count+ "张");
+                    holder.setText(R.id.id_dir_item_count, item.count + "张");
+                    holder.getView(R.id.id_dir_item_flag).setVisibility(item.isSelected() ? View.VISIBLE : View.INVISIBLE);
                 }
-            });
+            };
+            mFolderListView.setAdapter(folderAdapter);
             mFolderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    toggle();
-                    if(position==0){
+                    for (ImageBucket folder : imagesBucketList) {
+                        folder.setIsSelected(false);
+                    }
+                    ImageBucket folder = imagesBucketList.get(position);
+                    folder.setIsSelected(true);
+                    folderAdapter.notifyDataSetChanged();
+                    if (position == 0) {
                         adapter.setCameraGone(false);
-                    }else {
+                    } else {
                         adapter.setCameraGone(true);
                     }
-                    selected(imagesBucketList.get(position));
+                    toggle();
+                    selected(folder);
                 }
             });
             dimLayout.setOnTouchListener(new View.OnTouchListener() {
@@ -296,7 +305,7 @@ public class PictureSelectActivity extends BaseActivity {
      * 弹出或者收起文件夹列表
      */
     private void toggle() {
-        if(mIsFolderViewShow) {
+        if (mIsFolderViewShow) {
             outAnimatorSet.start();
             mIsFolderViewShow = false;
         } else {
@@ -311,6 +320,7 @@ public class PictureSelectActivity extends BaseActivity {
      */
     AnimatorSet inAnimatorSet = new AnimatorSet();
     AnimatorSet outAnimatorSet = new AnimatorSet();
+
     private void initAnimation(View dimLayout) {
         ObjectAnimator alphaInAnimator, alphaOutAnimator, transInAnimator, transOutAnimator;
         //获取actionBar的高
@@ -318,7 +328,7 @@ public class PictureSelectActivity extends BaseActivity {
         int height = ScreenUtils.getScreenHeight(this) - bottomLyout.getHeight();
         alphaInAnimator = ObjectAnimator.ofFloat(dimLayout, "alpha", 0f, 0.7f);
         alphaOutAnimator = ObjectAnimator.ofFloat(dimLayout, "alpha", 0.7f, 0f);
-        transInAnimator = ObjectAnimator.ofFloat(mFolderListView, "translationY", height , 0);
+        transInAnimator = ObjectAnimator.ofFloat(mFolderListView, "translationY", height, 0);
         transOutAnimator = ObjectAnimator.ofFloat(mFolderListView, "translationY", 0, height);
 
         LinearInterpolator linearInterpolator = new LinearInterpolator();
