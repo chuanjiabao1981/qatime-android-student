@@ -90,7 +90,6 @@ public class MsgViewHolderAudio extends MsgViewHolderBase {
             containerView.setBackgroundResource(R.drawable.chatfrom_bg_normal);
             containerView.setPadding(DensityUtils.dip2px(context, 15), DensityUtils.dip2px(context, 8), DensityUtils.dip2px(context, 10), DensityUtils.dip2px(context, 8));
             animationView.setBackgroundResource(R.drawable.audio_animation_list_left);
-            durationLabel.setTextColor(Color.BLACK);
 
         } else {
             setGravity(animationView, Gravity.RIGHT | Gravity.CENTER_VERTICAL);
@@ -100,7 +99,6 @@ public class MsgViewHolderAudio extends MsgViewHolderBase {
             containerView.setBackgroundResource(R.drawable.chatto_bg_normal);
             containerView.setPadding(DensityUtils.dip2px(context, 10), DensityUtils.dip2px(context, 8), DensityUtils.dip2px(context, 15), DensityUtils.dip2px(context, 8));
             animationView.setBackgroundResource(R.drawable.audio_animation_list_right);
-            durationLabel.setTextColor(Color.WHITE);
         }
     }
 
