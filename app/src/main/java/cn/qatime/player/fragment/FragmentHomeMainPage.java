@@ -3,8 +3,10 @@ package cn.qatime.player.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +18,15 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.msg.MsgService;
@@ -72,7 +77,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private GridView gridviewTeacher;
     private View allClass;
     private GridView gridviewClass;
-    private int page = 1;
     private List<ClassRecommendBean.DataBean> listRecommendClass = new ArrayList<>();
     private BaseAdapter classAdapter;
     private View message;
@@ -97,6 +101,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     refreshUnreadNum();
                 }
             };
+    private PullToRefreshScrollView scrollView;
 
     /**
      * 刷新未读
@@ -115,6 +120,37 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     }
 
     private void assignViews(View view) {
+        scrollView = (PullToRefreshScrollView) view.findViewById(R.id.scroll);
+        scrollView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+        scrollView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
+        scrollView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
+        scrollView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResourceString(R.string.refreshing));
+        scrollView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResourceString(R.string.loading));
+        scrollView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
+        scrollView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
+
+        scrollView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ScrollView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ScrollView> refreshView) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        String label = DateUtils.formatDateTime(
+                                getActivity(),
+                                System.currentTimeMillis(),
+                                DateUtils.FORMAT_SHOW_TIME
+                                        | DateUtils.FORMAT_SHOW_DATE
+                                        | DateUtils.FORMAT_ABBREV_ALL);
+                        // Update the LastUpdatedLabel
+                        scrollView.getLoadingLayoutProxy(false, true)
+                                .setLastUpdatedLabel(label);
+                        scrollView.onRefreshComplete();
+                    }
+                }, 200);
+                setCity();
+            }
+        });
+
         tagViewpagerImg = (TagViewPager) view.findViewById(R.id.tag_viewpager_img);
         gridviewTeacher = (GridView) view.findViewById(R.id.gridview_teacher);
         gridviewSubject = (GridView) view.findViewById(R.id.gridview_subject);
@@ -144,7 +180,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
     private void setCity() {
         cityName.setText(BaseApplication.getCurrentCity().getName());
-        page = 1;//重置为第一页
         initBannerData();
         initTeacherData();
         initClassData();
