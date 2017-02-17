@@ -83,7 +83,7 @@ public class FragmentTutorshipPreview extends BaseFragment {
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
                 try {
-                    long time = System.currentTimeMillis() - parse.parse(item.getPreview_time()).getTime();
+                    long time = parse.parse(item.getPreview_time()).getTime()-System.currentTimeMillis();
                     int value = 0;
                     if (time > 0) {
                         value = (int) (time / (1000 * 3600 * 24));

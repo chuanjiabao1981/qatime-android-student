@@ -210,11 +210,12 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
                             try {
                                 if ("init".equals(data.getData().getStatus()) || "published".equals(data.getData().getStatus())) {
-                                    long time = System.currentTimeMillis() - parse.parse(data.getData().getLive_start_time()).getTime();
+                                    long time =parse.parse(data.getData().getLive_start_time()).getTime()- System.currentTimeMillis() ;
                                     int value = 0;
                                     if (time > 0) {
                                         value = (int) (time / (1000 * 3600 * 24));
                                     }
+                                    Logger.e(value+"asdfasdf");
                                     timeToStart.setVisibility(View.VISIBLE);
                                     progress.setVisibility(View.GONE);
                                     timeToStart.setText("[" + getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day) + "]");
