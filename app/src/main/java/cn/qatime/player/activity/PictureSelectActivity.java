@@ -199,6 +199,7 @@ public class PictureSelectActivity extends BaseActivity {
                 ImageBucket firstBucket = new ImageBucket();
                 firstBucket.imageList = new ArrayList<>();
                 for (int i = 0; i < imagesBucketList.size(); i++) {
+                    imagesBucketList.get(i).setIsSelected(false);
                     for (int j = 0; j < imagesBucketList.get(i).imageList.size(); j++) {
                         firstBucket.imageList.add(imagesBucketList.get(i).imageList.get(j));
                     }
