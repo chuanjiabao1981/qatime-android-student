@@ -35,7 +35,7 @@ import libraryextra.utils.StringUtils;
  */
 public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItemFetchLoadAdapter, BaseViewHolder, IMMessage> {
 
-    public MsgViewHolderBase(BaseMultiItemFetchLoadAdapter adapter) {
+    MsgViewHolderBase(BaseMultiItemFetchLoadAdapter adapter) {
         super(adapter);
         this.adapter = adapter;
     }
@@ -49,22 +49,22 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
     protected IMMessage message;
 
     // view
-    protected View alertButton;
-    protected TextView timeTextView;
-    protected ProgressBar progressBar;
-    protected TextView nameTextView;
-    protected FrameLayout contentContainer;
-    protected LinearLayout nameContainer;
+    View alertButton;
+    private TextView timeTextView;
+    ProgressBar progressBar;
+    private TextView nameTextView;
+    private FrameLayout contentContainer;
+    private LinearLayout nameContainer;
 //    protected TextView readReceiptTextView;
 
     private ImageView avatarLeft;
     private ImageView avatarRight;
 
-    public ImageView nameIconView;
+    private ImageView nameIconView;
 
     // contentContainerView的默认长按事件。如果子类需要不同的处理，可覆盖onItemLongClick方法
     // 但如果某些子控件会拦截触摸消息，导致contentContainer收不到长按事件，子控件也可在inflate时重新设置
-    protected View.OnLongClickListener longClickListener;
+    View.OnLongClickListener longClickListener;
 
     /// -- 以下接口可由子类覆盖或实现
     // 返回具体消息类型内容展示区域的layout res id
@@ -81,7 +81,7 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
     }
 
     // 内容区域长按事件响应处理。该接口的优先级比adapter中有长按事件的处理监听高，当该接口返回为true时，adapter的长按事件监听不会被调用到。
-    protected boolean onItemLongClick() {
+    private boolean onItemLongClick() {
         return false;
     }
 
@@ -106,25 +106,25 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
     }
 
     // 是否显示气泡背景，默认为显示
-    protected boolean isShowBubble() {
+    private boolean isShowBubble() {
         return true;
     }
 
     /// -- 以下接口可由子类调用
-    protected final MsgAdapter getMsgAdapter() {
+    final MsgAdapter getMsgAdapter() {
         return (MsgAdapter) adapter;
     }
 
     /**
      * 下载附件/缩略图
      */
-    protected void downloadAttachment() {
+    void downloadAttachment() {
         if (message.getAttachment() != null && message.getAttachment() instanceof FileAttachment)
             NIMClient.getService(MsgService.class).downloadAttachment(message, true);
     }
 
     // 设置FrameLayout子控件的gravity参数
-    protected final void setGravity(View view, int gravity) {
+    final void setGravity(View view, int gravity) {
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
         params.gravity = gravity;
     }
@@ -145,7 +145,7 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
     }
 
     // 判断消息方向，是否是接收到的消息
-    protected boolean isReceivedMessage() {
+    boolean isReceivedMessage() {
         return message.getDirect() == MsgDirectionEnum.In;
     }
 

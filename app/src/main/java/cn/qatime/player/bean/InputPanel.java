@@ -204,8 +204,8 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
                 tagViewPager.setVisibility(View.VISIBLE);
                 emoji.setImageResource(R.mipmap.keybord);
 
-                buttonAudioMessage.setVisibility(View.GONE);
-                buttonTextMessage.setVisibility(View.VISIBLE);
+                buttonAudioMessage.setVisibility(View.VISIBLE);
+                buttonTextMessage.setVisibility(View.GONE);
                 audioRecord.setVisibility(GONE);
                 content.setVisibility(View.VISIBLE);
 
