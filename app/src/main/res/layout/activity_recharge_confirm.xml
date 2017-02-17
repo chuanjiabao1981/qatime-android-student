@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#eeeeee"
+    android:background="#f7f7f7"
     android:orientation="vertical">
 
     <LinearLayout
@@ -13,52 +13,55 @@
         <include layout="@layout/layout_backbar" />
 
         <LinearLayout
+            android:id="@+id/order_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#fff"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingBottom="8dp"
-                android:paddingLeft="30dp"
-                android:paddingRight="10dp"
-                android:paddingTop="8dp">
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
+                    android:paddingBottom="10dp"
                     android:text="编&#8195;&#8195;号"
-                    android:textColor="#666666" />
+                    android:textColor="#333333"
+                    android:id="@+id/textView13" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
+                    android:paddingBottom="10dp"
                     android:text="时&#8195;&#8195;间"
-                    android:textColor="#666666" />
+                    android:textColor="#333333" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
+                    android:paddingBottom="10dp"
                     android:text="交易类型"
-                    android:textColor="#666666" />
+                    android:textColor="#333333" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
+                    android:paddingBottom="10dp"
                     android:text="交易方式"
-                    android:textColor="#666666" />
+                    android:textColor="#333333" />
 
                 <TextView
+                    android:id="@+id/textView12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="交易金额"
-                    android:textColor="#666666" />
+                    android:textColor="#333333" />
 
             </LinearLayout>
 
@@ -66,63 +69,74 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingBottom="8dp"
-                android:paddingRight="32dp"
-                android:paddingTop="8dp">
+                android:paddingBottom="10dp"
+                android:paddingLeft="28dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp">
 
                 <TextView
                     android:id="@+id/id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="1dp"
                     android:text="00000000000000000"
-                    android:textColor="#333333" />
+                    android:textColor="#666666"
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="1dp"
                     android:text="0000-00-00 00:00:00"
-                    android:textColor="#333333" />
+                    android:textColor="#666666"
+                    android:textSize="13sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="1dp"
                     android:text="账户储值"
-                    android:textColor="#333333" />
+                    android:textColor="#666666"
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/mode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="1dp"
                     android:text="线下支付"
-                    android:textColor="#333333" />
+                    android:textColor="#666666"
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingTop="1dp"
                     android:text="￥0"
-                    android:textColor="#333333" />
+                    android:textColor="#666666"
+                    android:textSize="13sp" />
 
             </LinearLayout>
         </LinearLayout>
+
+        <Button
+            android:id="@+id/recharge_confirm"
+            style="@style/button_full_width_style"
+            android:layout_marginTop="20dp"
+            android:text="@string/confirm_payment" />
     </LinearLayout>
 
-
-    <Button
-        android:id="@+id/recharge_confirm"
-        style="@style/button_full_width_style"
-        android:layout_alignParentBottom="true"
-        android:text="@string/confirm_payment" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/recharge_confirm"
+        android:layout_alignParentBottom="true"
         android:layout_marginBottom="6dp"
         android:layout_marginTop="12dp"
         android:gravity="center"
@@ -141,9 +155,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="6dp"
-            android:text="@string/customer_service_phone_number"
-            android:textColor="#3399FF"
+            android:textColor="#00a2ee"
             android:textSize="16sp" />
-
     </LinearLayout>
+
 </RelativeLayout>

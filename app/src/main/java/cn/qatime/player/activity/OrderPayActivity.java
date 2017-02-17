@@ -5,12 +5,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
 import com.tencent.mm.sdk.modelpay.PayReq;
 import com.tencent.mm.sdk.openapi.IWXAPI;
@@ -19,17 +23,28 @@ import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.PayResult;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
+import cn.qatime.player.view.PayPopView;
 import libraryextra.bean.AppPayParamsBean;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
+
 
 public class OrderPayActivity extends BaseActivity {
     TextView code;
@@ -75,12 +90,16 @@ public class OrderPayActivity extends BaseActivity {
         }
     };
     private int SDK_PAY_FLAG = 1;
+    private AlertDialog alertDialog;
+    private PayPopView payPopView;
+    private String amount;
+    private String orderName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_pay);
-        setTitle(getResourceString(R.string.pay_confirm));
+        setTitles(getResourceString(R.string.pay_confirm));
         initView();
         payType = getIntent().getStringExtra("type");
         api = WXAPIFactory.createWXAPI(this, null);
@@ -101,28 +120,27 @@ public class OrderPayActivity extends BaseActivity {
             weixinData = (AppPayParamsBean) getIntent().getSerializableExtra("data");
         } else if (payType.equals("alipay")) {
             aliPayData = getIntent().getStringExtra("data");
+        } else if (payType.equals("account")) {
+            orderName = getIntent().getStringExtra("data");
         }
 
-        String price = df.format(getIntent().getFloatExtra("price", 0f));
-        if (price.startsWith(".")) {
-            price = "0" + price;
-        }
-        code.setText(getResourceString(R.string.order_number) + "：" + getIntent().getStringExtra("id"));
+        code.setText(getIntent().getStringExtra("id"));
         SimpleDateFormat parseISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
         SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
-            time.setText(getResourceString(R.string.time_built) + "：" + parse.format(parseISO.parse(getIntent().getStringExtra("time"))));
+            time.setText(parse.format(parseISO.parse(getIntent().getStringExtra("time"))));
         } catch (ParseException e) {
             e.printStackTrace();
         }
         if (payType.equals("alipay")) {
-            type.setText(getResourceString(R.string.method_payment) + getResourceString(R.string.pay_alipay));
+            type.setText(getResourceString(R.string.pay_alipay));
         } else if (payType.equals("weixin")) {
-            type.setText(getResourceString(R.string.method_payment) + getResourceString(R.string.pay_wexin));
+            type.setText(getResourceString(R.string.pay_wexin));
         } else {
-            type.setText(getResourceString(R.string.method_payment) + getResourceString(R.string.pay_account));
+            type.setText(getResourceString(R.string.pay_account));
         }
-        this.price.setText(getResourceString(R.string.amount_payment) + "：￥" + price);
+        amount = getIntent().getStringExtra("price");
+        this.price.setText("￥" + amount);
     }
 
     public void initView() {
@@ -131,13 +149,14 @@ public class OrderPayActivity extends BaseActivity {
         time = (TextView) findViewById(R.id.time);
         type = (TextView) findViewById(R.id.type);
         phone = (TextView) findViewById(R.id.phone);
+        phone.setText(Constant.phoneNumber);
         price = (TextView) findViewById(R.id.price);
         commit = (Button) findViewById(R.id.commit);
         //拨打电话
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.phoneNumber));
                 startActivity(intent);
             }
         });
@@ -145,22 +164,29 @@ public class OrderPayActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (payType.equals("weixin")) {
-                    PayReq request = new PayReq();
+//                    if (!api.isWXAppInstalled()) {
+//                        Toast.makeText(OrderPayActivity.this, R.string.wechat_not_installed, Toast.LENGTH_SHORT).show();
+//                    } else if (!api.isWXAppSupportAPI()) {
+//                        Toast.makeText(OrderPayActivity.this, R.string.wechat_not_support, Toast.LENGTH_SHORT).show();
+//                    } else {
+                        PayReq request = new PayReq();
+                        request.appId = weixinData.getAppid();
 
-                    request.appId = weixinData.getAppid();
 
-                    request.partnerId = weixinData.getPartnerid();
+                        request.partnerId = weixinData.getPartnerid();
 
-                    request.prepayId = weixinData.getPrepayid();
+                        request.prepayId = weixinData.getPrepayid();
 
-                    request.packageValue = weixinData.getPackage();
+                        request.packageValue = weixinData.getPackage();
 
-                    request.nonceStr = weixinData.getNoncestr();
+                        request.nonceStr = weixinData.getNoncestr();
 
-                    request.timeStamp = weixinData.getTimestamp();
+                        request.timeStamp = weixinData.getTimestamp();
 
-                    request.sign = weixinData.getSign();
-                    api.sendReq(request);
+                        request.sign = weixinData.getSign();
+                        api.sendReq(request);
+//                    }
+
                 } else if (payType.equals("alipay")) {
                     Runnable payRunnable = new Runnable() {
                         @Override
@@ -180,7 +206,11 @@ public class OrderPayActivity extends BaseActivity {
                     payThread.start();
                 } else if (payType.equals("account")) {
                     Logger.e("钱包支付");
-                    // TODO: 2016/10/8  钱包支付
+                    if(BaseApplication.getCashAccount().getData().isHas_password()){
+                        showPSWPop();
+                    }else{
+                        Toast.makeText(OrderPayActivity.this, R.string.pay_password_not_set, Toast.LENGTH_SHORT).show();
+                    }
 //                    Intent intent = new Intent(OrderPayActivity.this,OrderPayResultActivity.class);
 //                    intent.putExtra("state",PayResultState.SUCCESS);
 //                    startActivity(intent);
@@ -188,6 +218,161 @@ public class OrderPayActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    private void showPSWPop() {
+//        if (BaseApplication.getCashAccount().getData().isHas_password()) {
+        payPopView = new PayPopView(getIntent().getStringExtra("id"), orderName, "￥" + amount, OrderPayActivity.this);
+        payPopView.showPop();
+        payPopView.setOnPayPSWVerifyListener(new PayPopView.OnPayPSWVerifyListener() {
+            @Override
+            public void onSuccess(String ticket_token) {
+                payPopView.dismiss();
+                accountPayOrder(ticket_token);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+                payPopView.dismiss();
+                if (errorCode == 2005) {
+                    dialogPSWError();
+                } else if (errorCode == 2006) {
+                    Toast.makeText(OrderPayActivity.this, R.string.pay_password_not_set, Toast.LENGTH_SHORT).show();
+                } else if (errorCode == 2008) {
+                    dialogServerError(getString(R.string.pay_password_not_enough_24));//未满24小时
+                } else if (errorCode == 2009) {
+                    dialogServerError(getString(R.string.pay_password_too_many_mistake));//错误次数太多
+                } else if (errorCode == 0) {
+                    Toast.makeText(OrderPayActivity.this, R.string.server_error, Toast.LENGTH_SHORT).show();
+                } else {
+                    dialogServerError(getString(R.string.pay_server_error));//支付系统繁忙
+                }
+            }
+        });
+//        } else {
+//            dialogNotify();
+//            Toast.makeText(OrderPayActivity.this, "请先设置支付密码", Toast.LENGTH_SHORT).show();
+//        }
+    }
+
+    private void accountPayOrder(String ticket_token) {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("ticket_token", ticket_token);
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlPayResult + getIntent().getStringExtra("id") + "/pay", map), null,
+                new VolleyListener(OrderPayActivity.this) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        EventBus.getDefault().post(PayResultState.SUCCESS);
+                    }
+
+                    protected void onError(JSONObject response) {
+//                        2007 tocken error;
+                        try {
+                            if (response.getJSONObject("error").getInt("code") == 2007) {
+                                Toast.makeText(OrderPayActivity.this, R.string.token_error, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(OrderPayActivity.this, R.string.server_error, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(OrderPayActivity.this, R.string.server_error, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+                Toast.makeText(OrderPayActivity.this, R.string.server_error, Toast.LENGTH_SHORT).show();
+            }
+        });
+        addToRequestQueue(request);
+    }
+
+    private void dialogNotify() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        View view = View.inflate(this, R.layout.dialog_cancel_or_confirm, null);
+        TextView text = (TextView) view.findViewById(R.id.text);
+        text.setText(R.string.change_pay_password_notify);
+        Button cancel = (Button) view.findViewById(R.id.cancel);
+        Button confirm = (Button) view.findViewById(R.id.confirm);
+        confirm.setText(R.string.continue_anyway);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                changePayPSW();
+            }
+        });
+        alertDialog.show();
+        alertDialog.setContentView(view);
+    }
+
+    private void dialogServerError(String desc) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        View view = View.inflate(this, R.layout.dialog_confirm, null);
+        TextView text = (TextView) view.findViewById(R.id.text);
+        text.setText(desc);
+        Button confirm = (Button) view.findViewById(R.id.confirm);
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.show();
+        alertDialog.setContentView(view);
+    }
+
+    private void dialogPSWError() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        View view = View.inflate(this, R.layout.dialog_cancel_or_confirm, null);
+        TextView text = (TextView) view.findViewById(R.id.text);
+        text.setText(R.string.pay_password_error);
+        Button cancel = (Button) view.findViewById(R.id.cancel);
+        Button confirm = (Button) view.findViewById(R.id.confirm);
+        cancel.setText(R.string.try_again);
+        confirm.setText(R.string.forget_password);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                showPSWPop();
+            }
+        });
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                dialogNotify();
+            }
+        });
+        alertDialog.show();
+        alertDialog.setContentView(view);
+    }
+
+    private void changePayPSW() {
+//        if (BaseApplication.getCashAccount().getData().isHas_password()) {
+//            startActivity(new Intent(this, PayPSWVerifyActivity.class));
+//        } else {
+        startActivity(new Intent(this, PayPSWForgetActivity.class));
+//        }
     }
 
     @Subscribe

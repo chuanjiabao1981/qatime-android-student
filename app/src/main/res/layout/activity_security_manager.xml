@@ -184,7 +184,7 @@
 
         <TextView
             style="@style/setting_text_style"
-            android:text="@string/change_pay_password" />
+            android:text="@string/reset_pay_password" />
 
         <View
             android:layout_width="0dp"

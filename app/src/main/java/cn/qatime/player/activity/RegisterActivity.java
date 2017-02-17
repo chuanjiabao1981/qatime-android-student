@@ -69,7 +69,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        setTitle(getResources().getString(R.string.set_for_login));
+        setTitles(getResources().getString(R.string.set_for_login));
         initView();
         time = new TimeCount(60000, 1000);
     }
@@ -141,7 +141,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                         @Override
                         protected void onSuccess(JSONObject response) {
                             Toast.makeText(RegisterActivity.this, getResourceString(R.string.code_send_success), Toast.LENGTH_SHORT).show();
-                            Logger.e("验证码发送成功" + phone.getText().toString().trim() + "---" + response.toString());
                         }
 
                         @Override
@@ -255,7 +254,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             protected void onSuccess(JSONObject response) {
 
                 Toast.makeText(RegisterActivity.this, getResourceString(R.string.please_set_information), Toast.LENGTH_SHORT).show();
-                Logger.e("注册成功" + response);
                 Map<String, String> map = new HashMap<>();
                 map.put("login_account", phone.getText().toString().trim());
                 map.put("password", password.getText().toString().trim());
@@ -360,11 +358,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Logger.e("注册失败--" + result);
                 if (result.contains("已经被使用")) {
 //                    Toast.makeText(RegisterActivity.this, getResourceString(R.string.phone_already_used), Toast.LENGTH_SHORT).show();
                     dialogReTry();
-                } else if (result.contains("与确认值不匹配")) {
+                } else if (result.contains("Captcha confirmation")) {
                     Toast.makeText(RegisterActivity.this, getResourceString(R.string.code_error), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(RegisterActivity.this, getResourceString(R.string.register_failed), Toast.LENGTH_SHORT).show();
@@ -389,9 +386,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         final AlertDialog alertDialog = new AlertDialog.Builder(RegisterActivity.this).create();
         View view = View.inflate(RegisterActivity.this, R.layout.dialog_cancel_or_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("该手机号已注册,请直接登录");
-        ((TextView) view.findViewById(R.id.cancel)).setText("新号码注册");
-        ((TextView) view.findViewById(R.id.confirm)).setText("登录");
+        text.setText(R.string.this_phone_number_already_regist);
+        ((TextView) view.findViewById(R.id.cancel)).setText(R.string.use_a_new_number);
+        ((TextView) view.findViewById(R.id.confirm)).setText(R.string.login);
         Button cancel = (Button) view.findViewById(R.id.cancel);
         Button confirm = (Button) view.findViewById(R.id.confirm);
         cancel.setOnClickListener(new View.OnClickListener() {

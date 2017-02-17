@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f7f7f7"
     android:orientation="vertical"
     android:weightSum="1">
 
@@ -12,7 +13,6 @@
         android:layout_height="1px"
         android:background="#dfdddd" />
 
-
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
@@ -21,76 +21,77 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#fff"
         android:orientation="horizontal">
 
         <TextView
-            style="@style/setting_text_style"
-            android:text="@string/alert_mode" />
-
-        <View
-            android:layout_width="30dp"
-            android:layout_height="0dp"
-            android:background="#ffffff" />
-
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="15dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="15dp"
+            android:text="@string/alert_mode"
+            android:textColor="#333" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="5dp">
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:orientation="horizontal">
 
             <CheckBox
                 android:id="@+id/sms"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="#333333"
-                android:checked="true"
-                android:text="@string/sms_notify" />
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:button="@null"
+                android:checked="false"
+                android:drawableLeft="@drawable/checkbox_selector"
+                android:drawablePadding="5dp"
+                android:text="@string/sms_notify"
+                android:textColor="#333333" />
 
             <CheckBox
                 android:id="@+id/sys"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="#333333"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="45dp"
+                android:button="@null"
                 android:checked="true"
-                android:text="@string/sys_notify" />
+                android:drawableLeft="@drawable/checkbox_selector"
+                android:drawablePadding="5dp"
+                android:text="@string/sys_notify"
+                android:textColor="#333333" />
         </LinearLayout>
     </LinearLayout>
-
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#dfdddd" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#fff"
         android:orientation="horizontal">
 
         <TextView
             style="@style/setting_text_style"
             android:text="@string/time_setting" />
 
-        <View
-            android:layout_width="30dp"
-            android:layout_height="0dp"
-            android:background="#ffffff" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="10dp">
+            android:layout_marginRight="10dp"
+            android:gravity="right"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#333333"
-                android:text="@string/advance" />
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/advance"
+                android:textColor="#333333" />
 
             <LinearLayout
                 android:id="@+id/time"
@@ -105,28 +106,30 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
                     android:text="00小时"
-                    android:textColor="#800f" />
+                    android:textColor="#00a2ee" />
 
                 <TextView
                     android:id="@+id/minute"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="00分钟"
-                    android:textColor="#800f" />
+                    android:textColor="#00a2ee" />
 
                 <ImageView
                     android:layout_width="10dp"
                     android:layout_height="10dp"
                     android:layout_margin="2dp"
-                    android:src="@mipmap/screen_down" />
+                    android:src="@mipmap/screen_down"
+                    android:id="@+id/imageView5" />
             </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:paddingLeft="10dp"
-                android:textColor="#333333"
-                android:text="@string/remind_me" />
+                android:text="@string/remind_me"
+                android:textColor="#333333" />
         </LinearLayout>
 
     </LinearLayout>

@@ -9,12 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -62,13 +65,18 @@ public class FragmentFundRecordRecharge extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_fund_record_recharge, container, false);
         EventBus.getDefault().register(this);
         initview(view);
+        initOver=true;
         return view;
     }
 
     @Override
     public void onShow() {
         if (!isLoad) {
-            initData(1);
+            if(initOver){
+                initData(1);
+            }else{
+                super.onShow();
+            }
         }
     }
 
@@ -121,7 +129,6 @@ public class FragmentFundRecordRecharge extends BaseFragment {
 
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
-        listView.getRefreshableView().setDividerHeight(2);
         listView.setMode(PullToRefreshBase.Mode.BOTH);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
@@ -129,6 +136,10 @@ public class FragmentFundRecordRecharge extends BaseFragment {
         listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResourceString(R.string.loading));
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
+        View empty = View.inflate(getActivity(),R.layout.empty_view,null);
+        TextView textEmpty = (TextView) empty.findViewById(R.id.text_empty);
+        textEmpty.setText(R.string.not_found_related_order);
+        listView.setEmptyView(empty);
 
         adapter = new CommonAdapter<RechargeRecordBean.DataBean>(getActivity(), data, R.layout.item_fragment_fund_record1) {
 
@@ -171,6 +182,15 @@ public class FragmentFundRecordRecharge extends BaseFragment {
                 RechargeRecordBean.DataBean dataBean = data.get(position - 1);
                 String status = dataBean.getStatus();
                 if ("unpaid".equals(status)) {//如果是未支付进行跳转
+                    if (dataBean.getPay_type().equals("weixin")) {
+                        IWXAPI api = WXAPIFactory.createWXAPI(getActivity(), null);
+                        if (!api.isWXAppInstalled()) {
+                            Toast.makeText(getActivity(), R.string.wechat_not_installed, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    } else if (dataBean.getPay_type().equals("alipay")) {
+                        return;
+                    }
                     Intent intent = new Intent(getActivity(), RechargeConfirmActivity.class);
                     intent.putExtra("id", dataBean.getId());
                     intent.putExtra("amount", dataBean.getAmount());
@@ -190,9 +210,7 @@ public class FragmentFundRecordRecharge extends BaseFragment {
     @Subscribe
     public void onEvent(PayResultState code) {
         //充值成功刷新订单
-        if (!isLoad) {
             initData(1);
-        }
     }
 
 
@@ -205,23 +223,23 @@ public class FragmentFundRecordRecharge extends BaseFragment {
     private String getPayType(String pay_type) {
         switch (pay_type) {
             case "weixin":
-                return "微信支付";
+                return getResourceString(R.string.pay_wexin);
             case "alipay":
-                return "支付宝";
+                return getResourceString(R.string.alipay);
             case "offline":
-                return "线下支付";
+            default:
+                return getResourceString(R.string.pay_offline);
         }
-        return "微信支付";
     }
 
     private String getStatus(String status) {
         switch (status) {
             case "unpaid":
-                return "未支付";
+                return getString(R.string.unpaid);
             case "received":
-                return "充值成功";
+                return getString(R.string.recharge_success);
             default:
-                return "交易关闭";
+                return getString(R.string.deal_closed);
         }
     }
 

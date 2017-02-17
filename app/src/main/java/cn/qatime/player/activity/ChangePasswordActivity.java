@@ -5,13 +5,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
-import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONObject;
@@ -37,8 +35,6 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
     private EditText password;
     private EditText newPassword;
     private EditText confirmNewPassword;
-    private ImageView matchPwd1;
-    private ImageView matchPwd2;
     private Button buttonOver;
     private String password1;
     private String password2;
@@ -61,7 +57,7 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
     }
 
     private void initView() {
-        setTitle(getResources().getString(R.string.change_password));
+        setTitles(getResources().getString(R.string.change_password));
         assignViews();
 
         password.setHint(StringUtils.getSpannedString(this, R.string.hint_input_current_password));
@@ -107,7 +103,6 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
 
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        Logger.e("验证成功");
                         BaseApplication.clearToken();
                         Toast.makeText(ChangePasswordActivity.this, getResourceString(R.string.change_password_success), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(ChangePasswordActivity.this, MainActivity.class);

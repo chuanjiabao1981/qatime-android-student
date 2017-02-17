@@ -31,6 +31,7 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.CityBean;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.PinyinUtils;
 import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -69,7 +70,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_select);
-        setTitle("切换城市");
+        setTitles(getString(R.string.switch_city));
         assignViews();
         initView();
         initData();
@@ -87,14 +88,16 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
                             for (CityBean.Data item : list) {
                                 if (StringUtils.isNullOrBlanK(item.getName())) {
                                     item.setFirstLetter("");
+                                    item.setFirstLetters("");
                                 } else {
-                                    item.setFirstLetter(StringUtils.getPYIndexStr(item.getName().substring(0, 1)));
+                                    item.setFirstLetter(PinyinUtils.getPinyinFirstLetter(item.getName()).toUpperCase());
+                                    item.setFirstLetters(PinyinUtils.getPinyinFirstLetters(item.getName()));
                                 }
                             }
                             Collections.sort(list, new Comparator<CityBean.Data>() {
                                 @Override
                                 public int compare(CityBean.Data lhs, CityBean.Data rhs) {
-                                    return lhs.getFirstLetter().compareTo(rhs.getFirstLetter());
+                                    return lhs.getFirstLetters().compareTo(rhs.getFirstLetters());
                                 }
                             });
                             int position = 2;
@@ -128,7 +131,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
 
     private void initLocation() {
         locationView.setEnabled(false);
-        Toast.makeText(CitySelectActivity.this, "正在获取您的位置...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(CitySelectActivity.this, R.string.loading_location, Toast.LENGTH_SHORT).show();
         //如果没有被赋值，则默认全国
         utils = new AMapLocationUtils(getApplicationContext(), new AMapLocationUtils.LocationListener() {
             @Override
@@ -141,11 +144,11 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
                         }
                     }
                 } else {
-                    Toast.makeText(CitySelectActivity.this, "暂未获取到您的位置信息", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CitySelectActivity.this, R.string.position_locate_error, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (locationCity == null) {//如果没有被赋值，则默认全国
-                    Toast.makeText(CitySelectActivity.this, "暂未获取到您的位置信息", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CitySelectActivity.this,  R.string.position_locate_error, Toast.LENGTH_SHORT).show();
                 } else {
                     if (!BaseApplication.getCurrentCity().equals(locationCity)) {
                         dialogCity();
@@ -166,7 +169,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
         alertDialog.setCanceledOnTouchOutside(false);
         View view = View.inflate(this, R.layout.dialog_cancel_or_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("已获取到您的位置信息，是否\n切换为" + locationCity.getName());
+        text.setText(getString(R.string.position_locate_success) + locationCity.getName());
         Button cancel = (Button) view.findViewById(R.id.cancel);
         Button confirm = (Button) view.findViewById(R.id.confirm);
         cancel.setOnClickListener(new View.OnClickListener() {

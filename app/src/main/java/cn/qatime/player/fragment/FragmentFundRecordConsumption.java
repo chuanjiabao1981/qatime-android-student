@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -55,14 +56,21 @@ public class FragmentFundRecordConsumption extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fund_record_consumption, container, false);
         initview(view);
+        initOver = true;
         return view;
     }
+
     @Override
     public void onShow() {
         if (!isLoad) {
-            initData(1);
+            if (initOver) {
+                initData(1);
+            } else {
+                super.onShow();
+            }
         }
     }
+
     private void initData(final int loadType) {
         Map<String, String> map = new HashMap<>();
         map.put("start_date", "0");
@@ -114,7 +122,6 @@ public class FragmentFundRecordConsumption extends BaseFragment {
 
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
-        listView.getRefreshableView().setDividerHeight(2);
         listView.setMode(PullToRefreshBase.Mode.BOTH);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
@@ -122,6 +129,10 @@ public class FragmentFundRecordConsumption extends BaseFragment {
         listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResourceString(R.string.loading));
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
+        View empty = View.inflate(getActivity(), R.layout.empty_view, null);
+        TextView textEmpty = (TextView) empty.findViewById(R.id.text_empty);
+        textEmpty.setText(R.string.not_found_related_order);
+        listView.setEmptyView(empty);
 
         adapter = new CommonAdapter<ConsumptionRecordBean.DataBean>(getActivity(), data, R.layout.item_fragment_fund_record3) {
 
@@ -135,6 +146,7 @@ public class FragmentFundRecordConsumption extends BaseFragment {
                 try {
                     helper.setText(R.id.time, parse.format(parseISO.parse(item.getCreated_at())));
                 } catch (ParseException e) {
+                    helper.setText(R.id.time, item.getCreated_at());
                     e.printStackTrace();
                 }
                 helper.setText(R.id.mode, getChangeType(item.getChange_type()));
@@ -161,13 +173,13 @@ public class FragmentFundRecordConsumption extends BaseFragment {
     private String getChangeType(String change_type) {
         switch (change_type) {
             case "weixin":
-                return "微信支付";
+                return getResourceString(R.string.pay_wexin);
             case "alipay":
-                return "支付宝";
+                return getResourceString(R.string.alipay);
             case "account":
-                return "余额支付";
+            default:
+                return getResourceString(R.string.pay_account);
         }
-        return "余额支付";
     }
 
 

@@ -12,11 +12,12 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -27,7 +28,9 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.PayResultState;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.AppPayParamsBean;
@@ -46,7 +49,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     TextView classnumber;
     TextView classstarttime;
     TextView classendtime;
-    //    TextView status;
+    TextView status;
     TextView price;
     TextView payprice;
     private Button pay;
@@ -68,7 +71,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_confirm);
-        setTitle(getResources().getString(R.string.order_confirm));
+        setTitles(getResources().getString(R.string.order_confirm));
         initView();
 
         EventBus.getDefault().register(this);
@@ -98,13 +101,9 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         } catch (ParseException e) {
             e.printStackTrace();
         }
-//        if (data.status.equals("preview")) {
-//            status.setText(getResources().getString(R.string.status_preview));
-//        } else if (data.status.equals("teaching")) {
-//            status.setText(getResources().getString(R.string.status_teaching));
-//        } else {
-//            status.setText(getResources().getString(R.string.status_over));
-//        }
+
+        status.setText(getResources().getString(R.string.current_status) + getStatus(data.status));
+
         String price = df.format(data.current_price);
         if (price.startsWith(".")) {
             price = "0" + price;
@@ -116,7 +115,20 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        // TODO: 2016/10/8 余额支付验证
+        if (payType.equals("weixin")) {
+            IWXAPI api = WXAPIFactory.createWXAPI(this, null);
+            if (!api.isWXAppInstalled()) {
+                Toast.makeText(this, R.string.wechat_not_installed, Toast.LENGTH_SHORT).show();
+                return;
+            }
+        } else if (payType.equals("alipay")) {
+            return;
+        } else if (payType.equals("account")) {
+            if (priceNumber > Double.valueOf(BaseApplication.getCashAccount().getData().getBalance())) {
+                Toast.makeText(this, R.string.amount_not_enough, Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
         pay.setEnabled(false);
         Map<String, String> map = new HashMap<>();
         map.put("pay_type", payType);
@@ -124,15 +136,15 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                 new VolleyListener(OrderConfirmActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        OrderConfirmBean data = JsonUtils.objectFromJson(response.toString(), OrderConfirmBean.class);
+                        OrderConfirmBean confirmBean = JsonUtils.objectFromJson(response.toString(), OrderConfirmBean.class);
                         if (payType.equals("weixin")) {
-                            if (data != null) {
+                            if (confirmBean != null) {
                                 Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
-                                intent.putExtra("price", priceNumber);
-                                intent.putExtra("id", data.getData().getId());
-                                intent.putExtra("time", data.getData().getCreated_at());
+                                intent.putExtra("price", confirmBean.getData().getAmount());
+                                intent.putExtra("id", confirmBean.getData().getId());
+                                intent.putExtra("time", confirmBean.getData().getCreated_at());
                                 intent.putExtra("type", payType);
-                                AppPayParamsBean app_pay_params = data.getData().getApp_pay_params();
+                                AppPayParamsBean app_pay_params = confirmBean.getData().getApp_pay_params();
                                 intent.putExtra("data", app_pay_params);
                                 startActivity(intent);
                                 pay.setEnabled(true);
@@ -140,13 +152,13 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                                 dialog();
                             }
                         } else if (payType.equals("alipay")) {
-                            if (data != null) {
+                            if (confirmBean != null) {
                                 Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
-                                intent.putExtra("price", priceNumber);
-                                intent.putExtra("id", data.getData().getId());
-                                intent.putExtra("time", data.getData().getCreated_at());
+                                intent.putExtra("price", confirmBean.getData().getAmount());
+                                intent.putExtra("id", confirmBean.getData().getId());
+                                intent.putExtra("time", confirmBean.getData().getCreated_at());
                                 intent.putExtra("type", payType);
-                                String app_pay_params = data.getData().getApp_pay_str();
+                                String app_pay_params = confirmBean.getData().getApp_pay_str();
                                 intent.putExtra("data", app_pay_params);
                                 startActivity(intent);
                                 pay.setEnabled(true);
@@ -155,17 +167,14 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                             }
                         } else if (payType.equals("account")) {
                             //余额支付成功  status---failed交易失败  shipped交易成功
-                            // TODO: 2016/10/8 余额支付  订单?  校验?
-                            try {
-                                if (response.getJSONObject("data").getString("status").equals("shipped")) {
-                                    EventBus.getDefault().post(PayResultState.SUCCESS);
-                                    finish();
-                                } else {
-                                    Toast.makeText(OrderConfirmActivity.this, "余额不足", Toast.LENGTH_SHORT).show();
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
+//                            try {
+                            Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
+                            intent.putExtra("price", confirmBean.getData().getAmount());
+                            intent.putExtra("id", confirmBean.getData().getId());
+                            intent.putExtra("time", confirmBean.getData().getCreated_at());
+                            intent.putExtra("data", name.getText().toString());
+                            intent.putExtra("type", payType);
+                            startActivity(intent);
                         }
                         pay.setEnabled(true);
                     }
@@ -198,7 +207,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         alertDialog = builder.create();
         View view = View.inflate(this, R.layout.dialog_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("下单失败，请稍后再试");
+        text.setText(R.string.create_order_error);
         Button confirm = (Button) view.findViewById(R.id.confirm);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -223,7 +232,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         classnumber = (TextView) findViewById(R.id.class_number);
         classstarttime = (TextView) findViewById(R.id.class_start_time);
         classendtime = (TextView) findViewById(R.id.class_end_time);
-//        status = (TextView) findViewById(R.id.status);
+        status = (TextView) findViewById(R.id.status);
         wechatLayout = findViewById(R.id.wechat_layout);
         alipayLayout = findViewById(R.id.alipay_layout);
         accountLayout = findViewById(R.id.account_layout);
@@ -240,12 +249,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                 aliPay.setImageResource(R.drawable.shape_select_circle_select);
                 wechatPay.setImageResource(R.drawable.shape_select_circle_normal);
                 account.setImageResource(R.drawable.shape_select_circle_normal);
-
-                //TODO 集成完支付宝后，去掉下面这段
-                Toast.makeText(OrderConfirmActivity.this, getResourceString(R.string.not_support_alipay), Toast.LENGTH_SHORT).show();
-                wechatPay.setImageResource(R.drawable.shape_select_circle_select);
-                aliPay.setImageResource(R.drawable.shape_select_circle_normal);
-                payType = "weixin";
             }
         });
         wechatLayout.setOnClickListener(new View.OnClickListener() {
@@ -266,6 +269,22 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                 wechatPay.setImageResource(R.drawable.shape_select_circle_normal);
             }
         });
+    }
+
+    private String getStatus(String status) {
+        if (status == null) {
+            return getString(R.string.recruiting);
+        }
+        if (status.equals("published")) {
+            return getString(R.string.recruiting);
+        } else if (status.equals("init")) {
+            return getString(R.string.recruiting);
+        } else if (status.equals("teaching")) {
+            return getString(R.string.teaching);
+        } else if (status.equals(Constant.CourseStatus.completed) || status.equals(Constant.CourseStatus.finished)) {//未开始
+            return getString(R.string.completed);
+        }
+        return getString(R.string.recruiting);
     }
 
     @Subscribe

@@ -1,63 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#f7f7f7"
     android:orientation="vertical">
 
+    <include layout="@layout/layout_backbar" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+    <LinearLayout style="@style/edit_layout_style">
 
-        <include layout="@layout/layout_backbar" />
+        <EditText
+            android:id="@+id/name"
+            style="@style/activity_edit_text_style"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:hint="@string/input_real_name" />
 
-        <LinearLayout style="@style/edit_layout_style">
+        <EditText
+            android:id="@+id/account"
+            style="@style/activity_edit_text_style"
+            android:layout_width="match_parent"
+            android:gravity="center_vertical"
+            android:hint="@string/hint_input_alipay_account"
+            android:inputType="number" />
 
-            <EditText
-                android:id="@+id/name"
-                style="@style/activity_edit_text_style"
-                android:layout_width="match_parent"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center_vertical"
-                android:hint="@string/input_real_name" />
-
-            <EditText
-                android:id="@+id/account"
-                style="@style/activity_edit_text_style"
-                android:layout_width="match_parent"
-                android:gravity="center_vertical"
-                android:hint="@string/hint_input_alipay_account"
-                android:inputType="number" />
-
-            <LinearLayout
-                android:layout_marginTop="10dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:gravity="center">
-
-                <EditText
-                    android:id="@+id/code"
-                    style="@style/activity_edit_text_style"
-                    android:inputType="number" />
-
-                <TextView
-                    android:id="@+id/text_getcode"
-                    style="@style/button_style_with_edit"
-                    android:text="@string/getcode" />
-            </LinearLayout>
-        </LinearLayout>
     </LinearLayout>
-
 
     <Button
         android:id="@+id/withdraw_cash_now"
         style="@style/button_full_width_style"
-        android:layout_alignParentBottom="true"
-        android:enabled="false"
+        android:layout_marginTop="10dp"
+        android:enabled="true"
         android:text="@string/withdraw_cash_now"
         android:textColor="@drawable/text_selector_white_red" />
-</RelativeLayout>
+</LinearLayout>

@@ -7,7 +7,6 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
-import com.orhanobut.logger.Logger;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,7 +51,7 @@ public class PayPSWVerifyActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void initView() {
-        setTitle("验证支付密码");
+        setTitles(getString(R.string.verify_pay_password));
         payEditText = (PayEditText) findViewById(R.id.PayEditText_pay);
         customKeyboard = (CustomKeyboard) findViewById(R.id.KeyboardView_pay);
         forget = findViewById(R.id.forget_pay_password);
@@ -92,7 +91,6 @@ public class PayPSWVerifyActivity extends BaseActivity implements View.OnClickLi
                         new VolleyListener(PayPSWVerifyActivity.this) {
                             @Override
                             protected void onSuccess(JSONObject response) {
-                                Logger.e("密码正确");
                                 Intent intent = new Intent(PayPSWVerifyActivity.this, PayPSWChangeActivity.class);
                                 try {
                                     intent.putExtra("ticket_token", response.getString("data"));
@@ -108,10 +106,17 @@ public class PayPSWVerifyActivity extends BaseActivity implements View.OnClickLi
                                 try {
                                     int errorCode = response.getJSONObject("error").getInt("code");
                                     if (errorCode == 2005) {
-                                        Toast.makeText(PayPSWVerifyActivity.this, "密码验证失败", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(PayPSWVerifyActivity.this, "请先点击忘记支付密码进行重置", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(PayPSWVerifyActivity.this, R.string.password_error, Toast.LENGTH_SHORT).show();
+                                    } else if (errorCode == 2006) {
+                                        Toast.makeText(PayPSWVerifyActivity.this, R.string.pay_password_not_set, Toast.LENGTH_SHORT).show();
+                                    } else if (errorCode == 2008) {
+                                        Toast.makeText(PayPSWVerifyActivity.this, R.string.pay_password_not_enough_24, Toast.LENGTH_SHORT).show();
+                                    }else if (errorCode == 2009) {
+                                        Toast.makeText(PayPSWVerifyActivity.this, R.string.pay_password_too_many_mistake, Toast.LENGTH_SHORT).show();
+                                    }  else {
+                                        Toast.makeText(PayPSWVerifyActivity.this,R.string.server_error, Toast.LENGTH_SHORT).show();
                                     }
+
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }

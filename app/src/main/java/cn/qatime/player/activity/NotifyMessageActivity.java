@@ -1,9 +1,13 @@
 package cn.qatime.player.activity;
 
 import android.os.Bundle;
-import android.view.View;
+import android.support.v7.widget.SwitchCompat;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.umeng.analytics.MobclickAgent;
 
 import cn.qatime.player.R;
@@ -14,26 +18,24 @@ import libraryextra.utils.SPUtils;
 /**
  * Created by lenovo on 2016/8/22.
  */
-public class NotifyMessageActivity extends BaseActivity implements View.OnClickListener {
+public class NotifyMessageActivity extends BaseActivity implements CompoundButton.OnCheckedChangeListener {
 
-    private CheckBox cbVoice;
-    private CheckBox cbShake;
-    private View shake;
-    private View voice;
-    private boolean voiceStatus;
-    private boolean shakeStatus;
+    private CheckBox voice;
+    private CheckBox shake;
+    private SwitchCompat notifyStatus;
+    /**
+     * 状态是否初始化完成
+     */
+    private boolean initOver;
 
 
     private void assignViews() {
-        //TODO 待修改
-        voice = findViewById(R.id.voice);
-        cbVoice = (CheckBox) findViewById(R.id.cb_voice);
-        shake = findViewById(R.id.shake);
-        cbShake = (CheckBox) findViewById(R.id.cb_shake);
-//        cbVoice.setChecked(UserPreferences.getRingToggle());
-//        cbShake.setChecked(UserPreferences.getVibrateToggle());
-        voice.setOnClickListener(this);
-        shake.setOnClickListener(this);
+        voice = (CheckBox) findViewById(R.id.voice);
+        shake = (CheckBox) findViewById(R.id.shake);
+        notifyStatus = (SwitchCompat) findViewById(R.id.notify_status);
+        voice.setOnCheckedChangeListener(this);
+        shake.setOnCheckedChangeListener(this);
+        notifyStatus.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -45,58 +47,46 @@ public class NotifyMessageActivity extends BaseActivity implements View.OnClickL
 
     private void initView() {
         setContentView(R.layout.activity_notify_message);
-        setTitle(getResourceString(R.string.notify_message));
+        setTitles(getResourceString(R.string.notify_message));
         assignViews();
-        voice.setOnClickListener(this);
-        shake.setOnClickListener(this);
         boolean shakeStatus = (boolean) SPUtils.get(this, "shake_status", true);
-        cbShake.setChecked(shakeStatus);
+        shake.setChecked(shakeStatus);
         boolean voiceStatus = (boolean) SPUtils.get(this, "voice_status", true);
-        cbVoice.setChecked(voiceStatus);
+        voice.setChecked(voiceStatus);
+        boolean nofityStatus = (boolean) SPUtils.get(this, "notify_status", true);
+        notifyStatus.setChecked(nofityStatus);
+        initOver = true;
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if(!initOver){//避免重复设置
+            return;
+        }
+        switch (buttonView.getId()) {
             case R.id.voice:
-                setVoiceStatus();
+                SPUtils.put(this, "voice_status", isChecked);
+                BaseApplication.setOptions(isChecked, (boolean) SPUtils.get(this, "shake_status", true));
                 break;
             case R.id.shake:
-                setShakeStatus();
+                SPUtils.put(this, "shake_status", isChecked);
+                BaseApplication.setOptions((boolean) SPUtils.get(this, "voice_status", true), isChecked);
+                break;
+            case R.id.notify_status://消息提醒开关
+                BaseApplication.setChatMessageNotifyStatus(isChecked);
+                /**
+                 * 设置最近联系人的消息为已读
+                 *
+                 * @param account,    聊天对象帐号，或者以下两个值：
+                 *                    {@link #MSG_CHATTING_ACCOUNT_ALL} 目前没有与任何人对话，但能看到消息提醒（比如在消息列表界面），不需要在状态栏做消息通知
+                 *                    {@link #MSG_CHATTING_ACCOUNT_NONE} 目前没有与任何人对话，需要状态栏消息通知
+                 */
+                NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.isChatMessageNotifyStatus()?MsgService.MSG_CHATTING_ACCOUNT_NONE:MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
+                SPUtils.put(this, "notify_status", isChecked);
                 break;
         }
     }
 
-    private void setShakeStatus() {
-//        boolean check = UserPreferences.getVibrateToggle();
-//        cbShake.setChecked(!check);
-//        UserPreferences.setVibrateToggle(!check);
-
-        shakeStatus = !(boolean) SPUtils.get(this, "shake_status", true);
-        BaseApplication.setOptions((boolean) SPUtils.get(this, "voice_status", true), shakeStatus);
-        if (shakeStatus) {
-            SPUtils.put(this, "shake_status", true);
-            cbShake.setChecked(true);
-        } else {
-            SPUtils.put(this, "shake_status", false);
-            cbShake.setChecked(false);
-        }
-    }
-
-    private void setVoiceStatus() {
-//        boolean check = UserPreferences.getRingToggle();
-//        cbVoice.setChecked(!check);
-//        UserPreferences.setRingToggle(!check)
-        voiceStatus = !(boolean) SPUtils.get(this, "voice_status", true);
-        BaseApplication.setOptions(voiceStatus, (boolean) SPUtils.get(this, "shake_status", true));
-        if (voiceStatus) {
-            SPUtils.put(this, "voice_status", true);
-            cbVoice.setChecked(true);
-        } else {
-            SPUtils.put(this, "voice_status", false);
-            cbVoice.setChecked(false);
-        }
-    }
     @Override
     protected void onResume() {
         super.onResume();

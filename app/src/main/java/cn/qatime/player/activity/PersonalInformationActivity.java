@@ -24,9 +24,7 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
-import libraryextra.bean.SchoolBean;
 import libraryextra.transformation.GlideCircleTransform;
-import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -38,7 +36,7 @@ public class PersonalInformationActivity extends BaseActivity {
     TextView sex;
     TextView birthday;
     TextView grade;
-    TextView school;
+//    TextView school;
     TextView describe;
 
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
@@ -50,7 +48,7 @@ public class PersonalInformationActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_information);
-        setTitle(getResources().getString(R.string.personal_information));
+        setTitles(getResources().getString(R.string.personal_information));
         setRightImage(R.mipmap.personal_change_information, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,7 +127,7 @@ public class PersonalInformationActivity extends BaseActivity {
         if (!StringUtils.isNullOrBlanK(bean.getData().getGender())) {
             if (bean.getData().getGender().equals("male")) {
                 sex.setText(getResources().getString(R.string.male));
-            } else if (bean.getData().getGender().equals("male")) {
+            } else if (bean.getData().getGender().equals("female")) {
                 sex.setText(getResources().getString(R.string.female));
             }
         } else {
@@ -155,18 +153,18 @@ public class PersonalInformationActivity extends BaseActivity {
 //            region.setText("");}
 
 
-        SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getCacheDir() + "/school.txt").toString(), SchoolBean.class);
+//        SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getCacheDir() + "/school.txt").toString(), SchoolBean.class);
 
-        if (schoolBean != null && schoolBean.getData() != null) {
-            for (int i = 0; i < schoolBean.getData().size(); i++) {
-                if (bean.getData().getSchool() == schoolBean.getData().get(i).getId()) {
-                    school.setText(schoolBean.getData().get(i).getName());
-                    break;
-                }
-            }
-        } else {
-            school.setText("");
-        }
+//        if (schoolBean != null && schoolBean.getData() != null) {
+//            for (int i = 0; i < schoolBean.getData().size(); i++) {
+//                if (bean.getData().getSchool() == schoolBean.getData().get(i).getId()) {
+//                    school.setText(schoolBean.getData().get(i).getName());
+//                    break;
+//                }
+//            }
+//        } else {
+//            school.setText("");
+//        }
         if (!StringUtils.isNullOrBlanK(bean.getData().getDesc())) {
             describe.setText(bean.getData().getDesc());
         } else {
@@ -180,7 +178,7 @@ public class PersonalInformationActivity extends BaseActivity {
         sex = (TextView) findViewById(R.id.sex);
         birthday = (TextView) findViewById(R.id.birthday);
         grade = (TextView) findViewById(R.id.grade);
-        school = (TextView) findViewById(R.id.school);
+//        school = (TextView) findViewById(R.id.school);
         describe = (TextView) findViewById(R.id.describe);
     }
 

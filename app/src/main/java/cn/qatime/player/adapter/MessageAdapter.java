@@ -29,6 +29,7 @@ import com.netease.nimlib.sdk.team.model.MemberChangeAttachment;
 import com.netease.nimlib.sdk.team.model.MuteMemberAttachment;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.UpdateTeamAttachment;
+import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -50,6 +51,7 @@ import libraryextra.utils.StringUtils;
  * @Time 2016/9/22 11:18
  * @Describe
  */
+@Deprecated
 public class MessageAdapter extends BaseAdapter {
     private static ThreadLocal<String> teamId = new ThreadLocal<>();
     private final List<IMMessage> items;
@@ -142,7 +144,7 @@ public class MessageAdapter extends BaseAdapter {
             notifyHolder.notify.setText(buildNotification(item.getSessionId(), item.getFromAccount(), (NotificationAttachment) item.getAttachment()));
             teamId.set(null);
         } else {
-            notifyHolder.notify.setText("不支持的类型");
+            notifyHolder.notify.setText(R.string.unsupported_type);
         }
         return convertView;
     }
@@ -173,7 +175,7 @@ public class MessageAdapter extends BaseAdapter {
         if (isReceivedMessage(item)) {
             if (!StringUtils.isNullOrBlanK(owner)) {
                 if (owner.equals(item.getFromAccount())) {
-                    textHolder.othername.setText(item.getFromNick() + "(老师)");
+                    textHolder.othername.setText(item.getFromNick() + "("+context.getString(R.string.teacher_translate)+")");
                     textHolder.othername.setTextColor(0xffbe0b0b);
                 } else {
                     textHolder.othername.setText(item.getFromNick());
@@ -184,7 +186,11 @@ public class MessageAdapter extends BaseAdapter {
             }
             textHolder.right.setVisibility(View.GONE);
             textHolder.left.setVisibility(View.VISIBLE);
-            Glide.with(context).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_default).crossFade().dontAnimate().into((ImageView) textHolder.otherhead);
+            if (BaseApplication.getUserInfoProvide() != null) {
+                UserInfoProvider.UserInfo userinfo = BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount());
+                if (userinfo != null)
+                    Glide.with(context).load(userinfo.getAvatar()).placeholder(R.mipmap.head_default).crossFade().dontAnimate().into((ImageView) textHolder.otherhead);
+            }
             textHolder.othercontent.setText(ExpressionUtil.getExpressionString(
                     context, item.getContent(), ExpressionUtil.emoji, cache, new GifDrawable.UpdateListener() {
                         @Override
@@ -196,7 +202,11 @@ public class MessageAdapter extends BaseAdapter {
         } else {
             textHolder.right.setVisibility(View.VISIBLE);
             textHolder.left.setVisibility(View.GONE);
-            Glide.with(context).load(BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_default).crossFade().dontAnimate().into((ImageView) textHolder.headmine);
+            if (BaseApplication.getUserInfoProvide() != null) {
+                UserInfoProvider.UserInfo userinfo = BaseApplication.getUserInfoProvide().getUserInfo(item.getFromAccount());
+                if (userinfo != null)
+                    Glide.with(context).load(userinfo.getAvatar()).placeholder(R.mipmap.head_default).crossFade().dontAnimate().into((ImageView) textHolder.headmine);
+            }
             textHolder.timemine.setText(DateUtils.getTimeShowString(item.getTime(), false));
             textHolder.contentmine.setText(ExpressionUtil.getExpressionString(
                     context, item.getContent(), ExpressionUtil.emoji, cache, new GifDrawable.UpdateListener() {
@@ -322,7 +332,7 @@ public class MessageAdapter extends BaseAdapter {
                 left.setVisibility(View.VISIBLE);
                 if (!StringUtils.isNullOrBlanK(owner)) {
                     if (owner.equals(message.getFromAccount())) {
-                        othername.setText(message.getFromNick() + "(老师)");
+                        othername.setText(message.getFromNick() + "("+context.getString(R.string.teacher_translate)+")");
                         othername.setTextColor(0xffbe0b0b);
                     } else {
                         othername.setText(message.getFromNick());
@@ -331,7 +341,11 @@ public class MessageAdapter extends BaseAdapter {
                 } else {
                     othername.setText(message.getFromNick());
                 }
-                Glide.with(context).load(BaseApplication.getUserInfoProvide().getUserInfo(message.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_default).crossFade().dontAnimate().into((ImageView) otherhead);
+                if (BaseApplication.getUserInfoProvide() != null) {
+                    UserInfoProvider.UserInfo userinfo = BaseApplication.getUserInfoProvide().getUserInfo(message.getFromAccount());
+                    if (userinfo != null)
+                        Glide.with(context).load(userinfo.getAvatar()).placeholder(R.mipmap.head_default).crossFade().dontAnimate().into((ImageView) otherhead);
+                }
                 othertime.setText(DateUtils.getTimeShowString(message.getTime(), false));
 
                 if (!TextUtils.isEmpty(thumbPath)) {
@@ -348,7 +362,11 @@ public class MessageAdapter extends BaseAdapter {
                 right.setVisibility(View.VISIBLE);
                 left.setVisibility(View.GONE);
 
-                Glide.with(context).load(BaseApplication.getUserInfoProvide().getUserInfo(message.getFromAccount()).getAvatar()).placeholder(R.mipmap.head_default).crossFade().dontAnimate().into((ImageView) headmine);
+                if (BaseApplication.getUserInfoProvide() != null) {
+                    UserInfoProvider.UserInfo userinfo = BaseApplication.getUserInfoProvide().getUserInfo(message.getFromAccount());
+                    if (userinfo != null)
+                        Glide.with(context).load(userinfo.getAvatar()).placeholder(R.mipmap.head_default).crossFade().dontAnimate().into((ImageView) headmine);
+                }
                 timemine.setText(DateUtils.getTimeShowString(message.getTime(), false));
 
                 if (!TextUtils.isEmpty(thumbPath)) {
@@ -573,7 +591,7 @@ public class MessageAdapter extends BaseAdapter {
     }
 
     private String buildInviteMemberNotification(MemberChangeAttachment a, String fromAccount) {
-        return buildMemberListString(a.getTargets(), fromAccount) + " 加入了本班";
+        return buildMemberListString(a.getTargets(), fromAccount) + context.getString(R.string.join_the_class);
     }
 
     private String buildKickMemberNotification(MemberChangeAttachment a) {
@@ -581,9 +599,9 @@ public class MessageAdapter extends BaseAdapter {
         sb.append(buildMemberListString(a.getTargets(), null));
         Team team = TeamDataCache.getInstance().getTeamById(teamId.get());
         if (team.getType() == TeamTypeEnum.Advanced) {
-            sb.append(" 已被移出群");
+            sb.append(context.getString(R.string.has_been_removed_from_the_team));
         } else {
-            sb.append(" 已被移出讨论组");
+            sb.append(context.getString(R.string.has_been_removed_from_the_group));
         }
         return sb.toString();
     }
@@ -592,29 +610,29 @@ public class MessageAdapter extends BaseAdapter {
         String tip;
         Team team = TeamDataCache.getInstance().getTeamById(teamId.get());
         if (team.getType() == TeamTypeEnum.Advanced) {
-            tip = " 离开了群";
+            tip = context.getString(R.string.left_the_team);
         } else {
-            tip = " 离开了讨论组";
+            tip = context.getString(R.string.left_the_group);
         }
         return getTeamMemberDisplayName(fromAccount) + tip;
     }
 
     private String buildDismissTeamNotification(String fromAccount) {
-        return getTeamMemberDisplayName(fromAccount) + " 解散了群";
+        return getTeamMemberDisplayName(fromAccount) + context.getString(R.string.dismiss_the_team);
     }
 
     private String buildUpdateTeamNotification(String tid, String account, UpdateTeamAttachment a) {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<TeamFieldEnum, Object> field : a.getUpdatedFields().entrySet()) {
             if (field.getKey() == TeamFieldEnum.Name) {
-                sb.append("名称被更新为 ").append(field.getValue());
+                sb.append(context.getString(R.string.name_update_to)).append(field.getValue());
             } else if (field.getKey() == TeamFieldEnum.Introduce) {
-                sb.append("群介绍被更新为 ").append(field.getValue());
+                sb.append(context.getString(R.string.team_desc_update_to)).append(field.getValue());
             } else if (field.getKey() == TeamFieldEnum.Announcement) {
-                sb.append(TeamDataCache.getInstance().getTeamMemberDisplayNameYou(tid, account)).append(" 修改了群公告");
+                sb.append(TeamDataCache.getInstance().getTeamMemberDisplayNameYou(tid, account)).append(context.getString(R.string.update_the_team_announcement));
             } else if (field.getKey() == TeamFieldEnum.VerifyType) {
                 VerifyTypeEnum type = (VerifyTypeEnum) field.getValue();
-                String authen = "群身份验证权限更新为";
+                String authen = context.getString(R.string.team_authentication_update_to);
                 if (type == VerifyTypeEnum.Free) {
                     sb.append(authen).append(context.getString(R.string.team_allow_anyone_join));
                 } else if (type == VerifyTypeEnum.Apply) {
@@ -623,52 +641,52 @@ public class MessageAdapter extends BaseAdapter {
                     sb.append(authen).append(context.getString(R.string.team_not_allow_anyone_join));
                 }
             } else if (field.getKey() == TeamFieldEnum.Extension) {
-                sb.append("群扩展字段被更新为 ").append(field.getValue());
+                sb.append(context.getString(R.string.team_extension_field_update_to)).append(field.getValue());
             } else if (field.getKey() == TeamFieldEnum.Ext_Server) {
-                sb.append("群扩展字段(服务器)被更新为 ").append(field.getValue());
+                sb.append(context.getString(R.string.team_server_extension_field_update_to)).append(field.getValue());
             } else if (field.getKey() == TeamFieldEnum.ICON) {
-                sb.append("群头像已更新");
+                sb.append(context.getString(R.string.team_icon_has_updated));
             } else if (field.getKey() == TeamFieldEnum.InviteMode) {
-                sb.append("群邀请他人权限被更新为 ").append(field.getValue());
+                sb.append(context.getString(R.string.team_invite_permission_be_update_to)).append(field.getValue());
             } else if (field.getKey() == TeamFieldEnum.TeamUpdateMode) {
-                sb.append("群资料修改权限被更新为 ").append(field.getValue());
+                sb.append(context.getString(R.string.team_info_permission_be_updated_to)).append(field.getValue());
             } else if (field.getKey() == TeamFieldEnum.BeInviteMode) {
-                sb.append("群被邀请人身份验证权限被更新为 ").append(field.getValue());
+                sb.append(context.getString(R.string.team_invite_authentication_be_updated_to)).append(field.getValue());
             } else if (field.getKey() == TeamFieldEnum.TeamExtensionUpdateMode) {
-                sb.append("群扩展字段修改权限被更新为 ").append(field.getValue());
+                sb.append(context.getString(R.string.team_extension_update_mode_be_updated_to)).append(field.getValue());
             } else {
-                sb.append("群").append(field.getKey()).append("被更新为 ").append(field.getValue());
+                sb.append(context.getString(R.string.team)).append(field.getKey()).append(context.getString(R.string.be_updated_to)).append(field.getValue());
             }
             sb.append("\r\n");
         }
         if (sb.length() < 2) {
-            return "未知通知";
+            return context.getString(R.string.unknown_notify);
         }
         return sb.delete(sb.length() - 2, sb.length()).toString();
     }
 
     private String buildManagerPassTeamApplyNotification(MemberChangeAttachment a) {
-        return "管理员通过用户 " + buildMemberListString(a.getTargets(), null) + " 的入群申请";
+        return context.getString(R.string.administrator_allow_someone_join_the_team,buildMemberListString(a.getTargets(), null));
     }
 
     private String buildTransferOwnerNotification(String from, MemberChangeAttachment a) {
-        return getTeamMemberDisplayName(from) + " 将群转移给 " + buildMemberListString(a.getTargets(), null);
+        return getTeamMemberDisplayName(from) + context.getString(R.string.move_the_group_to) + buildMemberListString(a.getTargets(), null);
     }
 
     private String buildAddTeamManagerNotification(MemberChangeAttachment a) {
-        return buildMemberListString(a.getTargets(), null) + " 被任命为管理员";
+        return buildMemberListString(a.getTargets(), null) + context.getString(R.string.bean_appointed_administrator);
     }
 
     private String buildRemoveTeamManagerNotification(MemberChangeAttachment a) {
-        return buildMemberListString(a.getTargets(), null) + " 被撤销管理员身份";
+        return buildMemberListString(a.getTargets(), null) + context.getString(R.string.been_dropped_administrator);
     }
 
     private String buildAcceptInviteNotification(String from, MemberChangeAttachment a) {
-        return getTeamMemberDisplayName(from) + " 接受了 " + buildMemberListString(a.getTargets(), null) + " 的入群邀请";
+        return context.getString(R.string.accept_the_team_invite,getTeamMemberDisplayName(from),buildMemberListString(a.getTargets(), null));
     }
 
     private String buildMuteTeamNotification(MuteMemberAttachment a) {
-        return buildMemberListString(a.getTargets(), null) + "被" + (a.isMute() ? "禁言" : "解除禁言");
+        return buildMemberListString(a.getTargets(), null) + context.getString(R.string.be) + (a.isMute() ? context.getString(R.string.mute) : context.getString(R.string.unmute));
     }
 
     // 判断消息方向，是否是接收到的消息

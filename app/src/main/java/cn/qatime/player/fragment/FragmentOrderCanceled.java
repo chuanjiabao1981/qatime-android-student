@@ -8,11 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.bumptech.glide.Glide;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -53,11 +52,16 @@ public class FragmentOrderCanceled extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_order_canceled, container, false);
         initview(view);
+        initOver=true;
         return view;
     }
 
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
+        View empty = View.inflate(getActivity(),R.layout.empty_view,null);
+        TextView textEmpty = (TextView) empty.findViewById(R.id.text_empty);
+        textEmpty.setText(R.string.not_found_related_order);
+        listView.setEmptyView(empty);
         listView.setMode(PullToRefreshBase.Mode.BOTH);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setPullLabel(getResources().getString(R.string.pull_to_load));
@@ -65,17 +69,16 @@ public class FragmentOrderCanceled extends BaseFragment {
         listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
-
         adapter = new CommonAdapter<MyOrderBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_order3) {
             @Override
             public void convert(ViewHolder helper, final MyOrderBean.Data item, final int position) {
                 StringBuilder sp = new StringBuilder();
-                sp.append(item.getProduct().getGrade()).append(item.getProduct().getSubject()).append("/共").append(item.getProduct().getLesson_count())
+                sp.append(item.getProduct().getGrade()).append(item.getProduct().getSubject()).append("/共").append(item.getProduct().getPreset_lesson_count())
                         .append("课/").append(item.getProduct().getTeacher_name());
                 helper.setText(R.id.classname, item.getProduct().getName())
                         .setText(R.id.describe, sp.toString());
                 if (item.getStatus().equals("refunded")) {//交易关闭
-                    helper.setText(R.id.status, getResourceString(R.string.deal_closed));
+                    helper.setText(R.id.status, getString(R.string.refunded));
                 } else if (item.getStatus().equals("canceled")) {//交易关闭
                     helper.setText(R.id.status, getResourceString(R.string.deal_closed));
                 } else if (item.getStatus().equals("expired")) {//交易关闭
@@ -83,7 +86,7 @@ public class FragmentOrderCanceled extends BaseFragment {
                 } else {//已取消
                     helper.setText(R.id.status, "        ");
                 }
-                String price = df.format(item.getProduct().getCurrent_price());
+                String price = item.getAmount();
                 if (price.startsWith(".")) {
                     price = "0" + price;
                 }
@@ -152,6 +155,7 @@ public class FragmentOrderCanceled extends BaseFragment {
                 bean.Preset_lesson_count = list.get(position - 1).getProduct().getPreset_lesson_count();
                 bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
                 bean.current_price = list.get(position - 1).getProduct().getCurrent_price();
+                bean.amount = list.get(position-1).getAmount();
                 intent.putExtra("data", bean);
                 startActivity(intent);
             }
@@ -161,7 +165,11 @@ public class FragmentOrderCanceled extends BaseFragment {
     @Override
     public void onShow() {
         if (!isLoad) {
-            initData(1);
+            if (initOver) {
+                initData(1);
+            }else{
+                super.onShow();
+            }
         }
     }
 

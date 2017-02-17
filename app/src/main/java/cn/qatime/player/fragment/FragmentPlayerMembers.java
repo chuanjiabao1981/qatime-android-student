@@ -11,12 +11,14 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.adapter.FragmentNEVideoPlayerAdapter4;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.bean.Announcements;
+import libraryextra.utils.PinyinUtils;
 import libraryextra.utils.StringUtils;
 
 public class FragmentPlayerMembers extends BaseFragment {
@@ -40,6 +42,7 @@ public class FragmentPlayerMembers extends BaseFragment {
             }
         }
     };
+    private Announcements.DataBean.MembersBean owner;
 
     @Nullable
     @Override
@@ -60,26 +63,33 @@ public class FragmentPlayerMembers extends BaseFragment {
         if (accounts != null) {
             list.clear();
             list.addAll(accounts.getMembers());
-            for (Announcements.DataBean.MembersBean item : list) {
+            Iterator<Announcements.DataBean.MembersBean> it = list.iterator();
+            while (it.hasNext()) {
+                Announcements.DataBean.MembersBean item = it.next();
                 if (!StringUtils.isNullOrBlanK(accounts.getOwner())) {
                     if (accounts.getOwner().equals(item.getAccid())) {
                         item.setOwner(true);
+                        owner = item;
+                        it.remove();
                     } else {
                         item.setOwner(false);
                     }
                 }
                 if (StringUtils.isNullOrBlanK(item.getName())) {
-                    item.setFirstLetter("");
+                    item.setFirstLetters("");
                 } else {
-                    item.setFirstLetter(StringUtils.getPYIndexStr(item.getName().substring(0, 1)));
+                    item.setFirstLetters(PinyinUtils.getPinyinFirstLetters(item.getName()));
                 }
             }
             Collections.sort(list, new Comparator<Announcements.DataBean.MembersBean>() {
                 @Override
                 public int compare(Announcements.DataBean.MembersBean lhs, Announcements.DataBean.MembersBean rhs) {
-                    return rhs.isOwner() ? 1 : lhs.getFirstLetter().compareTo(rhs.getFirstLetter());
+                    return lhs.getFirstLetters().compareTo(rhs.getFirstLetters());
                 }
             });
+            if (owner != null) {
+                list.add(0, owner);
+            }
             hd.postDelayed(runnable, 200);
         }
     }

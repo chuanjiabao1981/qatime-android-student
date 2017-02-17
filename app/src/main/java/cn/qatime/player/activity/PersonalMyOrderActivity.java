@@ -27,7 +27,7 @@ public class PersonalMyOrderActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_my_order);
-        setTitle(getResources().getString(R.string.my_order));
+        setTitles(getResources().getString(R.string.my_order));
         initView();
     }
 

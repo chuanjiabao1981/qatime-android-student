@@ -35,6 +35,7 @@ android {
         exclude 'META-INF/dependencies.txt'
         exclude 'META-INF/LGPL2.1'
     }
+
     buildTypes {
         debug {
             minifyEnabled false
@@ -55,6 +56,10 @@ android {
     lintOptions {
         abortOnError false
     }
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
     productFlavors {
         flavors_debug {
             applicationId "cn.qatime.player.debug"
@@ -92,7 +97,6 @@ def getVersionNameFromManifest() {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.3.0'
     compile project(':library_pulltorefresh')
     compile project(':common')
     compile project(':pushSDK')

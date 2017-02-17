@@ -64,6 +64,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="年级"
+                        android:textSize="12sp"
                         android:textColor="#666" />
 
                     <TextView
@@ -71,6 +72,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="科目"
+                        android:textSize="12sp"
                         android:textColor="#666" />
 
                     <TextView
@@ -78,6 +80,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="/老师"
+                        android:textSize="12sp"
                         android:textColor="#666" />
 
                     <View
@@ -90,6 +93,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="待上课"
+                        android:textSize="12sp"
                         android:textColor="#999" />
                 </LinearLayout>
 
@@ -108,6 +112,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="日期"
+                        android:textSize="12sp"
                         android:textColor="#666" />
 
                     <TextView
@@ -115,6 +120,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="时间"
+                        android:textSize="12sp"
                         android:textColor="#666" />
                 </LinearLayout>
             </LinearLayout>

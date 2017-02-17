@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#f7f7f7"
     android:orientation="vertical">
 
     <include layout="@layout/layout_backbar" />
@@ -12,30 +14,51 @@
         android:background="#dfdddd" />
 
     <LinearLayout
-        android:id="@+id/voice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:background="#fff"
         android:orientation="horizontal">
 
         <TextView
-            style="@style/setting_text_style"
-            android:text="@string/voice" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="#ffffff" />
-
-
-        <CheckBox
-            android:id="@+id/cb_voice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
-            style="@style/setting_icon_margin_right"
-            android:clickable="false" />
+            android:paddingBottom="15dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="15dp"
+            android:text="@string/notify_mode"
+            android:textColor="#333" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/voice"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:button="@null"
+                android:checked="false"
+                android:drawableLeft="@drawable/checkbox_selector"
+                android:drawablePadding="5dp"
+                android:text="@string/voice"
+                android:textColor="#333333" />
+
+            <CheckBox
+                android:id="@+id/shake"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="45dp"
+                android:button="@null"
+                android:checked="true"
+                android:drawableLeft="@drawable/checkbox_selector"
+                android:drawablePadding="5dp"
+                android:text="@string/shake"
+                android:textColor="#333333" />
+        </LinearLayout>
     </LinearLayout>
 
     <View
@@ -44,30 +67,36 @@
         android:background="#dfdddd" />
 
     <LinearLayout
-        android:id="@+id/shake"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:background="#fff"
         android:orientation="horizontal">
 
         <TextView
-            style="@style/setting_text_style"
-            android:text="@string/shake" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="#ffffff" />
-
-
-        <CheckBox
-            android:id="@+id/cb_shake"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
-            android:clickable="false"
-            style="@style/setting_icon_margin_right" />
+            android:paddingBottom="15dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="15dp"
+            android:text="@string/course_message_notify"
+            android:textColor="#333" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:gravity="right|center_vertical"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/notify_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:minWidth="40dp"
+                android:minHeight="20dp"
+                android:thumb="@drawable/switch_thumb_selector" />
+        </LinearLayout>
     </LinearLayout>
 
     <View

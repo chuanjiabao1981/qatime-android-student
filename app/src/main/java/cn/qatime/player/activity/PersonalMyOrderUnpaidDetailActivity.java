@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,6 +12,8 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -25,6 +26,7 @@ import java.text.SimpleDateFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.MyOrderBean;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.Constant;
@@ -48,7 +50,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
     private LinearLayout listitem;
     private TextView grade;
     private TextView teacher;
-//    private ImageView status;
+    //    private ImageView status;
     private TextView payprice;
     private int classid;
     DecimalFormat df = new DecimalFormat("#.00");
@@ -60,7 +62,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_my_order_unpaid_detail);
-        setTitle(getResources().getString(R.string.detail_of_order));
+        setTitles(getResources().getString(R.string.detail_of_order));
         initView();
         EventBus.getDefault().register(this);
         data = (MyOrderBean.Data) getIntent().getSerializableExtra("data");
@@ -112,17 +114,14 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         }
         String payType = data.getPay_type();//支付方式
         if (payType.equals("weixin")) {
-            paytype.setText(getResourceString(R.string.wechat_payment));
-        } else {
+            paytype.setText(getResourceString(R.string.wexin_payment));
+        } else if (payType.equals("alipay")) {
             paytype.setText(getResourceString(R.string.alipay_payment));
+        } else {
+            paytype.setText(getResourceString(R.string.account_payment));
         }
-        progress.setText("共" + data.getProduct().getPreset_lesson_count() + "课");
-        String price = df.format(data.getProduct().getCurrent_price());
-        if (price.startsWith(".")) {
-            price = "0" + price;
-        }
-        PersonalMyOrderUnpaidDetailActivity.this.payprice.setText(price);
-        payprice.setText("￥" + price + " ");
+        progress.setText(String.format(getResourceString(R.string.lesson_count),data.getProduct().getPreset_lesson_count()));
+        payprice.setText("￥" + data.getAmount());
     }
 
     public void initView() {
@@ -153,6 +152,21 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //TODO: 2016/9/1 付款
+                if (data.getPay_type().equals("weixin")) {
+                    IWXAPI api = WXAPIFactory.createWXAPI(PersonalMyOrderUnpaidDetailActivity.this, null);
+                    if (!api.isWXAppInstalled()) {
+                        Toast.makeText(PersonalMyOrderUnpaidDetailActivity.this, R.string.wechat_not_installed, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                } else if (data.getPay_type().equals("alipay")) {
+                    return;
+                } else if (data.getPay_type().equals("account")) {
+                    if (Double.valueOf(data.getAmount()) > Double.valueOf(BaseApplication.getCashAccount().getData().getBalance())) {
+                        Toast.makeText(PersonalMyOrderUnpaidDetailActivity.this, R.string.amount_not_enough, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+
                 Intent intent = new Intent(PersonalMyOrderUnpaidDetailActivity.this, OrderPayActivity.class);
                 if (data.getPay_type().equals("weixin")) {
                     intent.putExtra("data", data.getApp_pay_params());
@@ -161,7 +175,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
                 }
                 intent.putExtra("id", data.getId());
                 intent.putExtra("time", data.getCreated_at());
-                intent.putExtra("price", data.getProduct().getCurrent_price());
+                intent.putExtra("price", data.getAmount());
                 intent.putExtra("type", data.getPay_type());
                 startActivity(intent);
             }
@@ -180,7 +194,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         final AlertDialog alertDialog = builder.create();
         View view = View.inflate(this, R.layout.dialog_cancel_or_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("是否确认取消此订单");
+        text.setText(R.string.confirm_cancel_order);
         Button cancel = (Button) view.findViewById(R.id.cancel);
         Button confirm = (Button) view.findViewById(R.id.confirm);
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -233,11 +247,6 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
 
     @Subscribe
     public void onEvent(PayResultState state) {
-        Intent intent = new Intent(this, OrderPayResultActivity.class);
-        intent.putExtra("orderId", ordernumber.getText().toString());
-        intent.putExtra("price", payprice.getText().toString());
-        intent.putExtra("state", state);
-        startActivity(intent);
         setResult(Constant.RESPONSE);//支付成功刷新订单
         finish();
     }

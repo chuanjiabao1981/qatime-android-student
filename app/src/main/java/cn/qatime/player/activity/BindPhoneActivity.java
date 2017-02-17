@@ -79,7 +79,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void initView() {
-        setTitle(getResources().getString(R.string.bind_phone_number));
+        setTitles(getResources().getString(R.string.bind_phone_number));
 
         assignViews();
 
@@ -115,7 +115,6 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
 
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        Logger.e("验证码发送成功" + currentphone + "---" + response.toString());
                         Toast.makeText(getApplicationContext(), getResourceString(R.string.code_send_success), Toast.LENGTH_LONG).show();
                     }
 
@@ -173,7 +172,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                     protected void onError(JSONObject response) {
                         try {
                             JSONObject error = response.getJSONObject("error");
-                            if (error.getString("msg").contains("与确认值不匹配")) {
+                            if (error.getString("msg").contains("Captcha confirmation")) {
                                 Toast.makeText(BindPhoneActivity.this, getResourceString(R.string.code_error), Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(BindPhoneActivity.this, getResourceString(R.string.phone_already_bind), Toast.LENGTH_SHORT).show();

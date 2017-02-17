@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -124,7 +125,10 @@ public class FragmentClassTableUnclosed extends BaseFragment {
         listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResourceString(R.string.loading));
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
-        listView.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
+        View emptyView = View.inflate(getActivity(), R.layout.empty_view, null);
+        TextView textEmpty = (TextView) emptyView.findViewById(R.id.text_empty);
+        textEmpty.setText(R.string.this_month_non_lesson);
+        listView.setEmptyView(emptyView);
 
         adapter = new CommonAdapter<ClassTimeTableBean.DataEntity.LessonsEntity>(getActivity(), itemList, R.layout.item_fragment_remedial_class_time_table1) {
             @Override
@@ -142,21 +146,21 @@ public class FragmentClassTableUnclosed extends BaseFragment {
 //                        });
 //                helper.setText(R.id.course, item.getCourse_name());
                 helper.setText(R.id.classname, item.getName());
+
                 try {
                     Date date = parse.parse(item.getClass_date());
-                    helper.setText(R.id.class_date, date.getMonth() + "-" + date.getDay() + "  ");
-                    helper.setText(R.id.status, getStatus(item.getStatus()));
+                    helper.setText(R.id.class_date, getMonth(date.getMonth()) + "-" + getDay(date.getDay()) + "  ");
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                helper.setText(R.id.status, getStatus(item.getStatus()));
                 helper.setText(R.id.live_time, item.getLive_time());
-                // TODO: 2016/11/16 接口暂无年级
                 helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
                 String status = item.getStatus();
 
-                boolean showEnter = "ready".equals(status) || "paused".equals(status) || "closed".equals(status) || "paused_inner".equals(status) || "teaching".equals(status);//是否是待上课、已直播、直播中
+                boolean showEnter = "ready".equals(status) || "paused".equals(status) || "closed".equals(status) || "teaching".equals(status);//是否是待上课、已直播、直播中
                 //进入状态
                 helper.getView(R.id.enter).setVisibility(showEnter ? View.VISIBLE : View.GONE);//进入播放器按钮显示或隐藏
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
@@ -191,6 +195,21 @@ public class FragmentClassTableUnclosed extends BaseFragment {
         });
     }
 
+    private String getDay(int day) {
+        if (day < 10) {
+            return "0" + day;
+        }
+        return String.valueOf(day);
+    }
+
+    private String getMonth(int month) {
+        month += 1;
+        if (month < 10) {
+            return "0" + month;
+        }
+        return String.valueOf(month);
+    }
+
     private String getStatus(String status) {
         if (status.equals("missed")) {//待补课
             return getResourceString(R.string.class_wait);
@@ -200,13 +219,11 @@ public class FragmentClassTableUnclosed extends BaseFragment {
             return getResourceString(R.string.class_ready);
         } else if (status.equals("teaching")) {//直播中
             return getResourceString(R.string.class_teaching);
-        } else if (status.equals("closed")) {//直播中
+        } else if (status.equals("closed")) {//已直播  。。。
+            return getResourceString(R.string.class_closed);
+        } else if (status.equals("paused")) {//直播中   .....
             return getResourceString(R.string.class_teaching);
-        } else if (status.equals("paused")) {//直播中
-            return getResourceString(R.string.class_teaching);
-        } else if (status.equals("paused_inner")) {//暂停中
-            return getResourceString(R.string.class_paused_inner);
-        } else {
+        }  else {
             return getResourceString(R.string.class_over);//已结束
         }
     }

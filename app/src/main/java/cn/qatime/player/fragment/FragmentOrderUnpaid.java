@@ -10,18 +10,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
-import com.bumptech.glide.Glide;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.orhanobut.logger.Logger;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -35,6 +35,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.OrderPayActivity;
 import cn.qatime.player.activity.PersonalMyOrderUnpaidDetailActivity;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.MyOrderBean;
 import cn.qatime.player.bean.PayResultState;
@@ -44,7 +45,6 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -61,13 +61,17 @@ public class FragmentOrderUnpaid extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_order_unpaid, container, false);
         EventBus.getDefault().register(this);
         initview(view);
+        initOver=true;
         return view;
 
     }
 
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
-
+        View empty = View.inflate(getActivity(),R.layout.empty_view,null);
+        TextView textEmpty = (TextView) empty.findViewById(R.id.text_empty);
+        textEmpty.setText(R.string.not_found_related_order);
+        listView.setEmptyView(empty);
         listView.setMode(PullToRefreshBase.Mode.BOTH);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
@@ -82,7 +86,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
                 StringBuilder sp = new StringBuilder();
                 sp.append(item.getProduct().getGrade())
                         .append(item.getProduct().getSubject())
-                        .append("/共").append(item.getProduct().getLesson_count()).append("课")
+                        .append("/共").append(item.getProduct().getPreset_lesson_count()).append("课")
                         .append("/").append(item.getProduct().getTeacher_name());
                 helper.setText(R.id.classname, item.getProduct().getName())
                         .setText(R.id.describe, sp.toString());
@@ -94,7 +98,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
                 } else {//已取消
                     helper.setText(R.id.status, getResourceString(R.string.deal_closed));
                 }
-                String price = df.format(item.getProduct().getCurrent_price());
+                String price = item.getAmount();
                 if (price.startsWith(".")) {
                     price = "0" + price;
                 }
@@ -104,6 +108,20 @@ public class FragmentOrderUnpaid extends BaseFragment {
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                if (item.getPay_type().equals("weixin")) {
+                                    IWXAPI api = WXAPIFactory.createWXAPI(getActivity(), null);
+                                    if (!api.isWXAppInstalled()) {
+                                        Toast.makeText(getActivity(), R.string.wechat_not_installed, Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
+                                } else if (item.getPay_type().equals("alipay")) {
+                                    return;
+                                } else if (item.getPay_type().equals("account")) {
+                                    if (Double.valueOf(item.getAmount()) > Double.valueOf(BaseApplication.getCashAccount().getData().getBalance())) {
+                                        Toast.makeText(getActivity(), R.string.amount_not_enough, Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
+                                }
                                 Intent intent = new Intent(getActivity(), OrderPayActivity.class);
                                 if (item.getPay_type().equals("weixin")) {
                                     intent.putExtra("data", item.getApp_pay_params());
@@ -112,7 +130,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
                                 }
                                 intent.putExtra("id", item.getId());
                                 intent.putExtra("time", item.getCreated_at());
-                                intent.putExtra("price", item.getProduct().getCurrent_price());
+                                intent.putExtra("price",item.getAmount());
                                 intent.putExtra("type", item.getPay_type());
                                 startActivity(intent);
                             }
@@ -122,7 +140,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
                             @Override
                             public void onClick(View v) {
                                 String id = list.get(position).getId();
-                                dialog(position, id);
+                                dialog(id);
                             }
                         });
 
@@ -166,7 +184,11 @@ public class FragmentOrderUnpaid extends BaseFragment {
     @Override
     public void onShow() {
         if (!isLoad) {
-            initData(1);
+            if (initOver) {
+                initData(1);
+            }else{
+                super.onShow();
+            }
         }
     }
 
@@ -206,7 +228,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
 
                     @Override
                     protected void onError(JSONObject response) {
-                        Toast.makeText(getActivity(), "订单信息获取失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.get_order_info_error, Toast.LENGTH_SHORT).show();
                         String label = DateUtils.formatDateTime(
                                 getActivity(),
                                 System.currentTimeMillis(),
@@ -228,13 +250,13 @@ public class FragmentOrderUnpaid extends BaseFragment {
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
                 listView.onRefreshComplete();
-                Toast.makeText(getActivity(), "请检查网络联接", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.server_error, Toast.LENGTH_SHORT).show();
             }
         });
         addToRequestQueue(request);
     }
 
-    protected void dialog(final int position, final String id) {
+    protected void dialog(final String id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final AlertDialog alertDialog = builder.create();
         View view = View.inflate(getActivity(), R.layout.dialog_cancel_or_confirm, null);
@@ -251,7 +273,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CancelOrder(position, id);
+                CancelOrder(id);
                 alertDialog.dismiss();
             }
         });
@@ -262,14 +284,12 @@ public class FragmentOrderUnpaid extends BaseFragment {
 //        alertDialog.getWindow().setAttributes(attributes);
     }
 
-    private void CancelOrder(final int position, String id) {
+    private void CancelOrder(String id) {
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.urlPaylist + "/" + id + "/cancel", null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        list.remove(position);
-                        Toast.makeText(getActivity(), getResourceString(R.string.order_cancel_success), Toast.LENGTH_SHORT).show();
-                        adapter.notifyDataSetChanged();
+                       initData(1);
                     }
 
                     @Override
@@ -293,13 +313,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
 
     @Subscribe
     public void onEvent(PayResultState code) {
-//        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
-//
-//            finish();
-//        }
-        if (!isLoad) {
             initData(1);
-        }
     }
 
 

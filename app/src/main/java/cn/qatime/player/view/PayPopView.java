@@ -5,11 +5,14 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
+import com.orhanobut.logger.Logger;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,6 +25,7 @@ import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -32,11 +36,27 @@ import libraryextra.utils.VolleyListener;
  * @Description:
  */
 public class PayPopView {
+    private int method;
+    private String url;
     private String title;
     private String price;
     private PayEditText payEditText;
     private CustomKeyboard customKeyboard;
     private BaseActivity activity;
+    private OnPayPSWVerifyListener listener;
+    private PopupWindow pop;
+    private TextView textPrice;
+    private TextView textTitle;
+    private View close;
+    private ImageView header;
+
+    public OnPayPSWVerifyListener getOnPayPSWVerifyListener() {
+        return listener;
+    }
+
+    public void setOnPayPSWVerifyListener(OnPayPSWVerifyListener listener) {
+        this.listener = listener;
+    }
 
     private static final String[] KEY = new String[]{
             "1", "2", "3",
@@ -46,7 +66,33 @@ public class PayPopView {
     };
     private View view;
 
+    /**
+     * 订单支付构造
+     *
+     * @param orderId
+     * @param title
+     * @param price
+     * @param activity
+     */
+    public PayPopView(String orderId, String title, String price, BaseActivity activity) {
+        method = Request.Method.POST;
+        url = UrlUtils.urlPayResult + orderId + "/pay/ticket_token";
+        this.title = title;
+        this.price = price;
+        this.activity = activity;
+        init();
+    }
+
+    /**
+     * 提现构造
+     *
+     * @param title
+     * @param price
+     * @param activity
+     */
     public PayPopView(String title, String price, BaseActivity activity) {
+        method = Request.Method.GET;
+        url = UrlUtils.urlpayment + BaseApplication.getUserId() + "/withdraws/ticket_token";
         this.title = title;
         this.price = price;
         this.activity = activity;
@@ -55,8 +101,27 @@ public class PayPopView {
 
     private void init() {
         view = View.inflate(activity, R.layout.dialog_pay_password, null);
+        header = (ImageView) view.findViewById(R.id.header);
+        close = view.findViewById(R.id.close);
+        textTitle = (TextView) view.findViewById(R.id.title);
+        textPrice = (TextView) view.findViewById(R.id.price);
         payEditText = (PayEditText) view.findViewById(R.id.PayEditText_pay);
         customKeyboard = (CustomKeyboard) view.findViewById(R.id.KeyboardView_pay);
+
+
+        textTitle.setText(title);
+        textPrice.setText(price);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pop.dismiss();
+            }
+        });
+
+        if (BaseApplication.getProfile().getData() != null && BaseApplication.getProfile().getData().getUser() != null) {
+            Glide.with(activity).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).placeholder(R.mipmap.personal_information_head).crossFade().transform(new GlideCircleTransform(activity)).into(header);
+        }
+
         //设置键盘
         customKeyboard.setKeyboardKeys(KEY);
         customKeyboard.setOnClickKeyboardListener(new CustomKeyboard.OnClickKeyboardListener() {
@@ -76,22 +141,27 @@ public class PayPopView {
             @Override
             public void onInputFinished(String password) {
                 Map<String, String> map = new HashMap<String, String>();
-                map.put("current_pament_password", password);
-                DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.cashAccounts + BaseApplication.getUserId() + "/password/ticket_token", map), null,
+                map.put("password", password);
+                DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(method,UrlUtils.getUrl(url, map), null,
                         new VolleyListener(activity) {
                             @Override
                             protected void onSuccess(JSONObject response) {
-                                Toast.makeText(activity, "密码正确", Toast.LENGTH_SHORT).show();
+                                if (listener != null) {
+                                    try {
+                                        listener.onSuccess(response.getString("data"));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
                             }
 
                             protected void onError(JSONObject response) {
+                                Logger.e(response.toString());
                                 payEditText.clear();
                                 try {
                                     int errorCode = response.getJSONObject("error").getInt("code");
-                                    if (errorCode == 2005) {
-                                        Toast.makeText(activity, "密码验证失败", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(activity, "请先设置支付密码", Toast.LENGTH_SHORT).show();
+                                    if (listener != null) {
+                                        listener.onError(errorCode);
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -106,6 +176,9 @@ public class PayPopView {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         super.onErrorResponse(volleyError);
+                        if (listener != null) {
+                            listener.onError(0);
+                        }
 
                     }
                 });
@@ -133,7 +206,7 @@ public class PayPopView {
 
     public void showPop() {
 
-        PopupWindow pop = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        pop = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         pop.setBackgroundDrawable(new ColorDrawable());
         pop.setFocusable(true);
         pop.setAnimationStyle(R.style.downDialogstyle);
@@ -169,5 +242,18 @@ public class PayPopView {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void dismiss() {
+        pop.dismiss();
+    }
+
+    public interface OnPayPSWVerifyListener {
+        void onSuccess(String ticket_token);
+
+        /**
+         * @param errorCode 0：serverError
+         */
+        void onError(int errorCode);
     }
 }

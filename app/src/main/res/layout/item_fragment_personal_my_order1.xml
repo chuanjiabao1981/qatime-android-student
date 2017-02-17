@@ -74,11 +74,11 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/button_background"
+                android:background="@drawable/button_background_light"
                 android:gravity="center"
                 android:singleLine="true"
                 android:text="@string/cancel_order"
-                android:textColor="#aaaaaa" />
+                android:textColor="#aaa" />
 
             <TextView
                 android:id="@+id/pay"

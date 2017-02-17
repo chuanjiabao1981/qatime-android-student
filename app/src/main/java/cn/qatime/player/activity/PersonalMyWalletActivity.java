@@ -48,6 +48,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
     private TextView withdrawCash;
     private Dialog alertDialog;
     DecimalFormat df = new DecimalFormat("#.00");
+    private LinearLayout refundRecord;
 
     private void assignViews() {
         balance = (TextView) findViewById(R.id.balance);
@@ -56,7 +57,9 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
         rechargeRecord = (LinearLayout) findViewById(R.id.recharge_record);
         consumptionRecord = (LinearLayout) findViewById(R.id.consumption_record);
         withdrawRecord = (LinearLayout) findViewById(R.id.withdraw_record);
+        refundRecord = (LinearLayout) findViewById(R.id.refund_record);
         phone = (TextView) findViewById(R.id.phone);
+        phone.setText(Constant.phoneNumber);
         recharge = (TextView) findViewById(R.id.recharge);
         withdrawCash = (TextView) findViewById(R.id.withdraw_cash);
     }
@@ -66,7 +69,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_personal_my_wallet);
-        setTitle(getResourceString(R.string.my_wallet));
+        setTitles(getResourceString(R.string.my_wallet));
 //        setRightText("说明", new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -82,6 +85,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
         consumptionRecord.setOnClickListener(this);
         rechargeRecord.setOnClickListener(this);
         withdrawRecord.setOnClickListener(this);
+        refundRecord.setOnClickListener(this);
         withdrawCash.setOnClickListener(this);
     }
 
@@ -110,7 +114,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
                 if (alertDialog == null) {
                     View view = View.inflate(PersonalMyWalletActivity.this, R.layout.dialog_cancel_or_confirm, null);
                     TextView text = (TextView) view.findViewById(R.id.text);
-                    text.setText(getResourceString(R.string.call_customer_service_phone) + phone.getText());
+                    text.setText(getResourceString(R.string.call_customer_service_phone) +  Constant.phoneNumber);
                     Button cancel = (Button) view.findViewById(R.id.cancel);
                     Button confirm = (Button) view.findViewById(R.id.confirm);
                     cancel.setOnClickListener(new View.OnClickListener() {
@@ -123,7 +127,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
                         @Override
                         public void onClick(View v) {
                             alertDialog.dismiss();
-                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
+                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" +  Constant.phoneNumber));
                             startActivity(intent);
                         }
                     });
@@ -156,6 +160,11 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
             case R.id.consumption_record:
                 intent = new Intent(this, RecordFundActivity.class);
                 intent.putExtra("page", 2);
+                startActivityForResult(intent,Constant.REQUEST);
+                break;
+            case R.id.refund_record:
+                intent = new Intent(this, RecordFundActivity.class);
+                intent.putExtra("page", 3);
                 startActivityForResult(intent,Constant.REQUEST);
                 break;
         }

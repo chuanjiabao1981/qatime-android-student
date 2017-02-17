@@ -84,6 +84,16 @@ public class UserPreferences {
         return getBoolean(KEY_DOWNTIME_TOGGLE, false);
     }
 
+    public static void setEarPhoneModeEnable(boolean on) {
+        saveBoolean(KEY_EARPHONE_MODE, on);
+    }
+
+    public static boolean isEarPhoneModeEnable() {
+        return getBoolean(KEY_EARPHONE_MODE, true);
+    }
+
+    private final static String KEY_EARPHONE_MODE = "KEY_EARPHONE_MODE";
+
     public static void setStatusConfig(StatusBarNotificationConfig config) {
         saveStatusBarNotificationConfig(KEY_STATUS_BAR_NOTIFICATION_CONFIG, config);
     }

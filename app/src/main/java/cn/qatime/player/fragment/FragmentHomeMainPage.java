@@ -1,15 +1,14 @@
 package cn.qatime.player.fragment;
 
 
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -70,7 +69,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
 
     private TagViewPager tagViewpagerImg;
-    private ImageView refreshTeacher;
     private GridView gridviewTeacher;
     private View allClass;
     private GridView gridviewClass;
@@ -118,7 +116,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
     private void assignViews(View view) {
         tagViewpagerImg = (TagViewPager) view.findViewById(R.id.tag_viewpager_img);
-        refreshTeacher = (ImageView) view.findViewById(R.id.refresh_teacher);
         gridviewTeacher = (GridView) view.findViewById(R.id.gridview_teacher);
         gridviewSubject = (GridView) view.findViewById(R.id.gridview_subject);
         cityName = (TextView) view.findViewById(R.id.city_name);
@@ -136,7 +133,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         initGridTeacher();
         initGridClass();
         initLocationData();
-        refreshTeacher.setOnClickListener(this);
         allClass.setOnClickListener(this);
         message.setOnClickListener(this);
         citySelect.setOnClickListener(this);
@@ -250,18 +246,13 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private void initGridTeacher() {
         teacherAdapter = new CommonAdapter<TeacherRecommendBean.DataBean>(getContext(), listRecommendTeacher, R.layout.item_grid_teacher) {
             @Override
-            public int getCount() {
-                return listRecommendTeacher.size();
-            }
-
-            @Override
             public void convert(ViewHolder holder, TeacherRecommendBean.DataBean item, int position) {
                 if (item != null) {
                     Glide.with(getActivity()).load(item.getTeacher().getAvatar_url()).error(R.mipmap.error_header).centerCrop().bitmapTransform(new GlideCircleTransform(getActivity())).crossFade().dontAnimate().into(((ImageView) holder.getView(R.id.teacher_img)));
                     holder.setText(R.id.teacher_text, item.getTeacher().getName());
                 } else {
                     Glide.with(getActivity()).load(R.mipmap.error_header).centerCrop().bitmapTransform(new GlideCircleTransform(getActivity())).crossFade().dontAnimate().into(((ImageView) holder.getView(R.id.teacher_img)));
-                    holder.setText(R.id.teacher_text, "教师名");
+                    holder.setText(R.id.teacher_text, getString(R.string.teacher_name));
                 }
             }
         };
@@ -277,12 +268,28 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
             }
         });
+
+    }
+
+    //gridview横向布局方法
+    public void horizontalLayout() {
+        int size = listRecommendTeacher.size();
+        DisplayMetrics dm = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+        float density = dm.density;
+        int screenWidth = ScreenUtils.getScreenWidth(getActivity());
+        int itemWidth = (int) ((screenWidth - density * 10 * 2) / 5);
+        int allWidth = itemWidth * size;
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                allWidth, LinearLayout.LayoutParams.MATCH_PARENT);
+        gridviewTeacher.setLayoutParams(params);// 设置GirdView布局参数
+        gridviewTeacher.setColumnWidth(itemWidth);// 列表项宽
+        gridviewTeacher.setStretchMode(GridView.NO_STRETCH);
+        gridviewTeacher.setNumColumns(size);//总长度
     }
 
     private void initTeacherData() {
         Map<String, String> map = new HashMap<>();
-        map.put("page", String.valueOf(page));
-        map.put("per_page", String.valueOf(5));
         try {
             map.put("city_name", URLEncoder.encode(BaseApplication.getCurrentCity().getName(), "UTF-8"));
         } catch (UnsupportedEncodingException e) {
@@ -294,18 +301,16 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     protected void onSuccess(JSONObject response) {
                         TeacherRecommendBean teacherRecommendBean = JsonUtils.objectFromJson(response.toString(), TeacherRecommendBean.class);
                         //teacherRecommendBean.getData()==null有两种情况  1、没有更多的老师。2、本来就没有老师
-                        page++;
                         listRecommendTeacher.clear();
                         if (teacherRecommendBean != null && teacherRecommendBean.getData() != null && teacherRecommendBean.getData().size() > 0) {
                             listRecommendTeacher.addAll(teacherRecommendBean.getData());
                         }
                         if (listRecommendTeacher.size() < 5) {
-                            page = 1; //一旦size小于5，说明没有更多推荐老师了，将page重置
                             while (listRecommendTeacher.size() < 5) {
                                 listRecommendTeacher.add(null);
-
                             }
                         }
+                        horizontalLayout();
                         teacherAdapter.notifyDataSetChanged();
                     }
 
@@ -342,16 +347,16 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     holder.setText(R.id.course_title, item.getLive_studio_course().getName());
                     holder.setText(R.id.grade, item.getLive_studio_course().getGrade());
                     holder.setText(R.id.subject, item.getLive_studio_course().getSubject());
-                    holder.setText(count, item.getLive_studio_course().getBuy_tickets_count() + "人报名");
+                    holder.setText(count, item.getLive_studio_course().getBuy_tickets_count() + getString(R.string.purchased));
                     ((TextView) holder.getView(R.id.reason)).setText(getReason(item.getReason()));
                     ((TextView) holder.getView(R.id.reason)).setBackgroundColor(getReasonBackground(item.getReason()));
                     ((TextView) holder.getView(R.id.reason)).setVisibility(View.VISIBLE);
                 } else {
                     Glide.with(getActivity()).load(R.mipmap.photo).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) holder.getView(R.id.class_recommend_img)));
-                    holder.setText(R.id.course_title, "暂无辅导班数据");
-                    holder.setText(R.id.grade, "年级");
-                    holder.setText(R.id.subject, "科目");
-                    holder.setText(count, "0人报名");
+                    holder.setText(R.id.course_title, getString(R.string.no_course_name));
+                    holder.setText(R.id.grade, getString(R.string.grade));
+                    holder.setText(R.id.subject, getString(R.string.subject));
+                    holder.setText(count, 0 + getString(R.string.purchased));
                     ((TextView) holder.getView(R.id.reason)).setVisibility(View.INVISIBLE);
                 }
             }
@@ -371,9 +376,9 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
     private String getReason(String reason) {
         if ("latest".equals(reason)) {
-            return "最新";
+            return getString(R.string.lastest);
         } else if ("hottest".equals(reason)) {
-            return "最热";
+            return getString(R.string.hottest);
         }
         return "";
     }
@@ -434,7 +439,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         super.onDestroy();
         //  注册/注销观察者
         NIMClient.getService(MsgServiceObserve.class)
-                .observeRecentContact(messageObserver, true);
+                .observeRecentContact(messageObserver, false);
     }
 
     @Override
@@ -443,13 +448,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             case R.id.all_class:
                 MainActivity mainActivity = (MainActivity) getActivity();
                 mainActivity.setCurrentPosition(1, getResourceString(R.string.whole));
-                break;
-            case R.id.refresh_teacher:
-                ObjectAnimator animator = ObjectAnimator.ofFloat(refreshTeacher, "rotation", 0F, 360F).setDuration(300L);
-                animator.setRepeatCount(2);
-                animator.setInterpolator(new AccelerateDecelerateInterpolator());
-                animator.start();
-                initTeacherData();
                 break;
             case R.id.message:
                 Intent intent;
@@ -497,7 +495,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                                             }
                                         }
                                     } else {
-                                        Toast.makeText(getActivity(), "暂未获取到您的位置信息", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getActivity(), R.string.position_locate_error, Toast.LENGTH_SHORT).show();
                                         return;
                                     }
                                     CityBean.Data currentCity = BaseApplication.getCurrentCity();
@@ -511,7 +509,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                                             }
                                         }
                                     } else {
-                                        Toast.makeText(getActivity(), "暂未获取到城市信息", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getActivity(), R.string.position_locate_error, Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -542,7 +540,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         alertDialog.setCanceledOnTouchOutside(false);
         View view = View.inflate(getActivity(), R.layout.dialog_cancel_or_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("答疑时间已开通本地工作站，是否\n切换为" + locationCity.getName());
+        text.setText(getString(R.string.position_locate_success) + locationCity.getName());
         Button cancel = (Button) view.findViewById(R.id.cancel);
         Button confirm = (Button) view.findViewById(R.id.confirm);
         cancel.setOnClickListener(new View.OnClickListener() {

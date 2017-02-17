@@ -55,6 +55,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
     private String openid;
     private PayEditText payEditText;
     private CustomKeyboard customKeyboard;
+    private AlertDialog alertDialog;
 
     private void assignViews() {
         bindPhoneNumber = (LinearLayout) findViewById(R.id.bind_phone_number);
@@ -153,7 +154,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
 
 
     private void initView() {
-        setTitle(getResources().getString(R.string.security_management));
+        setTitles(getResources().getString(R.string.security_management));
         assignViews();
 
         enableClick(false);
@@ -196,10 +197,16 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
                     dialogCancel();
                 } else {
                     //绑定
-                    SendAuth.Req req = new SendAuth.Req();
-                    req.scope = "snsapi_userinfo";
-                    req.state = "wechat_info";
-                    api.sendReq(req);
+                    if (!api.isWXAppInstalled()) {
+                        Toast.makeText(this, R.string.wechat_not_installed, Toast.LENGTH_SHORT).show();
+                    } else if (!api.isWXAppSupportAPI()) {
+                        Toast.makeText(this, R.string.wechat_not_support, Toast.LENGTH_SHORT).show();
+                    } else {
+                        SendAuth.Req req = new SendAuth.Req();
+                        req.scope = "snsapi_userinfo";
+                        req.state = "wechat_info";
+                        api.sendReq(req);
+                    }
                 }
                 break;
             case R.id.parent_phone_number://家长手机
@@ -239,7 +246,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
             @Override
             protected void onError(JSONObject response) {
                 enableClick(true);
-                Toast.makeText(SecurityManagerActivity.this, "绑定失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SecurityManagerActivity.this, R.string.bind_error, Toast.LENGTH_SHORT).show();
             }
         }, new VolleyErrorListener());
         addToRequestQueue(request);
@@ -247,14 +254,14 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
 
     private void dialogNotify() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        final AlertDialog alertDialog = builder.create();
+        alertDialog = builder.create();
         alertDialog.setCanceledOnTouchOutside(false);
         View view = View.inflate(this, R.layout.dialog_cancel_or_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("新设置或修改后将在24小时内不能使用支付密码，是否继续");
+        text.setText(R.string.change_pay_password_notify);
         Button cancel = (Button) view.findViewById(R.id.cancel);
         Button confirm = (Button) view.findViewById(R.id.confirm);
-        confirm.setText("继续");
+        confirm.setText(R.string.continue_anyway);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -290,11 +297,11 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
 
     private void dialogCancel() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        final AlertDialog alertDialog = builder.create();
+        alertDialog = builder.create();
         alertDialog.setCanceledOnTouchOutside(false);
         View view = View.inflate(this, R.layout.dialog_cancel_or_confirm, null);
         TextView text = (TextView) view.findViewById(R.id.text);
-        text.setText("取消绑定后将不能使用提现到微信功能，是否继续");
+        text.setText(R.string.cancel_bind_weixin_notify);
         Button cancel = (Button) view.findViewById(R.id.cancel);
         Button confirm = (Button) view.findViewById(R.id.confirm);
         cancel.setOnClickListener(new View.OnClickListener() {

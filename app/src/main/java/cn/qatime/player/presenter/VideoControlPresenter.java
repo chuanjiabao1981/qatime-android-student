@@ -50,10 +50,10 @@ public class VideoControlPresenter implements VideoFloatFragment.CallBack {
     }
 
     @Override
-    public void fullScreen() {
-        vai.setOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    public void zoom() {
+        assert vai != null;
+        vai.zoom();
     }
-
 
     @Override
     public void changeMain2Sub() {
@@ -117,5 +117,10 @@ public class VideoControlPresenter implements VideoFloatFragment.CallBack {
     @Override
     public boolean isPlaying() {
         return vai != null && vai.isPlaying();
+    }
+
+    @Override
+    public boolean isPortrait() {
+        return vai != null && vai.isPortrait();
     }
 }
