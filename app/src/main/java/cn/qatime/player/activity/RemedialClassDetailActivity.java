@@ -215,10 +215,13 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                                     if (time > 0) {
                                         value = (int) (time / (1000 * 3600 * 24));
                                     }
-                                    Logger.e(value+"asdfasdf");
                                     timeToStart.setVisibility(View.VISIBLE);
                                     progress.setVisibility(View.GONE);
-                                    timeToStart.setText("[" + getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day) + "]");
+                                    if(value!=0){
+                                        timeToStart.setText("[" + getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day) + "]");
+                                    }else{
+                                        timeToStart.setText(R.string.ready_to_start);
+                                    }
                                     layoutView.setBackgroundColor(0xff00d564);
                                 } else if ("teaching".equals(data.getData().getStatus())) {
                                     progress.setVisibility(View.VISIBLE);

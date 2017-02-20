@@ -83,7 +83,11 @@ public class FragmentRemedialClassUpToDate extends BaseFragment {
                     if (time > 0) {
                         value = (int) (time / (1000 * 3600 * 24));
                     }
-                    helper.setText(R.id.teaching_time, getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day));
+                    if(value!=0){
+                        helper.setText(R.id.teaching_time, getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day));
+                    }else{
+                        helper.setText(R.id.teaching_time,getString(R.string.ready_to_start));
+                    }
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
