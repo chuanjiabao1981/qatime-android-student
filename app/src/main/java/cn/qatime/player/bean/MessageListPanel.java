@@ -17,8 +17,10 @@ import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.attachment.AudioAttachment;
 import com.netease.nimlib.sdk.msg.attachment.FileAttachment;
+import com.netease.nimlib.sdk.msg.constant.AttachStatusEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
+import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.AttachmentProgress;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
@@ -34,7 +36,9 @@ import cn.qatime.player.adapter.BaseFetchLoadAdapter;
 import cn.qatime.player.adapter.MsgAdapter;
 import cn.qatime.player.audio.MessageAudioControl;
 import cn.qatime.player.config.UserPreferences;
+import cn.qatime.player.utils.VoiceTrans;
 import cn.qatime.player.view.loadmore.MsgListFetchLoadMoreView;
+import libraryextra.view.CustomAlertDialog;
 
 /**
  * @author lungtify
@@ -49,6 +53,7 @@ public class MessageListPanel {
     private List<IMMessage> items;
     private MsgAdapter adapter;
     private Handler uiHandler;
+    private VoiceTrans voiceTrans;
 
     public MessageListPanel(Container container, View rootView) {
         this.container = container;
@@ -194,10 +199,10 @@ public class MessageListPanel {
     public boolean onBackPressed() {
         uiHandler.removeCallbacks(null);
         MessageAudioControl.getInstance(container.activity).stopAudio(); // 界面返回，停止语音播放
-//        if (voiceTrans != null && voiceTrans.isShow()) {
-//            voiceTrans.hide();
-//            return true;
-//        }
+        if (voiceTrans != null && voiceTrans.isShow()) {
+            voiceTrans.hide();
+            return true;
+        }
         return false;
     }
 
@@ -440,6 +445,59 @@ public class MessageListPanel {
     }
 
     private void showLongClickAction(IMMessage message) {
+        CustomAlertDialog alertDialog = new CustomAlertDialog(container.activity);
+        alertDialog.setCancelable(true);
+        alertDialog.setCanceledOnTouchOutside(true);
+
+        prepareDialogItems(message, alertDialog);
+        alertDialog.show();
+    }
+
+    private void prepareDialogItems(IMMessage selectedItem, CustomAlertDialog alertDialog) {
+        MsgTypeEnum msgType = selectedItem.getMsgType();
+
+        MessageAudioControl.getInstance(container.activity).stopAudio();
+
+        longClickItemEarPhoneMode(alertDialog, msgType);
+
+        longClickItemVoidToText(selectedItem, alertDialog, msgType);
+
+    }
+
+    /**
+     * 语音转文字
+     */
+    private void longClickItemVoidToText(final IMMessage item, CustomAlertDialog alertDialog, MsgTypeEnum msgType) {
+        if (msgType != MsgTypeEnum.audio) return;
+
+        if (item.getDirect() == MsgDirectionEnum.In && item.getAttachStatus() != AttachStatusEnum.transferred)
+            return;
+        if (item.getDirect() == MsgDirectionEnum.Out && item.getAttachStatus() != AttachStatusEnum.transferred)
+            return;
+        alertDialog.addItem(container.activity.getString(R.string.voice_to_text), new CustomAlertDialog.onSeparateItemClickListener() {
+
+            @Override
+            public void onClick() {
+                onVoiceToText(item);
+            }
+        });
+    }
+
+    private void onVoiceToText(IMMessage item) {
+        if (voiceTrans == null)
+            voiceTrans = new VoiceTrans(container.activity);
+        voiceTrans.voiceToText(item);
+        if (item.getDirect() == MsgDirectionEnum.In && item.getStatus() != MsgStatusEnum.read) {
+            item.setStatus(MsgStatusEnum.read);
+            NIMClient.getService(MsgService.class).updateIMMessageStatus(item);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    /**
+     * 耳机扬声器切换
+     */
+    private void longClickItemEarPhoneMode(CustomAlertDialog alertDialog, MsgTypeEnum msgType) {
 
     }
 
