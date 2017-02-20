@@ -622,4 +622,6 @@
 
     <string name="unsupport_title">无法显示该内容</string>
     <string name="unsupport_desc">客户端版本不支持该内容</string>
+    <string name="voice_to_text">转文字</string>
+    <string name="trans_voice_failed">语音转化失败</string>
 </resources>
