@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -93,10 +94,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         TextView enter = (TextView) findViewById(R.id.enter);
         View loginerror = findViewById(R.id.login_error);//忘记密码
         findViewById(R.id.wechat_login).setOnClickListener(this);
+        ImageView back = (ImageView) findViewById(R.id.back);
 
         login.setOnClickListener(this);
         register.setOnClickListener(this);
         enter.setOnClickListener(this);
+        back.setOnClickListener(this);
         loginerror.setOnClickListener(this);
         checkview.setOnClickListener(this);
 
@@ -111,7 +114,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             } else if (sign.equals(Constant.VISITORTOLOGIN)) {//游客身份转到登录页
                 reenter = true;
                 action = getIntent().getStringExtra("action");
-                enter.setVisibility(View.GONE);
+                enter.setVisibility(View.INVISIBLE);
+                back.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -140,6 +144,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             case R.id.enter://直接进入
                 intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
+                break;
+            case R.id.back:
                 finish();
                 break;
             case R.id.wechat_login://微信登录
