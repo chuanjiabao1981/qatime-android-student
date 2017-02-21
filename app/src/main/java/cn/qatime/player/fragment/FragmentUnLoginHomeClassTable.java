@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import cn.qatime.player.R;
-import cn.qatime.player.activity.LoginActivity;
+import cn.qatime.player.activity.LoginActivity2;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.utils.Constant;
 
@@ -34,16 +34,7 @@ public class FragmentUnLoginHomeClassTable extends BaseFragment implements View.
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
-        intent.putExtra("sign", Constant.VISITORTOLOGIN);
-        switch (v.getId()) {
-            case R.id.login:
-                intent.putExtra("action", Constant.LoginAction.toPage3);
-                break;
-            case R.id.calendar:
-                intent.putExtra("action", Constant.LoginAction.toClassTimeTable);
-                break;
-        }
+        Intent intent = new Intent(getActivity(), LoginActivity2.class);
         startActivityForResult(intent, Constant.REQUEST);
     }
 }

@@ -146,30 +146,6 @@ public class MainActivity extends BaseFragmentActivity {
         if (requestCode == Constant.REQUEST_EXIT_LOGIN && resultCode == Constant.RESPONSE_EXIT_LOGIN) {
             finish();
         }
-        if (resultCode == Constant.VISITORLOGINED) {
-            initView();
-
-            if (data == null) return;
-            String action = data.getStringExtra("action");
-            if (!StringUtils.isNullOrBlanK(action)) {
-                if (action.equals(Constant.LoginAction.toMessage)) {
-                    Intent intent = new Intent(MainActivity.this, MessageFragmentActivity.class);
-                    startActivity(intent);
-                } else if (action.equals(Constant.LoginAction.toPage3)) {//课程表点击登录返回
-                    fragmentlayout.setCurrenItem(2);
-                } else if (action.equals(Constant.LoginAction.toPage4)) {
-                    fragmentlayout.setCurrenItem(3);
-                } else if (action.equals(Constant.LoginAction.toClassTimeTable)) {//课程表右上角点击返回
-                    fragmentlayout.setCurrenItem(2);
-                    Intent intent = new Intent(MainActivity.this, ClassTimeTableActivity.class);
-                    startActivity(intent);
-                } else if (action.equals(Constant.LoginAction.toPersonalInformationChange)) {
-                    fragmentlayout.setCurrenItem(3);
-                    Intent intent = new Intent(MainActivity.this, PersonalInformationActivity.class);
-                    startActivityForResult(intent, Constant.REQUEST);
-                }
-            }
-        }
         if (resultCode == Constant.RESPONSE) {//如果有返回并且携带了跳转码，则跳到响应的页面
 //            initView();//刷新view
             fragmentlayout.setCurrenItem(3);
@@ -225,10 +201,6 @@ public class MainActivity extends BaseFragmentActivity {
                 Intent intent = new Intent(this, MessageFragmentActivity.class);
                 intent.putExtra("intent", data);
                 startActivity(intent);
-            } else if (!StringUtils.isNullOrBlanK(data.getStringExtra("action")) && data.getStringExtra("action").equals(Constant.LoginAction.toPersonalInformationChange)) {
-                fragmentlayout.setCurrenItem(3);
-                Intent intent = new Intent(MainActivity.this, PersonalInformationActivity.class);
-                startActivityForResult(intent, Constant.REQUEST);
             }
         }
     }

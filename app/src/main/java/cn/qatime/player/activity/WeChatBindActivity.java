@@ -2,7 +2,6 @@ package cn.qatime.player.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -449,10 +448,7 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
             });
         }
 
-        if (!LoginActivity.reenter) {
-            Intent data = new Intent(WeChatBindActivity.this, MainActivity.class);
-            startActivity(data);
-        }
+        // TODO: 2017/2/21 绑定成功关闭
         DialogUtils.dismissDialog(progress);
         setResult(Constant.RESPONSE);
         finish();

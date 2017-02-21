@@ -60,7 +60,7 @@ import libraryextra.view.CustomProgressDialog;
 /**
  * 登陆页
  */
-public class LoginActivity extends BaseActivity implements View.OnClickListener {
+public class LoginActivity2 extends BaseActivity implements View.OnClickListener {
     private EditText username;
     private EditText password;
     private int errornum = 0;
@@ -76,7 +76,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_login2);
 
         EventBus.getDefault().register(this);
         api = WXAPIFactory.createWXAPI(this, null);
@@ -97,11 +97,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         login.setOnClickListener(this);
         register.setOnClickListener(this);
         enter.setOnClickListener(this);
+        back.setOnClickListener(this);
         loginerror.setOnClickListener(this);
         checkview.setOnClickListener(this);
 
-        if (!StringUtils.isNullOrBlanK(SPUtils.get(LoginActivity.this, "username", ""))) {
-            username.setText(SPUtils.get(LoginActivity.this, "username", "").toString());
+        if (!StringUtils.isNullOrBlanK(SPUtils.get(LoginActivity2.this, "username", ""))) {
+            username.setText(SPUtils.get(LoginActivity2.this, "username", "").toString());
         }
         String sign = getIntent().getStringExtra("sign");
         if (!StringUtils.isNullOrBlanK(sign)) {
@@ -119,22 +120,26 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             case R.id.login://登陆
                 login.setClickable(false);
                 login();
+
                 break;
             case R.id.register://注册
-                intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                intent.putExtra("register_action",Constant.REGIST_1);
-                startActivityForResult(intent, Constant.REGIST_1);
+                intent = new Intent(LoginActivity2.this, RegisterActivity.class);
+                intent.putExtra("register_action",Constant.REGIST_2);
+                startActivityForResult(intent, Constant.REGIST_2);
                 break;
             case R.id.login_error://忘记密码
-                intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
+                intent = new Intent(LoginActivity2.this, ForgetPasswordActivity.class);
                 startActivity(intent);
                 break;
             case R.id.checkview://重新换验证码
                 initCheckNum();
                 break;
             case R.id.enter://直接进入
-                intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent = new Intent(LoginActivity2.this, MainActivity.class);
                 startActivity(intent);
+                finish();
+                break;
+            case R.id.back:
                 finish();
                 break;
             case R.id.wechat_login://微信登录
@@ -177,7 +182,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 return;
             }
         }
-        progress = DialogUtils.startProgressDialog(progress, LoginActivity.this, getResourceString(R.string.landing));
+        progress = DialogUtils.startProgressDialog(progress, LoginActivity2.this, getResourceString(R.string.landing));
         progress.setCancelable(false);
         progress.setCanceledOnTouchOutside(false);
 
@@ -187,7 +192,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         map.put("client_type", "app");
         map.put("client_cate", "student_client");
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlLogin, map), null,
-                new VolleyListener(LoginActivity.this) {
+                new VolleyListener(LoginActivity2.this) {
                     @Override
                     protected void onTokenOut() {
                         login.setClickable(true);
@@ -202,7 +207,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             if (data.has("result")) {
                                 DialogUtils.dismissDialog(progress);
                                 if (data.getString("result") != null && data.getString("result").equals("failed")) {
-                                    Toast.makeText(LoginActivity.this, getResources().getString(R.string.account_or_password_error), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginActivity2.this, getResources().getString(R.string.account_or_password_error), Toast.LENGTH_SHORT).show();
                                     BaseApplication.clearToken();
                                     login.setClickable(true);
                                     password.setText("");
@@ -214,29 +219,29 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                     }
                                 }
                             } else {
-                                SPUtils.put(LoginActivity.this, "username", username.getText().toString());
+                                SPUtils.put(LoginActivity2.this, "username", username.getText().toString());
                                 profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
                                 if (profile != null && profile.getData() != null && profile.getData().getUser() != null && profile.getData().getUser().getId() != 0) {
-                                    PushAgent.getInstance(LoginActivity.this).addAlias(String.valueOf(profile.getData().getUser().getId()), "student", new UTrack.ICallBack() {
+                                    PushAgent.getInstance(LoginActivity2.this).addAlias(String.valueOf(profile.getData().getUser().getId()), "student", new UTrack.ICallBack() {
                                         @Override
                                         public void onMessage(boolean b, String s) {
 
                                         }
                                     });
-                                    String deviceToken = PushAgent.getInstance(LoginActivity.this).getRegistrationId();
+                                    String deviceToken = PushAgent.getInstance(LoginActivity2.this).getRegistrationId();
                                     if (!StringUtils.isNullOrBlanK(deviceToken)) {
                                         Map<String, String> m = new HashMap<>();
                                         m.put("user_id", String.valueOf(profile.getData().getUser().getId()));
                                         m.put("device_token", deviceToken);
                                         m.put("device_model", Build.MODEL);
                                         try {
-                                            m.put("app_name", URLEncoder.encode(AppUtils.getAppName(LoginActivity.this), "UTF-8"));
+                                            m.put("app_name", URLEncoder.encode(AppUtils.getAppName(LoginActivity2.this), "UTF-8"));
                                         } catch (UnsupportedEncodingException e) {
                                             e.printStackTrace();
                                         }
-                                        m.put("app_version", AppUtils.getVersionName(LoginActivity.this));
+                                        m.put("app_version", AppUtils.getVersionName(LoginActivity2.this));
                                         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlDeviceInfo, m), null,
-                                                new VolleyListener(LoginActivity.this) {
+                                                new VolleyListener(LoginActivity2.this) {
 
                                                     @Override
                                                     protected void onSuccess(JSONObject response) {
@@ -264,7 +269,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                 if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
                                     //登录成功且有个人信息  设置profile
                                     BaseApplication.setProfile(profile);
-                                    SPUtils.put(LoginActivity.this, "username", username.getText().toString());
+                                    SPUtils.put(LoginActivity2.this, "username", username.getText().toString());
                                     loginAccount();//登陆云信
                                 } else {
                                     //没有数据或token
@@ -289,7 +294,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             public void onErrorResponse(VolleyError volleyError) {
                 DialogUtils.dismissDialog(progress);
                 BaseApplication.clearToken();
-                Toast.makeText(LoginActivity.this, getResourceString(R.string.after_try_again), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity2.this, getResourceString(R.string.after_try_again), Toast.LENGTH_SHORT).show();
                 login.setClickable(true);
                 password.setText("");
                 //当密码错误5次以上，开始使用验证码
@@ -337,7 +342,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     DialogUtils.dismissDialog(progress);
 //                    BaseApplication.clearToken();
                     profile.getData().setRemember_token("");
-                    SPUtils.putObject(LoginActivity.this, "profile", profile);
+                    SPUtils.putObject(LoginActivity2.this, "profile", profile);
                     Logger.e(code + "code");
 //                    if (code == 302 || code == 404) {
 //                        Toast.makeText(LoginActivity.this, R.string.account_or_password_error, Toast.LENGTH_SHORT).show();
@@ -352,12 +357,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     Logger.e(throwable.getMessage());
 //                    BaseApplication.clearToken();
                     profile.getData().setRemember_token("");
-                    SPUtils.putObject(LoginActivity.this, "profile", profile);
+                    SPUtils.putObject(LoginActivity2.this, "profile", profile);
                 }
             });
         }
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
+
         DialogUtils.dismissDialog(progress);
         finish();
     }
@@ -372,7 +376,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if ((requestCode == Constant.REGIST_1||requestCode == Constant.REGIST_2) && resultCode == Constant.RESPONSE) {
+        if (requestCode == Constant.REGIST_1 && resultCode == Constant.RESPONSE) {
             finish();
         }
     }
@@ -388,7 +392,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         map.put("code", code);
         map.put("client_cate", "student_client");
         map.put("client_type", "app");
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlLogin + "/wechat", map), null, new VolleyListener(LoginActivity.this) {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlLogin + "/wechat", map), null, new VolleyListener(LoginActivity2.this) {
             @Override
             protected void onTokenOut() {
                 tokenOut();
@@ -402,7 +406,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             Profile data = JsonUtils.objectFromJson(response.toString(), Profile.class);
                             if (data != null && data.getData() != null && !StringUtils.isNullOrBlanK(data.getData().getRemember_token())) {
                                 BaseApplication.setProfile(data);
-                                SPUtils.put(LoginActivity.this, "username", username.getText().toString());
+                                SPUtils.put(LoginActivity2.this, "username", username.getText().toString());
                                 loginAccount();//登陆云信
                             } else {
                                 //没有数据或没有token
@@ -410,7 +414,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                         } else {
                             String openid = response.getJSONObject("data").getString("openid");
-                            Intent intent = new Intent(LoginActivity.this, WeChatBindActivity.class);
+                            Intent intent = new Intent(LoginActivity2.this, WeChatBindActivity.class);
                             intent.putExtra("openid", openid);
                             startActivityForResult(intent, Constant.REGIST_1);
                         }
@@ -433,7 +437,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         });
         addToRequestQueue(request);
     }
-
     @Override
     protected void onResume() {
         super.onResume();

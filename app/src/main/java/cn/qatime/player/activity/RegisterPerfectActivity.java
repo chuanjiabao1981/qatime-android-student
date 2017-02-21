@@ -38,6 +38,7 @@ import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.DialogUtils;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.KeyBoardUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.view.CustomProgressDialog;
 import libraryextra.view.WheelView;
@@ -98,17 +99,10 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
         Intent intent;
         switch (v.getId()) {
             case R.id.edit_more:
-                if (LoginActivity.reenter) {
-                    intent = new Intent();
-                    intent.putExtra("action", Constant.LoginAction.toPersonalInformationChange);
-                    setResult(Constant.RESPONSE, intent);
-                } else {
-                    intent = new Intent(this, MainActivity.class);
-                    intent.putExtra("action", Constant.LoginAction.toPersonalInformationChange);
-                    startActivity(intent);
-                    setResult(Constant.RESPONSE);
-                }
-                finish();
+                intent = new Intent(RegisterPerfectActivity.this, PersonalInformationChangeActivity.class);
+                int register_action = getIntent().getIntExtra("register_action", Constant.REGIST_1);
+                intent.putExtra("register_action",register_action);
+                startActivityForResult(intent, register_action);
                 break;
             case R.id.grade:
                 showGradePickerDialog();
@@ -148,10 +142,8 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                             BaseApplication.setProfile(profile);
                         }
                         DialogUtils.dismissDialog(progress);
-                        if (!LoginActivity.reenter) {
-                            Intent data = new Intent(RegisterPerfectActivity.this, MainActivity.class);
-                            startActivity(data);
-                        }
+                        Intent data = new Intent(RegisterPerfectActivity.this, MainActivity.class);
+                        startActivity(data);
                         setResult(Constant.RESPONSE);
                         finish();
                     }
@@ -191,6 +183,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
     }
 
     private void showGradePickerDialog() {
+        KeyBoardUtils.closeKeybord(this);
         if (alertDialog == null) {
             final View view = View.inflate(RegisterPerfectActivity.this, R.layout.dialog_grade_picker, null);
             final WheelView grade = (WheelView) view.findViewById(R.id.grade);
@@ -256,6 +249,14 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                     Glide.with(this).load(Uri.fromFile(new File(imageUrl))).transform(new GlideCircleTransform(this)).crossFade().into(headSculpture);
                 }
             }
+        } else if (requestCode == Constant.REGIST_1 && resultCode == Constant.RESPONSE) {
+            Intent intent = new Intent(RegisterPerfectActivity.this, MainActivity.class);
+            startActivity(intent);
+            setResult(resultCode);
+            finish();
+        }else if (requestCode == Constant.REGIST_2 && resultCode == Constant.RESPONSE) {
+            setResult(resultCode);
+            finish();
         }
     }
 
