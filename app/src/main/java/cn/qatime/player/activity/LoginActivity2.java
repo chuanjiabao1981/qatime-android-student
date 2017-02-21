@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -89,15 +88,11 @@ public class LoginActivity2 extends BaseActivity implements View.OnClickListener
         password = (EditText) findViewById(R.id.pass);
         login = (Button) findViewById(R.id.login);
         TextView register = (TextView) findViewById(R.id.register);
-        TextView enter = (TextView) findViewById(R.id.enter);
         View loginerror = findViewById(R.id.login_error);//忘记密码
         findViewById(R.id.wechat_login).setOnClickListener(this);
-        ImageView back = (ImageView) findViewById(R.id.back);
 
         login.setOnClickListener(this);
         register.setOnClickListener(this);
-        enter.setOnClickListener(this);
-        back.setOnClickListener(this);
         loginerror.setOnClickListener(this);
         checkview.setOnClickListener(this);
 

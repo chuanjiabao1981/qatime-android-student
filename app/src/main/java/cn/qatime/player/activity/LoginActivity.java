@@ -412,6 +412,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             String openid = response.getJSONObject("data").getString("openid");
                             Intent intent = new Intent(LoginActivity.this, WeChatBindActivity.class);
                             intent.putExtra("openid", openid);
+                            intent.putExtra("register_action",Constant.REGIST_1);
                             startActivityForResult(intent, Constant.REGIST_1);
                         }
                     }

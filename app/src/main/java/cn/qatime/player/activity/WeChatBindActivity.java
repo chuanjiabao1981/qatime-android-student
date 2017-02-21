@@ -2,6 +2,7 @@ package cn.qatime.player.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -115,7 +116,9 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
             @Override
             public void afterTextChanged(Editable s) {
                 if (StringUtils.isPhone(phone.getText().toString().trim())) {
-                    getCode.setEnabled(true);
+                    if(!time.ticking){
+                        getCode.setEnabled(true);
+                    }
                 } else {
                     getCode.setEnabled(false);
                 }
@@ -447,8 +450,10 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
                 }
             });
         }
-
-        // TODO: 2017/2/21 绑定成功关闭
+        if(getIntent().getIntExtra("register_action",Constant.REGIST_1) == Constant.REGIST_1){
+            Intent intent = new Intent(this,MainActivity.class);
+            startActivity(intent);
+        }
         DialogUtils.dismissDialog(progress);
         setResult(Constant.RESPONSE);
         finish();
@@ -457,18 +462,21 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
 
 
     private class TimeCount extends CountDownTimer {
+        public boolean ticking;
         TimeCount(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
         }
 
         @Override
         public void onFinish() {// 计时完毕
+            ticking=false;
             getCode.setText(getResources().getString(R.string.get_verification_code));
             getCode.setEnabled(true);
         }
 
         @Override
         public void onTick(long millisUntilFinished) {// 计时过程
+            ticking = true;
             getCode.setEnabled(false);//防止重复点击
             getCode.setText(millisUntilFinished / 1000 + "s");
         }

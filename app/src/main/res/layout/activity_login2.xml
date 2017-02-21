@@ -1,129 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:orientation="vertical">
 
+    <include layout="@layout/layout_backbar" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/back"
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:padding="10dp"
-            android:visibility="invisible"
-            android:src="@mipmap/back_arrow_login" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <TextView
-            android:id="@+id/enter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:padding="10dp"
-            android:text="@string/enter"
-            android:textColor="#333"
-            android:textSize="16sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginTop="10dp"
         android:orientation="vertical">
 
-        <com.zhy.android.percent.support.PercentRelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_weight="1">
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="fill_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/shape_input"
+            android:hint="@string/account"
+            android:inputType="text"
+            android:paddingBottom="8dp"
+            android:paddingLeft="15dip"
+            android:paddingRight="15dip"
+            android:paddingTop="8dp"
+            android:singleLine="true"
+            android:textColorHint="#ccc"
+            android:textSize="14sp" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="115dp"
-                android:src="@mipmap/logo"
-                custom:layout_widthPercent="70%" />
-        </com.zhy.android.percent.support.PercentRelativeLayout>
-
+        <EditText
+            android:id="@+id/pass"
+            android:layout_width="fill_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/shape_input"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:paddingBottom="8dp"
+            android:paddingLeft="15dip"
+            android:paddingRight="15dip"
+            android:paddingTop="8dp"
+            android:singleLine="true"
+            android:textColorHint="#ccc"
+            android:textSize="14sp" />
 
         <LinearLayout
+            android:id="@+id/checklayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
-            android:orientation="vertical">
+            android:layout_height="45dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <EditText
-                android:id="@+id/name"
-                android:layout_width="fill_parent"
-                android:layout_height="45dp"
+                android:id="@+id/checkcode"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
                 android:background="@drawable/shape_input_radius"
-                android:drawableLeft="@mipmap/account"
-                android:drawablePadding="15dip"
-                android:hint="@string/account"
-                android:inputType="text"
-                android:paddingBottom="8dp"
-                android:paddingLeft="15dip"
-                android:paddingRight="15dip"
-                android:paddingTop="8dp"
-                android:singleLine="true"
+                android:hint="@string/verification_code"
+                android:maxLines="1"
+                android:paddingLeft="15dp"
                 android:textColorHint="#ccc"
                 android:textSize="14sp" />
 
-            <EditText
-                android:id="@+id/pass"
-                android:layout_width="fill_parent"
-                android:layout_height="45dp"
-                android:background="@drawable/shape_input_radius"
-                android:drawableLeft="@mipmap/password"
-                android:drawablePadding="15dip"
-                android:hint="@string/password"
-                android:inputType="textPassword"
-                android:paddingBottom="8dp"
-                android:paddingLeft="15dip"
-                android:paddingRight="15dip"
-                android:paddingTop="8dp"
-                android:singleLine="true"
-                android:textColorHint="#ccc"
-                android:textSize="14sp" />
+            <libraryextra.view.CheckView
+                android:id="@+id/checkview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
-            <LinearLayout
-                android:id="@+id/checklayout"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:orientation="horizontal"
-                android:visibility="gone">
-
-                <EditText
-                    android:id="@+id/checkcode"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:background="@drawable/shape_input_radius"
-                    android:hint="@string/verification_code"
-                    android:maxLines="1"
-                    android:paddingLeft="15dp"
-                    android:textColorHint="#ccc"
-                    android:textSize="14sp" />
-
-                <libraryextra.view.CheckView
-                    android:id="@+id/checkview"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
@@ -166,6 +112,10 @@
             android:textSize="14sp" />
     </RelativeLayout>
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
     <LinearLayout
         android:layout_width="match_parent"
