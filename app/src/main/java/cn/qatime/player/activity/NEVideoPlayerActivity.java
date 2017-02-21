@@ -7,9 +7,11 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -60,6 +62,7 @@ import cn.qatime.player.view.NEVideoView;
 import cn.qatime.player.view.VideoLayout;
 import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.NetUtils;
 import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -611,7 +614,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     @Override
     protected void onDestroy() {
         hd.removeCallbacks(runnable);//停止查询播放状态
-        Logger.e("退出轮询");
+//        Logger.e("退出轮询");
         video1.release_resource();
         video2.release_resource();
         video1 = null;
@@ -692,7 +695,39 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 playingReQuery = 0;
             }
             playingReQuery++;
-            refreshState();
+            if (NetUtils.isConnected(NEVideoPlayerActivity.this)) {
+                if (NetUtils.isMobile(NEVideoPlayerActivity.this)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(NEVideoPlayerActivity.this);
+                    final AlertDialog alertDialog = builder.create();
+                    View view = View.inflate(NEVideoPlayerActivity.this, R.layout.dialog_cancel_or_confirm, null);
+                    TextView text = (TextView) view.findViewById(R.id.text);
+                    text.setText("您当前正在使用移动网络，继续播放将消耗流量");
+                    Button cancel = (Button) view.findViewById(R.id.cancel);
+                    Button confirm = (Button) view.findViewById(R.id.confirm);
+                    cancel.setText("停止播放");
+                    confirm.setText("继续播放");
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialog.dismiss();
+                        }
+                    });
+                    confirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialog.dismiss();
+                            refreshState();
+                        }
+                    });
+                    alertDialog.show();
+                    alertDialog.setContentView(view);
+                } else if (NetUtils.isWifi(NEVideoPlayerActivity.this)) {
+                    refreshState();
+                }
+            } else {
+                Toast.makeText(NEVideoPlayerActivity.this, "网络不可用", Toast.LENGTH_SHORT).show();
+            }
+
         } else if (videoState == VideoState.CLOSED) {//关闭状态   摄像头关闭
             this.videoState = videoState;
             hd.removeCallbacks(runnable);
@@ -994,8 +1029,40 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     @Override
     public void play() {
-        video1.start();
-        video2.start();
+        if (NetUtils.isConnected(NEVideoPlayerActivity.this)) {
+            if (NetUtils.isMobile(NEVideoPlayerActivity.this)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(NEVideoPlayerActivity.this);
+                final AlertDialog alertDialog = builder.create();
+                View view = View.inflate(NEVideoPlayerActivity.this, R.layout.dialog_cancel_or_confirm, null);
+                TextView text = (TextView) view.findViewById(R.id.text);
+                text.setText("您当前正在使用移动网络，继续播放将消耗流量");
+                Button cancel = (Button) view.findViewById(R.id.cancel);
+                Button confirm = (Button) view.findViewById(R.id.confirm);
+                cancel.setText("停止播放");
+                confirm.setText("继续播放");
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                    }
+                });
+                confirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                        video1.start();
+                        video2.start();
+                    }
+                });
+                alertDialog.show();
+                alertDialog.setContentView(view);
+            } else if (NetUtils.isWifi(NEVideoPlayerActivity.this)) {
+                video1.start();
+                video2.start();
+            }
+        } else {
+            Toast.makeText(NEVideoPlayerActivity.this, "网络不可用", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
