@@ -81,6 +81,8 @@ public class LoginActivity2 extends BaseActivity implements View.OnClickListener
         api = WXAPIFactory.createWXAPI(this, null);
         api.registerApp(Constant.APP_ID);
 
+        setTitles(getString(R.string.login));
+
         checklayout = findViewById(R.id.checklayout);
         checkview = (CheckView) findViewById(R.id.checkview);
         checkcode = (EditText) findViewById(R.id.checkcode);
@@ -115,11 +117,10 @@ public class LoginActivity2 extends BaseActivity implements View.OnClickListener
             case R.id.login://登陆
                 login.setClickable(false);
                 login();
-
                 break;
             case R.id.register://注册
                 intent = new Intent(LoginActivity2.this, RegisterActivity.class);
-                intent.putExtra("register_action",Constant.REGIST_2);
+                intent.putExtra("register_action", Constant.REGIST_2);
                 startActivityForResult(intent, Constant.REGIST_2);
                 break;
             case R.id.login_error://忘记密码
@@ -128,14 +129,6 @@ public class LoginActivity2 extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.checkview://重新换验证码
                 initCheckNum();
-                break;
-            case R.id.enter://直接进入
-                intent = new Intent(LoginActivity2.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-                break;
-            case R.id.back:
-                finish();
                 break;
             case R.id.wechat_login://微信登录
                 if (!api.isWXAppInstalled()) {
@@ -371,7 +364,8 @@ public class LoginActivity2 extends BaseActivity implements View.OnClickListener
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constant.REGIST_1 && resultCode == Constant.RESPONSE) {
+        if ((requestCode == Constant.REGIST_1 || requestCode == Constant.REGIST_2) && resultCode == Constant.RESPONSE) {
+
             finish();
         }
     }
@@ -411,7 +405,8 @@ public class LoginActivity2 extends BaseActivity implements View.OnClickListener
                             String openid = response.getJSONObject("data").getString("openid");
                             Intent intent = new Intent(LoginActivity2.this, WeChatBindActivity.class);
                             intent.putExtra("openid", openid);
-                            startActivityForResult(intent, Constant.REGIST_1);
+                            intent.putExtra("register_action", Constant.REGIST_2);
+                            startActivityForResult(intent, Constant.REGIST_2);
                         }
                     }
                 } catch (JSONException e) {
@@ -432,6 +427,7 @@ public class LoginActivity2 extends BaseActivity implements View.OnClickListener
         });
         addToRequestQueue(request);
     }
+
     @Override
     protected void onResume() {
         super.onResume();

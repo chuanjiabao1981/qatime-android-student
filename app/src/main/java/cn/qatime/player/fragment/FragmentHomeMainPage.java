@@ -491,7 +491,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     startActivity(intent);
                 } else {
                     intent = new Intent(getActivity(), LoginActivity2.class);
-                    startActivityForResult(intent, Constant.REQUEST);
+                    startActivity(intent);
                 }
                 break;
             case R.id.city_select:

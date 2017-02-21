@@ -137,6 +137,10 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
+            android:name=".activity.LoginActivity2"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
             android:name=".activity.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTask"
@@ -186,8 +190,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PersonalMyTutorshipActivity"
-            android:launchMode="singleTask"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PersonalInformationActivity"
@@ -383,5 +387,5 @@
             android:name=".activity.ApplyRefundActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
-</application>
+    </application>
 </manifest>

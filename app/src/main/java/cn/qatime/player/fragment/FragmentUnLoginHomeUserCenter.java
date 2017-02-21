@@ -13,7 +13,6 @@ import android.widget.Toast;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.LoginActivity2;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.utils.Constant;
 
 /**
  * @author lungtify
@@ -59,7 +58,7 @@ public class FragmentUnLoginHomeUserCenter extends BaseFragment implements View.
             case R.id.information:
             case R.id.name:
                 Intent intent = new Intent(getActivity(), LoginActivity2.class);
-                startActivityForResult(intent, Constant.REQUEST);
+                startActivity(intent);
                 break;
             case R.id.my_wallet:
             case R.id.my_order:
