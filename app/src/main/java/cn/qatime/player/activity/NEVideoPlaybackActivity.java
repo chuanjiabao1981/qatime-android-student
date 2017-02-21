@@ -1,8 +1,13 @@
 package cn.qatime.player.activity;
 
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 
@@ -18,6 +23,7 @@ import cn.qatime.player.utils.PlayBackVideoInterface;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.view.NEVideoView;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.NetUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -58,11 +64,47 @@ public class NEVideoPlaybackActivity extends BaseActivity implements PlayBackVid
                 new VolleyListener(NEVideoPlaybackActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        PlayBackBean data = JsonUtils.objectFromJson(response.toString(), PlayBackBean.class);
-                        if (data != null && data.getData() != null && data.getData().getReplay() != null && !StringUtils.isNullOrBlanK(data.getData().getReplay().getOrig_url())) {
-                            video.setVideoPath(data.getData().getReplay().getOrig_url());
-                            video.start();
+                        final PlayBackBean data = JsonUtils.objectFromJson(response.toString(), PlayBackBean.class);
+                        if (NetUtils.isConnected(NEVideoPlaybackActivity.this)) {
+                            if (NetUtils.isMobile(NEVideoPlaybackActivity.this)) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(NEVideoPlaybackActivity.this);
+                                final AlertDialog alertDialog = builder.create();
+                                View view = View.inflate(NEVideoPlaybackActivity.this, R.layout.dialog_cancel_or_confirm, null);
+                                TextView text = (TextView) view.findViewById(R.id.text);
+                                text.setText("您当前正在使用移动网络，继续播放将消耗流量");
+                                Button cancel = (Button) view.findViewById(R.id.cancel);
+                                Button confirm = (Button) view.findViewById(R.id.confirm);
+                                cancel.setText("停止播放");
+                                confirm.setText("继续播放");
+                                cancel.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        alertDialog.dismiss();
+                                    }
+                                });
+                                confirm.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        alertDialog.dismiss();
+                                        if (data != null && data.getData() != null && data.getData().getReplay() != null && !StringUtils.isNullOrBlanK(data.getData().getReplay().getOrig_url())) {
+                                            video.setVideoPath(data.getData().getReplay().getOrig_url());
+                                            video.start();
+                                        }
+                                    }
+                                });
+                                alertDialog.show();
+                                alertDialog.setContentView(view);
+                            } else if (NetUtils.isWifi(NEVideoPlaybackActivity.this)) {
+                                if (data != null && data.getData() != null && data.getData().getReplay() != null && !StringUtils.isNullOrBlanK(data.getData().getReplay().getOrig_url())) {
+                                    video.setVideoPath(data.getData().getReplay().getOrig_url());
+                                    video.start();
+                                }
+                            }
+                        } else {
+                            Toast.makeText(NEVideoPlaybackActivity.this, "网络不可用", Toast.LENGTH_SHORT).show();
                         }
+
+
                     }
 
                     @Override
@@ -108,8 +150,41 @@ public class NEVideoPlaybackActivity extends BaseActivity implements PlayBackVid
             playBackFloatFragment.setPlayOrPause(false);
             video.pause();
         } else {
-            video.start();
-            playBackFloatFragment.setPlayOrPause(true);
+            if (NetUtils.isConnected(NEVideoPlaybackActivity.this)) {
+                if (NetUtils.isMobile(NEVideoPlaybackActivity.this)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(NEVideoPlaybackActivity.this);
+                    final AlertDialog alertDialog = builder.create();
+                    View view = View.inflate(NEVideoPlaybackActivity.this, R.layout.dialog_cancel_or_confirm, null);
+                    TextView text = (TextView) view.findViewById(R.id.text);
+                    text.setText("您当前正在使用移动网络，继续播放将消耗流量");
+                    Button cancel = (Button) view.findViewById(R.id.cancel);
+                    Button confirm = (Button) view.findViewById(R.id.confirm);
+                    cancel.setText("停止播放");
+                    confirm.setText("继续播放");
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialog.dismiss();
+                        }
+                    });
+                    confirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialog.dismiss();
+                            video.start();
+                            playBackFloatFragment.setPlayOrPause(true);
+                        }
+                    });
+                    alertDialog.show();
+                    alertDialog.setContentView(view);
+                } else if (NetUtils.isWifi(NEVideoPlaybackActivity.this)) {
+                    video.start();
+                    playBackFloatFragment.setPlayOrPause(true);
+                }
+            } else {
+                Toast.makeText(NEVideoPlaybackActivity.this, "网络不可用", Toast.LENGTH_SHORT).show();
+            }
+
         }
     }
 
