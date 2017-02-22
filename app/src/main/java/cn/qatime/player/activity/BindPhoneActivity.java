@@ -123,7 +123,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                         Toast.makeText(BindPhoneActivity.this, getResourceString(R.string.code_send_failed), Toast.LENGTH_SHORT).show();
 
                     }
-                }, new VolleyErrorListener(){
+                }, new VolleyErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         super.onErrorResponse(volleyError);
@@ -161,7 +161,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                         Toast.makeText(BindPhoneActivity.this, getResourceString(R.string.bind_phone_success), Toast.LENGTH_SHORT).show();
                         BaseApplication.clearToken();
                         setResult(Constant.RESPONSE_EXIT_LOGIN);
-                        Intent intent = new Intent(BindPhoneActivity.this, LoginActivity.class);
+                        Intent intent = new Intent(BindPhoneActivity.this, MainActivity.class);
                         intent.putExtra("sign", "exit_login");
                         startActivity(intent);
                         finish();
@@ -181,7 +181,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                             e.printStackTrace();
                         }
                     }
-                }, new VolleyErrorListener(){
+                }, new VolleyErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         super.onErrorResponse(volleyError);
@@ -211,6 +211,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
             textGetcode.setText(millisUntilFinished / 1000 + getResourceString(R.string.time_after_acquisition));
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
