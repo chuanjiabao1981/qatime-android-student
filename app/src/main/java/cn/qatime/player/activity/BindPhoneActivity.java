@@ -161,7 +161,7 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                         Toast.makeText(BindPhoneActivity.this, getResourceString(R.string.bind_phone_success), Toast.LENGTH_SHORT).show();
                         BaseApplication.clearToken();
                         setResult(Constant.RESPONSE_EXIT_LOGIN);
-                        Intent intent = new Intent(BindPhoneActivity.this, LoginActivity.class);
+                        Intent intent = new Intent(BindPhoneActivity.this, MainActivity.class);
                         intent.putExtra("sign", "exit_login");
                         startActivity(intent);
                         finish();

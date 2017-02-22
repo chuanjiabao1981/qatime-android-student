@@ -311,6 +311,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     }
                 } else {
                     intent = new Intent(RemedialClassDetailActivity.this, LoginActivity2.class);
+                    intent.putExtra("activity_action",Constant.LoginAction.toRemedialClassDetail);
                     startActivity(intent);
                 }
                 break;
@@ -319,6 +320,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     joinAudition();
                 } else {
                     intent = new Intent(RemedialClassDetailActivity.this, LoginActivity2.class);
+                    intent.putExtra("activity_action",Constant.LoginAction.toRemedialClassDetail);
                     startActivity(intent);                }
                 break;
             case R.id.start_study:
@@ -335,6 +337,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     }
                 } else {
                     intent = new Intent(RemedialClassDetailActivity.this, LoginActivity2.class);
+                    intent.putExtra("activity_action",Constant.LoginAction.toRemedialClassDetail);
                     startActivity(intent);                }
                 break;
             case R.id.pay:
@@ -371,6 +374,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     }
                 } else {
                     intent = new Intent(RemedialClassDetailActivity.this, LoginActivity2.class);
+                    intent.putExtra("activity_action",Constant.LoginAction.toRemedialClassDetail);
+                    intent.putExtra("id",id);
                     startActivity(intent);
                 }
                 break;

@@ -142,8 +142,10 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                             BaseApplication.setProfile(profile);
                         }
                         DialogUtils.dismissDialog(progress);
-                        Intent data = new Intent(RegisterPerfectActivity.this, MainActivity.class);
-                        startActivity(data);
+                        if(getIntent().getIntExtra("register_action",Constant.REGIST_1)==Constant.REGIST_1){
+                            Intent data = new Intent(RegisterPerfectActivity.this, MainActivity.class);
+                            startActivity(data);
+                        }
                         setResult(Constant.RESPONSE);
                         finish();
                     }

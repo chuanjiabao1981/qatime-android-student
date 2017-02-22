@@ -43,5 +43,14 @@ public class Constant {
         public static String CustomizedCourseActionNotification = "customized_course_action_notification";
         public static String LiveStudioLessonNotification = "live_studio_lesson_notification";
     }
-
+    /**
+     * 游客状态到登录页返回时需要做的动作
+     */
+    public static class LoginAction {
+        public static String toPage3 = "toPage3";
+        public static String toPage4 = "toPage4";
+        public static String toClassTimeTable = "toClassTimeTable";
+        public static String toMessage = "toMessage";
+        public static String toRemedialClassDetail = "toRemedialClassDetail";
+    }
 }

@@ -491,6 +491,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     startActivity(intent);
                 } else {
                     intent = new Intent(getActivity(), LoginActivity2.class);
+                    intent.putExtra("activity_action",Constant.LoginAction.toMessage);
                     startActivity(intent);
                 }
                 break;

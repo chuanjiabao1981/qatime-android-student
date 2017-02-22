@@ -143,14 +143,6 @@ public class MainActivity extends BaseFragmentActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constant.REQUEST_EXIT_LOGIN && resultCode == Constant.RESPONSE_EXIT_LOGIN) {
-            finish();
-        }
-        if (resultCode == Constant.RESPONSE) {//如果有返回并且携带了跳转码，则跳到响应的页面
-//            initView();//刷新view
-            fragmentlayout.setCurrenItem(3);
-            ((FragmentHomeUserCenter) fragBaseFragments.get(3)).onActivityResult(Constant.REQUEST, Constant.RESPONSE, null);
-        }
     }
 
     private boolean flag = false;
@@ -182,6 +174,27 @@ public class MainActivity extends BaseFragmentActivity {
             }
             startActivity(start);
             finish();
+        } else if (!StringUtils.isNullOrBlanK(intent.getStringExtra("activity_action"))) {
+            initView();
+            String action = intent.getStringExtra("activity_action");
+            if (!StringUtils.isNullOrBlanK(action)) {
+                if (action.equals(Constant.LoginAction.toMessage)) {
+                    Intent intentAction = new Intent(MainActivity.this, MessageFragmentActivity.class);
+                    startActivity(intentAction);
+                } else if (action.equals(Constant.LoginAction.toPage3)) {//课程表点击登录返回
+                    fragmentlayout.setCurrenItem(2);
+                } else if (action.equals(Constant.LoginAction.toPage4)) {
+                    fragmentlayout.setCurrenItem(3);
+                } else if (action.equals(Constant.LoginAction.toClassTimeTable)) {//课程表右上角点击返回
+                    fragmentlayout.setCurrenItem(2);
+                    Intent intentAction = new Intent(MainActivity.this, ClassTimeTableActivity.class);
+                    startActivity(intentAction);
+                } else if (action.equals(Constant.LoginAction.toRemedialClassDetail)) {
+                    Intent intentAction = new Intent(MainActivity.this, RemedialClassDetailActivity.class);
+                    intent.putExtra("id",getIntent().getStringExtra("id"));
+                    startActivity(intentAction);
+                }
+            }
         } else {
             //云信通知消息
             setIntent(intent);
@@ -352,7 +365,7 @@ public class MainActivity extends BaseFragmentActivity {
          *                    {@link #MSG_CHATTING_ACCOUNT_ALL} 目前没有与任何人对话，但能看到消息提醒（比如在消息列表界面），不需要在状态栏做消息通知
          *                    {@link #MSG_CHATTING_ACCOUNT_NONE} 目前没有与任何人对话，需要状态栏消息通知
          */
-        NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.isChatMessageNotifyStatus()?MsgService.MSG_CHATTING_ACCOUNT_NONE:MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
+        NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.isChatMessageNotifyStatus() ? MsgService.MSG_CHATTING_ACCOUNT_NONE : MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
         MobclickAgent.onResume(this);
     }
 

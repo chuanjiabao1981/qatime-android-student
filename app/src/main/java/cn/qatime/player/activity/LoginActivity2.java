@@ -349,9 +349,10 @@ public class LoginActivity2 extends BaseActivity implements View.OnClickListener
                 }
             });
         }
-
         DialogUtils.dismissDialog(progress);
-        finish();
+        Intent intent = new Intent(this,MainActivity.class);
+        intent.putExtra("activity_action",getIntent().getStringExtra("activity_action"));
+        startActivity(intent);
     }
 
     /**
@@ -364,10 +365,21 @@ public class LoginActivity2 extends BaseActivity implements View.OnClickListener
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if ((requestCode == Constant.REGIST_1 || requestCode == Constant.REGIST_2) && resultCode == Constant.RESPONSE) {
-
-            finish();
+        if (resultCode == Constant.RESPONSE) {
+               if(requestCode == Constant.REGIST_2){
+                    finish();
+                }
         }
+    }
+
+    @Override
+    public void finish() {
+        if(BaseApplication.isLogined()){
+            Intent intent = new Intent(this,MainActivity.class);
+            intent.putExtra("activity_action",getIntent().getStringExtra("activity_action"));
+            startActivity(intent);
+        }
+        super.finish();
     }
 
     /**
