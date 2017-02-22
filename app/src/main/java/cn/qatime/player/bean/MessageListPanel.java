@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Toast;
 
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
@@ -458,9 +459,9 @@ public class MessageListPanel {
 
         MessageAudioControl.getInstance(container.activity).stopAudio();
 
-        longClickItemEarPhoneMode(alertDialog, msgType);
-
         longClickItemVoidToText(selectedItem, alertDialog, msgType);
+
+        longClickItemEarPhoneMode(alertDialog, msgType);
 
     }
 
@@ -498,7 +499,18 @@ public class MessageListPanel {
      * 耳机扬声器切换
      */
     private void longClickItemEarPhoneMode(CustomAlertDialog alertDialog, MsgTypeEnum msgType) {
+        if (msgType != MsgTypeEnum.audio) return;
 
+        String content = UserPreferences.isEarPhoneModeEnable() ? "切换成扬声器播放" : "切换成听筒播放";
+        final String finalContent = content;
+        alertDialog.addItem(content, new CustomAlertDialog.onSeparateItemClickListener() {
+
+            @Override
+            public void onClick() {
+                Toast.makeText(container.activity, finalContent, Toast.LENGTH_SHORT).show();
+                setEarPhoneMode(!UserPreferences.isEarPhoneModeEnable());
+            }
+        });
     }
 
     // 重新下载(对话框提示)
