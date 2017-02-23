@@ -32,6 +32,7 @@ import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
+import com.umeng.message.entity.UMessage;
 
 import org.json.JSONObject;
 
@@ -176,6 +177,12 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         //  注册/注销观察者
         NIMClient.getService(MsgServiceObserve.class)
                 .observeRecentContact(messageObserver, true);
+        BaseApplication.setUmengMessageListener(new BaseApplication.UmengMessageListener() {
+            @Override
+            public void receiveMessage(UMessage uMessage) {
+                message_x.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private void setCity() {
@@ -491,7 +498,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     startActivity(intent);
                 } else {
                     intent = new Intent(getActivity(), LoginActivity2.class);
-                    intent.putExtra("activity_action",Constant.LoginAction.toMessage);
+                    intent.putExtra("activity_action", Constant.LoginAction.toMessage);
                     startActivity(intent);
                 }
                 break;

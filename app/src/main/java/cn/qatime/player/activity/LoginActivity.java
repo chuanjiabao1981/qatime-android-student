@@ -364,6 +364,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
      * 刷新验证码
      */
     private void initCheckNum() {
+        login.setClickable(true);
         checkNum = CheckUtil.getCheckNum();
         checkview.setCheckNum(checkNum);
     }
