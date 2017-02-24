@@ -40,6 +40,7 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.GradeBean;
 import libraryextra.bean.ImageItem;
 import libraryextra.bean.PersonalInformationBean;
+import libraryextra.bean.Profile;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.DialogUtils;
 import libraryextra.utils.FileUtil;
@@ -193,6 +194,23 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                     @Override
                     protected void httpSuccess(String result) {
                         DialogUtils.dismissDialog(progress);
+                        PersonalInformationBean sData = JsonUtils.objectFromJson(result, PersonalInformationBean.class);
+
+                        BaseApplication.getProfile().getData().getUser().setAvatar_url(sData.getData().getAvatar_url());
+                        Profile profile = BaseApplication.getProfile();
+                        Profile.User user = profile.getData().getUser();
+                        user.setId(sData.getData().getId());
+                        user.setName(sData.getData().getName());
+                        user.setNick_name(sData.getData().getNick_name());
+                        user.setAvatar_url(sData.getData().getAvatar_url());
+                        user.setEx_big_avatar_url(sData.getData().getEx_big_avatar_url());
+                        user.setEmail(sData.getData().getEmail());
+                        user.setLogin_mobile(sData.getData().getLogin_mobile());
+                        user.setChat_account(sData.getData().getChat_account());
+
+                        profile.getData().setUser(user);
+                        BaseApplication.setProfile(profile);
+
                         Intent data = new Intent();
                         data.putExtra("data", result);
                         setResult(Constant.RESPONSE, data);

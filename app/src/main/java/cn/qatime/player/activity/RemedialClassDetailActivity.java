@@ -215,10 +215,13 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                                     if (time > 0) {
                                         value = (int) (time / (1000 * 3600 * 24));
                                     }
-                                    Logger.e(value+"asdfasdf");
                                     timeToStart.setVisibility(View.VISIBLE);
                                     progress.setVisibility(View.GONE);
-                                    timeToStart.setText("[" + getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day) + "]");
+                                    if(value!=0){
+                                        timeToStart.setText("[" + getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day) + "]");
+                                    }else{
+                                        timeToStart.setText(R.string.ready_to_start);
+                                    }
                                     layoutView.setBackgroundColor(0xff00d564);
                                 } else if ("teaching".equals(data.getData().getStatus())) {
                                     progress.setVisibility(View.VISIBLE);
@@ -307,19 +310,18 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                         startActivity(intent);
                     }
                 } else {
-                    intent = new Intent(RemedialClassDetailActivity.this, LoginActivity.class);
-                    intent.putExtra("sign", Constant.VISITORTOLOGIN);
-                    startActivityForResult(intent, Constant.REQUEST);
+                    intent = new Intent(RemedialClassDetailActivity.this, LoginActivity2.class);
+                    intent.putExtra("activity_action",Constant.LoginAction.toRemedialClassDetail);
+                    startActivity(intent);
                 }
                 break;
             case R.id.audition:
                 if (BaseApplication.isLogined()) {
                     joinAudition();
                 } else {
-                    intent = new Intent(RemedialClassDetailActivity.this, LoginActivity.class);
-                    intent.putExtra("sign", Constant.VISITORTOLOGIN);
-                    startActivityForResult(intent, Constant.REQUEST);
-                }
+                    intent = new Intent(RemedialClassDetailActivity.this, LoginActivity2.class);
+                    intent.putExtra("activity_action",Constant.LoginAction.toRemedialClassDetail);
+                    startActivity(intent);                }
                 break;
             case R.id.start_study:
                 if (BaseApplication.isLogined()) {
@@ -334,10 +336,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                         startActivity(intent);
                     }
                 } else {
-                    intent = new Intent(RemedialClassDetailActivity.this, LoginActivity.class);
-                    intent.putExtra("sign", Constant.VISITORTOLOGIN);
-                    startActivityForResult(intent, Constant.REQUEST);
-                }
+                    intent = new Intent(RemedialClassDetailActivity.this, LoginActivity2.class);
+                    intent.putExtra("activity_action",Constant.LoginAction.toRemedialClassDetail);
+                    startActivity(intent);                }
                 break;
             case R.id.pay:
                 if (BaseApplication.isLogined()) {
@@ -372,9 +373,10 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                         payRemedial();
                     }
                 } else {
-                    intent = new Intent(RemedialClassDetailActivity.this, LoginActivity.class);
-                    intent.putExtra("sign", Constant.VISITORTOLOGIN);
-                    startActivityForResult(intent, Constant.REQUEST);
+                    intent = new Intent(RemedialClassDetailActivity.this, LoginActivity2.class);
+                    intent.putExtra("activity_action",Constant.LoginAction.toRemedialClassDetail);
+                    intent.putExtra("id",id);
+                    startActivity(intent);
                 }
                 break;
         }
@@ -533,9 +535,6 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Constant.VISITORLOGINED) {
-            setResult(Constant.VISITORLOGINED);
-        }
     }
 
     @Override

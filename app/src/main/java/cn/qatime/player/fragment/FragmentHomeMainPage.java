@@ -45,7 +45,7 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.CitySelectActivity;
-import cn.qatime.player.activity.LoginActivity;
+import cn.qatime.player.activity.LoginActivity2;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.MessageFragmentActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
@@ -490,10 +490,9 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     intent = new Intent(getActivity(), MessageFragmentActivity.class);
                     startActivity(intent);
                 } else {
-                    intent = new Intent(getActivity(), LoginActivity.class);
-                    intent.putExtra("sign", Constant.VISITORTOLOGIN);
-                    intent.putExtra("action", Constant.LoginAction.toMessage);
-                    startActivityForResult(intent, Constant.REQUEST);
+                    intent = new Intent(getActivity(), LoginActivity2.class);
+                    intent.putExtra("activity_action",Constant.LoginAction.toMessage);
+                    startActivity(intent);
                 }
                 break;
             case R.id.city_select:

@@ -97,7 +97,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void afterTextChanged(Editable s) {
                 if (StringUtils.isPhone(phone.getText().toString().trim())) {
-                    getcode.setEnabled(true);
+                    if(!time.ticking){//如果不在计时，允许点击
+                        getcode.setEnabled(true);
+                    }
                 } else {
                     getcode.setEnabled(false);
                 }
@@ -172,18 +174,22 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     }
 
     private class TimeCount extends CountDownTimer {
+        public boolean ticking;
+
         TimeCount(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
         }
 
         @Override
         public void onFinish() {// 计时完毕
+            ticking = false;
             getcode.setText(getResources().getString(R.string.get_verification_code));
             getcode.setEnabled(true);
         }
 
         @Override
         public void onTick(long millisUntilFinished) {// 计时过程
+            ticking =true;
             getcode.setEnabled(false);//防止重复点击
             getcode.setText(millisUntilFinished / 1000 + "s");
         }
@@ -462,13 +468,15 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         }
         //下一步跳转，完善信息
         Intent intent = new Intent(RegisterActivity.this, RegisterPerfectActivity.class);
-        startActivityForResult(intent, Constant.REGIST);
+        int register_action = getIntent().getIntExtra("register_action", Constant.REGIST_1);
+        intent.putExtra("register_action",register_action);
+        startActivityForResult(intent, register_action);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constant.REGIST && resultCode == Constant.RESPONSE) {
-            setResult(resultCode, data);
+        if ((requestCode == Constant.REGIST_1||requestCode == Constant.REGIST_2) && resultCode == Constant.RESPONSE) {
+            setResult(resultCode);
             finish();
         }
     }

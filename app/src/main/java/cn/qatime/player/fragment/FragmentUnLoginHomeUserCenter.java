@@ -6,13 +6,12 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import cn.qatime.player.R;
-import cn.qatime.player.activity.LoginActivity;
+import cn.qatime.player.activity.LoginActivity2;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.utils.Constant;
 
@@ -59,10 +58,9 @@ public class FragmentUnLoginHomeUserCenter extends BaseFragment implements View.
         switch (v.getId()) {
             case R.id.information:
             case R.id.name:
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                intent.putExtra("sign", Constant.VISITORTOLOGIN);
-                intent.putExtra("action", Constant.LoginAction.toPage4);
-                startActivityForResult(intent, Constant.REQUEST);
+                Intent intent = new Intent(getActivity(), LoginActivity2.class);
+                intent.putExtra("activity_action", Constant.LoginAction.toPage4);
+                startActivity(intent);
                 break;
             case R.id.my_wallet:
             case R.id.my_order:
