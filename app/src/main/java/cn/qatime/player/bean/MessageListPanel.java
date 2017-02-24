@@ -459,7 +459,7 @@ public class MessageListPanel {
 
         MessageAudioControl.getInstance(container.activity).stopAudio();
 
-        longClickItemVoidToText(selectedItem, alertDialog, msgType);
+//        longClickItemVoidToText(selectedItem, alertDialog, msgType);
 
         longClickItemEarPhoneMode(alertDialog, msgType);
 
