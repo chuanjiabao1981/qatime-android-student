@@ -16,17 +16,19 @@ import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.message.entity.UMessage;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
-import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.fragment.FragmentMessageChatNews;
 import cn.qatime.player.fragment.FragmentMessageNotifyNews;
+import libraryextra.utils.StringUtils;
 import libraryextra.view.FragmentLayoutWithLine;
 
 /**
@@ -59,14 +61,17 @@ public class MessageFragmentActivity extends BaseFragmentActivity {
         //  注册/注销观察者
         NIMClient.getService(MsgServiceObserve.class)
                 .observeRecentContact(messageObserver, true);
-        BaseApplication.setUmengMessageListener(new BaseApplication.UmengMessageListener() {
-            @Override
-            public void receiveMessage(UMessage uMessage) {
-                if (currentPosition == 2) {
-                    fragmentlayout.getTabLayout().findViewById(R.id.flag2).setVisibility(View.VISIBLE);
-                }
+        EventBus.getDefault().register(this);
+    }
+
+
+    @Subscribe
+    public void onEvent(String msg) {
+        if (!StringUtils.isNullOrBlanK(msg) && "handleUPushMessage".equals(msg)) {
+            if (currentPosition == 0) {
+                fragmentlayout.getTabLayout().findViewById(R.id.flag2).setVisibility(View.VISIBLE);
             }
-        });
+        }
     }
 
     @Override
@@ -75,6 +80,7 @@ public class MessageFragmentActivity extends BaseFragmentActivity {
         //  注册/注销观察者
         NIMClient.getService(MsgServiceObserve.class)
                 .observeRecentContact(messageObserver, false);
+        EventBus.getDefault().unregister(this);
     }
 
     private void initview() {

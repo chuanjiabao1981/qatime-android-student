@@ -34,6 +34,7 @@ import com.umeng.message.UmengNotificationClickHandler;
 import com.umeng.message.entity.UMessage;
 import com.umeng.message.tag.TagManager;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -67,15 +68,7 @@ public class BaseApplication extends Application {
      * 是否进行聊天消息通知栏提醒
      */
     public static boolean chatMessageNotifyStatus;
-    private static UmengMessageListener umengMessageListener;
 
-    public static void setUmengMessageListener(UmengMessageListener umengMessageListener) {
-        BaseApplication.umengMessageListener = umengMessageListener;
-    }
-
-    public interface UmengMessageListener{
-        void receiveMessage(UMessage uMessage);
-    }
     public static boolean isChatMessageNotifyStatus() {
         return chatMessageNotifyStatus;
     }
@@ -161,9 +154,8 @@ public class BaseApplication extends Application {
         mPushAgent.setMessageHandler(new UmengMessageHandler(){
             @Override
             public void handleMessage(Context context, UMessage uMessage) {
+                EventBus.getDefault().post("handleUPushMessage");
                 super.handleMessage(context, uMessage);
-                if(umengMessageListener!=null)
-                umengMessageListener.receiveMessage(uMessage);
             }
         });
         //注册推送服务，每次调用register方法都会回调该接口

@@ -32,8 +32,9 @@ import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
-import com.umeng.message.entity.UMessage;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -65,6 +66,7 @@ import libraryextra.bean.CityBean;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.ScreenUtils;
+import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.TagViewPager;
@@ -177,13 +179,16 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         //  注册/注销观察者
         NIMClient.getService(MsgServiceObserve.class)
                 .observeRecentContact(messageObserver, true);
-        BaseApplication.setUmengMessageListener(new BaseApplication.UmengMessageListener() {
-            @Override
-            public void receiveMessage(UMessage uMessage) {
-                message_x.setVisibility(View.VISIBLE);
-            }
-        });
+        EventBus.getDefault().register(this);
     }
+
+    @Subscribe
+    public void onEvent(String msg) {
+        if(!StringUtils.isNullOrBlanK(msg)&&"handleUPushMessage".equals(msg)){
+            message_x.setVisibility(View.VISIBLE);
+        }
+    }
+
 
     private void setCity() {
         cityName.setText(BaseApplication.getCurrentCity().getName());
@@ -480,6 +485,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     public void onDestroy() {
         super.onDestroy();
         //  注册/注销观察者
+        EventBus.getDefault().unregister(this);
         NIMClient.getService(MsgServiceObserve.class)
                 .observeRecentContact(messageObserver, false);
     }
