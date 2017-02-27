@@ -70,7 +70,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         sessionId = getIntent().getStringExtra("sessionId");
         sessionType = (SessionTypeEnum) getIntent().getSerializableExtra("sessionType");
         courseId = getIntent().getIntExtra("courseId", 0);
-        initView();
+
         setRightImage(R.mipmap.online_room, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,6 +84,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         });
         registerObservers(true);
         registerTeamUpdateObserver(true);
+        initView();
     }
 
     private void initView() {
