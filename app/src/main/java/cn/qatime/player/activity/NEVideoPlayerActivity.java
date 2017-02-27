@@ -418,6 +418,18 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             }
         });
 
+        inputPanel.setOnAudioRecordListener(new InputPanel.AudioRecordListener() {
+            @Override
+            public void audioRecordStart() {
+                screenSwitchUtils.stop();
+            }
+
+            @Override
+            public void audioRecordStop() {
+                screenSwitchUtils.start(NEVideoPlayerActivity.this);
+            }
+        });
+
     }
 
     /**
