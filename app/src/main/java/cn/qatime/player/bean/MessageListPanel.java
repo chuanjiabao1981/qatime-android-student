@@ -130,7 +130,7 @@ public class MessageListPanel {
     }
 
     public void onIncomingMessage(List<IMMessage> messages) {
-        boolean needScrollToBottom = isLastMessageVisible();
+//        boolean needScrollToBottom = isLastMessageVisible();
         boolean needRefresh = false;
         List<IMMessage> addedListItems = new ArrayList<>(messages.size());
         for (IMMessage message : messages) {
@@ -150,10 +150,9 @@ public class MessageListPanel {
         // incoming messages tip
         IMMessage lastMsg = messages.get(messages.size() - 1);
         if (isMyMessage(lastMsg)) {
-            if (needScrollToBottom) {
+//            if (needScrollToBottom) {
                 doScrollToBottom();
-            }
-//            else if (incomingMsgPrompt != null && lastMsg.getSessionType() != SessionTypeEnum.ChatRoom) {
+//            } else if (incomingMsgPrompt != null && lastMsg.getSessionType() != SessionTypeEnum.ChatRoom) {
 //                incomingMsgPrompt.show(lastMsg);
 //            }
         }
@@ -459,7 +458,7 @@ public class MessageListPanel {
 
         MessageAudioControl.getInstance(container.activity).stopAudio();
 
-        longClickItemVoidToText(selectedItem, alertDialog, msgType);
+//        longClickItemVoidToText(selectedItem, alertDialog, msgType);
 
         longClickItemEarPhoneMode(alertDialog, msgType);
 

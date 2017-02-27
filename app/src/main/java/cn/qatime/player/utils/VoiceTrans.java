@@ -2,6 +2,7 @@ package cn.qatime.player.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.google.gson.JsonObject;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -17,7 +22,19 @@ import com.netease.nimlib.sdk.msg.attachment.AudioAttachment;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.orhanobut.logger.Logger;
 
+import org.apache.http.client.methods.HttpPost;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
 import cn.qatime.player.R;
+import cn.qatime.player.base.BaseApplication;
+import libraryextra.utils.FileUtil;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 
 /**
  */
@@ -97,33 +114,80 @@ public class VoiceTrans {
 
     public void voiceToText(IMMessage msg) {
         AudioAttachment attachment = (AudioAttachment) msg.getAttachment();
-        String voiceUrl = attachment.getUrl();
         String path = attachment.getPath();
+        String speech = Base64.encodeToString(FileUtil.File2byte(path), Base64.DEFAULT);
         refreshStartUI();
-        callFuture = NIMClient.getService(MsgService.class).transVoiceToText(voiceUrl, path, attachment.getDuration());
-        callFuture.setCallback(new RequestCallback<String>() {
-            @Override
-            public void onSuccess(String param) {
-                voiceTransText.setText(param);
-                updateUI();
-            }
 
+        Map<String, String> map = new HashMap<>();
+        map.put("format", "amr");
+        map.put("rate", "8000");
+        map.put("channel", "1");
+        map.put("cuid", "8789341");
+        map.put("token", "heKtzNNNShIkzh9A4FGepo2DU4wbyV5k");
+        map.put("speech", speech);
+        map.put("len", String.valueOf(attachment.getSize()));
+
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl("http://vop.baidu.com/server_api", map),
+                null,
+//                new VolleyListener(baseActivity) {
+//                    @Override
+//                    protected void onSuccess(JSONObject response) {
+//                        Logger.e("转换" + response.toString());
+//                        updateUI();
+//                    }
+//
+//                    @Override
+//                    protected void onError(JSONObject response) {
+//                        voiceTransText.setText(R.string.trans_voice_failed);
+//                        failIcon.setVisibility(View.VISIBLE);
+//                        updateUI();
+//                    }
+//
+//                    @Override
+//                    protected void onTokenOut() {
+//
+//                    }
+//                }
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject jsonObject) {
+                        Logger.e("转换" + jsonObject.toString());
+                    }
+                }
+                , new VolleyErrorListener() {
             @Override
-            public void onFailed(int code) {
-                Logger.e(TAG, "voice to text failed, code=" + code);
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+                Logger.e(volleyError.getMessage());
                 voiceTransText.setText(R.string.trans_voice_failed);
                 failIcon.setVisibility(View.VISIBLE);
                 updateUI();
             }
-
-            @Override
-            public void onException(Throwable exception) {
-                Logger.e(TAG, "voice to text throw exception, e=" + exception.getMessage());
-                voiceTransText.setText("参数错误");
-                failIcon.setVisibility(View.VISIBLE);
-                updateUI();
-            }
         });
+
+        BaseApplication.getRequestQueue().add(request);
+//        callFuture = NIMClient.getService(MsgService.class).transVoiceToText(voiceUrl, path, attachment.getDuration());
+//        callFuture.setCallback(new RequestCallback<String>() {
+//            @Override
+//            public void onSuccess(String param) {
+//                voiceTransText.setText(param);
+//
+//            }
+//
+//            @Override
+//            public void onFailed(int code) {
+//                Logger.e(TAG, "voice to text failed, code=" + code);
+//
+//            }
+//
+//            @Override
+//            public void onException(Throwable exception) {
+//                Logger.e(TAG, "voice to text throw exception, e=" + exception.getMessage());
+//                voiceTransText.setText("参数错误");
+//                failIcon.setVisibility(View.VISIBLE);
+//                updateUI();
+//            }
+//        });
         show();
     }
 
