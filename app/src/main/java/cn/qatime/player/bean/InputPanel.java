@@ -93,6 +93,7 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
     private long start = 0;
     private long end = 0;
     private ImageView alertImage;
+    private AudioRecordListener audioRecordListener;
 
     public void onPause() {
         // 停止录音
@@ -103,6 +104,16 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
 
     public interface InputPanelListener {
         void ChatMessage(IMMessage message);
+    }
+
+    public interface AudioRecordListener {
+        void audioRecordStart();
+
+        void audioRecordStop();
+    }
+
+    public void setOnAudioRecordListener(AudioRecordListener audioRecordListener) {
+        this.audioRecordListener = audioRecordListener;
     }
 
     public interface OnInputShowListener {
@@ -440,11 +451,17 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
 
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     touched = true;
+                    if (audioRecordListener != null) {
+                        audioRecordListener.audioRecordStart();
+                    }
                     initAudioRecord();
                     onStartAudioRecord();
                     start = System.currentTimeMillis();
                 } else if (event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP) {
                     touched = false;
+                    if (audioRecordListener != null) {
+                        audioRecordListener.audioRecordStop();
+                    }
                     end = System.currentTimeMillis();
                     if (end - start < 800) {
                         tooShortAudioRecord();
