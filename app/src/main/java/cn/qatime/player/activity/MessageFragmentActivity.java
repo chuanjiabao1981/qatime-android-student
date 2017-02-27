@@ -118,7 +118,7 @@ public class MessageFragmentActivity extends BaseFragmentActivity {
             }
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_fragment_news, 0x0912);
-
+        fragmentlayout.getViewPager().setOffscreenPageLimit(2);
     }
 
     private void parseIntent() {

@@ -14,6 +14,7 @@ import com.android.volley.VolleyError;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -50,6 +51,7 @@ public class FragmentMessageNotifyNews extends BaseFragment {
         View view = View.inflate(getActivity(), R.layout.fragment_message_notify_news, null);
         initview(view);
         initOver = true;
+        initData(1);
         return view;
     }
 
@@ -152,6 +154,9 @@ public class FragmentMessageNotifyNews extends BaseFragment {
                         if (data != null && data.getData() != null) {
                             list.addAll(data.getData());
                             adapter.notifyDataSetChanged();
+                            if(!data.getData().get(0).isRead()){//有未读发送未读event
+                                EventBus.getDefault().post("handleUPushMessage");
+                            }
                         }
                     }
 
