@@ -9,18 +9,26 @@ import android.widget.TextView;
 
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.NimIntent;
+import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.umeng.analytics.MobclickAgent;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.fragment.FragmentMessageChatNews;
 import cn.qatime.player.fragment.FragmentMessageNotifyNews;
+import libraryextra.utils.StringUtils;
 import libraryextra.view.FragmentLayoutWithLine;
 
 /**
@@ -32,6 +40,16 @@ public class MessageFragmentActivity extends BaseFragmentActivity {
     FragmentLayoutWithLine fragmentlayout;
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2};
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
+    private int currentPosition = 0;
+    Observer<List<RecentContact>> messageObserver =
+            new Observer<List<RecentContact>>() {
+                @Override
+                public void onEvent(List<RecentContact> messages) {
+                    if (currentPosition == 1) {
+                        fragmentlayout.getTabLayout().findViewById(R.id.flag1).setVisibility(View.VISIBLE);
+                    }
+                }
+            };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +58,29 @@ public class MessageFragmentActivity extends BaseFragmentActivity {
         setTitles(getResourceString(R.string.message));
         initview();
         parseIntent();
+        //  注册/注销观察者
+        NIMClient.getService(MsgServiceObserve.class)
+                .observeRecentContact(messageObserver, true);
+        EventBus.getDefault().register(this);
+    }
+
+
+    @Subscribe
+    public void onEvent(String msg) {
+        if (!StringUtils.isNullOrBlanK(msg) && "handleUPushMessage".equals(msg)) {
+            if (currentPosition == 0) {
+                fragmentlayout.getTabLayout().findViewById(R.id.flag2).setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //  注册/注销观察者
+        NIMClient.getService(MsgServiceObserve.class)
+                .observeRecentContact(messageObserver, false);
+        EventBus.getDefault().unregister(this);
     }
 
     private void initview() {
@@ -68,10 +109,16 @@ public class MessageFragmentActivity extends BaseFragmentActivity {
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff999999);
                 ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff333333);
                 ((BaseFragment) fragBaseFragments.get(position)).onShow();
+                currentPosition = position;
+                if (position == 0) {
+                    currentTabView.findViewById(R.id.flag1).setVisibility(View.INVISIBLE);
+                } else if (position == 1) {
+                    currentTabView.findViewById(R.id.flag2).setVisibility(View.INVISIBLE);
+                }
             }
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_fragment_news, 0x0912);
-
+        fragmentlayout.getViewPager().setOffscreenPageLimit(2);
     }
 
     private void parseIntent() {
