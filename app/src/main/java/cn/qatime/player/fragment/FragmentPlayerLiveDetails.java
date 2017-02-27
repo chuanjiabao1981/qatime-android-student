@@ -1,12 +1,15 @@
 package cn.qatime.player.fragment;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,12 +43,12 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
     private TextView grade;
     private TextView classStartTime;
     private TextView classEndTime;
-    private TextView courseDescribe;
+    private WebView courseDescribe;
     private TextView name;
     private TextView sex;
     private TextView teachingYears;
     private TextView school;
-    private TextView teacherDescribe;
+    private WebView teacherDescribe;
     private ImageView image;
     private ListViewForScrollView list;
     private RemedialClassDetailBean.Data data;
@@ -68,15 +71,54 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
         grade = (TextView) view.findViewById(R.id.grade);
         classStartTime = (TextView) view.findViewById(R.id.class_start_time);
         classEndTime = (TextView) view.findViewById(R.id.class_end_time);
-        courseDescribe = (TextView) view.findViewById(R.id.course_describe);
         name = (TextView) view.findViewById(R.id.name);
         sex = (TextView) view.findViewById(R.id.sex);
         teachingYears = (TextView) view.findViewById(R.id.teaching_years);
         school = (TextView) view.findViewById(R.id.school);
-        teacherDescribe = (TextView) view.findViewById(R.id.teacher_describe);
         image = (ImageView) view.findViewById(R.id.image);
         list = (ListViewForScrollView) view.findViewById(R.id.list);
         viewEmptyGone = view.findViewById(R.id.view_empty_gone);
+
+        courseDescribe = (WebView) view.findViewById(R.id.course_describe);
+        courseDescribe.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return true;
+            }
+        });
+
+        courseDescribe.setBackgroundColor(0); // 设置背景色
+        courseDescribe.getBackground().setAlpha(0); // 设置填充透明度 范围：0-255
+        courseDescribe.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY); //取消滚动条白边效果
+        WebSettings settingsC = courseDescribe.getSettings();
+        settingsC.setDefaultTextEncodingName("UTF-8") ;
+        settingsC.setBlockNetworkImage(false);
+        settingsC.setDefaultFontSize(13);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            settingsC.setMixedContentMode(settingsC.MIXED_CONTENT_ALWAYS_ALLOW);  //注意安卓5.0以上的权限
+        }
+
+
+        teacherDescribe = (WebView) view.findViewById(R.id.teacher_describe);
+        teacherDescribe.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return true;
+            }
+        });
+
+        teacherDescribe.setBackgroundColor(0); // 设置背景色
+        teacherDescribe.getBackground().setAlpha(0); // 设置填充透明度 范围：0-255
+        teacherDescribe.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY); //取消滚动条白边效果
+        WebSettings settingsT = teacherDescribe.getSettings();
+        settingsT.setDefaultTextEncodingName("UTF-8") ;
+        settingsT.setBlockNetworkImage(false);
+        settingsT.setDefaultFontSize(13);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            settingsT.setMixedContentMode(settingsT.MIXED_CONTENT_ALWAYS_ALLOW);  //注意安卓5.0以上的权限
+        }
+
+
         initList();
         return view;
     }
@@ -197,7 +239,10 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
                 }
                 grade.setText((data.getGrade() == null ? "" : data.getGrade()));
                 totalClass.setText(getString(R.string.lesson_count,data.getPreset_lesson_count()));
-                courseDescribe.setText(StringUtils.isNullOrBlanK(data.getDescription()) ?  getString(R.string.no_desc) : data.getDescription());
+                String body =StringUtils.isNullOrBlanK(data.getDescription()) ? getString(R.string.no_desc) : data.getDescription();
+                body = body.replace("\r\n", "<br>");
+                String css = "<style>* {color:#999999;}</style>";//默认color
+                courseDescribe.loadDataWithBaseURL(null,css+body,"text/html","UTF-8",null);
             }
         }
     };
@@ -219,8 +264,10 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
                         teachingYears.setText(getResourceString(R.string.teacher_years) + " " + getResourceString(R.string.more_than_ten_years));
                     }
                 }
-                teacherDescribe.setText(StringUtils.isNullOrBlanK(data.getTeacher().getDesc()) ?  getString(R.string.no_desc)  : data.getTeacher().getDesc());
-
+                String body =StringUtils.isNullOrBlanK(data.getTeacher().getDesc()) ? getString(R.string.no_desc) : data.getTeacher().getDesc();
+                body = body.replace("\r\n", "<br>");
+                String css = "<style>* {color:#999999;}</style>";//默认color
+                teacherDescribe.loadDataWithBaseURL(null,css+body,"text/html","UTF-8",null);
                 SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getCacheDir() + "/school.txt").toString(), SchoolBean.class);
                 if (schoolBean != null && schoolBean.getData() != null) {
                     for (int i = 0; i < schoolBean.getData().size(); i++) {
