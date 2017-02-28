@@ -60,6 +60,8 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     TextView complete;
     private EditText describe;
     private TextView birthday;
+    private TextView region;
+    private View regionView;
     private View birthdayView;
     private View gradeView;
 
@@ -97,6 +99,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         birthdayView.setOnClickListener(this);
         complete.setOnClickListener(this);
         gradeView.setOnClickListener(this);
+        regionView.setOnClickListener(this);
         PersonalInformationBean data = (PersonalInformationBean) getIntent().getSerializableExtra("data");
         if (data != null && data.getData() != null) {
             initData(data);
@@ -144,6 +147,10 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.region_view:
+                Intent regionIntent = new Intent(this,RegionSelectActivity1.class);
+                startActivityForResult(regionIntent,Constant.REQUEST_REGION_SELECT);
+                break;
             case R.id.men:
                 men.setSelected(true);
                 women.setSelected(false);
@@ -313,6 +320,8 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         birthdayView = findViewById(R.id.birthday_view);
         gradeView = findViewById(R.id.grade_view);
         complete = (TextView) findViewById(R.id.complete);
+        region = (TextView) findViewById(R.id.region);
+        regionView = findViewById(R.id.region_view);
     }
 
     @Override

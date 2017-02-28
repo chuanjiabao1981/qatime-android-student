@@ -10,12 +10,12 @@ import android.os.Environment;
 public class Constant {
     public static String phoneNumber = "400-838-8010";
     public static String APP_ID = "wxf2dfbeb5f641ce40";//微信appid
-
     public static final String CACHEPATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/qatime";
 
     public static int REQUEST = 0;
 
     public static int RESPONSE = 1;
+
     public static int REQUEST_EXIT_LOGIN = 0x1001;
     public static int RESPONSE_EXIT_LOGIN = 0x1002;
     public static int REQUEST_CAMERA = 0x1003;
@@ -27,6 +27,8 @@ public class Constant {
     public static int REGIST_2 = 0x1010;//LoginActivity2
     public static int RESPONSE_CITY_SELECT = 0x1011;
     public static int CHANGE_PAY_PSW = 0x1012;
+    public static int REQUEST_REGION_SELECT = 0x1013;
+    public static int RESPONSE_REGION_SELECT = 0x1014;
 
     public static class CourseStatus {
         public static String published = "published";//招生中

@@ -625,4 +625,5 @@
     <string name="voice_to_text">转文字</string>
     <string name="trans_voice_failed">语音转化失败</string>
     <string name="ready_to_start">[即将开课]</string>
+    <string name="hint_choose_region">请选择您所在的区域</string>
 </resources>

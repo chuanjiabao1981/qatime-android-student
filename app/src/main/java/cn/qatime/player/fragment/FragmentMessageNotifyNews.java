@@ -154,7 +154,7 @@ public class FragmentMessageNotifyNews extends BaseFragment {
                         if (data != null && data.getData() != null) {
                             list.addAll(data.getData());
                             adapter.notifyDataSetChanged();
-                            if(!data.getData().get(0).isRead()){//有未读发送未读event
+                            if (data.getData().get(0) != null && !data.getData().get(0).isRead()) {//有未读发送未读event
                                 EventBus.getDefault().post("handleUPushMessage");
                             }
                         }

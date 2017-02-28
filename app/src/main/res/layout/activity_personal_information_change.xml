@@ -118,24 +118,24 @@
                 <TextView
                     android:id="@+id/men"
                     android:layout_width="74dp"
-                    android:padding="2dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/text_sex_background_selector"
                     android:gravity="center"
-                    android:textSize="13sp"
+                    android:padding="2dp"
                     android:text="@string/boy"
-                    android:textColor="@drawable/text_sex_color_selector" />
+                    android:textColor="@drawable/text_sex_color_selector"
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/women"
-                    android:padding="2dp"
                     android:layout_width="74dp"
                     android:layout_height="wrap_content"
-                    android:textSize="13sp"
                     android:background="@drawable/text_sex_background_selector"
                     android:gravity="center"
+                    android:padding="2dp"
                     android:text="@string/girl"
-                    android:textColor="@drawable/text_sex_color_selector" />
+                    android:textColor="@drawable/text_sex_color_selector"
+                    android:textSize="13sp" />
             </LinearLayout>
 
             <View
@@ -167,8 +167,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0000年00月00日"
-                    android:textSize="12sp"
-                    android:textColor="#666" />
+                    android:textColor="#666"
+                    android:textSize="12sp" />
 
                 <View
                     android:layout_width="0dp"
@@ -222,6 +222,8 @@
                 android:layout_height="1px"
                 android:background="#dfdddd" />
 
+            e
+
             <LinearLayout
                 android:id="@+id/grade_view"
                 android:layout_width="match_parent"
@@ -246,8 +248,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="高一"
-                    android:textSize="13sp"
-                    android:textColor="#666" />
+                    android:textColor="#666"
+                    android:textSize="13sp" />
 
                 <View
                     android:layout_width="0dp"
@@ -259,6 +261,41 @@
                     android:layout_height="12dp"
                     android:layout_marginLeft="2dp"
                     android:src="@mipmap/screen_down" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#dfdddd" />
+
+            <LinearLayout
+                android:id="@+id/region_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingBottom="15dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="15dp">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:text="@string/region"
+                    android:textColor="#333" />
+
+                <TextView
+                    android:id="@+id/region"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/hint_choose_region"
+                    android:inputType="text"
+                    android:textColor="#666"
+                    android:textColorHint="#bfbfbf"
+                    android:textSize="13sp" />
             </LinearLayout>
 
             <View
@@ -288,10 +325,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:imeOptions="actionDone"
-                    android:inputType="textMultiLine"
                     android:gravity="top"
                     android:hint="@string/hint_profiles"
+                    android:imeOptions="actionDone"
+                    android:inputType="textMultiLine"
                     android:textColor="#666"
                     android:textColorHint="#bfbfbf"
                     android:textSize="13sp" />
