@@ -12,14 +12,19 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -41,6 +46,7 @@ import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.qrcore.camera.CameraManager;
 import cn.qatime.player.qrcore.executor.ResultHandler;
 import libraryextra.utils.ScreenUtils;
+import libraryextra.utils.StringUtils;
 
 public final class CaptureActivity extends BaseActivity implements SurfaceHolder.Callback {
     private RequestQueue mQueue;
@@ -121,8 +127,8 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         mQueue = Volley.newRequestQueue(this);
-        // Window window = getWindow();
-        // window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.capture);
         setTitles("扫描二维码");
         hasSurface = false;
@@ -143,14 +149,6 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
                     cameraManager.setTorch(true);
             }
         });
-//		dialog = new Dialog(this, R.style.MyDialogStyle);
-//		dialog.setCanceledOnTouchOutside(true);
-//		View view = View.inflate(this, R.layout.pop_qrdialog, null);
-//		name = (TextView) view.findViewById(R.id.name);
-//		className = (TextView) view.findViewById(R.id.className);
-//		parentName = (TextView) view.findViewById(R.id.parentName);
-//		time = (TextView) view.findViewById(R.id.time);
-//		dialog.setContentView(view);
     }
 
     public String parsLocalPic(String path) {
@@ -314,102 +312,30 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
 
         ResultHandler resultHandler = new ResultHandler(parseResult(rawResult));
 
-        if (barcode == null) {
-            Logger.e("steven", "rawResult.getBarcodeFormat().toString():" + rawResult.getBarcodeFormat().toString());
-            Logger.e("steven", "resultHandler.getType().toString():" + resultHandler.getType().toString());
-            Logger.e("steven", "resultHandler.getDisplayContents():" + resultHandler.getDisplayContents());
-        } else {
-            showDialog();
+//        if (barcode == null) {
+//            Logger.e("steven", "rawResult.getBarcodeFormat().toString():" + rawResult.getBarcodeFormat().toString());
+//            Logger.e("steven", "resultHandler.getType().toString():" + resultHandler.getType().toString());
+//            Logger.e("steven", "resultHandler.getDisplayContents():" + resultHandler.getDisplayContents());
+//        } else {
             initData(resultHandler.getDisplayContents().toString());
             restartPreviewAfterDelay(3000L);
-        }
+//        }
     }
 
     /**
-     * 扫描完成后请求签到
+     *
      */
-    // childId Int true 孩子Id
-    // parentId String true 家长Id
-    // unitId String true 学校Id
-    // operatorId String true 发送者id，即当前登录者uid
-    // type Int true 1入校，2离校3 请假
-    // token String true 令牌
     public void initData(String qr) {
         Logger.e("qr" + qr);
-//        try {
-//            JSONObject json = new JSONObject(qr);
-//            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-//                    UrlUtils.getHttpsUrl(
-//                            "/attendance/qr_attendance",
-//                            new String[]{"parentId", "operatorId", "token",
-//                                    "childId", "unitId", "type"},
-//                            new String[]{json.getString("parentsId"),
-//                                    MainActivity.contextUser.getUid(),
-//                                    MainActivity.contextUser.getToken(),
-//                                    json.getString("childId"),
-//                                    MainActivity.contextUser.getUnitId(),
-//                                    String.valueOf(type)}), null,
-//                    new VolleyListerner(this) {
-//                        @Override
-//                        public void onSucess(JSONObject response) {
-//                            setValues(response);
-//                        }
-//
-//                        @Override
-//                        public void onRet_0(JSONObject response) {
-//                            super.onRet_0(response);
-//                            errorValues();
-//                        }
-//                    }, new VolleyErrorListoner(this) {
-//                @Override
-//                public void onError(VolleyError error) {
-//                    super.onError(error);
-//                    errorValues();
-//                }
-//            });
-//            mQueue.add(jsonObjectRequest);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-    }
+        if (StringUtils.isSelfQRcode(qr)) {
 
-    protected void showDialog() {
-//        dialog = new Dialog(this, R.style.MyDialogStyle);
-//        dialog.setCanceledOnTouchOutside(true);
-//        view = View.inflate(this, R.layout.pop_qrdialog, null);
-//        school_name = (TextView) view.findViewById(R.id.textView1);
-//        school_name.setText(MainActivity.contextUser.getSchoolName());
-//        name = (TextView) view.findViewById(R.id.name);
-//        className = (TextView) view.findViewById(R.id.className);
-//        parentName = (TextView) view.findViewById(R.id.parentName);
-//        time = (TextView) view.findViewById(R.id.time);
-//        result = (TextView) view.findViewById(R.id.textView2);
-//        icon = (ImageView) view.findViewById(R.id.imageView_icon);
-//        dialog.setContentView(view);
-//        dialog.show();
+        } else {
+            Toast toast = Toast.makeText(this, "不支持的二维码类型", Toast.LENGTH_LONG);
+            ((TextView) ((LinearLayout) toast.getView()).getChildAt(0)).setTextSize(22);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+        }
     }
-
-//    public void setValues(JSONObject json) {
-//        try {
-//            name.setText(json.getString("childName"));
-//            className.setText(MainActivity.contextUser.getClassName());
-//            parentName.setText(json.getString("parentName"));
-//            time.setText(json.getString("time"));
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public void errorValues() {
-//        view.findViewById(R.id.layout_name).setVisibility(View.GONE);
-//        view.findViewById(R.id.layout_class).setVisibility(View.GONE);
-//        view.findViewById(R.id.layout_parent).setVisibility(View.GONE);
-//        view.findViewById(R.id.layout_time).setVisibility(View.GONE);
-//        icon.setImageResource(R.drawable.waring_icon);
-//        result.setText("扫描失败");
-//        result.setTextColor(0xfffe6669);
-//    }
 
     // 初始化照相机，CaptureActivityHandler解码
     private void initCamera(SurfaceHolder surfaceHolder) {

@@ -148,8 +148,8 @@ public final class ViewfinderView extends View {
             scannerAlpha = (scannerAlpha + 1) % SCANNER_ALPHA.length;
             //�����м�ĺ���
             loopTop++;
-            Logger.e("steven", "loopTop:" + loopTop);
-            Logger.e("steven", "loopBottom:" + loopBottom);
+//            Logger.e("steven", "loopTop:" + loopTop);
+//            Logger.e("steven", "loopBottom:" + loopBottom);
             if (loopTop >= frame.bottom) {
                 loopTop = frame.top;
             }

@@ -48,7 +48,8 @@ public class Constant {
      */
     public static class LoginAction {
         public static String toPage3 = "toPage3";
-        public static String toPage4 = "toPage4";
+//        public static String toPage4 = "toPage4";
+        public static String toPage5 = "toPage5";
         public static String toClassTimeTable = "toClassTimeTable";
         public static String toMessage = "toMessage";
         public static String toRemedialClassDetail = "toRemedialClassDetail";

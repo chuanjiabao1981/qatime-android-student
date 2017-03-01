@@ -59,7 +59,7 @@ public class FragmentUnLoginHomeUserCenter extends BaseFragment implements View.
             case R.id.information:
             case R.id.name:
                 Intent intent = new Intent(getActivity(), LoginActivity2.class);
-                intent.putExtra("activity_action", Constant.LoginAction.toPage4);
+                intent.putExtra("activity_action", Constant.LoginAction.toPage5);
                 startActivity(intent);
                 break;
             case R.id.my_wallet:
