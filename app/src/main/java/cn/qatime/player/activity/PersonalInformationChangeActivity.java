@@ -148,8 +148,9 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.region_view:
-                Intent regionIntent = new Intent(this,RegionSelectActivity1.class);
-                startActivityForResult(regionIntent,Constant.REQUEST_REGION_SELECT);
+                Intent regionIntent = new Intent(this, RegionSelectActivity1.class);
+                regionIntent.putExtra("region",region.getText().toString());
+                startActivityForResult(regionIntent, Constant.REQUEST_REGION_SELECT);
                 break;
             case R.id.men:
                 men.setSelected(true);
@@ -363,6 +364,8 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                     Glide.with(this).load(Uri.fromFile(new File(imageUrl))).transform(new GlideCircleTransform(this)).crossFade().into(headsculpture);
                 }
             }
+        } else if (requestCode == Constant.REQUEST_REGION_SELECT && resultCode == Constant.RESPONSE_REGION_SELECT) {
+            region.setText(data.getStringExtra("region"));
         }
     }
 

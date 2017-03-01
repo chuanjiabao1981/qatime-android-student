@@ -139,7 +139,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
                 locationView.setEnabled(true);
                 if (result != null && result.length > 1) {
                     for (CityBean.Data item : list) {
-                        if (result[1].equals(item.getName()) || result[0].equals(item.getName())) {//需先对比区,区不对应往上对比市,不可颠倒
+                        if (result[2].equals(item.getName()) || result[1].equals(item.getName())) {//需先对比区,区不对应往上对比市,不可颠倒
                             locationCity = item;
                         }
                     }

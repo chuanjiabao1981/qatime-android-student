@@ -272,6 +272,7 @@
                 android:id="@+id/region_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clickable="true"
                 android:gravity="center_vertical"
                 android:paddingBottom="15dp"
                 android:paddingLeft="10dp"
@@ -288,12 +289,11 @@
 
                 <TextView
                     android:id="@+id/region"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:hint="@string/hint_choose_region"
-                    android:inputType="text"
                     android:textColor="#666"
+                    android:clickable="false"
                     android:textColorHint="#bfbfbf"
                     android:textSize="13sp" />
             </LinearLayout>

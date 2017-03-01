@@ -120,7 +120,7 @@ public class AMapLocationUtils {
                 //                定位完成的时间
                 //                sb.append("定位时间: " + location.getTime() + "\n");
                 //                Logger.e(sb.toString());
-                return new String[]{location.getCity(), location.getDistrict()};
+                return new String[]{location.getProvince(),location.getCity(), location.getDistrict()};
             }
 //            else {
 //                // 以下信息只有提供者是GPS时才会有

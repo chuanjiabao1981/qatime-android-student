@@ -537,7 +537,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                                 public void onLocationBack(String[] result) {
                                     if (result != null && result.length > 1) {
                                         for (CityBean.Data item : listCity) {
-                                            if (result[1].equals(item.getName()) || result[0].equals(item.getName())) {//需先对比区,区不对应往上对比市,不可颠倒
+                                            if (result[2].equals(item.getName()) || result[1].equals(item.getName())) {//需先对比区,区不对应往上对比市,不可颠倒
                                                 locationCity = item;
                                             }
                                         }

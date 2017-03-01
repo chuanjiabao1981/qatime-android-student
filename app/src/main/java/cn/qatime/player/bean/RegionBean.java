@@ -1,5 +1,6 @@
 package cn.qatime.player.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  * @date 2017/2/28 19:28
  * @Description:
  */
-public class RegionBean {
+public class RegionBean implements Serializable{
 
     /**
      * areaId : 110000
@@ -18,7 +19,23 @@ public class RegionBean {
     private String areaId;
     private String areaName;
     private List<CitiesBean> cities;
+    private String firstLetters;
+    private String firstLetter;
+    public void setFirstLetters(String firstLetters) {
+        this.firstLetters = firstLetters;
+    }
 
+    public void setFirstLetter(String firstLetter) {
+        this.firstLetter = firstLetter;
+    }
+
+    public String getFirstLetters() {
+        return firstLetters;
+    }
+
+    public String getFirstLetter() {
+        return firstLetter;
+    }
     public String getAreaId() {
         return areaId;
     }
@@ -43,7 +60,7 @@ public class RegionBean {
         this.cities = cities;
     }
 
-    public static class CitiesBean {
+    public static class CitiesBean implements Serializable {
         /**
          * areaId : 110000
          * areaName : 北京市
@@ -53,7 +70,23 @@ public class RegionBean {
         private String areaId;
         private String areaName;
         private List<CountiesBean> counties;
+        private String firstLetters;
+        private String firstLetter;
+        public void setFirstLetters(String firstLetters) {
+            this.firstLetters = firstLetters;
+        }
 
+        public void setFirstLetter(String firstLetter) {
+            this.firstLetter = firstLetter;
+        }
+
+        public String getFirstLetters() {
+            return firstLetters;
+        }
+
+        public String getFirstLetter() {
+            return firstLetter;
+        }
         public String getAreaId() {
             return areaId;
         }
@@ -78,7 +111,7 @@ public class RegionBean {
             this.counties = counties;
         }
 
-        public static class CountiesBean {
+        public static class CountiesBean implements Serializable {
             /**
              * areaId : 110101
              * areaName : 东城区
@@ -86,7 +119,23 @@ public class RegionBean {
 
             private String areaId;
             private String areaName;
+            private String firstLetters;
+            private String firstLetter;
+            public void setFirstLetters(String firstLetters) {
+                this.firstLetters = firstLetters;
+            }
 
+            public void setFirstLetter(String firstLetter) {
+                this.firstLetter = firstLetter;
+            }
+
+            public String getFirstLetters() {
+                return firstLetters;
+            }
+
+            public String getFirstLetter() {
+                return firstLetter;
+            }
             public String getAreaId() {
                 return areaId;
             }
