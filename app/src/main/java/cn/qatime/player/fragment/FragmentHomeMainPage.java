@@ -57,6 +57,7 @@ import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.BannerRecommendBean;
 import cn.qatime.player.bean.ClassRecommendBean;
 import cn.qatime.player.bean.TeacherRecommendBean;
+import cn.qatime.player.qrcore.core.CaptureActivity;
 import cn.qatime.player.utils.AMapLocationUtils;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.UrlUtils;
@@ -500,8 +501,10 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             case R.id.message:
                 Intent intent;
                 if (BaseApplication.isLogined()) {
-                    intent = new Intent(getActivity(), MessageFragmentActivity.class);
+                    intent = new Intent(getActivity(), CaptureActivity.class);
                     startActivity(intent);
+//                    intent = new Intent(getActivity(), MessageFragmentActivity.class);
+//                    startActivity(intent);
                 } else {
                     intent = new Intent(getActivity(), LoginActivity2.class);
                     intent.putExtra("activity_action", Constant.LoginAction.toMessage);
