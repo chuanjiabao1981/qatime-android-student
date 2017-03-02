@@ -16,6 +16,7 @@ import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
+import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -97,6 +98,7 @@ public class FragmentHomeMessage extends BaseFragment {
             fragmentlayout.getTabLayout().findViewById(R.id.flag2).setVisibility(View.VISIBLE);
         }else if(!StringUtils.isNullOrBlanK(msg) && "refreshNotifications".equals(msg)){
             //系统消息刷新event flag2消失
+            Logger.e("refreshNotifications");
             fragmentlayout.getTabLayout().findViewById(R.id.flag2).setVisibility(View.INVISIBLE);
         }
     }

@@ -13,7 +13,6 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
@@ -128,12 +127,12 @@ public class FragmentMessageNotifyNews extends BaseFragment {
 
     @Override
     public void onShow() {
-            if (initOver) {
-                page = 1;
-                initData(1);
-            } else {
-                super.onShow();
-            }
+        if (initOver) {
+            page = 1;
+            initData(1);
+        } else {
+            super.onShow();
+        }
     }
 
     private void initData(final int type) {
@@ -153,13 +152,13 @@ public class FragmentMessageNotifyNews extends BaseFragment {
                             list.addAll(data.getData());
                             adapter.notifyDataSetChanged();
 
-                          StringBuffer unRead = new StringBuffer();
-                            for (SystemNotifyBean.DataBean bean : data.getData()){
+                            StringBuffer unRead = new StringBuffer();
+                            for (SystemNotifyBean.DataBean bean : data.getData()) {
                                 if (!bean.isRead()) {//将集合中的
-                                    unRead.append(bean.getId()+" ");
+                                    unRead.append(bean.getId() + " ");
                                 }
                             }
-                            markNotifiesRead(unRead);
+                            markNotifiesRead(unRead.toString());
                         }
                     }
 
@@ -181,10 +180,32 @@ public class FragmentMessageNotifyNews extends BaseFragment {
         addToRequestQueue(request);
     }
 
-    public void markNotifiesRead(StringBuffer unRead) {
-        if (unRead.length()>0){
-            // TODO: 2017/3/2 批量清除已读 （当前已从网络获取的数据）
-            Logger.e("markNotifiesRead");
+    public void markNotifiesRead(String unRead) {
+        if (unRead.length() > 0) {
+            Map<String, String> map = new HashMap<>();
+            map.put("ids", unRead);
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getUserId() + "/notifications/batch_read", map), null,
+                    new VolleyListener(getActivity()) {
+                        @Override
+                        protected void onSuccess(JSONObject response) {
+                        }
+
+                        @Override
+                        protected void onError(JSONObject response) {
+                        }
+
+                        @Override
+                        protected void onTokenOut() {
+                            tokenOut();
+                        }
+
+                    }, new VolleyErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    super.onErrorResponse(volleyError);
+                }
+            });
+            addToRequestQueue(request);
         }
     }
 
