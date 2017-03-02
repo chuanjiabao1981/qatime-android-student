@@ -147,6 +147,7 @@ public class MessageListPanel {
 
         adapter.updateShowTimeItem(addedListItems, false, true);
 
+
         // incoming messages tip
         IMMessage lastMsg = messages.get(messages.size() - 1);
         if (isMyMessage(lastMsg)) {
