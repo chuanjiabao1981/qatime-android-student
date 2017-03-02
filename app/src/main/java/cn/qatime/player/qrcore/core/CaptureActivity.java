@@ -307,7 +307,7 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
     }
 
     // 解析二维码
-    public void handleDecode(Result rawResult, Bitmap barcode) {
+    public void handleDecode(Result rawResult) {
         inactivityTimer.onActivity();
 
         ResultHandler resultHandler = new ResultHandler(parseResult(rawResult));
@@ -317,8 +317,8 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
 //            Logger.e("steven", "resultHandler.getType().toString():" + resultHandler.getType().toString());
 //            Logger.e("steven", "resultHandler.getDisplayContents():" + resultHandler.getDisplayContents());
 //        } else {
-            initData(resultHandler.getDisplayContents().toString());
-            restartPreviewAfterDelay(3000L);
+        initData(resultHandler.getDisplayContents().toString());
+        restartPreviewAfterDelay(3000L);
 //        }
     }
 
