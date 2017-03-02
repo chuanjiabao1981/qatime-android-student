@@ -1,21 +1,21 @@
-package cn.qatime.player.activity;
+package cn.qatime.player.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.NimIntent;
 import com.netease.nimlib.sdk.Observer;
-import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
-import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
-import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -25,18 +25,16 @@ import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.base.BaseFragmentActivity;
-import cn.qatime.player.fragment.FragmentMessageChatNews;
-import cn.qatime.player.fragment.FragmentMessageNotifyNews;
 import libraryextra.utils.StringUtils;
 import libraryextra.view.FragmentLayoutWithLine;
 
 /**
- * @author Tianhaoranly
- * @date 2016/10/26 14:40
- * @Description:
+ * @author lungtify
+ * @Time 2017/3/1 11:03
+ * @Describe
  */
-public class MessageFragmentActivity extends BaseFragmentActivity {
+
+public class FragmentHomeMessage extends BaseFragment {
     FragmentLayoutWithLine fragmentlayout;
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2};
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
@@ -51,53 +49,24 @@ public class MessageFragmentActivity extends BaseFragmentActivity {
                 }
             };
 
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_message_fragment);
-        setTitles(getResourceString(R.string.message));
-        initview();
-        parseIntent();
-        //  注册/注销观察者
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_home_message, container, false);
+        assignViews(view);
         NIMClient.getService(MsgServiceObserve.class)
                 .observeRecentContact(messageObserver, true);
         EventBus.getDefault().register(this);
+        return view;
     }
 
-
-    @Subscribe
-    public void onEvent(String msg) {
-        if (!StringUtils.isNullOrBlanK(msg) && "handleUPushMessage".equals(msg)) {
-            if (currentPosition == 0) {
-                fragmentlayout.getTabLayout().findViewById(R.id.flag2).setVisibility(View.VISIBLE);
-            }
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //  注册/注销观察者
-        NIMClient.getService(MsgServiceObserve.class)
-                .observeRecentContact(messageObserver, false);
-        EventBus.getDefault().unregister(this);
-    }
-
-    private void initview() {
-//        Button roll = (Button) findViewById(R.id.roll);
-//        roll.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-
+    private void assignViews(View view) {
         fragBaseFragments.add(new FragmentMessageChatNews());
         fragBaseFragments.add(new FragmentMessageNotifyNews());
 
 
-        fragmentlayout = (FragmentLayoutWithLine) findViewById(R.id.fragmentlayout);
+        fragmentlayout = (FragmentLayoutWithLine) view.findViewById(R.id.fragmentlayout);
 
         fragmentlayout.setScorllToNext(true);
         fragmentlayout.setScorll(true);
@@ -121,8 +90,26 @@ public class MessageFragmentActivity extends BaseFragmentActivity {
         fragmentlayout.getViewPager().setOffscreenPageLimit(2);
     }
 
-    private void parseIntent() {
-        Intent intent = getIntent().getParcelableExtra("intent");
+    @Subscribe
+    public void onEvent(String msg) {
+        if (!StringUtils.isNullOrBlanK(msg) && "handleUPushMessage".equals(msg)) {
+            if (currentPosition == 0) {
+                fragmentlayout.getTabLayout().findViewById(R.id.flag2).setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //  注册/注销观察者
+        NIMClient.getService(MsgServiceObserve.class)
+                .observeRecentContact(messageObserver, false);
+        EventBus.getDefault().unregister(this);
+    }
+
+    public void setMessage(Intent intent) {
         /**     * 解析通知栏发来的云信消息     */
         if (intent != null && intent.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT)) {
             ArrayList<IMMessage> messages = (ArrayList<IMMessage>) intent.getSerializableExtra(NimIntent.EXTRA_NOTIFY_CONTENT);
@@ -148,25 +135,4 @@ public class MessageFragmentActivity extends BaseFragmentActivity {
             }
         }
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        /**
-         * 设置最近联系人的消息为已读
-         *
-         * @param account,    聊天对象帐号，或者以下两个值：
-         *                    {@link #MSG_CHATTING_ACCOUNT_ALL} 目前没有与任何人对话，但能看到消息提醒（比如在消息列表界面），不需要在状态栏做消息通知
-         *                    {@link #MSG_CHATTING_ACCOUNT_NONE} 目前没有与任何人对话，需要状态栏消息通知
-         */
-        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPause(this);
-    }
-
 }

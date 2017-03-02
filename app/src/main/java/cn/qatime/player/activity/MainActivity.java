@@ -44,9 +44,11 @@ import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.fragment.FragmentHomeClassTable;
 import cn.qatime.player.fragment.FragmentHomeMainPage;
+import cn.qatime.player.fragment.FragmentHomeMessage;
 import cn.qatime.player.fragment.FragmentHomeUserCenter;
 import cn.qatime.player.fragment.FragmentRemedialClassAll;
 import cn.qatime.player.fragment.FragmentUnLoginHomeClassTable;
+import cn.qatime.player.fragment.FragmentUnLoginHomeMessage;
 import cn.qatime.player.fragment.FragmentUnLoginHomeUserCenter;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
@@ -67,12 +69,13 @@ public class MainActivity extends BaseFragmentActivity {
 
     FragmentLayout fragmentlayout;
     public ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
-    private int[] tab_img = {R.id.tab_img1, R.id.tab_img2, R.id.tab_img3, R.id.tab_img4};
-    private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3, R.id.tab_text4};
+    private int[] tab_img = {R.id.tab_img1, R.id.tab_img2, R.id.tab_img3, R.id.tab_img4, R.id.tab_img5};
+    private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3, R.id.tab_text4, R.id.tab_text5};
     private int tabImages[][] = {
             {R.mipmap.tab_home_1, R.mipmap.tab_home_2},
             {R.mipmap.tab_tutorship_1, R.mipmap.tab_tutorship_2},
             {R.mipmap.tab_moments_1, R.mipmap.tab_moments_2},
+            {R.mipmap.tab_message_1, R.mipmap.tab_message_2},
             {R.mipmap.tab_person_1, R.mipmap.tab_person_2}};
 
     @Override
@@ -115,9 +118,11 @@ public class MainActivity extends BaseFragmentActivity {
 
         if (BaseApplication.isLogined()) {
             fragBaseFragments.add(new FragmentHomeClassTable());
+            fragBaseFragments.add(new FragmentHomeMessage());
             fragBaseFragments.add(new FragmentHomeUserCenter());
         } else {
             fragBaseFragments.add(new FragmentUnLoginHomeClassTable());
+            fragBaseFragments.add(new FragmentUnLoginHomeMessage());
             fragBaseFragments.add(new FragmentUnLoginHomeUserCenter());
         }
 
@@ -134,10 +139,22 @@ public class MainActivity extends BaseFragmentActivity {
                 ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffbe0b0b);
                 ((ImageView) currentTabView.findViewById(tab_img[position])).setImageResource(tabImages[position][0]);
 //                enableMsgNotification(false);
+                if (position == 3) {
+                    /**
+                     * 设置最近联系人的消息为已读
+                     *
+                     * @param account,    聊天对象帐号，或者以下两个值：
+                     *                    {@link #MSG_CHATTING_ACCOUNT_ALL} 目前没有与任何人对话，但能看到消息提醒（比如在消息列表界面），不需要在状态栏做消息通知
+                     *                    {@link #MSG_CHATTING_ACCOUNT_NONE} 目前没有与任何人对话，需要状态栏消息通知
+                     */
+                    NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
+                } else {
+                    NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
+                }
             }
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout, 0x1000);
-        fragmentlayout.getViewPager().setOffscreenPageLimit(3);
+        fragmentlayout.getViewPager().setOffscreenPageLimit(4);
     }
 
     @Override
@@ -178,27 +195,27 @@ public class MainActivity extends BaseFragmentActivity {
             initView();
             String action = intent.getStringExtra("activity_action");
             if (!StringUtils.isNullOrBlanK(action)) {
-                if (action.equals(Constant.LoginAction.toMessage)) {
-                    Intent intentAction = new Intent(MainActivity.this, MessageFragmentActivity.class);
-                    startActivity(intentAction);
-                } else if (action.equals(Constant.LoginAction.toPage3)) {//课程表点击登录返回
+                if (action.equals(Constant.LoginAction.toPage3)) {//课程表点击登录返回
                     fragmentlayout.setCurrenItem(2);
-                } else if (action.equals(Constant.LoginAction.toPage4)) {
-                    fragmentlayout.setCurrenItem(3);
-                } else if (action.equals(Constant.LoginAction.toClassTimeTable)) {//课程表右上角点击返回
-                    fragmentlayout.setCurrenItem(2);
-                    Intent intentAction = new Intent(MainActivity.this, ClassTimeTableActivity.class);
-                    startActivity(intentAction);
-                } else if (action.equals(Constant.LoginAction.toRemedialClassDetail)) {
-                    Intent intentAction = new Intent(MainActivity.this, RemedialClassDetailActivity.class);
-                    intent.putExtra("id",getIntent().getStringExtra("id"));
-                    startActivity(intentAction);
+                    if (action.equals(Constant.LoginAction.toMessage)) {//消息
+                        fragmentlayout.setCurrenItem(3);
+                    } else if (action.equals(Constant.LoginAction.toPage5)) {//个人中心
+                        fragmentlayout.setCurrenItem(4);
+                    } else if (action.equals(Constant.LoginAction.toClassTimeTable)) {//课程表右上角点击返回
+                        fragmentlayout.setCurrenItem(2);
+                        Intent intentAction = new Intent(MainActivity.this, ClassTimeTableActivity.class);
+                        startActivity(intentAction);
+                    } else if (action.equals(Constant.LoginAction.toRemedialClassDetail)) {
+                        Intent intentAction = new Intent(MainActivity.this, RemedialClassDetailActivity.class);
+                        intent.putExtra("id", getIntent().getStringExtra("id"));
+                        startActivity(intentAction);
+                    }
                 }
+            } else {
+                //云信通知消息
+                setIntent(intent);
+                parseIntent();
             }
-        } else {
-            //云信通知消息
-            setIntent(intent);
-            parseIntent();
         }
     }
 
@@ -206,14 +223,15 @@ public class MainActivity extends BaseFragmentActivity {
         Intent data = getIntent();
         /**     * 解析通知栏发来的云信消息     */
         if (data != null) {
-            if (data.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT)) {
-                Intent intent = new Intent(this, MessageFragmentActivity.class);
-                intent.putExtra("intent", data);
-                startActivity(intent);
-            } else if (data.hasExtra("type") && data.getStringExtra("type").equals("system_message")) {//转到系统消息页面
-                Intent intent = new Intent(this, MessageFragmentActivity.class);
-                intent.putExtra("intent", data);
-                startActivity(intent);
+            if (data.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT) ||
+                    //转到系统消息页面
+                    (data.hasExtra("type") && data.getStringExtra("type").equals("system_message"))) {
+                if (fragBaseFragments != null && fragBaseFragments.size() > 0 && fragBaseFragments.get(3) instanceof FragmentHomeMainPage) {
+                    ((FragmentHomeMessage) fragBaseFragments.get(3)).setMessage(data);
+                }
+//                Intent intent = new Intent(this, MessageFragmentActivity.class);
+//                intent.putExtra("intent", data);
+//                startActivity(intent);
             }
         }
     }

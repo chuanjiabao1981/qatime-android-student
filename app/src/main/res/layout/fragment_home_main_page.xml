@@ -58,13 +58,13 @@
                 android:layout_marginRight="6dp"
                 android:src="@mipmap/message" />
 
-            <ImageView
-                android:id="@+id/message_x"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignRight="@id/message_icon"
-                android:layout_alignTop="@id/message_icon"
-                android:src="@mipmap/message_x" />
+            <!--<ImageView-->
+                <!--android:id="@+id/message_x"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignRight="@id/message_icon"-->
+                <!--android:layout_alignTop="@id/message_icon"-->
+                <!--android:src="@mipmap/message_x" />-->
         </RelativeLayout>
         <!--<View-->
         <!--android:id="@+id/count"-->
