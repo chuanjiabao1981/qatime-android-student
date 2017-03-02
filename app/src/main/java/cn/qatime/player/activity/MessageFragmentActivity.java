@@ -65,12 +65,14 @@ public class MessageFragmentActivity extends BaseFragmentActivity {
     }
 
 
-    @Subscribe
+    @Subscribe(sticky = true)
     public void onEvent(String msg) {
         if (!StringUtils.isNullOrBlanK(msg) && "handleUPushMessage".equals(msg)) {
-            if (currentPosition == 0) {
-                fragmentlayout.getTabLayout().findViewById(R.id.flag2).setVisibility(View.VISIBLE);
-            }
+            EventBus.getDefault().removeStickyEvent(msg);
+            fragmentlayout.getTabLayout().findViewById(R.id.flag2).setVisibility(View.VISIBLE);
+        }else if(!StringUtils.isNullOrBlanK(msg) && "refreshNotifications".equals(msg)){
+            //系统消息刷新event flag2消失
+            fragmentlayout.getTabLayout().findViewById(R.id.flag2).setVisibility(View.INVISIBLE);
         }
     }
 

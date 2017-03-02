@@ -13,6 +13,7 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
@@ -51,7 +52,6 @@ public class FragmentMessageNotifyNews extends BaseFragment {
         View view = View.inflate(getActivity(), R.layout.fragment_message_notify_news, null);
         initview(view);
         initOver = true;
-        initData(1);
         return view;
     }
 
@@ -93,6 +93,7 @@ public class FragmentMessageNotifyNews extends BaseFragment {
                         listView.onRefreshComplete();
                     }
                 }, 200);
+                EventBus.getDefault().post("refreshNotifications");
                 initData(1);
             }
 
@@ -127,15 +128,12 @@ public class FragmentMessageNotifyNews extends BaseFragment {
 
     @Override
     public void onShow() {
-        if (!isLoad) {
             if (initOver) {
                 page = 1;
                 initData(1);
             } else {
                 super.onShow();
             }
-
-        }
     }
 
     private void initData(final int type) {
@@ -154,9 +152,14 @@ public class FragmentMessageNotifyNews extends BaseFragment {
                         if (data != null && data.getData() != null) {
                             list.addAll(data.getData());
                             adapter.notifyDataSetChanged();
-                            if(!data.getData().get(0).isRead()){//有未读发送未读event
-                                EventBus.getDefault().post("handleUPushMessage");
+
+                          StringBuffer unRead = new StringBuffer();
+                            for (SystemNotifyBean.DataBean bean : data.getData()){
+                                if (!bean.isRead()) {//将集合中的
+                                    unRead.append(bean.getId()+" ");
+                                }
                             }
+                            markNotifiesRead(unRead);
                         }
                     }
 
@@ -176,6 +179,13 @@ public class FragmentMessageNotifyNews extends BaseFragment {
             }
         });
         addToRequestQueue(request);
+    }
+
+    public void markNotifiesRead(StringBuffer unRead) {
+        if (unRead.length()>0){
+            // TODO: 2017/3/2 批量清除已读 （当前已从网络获取的数据）
+            Logger.e("markNotifiesRead");
+        }
     }
 
     private void markNotifyRead(String id) {

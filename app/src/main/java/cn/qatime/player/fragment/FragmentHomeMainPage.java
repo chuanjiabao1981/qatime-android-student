@@ -59,10 +59,12 @@ import cn.qatime.player.bean.ClassRecommendBean;
 import cn.qatime.player.bean.TeacherRecommendBean;
 import cn.qatime.player.utils.AMapLocationUtils;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.CityBean;
+import libraryextra.bean.SystemNotifyBean;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.ScreenUtils;
@@ -172,6 +174,9 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         initGridTeacher();
         initGridClass();
         initLocationData();
+        if (BaseApplication.isLogined()) {
+            initMessage();
+        }
         allClass.setOnClickListener(this);
         message.setOnClickListener(this);
         citySelect.setOnClickListener(this);
@@ -182,9 +187,46 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         EventBus.getDefault().register(this);
     }
 
+    private void initMessage() {
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", String.valueOf(BaseApplication.getUserId()));
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getUserId() + "/notifications", map), null,
+                new VolleyListener(getActivity()) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        SystemNotifyBean data = JsonUtils.objectFromJson(response.toString(), SystemNotifyBean.class);
+                        if (data != null && data.getData() != null) {
+                            for (SystemNotifyBean.DataBean bean : data.getData()){
+                                if (!bean.isRead()) {//有未读发送未读event
+                                    EventBus.getDefault().postSticky("handleUPushMessage");
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
+    }
+
+
     @Subscribe
     public void onEvent(String msg) {
-        if(!StringUtils.isNullOrBlanK(msg)&&"handleUPushMessage".equals(msg)){
+        if (!StringUtils.isNullOrBlanK(msg) && "handleUPushMessage".equals(msg)) {
             message_x.setVisibility(View.VISIBLE);
         }
     }
@@ -500,6 +542,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             case R.id.message:
                 Intent intent;
                 if (BaseApplication.isLogined()) {
+                    message_x.setVisibility(View.GONE);
                     intent = new Intent(getActivity(), MessageFragmentActivity.class);
                     startActivity(intent);
                 } else {
