@@ -155,7 +155,7 @@ public class FragmentMessageNotifyNews extends BaseFragment {
                             StringBuffer unRead = new StringBuffer();
                             for (SystemNotifyBean.DataBean bean : data.getData()) {
                                 if (!bean.isRead()) {//将集合中的
-                                    unRead.append(bean.getId() + " ");
+                                    unRead.append(bean.getId() + "-");
                                 }
                             }
                             markNotifiesRead(unRead.toString());
@@ -184,7 +184,8 @@ public class FragmentMessageNotifyNews extends BaseFragment {
         if (unRead.length() > 0) {
             Map<String, String> map = new HashMap<>();
             map.put("ids", unRead);
-            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getUserId() + "/notifications/batch_read", map), null,
+            JSONObject jsonObject = new JSONObject(map);
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.urlUser + BaseApplication.getUserId() + "/notifications/batch_read", jsonObject,
                     new VolleyListener(getActivity()) {
                         @Override
                         protected void onSuccess(JSONObject response) {
