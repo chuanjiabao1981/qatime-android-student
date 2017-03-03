@@ -51,7 +51,6 @@ public class FragmentMessageNotifyNews extends BaseFragment {
         View view = View.inflate(getActivity(), R.layout.fragment_message_notify_news, null);
         initview(view);
         initOver = true;
-        initData(1);
         return view;
     }
 
@@ -93,6 +92,7 @@ public class FragmentMessageNotifyNews extends BaseFragment {
                         listView.onRefreshComplete();
                     }
                 }, 200);
+                EventBus.getDefault().post("refreshNotifications");
                 initData(1);
             }
 
@@ -127,14 +127,11 @@ public class FragmentMessageNotifyNews extends BaseFragment {
 
     @Override
     public void onShow() {
-        if (!isLoad) {
-            if (initOver) {
-                page = 1;
-                initData(1);
-            } else {
-                super.onShow();
-            }
-
+        if (initOver) {
+            page = 1;
+            initData(1);
+        } else {
+            super.onShow();
         }
     }
 
@@ -154,9 +151,14 @@ public class FragmentMessageNotifyNews extends BaseFragment {
                         if (data != null && data.getData() != null) {
                             list.addAll(data.getData());
                             adapter.notifyDataSetChanged();
-                            if (data.getData().size() > 0 && !data.getData().get(0).isRead()) {//有未读发送未读event
-                                EventBus.getDefault().post("handleUPushMessage");
+
+                            StringBuffer unRead = new StringBuffer();
+                            for (SystemNotifyBean.DataBean bean : data.getData()) {
+                                if (!bean.isRead()) {//将集合中的
+                                    unRead.append(bean.getId() + "-");
+                                }
                             }
+                            markNotifiesRead(unRead.toString());
                         }
                     }
 
@@ -176,6 +178,36 @@ public class FragmentMessageNotifyNews extends BaseFragment {
             }
         });
         addToRequestQueue(request);
+    }
+
+    public void markNotifiesRead(String unRead) {
+        if (unRead.length() > 0) {
+            Map<String, String> map = new HashMap<>();
+            map.put("ids", unRead);
+            JSONObject jsonObject = new JSONObject(map);
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.urlUser + BaseApplication.getUserId() + "/notifications/batch_read", jsonObject,
+                    new VolleyListener(getActivity()) {
+                        @Override
+                        protected void onSuccess(JSONObject response) {
+                        }
+
+                        @Override
+                        protected void onError(JSONObject response) {
+                        }
+
+                        @Override
+                        protected void onTokenOut() {
+                            tokenOut();
+                        }
+
+                    }, new VolleyErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    super.onErrorResponse(volleyError);
+                }
+            });
+            addToRequestQueue(request);
+        }
     }
 
     private void markNotifyRead(String id) {

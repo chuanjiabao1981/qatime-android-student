@@ -76,10 +76,26 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/tab_img4"
-            style="@style/tab_menu_icon_size"
-            android:src="@mipmap/tab_message_2" />
+        <RelativeLayout
+            android:id="@+id/message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/tab_img4"
+                style="@style/tab_menu_icon_size"
+                android:src="@mipmap/tab_message_2" />
+
+
+            <ImageView
+                android:id="@+id/message_x"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_alignRight="@id/tab_img4"
+                android:layout_alignTop="@id/tab_img4"
+                android:visibility="gone"
+                android:src="@mipmap/message_x" />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tab_text4"

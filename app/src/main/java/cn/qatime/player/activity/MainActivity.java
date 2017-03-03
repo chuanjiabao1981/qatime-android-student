@@ -25,7 +25,9 @@ import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
+import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
@@ -37,6 +39,9 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
@@ -57,6 +62,7 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
+import libraryextra.bean.SystemNotifyBean;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.SPUtils;
@@ -77,6 +83,26 @@ public class MainActivity extends BaseFragmentActivity {
             {R.mipmap.tab_moments_1, R.mipmap.tab_moments_2},
             {R.mipmap.tab_message_1, R.mipmap.tab_message_2},
             {R.mipmap.tab_person_1, R.mipmap.tab_person_2}};
+    private View message_x;
+//      创建观察者对象
+    Observer<List<RecentContact>> messageObserver =
+            new Observer<List<RecentContact>>() {
+                @Override
+                public void onEvent(List<RecentContact> messages) {
+                    if(fragmentlayout.getCurrentPosition()!=3){
+                        refreshUnreadNum();
+                    }
+                }
+            };
+
+    /**
+     * 刷新未读
+     */
+    private void refreshUnreadNum() {
+        int unreadNum = NIMClient.getService(MsgService.class).getTotalUnreadCount();
+                    Logger.e("unreadNum" + unreadNum);
+        message_x.setVisibility(unreadNum == 0 ? View.GONE : View.VISIBLE);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +110,10 @@ public class MainActivity extends BaseFragmentActivity {
         setContentView(R.layout.activity_main);
         initView();
         EventBus.getDefault().register(this);
+        //  注册/注销观察者
+        NIMClient.getService(MsgServiceObserve.class)
+                .observeRecentContact(messageObserver, true);
+        refreshUnreadNum();
         refreshMedia();
 
         File file = new File(Constant.CACHEPATH);
@@ -119,6 +149,7 @@ public class MainActivity extends BaseFragmentActivity {
         if (BaseApplication.isLogined()) {
             fragBaseFragments.add(new FragmentHomeClassTable());
             fragBaseFragments.add(new FragmentHomeMessage());
+            initMessage();
             fragBaseFragments.add(new FragmentHomeUserCenter());
         } else {
             fragBaseFragments.add(new FragmentUnLoginHomeClassTable());
@@ -131,6 +162,7 @@ public class MainActivity extends BaseFragmentActivity {
         fragmentlayout.setScorllToNext(false);
         fragmentlayout.setScorll(false);
         fragmentlayout.setWhereTab(0);
+
         fragmentlayout.setOnChangeFragmentListener(new FragmentLayout.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
@@ -147,6 +179,7 @@ public class MainActivity extends BaseFragmentActivity {
                      *                    {@link #MSG_CHATTING_ACCOUNT_ALL} 目前没有与任何人对话，但能看到消息提醒（比如在消息列表界面），不需要在状态栏做消息通知
                      *                    {@link #MSG_CHATTING_ACCOUNT_NONE} 目前没有与任何人对话，需要状态栏消息通知
                      */
+                    message_x.setVisibility(View.GONE);
                     NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
                 } else {
                     NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
@@ -155,7 +188,49 @@ public class MainActivity extends BaseFragmentActivity {
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout, 0x1000);
         fragmentlayout.getViewPager().setOffscreenPageLimit(4);
+        message_x=fragmentlayout.getTabLayout().findViewById(R.id.message_x);
+
+
     }
+
+    private void initMessage() {
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", String.valueOf(BaseApplication.getUserId()));
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getUserId() + "/notifications", map), null,
+                new VolleyListener(MainActivity.this) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        SystemNotifyBean data = JsonUtils.objectFromJson(response.toString(), SystemNotifyBean.class);
+                        if (data != null && data.getData() != null) {
+                            for (SystemNotifyBean.DataBean bean : data.getData()){
+                                if (!bean.isRead()) {//有未读发送未读event
+                                    EventBus.getDefault().postSticky("handleUPushMessage");
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
+    }
+
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -431,6 +506,10 @@ public class MainActivity extends BaseFragmentActivity {
         if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
             if (StringUtils.isNullOrBlanK(BaseApplication.getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getAccountToken())) {
                 getAccount();
+            }
+        } else if (!StringUtils.isNullOrBlanK(event) && "handleUPushMessage".equals(event)) {
+            if(fragmentlayout.getCurrentPosition()!=3) {
+                message_x.setVisibility(View.VISIBLE);
             }
         }
     }

@@ -154,7 +154,7 @@ public class BaseApplication extends Application {
         mPushAgent.setMessageHandler(new UmengMessageHandler(){
             @Override
             public void handleMessage(Context context, UMessage uMessage) {
-                EventBus.getDefault().post("handleUPushMessage");
+                EventBus.getDefault().postSticky("handleUPushMessage");
                 super.handleMessage(context, uMessage);
             }
         });

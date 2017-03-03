@@ -16,6 +16,7 @@ import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
+import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -90,15 +91,17 @@ public class FragmentHomeMessage extends BaseFragment {
         fragmentlayout.getViewPager().setOffscreenPageLimit(2);
     }
 
-    @Subscribe
+    @Subscribe(sticky = true)
     public void onEvent(String msg) {
         if (!StringUtils.isNullOrBlanK(msg) && "handleUPushMessage".equals(msg)) {
-            if (currentPosition == 0) {
-                fragmentlayout.getTabLayout().findViewById(R.id.flag2).setVisibility(View.VISIBLE);
-            }
+            EventBus.getDefault().removeStickyEvent(msg);
+            fragmentlayout.getTabLayout().findViewById(R.id.flag2).setVisibility(View.VISIBLE);
+        }else if(!StringUtils.isNullOrBlanK(msg) && "refreshNotifications".equals(msg)){
+            //系统消息刷新event flag2消失
+            Logger.e("refreshNotifications");
+            fragmentlayout.getTabLayout().findViewById(R.id.flag2).setVisibility(View.INVISIBLE);
         }
     }
-
 
     @Override
     public void onDestroy() {
