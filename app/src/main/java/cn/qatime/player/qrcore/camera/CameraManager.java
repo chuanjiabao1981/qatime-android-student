@@ -28,6 +28,7 @@ import com.orhanobut.logger.Logger;
 
 import java.io.IOException;
 
+import libraryextra.utils.DensityUtils;
 import libraryextra.utils.ScreenUtils;
 
 /**
@@ -226,24 +227,23 @@ public final class CameraManager {
                 // Called early, before init even finished
                 return null;
             }
-            int width = ScreenUtils.getScreenWidth(context) * 3 / 4;
-            if (width < MIN_FRAME_WIDTH) {
-                width = MIN_FRAME_WIDTH;
-            } else if (width > MAX_FRAME_WIDTH) {
-                width = MAX_FRAME_WIDTH;
-            }
-            // int height = screenResolution.y * 3 / 4;
-            int height = width * 3 / 4;
-            if (height < MIN_FRAME_HEIGHT) {
-                height = MIN_FRAME_HEIGHT;
-            } else if (height > MAX_FRAME_HEIGHT) {
-                height = MAX_FRAME_HEIGHT;
-            }
+            int width = ScreenUtils.getScreenWidth(context) * 3 / 5;
+//            if (width < MIN_FRAME_WIDTH) {
+//                width = MIN_FRAME_WIDTH;
+//            } else if (width > MAX_FRAME_WIDTH) {
+//                width = MAX_FRAME_WIDTH;
+//            }
+//            // int height = screenResolution.y * 3 / 4;
+//            int height = width * 3 / 4;
+//            if (height < MIN_FRAME_HEIGHT) {
+//                height = MIN_FRAME_HEIGHT;
+//            } else if (height > MAX_FRAME_HEIGHT) {
+//                height = MAX_FRAME_HEIGHT;
+//            }
             int leftOffset = (screenResolution.x - width) / 2;
             // int topOffset = (screenResolution.y - height) / 2;
-            int topOffset = (screenResolution.y - width) / 2;
-            framingRect = new Rect(leftOffset, topOffset, leftOffset + width,
-                    topOffset + height);
+            int topOffset = (screenResolution.y - DensityUtils.dp2px(context, 48) - width) / 2 - 100;
+            framingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + width);
             Logger.e(TAG, "Calculated framing rect: " + framingRect);
         }
         return framingRect;

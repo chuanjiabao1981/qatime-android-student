@@ -23,6 +23,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,43 +39,37 @@ import com.google.zxing.common.HybridBinarizer;
 import com.orhanobut.logger.Logger;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collection;
 import java.util.Hashtable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.qrcore.camera.CameraManager;
 import cn.qatime.player.qrcore.executor.ResultHandler;
+import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.UrlUtils;
+import libraryextra.utils.DensityUtils;
 import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.StringUtils;
 
 public final class CaptureActivity extends BaseActivity implements SurfaceHolder.Callback {
-    private RequestQueue mQueue;
     private static final String TAG = CaptureActivity.class.getSimpleName();
     private CameraManager cameraManager;
     private CaptureActivityHandler handler;
     private ViewfinderView viewfinderView;
-    //    private Result lastResult;
     private boolean hasSurface;
-    //    private IntentSource source;
     private Collection<BarcodeFormat> decodeFormats;
-    //    private String characterSet;
     private InactivityTimer inactivityTimer;
-    //    private PopupWindow pop;
-    // private Button from_gallery;
     private final int from_photo = 010;
     static final int PARSE_BARCODE_SUC = 3035;
     static final int PARSE_BARCODE_FAIL = 3036;
     String photoPath;
     ProgressDialog mProgress;
-//    CustomProgressDialog progressDialog;
-//    private int type;
-//    private Dialog dialog;
-//    View view;
-//    private TextView name, className, parentName, time, school_name, result;
-//    private ImageView icon;
-
-    // Dialog dialog;
 
 
     Handler barHandler = new Handler() {
@@ -87,7 +82,6 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
                     // 选择图片
                     break;
                 case PARSE_BARCODE_FAIL:
-                    // showDialog((String) msg.obj);
                     if (mProgress != null && mProgress.isShowing()) {
                         mProgress.dismiss();
                     }
@@ -126,7 +120,6 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        mQueue = Volley.newRequestQueue(this);
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.capture);
@@ -137,9 +130,14 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
         viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
         viewfinderView.setCameraManager(cameraManager);
         flashLamp = (ImageView) findViewById(R.id.flash_lamp);
-        FrameLayout.LayoutParams param = (FrameLayout.LayoutParams) flashLamp.getLayoutParams();
-        param.topMargin = ScreenUtils.getScreenWidth(this) * 3 / 8 + 30;
-        flashLamp.setLayoutParams(param);
+        View status = findViewById(R.id.status);
+        int width = ScreenUtils.getScreenWidth(this);
+        RelativeLayout.LayoutParams statusParam = (RelativeLayout.LayoutParams) status.getLayoutParams();
+        statusParam.topMargin = (ScreenUtils.getScreenHeight(this) - DensityUtils.dp2px(this, 48) - width) / 2 - 80;
+        status.setLayoutParams(statusParam);
+//        FrameLayout.LayoutParams param = (FrameLayout.LayoutParams) flashLamp.getLayoutParams();
+//        param.topMargin = width * 3 / 10 + 50;
+//        flashLamp.setLayoutParams(param);
         flashLamp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -312,14 +310,8 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
 
         ResultHandler resultHandler = new ResultHandler(parseResult(rawResult));
 
-//        if (barcode == null) {
-//            Logger.e("steven", "rawResult.getBarcodeFormat().toString():" + rawResult.getBarcodeFormat().toString());
-//            Logger.e("steven", "resultHandler.getType().toString():" + resultHandler.getType().toString());
-//            Logger.e("steven", "resultHandler.getDisplayContents():" + resultHandler.getDisplayContents());
-//        } else {
         initData(resultHandler.getDisplayContents().toString());
         restartPreviewAfterDelay(3000L);
-//        }
     }
 
     /**
@@ -329,6 +321,19 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
         Logger.e("qr" + qr);
         if (StringUtils.isSelfQRcode(qr)) {
 
+            Pattern pattern = Pattern.compile("/\\d+\\?");
+            Matcher matcher = pattern.matcher(qr);
+            int id = 0;
+            if (matcher.find()) {
+                id = Integer.valueOf(matcher.group().replace("/", "").replace("?", ""));
+            }
+            String coupon = (String) UrlUtils.getUrlParams(qr.split("[?]")[1]).get("coupon_code");
+
+            Intent data = new Intent();
+            data.putExtra("id", id);
+            data.putExtra("coupon", coupon);
+            setResult(Constant.QRCODE_SUCCESS, data);
+            finish();
         } else {
             Toast toast = Toast.makeText(this, "不支持的二维码类型", Toast.LENGTH_LONG);
             ((TextView) ((LinearLayout) toast.getView()).getChildAt(0)).setTextSize(22);

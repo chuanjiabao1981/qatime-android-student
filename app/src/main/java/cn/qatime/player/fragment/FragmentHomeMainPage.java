@@ -73,8 +73,8 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private GridView gridviewClass;
     private List<ClassRecommendBean.DataBean> listRecommendClass = new ArrayList<>();
     private BaseAdapter classAdapter;
-    private View message;
-//    private ImageView message_x;
+    private View scan;
+    //    private ImageView message_x;
     private ArrayList<TeacherRecommendBean.DataBean> listRecommendTeacher = new ArrayList<>();
     private CommonAdapter<TeacherRecommendBean.DataBean> teacherAdapter;
     private GridView gridviewSubject;
@@ -87,24 +87,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 //    private View count;
 
     private BannerRecommendBean.DataBean noBanner;
-    //  创建观察者对象
-//    Observer<List<RecentContact>> messageObserver =
-//            new Observer<List<RecentContact>>() {
-//                @Override
-//                public void onEvent(List<RecentContact> messages) {
-//                    refreshUnreadNum();
-//                }
-//            };
     private PullToRefreshScrollView scrollView;
-
-    /**
-     * 刷新未读
-     */
-//    private void refreshUnreadNum() {
-//        int unreadNum = NIMClient.getService(MsgService.class).getTotalUnreadCount();
-//                    Logger.e("unreadNum" + unreadNum);
-//        message_x.setVisibility(unreadNum == 0 ? View.GONE : View.VISIBLE);
-//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -152,7 +135,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         allClass = view.findViewById(R.id.all_class);
         citySelect = view.findViewById(R.id.city_select);
         gridviewClass = (GridView) view.findViewById(R.id.gridview_class);
-        message = view.findViewById(R.id.message);
+        scan = view.findViewById(R.id.scan);
 //        message_x = (ImageView) view.findViewById(R.id.message_x);
 //        count = view.findViewById(count);
 
@@ -164,21 +147,9 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         initGridClass();
         initLocationData();
         allClass.setOnClickListener(this);
-        message.setOnClickListener(this);
+        scan.setOnClickListener(this);
         citySelect.setOnClickListener(this);
-//        refreshUnreadNum();
-//        //  注册/注销观察者
-//        NIMClient.getService(MsgServiceObserve.class)
-//                .observeRecentContact(messageObserver, true);
-//        EventBus.getDefault().register(this);
     }
-
-//    @Subscribe
-//    public void onEvent(String msg) {
-//        if(!StringUtils.isNullOrBlanK(msg)&&"handleUPushMessage".equals(msg)){
-//            message_x.setVisibility(View.VISIBLE);
-//        }
-//    }
 
 
     private void setCity() {
@@ -189,7 +160,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     }
 
     private void initTagImg() {
-//        final int imageIds[] = {R.mipmap.no_banner};
         ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()), ScreenUtils.getScreenWidth(getActivity()) / 3);
         tagViewpagerImg.setLayoutParams(params);
         noBanner = new BannerRecommendBean.DataBean();
@@ -483,23 +453,15 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
+        MainActivity mainActivity = (MainActivity) getActivity();
+        Intent intent;
         switch (v.getId()) {
             case R.id.all_class:
-                MainActivity mainActivity = (MainActivity) getActivity();
                 mainActivity.setCurrentPosition(1, getResourceString(R.string.whole));
                 break;
-            case R.id.message:
-                Intent intent;
-//                if (BaseApplication.isLogined()) {
-                    intent = new Intent(getActivity(), CaptureActivity.class);
-                    startActivity(intent);
-//                    intent = new Intent(getActivity(), MessageFragmentActivity.class);
-//                    startActivity(intent);
-//                } else {
-//                    intent = new Intent(getActivity(), LoginActivity2.class);
-//                    intent.putExtra("activity_action", Constant.LoginAction.toMessage);
-//                    startActivity(intent);
-//                }
+            case R.id.scan:
+                intent = new Intent(getActivity(), CaptureActivity.class);
+                mainActivity.startActivityForResult(intent, Constant.REQUEST);
                 break;
             case R.id.city_select:
                 intent = new Intent(getActivity(), CitySelectActivity.class);

@@ -22,9 +22,10 @@ import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.hardware.Camera;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
+
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -78,10 +79,10 @@ final class CameraConfigurationManager {
 //			height = temp;
 //		}
         screenResolution = new Point(width, height);
-        Log.i(TAG, "Screen resolution: " + screenResolution);
-        cameraResolution = findBestPreviewSizeValue(parameters,
+        Logger.e(TAG, "Screen resolution: " + screenResolution);
+        cameraResolution = getBestCameraResolution(parameters,
                 screenResolution);
-        Log.i(TAG, "Camera resolution: " + cameraResolution);
+        Logger.e(TAG, "Camera resolution: " + cameraResolution);
     }
 
     @SuppressLint("NewApi")
@@ -90,15 +91,15 @@ final class CameraConfigurationManager {
         Camera.Parameters parameters = camera.getParameters();
 
         if (parameters == null) {
-            Log.w(TAG,
+            Logger.e(TAG,
                     "Device error: no camera parameters are available. Proceeding without configuration.");
             return;
         }
 
-        Log.i(TAG, "Initial camera parameters: " + parameters.flatten());
+        Logger.e(TAG, "Initial camera parameters: " + parameters.flatten());
 
         if (safeMode) {
-            Log.w(TAG,
+            Logger.e(TAG,
                     "In camera config safe mode -- most settings will not be honored");
         }
 
@@ -180,14 +181,29 @@ final class CameraConfigurationManager {
 		 * newSetting); } }
 		 */
     }
-
+    private Point getBestCameraResolution(Camera.Parameters parameters, Point screenResolution){
+        float tmp = 0f;
+        float mindiff = 100f;
+        float x_d_y = (float)screenResolution.x / (float)screenResolution.y;
+        Camera.Size best = null;
+        List<Camera.Size> supportedPreviewSizes = parameters.getSupportedPreviewSizes();
+        for(Camera.Size s : supportedPreviewSizes){
+            tmp = Math.abs(((float)s.height/(float)s.width)-x_d_y);
+            if(tmp<mindiff){
+                mindiff = tmp;
+                best = s;
+            }
+        }
+        assert best != null;
+        return new Point(best.width, best.height);
+    }
     private Point findBestPreviewSizeValue(Camera.Parameters parameters,
                                            Point screenResolution) {
 
         List<Camera.Size> rawSupportedSizes = parameters
                 .getSupportedPreviewSizes();
         if (rawSupportedSizes == null) {
-            Log.w(TAG,
+            Logger.e(TAG,
                     "Device returned no supported preview sizes; using default");
             Camera.Size defaultSize = parameters.getPreviewSize();
             return new Point(defaultSize.width, defaultSize.height);
@@ -211,15 +227,15 @@ final class CameraConfigurationManager {
             }
         });
 
-        if (Log.isLoggable(TAG, Log.INFO)) {
-            StringBuilder previewSizesString = new StringBuilder();
-            for (Camera.Size supportedPreviewSize : supportedPreviewSizes) {
-                previewSizesString.append(supportedPreviewSize.width)
-                        .append('x').append(supportedPreviewSize.height)
-                        .append(' ');
-            }
-            Log.i(TAG, "Supported preview sizes: " + previewSizesString);
-        }
+//        if (Logger.esLoggable(TAG, Logger.eNFO)) {
+//            StringBuilder previewSizesString = new StringBuilder();
+//            for (Camera.Size supportedPreviewSize : supportedPreviewSizes) {
+//                previewSizesString.append(supportedPreviewSize.width)
+//                        .append('x').append(supportedPreviewSize.height)
+//                        .append(' ');
+//            }
+//            Logger.e(TAG, "Supported preview sizes: " + previewSizesString);
+//        }
 
         Point bestSize = null;
         float screenAspectRatio = (float) screenResolution.x
@@ -241,7 +257,7 @@ final class CameraConfigurationManager {
             if (maybeFlippedWidth == screenResolution.x
                     && maybeFlippedHeight == screenResolution.y) {
                 Point exactPoint = new Point(realWidth, realHeight);
-                Log.i(TAG, "Found preview size exactly matching screen size: "
+                Logger.e(TAG, "Found preview size exactly matching screen size: "
                         + exactPoint);
                 return exactPoint;
             }
@@ -257,16 +273,16 @@ final class CameraConfigurationManager {
         if (bestSize == null) {
             Camera.Size defaultSize = parameters.getPreviewSize();
             bestSize = new Point(defaultSize.width, defaultSize.height);
-            Log.i(TAG, "No suitable preview sizes, using default: " + bestSize);
+            Logger.e(TAG, "No suitable preview sizes, using default: " + bestSize);
         }
 
-        Log.i(TAG, "Found best approximate preview size: " + bestSize);
+        Logger.e(TAG, "Found best approximate preview size: " + bestSize);
         return bestSize;
     }
 
     private static String findSettableValue(Collection<String> supportedValues,
                                             String... desiredValues) {
-        Log.i(TAG, "Supported values: " + supportedValues);
+        Logger.e(TAG, "Supported values: " + supportedValues);
         String result = null;
         if (supportedValues != null) {
             for (String desiredValue : desiredValues) {
@@ -276,7 +292,7 @@ final class CameraConfigurationManager {
                 }
             }
         }
-        Log.i(TAG, "Settable value: " + result);
+        Logger.e(TAG, "Settable value: " + result);
         return result;
     }
 
