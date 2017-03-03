@@ -130,7 +130,7 @@ public class MessageListPanel {
     }
 
     public void onIncomingMessage(List<IMMessage> messages) {
-        boolean needScrollToBottom = isLastMessageVisible();
+//        boolean needScrollToBottom = isLastMessageVisible();
         boolean needRefresh = false;
         List<IMMessage> addedListItems = new ArrayList<>(messages.size());
         for (IMMessage message : messages) {
@@ -147,13 +147,13 @@ public class MessageListPanel {
 
         adapter.updateShowTimeItem(addedListItems, false, true);
 
+
         // incoming messages tip
         IMMessage lastMsg = messages.get(messages.size() - 1);
         if (isMyMessage(lastMsg)) {
-            if (needScrollToBottom) {
+//            if (needScrollToBottom) {
                 doScrollToBottom();
-            }
-//            else if (incomingMsgPrompt != null && lastMsg.getSessionType() != SessionTypeEnum.ChatRoom) {
+//            } else if (incomingMsgPrompt != null && lastMsg.getSessionType() != SessionTypeEnum.ChatRoom) {
 //                incomingMsgPrompt.show(lastMsg);
 //            }
         }

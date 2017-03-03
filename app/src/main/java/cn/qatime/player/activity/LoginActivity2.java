@@ -350,8 +350,8 @@ public class LoginActivity2 extends BaseActivity implements View.OnClickListener
             });
         }
         DialogUtils.dismissDialog(progress);
-        Intent intent = new Intent(this,MainActivity.class);
-        intent.putExtra("activity_action",getIntent().getStringExtra("activity_action"));
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("activity_action", getIntent().getStringExtra("activity_action"));
         startActivity(intent);
     }
 
@@ -359,6 +359,7 @@ public class LoginActivity2 extends BaseActivity implements View.OnClickListener
      * 刷新验证码
      */
     private void initCheckNum() {
+        login.setClickable(true);
         checkNum = CheckUtil.getCheckNum();
         checkview.setCheckNum(checkNum);
     }
@@ -366,17 +367,17 @@ public class LoginActivity2 extends BaseActivity implements View.OnClickListener
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Constant.RESPONSE) {
-               if(requestCode == Constant.REGIST_2){
-                    finish();
-                }
+            if (requestCode == Constant.REGIST_2) {
+                finish();
+            }
         }
     }
 
     @Override
     public void finish() {
-        if(BaseApplication.isLogined()){
-            Intent intent = new Intent(this,MainActivity.class);
-            intent.putExtra("activity_action",getIntent().getStringExtra("activity_action"));
+        if (BaseApplication.isLogined()) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("activity_action", getIntent().getStringExtra("activity_action"));
             startActivity(intent);
         }
         super.finish();

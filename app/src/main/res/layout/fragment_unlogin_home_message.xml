@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout style="@style/top_style">
+
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_top_tab" />
+
+
+        <TextView
+            style="@style/backbar_text_style"
+            android:layout_centerInParent="true"
+            android:text="@string/message" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/login"
+            android:layout_centerInParent="true"
+            android:text="登录才能查看!"
+            android:textColor="#999" />
+
+        <Button
+            android:id="@id/login"
+            style="@style/dialog_button_style"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_centerInParent="true"
+            android:text="@string/click_login" />
+    </RelativeLayout>
+</LinearLayout>

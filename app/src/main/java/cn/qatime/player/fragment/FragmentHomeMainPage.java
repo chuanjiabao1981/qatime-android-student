@@ -27,11 +27,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.Observer;
-import com.netease.nimlib.sdk.msg.MsgService;
-import com.netease.nimlib.sdk.msg.MsgServiceObserve;
-import com.netease.nimlib.sdk.msg.model.RecentContact;
 
 import org.json.JSONObject;
 
@@ -45,9 +40,7 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.CitySelectActivity;
-import cn.qatime.player.activity.LoginActivity2;
 import cn.qatime.player.activity.MainActivity;
-import cn.qatime.player.activity.MessageFragmentActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.base.BaseApplication;
@@ -55,6 +48,7 @@ import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.BannerRecommendBean;
 import cn.qatime.player.bean.ClassRecommendBean;
 import cn.qatime.player.bean.TeacherRecommendBean;
+import cn.qatime.player.qrcore.core.CaptureActivity;
 import cn.qatime.player.utils.AMapLocationUtils;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.UrlUtils;
@@ -79,8 +73,8 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private GridView gridviewClass;
     private List<ClassRecommendBean.DataBean> listRecommendClass = new ArrayList<>();
     private BaseAdapter classAdapter;
-    private View message;
-    private ImageView message_x;
+    private View scan;
+    //    private ImageView message_x;
     private ArrayList<TeacherRecommendBean.DataBean> listRecommendTeacher = new ArrayList<>();
     private CommonAdapter<TeacherRecommendBean.DataBean> teacherAdapter;
     private GridView gridviewSubject;
@@ -93,24 +87,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 //    private View count;
 
     private BannerRecommendBean.DataBean noBanner;
-    //  创建观察者对象
-    Observer<List<RecentContact>> messageObserver =
-            new Observer<List<RecentContact>>() {
-                @Override
-                public void onEvent(List<RecentContact> messages) {
-                    refreshUnreadNum();
-                }
-            };
     private PullToRefreshScrollView scrollView;
-
-    /**
-     * 刷新未读
-     */
-    private void refreshUnreadNum() {
-        int unreadNum = NIMClient.getService(MsgService.class).getTotalUnreadCount();
-//                    Logger.e("unreadNum" + unreadNum);
-        message_x.setVisibility(unreadNum == 0 ? View.GONE : View.VISIBLE);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -158,8 +135,8 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         allClass = view.findViewById(R.id.all_class);
         citySelect = view.findViewById(R.id.city_select);
         gridviewClass = (GridView) view.findViewById(R.id.gridview_class);
-        message = view.findViewById(R.id.message);
-        message_x = (ImageView) view.findViewById(R.id.message_x);
+        scan = view.findViewById(R.id.scan);
+//        message_x = (ImageView) view.findViewById(R.id.message_x);
 //        count = view.findViewById(count);
 
         setCity();
@@ -170,13 +147,10 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         initGridClass();
         initLocationData();
         allClass.setOnClickListener(this);
-        message.setOnClickListener(this);
+        scan.setOnClickListener(this);
         citySelect.setOnClickListener(this);
-        refreshUnreadNum();
-        //  注册/注销观察者
-        NIMClient.getService(MsgServiceObserve.class)
-                .observeRecentContact(messageObserver, true);
     }
+
 
     private void setCity() {
         cityName.setText(BaseApplication.getCurrentCity().getName());
@@ -186,7 +160,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     }
 
     private void initTagImg() {
-//        final int imageIds[] = {R.mipmap.no_banner};
         ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()), ScreenUtils.getScreenWidth(getActivity()) / 3);
         tagViewpagerImg.setLayoutParams(params);
         noBanner = new BannerRecommendBean.DataBean();
@@ -473,27 +446,22 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     public void onDestroy() {
         super.onDestroy();
         //  注册/注销观察者
-        NIMClient.getService(MsgServiceObserve.class)
-                .observeRecentContact(messageObserver, false);
+//        EventBus.getDefault().unregister(this);
+//        NIMClient.getService(MsgServiceObserve.class)
+//                .observeRecentContact(messageObserver, false);
     }
 
     @Override
     public void onClick(View v) {
+        MainActivity mainActivity = (MainActivity) getActivity();
+        Intent intent;
         switch (v.getId()) {
             case R.id.all_class:
-                MainActivity mainActivity = (MainActivity) getActivity();
                 mainActivity.setCurrentPosition(1, getResourceString(R.string.whole));
                 break;
-            case R.id.message:
-                Intent intent;
-                if (BaseApplication.isLogined()) {
-                    intent = new Intent(getActivity(), MessageFragmentActivity.class);
-                    startActivity(intent);
-                } else {
-                    intent = new Intent(getActivity(), LoginActivity2.class);
-                    intent.putExtra("activity_action",Constant.LoginAction.toMessage);
-                    startActivity(intent);
-                }
+            case R.id.scan:
+                intent = new Intent(getActivity(), CaptureActivity.class);
+                mainActivity.startActivityForResult(intent, Constant.REQUEST);
                 break;
             case R.id.city_select:
                 intent = new Intent(getActivity(), CitySelectActivity.class);
