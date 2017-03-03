@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +31,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.bean.CouponVerifyBean;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
@@ -37,6 +40,7 @@ import libraryextra.bean.AppPayParamsBean;
 import libraryextra.bean.OrderConfirmBean;
 import libraryextra.bean.OrderPayBean;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -66,12 +70,19 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     private View alipayLayout;
     private View wechatLayout;
     private View accountLayout;
+    private View couponLayout;
+    private View confirmCoupon;
+    private EditText couponCode;
+    private String coupon;
+    private LinearLayout couponPriceLayout;
+    private TextView couponPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_confirm);
         setTitles(getResources().getString(R.string.order_confirm));
+        coupon = getIntent().getStringExtra("coupon");
         initView();
 
         EventBus.getDefault().register(this);
@@ -81,7 +92,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         if (data != null) {
             setValue(data);
             priceNumber = data.current_price;
-//            initData(data.getData().getId());
         }
         pay.setOnClickListener(this);
     }
@@ -110,7 +120,12 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         }
         OrderConfirmActivity.this.price.setText(getResourceString(R.string.order_price) + price);
         payprice.setText(" " + price + " ");
-
+        if (!StringUtils.isNullOrBlanK(coupon)) {
+            couponLayout.setVisibility(View.GONE);
+            couponCode.setText(coupon);
+            couponCode.clearFocus();
+            verifyCoupon();
+        }
     }
 
     @Override
@@ -132,6 +147,9 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         pay.setEnabled(false);
         Map<String, String> map = new HashMap<>();
         map.put("pay_type", payType);
+        if (!StringUtils.isNullOrBlanK(coupon)) {
+            map.put("coupon", coupon);
+        }
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlCourses + id + "/orders", map), null,
                 new VolleyListener(OrderConfirmActivity.this) {
                     @Override
@@ -236,6 +254,28 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         wechatLayout = findViewById(R.id.wechat_layout);
         alipayLayout = findViewById(R.id.alipay_layout);
         accountLayout = findViewById(R.id.account_layout);
+
+        couponLayout = findViewById(R.id.coupon_layout);
+        couponLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                couponLayout.setVisibility(View.GONE);
+            }
+        });
+        couponCode = (EditText) findViewById(R.id.coupon_code);
+        confirmCoupon = findViewById(R.id.confirm_coupon);
+        confirmCoupon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!StringUtils.isNullOrBlanK(couponCode.getText().toString())) {
+                    coupon = couponCode.getText().toString();
+                    verifyCoupon();
+                }
+            }
+        });
+
+        couponPriceLayout = (LinearLayout) findViewById(R.id.coupon_price_layout);
+        couponPrice = (TextView) findViewById(R.id.coupon_price);
         wechatPay = (ImageView) findViewById(R.id.wechat_pay);
         aliPay = (ImageView) findViewById(R.id.alipay);
         account = (ImageView) findViewById(R.id.account);
@@ -269,6 +309,53 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                 wechatPay.setImageResource(R.drawable.shape_select_circle_normal);
             }
         });
+    }
+
+    /**
+     * 验证优惠吗
+     */
+    private void verifyCoupon() {
+//        "http://192.168.1.107:3000/api/v1/payment/coupons/"
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.urlCoupon + coupon + "/verify", null,
+                new VolleyListener(OrderConfirmActivity.this) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        CouponVerifyBean data = JsonUtils.objectFromJson(response.toString(), CouponVerifyBean.class);
+                        if (data != null && data.getData() != null) {
+                            couponPriceLayout.setVisibility(View.VISIBLE);
+                            couponPrice.setText(data.getData().getPrice());
+                            double couponprice = priceNumber - Double.valueOf(data.getData().getPrice());
+                            payprice.setText(" " + couponprice + " ");
+                        }
+
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                        Toast.makeText(OrderConfirmActivity.this, "优惠码不正确", Toast.LENGTH_SHORT).show();
+                        couponPriceLayout.setVisibility(View.GONE);
+                        String price = df.format(priceNumber);
+                        if (price.startsWith(".")) {
+                            price = "0" + price;
+                        }
+                        OrderConfirmActivity.this.price.setText(getResourceString(R.string.order_price) + price);
+                        payprice.setText(" " + price + " ");
+
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+                }
+
+                , new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
     }
 
     private String getStatus(String status) {

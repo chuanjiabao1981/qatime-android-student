@@ -16,15 +16,11 @@
 
   xmlns:oncon="http://schemas.android.com/apk/res/com.sitech.oncon.barcode"
 -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/container"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-
-    <SurfaceView
-        android:id="@+id/preview_view"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
 
     <include
         android:id="@+id/include"
@@ -32,15 +28,38 @@
         android:layout_width="match_parent"
         android:layout_height="50dp" />
 
-    <cn.qatime.player.qrcore.core.ViewfinderView
-        android:id="@+id/viewfinder_view"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/flash_lamp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:src="@mipmap/flash_lamp" />
-</FrameLayout>
+        <SurfaceView
+            android:id="@+id/preview_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+
+
+        <cn.qatime.player.qrcore.core.ViewfinderView
+            android:id="@+id/viewfinder_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+
+        <ImageView
+            android:id="@+id/flash_lamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="60dp"
+            android:src="@mipmap/flash_lamp" />
+
+        <TextView
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:text="将二维码放入框中，即可自动扫描"
+            android:textColor="#fff" />
+    </RelativeLayout>
+
+</LinearLayout>
