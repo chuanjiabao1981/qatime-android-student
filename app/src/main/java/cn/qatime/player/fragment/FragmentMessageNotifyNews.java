@@ -37,6 +37,7 @@ import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.SystemNotifyBean;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -76,40 +77,42 @@ public class FragmentMessageNotifyNews extends BaseFragment {
             public void convert(ViewHolder helper, SystemNotifyBean.DataBean item, int position) {
 //                &#8195;
                 String blank = "\u3000\u3000  ";
-                switch (item.getNotificationable_type()) {
-                    case "live_studio/course":
-                        if ("start".equals(item.getAction_name())) {
-                            helper.setText(R.id.type, " 开课 ", 0xff00a0e9);
-                            helper.getView(R.id.type).setBackgroundResource(R.drawable.notify_text_background_teaching);
-                        } else {
-                            helper.setText(R.id.type, " 公告 ", 0xffffafaf);
-                            helper.getView(R.id.type).setBackgroundResource(R.drawable.notify_text_background_notice);
-                        }
-                        break;
-                    case "live_studio/lesson":
-                        if ("start_for_student".equals(item.getAction_name())) {
-                            helper.setText(R.id.type, " 上课 ", 0xff669966);
-                            helper.getView(R.id.type).setBackgroundResource(R.drawable.notify_text_background_start);
-                        } else if ("change_time".equals(item.getAction_name())) {
-                            helper.setText(R.id.type, " 调课 ", 0xffff9900);
-                            helper.getView(R.id.type).setBackgroundResource(R.drawable.notify_text_background_change);
-                        } else {
+                if (item != null && !StringUtils.isNullOrBlanK(item.getNotificationable_type())) {
+                    switch (item.getNotificationable_type()) {
+                        case "live_studio/course":
+                            if ("start".equals(item.getAction_name())) {
+                                helper.setText(R.id.type, " 开课 ", 0xff00a0e9);
+                                helper.getView(R.id.type).setBackgroundResource(R.drawable.notify_text_background_teaching);
+                            } else {
+                                helper.setText(R.id.type, " 公告 ", 0xffffafaf);
+                                helper.getView(R.id.type).setBackgroundResource(R.drawable.notify_text_background_notice);
+                            }
+                            break;
+                        case "live_studio/lesson":
+                            if ("start_for_student".equals(item.getAction_name())) {
+                                helper.setText(R.id.type, " 上课 ", 0xff669966);
+                                helper.getView(R.id.type).setBackgroundResource(R.drawable.notify_text_background_start);
+                            } else if ("change_time".equals(item.getAction_name())) {
+                                helper.setText(R.id.type, " 调课 ", 0xffff9900);
+                                helper.getView(R.id.type).setBackgroundResource(R.drawable.notify_text_background_change);
+                            } else {
+                                helper.setText(R.id.type, " 系统 ", 0xffbe0b0b);
+                                helper.getView(R.id.type).setBackgroundResource(R.drawable.notify_text_background_system);
+                            }
+                            break;
+                        case "payment/order":
+                            helper.setText(R.id.type, " 退款 ", 0xff66cccc);
+                            helper.getView(R.id.type).setBackgroundResource(R.drawable.notify_text_background_refund);
+                            break;
+                        case "action_record ":
+                            helper.setText(R.id.type, " 专属课程 ", 0xff780078);
+                            blank = "\u3000\u3000\u3000\u3000  ";
+                            helper.getView(R.id.type).setBackgroundResource(R.drawable.notify_text_background_record);
+                            break;
+                        default:
                             helper.setText(R.id.type, " 系统 ", 0xffbe0b0b);
                             helper.getView(R.id.type).setBackgroundResource(R.drawable.notify_text_background_system);
-                        }
-                        break;
-                    case "payment/order":
-                        helper.setText(R.id.type, " 退款 ", 0xff66cccc);
-                        helper.getView(R.id.type).setBackgroundResource(R.drawable.notify_text_background_refund);
-                        break;
-                    case "action_record ":
-                        helper.setText(R.id.type, " 专属课程 ", 0xff780078);
-                        blank = "\u3000\u3000\u3000\u3000  ";
-                        helper.getView(R.id.type).setBackgroundResource(R.drawable.notify_text_background_record);
-                        break;
-                    default:
-                        helper.setText(R.id.type, " 系统 ", 0xffbe0b0b);
-                        helper.getView(R.id.type).setBackgroundResource(R.drawable.notify_text_background_system);
+                    }
                 }
 //                SpannableStringBuilder span = new SpannableStringBuilder(blank + item.getNotice_content());
 //                span.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), 0, blank.length(),
