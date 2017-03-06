@@ -148,7 +148,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         Map<String, String> map = new HashMap<>();
         map.put("pay_type", payType);
         if (!StringUtils.isNullOrBlanK(coupon)) {
-            map.put("coupon", coupon);
+            map.put("coupon_code", coupon);
         }
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlCourses + id + "/orders", map), null,
                 new VolleyListener(OrderConfirmActivity.this) {
