@@ -65,7 +65,7 @@ public class RegionSelectActivity2 extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectCountry = citiesList.get(position).getAreaName();
-                Intent intent = new Intent(RegionSelectActivity2.this,RegionSelectActivity3.class);
+                Intent intent = new Intent(RegionSelectActivity2.this, RegionSelectActivity3.class);
                 intent.putExtra("counties", (Serializable) (citiesList.get(position).getCounties()));
                 startActivityForResult(intent, Constant.REQUEST_REGION_SELECT);
             }

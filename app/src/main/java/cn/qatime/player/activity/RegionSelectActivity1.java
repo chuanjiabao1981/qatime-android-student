@@ -51,6 +51,7 @@ public class RegionSelectActivity1 extends BaseActivity {
     }
 
     private void initData() {
+        // TODO: 2017/3/6 从网络获取省份列表
         new Thread() {
             @Override
             public void run() {
@@ -89,6 +90,15 @@ public class RegionSelectActivity1 extends BaseActivity {
             @Override
             public void onLocationBack(String[] result) {
                 location.setText(result[0] + "" + result[1] + "" + result[2]);
+                location.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent data = new Intent();
+                        data.putExtra("region",location.getText().toString());
+                        setResult(Constant.RESPONSE_REGION_SELECT, data);
+                        finish();
+                    }
+                });
             }
         });
         utils.startLocation();

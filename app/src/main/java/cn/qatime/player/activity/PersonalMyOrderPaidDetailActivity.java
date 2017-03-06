@@ -35,7 +35,7 @@ import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
 
-public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
+public class   PersonalMyOrderPaidDetailActivity extends BaseActivity {
 
     private TextView subject;
     private TextView progress;

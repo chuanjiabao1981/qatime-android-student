@@ -149,7 +149,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         switch (v.getId()) {
             case R.id.region_view:
                 Intent regionIntent = new Intent(this, RegionSelectActivity1.class);
-                regionIntent.putExtra("region",region.getText().toString());
+                regionIntent.putExtra("region", region.getText().toString());
                 startActivityForResult(regionIntent, Constant.REQUEST_REGION_SELECT);
                 break;
             case R.id.men:
