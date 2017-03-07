@@ -56,6 +56,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
     private PayEditText payEditText;
     private CustomKeyboard customKeyboard;
     private AlertDialog alertDialog;
+    private TextView payPswText;
 
     private void assignViews() {
         bindPhoneNumber = (LinearLayout) findViewById(R.id.bind_phone_number);
@@ -63,6 +64,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
         bindWeChat = findViewById(R.id.bind_wechat);
         weChat = (TextView) findViewById(R.id.wechat);
         email = (TextView) findViewById(R.id.email);
+        payPswText = (TextView) findViewById(R.id.pay_psw);
         parentPhoneNumber = (LinearLayout) findViewById(R.id.parent_phone_number);
         phoneNumberP = (TextView) findViewById(R.id.phone_number_p);
         phoneNumberM = (TextView) findViewById(R.id.phone_number_m);
@@ -131,6 +133,15 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
         } else {
             this.email.setText(getResourceString(R.string.not_bind));
             this.email.setTextColor(Color.RED);
+        }
+        // TODO: 2017/3/7 将支付密码信息整合到接口中
+        if (BaseApplication.getCashAccount() != null && BaseApplication.getCashAccount().getData() != null) {
+            if (BaseApplication.getCashAccount().getData().isHas_password()) {
+                // TODO: 2017/3/7 判断密码是否可用
+            } else {
+                payPswText.setText(getResourceString(R.string.not_set));
+                payPswText.setTextColor(Color.RED);
+            }
         }
         openid = bean.getData().getOpenid();
         if (!StringUtils.isNullOrBlanK(openid)) {
