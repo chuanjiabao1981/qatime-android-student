@@ -6,28 +6,6 @@
 
     <include layout="@layout/layout_backbar" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="已选地区"
-            android:textColor="#333"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/current_region"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="" />
-
-    </LinearLayout>
-
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"

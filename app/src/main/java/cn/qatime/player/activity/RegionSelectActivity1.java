@@ -106,11 +106,7 @@ public class RegionSelectActivity1 extends BaseActivity {
 
     private void initView() {
         list = (ListView) findViewById(R.id.list);
-        currentRegion = (TextView) findViewById(R.id.current_region);
         location = (TextView) findViewById(R.id.location);
-
-
-        currentRegion.setText(getIntent().getStringExtra("region"));
 
         regionList = new ArrayList<>();
         adapter = new CommonAdapter<RegionBean>(RegionSelectActivity1.this, regionList, R.layout.item_region) {
