@@ -104,7 +104,7 @@ public class FragmentMessageNotifyNews extends BaseFragment {
                             helper.setText(R.id.type, " 退款 ", 0xff66cccc);
                             helper.getView(R.id.type).setBackgroundResource(R.drawable.notify_text_background_refund);
                             break;
-                        case "action_record ":
+                        case "action_record":
                             helper.setText(R.id.type, " 专属课程 ", 0xff780078);
                             blank = "\u3000\u3000\u3000\u3000  ";
                             helper.getView(R.id.type).setBackgroundResource(R.drawable.notify_text_background_record);

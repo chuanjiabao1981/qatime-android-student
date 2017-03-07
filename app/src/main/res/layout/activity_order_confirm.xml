@@ -2,348 +2,371 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f7f7f7"
     android:orientation="vertical">
 
     <include layout="@layout/layout_backbar" />
 
-
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:background="#fff"
-        android:scrollbars="none">
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textColor="#333"
+            android:textSize="13sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="#ccc" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="28dp"
-                    android:layout_marginTop="10dp"
-                    android:text="@string/commodity_name"
-                    android:textColor="#333" />
+                    android:text="科        目"
+                    android:textColor="#333"
+                    android:textSize="14sp" />
 
                 <TextView
-                    android:id="@+id/name"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="年        级"
+                    android:textColor="#333"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="授课老师"
+                    android:textColor="#333"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="课时总数"
+                    android:textColor="#333"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="价        格"
+                    android:textColor="#333"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/project"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#666"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/grade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#666"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/teacher"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#666"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/class_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#666"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/price"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text=""
-                    android:textColor="#666666"
-                    android:textSize="13sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:paddingBottom="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="28dp"
-                    android:text="@string/commodity_detail"
-                    android:textColor="#333" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/image"
-                        android:layout_width="160dp"
-                        android:layout_height="120dp"
-                        android:scaleType="centerCrop"
-                        android:src="@mipmap/photo" />
-                    <!--科目类型-->
-                    <TextView
-                        android:id="@+id/project"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dp"
-                        android:textColor="#666666"
-                        android:textSize="13sp" />
-                    <!--年级类型-->
-                    <TextView
-                        android:id="@+id/grade"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dp"
-                        android:textColor="#666666"
-                        android:textSize="13sp" />
-                    <!--授课老师-->
-                    <TextView
-                        android:id="@+id/teacher"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dp"
-                        android:textColor="#666666"
-                        android:textSize="13sp" />
-                    <!--课时总数-->
-                    <TextView
-
-                        android:id="@+id/class_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dp"
-                        android:textColor="#666666"
-                        android:textSize="13sp" />
-                    <!--开课时间-->
-
-                    <TextView
-
-                        android:id="@+id/class_start_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dp"
-                        android:text=""
-                        android:textColor="#666666"
-                        android:textSize="13sp" />
-                    <!--结课时间-->
-
-                    <TextView
-
-                        android:id="@+id/class_end_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dp"
-                        android:textColor="#666666"
-                        android:textSize="13sp" />
-
-                    <TextView
-                        android:id="@+id/status"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dp"
-                        android:textColor="#666666"
-                        android:textSize="13sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dp"
-                        android:text="@string/teach_type"
-                        android:textColor="#666666"
-                        android:textSize="13sp" />
-
-                    <TextView
-                        android:id="@+id/price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dp"
-                        android:textColor="#666666"
-                        android:textSize="13sp" />
-                </LinearLayout>
+                    android:textColor="#666"
+                    android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#dfdddd" />
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#f7f7f7"
+        android:layout_marginTop="10dp"
+        android:background="#fff"
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/wechat_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#fff"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:padding="5dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginRight="28dp"
-                android:layout_marginTop="5dp"
-                android:gravity="center_vertical"
-                android:text="@string/method_payment"
-                android:textColor="#333" />
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_margin="8dp"
+                android:src="@mipmap/wechat_pay" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <LinearLayout
-                    android:id="@+id/wechat_layout"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
+                    android:text="@string/wexin_payment"
+                    android:textColor="#333"
+                    android:textSize="14sp" />
 
-                    <ImageView
-                        android:id="@+id/wechat_pay"
-                        android:layout_width="14dp"
-                        android:layout_height="14dp"
-                        android:background="@drawable/shape_select_circle_bg"
-                        android:padding="3dp"
-                        android:src="@drawable/shape_select_circle_select" />
-
-                    <ImageView
-                        android:layout_width="14dp"
-                        android:layout_height="14dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="3dp"
-                        android:src="@mipmap/wechat_pay" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:gravity="center"
-                        android:text="@string/wexin_payment"
-                        android:textColor="#666666"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/alipay_layout"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp"
-                    android:visibility="gone">
-
-                    <ImageView
-                        android:id="@+id/alipay"
-                        android:layout_width="14dp"
-                        android:layout_height="14dp"
-                        android:background="@drawable/shape_select_circle_bg"
-                        android:padding="3dp"
-                        android:src="@drawable/shape_select_circle_normal" />
-
-                    <ImageView
-                        android:layout_width="14dp"
-                        android:layout_height="14dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="3dp"
-                        android:src="@mipmap/alipay" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:gravity="center"
-                        android:text="@string/alipay_payment"
-                        android:textColor="#666666"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/account_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
-
-                    <ImageView
-                        android:id="@+id/account"
-                        android:layout_width="14dp"
-                        android:layout_height="14dp"
-                        android:background="@drawable/shape_select_circle_bg"
-                        android:padding="3dp"
-                        android:src="@drawable/shape_select_circle_normal" />
-
-                    <ImageView
-                        android:layout_width="14dp"
-                        android:layout_height="14dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="3dp"
-                        android:src="@mipmap/account_pay" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:gravity="center"
-                        android:text="@string/account_payment"
-                        android:textColor="#666666"
-                        android:textSize="14sp" />
-                </LinearLayout>
+                    android:text="推荐安装微信5.0及以上版本"
+                    android:textColor="#666"
+                    android:textSize="13sp" />
             </LinearLayout>
 
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/wechat_pay"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginRight="10dp"
+                android:src="@mipmap/pay_status_selected" />
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="#cccccc" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="#ccc"
+            android:visibility="gone" />
 
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/alipay_layout"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="#fff">
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_margin="8dp"
+                android:src="@mipmap/alipay" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:text="输入优惠码" />
-
-                <EditText
-                    android:id="@+id/coupon_code"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="6dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="6dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/shape_input" />
+                    android:text="@string/alipay_payment"
+                    android:textColor="#333"
+                    android:textSize="14sp" />
 
                 <TextView
-                    android:id="@+id/confirm_coupon"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="6dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="6dp"
-                    android:background="@drawable/shape_input"
-                    android:gravity="center"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:text="确认" />
+                    android:layout_height="wrap_content"
+                    android:text="推荐有支付宝账号的用户使用"
+                    android:textColor="#666"
+                    android:textSize="13sp" />
             </LinearLayout>
 
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/alipay"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginRight="10dp"
+                android:src="@mipmap/pay_status_normal" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="#ccc" />
+
+        <LinearLayout
+            android:id="@+id/account_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_margin="8dp"
+                android:src="@mipmap/account_pay" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/account_payment"
+                    android:textColor="#333"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/balance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="当前余额0.00元"
+                    android:textColor="#666"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/account"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginRight="10dp"
+                android:src="@mipmap/pay_status_normal" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:background="#fff">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
             <TextView
-                android:id="@+id/coupon_layout"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="输入优惠码" />
+
+            <EditText
+                android:id="@+id/coupon_code"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:background="#fff"
+                android:layout_marginBottom="6dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="6dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_input" />
+
+            <TextView
+                android:id="@+id/confirm_coupon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="6dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/shape_input"
                 android:gravity="center"
-                android:text="使用优惠码" />
-        </RelativeLayout>
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="确认" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/coupon_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#fff"
+            android:gravity="center"
+            android:text="使用优惠码"
+            android:textColor="#666"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -387,6 +410,8 @@
                     android:id="@+id/pay_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
                     android:text="00"
                     android:textColor="#be0b0b"
                     android:textSize="30dp" />
@@ -415,7 +440,7 @@
             android:text="@string/pay_now"
             android:textColor="@drawable/text_selector_white_red"
             android:textSize="16sp" />
-
     </LinearLayout>
+
 
 </LinearLayout>
