@@ -115,7 +115,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         if (cashAccount != null && cashAccount.getData() != null) {
             String currentBalance = cashAccount.getData().getBalance();
             if (currentBalance.startsWith(".")) {
-                currentBalance = "0" + price;
+                currentBalance = "0" + currentBalance;
             }
             balance.setText("当前余额" + currentBalance + "元");
         }

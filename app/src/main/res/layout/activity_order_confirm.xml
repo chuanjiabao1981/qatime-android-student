@@ -121,7 +121,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text=""
                     android:textColor="#666"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -133,7 +132,6 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="#dfdddd" />
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -189,13 +187,13 @@
                 android:src="@mipmap/pay_status_selected" />
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="#ccc"
-            android:visibility="gone" />
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="1px"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:background="#ccc"-->
+            <!--android:visibility="gone" />-->
 
         <LinearLayout
             android:id="@+id/alipay_layout"
@@ -287,7 +285,6 @@
                     android:textSize="13sp" />
             </LinearLayout>
 
-
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
@@ -302,7 +299,6 @@
         </LinearLayout>
 
     </LinearLayout>
-
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -319,7 +315,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="10dp"
                 android:text="输入优惠码" />
 
             <EditText
@@ -328,6 +324,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginBottom="6dp"
                 android:layout_marginLeft="10dp"
+                android:maxLines="1"
                 android:layout_marginTop="6dp"
                 android:layout_weight="1"
                 android:background="@drawable/shape_input" />
@@ -337,7 +334,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="6dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginRight="10dp"
                 android:layout_marginTop="6dp"
                 android:background="@drawable/shape_input"
                 android:gravity="center"
@@ -426,7 +423,6 @@
 
         </RelativeLayout>
 
-
         <Button
             android:id="@+id/pay"
             android:layout_width="match_parent"
@@ -441,6 +437,5 @@
             android:textColor="@drawable/text_selector_white_red"
             android:textSize="16sp" />
     </LinearLayout>
-
 
 </LinearLayout>
