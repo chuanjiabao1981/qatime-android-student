@@ -395,9 +395,5 @@
             android:name=".activity.RegionSelectActivity2"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.RegionSelectActivity3"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
     </application>
 </manifest>

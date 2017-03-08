@@ -7,8 +7,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.io.IOException;
-import java.io.Serializable;
+import com.android.volley.VolleyError;
+
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -16,14 +18,18 @@ import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
-import cn.qatime.player.bean.RegionBean;
+import cn.qatime.player.bean.ProvincesBean;
 import cn.qatime.player.utils.AMapLocationUtils;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.PinyinUtils;
 import libraryextra.utils.StringUtils;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 
 /**
  * @author Tianhaoranly
@@ -33,9 +39,9 @@ import libraryextra.utils.StringUtils;
 public class RegionSelectActivity1 extends BaseActivity {
 
 
-    private List<RegionBean> regionList;
+    private List<ProvincesBean.DataBean> regionList;
     private ListView list;
-    private CommonAdapter<RegionBean> adapter;
+    private CommonAdapter<ProvincesBean.DataBean> adapter;
     private String selectCity = "";
     private AMapLocationUtils utils;
     private TextView currentRegion;
@@ -51,39 +57,49 @@ public class RegionSelectActivity1 extends BaseActivity {
     }
 
     private void initData() {
-        // TODO: 2017/3/6 从网络获取省份列表
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    regionList.addAll(JsonUtils.listFromJson(getAssets().open("city.json"), RegionBean.class));
-                    for (RegionBean item : regionList) {
-                        if (StringUtils.isNullOrBlanK(item.getAreaName())) {
-                            item.setFirstLetter("");
-                            item.setFirstLetters("");
-                        } else {
-                            item.setFirstLetter(PinyinUtils.getPinyinFirstLetter(item.getAreaName()).toUpperCase());
-                            item.setFirstLetters(PinyinUtils.getPinyinFirstLetters(item.getAreaName()));
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/provinces", null,
+                new VolleyListener(this) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        ProvincesBean provincesBean = JsonUtils.objectFromJson(response.toString(), ProvincesBean.class);
+                        if (provincesBean != null && provincesBean.getData() != null) {
+                            regionList.addAll(provincesBean.getData());
+                            for (ProvincesBean.DataBean item : regionList) {
+                                if (StringUtils.isNullOrBlanK(item.getName())) {
+                                    item.setFirstLetter("");
+                                    item.setFirstLetters("");
+                                } else {
+                                    item.setFirstLetter(PinyinUtils.getPinyinFirstLetter(item.getName()).toUpperCase());
+                                    item.setFirstLetters(PinyinUtils.getPinyinFirstLetters(item.getName()));
+                                }
+                            }
+                            Collections.sort(regionList, new Comparator<ProvincesBean.DataBean>() {
+                                @Override
+                                public int compare(ProvincesBean.DataBean lhs, ProvincesBean.DataBean rhs) {
+                                    return lhs.getFirstLetters().compareTo(rhs.getFirstLetters());
+                                }
+                            });
+
+                                    adapter.notifyDataSetChanged();
                         }
                     }
-                    Collections.sort(regionList, new Comparator<RegionBean>() {
-                        @Override
-                        public int compare(RegionBean lhs, RegionBean rhs) {
-                            return lhs.getFirstLetters().compareTo(rhs.getFirstLetters());
-                        }
-                    });
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            adapter.notifyDataSetChanged();
-                            adapter.notifyDataSetInvalidated();
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
             }
-        }.start();
+        });
+        addToRequestQueue(request);
 
 
         utils = new AMapLocationUtils(getApplicationContext(), new AMapLocationUtils.LocationListener() {
@@ -109,20 +125,20 @@ public class RegionSelectActivity1 extends BaseActivity {
         location = (TextView) findViewById(R.id.location);
 
         regionList = new ArrayList<>();
-        adapter = new CommonAdapter<RegionBean>(RegionSelectActivity1.this, regionList, R.layout.item_region) {
+        adapter = new CommonAdapter<ProvincesBean.DataBean>(RegionSelectActivity1.this, regionList, R.layout.item_region) {
 
             @Override
-            public void convert(ViewHolder holder, RegionBean item, int position) {
-                holder.setText(R.id.region_text, item.getAreaName());
+            public void convert(ViewHolder holder, ProvincesBean.DataBean item, int position) {
+                holder.setText(R.id.region_text, item.getName());
             }
         };
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectCity = regionList.get(position).getAreaName();
+                selectCity = regionList.get(position).getName();
                 Intent intent = new Intent(RegionSelectActivity1.this, RegionSelectActivity2.class);
-                intent.putExtra("cities", (Serializable) (regionList.get(position).getCities()));
+                intent.putExtra("provinces_id", regionList.get(position).getId());
                 startActivityForResult(intent, Constant.REQUEST_REGION_SELECT);
             }
         });

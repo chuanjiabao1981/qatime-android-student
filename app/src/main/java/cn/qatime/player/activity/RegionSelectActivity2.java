@@ -6,19 +6,28 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.io.Serializable;
+import com.android.volley.VolleyError;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
-import cn.qatime.player.bean.RegionBean;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
+import libraryextra.bean.CityBean;
+import libraryextra.utils.JsonUtils;
 import libraryextra.utils.PinyinUtils;
 import libraryextra.utils.StringUtils;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 
 /**
  * @author Tianhaoranly
@@ -26,59 +35,88 @@ import libraryextra.utils.StringUtils;
  * @Description:
  */
 public class RegionSelectActivity2 extends BaseActivity {
-    private List<RegionBean.CitiesBean> citiesList;
+    private List<CityBean.Data> citiesList;
     private ListView list;
-    private CommonAdapter<RegionBean.CitiesBean> adapter;
-    private String selectCountry = "";
+    private CommonAdapter<CityBean.Data> adapter;
+    private String provincesId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_region_select1);
         setTitles("选择地区");
-        citiesList = (List<RegionBean.CitiesBean>) getIntent().getSerializableExtra("cities");
-        for (RegionBean.CitiesBean item : citiesList) {
-            if (StringUtils.isNullOrBlanK(item.getAreaName())) {
-                item.setFirstLetter("");
-                item.setFirstLetters("");
-            } else {
-                item.setFirstLetter(PinyinUtils.getPinyinFirstLetter(item.getAreaName()).toUpperCase());
-                item.setFirstLetters(PinyinUtils.getPinyinFirstLetters(item.getAreaName()));
-            }
-        }
-        Collections.sort(citiesList, new Comparator<RegionBean.CitiesBean>() {
-            @Override
-            public int compare(RegionBean.CitiesBean lhs, RegionBean.CitiesBean rhs) {
-                return lhs.getFirstLetters().compareTo(rhs.getFirstLetters());
-            }
-        });
+        provincesId = getIntent().getStringExtra("provinces_id");
         list = (ListView) findViewById(R.id.list);
-        adapter = new CommonAdapter<RegionBean.CitiesBean>(RegionSelectActivity2.this, citiesList, R.layout.item_region) {
+        citiesList = new ArrayList<>();
+        adapter = new CommonAdapter<CityBean.Data>(RegionSelectActivity2.this, citiesList, R.layout.item_region) {
 
             @Override
-            public void convert(ViewHolder holder, RegionBean.CitiesBean item, int position) {
-                holder.setText(R.id.region_text, item.getAreaName());
+            public void convert(ViewHolder holder, CityBean.Data item, int position) {
+                holder.setText(R.id.region_text, item.getName());
             }
         };
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectCountry = citiesList.get(position).getAreaName();
-                Intent intent = new Intent(RegionSelectActivity2.this, RegionSelectActivity3.class);
-                intent.putExtra("counties", (Serializable) (citiesList.get(position).getCounties()));
-                startActivityForResult(intent, Constant.REQUEST_REGION_SELECT);
+                Intent data = new Intent();
+                data.putExtra("region", citiesList.get(position).getName());
+                setResult(Constant.RESPONSE_REGION_SELECT, data);
+                finish();
             }
         });
 
+        initData();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constant.REQUEST_REGION_SELECT && resultCode == Constant.RESPONSE_REGION_SELECT) {
-            data.putExtra("region", selectCountry + data.getStringExtra("region"));
-            setResult(Constant.RESPONSE_REGION_SELECT, data);
-            finish();
-        }
+    private void initData() {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,
+                new VolleyListener(this) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        CityBean cityBean = JsonUtils.objectFromJson(response.toString(), CityBean.class);
+                        if (cityBean != null && cityBean.getData() != null) {
+                            citiesList.clear();
+                            for (CityBean.Data data : cityBean.getData()) {
+                                if (data.getProvince_id().equals(provincesId)){
+                                    citiesList.add(data);
+                                }
+                            }
+
+                            for (CityBean.Data item : citiesList) {
+                                if (StringUtils.isNullOrBlanK(item.getName())) {
+                                    item.setFirstLetter("");
+                                    item.setFirstLetters("");
+                                } else {
+                                    item.setFirstLetter(PinyinUtils.getPinyinFirstLetter(item.getName()).toUpperCase());
+                                    item.setFirstLetters(PinyinUtils.getPinyinFirstLetters(item.getName()));
+                                }
+                            }
+                            Collections.sort(citiesList, new Comparator<CityBean.Data>() {
+                                @Override
+                                public int compare(CityBean.Data lhs, CityBean.Data rhs) {
+                                    return lhs.getFirstLetters().compareTo(rhs.getFirstLetters());
+                                }
+                            });
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
     }
 }
