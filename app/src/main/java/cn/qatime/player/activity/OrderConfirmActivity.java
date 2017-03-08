@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
-import com.bumptech.glide.Glide;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.umeng.analytics.MobclickAgent;
@@ -23,14 +22,13 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.bean.CashAccountBean;
 import cn.qatime.player.bean.CouponVerifyBean;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.Constant;
@@ -46,14 +44,10 @@ import libraryextra.utils.VolleyListener;
 
 public class OrderConfirmActivity extends BaseActivity implements View.OnClickListener {
     TextView name;
-    ImageView image;
     TextView project;
     TextView grade;
     TextView teacher;
     TextView classnumber;
-    TextView classstarttime;
-    TextView classendtime;
-    TextView status;
     TextView price;
     TextView payprice;
     private Button pay;
@@ -62,8 +56,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     private String payType = "weixin";
     private float priceNumber = 0;
     DecimalFormat df = new DecimalFormat("#.00");
-    private SimpleDateFormat parse1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    private SimpleDateFormat parse2 = new SimpleDateFormat("yyyy-MM-dd");
     private AlertDialog alertDialog;
     private ImageView aliPay;
     private ImageView account;
@@ -76,6 +68,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     private String coupon;
     private LinearLayout couponPriceLayout;
     private TextView couponPrice;
+    private TextView balance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,33 +91,33 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 
 
     private void setValue(OrderPayBean data) {
-        Glide.with(OrderConfirmActivity.this).load(data.image).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
 
         name.setText(data.name);
-        project.setText(getResources().getString(R.string.subject_type) + data.subject);
-        grade.setText(getResources().getString(R.string.grade_type) + data.grade);
-        classnumber.setText(getResources().getString(R.string.total_class_hours) + data.classnumber);
-        teacher.setText(getResources().getString(R.string.teacher) + data.teacher);
-        try {
-            classstarttime.setText(getResources().getString(R.string.class_start_time) + parse2.format(parse1.parse(data.classstarttime)));
-            classendtime.setText(getResources().getString(R.string.class_end_time) + parse2.format(parse1.parse(data.classendtime)));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        status.setText(getResources().getString(R.string.current_status) + getStatus(data.status));
+        project.setText(data.subject);
+        grade.setText(data.grade);
+        classnumber.setText("共" + data.classnumber + "课");
+        teacher.setText(data.teacher);
 
         String price = df.format(data.current_price);
         if (price.startsWith(".")) {
             price = "0" + price;
         }
-        OrderConfirmActivity.this.price.setText(getResourceString(R.string.order_price) + price);
+        OrderConfirmActivity.this.price.setText(price + "元");
         payprice.setText(" " + price + " ");
         if (!StringUtils.isNullOrBlanK(coupon)) {
             couponLayout.setVisibility(View.GONE);
             couponCode.setText(coupon);
             couponCode.clearFocus();
             verifyCoupon();
+        }
+
+        CashAccountBean cashAccount = BaseApplication.getCashAccount();
+        if (cashAccount != null && cashAccount.getData() != null) {
+            String currentBalance = cashAccount.getData().getBalance();
+            if (currentBalance.startsWith(".")) {
+                currentBalance = "0" + currentBalance;
+            }
+            balance.setText("当前余额" + currentBalance + "元");
         }
     }
 
@@ -243,17 +236,14 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     public void initView() {
 
         name = (TextView) findViewById(R.id.name);
-        image = (ImageView) findViewById(R.id.image);
         project = (TextView) findViewById(R.id.project);
         grade = (TextView) findViewById(R.id.grade);
         teacher = (TextView) findViewById(R.id.teacher);
         classnumber = (TextView) findViewById(R.id.class_number);
-        classstarttime = (TextView) findViewById(R.id.class_start_time);
-        classendtime = (TextView) findViewById(R.id.class_end_time);
-        status = (TextView) findViewById(R.id.status);
         wechatLayout = findViewById(R.id.wechat_layout);
         alipayLayout = findViewById(R.id.alipay_layout);
         accountLayout = findViewById(R.id.account_layout);
+        balance = (TextView) findViewById(R.id.balance);
 
         couponLayout = findViewById(R.id.coupon_layout);
         couponLayout.setOnClickListener(new View.OnClickListener() {
@@ -286,27 +276,27 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onClick(View v) {
                 payType = "alipay";
-                aliPay.setImageResource(R.drawable.shape_select_circle_select);
-                wechatPay.setImageResource(R.drawable.shape_select_circle_normal);
-                account.setImageResource(R.drawable.shape_select_circle_normal);
+                aliPay.setImageResource(R.mipmap.pay_status_selected);
+                wechatPay.setImageResource(R.mipmap.pay_status_normal);
+                account.setImageResource(R.mipmap.pay_status_normal);
             }
         });
         wechatLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 payType = "weixin";
-                wechatPay.setImageResource(R.drawable.shape_select_circle_select);
-                aliPay.setImageResource(R.drawable.shape_select_circle_normal);
-                account.setImageResource(R.drawable.shape_select_circle_normal);
+                wechatPay.setImageResource(R.mipmap.pay_status_selected);
+                aliPay.setImageResource(R.mipmap.pay_status_normal);
+                account.setImageResource(R.mipmap.pay_status_normal);
             }
         });
         accountLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 payType = "account";
-                account.setImageResource(R.drawable.shape_select_circle_select);
-                aliPay.setImageResource(R.drawable.shape_select_circle_normal);
-                wechatPay.setImageResource(R.drawable.shape_select_circle_normal);
+                account.setImageResource(R.mipmap.pay_status_selected);
+                aliPay.setImageResource(R.mipmap.pay_status_normal);
+                wechatPay.setImageResource(R.mipmap.pay_status_normal);
             }
         });
     }
