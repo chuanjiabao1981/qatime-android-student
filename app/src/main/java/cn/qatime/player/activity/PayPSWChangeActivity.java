@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,6 +23,7 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.view.CustomKeyboard;
 import cn.qatime.player.view.PayEditText;
+import libraryextra.utils.SPUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -112,20 +114,21 @@ public class PayPSWChangeActivity extends BaseActivity implements View.OnClickLi
             }
         });
     }
+
     @Override
     public void backClick(View v) {
-        if(over.getVisibility() == View.INVISIBLE ){
+        if (over.getVisibility() == View.INVISIBLE) {
             super.backClick(v);
-        }else {
+        } else {
             reset();
         }
     }
 
     @Override
     public void onBackPressed() {
-        if(over.getVisibility() == View.INVISIBLE ){
+        if (over.getVisibility() == View.INVISIBLE) {
             super.onBackPressed();
-        }else {
+        } else {
             reset();
         }
     }
@@ -135,7 +138,7 @@ public class PayPSWChangeActivity extends BaseActivity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.over:
                 if (!tempPassword.equals(payEditText.getText())) {
-                    Toast.makeText(PayPSWChangeActivity.this,R.string.password_and_repassword_are_incongruous, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PayPSWChangeActivity.this, R.string.password_and_repassword_are_incongruous, Toast.LENGTH_SHORT).show();
                     reset();
                     return;
                 }
@@ -146,6 +149,8 @@ public class PayPSWChangeActivity extends BaseActivity implements View.OnClickLi
                         new VolleyListener(PayPSWChangeActivity.this) {
                             @Override
                             protected void onSuccess(JSONObject response) {
+                                SPUtils.put(PayPSWChangeActivity.this, "pay_pwd_change_at", System.currentTimeMillis());
+                                EventBus.getDefault().post("pay_pwd_change");
                                 Toast.makeText(PayPSWChangeActivity.this, R.string.change_pay_password_success, Toast.LENGTH_SHORT).show();
                                 BaseApplication.getCashAccount().getData().setHas_password(true);
                                 finish();
