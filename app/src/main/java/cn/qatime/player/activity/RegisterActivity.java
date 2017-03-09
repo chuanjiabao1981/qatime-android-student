@@ -209,7 +209,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             return;
         }
         if (!StringUtils.isGoodPWD(password.getText().toString().trim())) {
-            Toast.makeText(this, getResources().getString(R.string.password_6_16), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getResources().getString(R.string.password_format_error), Toast.LENGTH_LONG).show();
             next.setClickable(true);
             return;
         }
