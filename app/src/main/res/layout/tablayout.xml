@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/tab_menu_height"
     android:layout_width="match_parent"
     android:background="@drawable/shape_menu_tab"
     android:gravity="center_vertical"
-    android:orientation="horizontal"
-    style="@style/tab_menu_height">
+    android:orientation="horizontal">
 
     <LinearLayout
-        android:layout_width="0dp"
         style="@style/tab_menu_height"
+        android:layout_width="0dp"
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical">
@@ -20,15 +20,16 @@
 
         <TextView
             android:id="@+id/tab_text1"
+            style="@style/tab_menu_text_color_select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:text="@string/home_page"
-            style="@style/tab_menu_text_color_select" />
+            android:text="@string/home_page" />
     </LinearLayout>
+
     <LinearLayout
-        android:layout_width="0dp"
         style="@style/tab_menu_height"
+        android:layout_width="0dp"
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical">
@@ -40,15 +41,16 @@
 
         <TextView
             android:id="@+id/tab_text2"
+            style="@style/tab_menu_text_color_normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:text="@string/Remedial_class"
-            style="@style/tab_menu_text_color_normal" />
+            android:text="@string/Remedial_class" />
     </LinearLayout>
+
     <LinearLayout
-        android:layout_width="0dp"
         style="@style/tab_menu_height"
+        android:layout_width="0dp"
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical">
@@ -60,54 +62,70 @@
 
         <TextView
             android:id="@+id/tab_text3"
+            style="@style/tab_menu_text_color_normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:text="@string/time_table"
-            style="@style/tab_menu_text_color_normal" />
+            android:text="@string/time_table" />
     </LinearLayout>
 
-    <!--<LinearLayout-->
-        <!--android:layout_width="0dp"-->
-        <!--style="@style/tab_menu_height"-->
-        <!--android:layout_weight="1"-->
-        <!--android:gravity="center"-->
-        <!--android:orientation="vertical">-->
+    <LinearLayout
+        style="@style/tab_menu_height"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <!--<ImageView-->
-            <!--android:id="@+id/tab_img3"-->
-            <!--style="@style/tab_menu_icon_size"-->
-            <!--android:src="@mipmap/tab_message_2" />-->
+        <RelativeLayout
+            android:id="@+id/message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-        <!--<TextView-->
-            <!--android:id="@+id/tab_text3"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:gravity="center_vertical"-->
-            <!--android:text="@string/message"-->
-            <!--style="@style/tab_menu_text_color_normal" />-->
-    <!--</LinearLayout>-->
+            <ImageView
+                android:id="@+id/tab_img4"
+                style="@style/tab_menu_icon_size"
+                android:src="@mipmap/tab_message_2" />
+
+
+            <ImageView
+                android:id="@+id/message_x"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_alignRight="@id/tab_img4"
+                android:layout_alignTop="@id/tab_img4"
+                android:visibility="gone"
+                android:src="@mipmap/message_x" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tab_text4"
+            style="@style/tab_menu_text_color_normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/message" />
+    </LinearLayout>
 
 
     <LinearLayout
-        android:layout_width="0dp"
         style="@style/tab_menu_height"
+        android:layout_width="0dp"
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/tab_img4"
-            android:src="@mipmap/tab_person_2"
-            style="@style/tab_menu_icon_size" />
+            android:id="@+id/tab_img5"
+            style="@style/tab_menu_icon_size"
+            android:src="@mipmap/tab_person_2" />
 
         <TextView
-            android:id="@+id/tab_text4"
+            android:id="@+id/tab_text5"
+            style="@style/tab_menu_text_color_normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:text="@string/individual"
-            style="@style/tab_menu_text_color_normal" />
+            android:text="@string/individual" />
     </LinearLayout>
 
 </LinearLayout>

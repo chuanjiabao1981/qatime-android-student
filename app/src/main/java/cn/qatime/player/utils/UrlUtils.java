@@ -2,6 +2,7 @@ package cn.qatime.player.utils;
 
 import com.orhanobut.logger.Logger;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -38,6 +39,8 @@ public class UrlUtils {
     public static String urlPayResult = baseUrl + "api/v1/payment/orders/";
     //订单列表
     public static String urlPaylist = baseUrl + "api/v1/payment/orders";
+    //优惠券
+    public static String urlCoupon = baseUrl + "api/v1/payment/coupons/";
     //获取验证码
     public static String urlGetCode = baseUrl + "api/v1/captcha";
     //用户信息
@@ -85,5 +88,20 @@ public class UrlUtils {
             }
         }
         return sb.toString();
+    }
+
+    public static Map<String, Object> getUrlParams(String param) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        if ("".equals(param) || null == param) {
+            return map;
+        }
+        String[] params = param.split("&");
+        for (String param1 : params) {
+            String[] p = param1.split("=");
+            if (p.length == 2) {
+                map.put(p[0], p[1]);
+            }
+        }
+        return map;
     }
 }

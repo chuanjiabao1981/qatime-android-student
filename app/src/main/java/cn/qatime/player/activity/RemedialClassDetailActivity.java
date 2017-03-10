@@ -210,16 +210,16 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
                             try {
                                 if ("init".equals(data.getData().getStatus()) || "published".equals(data.getData().getStatus())) {
-                                    long time =parse.parse(data.getData().getLive_start_time()).getTime()- System.currentTimeMillis() ;
+                                    long time = parse.parse(data.getData().getLive_start_time()).getTime() - System.currentTimeMillis();
                                     int value = 0;
                                     if (time > 0) {
                                         value = (int) (time / (1000 * 3600 * 24));
                                     }
                                     timeToStart.setVisibility(View.VISIBLE);
                                     progress.setVisibility(View.GONE);
-                                    if(value!=0){
+                                    if (value != 0) {
                                         timeToStart.setText("[" + getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day) + "]");
-                                    }else{
+                                    } else {
                                         timeToStart.setText(R.string.ready_to_start);
                                     }
                                     layoutView.setBackgroundColor(0xff00d564);
@@ -311,7 +311,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     }
                 } else {
                     intent = new Intent(RemedialClassDetailActivity.this, LoginActivity2.class);
-                    intent.putExtra("activity_action",Constant.LoginAction.toRemedialClassDetail);
+                    intent.putExtra("activity_action", Constant.LoginAction.toRemedialClassDetail);
                     startActivity(intent);
                 }
                 break;
@@ -320,8 +320,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     joinAudition();
                 } else {
                     intent = new Intent(RemedialClassDetailActivity.this, LoginActivity2.class);
-                    intent.putExtra("activity_action",Constant.LoginAction.toRemedialClassDetail);
-                    startActivity(intent);                }
+                    intent.putExtra("activity_action", Constant.LoginAction.toRemedialClassDetail);
+                    startActivity(intent);
+                }
                 break;
             case R.id.start_study:
                 if (BaseApplication.isLogined()) {
@@ -337,8 +338,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     }
                 } else {
                     intent = new Intent(RemedialClassDetailActivity.this, LoginActivity2.class);
-                    intent.putExtra("activity_action",Constant.LoginAction.toRemedialClassDetail);
-                    startActivity(intent);                }
+                    intent.putExtra("activity_action", Constant.LoginAction.toRemedialClassDetail);
+                    startActivity(intent);
+                }
                 break;
             case R.id.pay:
                 if (BaseApplication.isLogined()) {
@@ -374,8 +376,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     }
                 } else {
                     intent = new Intent(RemedialClassDetailActivity.this, LoginActivity2.class);
-                    intent.putExtra("activity_action",Constant.LoginAction.toRemedialClassDetail);
-                    intent.putExtra("id",id);
+                    intent.putExtra("activity_action", Constant.LoginAction.toRemedialClassDetail);
+                    intent.putExtra("id", id);
                     startActivity(intent);
                 }
                 break;
@@ -385,16 +387,13 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     private void payRemedial() {
         Intent intent = new Intent(RemedialClassDetailActivity.this, OrderConfirmActivity.class);
         intent.putExtra("id", id);
+        intent.putExtra("coupon", getIntent().getStringExtra("coupon"));
         OrderPayBean bean = new OrderPayBean();
-        bean.image = data.getData().getPublicize();
         bean.name = data.getData().getName();
         bean.subject = data.getData().getSubject();
         bean.grade = data.getData().getGrade();
         bean.classnumber = data.getData().getPreset_lesson_count();
         bean.teacher = data.getData().getTeacher().getName();
-        bean.classendtime = data.getData().getLive_end_time();
-        bean.status = data.getData().getStatus();
-        bean.classstarttime = data.getData().getLive_start_time();
         bean.current_price = data.getData().getCurrent_price();
 
         intent.putExtra("data", bean);

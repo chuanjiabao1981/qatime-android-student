@@ -625,5 +625,8 @@
     <string name="voice_to_text">转文字</string>
     <string name="trans_voice_failed">语音转化失败</string>
     <string name="ready_to_start">[即将开课]</string>
+    <string name="msg_camera_framework_bug">抱歉，Android相机出现问题。您可能需要重启设备。</string>
+    <string name="not_set">未设置</string>
+    <string name="new_pay_password_invalid">新密码%1$d小时后可用</string>
     <string name="hint_choose_region">请选择您所在的区域</string>
 </resources>
