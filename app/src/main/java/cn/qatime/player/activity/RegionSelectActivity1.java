@@ -80,7 +80,7 @@ public class RegionSelectActivity1 extends BaseActivity {
                                 }
                             });
 
-                                    adapter.notifyDataSetChanged();
+                            adapter.notifyDataSetChanged();
                         }
                     }
 
@@ -110,7 +110,7 @@ public class RegionSelectActivity1 extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         Intent data = new Intent();
-                        data.putExtra("region",location.getText().toString());
+                        data.putExtra("region", location.getText().toString());
                         setResult(Constant.RESPONSE_REGION_SELECT, data);
                         finish();
                     }

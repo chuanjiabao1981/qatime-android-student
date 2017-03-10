@@ -78,7 +78,7 @@ public class RegionSelectActivity2 extends BaseActivity {
                         if (cityBean != null && cityBean.getData() != null) {
                             citiesList.clear();
                             for (CityBean.Data data : cityBean.getData()) {
-                                if (data.getProvince_id().equals(provincesId)){
+                                if (data.getProvince_id().equals(provincesId)) {
                                     citiesList.add(data);
                                 }
                             }
