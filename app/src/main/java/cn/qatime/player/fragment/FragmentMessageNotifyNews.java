@@ -77,8 +77,8 @@ public class FragmentMessageNotifyNews extends BaseFragment {
             public void convert(ViewHolder helper, SystemNotifyBean.DataBean item, int position) {
 //                &#8195;
                 String blank = "\u3000\u3000  ";
-                if (item != null && !StringUtils.isNullOrBlanK(item.getNotificationable_type())) {
-                    switch (item.getNotificationable_type()) {
+                if (item != null && !StringUtils.isNullOrBlanK(item.getType())) {
+                    switch (item.getType()) {
                         case "live_studio/course":
                             if ("start".equals(item.getAction_name())) {
                                 helper.setText(R.id.type, " 开课 ", 0xff00a0e9);
@@ -178,7 +178,7 @@ public class FragmentMessageNotifyNews extends BaseFragment {
                     courseId = item.getLink().replace("live_studio/course:", "");
                 }
                 Intent intent;
-                switch (item.getNotificationable_type()) {
+                switch (item.getType()) {
                     case "live_studio/course":
                         if ("start".equals(item.getAction_name())) {
                             intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
