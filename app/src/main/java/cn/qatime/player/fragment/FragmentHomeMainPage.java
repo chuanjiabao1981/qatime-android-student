@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -48,6 +51,7 @@ import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.BannerRecommendBean;
 import cn.qatime.player.bean.ClassRecommendBean;
 import cn.qatime.player.bean.TeacherRecommendBean;
+import cn.qatime.player.holder.BaseViewHolder;
 import cn.qatime.player.qrcore.core.CaptureActivity;
 import cn.qatime.player.utils.AMapLocationUtils;
 import cn.qatime.player.utils.Constant;
@@ -55,9 +59,12 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.CityBean;
+import libraryextra.bean.GradeBean;
 import libraryextra.transformation.GlideCircleTransform;
+import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.ScreenUtils;
+import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.TagViewPager;
@@ -70,11 +77,10 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private TagViewPager tagViewpagerImg;
     private GridView gridviewTeacher;
     private View allClass;
-    private GridView gridviewClass;
+    private ListView listViewClass;
     private List<ClassRecommendBean.DataBean> listRecommendClass = new ArrayList<>();
     private BaseAdapter classAdapter;
     private View scan;
-    //    private ImageView message_x;
     private ArrayList<TeacherRecommendBean.DataBean> listRecommendTeacher = new ArrayList<>();
     private CommonAdapter<TeacherRecommendBean.DataBean> teacherAdapter;
     private GridView gridviewSubject;
@@ -84,10 +90,12 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private CityBean.Data locationCity;
     private AMapLocationUtils utils;
     private List<BannerRecommendBean.DataBean> listBanner = new ArrayList<>();
-//    private View count;
 
     private BannerRecommendBean.DataBean noBanner;
     private PullToRefreshScrollView scrollView;
+    private RecyclerView recyclerGrade;
+    private List<String> gradeList;
+    private RecyclerView.Adapter gradeAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -134,21 +142,51 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         cityName = (TextView) view.findViewById(R.id.city_name);
         allClass = view.findViewById(R.id.all_class);
         citySelect = view.findViewById(R.id.city_select);
-        gridviewClass = (GridView) view.findViewById(R.id.gridview_class);
+        listViewClass = (ListView) view.findViewById(R.id.gridview_class);
         scan = view.findViewById(R.id.scan);
-//        message_x = (ImageView) view.findViewById(R.id.message_x);
-//        count = view.findViewById(count);
-
-        setCity();
+        recyclerGrade = (RecyclerView) view.findViewById(R.id.recycler_grade);
 
         initTagImg();
+        initGrade();
         initTagViewpagerSubject();
         initGridTeacher();
         initGridClass();
+
+        setCity();
+
         initLocationData();
         allClass.setOnClickListener(this);
         scan.setOnClickListener(this);
         citySelect.setOnClickListener(this);
+    }
+
+    private void initGrade() {
+        gradeList = new ArrayList<>();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        recyclerGrade.setLayoutManager(layoutManager);
+        gradeAdapter = new RecyclerView.Adapter() {
+            @Override
+            public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                TextView textView = new TextView(getActivity());
+                return new BaseViewHolder(textView);
+            }
+
+            @Override
+            public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+                String info = gradeList.get(position);
+                TextView textView = (TextView) holder.itemView;
+                textView.setText(info);
+                textView.setPadding(30, 15, 30, 15);
+                textView.setTextColor(0xffbb8888);
+            }
+
+            @Override
+            public int getItemCount() {
+                return gradeList.size();
+            }
+        };
+        recyclerGrade.setAdapter(gradeAdapter);
     }
 
 
@@ -157,6 +195,15 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         initBannerData();
         initTeacherData();
         initClassData();
+        initGradeData();
+    }
+
+    private void initGradeData() {
+        String gradeString = FileUtil.readFile(getActivity().getFilesDir() + "/grade.txt");
+        if (!StringUtils.isNullOrBlanK(gradeString)) {
+            gradeList = JsonUtils.objectFromJson(gradeString, GradeBean.class).getData().getGrades();
+            gradeAdapter.notifyDataSetChanged();
+        }
     }
 
     private void initTagImg() {
@@ -369,8 +416,8 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 }
             }
         };
-        gridviewClass.setAdapter(classAdapter);
-        gridviewClass.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listViewClass.setAdapter(classAdapter);
+        listViewClass.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (listRecommendClass.get(position) != null) {

@@ -34,7 +34,9 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
@@ -79,7 +81,7 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
     private Profile profile;
     private CustomProgressDialog progress;
     private AlertDialog alertDialog;
-    private GradeBean gradeBean;
+    private List<String> grades;
 
     private void assignViews() {
         phone = (EditText) findViewById(R.id.phone);
@@ -133,9 +135,11 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
         setTitles(getString(R.string.bind));
         openid = getIntent().getStringExtra("openid");
         assignViews();
+        grades = new ArrayList<>();
         String gradeString = FileUtil.readFile(getFilesDir() + "/grade.txt");
         if (!StringUtils.isNullOrBlanK(gradeString)) {
-            gradeBean = JsonUtils.objectFromJson(gradeString, GradeBean.class);
+            GradeBean gradeBean = JsonUtils.objectFromJson(gradeString, GradeBean.class);
+            grades = gradeBean.getData().getGrades();
         }
     }
 
@@ -167,8 +171,8 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
             final View view = View.inflate(WeChatBindActivity.this, R.layout.dialog_grade_picker, null);
             final WheelView wheelView = (WheelView) view.findViewById(R.id.grade);
             wheelView.setOffset(1);
-            wheelView.setItems(gradeBean.getData().getGrades());
-            wheelView.setSeletion(gradeBean.getData().getGrades().indexOf(grade.getText()));
+            wheelView.setItems(grades);
+            wheelView.setSeletion(grades.indexOf(grade.getText()));
             wheelView.setonItemClickListener(new WheelView.OnItemClickListener() {
                 @Override
                 public void onItemClick() {
