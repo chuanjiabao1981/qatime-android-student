@@ -360,7 +360,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".activity.ScreenGradeAndSubjectActivity"
+            android:name=".activity.FilterCourseContentActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity

@@ -5,7 +5,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/layout_backbar" />
+    <RelativeLayout style="@style/top_style">
+
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/shape_top_tab" />
+
+        <TextView
+            style="@style/backbar_text_style"
+            android:layout_centerInParent="true"
+            android:text="选课" />
+    </RelativeLayout>
 
     <com.zhy.android.percent.support.PercentLinearLayout
         android:layout_width="match_parent"
@@ -17,12 +28,18 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:background="#f2f2f2"
+            android:cacheColorHint="#00000000"
+            android:divider="#00000000"
+            android:dividerHeight="0dp"
             app:layout_widthPercent="35%" />
 
         <GridView
             android:id="@+id/gridView"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:background="#fff"
+            android:listSelector="#00000000"
+            android:numColumns="2"
             app:layout_widthPercent="65%" />
     </com.zhy.android.percent.support.PercentLinearLayout>
 </LinearLayout>

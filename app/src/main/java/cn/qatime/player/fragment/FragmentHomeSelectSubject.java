@@ -1,5 +1,6 @@
 package cn.qatime.player.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.FilterCourseContentActivity;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
@@ -31,7 +33,7 @@ public class FragmentHomeSelectSubject extends BaseFragment {
     private List<String> gradeData = new ArrayList<>();
     private List<String> subjectData = new ArrayList<>();
     private int gradeChecked = 0;
-    private int subjectChecked = 0;
+//    private int subjectChecked = 0;
 
     private void assignViews(View view) {
         listview = (ListView) view.findViewById(R.id.listview);
@@ -101,6 +103,15 @@ public class FragmentHomeSelectSubject extends BaseFragment {
             }
         };
         gridView.setAdapter(gridAdapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), FilterCourseContentActivity.class);
+                intent.putExtra("grade", gradeData.get(gradeChecked));
+                intent.putExtra("subject", subjectData.get(position));
+                startActivity(intent);
+            }
+        });
         return view;
     }
 }
