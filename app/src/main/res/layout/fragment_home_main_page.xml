@@ -83,12 +83,13 @@
                 android:id="@+id/recycler_grade"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#fff"
                 android:orientation="horizontal"
+                android:paddingBottom="9dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:paddingBottom="9dp"
-                android:paddingTop="9dp"
-                android:background="#fff" />
+                android:paddingTop="9dp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -126,20 +127,18 @@
                     android:textColor="#999"
                     android:textSize="12sp" />
             </LinearLayout>
-            <!--待删除 改成直播-->
-            <libraryextra.view.GridViewForScrollView
-                android:id="@+id/gridview_subject"
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_today"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#fff"
-                android:gravity="center"
-                android:numColumns="5"
-                android:paddingBottom="10dp"
-                android:paddingLeft="9dp"
-                android:paddingRight="9dp"
-                android:paddingTop="10dp"
-                android:verticalSpacing="6dp" />
-            <!--待删除-->
+                android:orientation="horizontal"
+                android:paddingBottom="9dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="9dp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -177,9 +176,18 @@
                     android:textColor="#999"
                     android:textSize="12sp" />
             </LinearLayout>
+
             <libraryextra.view.ListViewForScrollView
+                android:id="@+id/listview_class"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:background="#ffffff"
+                android:cacheColorHint="#00000000"
+                android:divider="#f7f7f7"
+                android:dividerHeight="1dp"
+                android:gravity="center"
+                android:listSelector="#00000000"
+                android:scrollbars="none" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -269,15 +277,15 @@
             </LinearLayout>
 
             <libraryextra.view.ListViewForScrollView
-                android:id="@+id/gridview_class"
+                android:id="@+id/listview_class1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#ffffff"
                 android:cacheColorHint="#00000000"
-                android:gravity="center"
-                android:listSelector="#00000000"
                 android:divider="#f7f7f7"
                 android:dividerHeight="1dp"
+                android:gravity="center"
+                android:listSelector="#00000000"
                 android:scrollbars="none" />
 
             <LinearLayout
@@ -319,14 +327,15 @@
             </LinearLayout>
 
             <libraryextra.view.ListViewForScrollView
+                android:id="@+id/listview_class2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#ffffff"
                 android:cacheColorHint="#00000000"
-                android:gravity="center"
-                android:listSelector="#00000000"
                 android:divider="#f7f7f7"
                 android:dividerHeight="1dp"
+                android:gravity="center"
+                android:listSelector="#00000000"
                 android:scrollbars="none" />
         </LinearLayout>
     </com.handmark.pulltorefresh.library.PullToRefreshScrollView>

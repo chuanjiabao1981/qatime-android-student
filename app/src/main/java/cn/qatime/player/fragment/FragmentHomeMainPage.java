@@ -2,6 +2,7 @@ package cn.qatime.player.fragment;
 
 
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -36,7 +37,6 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,10 +80,11 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private ListView listViewClass;
     private List<ClassRecommendBean.DataBean> listRecommendClass = new ArrayList<>();
     private BaseAdapter classAdapter;
+    private BaseAdapter classAdapter1;
+    private BaseAdapter classAdapter2;
     private View scan;
     private ArrayList<TeacherRecommendBean.DataBean> listRecommendTeacher = new ArrayList<>();
     private CommonAdapter<TeacherRecommendBean.DataBean> teacherAdapter;
-    private GridView gridviewSubject;
     private View citySelect;
     private TextView cityName;
     private List<CityBean.Data> listCity;
@@ -96,6 +97,11 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private RecyclerView recyclerGrade;
     private List<String> gradeList;
     private RecyclerView.Adapter gradeAdapter;
+    private RecyclerView recyclerToday;
+    private RecyclerView.Adapter todayAdapter;
+    private List<String> todayList;
+    private ListView listViewClass1;
+    private ListView listViewClass2;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -138,27 +144,138 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
         tagViewpagerImg = (TagViewPager) view.findViewById(R.id.tag_viewpager_img);
         gridviewTeacher = (GridView) view.findViewById(R.id.gridview_teacher);
-        gridviewSubject = (GridView) view.findViewById(R.id.gridview_subject);
         cityName = (TextView) view.findViewById(R.id.city_name);
         allClass = view.findViewById(R.id.all_class);
         citySelect = view.findViewById(R.id.city_select);
-        listViewClass = (ListView) view.findViewById(R.id.gridview_class);
+        listViewClass = (ListView) view.findViewById(R.id.listview_class);
+        listViewClass1 = (ListView) view.findViewById(R.id.listview_class1);
+        listViewClass2 = (ListView) view.findViewById(R.id.listview_class2);
         scan = view.findViewById(R.id.scan);
         recyclerGrade = (RecyclerView) view.findViewById(R.id.recycler_grade);
+        recyclerToday = (RecyclerView) view.findViewById(R.id.recycler_today);
 
-        initTagImg();
+        listRecommendClass.add(null);
+        listRecommendClass.add(null);
+        listRecommendClass.add(null);
+        listRecommendClass.add(null);
+        listRecommendClass.add(null);
+        listRecommendClass.add(null);
+
+        initBanner();
         initGrade();
-        initTagViewpagerSubject();
-        initGridTeacher();
-        initGridClass();
+        //todo 今日直播 精选内容
+        initToady();
+        initEssence();
+
+        initTeacher();
+        //todo 近期开课 新课发布
+        initEssence1();
+        initEssence2();
 
         setCity();
-
         initLocationData();
         allClass.setOnClickListener(this);
         scan.setOnClickListener(this);
         citySelect.setOnClickListener(this);
     }
+
+    private void initEssence2() {
+        classAdapter2 = new CommonAdapter<ClassRecommendBean.DataBean>(getContext(), listRecommendClass, R.layout.item_class_recommend) {
+            @Override
+            public int getCount() {
+                return 2;
+            }
+
+            @Override
+            public void convert(ViewHolder holder, ClassRecommendBean.DataBean item, int position) {
+
+            }
+        };
+        listViewClass2.setAdapter(classAdapter2);
+        listViewClass2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
+    }
+
+    private void initEssence1() {
+        classAdapter1 = new CommonAdapter<ClassRecommendBean.DataBean>(getContext(), listRecommendClass, R.layout.item_class_recommend) {
+            @Override
+            public int getCount() {
+                return 2;
+            }
+
+            @Override
+            public void convert(ViewHolder holder, ClassRecommendBean.DataBean item, int position) {
+
+            }
+        };
+        listViewClass1.setAdapter(classAdapter1);
+        listViewClass1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
+    }
+
+    private void initEssence() {
+        classAdapter = new CommonAdapter<ClassRecommendBean.DataBean>(getContext(), listRecommendClass, R.layout.item_class_recommend) {
+            @Override
+            public int getCount() {
+                return 4;
+            }
+
+            @Override
+            public void convert(ViewHolder holder, ClassRecommendBean.DataBean item, int position) {
+            }
+        };
+        listViewClass.setAdapter(classAdapter);
+        listViewClass.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
+    }
+
+    private void initToady() {
+        todayList = new ArrayList<>();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        recyclerToday.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                outRect.left = 30;
+                outRect.right = 30;
+                outRect.bottom = 0;
+                outRect.top = 0;
+            }
+        });
+        recyclerToday.setLayoutManager(layoutManager);
+        todayAdapter = new RecyclerView.Adapter() {
+            @Override
+            public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                View item = View.inflate(getActivity(),R.layout.item_home_today,null);
+                return new BaseViewHolder(item);
+            }
+
+            @Override
+            public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+            }
+
+            @Override
+            public int getItemCount() {
+//                return todayList.size();
+                return 6;
+            }
+        };
+        recyclerToday.setAdapter(todayAdapter);
+    }
+
 
     private void initGrade() {
         gradeList = new ArrayList<>();
@@ -192,10 +309,11 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
     private void setCity() {
         cityName.setText(BaseApplication.getCurrentCity().getName());
+
         initBannerData();
-        initTeacherData();
-        initClassData();
         initGradeData();
+        initTeacherData();
+        // TODO: 2017/3/15 initData
     }
 
     private void initGradeData() {
@@ -206,7 +324,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         }
     }
 
-    private void initTagImg() {
+    private void initBanner() {
         ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()), ScreenUtils.getScreenWidth(getActivity()) / 3);
         tagViewpagerImg.setLayoutParams(params);
         noBanner = new BannerRecommendBean.DataBean();
@@ -271,34 +389,8 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         addToRequestQueue(request);
     }
 
-    private void initTagViewpagerSubject() {
-        String[] subject = getResources().getStringArray(R.array.subject);
-        final int[] icons = {R.mipmap.chinese, R.mipmap.math, R.mipmap.english, R.mipmap.physics, R.mipmap.chemistry, R.mipmap.biology, R.mipmap.history, R.mipmap.geography, R.mipmap.politics, R.mipmap.science};
-        final List<String> strings = Arrays.asList(subject);
-        gridviewSubject.setAdapter(new CommonAdapter<String>(getContext(), strings, R.layout.item_grid_subject) {
-            @Override
-            public int getCount() {
-                return strings.size();
-            }
 
-            @Override
-            public void convert(ViewHolder holder, String item, int position) {
-                String s = strings.get(position);
-                holder.setText(R.id.subject_text, s);
-                holder.setImageResource(R.id.subject_img, icons[position]);
-            }
-        });
-        gridviewSubject.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String s = strings.get(position);
-                MainActivity mainActivity = (MainActivity) getActivity();
-                mainActivity.setCurrentPosition(1, s);
-            }
-        });
-    }
-
-    private void initGridTeacher() {
+    private void initTeacher() {
         teacherAdapter = new CommonAdapter<TeacherRecommendBean.DataBean>(getContext(), listRecommendTeacher, R.layout.item_grid_teacher) {
             @Override
             public void convert(ViewHolder holder, TeacherRecommendBean.DataBean item, int position) {
