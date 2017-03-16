@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.base.BaseApplication;
+import libraryextra.utils.StringUtils;
 
 /**
  * @author luntify
@@ -32,6 +33,9 @@ public class DaYiJsonObjectRequest extends JsonObjectRequest {
     public Map<String, String> getHeaders() throws AuthFailureError {
         Map<String, String> map = new HashMap<>();
         map.put("Remember-Token", BaseApplication.getProfile().getToken());
+        if (StringUtils.isNullOrBlanK(BaseApplication.getProfile().getToken())){
+            Logger.e("token none**************************none");
+        }
         return map;
     }
 }
