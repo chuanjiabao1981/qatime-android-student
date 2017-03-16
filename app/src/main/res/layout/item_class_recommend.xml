@@ -8,6 +8,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="1px"
+        android:background="@drawable/text_stroke_background"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -23,15 +25,24 @@
                 android:src="@mipmap/photo" />
 
             <TextView
-                android:id="@+id/reason"
+                android:id="@+id/reason1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:background="#ff9999"
-                android:text="最热"
+                android:layout_alignParentBottom="true"
+                android:background="#9999ff"
+                android:text="试听"
                 android:textColor="#fff"
-                android:textSize="12dp"
-                android:visibility="invisible" />
+                android:textSize="12dp" />
+            <TextView
+                android:id="@+id/reason2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_toRightOf="@id/reason1"
+                android:background="#ff9999"
+                android:text="名师"
+                android:textColor="#fff"
+                android:textSize="12dp" />
         </RelativeLayout>
 
         <LinearLayout
