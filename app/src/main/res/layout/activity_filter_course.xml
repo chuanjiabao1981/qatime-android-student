@@ -16,6 +16,8 @@
             android:id="@+id/latest"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:background="#ccc"
+            android:drawableRight="@mipmap/arrow_down"
             android:gravity="center"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"

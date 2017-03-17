@@ -1,6 +1,7 @@
 package cn.qatime.player.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -35,6 +36,9 @@ public class FilterCourseContentActivity extends BaseActivity {
     private CommonAdapter<Object> adapter;
     private List<Object> datas = new ArrayList<>();
     private View screen;
+    private int latestResult = 1;//0上1下-1未选
+    private int popularityResult = -1;
+    private int priceResult = -1;
 
 
     @Override
@@ -49,26 +53,60 @@ public class FilterCourseContentActivity extends BaseActivity {
     }
 
     private void initView() {
-        TextView latest = (TextView) findViewById(R.id.latest);
-        TextView price = (TextView) findViewById(R.id.price);
-        TextView popularity = (TextView) findViewById(R.id.popularity);
+        final TextView latest = (TextView) findViewById(R.id.latest);
+        final TextView price = (TextView) findViewById(R.id.price);
+        final TextView popularity = (TextView) findViewById(R.id.popularity);
 
         latest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (latestResult == -1) {
+                    latestResult = 1;
+                } else if (latestResult == 0) {
+                    latestResult = 1;
+                } else if (latestResult == 1) {
+                    latestResult = 0;
+                }
+                priceResult = -1;
+                popularityResult = -1;
+                refreshState(latest, latestResult);
+                refreshState(price, priceResult);
+                refreshState(popularity, popularityResult);
             }
         });
         price.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (priceResult == -1) {
+                    priceResult = 1;
+                } else if (priceResult == 0) {
+                    priceResult = 1;
+                } else if (priceResult == 1) {
+                    priceResult = 0;
+                }
+                latestResult = -1;
+                popularityResult = -1;
+                refreshState(latest, latestResult);
+                refreshState(price, priceResult);
+                refreshState(popularity, popularityResult);
 
             }
         });
         popularity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (popularityResult == -1) {
+                    popularityResult = 1;
+                } else if (popularityResult == 0) {
+                    popularityResult = 1;
+                } else if (popularityResult == 1) {
+                    popularityResult = 0;
+                }
+                latestResult = -1;
+                priceResult = -1;
+                refreshState(latest, latestResult);
+                refreshState(price, priceResult);
+                refreshState(popularity, popularityResult);
             }
         });
         final TextView label = (TextView) findViewById(R.id.label);
@@ -152,6 +190,23 @@ public class FilterCourseContentActivity extends BaseActivity {
                 startActivityForResult(intent, Constant.REQUEST);
             }
         });
+    }
+
+    private void refreshState(TextView view, int result) {//-1未选 0上 1下
+        if (result == -1) {
+            view.setCompoundDrawables(null, null, null, null);
+            view.setBackgroundColor(0);
+        } else if (result == 0) {
+            Drawable up = getResources().getDrawable(R.mipmap.arrow_up);
+            up.setBounds(0, 0, up.getMinimumWidth(), up.getMinimumHeight());
+            view.setCompoundDrawables(null, null, up, null);
+            view.setBackgroundColor(0xffcccccc);
+        } else if (result == 1) {
+            Drawable down = getResources().getDrawable(R.mipmap.arrow_down);
+            down.setBounds(0, 0, down.getMinimumWidth(), down.getMinimumHeight());
+            view.setCompoundDrawables(null, null, down, null);
+            view.setBackgroundColor(0xffcccccc);
+        }
     }
 
     @Override
