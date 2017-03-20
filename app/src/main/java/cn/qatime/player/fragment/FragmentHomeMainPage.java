@@ -50,6 +50,7 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.BannerRecommendBean;
 import cn.qatime.player.bean.ClassRecommendBean;
+import cn.qatime.player.bean.RecentPublishedBean;
 import cn.qatime.player.bean.TeacherRecommendBean;
 import cn.qatime.player.holder.BaseViewHolder;
 import cn.qatime.player.qrcore.core.CaptureActivity;
@@ -154,12 +155,12 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         recyclerGrade = (RecyclerView) view.findViewById(R.id.recycler_grade);
         recyclerToday = (RecyclerView) view.findViewById(R.id.recycler_today);
 
-        listRecommendClass.add(null);
-        listRecommendClass.add(null);
-        listRecommendClass.add(null);
-        listRecommendClass.add(null);
-        listRecommendClass.add(null);
-        listRecommendClass.add(null);
+//        listRecommendClass.add(null);
+//        listRecommendClass.add(null);
+//        listRecommendClass.add(null);
+//        listRecommendClass.add(null);
+//        listRecommendClass.add(null);
+//        listRecommendClass.add(null);
 
         initBanner();
         initGrade();
@@ -258,7 +259,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         todayAdapter = new RecyclerView.Adapter() {
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View item = View.inflate(getActivity(),R.layout.item_home_today,null);
+                View item = View.inflate(getActivity(), R.layout.item_home_today, null);
                 return new BaseViewHolder(item);
             }
 
@@ -314,6 +315,35 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         initGradeData();
         initTeacherData();
         // TODO: 2017/3/15 initData
+        initRecentPublished();//最新发布,近期开课
+    }
+
+    private void initRecentPublished() {
+        Map<String, String> map = new HashMap<>();
+        map.put("count", "5");
+        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecentPublished, map), null,
+                new VolleyListener(getActivity()) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        RecentPublishedBean data = JsonUtils.objectFromJson(response.toString(), RecentPublishedBean.class);
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
     }
 
     private void initGradeData() {
