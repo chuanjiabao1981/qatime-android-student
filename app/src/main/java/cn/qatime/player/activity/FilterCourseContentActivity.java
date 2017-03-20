@@ -92,9 +92,9 @@ public class FilterCourseContentActivity extends BaseActivity {
             }
         } else if (priceResult != -1) {
             if (priceResult == 0) {
-                map.put("sort_by", "price");
+                map.put("sort_by", "left_price");
             } else {
-                map.put("sort_by", "price.asc");
+                map.put("sort_by", "left_price.asc");
             }
         } else if (popularityResult != -1) {
             if (popularityResult == 0) {
