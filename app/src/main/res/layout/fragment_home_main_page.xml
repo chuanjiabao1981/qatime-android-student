@@ -99,16 +99,10 @@
                 android:orientation="horizontal"
                 android:padding="10dp">
 
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="10dp"
-                    android:src="@mipmap/tutorship_recommend" />
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:layout_marginLeft="3dp"
                     android:text="今日直播"
                     android:textColor="#000"
                     android:textSize="16sp" />
@@ -135,8 +129,6 @@
                 android:background="#fff"
                 android:orientation="horizontal"
                 android:paddingBottom="9dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
                 android:paddingTop="9dp" />
 
             <LinearLayout
@@ -148,16 +140,10 @@
                 android:orientation="horizontal"
                 android:padding="10dp">
 
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="10dp"
-                    android:src="@mipmap/tutorship_recommend" />
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:layout_marginLeft="3dp"
                     android:text="精选内容"
                     android:textColor="#000"
                     android:textSize="16sp" />
@@ -198,16 +184,10 @@
                 android:orientation="horizontal"
                 android:paddingLeft="10dp">
 
-                <ImageView
-                    android:layout_width="14dp"
-                    android:layout_height="16dp"
-                    android:src="@mipmap/teacher_recommend" />
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="3dp"
                     android:text="@string/teacher_recommendation"
                     android:textColor="#000"
                     android:textSize="16sp" />
@@ -246,16 +226,10 @@
                 android:orientation="horizontal"
                 android:padding="10dp">
 
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="10dp"
-                    android:src="@mipmap/tutorship_recommend" />
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:layout_marginLeft="3dp"
                     android:text="近期开课"
                     android:textColor="#000"
                     android:textSize="16sp" />
@@ -297,16 +271,10 @@
                 android:orientation="horizontal"
                 android:padding="10dp">
 
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="10dp"
-                    android:src="@mipmap/tutorship_recommend" />
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:layout_marginLeft="3dp"
                     android:text="新课发布"
                     android:textColor="#000"
                     android:textSize="16sp" />

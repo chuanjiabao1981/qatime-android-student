@@ -1,6 +1,8 @@
 package cn.qatime.player.activity;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -59,6 +61,7 @@ import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.ImageUtil;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
@@ -77,19 +80,13 @@ public class MainActivity extends BaseFragmentActivity {
     public ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
     private int[] tab_img = {R.id.tab_img1, R.id.tab_img2, R.id.tab_img3, R.id.tab_img4, R.id.tab_img5};
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3, R.id.tab_text4, R.id.tab_text5};
-    private int tabImages[][] = {
-            {R.mipmap.tab_home_1, R.mipmap.tab_home_2},
-            {R.mipmap.tab_tutorship_1, R.mipmap.tab_tutorship_2},
-            {R.mipmap.tab_moments_1, R.mipmap.tab_moments_2},
-            {R.mipmap.tab_message_1, R.mipmap.tab_message_2},
-            {R.mipmap.tab_person_1, R.mipmap.tab_person_2}};
     private View message_x;
-//      创建观察者对象
+    //      创建观察者对象
     Observer<List<RecentContact>> messageObserver =
             new Observer<List<RecentContact>>() {
                 @Override
                 public void onEvent(List<RecentContact> messages) {
-                    if(fragmentlayout.getCurrentPosition()!=3){
+                    if (fragmentlayout.getCurrentPosition() != 3) {
                         refreshUnreadNum();
                     }
                 }
@@ -100,7 +97,7 @@ public class MainActivity extends BaseFragmentActivity {
      */
     private void refreshUnreadNum() {
         int unreadNum = NIMClient.getService(MsgService.class).getTotalUnreadCount();
-                    Logger.e("unreadNum" + unreadNum);
+        Logger.e("unreadNum" + unreadNum);
         message_x.setVisibility(unreadNum == 0 ? View.GONE : View.VISIBLE);
     }
 
@@ -167,10 +164,11 @@ public class MainActivity extends BaseFragmentActivity {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff666666);
-                ((ImageView) lastTabView.findViewById(tab_img[lastPosition])).setImageResource(tabImages[lastPosition][1]);
-                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffbe0b0b);
-                ((ImageView) currentTabView.findViewById(tab_img[position])).setImageResource(tabImages[position][0]);
-//                enableMsgNotification(false);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffff5842);
+                Drawable lastDrawable = ((ImageView) lastTabView.findViewById(tab_img[lastPosition])).getDrawable().mutate();
+                ((ImageView) lastTabView.findViewById(tab_img[lastPosition])).setImageDrawable(ImageUtil.tintDrawable(lastDrawable, ColorStateList.valueOf(0xff666666)));
+                Drawable currentDrawable = ((ImageView) currentTabView.findViewById(tab_img[position])).getDrawable().mutate();
+                ((ImageView) currentTabView.findViewById(tab_img[position])).setImageDrawable(ImageUtil.tintDrawable(currentDrawable, ColorStateList.valueOf(0xffff5842)));
                 if (position == 3) {
                     /**
                      * 设置最近联系人的消息为已读
@@ -188,7 +186,7 @@ public class MainActivity extends BaseFragmentActivity {
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout, 0x1000);
         fragmentlayout.getViewPager().setOffscreenPageLimit(4);
-        message_x=fragmentlayout.getTabLayout().findViewById(R.id.message_x);
+        message_x = fragmentlayout.getTabLayout().findViewById(R.id.message_x);
 
 
     }
@@ -202,7 +200,7 @@ public class MainActivity extends BaseFragmentActivity {
                     protected void onSuccess(JSONObject response) {
                         SystemNotifyBean data = JsonUtils.objectFromJson(response.toString(), SystemNotifyBean.class);
                         if (data != null && data.getData() != null) {
-                            for (SystemNotifyBean.DataBean bean : data.getData()){
+                            for (SystemNotifyBean.DataBean bean : data.getData()) {
                                 if (!bean.isRead()) {//有未读发送未读event
                                     EventBus.getDefault().postSticky("handleUPushMessage");
                                     break;
@@ -228,8 +226,6 @@ public class MainActivity extends BaseFragmentActivity {
         });
         addToRequestQueue(request);
     }
-
-
 
 
     @Override
@@ -514,7 +510,7 @@ public class MainActivity extends BaseFragmentActivity {
                 getAccount();
             }
         } else if (!StringUtils.isNullOrBlanK(event) && "handleUPushMessage".equals(event)) {
-            if(fragmentlayout.getCurrentPosition()!=3) {
+            if (fragmentlayout.getCurrentPosition() != 3) {
                 message_x.setVisibility(View.VISIBLE);
             }
         }

@@ -2,15 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="1px"
         android:background="@drawable/text_stroke_background"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="1px">
 
         <RelativeLayout
             android:id="@+id/rel_img"
@@ -18,7 +18,7 @@
             android:layout_height="100dp">
 
             <ImageView
-                android:id="@+id/class_recommend_img"
+                android:id="@+id/image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scaleType="fitXY"
@@ -33,6 +33,7 @@
                 android:text="试听"
                 android:textColor="#fff"
                 android:textSize="12dp" />
+
             <TextView
                 android:id="@+id/reason2"
                 android:layout_width="wrap_content"
@@ -48,9 +49,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="3dp"
             android:layout_gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <TextView
                 android:id="@+id/course_title"
@@ -64,6 +65,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="1" />
+
             <TextView
                 android:id="@+id/grade_subject"
                 android:layout_width="wrap_content"
@@ -71,11 +73,13 @@
                 android:text="高一语文"
                 android:textColor="#999"
                 android:textSize="12sp" />
+
             <TextView
+                android:layout_marginTop="5dp"
                 android:id="@+id/teacher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="荣思杰"
+                android:text="老师"
                 android:textColor="#999"
                 android:textSize="12sp" />
         </LinearLayout>
