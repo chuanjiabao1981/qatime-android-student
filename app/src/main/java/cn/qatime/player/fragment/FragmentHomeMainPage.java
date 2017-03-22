@@ -42,6 +42,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.CitySelectActivity;
 import cn.qatime.player.activity.MainActivity;
+import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
@@ -154,12 +155,10 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
         initBanner();
         initGrade();
-        //todo 今日直播 精选内容
         initToady();
         initEssence();
 
         initTeacher();
-        //todo 近期开课 新课发布
         initStartRank();
         initPublishedRank();
 
@@ -185,7 +184,10 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         listViewPublishedRank.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                int courseId = listPublishedRank.get(position).getId();
+                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                intent.putExtra("id",courseId);
+                startActivity(intent);
             }
         });
     }
@@ -205,7 +207,10 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         listViewStartRank.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                int courseId = listStartRank.get(position).getId();
+                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                intent.putExtra("id",courseId);
+                startActivity(intent);
             }
         });
     }
@@ -215,7 +220,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             @Override
             public void convert(ViewHolder holder, EssenceContentBean.DataBean item, int position) {
                 holder.setImageByUrl(R.id.image, item.getLogo_url(), R.mipmap.photo)
-                        .setText(R.id.course_title, item.getTitle())
+                        .setText(R.id.course_title, item.getLive_studio_course().getName())
                         .setText(R.id.grade_subject, item.getLive_studio_course().getGrade() + item.getLive_studio_course().getSubject())
                         .setText(R.id.teacher, item.getLive_studio_course().getTeacher_name());
                 holder.getView(R.id.reason1).setVisibility(StringUtils.isNullOrBlanK(item.getTag_one()) ? View.GONE : View.VISIBLE);
@@ -228,7 +233,10 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         listViewEssenceContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                int courseId = listEssenceContent.get(position).getLive_studio_course().getId();
+                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                intent.putExtra("id",courseId);
+                startActivity(intent);
             }
         });
     }
@@ -275,11 +283,20 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             }
 
             @Override
-            public void onBindViewHolder(BaseViewHolder holder, int position) {
+            public void onBindViewHolder(BaseViewHolder holder,final int position) {
                 LiveTodayBean.DataBean item = todayList.get(position);
                 holder.setText(R.id.teaching_time, item.getCourse().getName())
                         .setImageByUrl(R.id.image, item.getCourse().getPublicize(), R.mipmap.photo)
                         .setText(R.id.time, item.getLive_time());
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int courseId = todayList.get(position).getCourse().getId();
+                        Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                        intent.putExtra("id",courseId);
+                        startActivity(intent);
+                    }
+                });
             }
 
             @Override
@@ -304,12 +321,17 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             }
 
             @Override
-            public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
                 String info = gradeList.get(position);
                 TextView textView = (TextView) holder.itemView;
                 textView.setText(info);
                 textView.setPadding(30, 15, 30, 15);
                 textView.setTextColor(getResources().getColor(R.color.colorPrimary));
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                    }
+                });
             }
 
             @Override
