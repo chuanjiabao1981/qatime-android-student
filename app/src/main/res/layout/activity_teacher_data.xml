@@ -19,7 +19,8 @@
         <com.zhy.android.percent.support.PercentLinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="20dp">
 
             <RelativeLayout
                 android:layout_width="0dp"
@@ -35,171 +36,128 @@
                     android:src="@mipmap/teacher_data_background" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="5dp"
-                    android:gravity="bottom"
-                    android:orientation="horizontal">
+                    android:layout_centerInParent="true"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
-                    <com.zhy.android.percent.support.PercentLinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="horizontal"
-                        android:paddingLeft="10dp">
-
-                        <ImageView
-                            android:id="@+id/head_sculpture"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:scaleType="fitXY"
-                            android:src="@mipmap/error_header_rect"
-                            custom:layout_heightPercent="40%w"
-                            custom:layout_widthPercent="40%w" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="10dp"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:id="@+id/name"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textColor="#333"
-                                    android:textSize="18sp" />
-
-                                <TextView
-                                    android:id="@+id/sex"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="bottom"
-                                    android:text="♀"
-                                    android:textColor="#ff66ff"
-                                    android:textSize="16sp" />
-                            </LinearLayout>
-
-                            <View
-                                android:layout_width="0dp"
-                                android:layout_height="0dp"
-                                android:layout_weight="1" />
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:background="#ff9966"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:id="@+id/category"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textColor="#fff"
-                                    android:textSize="14sp" />
-
-                                <TextView
-                                    android:id="@+id/subject"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textColor="#fff"
-                                    android:textSize="14sp" />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </com.zhy.android.percent.support.PercentLinearLayout>
+                    <ImageView
+                        android:id="@+id/head_sculpture"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/error_header" />
 
                     <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="right"
-                        android:orientation="vertical"
-                        android:paddingRight="10dp">
-
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/teach_age"
+                            android:id="@+id/name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="教龄" />
-
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <View
-                                android:layout_width="0dp"
-                                android:layout_height="0dp"
-                                android:layout_weight="1" />
-
-                            <TextView
-                                android:id="@+id/province"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="河北" />
-
-                            <TextView
-                                android:id="@+id/city"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                            <TextView
-                                android:id="@+id/town"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
+                            android:text="名字"
+                            android:textColor="#333"
+                            android:textSize="18sp" />
 
                         <TextView
-                            android:id="@+id/school"
+                            android:id="@+id/sex"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:text="♀"
+                            android:textColor="#ff66ff"
+                            android:textSize="16sp" />
                     </LinearLayout>
                 </LinearLayout>
             </RelativeLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="基本资料"
+                android:textColor="#333"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/teach_age"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="教龄" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:paddingBottom="6dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="3dp"
-                    android:paddingTop="6dp"
-                    android:src="@mipmap/person_info"
-                    android:id="@+id/imageView4" />
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp">
 
                 <TextView
+                    android:id="@+id/category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="自我介绍"
-                    android:textColor="#333"
-                    android:textSize="16sp" />
+                    android:text="年级"
+                    android:textSize="14sp" />
 
+                <TextView
+                    android:id="@+id/subject"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="科目"
+                    android:textSize="14sp" />
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp">
+
+                <TextView
+                    android:id="@+id/province"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="河北" />
+
+                <TextView
+                    android:id="@+id/city"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/town"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/school"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="10dp"
+                android:text="学校" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_marginTop="10dp"
+                android:background="#f7f7f7" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="自我介绍"
+                android:textColor="#333"
+                android:textSize="16sp" />
+
 
             <TextView
                 android:id="@+id/describe"
@@ -217,28 +175,14 @@
                 android:layout_marginTop="10dp"
                 android:background="#f7f7f7" />
 
-            <LinearLayout
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:paddingBottom="6dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="3dp"
-                    android:paddingTop="6dp"
-                    android:src="@mipmap/tutorship_info" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TA的课程"
-                    android:textColor="#333"
-                    android:textSize="16sp" />
-            </LinearLayout>
+                android:layout_margin="10dp"
+                android:text="TA的课程"
+                android:textColor="#333"
+                android:textSize="16sp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
