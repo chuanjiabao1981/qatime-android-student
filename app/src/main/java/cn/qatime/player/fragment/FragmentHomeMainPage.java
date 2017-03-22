@@ -61,6 +61,7 @@ import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.CityBean;
 import libraryextra.bean.GradeBean;
 import libraryextra.transformation.GlideCircleTransform;
+import libraryextra.utils.DensityUtils;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.ScreenUtils;
@@ -186,7 +187,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int courseId = listPublishedRank.get(position).getId();
                 Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                intent.putExtra("id",courseId);
+                intent.putExtra("id", courseId);
                 startActivity(intent);
             }
         });
@@ -209,7 +210,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int courseId = listStartRank.get(position).getId();
                 Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                intent.putExtra("id",courseId);
+                intent.putExtra("id", courseId);
                 startActivity(intent);
             }
         });
@@ -235,7 +236,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int courseId = listEssenceContent.get(position).getLive_studio_course().getId();
                 Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                intent.putExtra("id",courseId);
+                intent.putExtra("id", courseId);
                 startActivity(intent);
             }
         });
@@ -268,10 +269,15 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         recyclerToday.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                outRect.left = 10;
-                outRect.right = 10;
+                outRect.right = DensityUtils.dip2px(getActivity(), 10);
                 outRect.bottom = 0;
                 outRect.top = 0;
+                outRect.left = DensityUtils.dip2px(getActivity(), 10);
+
+                if (parent.getChildPosition(view) == 0)
+                    outRect.left = 0;
+                if(parent.getChildAdapterPosition(view)==todayList.size())
+                    outRect.right = 0;
             }
         });
         recyclerToday.setLayoutManager(layoutManager);

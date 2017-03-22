@@ -119,6 +119,8 @@
                 android:layout_height="wrap_content"
                 android:background="#fff"
                 android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:paddingBottom="9dp"
                 android:paddingTop="9dp" />
 
