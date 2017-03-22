@@ -95,7 +95,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="100.00"
-                        android:textColor="#be0b0b"
+                        android:textColor="@color/colorPrimary"
                         android:textSize="14sp" /> <!--价格-->
                     <TextView
                         android:id="@+id/transfer_price"
