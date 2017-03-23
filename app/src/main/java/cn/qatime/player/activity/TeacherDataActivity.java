@@ -29,6 +29,7 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
+import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -41,7 +42,7 @@ import libraryextra.view.GridViewForScrollView;
  * @Describe
  */
 public class TeacherDataActivity extends BaseActivity {
-    private ImageView banner;
+    //    private ImageView banner;
     private ImageView headSculpture;
     private TextView sex;
     private TextView name;
@@ -63,7 +64,7 @@ public class TeacherDataActivity extends BaseActivity {
     private void assignViews() {
         PullToRefreshScrollView scroll = (PullToRefreshScrollView) findViewById(R.id.scroll);
         scroll.setMode(PullToRefreshBase.Mode.DISABLED);
-        banner = (ImageView) findViewById(R.id.banner);
+//        banner = (ImageView) findViewById(R.id.banner);
         headSculpture = (ImageView) findViewById(R.id.head_sculpture);
         sex = (TextView) findViewById(R.id.sex);
         name = (TextView) findViewById(R.id.name);
@@ -159,7 +160,7 @@ public class TeacherDataActivity extends BaseActivity {
                                 town.setText(bean.getData().getTown());
                                 sex.setText(getSex(bean.getData().getGender()));
                                 sex.setTextColor(getSexColor(bean.getData().getGender()));
-                                Glide.with(TeacherDataActivity.this).load(bean.getData().getAvatar_url()).placeholder(R.mipmap.error_header_rect).crossFade().into(headSculpture);
+                                Glide.with(TeacherDataActivity.this).load(bean.getData().getAvatar_url()).transform(new GlideCircleTransform(TeacherDataActivity.this)).placeholder(R.mipmap.error_header_rect).crossFade().into(headSculpture);
                                 school.setText(bean.getData().getSchool());
                                 if (bean.getData().getCourses() != null && bean.getData().getCourses().size() > 0) {
                                     list.addAll(bean.getData().getCourses());

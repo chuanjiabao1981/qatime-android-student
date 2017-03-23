@@ -20,6 +20,7 @@ import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.bean.SchoolBean;
+import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
@@ -61,10 +62,10 @@ public class FragmentClassDetailTeacherInfo extends BaseFragment {
         describe.getBackground().setAlpha(0); // 设置填充透明度 范围：0-255
         describe.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY); //取消滚动条白边效果
         WebSettings settings = describe.getSettings();
-        settings.setDefaultTextEncodingName("UTF-8") ;
+        settings.setDefaultTextEncodingName("UTF-8");
         settings.setBlockNetworkImage(false);
         settings.setDefaultFontSize(13);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             settings.setMixedContentMode(settings.MIXED_CONTENT_ALWAYS_ALLOW);  //注意安卓5.0以上的权限
         }
     }
@@ -76,13 +77,13 @@ public class FragmentClassDetailTeacherInfo extends BaseFragment {
             name.setText(data.getData().getTeacher().getName());
             if (!StringUtils.isNullOrBlanK(data.getData().getTeacher().getTeaching_years())) {
                 if (data.getData().getTeacher().getTeaching_years().equals("within_three_years")) {
-                    teachingyears.setText(getResourceString(R.string.teacher_years) + " " + getResourceString(R.string.within_three_years));
+                    teachingyears.setText(getResourceString(R.string.within_three_years));
                 } else if (data.getData().getTeacher().getTeaching_years().equals("within_ten_years")) {
-                    teachingyears.setText(getResourceString(R.string.teacher_years) + " " + getResourceString(R.string.within_ten_years));
+                    teachingyears.setText(getResourceString(R.string.within_ten_years));
                 } else if (data.getData().getTeacher().getTeaching_years().equals("within_twenty_years")) {
-                    teachingyears.setText(getResourceString(R.string.teacher_years) + " " + getResourceString(R.string.within_twenty_years));
+                    teachingyears.setText(getResourceString(R.string.within_twenty_years));
                 } else {
-                    teachingyears.setText(getResourceString(R.string.teacher_years) + " " + getResourceString(R.string.more_than_ten_years));
+                    teachingyears.setText(getResourceString(R.string.more_than_ten_years));
                 }
             }
 
@@ -90,27 +91,27 @@ public class FragmentClassDetailTeacherInfo extends BaseFragment {
             if (schoolBean != null && schoolBean.getData() != null) {
                 for (int i = 0; i < schoolBean.getData().size(); i++) {
                     if (data.getData().getTeacher().getSchool() == schoolBean.getData().get(i).getId()) {
-                        school.setText(getResourceString(R.string.teacher_school) + " " + schoolBean.getData().get(i).getName());
+                        school.setText(schoolBean.getData().get(i).getName());
                         break;
                     }
                 }
             } else {
-                school.setText(getResourceString(R.string.teacher_school) + R.string.not_available);
+                school.setText(R.string.not_available);
             }
 
-            Glide.with(this).load(data.getData().getTeacher().getAvatar_url()).placeholder(R.mipmap.error_header_rect).crossFade().into(image);
+            Glide.with(this).load(data.getData().getTeacher().getAvatar_url()).bitmapTransform(new GlideCircleTransform(getActivity())).placeholder(R.mipmap.error_header_rect).crossFade().into(image);
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), TeacherDataActivity.class);
-                    intent.putExtra("teacherId",data.getData().getTeacher().getId());
+                    intent.putExtra("teacherId", data.getData().getTeacher().getId());
                     startActivity(intent);
                 }
             });
-            String body =StringUtils.isNullOrBlanK(data.getData().getTeacher().getDesc()) ? getString(R.string.no_desc):data.getData().getTeacher().getDesc();
+            String body = StringUtils.isNullOrBlanK(data.getData().getTeacher().getDesc()) ? getString(R.string.no_desc) : data.getData().getTeacher().getDesc();
             body = body.replace("\r\n", "<br>");
             String css = "<style>* {color:#999999;}</style>";//默认color（android标签下以及所有未设置颜色的标签）
-            describe.loadDataWithBaseURL(null,css+body,"text/html","UTF-8",null);
+            describe.loadDataWithBaseURL(null, css + body, "text/html", "UTF-8", null);
         }
 
     }

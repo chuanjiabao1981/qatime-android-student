@@ -184,7 +184,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     protected void onSuccess(JSONObject response) {
                         data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
 
-                        if (data.getData() != null && data.getData().getLive_start_time() != null) {
+                        if (data != null && data.getData() != null && data.getData().getLive_start_time() != null) {
 
                             Glide.with(getApplicationContext()).load(data.getData().getPublicize()).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
                             status.setText(getStatus(data.getData().getStatus()));
