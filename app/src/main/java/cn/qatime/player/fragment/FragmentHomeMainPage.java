@@ -59,10 +59,8 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.CityBean;
-import libraryextra.bean.GradeBean;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.DensityUtils;
-import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.StringUtils;
@@ -75,7 +73,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
     private TagViewPager tagViewpagerImg;
     private GridView gridviewTeacher;
-    private View allClass;
     private ListViewForScrollView listViewEssenceContent;
     private List<EssenceContentBean.DataBean> listEssenceContent = new ArrayList<>();
     private CommonAdapter<EssenceContentBean.DataBean> essenceContentAdapter;
@@ -144,7 +141,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         tagViewpagerImg = (TagViewPager) view.findViewById(R.id.tag_viewpager_img);
         gridviewTeacher = (GridView) view.findViewById(R.id.gridview_teacher);
         cityName = (TextView) view.findViewById(R.id.city_name);
-        allClass = view.findViewById(R.id.all_class);
         View citySelect = view.findViewById(R.id.city_select);
         listViewEssenceContent = (ListViewForScrollView) view.findViewById(R.id.listview_class);
         listViewStartRank = (ListViewForScrollView) view.findViewById(R.id.listview_class1);
@@ -165,7 +161,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
         setCity();
         initLocationData();
-        allClass.setOnClickListener(this);
         scan.setOnClickListener(this);
         citySelect.setOnClickListener(this);
     }
@@ -316,26 +311,38 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
     private void initGrade() {
         gradeList = new ArrayList<>();
+        gradeList.add("高三");
+        gradeList.add("高二");
+        gradeList.add("高一");
+        gradeList.add("初三");
+        gradeList.add("初二");
+        gradeList.add("初一");
+        gradeList.add("六年级");
+        gradeList.add("五年级");
+        gradeList.add("四年级");
+        gradeList.add("三年级");
+        gradeList.add("二年级");
+        gradeList.add("一年级");
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerGrade.setLayoutManager(layoutManager);
         gradeAdapter = new RecyclerView.Adapter() {
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                TextView textView = new TextView(getActivity());
+                View textView = View.inflate(getActivity(),R.layout.item_home_grade,null);
                 return new BaseViewHolder(textView);
             }
 
             @Override
-            public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+            public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
                 String info = gradeList.get(position);
                 TextView textView = (TextView) holder.itemView;
                 textView.setText(info);
-                textView.setPadding(30, 15, 30, 15);
-                textView.setTextColor(getResources().getColor(R.color.colorPrimary));
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        MainActivity mainActivity = (MainActivity) getActivity();
+                        mainActivity.setCurrentPosition(1,position);
                     }
                 });
             }
@@ -353,7 +360,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         cityName.setText(BaseApplication.getCurrentCity().getName());
 
         initBannerData();
-        initGradeData();
         initEssenceData();//精选内容
         initToadyData();//今日直播
         initTeacherData();
@@ -468,13 +474,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         addToRequestQueue(request);
     }
 
-    private void initGradeData() {
-        String gradeString = FileUtil.readFile(getActivity().getFilesDir() + "/grade.txt");
-        if (!StringUtils.isNullOrBlanK(gradeString)) {
-            gradeList = JsonUtils.objectFromJson(gradeString, GradeBean.class).getData().getGrades();
-            gradeAdapter.notifyDataSetChanged();
-        }
-    }
 
     private void initBanner() {
         ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()), ScreenUtils.getScreenWidth(getActivity()) / 3);
@@ -599,7 +598,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     @Override
                     protected void onSuccess(JSONObject response) {
                         TeacherRecommendBean teacherRecommendBean = JsonUtils.objectFromJson(response.toString(), TeacherRecommendBean.class);
-                        //teacherRecommendBean.getData()==null有两种情况  1、没有更多的老师。2、本来就没有老师
                         listRecommendTeacher.clear();
                         if (teacherRecommendBean != null && teacherRecommendBean.getData() != null && teacherRecommendBean.getData().size() > 0) {
                             listRecommendTeacher.addAll(teacherRecommendBean.getData());
@@ -661,9 +659,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         MainActivity mainActivity = (MainActivity) getActivity();
         Intent intent;
         switch (v.getId()) {
-            case R.id.all_class:
-                mainActivity.setCurrentPosition(1, getResourceString(R.string.whole));
-                break;
             case R.id.scan:
                 intent = new Intent(getActivity(), CaptureActivity.class);
                 mainActivity.startActivityForResult(intent, Constant.REQUEST);

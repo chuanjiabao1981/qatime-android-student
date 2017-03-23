@@ -54,7 +54,6 @@ import cn.qatime.player.fragment.FragmentHomeMainPage;
 import cn.qatime.player.fragment.FragmentHomeMessage;
 import cn.qatime.player.fragment.FragmentHomeSelectSubject;
 import cn.qatime.player.fragment.FragmentHomeUserCenter;
-import cn.qatime.player.fragment.FragmentRemedialClassAll;
 import cn.qatime.player.fragment.FragmentUnLoginHomeClassTable;
 import cn.qatime.player.fragment.FragmentUnLoginHomeMessage;
 import cn.qatime.player.fragment.FragmentUnLoginHomeUserCenter;
@@ -591,13 +590,13 @@ public class MainActivity extends BaseFragmentActivity {
         });
         addToRequestQueue(request);
     }
-
-    public void setCurrentPosition(int currentPosition, String s) {
+    public void more(View v){
+        setCurrentPosition(1,0);
+    }
+    public void setCurrentPosition(int currentPosition, int position) {
         fragmentlayout.setCurrenItem(currentPosition);
-        if (!StringUtils.isNullOrBlanK(s)) {
-            FragmentRemedialClassAll fragmentRemedialClassAll = (FragmentRemedialClassAll) fragBaseFragments.get(1);
-            fragmentRemedialClassAll.initDataAsSubject(s);
-        }
+        FragmentHomeSelectSubject fragmentHomeSelectSubject = (FragmentHomeSelectSubject) fragBaseFragments.get(1);
+        fragmentHomeSelectSubject.setGrade(position);
     }
 
 }
