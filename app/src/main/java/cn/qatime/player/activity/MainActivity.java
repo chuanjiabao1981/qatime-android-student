@@ -52,6 +52,7 @@ import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.fragment.FragmentHomeClassTable;
 import cn.qatime.player.fragment.FragmentHomeMainPage;
 import cn.qatime.player.fragment.FragmentHomeMessage;
+import cn.qatime.player.fragment.FragmentHomeSelectSubject;
 import cn.qatime.player.fragment.FragmentHomeUserCenter;
 import cn.qatime.player.fragment.FragmentRemedialClassAll;
 import cn.qatime.player.fragment.FragmentUnLoginHomeClassTable;
@@ -141,7 +142,8 @@ public class MainActivity extends BaseFragmentActivity {
 
         //添加fragment
         fragBaseFragments.add(new FragmentHomeMainPage());
-        fragBaseFragments.add(new FragmentRemedialClassAll());
+//        fragBaseFragments.add(new FragmentRemedialClassAll());
+        fragBaseFragments.add(new FragmentHomeSelectSubject());
 
         if (BaseApplication.isLogined()) {
             fragBaseFragments.add(new FragmentHomeClassTable());

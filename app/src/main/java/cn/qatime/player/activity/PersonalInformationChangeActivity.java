@@ -179,7 +179,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                                 e.printStackTrace();
                             }
                         }
-                    }, parse.parse(select).getYear() + 1900, parse.parse(select).getMonth() + 1, parse.parse(select).getDay());
+                    }, parse.parse(select).getYear() + 1900, parse.parse(select).getMonth() + 1, parse.parse(select).getDate());
                     dataDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
                     dataDialog.show();
                 } catch (ParseException e) {

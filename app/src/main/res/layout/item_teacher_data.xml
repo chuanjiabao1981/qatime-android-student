@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="￥0.00"
-            android:textColor="#f00"
+            android:textColor="@color/colorPrimary"
             android:textSize="12sp" />
     </LinearLayout>
 </com.zhy.android.percent.support.PercentLinearLayout>
