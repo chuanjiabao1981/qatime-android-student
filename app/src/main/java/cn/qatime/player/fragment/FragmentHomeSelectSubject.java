@@ -63,11 +63,11 @@ public class FragmentHomeSelectSubject extends BaseFragment {
             public void convert(ViewHolder holder, String item, int position) {
                 holder.setText(R.id.text, gradeData.get(position));
                 if (gradeChecked == position) {
-                    ((TextView) holder.getView(R.id.text)).setTextColor(0xfffeb0b0);
+                    ((TextView) holder.getView(R.id.text)).setTextColor(getResources().getColor(R.color.colorPrimary));
                     holder.getView(R.id.text).setBackgroundColor(0xffffffff);
                 } else {
                     ((TextView) holder.getView(R.id.text)).setTextColor(0xffcccccc);
-                    holder.getView(R.id.text).setBackgroundColor(0xfff2f2f2);
+                    holder.getView(R.id.text).setBackgroundColor(0xfff3f3f3);
                 }
             }
         };
@@ -93,13 +93,6 @@ public class FragmentHomeSelectSubject extends BaseFragment {
             @Override
             public void convert(ViewHolder holder, String item, int position) {
                 holder.setText(R.id.text, subjectData.get(position));
-//                if (subjectChecked == position) {
-//                    ((TextView) holder.getView(R.id.text)).setTextColor(0xfffeb0b0);
-//                    holder.getView(R.id.text).setBackgroundColor(0xffffffff);
-//                } else {
-//                    ((TextView) holder.getView(R.id.text)).setTextColor(0xffcccccc);
-//                    holder.getView(R.id.text).setBackgroundColor(0xfff2f2f2);
-//                }
             }
         };
         gridView.setAdapter(gridAdapter);

@@ -8,8 +8,9 @@
         android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/text_background_red"
+        android:background="@drawable/text_background"
         android:gravity="center"
         android:padding="5dp"
-        android:text="科目" />
+        android:text="科目"
+        android:textColor="#ffcccccc" />
 </RelativeLayout>

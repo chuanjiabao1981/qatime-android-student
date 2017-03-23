@@ -53,7 +53,6 @@ public class FilterCourseContentActivity extends BaseActivity {
     private PullToRefreshListView listview;
     private CommonAdapter<FilterCourseContentBean.DataBean> adapter;
     private List<FilterCourseContentBean.DataBean> datas = new ArrayList<>();
-    private View screen;
     private int latestResult = 1;//0上1下-1未选
     private int popularityResult = -1;
     private int priceResult = -1;
@@ -222,7 +221,7 @@ public class FilterCourseContentActivity extends BaseActivity {
             }
         });
         final TextView label = (TextView) findViewById(R.id.label);
-        screen = findViewById(R.id.screen);//筛选按钮
+        View screen = findViewById(R.id.screen);
 
         listview = (PullToRefreshListView) findViewById(R.id.listview);
         listview.setMode(PullToRefreshBase.Mode.BOTH);
@@ -235,7 +234,7 @@ public class FilterCourseContentActivity extends BaseActivity {
         adapter = new CommonAdapter<FilterCourseContentBean.DataBean>(this, datas, R.layout.item_filter_course) {
             @Override
             public void convert(ViewHolder holder, FilterCourseContentBean.DataBean item, int position) {
-                Glide.with(FilterCourseContentActivity.this).load(item.getPublicize()).crossFade().fitCenter().into((ImageView) holder.getView(R.id.image));
+                Glide.with(FilterCourseContentActivity.this).load(item.getPublicize()).crossFade().placeholder(R.mipmap.photo).into((ImageView) holder.getView(R.id.image));
                 holder.setText(R.id.name, item.getName())
                         .setText(R.id.price, "￥" + item.getPrice())
                         .setText(R.id.teacher, item.getTeacher_name());
@@ -253,11 +252,13 @@ public class FilterCourseContentActivity extends BaseActivity {
         listview.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                page = 1;
                 getData(0);
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                page += 1;
                 getData(1);
             }
         });
@@ -336,17 +337,17 @@ public class FilterCourseContentActivity extends BaseActivity {
     private void refreshState(TextView view, int result) {//-1未选 0上 1下
         if (result == -1) {
             view.setCompoundDrawables(null, null, null, null);
-            view.setBackgroundColor(0);
+            view.setTextColor(0xff666666);
         } else if (result == 0) {
             Drawable up = getResources().getDrawable(R.mipmap.arrow_up);
             up.setBounds(0, 0, up.getMinimumWidth(), up.getMinimumHeight());
             view.setCompoundDrawables(null, null, up, null);
-            view.setBackgroundColor(0xffcccccc);
+            view.setTextColor(getResources().getColor(R.color.colorPrimary));
         } else if (result == 1) {
             Drawable down = getResources().getDrawable(R.mipmap.arrow_down);
             down.setBounds(0, 0, down.getMinimumWidth(), down.getMinimumHeight());
             view.setCompoundDrawables(null, null, down, null);
-            view.setBackgroundColor(0xffcccccc);
+            view.setTextColor(getResources().getColor(R.color.colorPrimary));
         }
     }
 

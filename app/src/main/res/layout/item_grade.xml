@@ -6,6 +6,6 @@
     android:gravity="center"
     android:padding="8dp"
     android:text="年级"
-    android:textColor="#333">
+    android:textColor="@color/colorPrimary">
 
 </TextView>

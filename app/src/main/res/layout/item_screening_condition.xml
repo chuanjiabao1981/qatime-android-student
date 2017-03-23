@@ -7,8 +7,9 @@
         android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/text_background_red"
+        android:background="@drawable/text_background"
         android:gravity="center_horizontal"
         android:padding="3dp"
+        android:textColor="#666"
         android:text="条件" />
 </RelativeLayout>
