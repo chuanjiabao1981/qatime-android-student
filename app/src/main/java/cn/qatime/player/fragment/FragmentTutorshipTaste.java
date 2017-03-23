@@ -137,7 +137,7 @@ public class FragmentTutorshipTaste extends BaseFragment {
                     helper.getView(R.id.progress).setVisibility(View.VISIBLE);
                     helper.getView(R.id.teaching_time).setVisibility(View.GONE);
                     helper.getView(R.id.class_over).setVisibility(View.GONE);
-                    helper.setText(R.id.progress,getString(R.string.progress, item.getCompleted_lesson_count(), item.getPreset_lesson_count()));
+                    helper.setText(R.id.progress,getString(R.string.progress, item.getClosed_lessons_count(), item.getPreset_lesson_count()));
                 }
             }
         };

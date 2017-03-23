@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.orhanobut.logger.Logger;
+//import com.orhanobut.logger.Logger;
 
 public class FlowLayout extends ViewGroup {
 
@@ -46,7 +46,7 @@ public class FlowLayout extends ViewGroup {
         int modeWidth = MeasureSpec.getMode(widthMeasureSpec);
         int modeHeight = MeasureSpec.getMode(heightMeasureSpec);
 
-        Logger.e(TAG, sizeWidth + "," + sizeHeight);
+//        Logger.e(TAG, sizeWidth + "," + sizeHeight);
 
         // 如果是warp_content情况下，记录宽和高
         int width = 0;
@@ -159,8 +159,8 @@ public class FlowLayout extends ViewGroup {
             // 当前行的最大高度
             lineHeight = mLineHeight.get(i);
 
-            Logger.e(TAG, "第" + i + "行 ：" + lineViews.size() + " , " + lineViews);
-            Logger.e(TAG, "第" + i + "行， ：" + lineHeight);
+//            Logger.e(TAG, "第" + i + "行 ：" + lineViews.size() + " , " + lineViews);
+//            Logger.e(TAG, "第" + i + "行， ：" + lineHeight);
 
             // 遍历当前行所有的View
             for (int j = 0; j < lineViews.size(); j++) {

@@ -19,37 +19,37 @@
             android:padding="13dp"
             android:src="@mipmap/ic_play_exit" />
 
-        <!--<TextView-->
-            <!--android:id="@+id/video_name"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_toRightOf="@id/player_exit"-->
-            <!--android:ellipsize="marquee"-->
-            <!--android:focusable="true"-->
-            <!--android:gravity="center_vertical"-->
-            <!--android:singleLine="true"-->
-            <!--android:text="視頻名字"-->
-            <!--android:textColor="#fff"-->
-            <!--android:textSize="16sp"-->
-            <!--android:visibility="gone" />-->
+        <TextView
+            android:id="@+id/video_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/player_exit"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="視頻名字"
+            android:textColor="#fff"
+            android:textSize="16sp"
+            android:visibility="gone" />
 
-        <!--<TextView-->
-            <!--android:id="@id/view_count"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_marginRight="3dp"-->
-            <!--android:background="@drawable/shape_circle_bg"-->
-            <!--android:drawableLeft="@mipmap/eyes"-->
-            <!--android:paddingBottom="2dp"-->
-            <!--android:paddingLeft="5dp"-->
-            <!--android:paddingRight="5dp"-->
-            <!--android:paddingTop="2dp"-->
-            <!--android:singleLine="true"-->
-            <!--android:text="123"-->
-            <!--android:textColor="#fff"-->
-            <!--android:textSize="13sp" />-->
+        <TextView
+            android:id="@+id/view_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="3dp"
+            android:background="@drawable/shape_circle_bg"
+            android:drawableLeft="@mipmap/eyes"
+            android:paddingBottom="2dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="2dp"
+            android:singleLine="true"
+            android:text="0"
+            android:textColor="#fff"
+            android:textSize="13sp" />
     </RelativeLayout>
 
     <LinearLayout
