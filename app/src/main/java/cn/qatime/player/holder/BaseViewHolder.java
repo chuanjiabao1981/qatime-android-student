@@ -37,8 +37,12 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+
+import libraryextra.adapter.ViewHolder;
 
 public class BaseViewHolder extends RecyclerView.ViewHolder {
 
@@ -309,6 +313,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     /**
      * Sets the on click listener of the view.
+     *
      * @param viewId   The view id.
      * @param listener The on click listener;
      * @return The BaseViewHolder for chaining.
@@ -322,6 +327,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     /**
      * add childView id
+     *
      * @param viewId add the child view id   can support childview click
      * @return
      */
@@ -332,6 +338,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
 
     /**
      * add long click view id
+     *
      * @param viewId
      * @return
      */
@@ -499,6 +506,22 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      */
     public void setAssociatedObject(Object associatedObject) {
         this.associatedObject = associatedObject;
+    }
+
+    /**
+     * 为ImageView设置图片
+     *
+     * @param viewId
+     * @return
+     */
+    public BaseViewHolder setImageByUrl(int viewId, String url) {
+        setImageByUrl(viewId, url, 0);
+        return this;
+    }
+
+    public BaseViewHolder setImageByUrl(int viewId, String url, int defaultImage) {
+        Glide.with(getContext()).load(url).crossFade().placeholder(defaultImage).into((ImageView) getView(viewId));
+        return this;
     }
 
     public Context getContext() {

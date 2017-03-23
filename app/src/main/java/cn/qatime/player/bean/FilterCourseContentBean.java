@@ -65,8 +65,8 @@ public class FilterCourseContentBean implements Serializable {
         private String subject;
         private String grade;
         private String teacher_name;
-        private int price;
-        private int current_price;
+        private float price;
+        private float current_price;
         private String chat_team_id;
         private String chat_team_owner;
         private int buy_tickets_count;
@@ -122,19 +122,19 @@ public class FilterCourseContentBean implements Serializable {
             this.teacher_name = teacher_name;
         }
 
-        public int getPrice() {
+        public float getPrice() {
             return price;
         }
 
-        public void setPrice(int price) {
+        public void setPrice(float price) {
             this.price = price;
         }
 
-        public int getCurrent_price() {
+        public float getCurrent_price() {
             return current_price;
         }
 
-        public void setCurrent_price(int current_price) {
+        public void setCurrent_price(float current_price) {
             this.current_price = current_price;
         }
 

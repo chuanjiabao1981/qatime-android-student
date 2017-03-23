@@ -33,7 +33,8 @@ public class FragmentHomeSelectSubject extends BaseFragment {
     private List<String> gradeData = new ArrayList<>();
     private List<String> subjectData = new ArrayList<>();
     private int gradeChecked = 0;
-//    private int subjectChecked = 0;
+    private CommonAdapter<String> listAdapter;
+    //    private int subjectChecked = 0;
 
     private void assignViews(View view) {
         listview = (ListView) view.findViewById(R.id.listview);
@@ -57,7 +58,7 @@ public class FragmentHomeSelectSubject extends BaseFragment {
         gradeData.add("三年级");
         gradeData.add("二年级");
         gradeData.add("一年级");
-        final CommonAdapter<String> listAdapter = new CommonAdapter<String>(getActivity(), gradeData, R.layout.item_grade) {
+        listAdapter = new CommonAdapter<String>(getActivity(), gradeData, R.layout.item_grade) {
 
             @Override
             public void convert(ViewHolder holder, String item, int position) {
@@ -106,5 +107,10 @@ public class FragmentHomeSelectSubject extends BaseFragment {
             }
         });
         return view;
+    }
+
+    public void setGrade(int position) {
+        gradeChecked = position;
+        listAdapter.notifyDataSetChanged();
     }
 }

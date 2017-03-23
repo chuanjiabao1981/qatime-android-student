@@ -92,7 +92,6 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
     private int page = 1;
     private SimpleDateFormat parseDate = new SimpleDateFormat("yyyy-MM-dd");
     DecimalFormat df = new DecimalFormat("#.00");
-    private GradeBean gradeBean;
     private int timesortposition;
     private View started;
     private View recruiting;
@@ -101,6 +100,7 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
     private CheckedTextView recruitingText;
     private View recruitingSelected;
     private View screenPopView;
+    private List<String> grades;
 
     @Nullable
     @Override
@@ -108,10 +108,13 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
         View view = inflater.inflate(R.layout.fragment_remedial_class_all, container, false);
         initView(view);
         initData(1);
+
         String gradeString = FileUtil.readFile(getActivity().getFilesDir() + "/grade.txt");
-//        LogUtils.e("班级基础信息" + gradeString);
+//        LogUtils.e("班级基础信息" + gradeString);g
+        grades = new ArrayList<>();
         if (!StringUtils.isNullOrBlanK(gradeString)) {
-            gradeBean = JsonUtils.objectFromJson(gradeString, GradeBean.class);
+            GradeBean gradeBean = JsonUtils.objectFromJson(gradeString, GradeBean.class);
+            grades = gradeBean.getData().getGrades();
         }
         return view;
     }
@@ -241,7 +244,7 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
         map.put("class_date_ceil", class_date_ceil);
         map.put("status", status);
         try {
-            map.put("city_name",URLEncoder.encode(BaseApplication.getCurrentCity().getName(),"UTF-8"));
+            map.put("city_name", URLEncoder.encode(BaseApplication.getCurrentCity().getName(), "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -435,8 +438,8 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
                 listView = (ListView) popView.findViewById(R.id.list);
                 final List<String> classList = new ArrayList<>();
                 classList.add(getResourceString(R.string.whole));
-                if (gradeBean != null && gradeBean.getData() != null && gradeBean.getData().getGrades() != null && gradeBean.getData().getGrades().size() > 0) {
-                    classList.addAll(gradeBean.getData().getGrades());
+                if (grades != null && grades.size() > 0) {
+                    classList.addAll(grades);
                 } else {
                     classList.add(getResourceString(R.string.high3));
                     classList.add(getResourceString(R.string.high2));
@@ -551,7 +554,7 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
                 started.setBackgroundResource(startedText.isChecked() ? R.drawable.text_background_select : R.drawable.text_background_normal);
                 startedSelected.setVisibility(startedText.isChecked() ? View.VISIBLE : View.INVISIBLE);
                 break;
-            case R.id.   recruiting:
+            case R.id.recruiting:
                 recruitingText.setChecked(!recruitingText.isChecked());
                 recruiting.setBackgroundResource(recruitingText.isChecked() ? R.drawable.text_background_select : R.drawable.text_background_normal);
                 recruitingSelected.setVisibility(recruitingText.isChecked() ? View.VISIBLE : View.INVISIBLE);

@@ -15,6 +15,7 @@
     <string name="individual">个人</string>
     <string name="latest">最新</string>
     <string name="whole">全部</string>
+    <string name="more">更多</string>
     <string name="by_time">按时间</string>
     <string name="by_subject">科目</string>
     <string name="by_grade">年级</string>
@@ -628,4 +629,5 @@
     <string name="msg_camera_framework_bug">抱歉，Android相机出现问题。您可能需要重启设备。</string>
     <string name="not_set">未设置</string>
     <string name="new_pay_password_invalid">新密码%1$d小时后可用</string>
+    <string name="select_subject">选课</string>
 </resources>

@@ -51,23 +51,6 @@
             android:padding="6dp"
             android:src="@mipmap/qr_scan" />
 
-        <!--<ImageView-->
-        <!--android:id="@+id/message_x"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignRight="@id/message_icon"-->
-        <!--android:layout_alignTop="@id/message_icon"-->
-        <!--android:src="@mipmap/message_x" />-->
-        <!--<View-->
-        <!--android:id="@+id/count"-->
-        <!--android:layout_width="10dp"-->
-        <!--android:layout_height="10dp"-->
-        <!--android:layout_alignRight="@id/message"-->
-        <!--android:layout_marginRight="5dp"-->
-        <!--android:layout_marginTop="10dp"-->
-        <!--android:background="@drawable/shape_circle"-->
-        <!--android:visibility="visible" />-->
-
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="wrap_content"
@@ -96,18 +79,16 @@
                 android:layout_height="119dp"
                 android:background="#fff" />
 
-            <libraryextra.view.GridViewForScrollView
-                android:id="@+id/gridview_subject"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_grade"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="#fff"
-                android:gravity="center"
-                android:numColumns="5"
-                android:paddingBottom="10dp"
-                android:paddingLeft="9dp"
-                android:paddingRight="9dp"
-                android:paddingTop="10dp"
-                android:verticalSpacing="6dp" />
+                android:orientation="horizontal"
+                android:paddingBottom="9dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="9dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -116,19 +97,13 @@
                 android:background="#fff"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:paddingLeft="10dp">
-
-                <ImageView
-                    android:layout_width="14dp"
-                    android:layout_height="16dp"
-                    android:src="@mipmap/teacher_recommend" />
+                android:padding="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="3dp"
-                    android:text="@string/teacher_recommendation"
+                    android:layout_gravity="bottom"
+                    android:text="今日直播"
                     android:textColor="#000"
                     android:textSize="16sp" />
 
@@ -136,6 +111,80 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_today"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="9dp"
+                android:paddingTop="9dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:background="#fff"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="精选内容"
+                    android:textColor="#000"
+                    android:textSize="16sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="3dp"
+                    android:drawableRight="@mipmap/home_right_arrow"
+                    android:text="@string/more"
+                    android:onClick="more"
+                    android:textColor="#999"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <libraryextra.view.ListViewForScrollView
+                android:id="@+id/listview_class"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ffffff"
+                android:cacheColorHint="#00000000"
+                android:divider="#f7f7f7"
+                android:dividerHeight="0dp"
+                android:gravity="center"
+                android:listSelector="#00000000"
+                android:scrollbars="none" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:background="#fff"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/teacher_recommendation"
+                    android:textColor="#000"
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <HorizontalScrollView
@@ -164,24 +213,18 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginTop="10dp"
                 android:background="#fff"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:padding="10dp">
 
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="10dp"
-                    android:src="@mipmap/tutorship_recommend" />
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:layout_marginLeft="3dp"
-                    android:text="@string/live_courses"
+                    android:text="近期开课"
                     android:textColor="#000"
                     android:textSize="16sp" />
 
@@ -190,43 +233,73 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
-                <LinearLayout
-                    android:id="@+id/all_class"
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/whole"
-                        android:textColor="#999"
-                        android:textSize="12sp" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="13dp"
-                        android:layout_marginLeft="-3dp"
-                        android:padding="3dp"
-                        android:src="@mipmap/home_right_arrow" />
-                </LinearLayout>
+                    android:drawablePadding="3dp"
+                    android:drawableRight="@mipmap/home_right_arrow"
+                    android:onClick="more"
+                    android:text="@string/more"
+                    android:textColor="#999"
+                    android:textSize="12sp" />
             </LinearLayout>
 
-            <libraryextra.view.GridViewForScrollView
-                android:id="@+id/gridview_class"
+            <libraryextra.view.ListViewForScrollView
+                android:id="@+id/listview_class1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#ffffff"
                 android:cacheColorHint="#00000000"
+                android:divider="#f7f7f7"
+                android:dividerHeight="0dp"
                 android:gravity="center"
-                android:horizontalSpacing="10dp"
                 android:listSelector="#00000000"
-                android:numColumns="2"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:scrollbars="none"
-                android:verticalSpacing="20dp" />
+                android:scrollbars="none" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:background="#fff"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="新课发布"
+                    android:textColor="#000"
+                    android:textSize="16sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="3dp"
+                    android:drawableRight="@mipmap/home_right_arrow"
+                    android:text="@string/more"
+                    android:onClick="more"
+                    android:textColor="#999"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <libraryextra.view.ListViewForScrollView
+                android:id="@+id/listview_class2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ffffff"
+                android:cacheColorHint="#00000000"
+                android:divider="#f7f7f7"
+                android:dividerHeight="0dp"
+                android:gravity="center"
+                android:listSelector="#00000000"
+                android:scrollbars="none" />
         </LinearLayout>
     </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
 </LinearLayout>

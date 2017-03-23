@@ -37,6 +37,8 @@ public class UrlUtils {
     public static String urlCourses = baseUrl + "api/v1/live_studio/courses/";
     //课程
     public static String urlSearch = baseUrl + "api/v1/live_studio/courses/search";
+    //辅导班排行
+    public static String urlRecentPublished = baseUrl + "/api/v1/live_studio/courses/rank/published_rank,start_rank";
     //獲取支付结果
     public static String urlPayResult = baseUrl + "api/v1/payment/orders/";
     //订单列表

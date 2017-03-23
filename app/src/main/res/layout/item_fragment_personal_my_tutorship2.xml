@@ -6,135 +6,132 @@
     android:paddingLeft="12dp"
     android:paddingRight="12dp">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:background="@drawable/tutor_text_background"
+        android:orientation="horizontal"
+        android:padding="1px">
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/photo" />
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/tutor_text_background"
-            android:orientation="horizontal">
+            android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/image"
-                android:layout_width="110dp"
-                android:layout_height="110dp"
-                android:scaleType="fitXY"
-                android:src="@mipmap/photo" />
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="10dp">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/taste"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_marginRight="2dp"
+                        android:background="#f96"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:text="试听中"
+                        android:textColor="#fff"
+                        android:textSize="12sp" />
 
-                        <TextView
-                            android:id="@+id/taste"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="#f96"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:paddingLeft="3dp"
-                            android:paddingRight="3dp"
-                            android:layout_marginRight="2dp"
-                            android:text="试听中"
-                            android:textColor="#fff"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:id="@+id/name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:text="高考考前急速冲刺班相学练班"
-                            android:textColor="#333"
-                            android:textSize="13sp" />
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="高考考前急速冲刺班相学练班"
+                        android:textColor="#333"
+                        android:textSize="13sp" />
 
-                        <TextView
-                            android:id="@+id/grade"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="年级"
-                            android:textColor="#666"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:id="@+id/subject"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="科目"
-                            android:textColor="#666"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:id="@+id/teacher"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="/老师"
-                            android:textColor="#666"
-                            android:textSize="12sp" />
-
-                        <!--<View-->
-                        <!--android:layout_width="0dp"-->
-                        <!--android:layout_height="match_parent"-->
-                        <!--android:layout_weight="1" />-->
-
-                        <!--<TextView-->
-                        <!--android:id="@+id/status"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:text="待上课"-->
-                        <!--android:textColor="#ccc" />-->
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/teaching_time"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:maxLines="1"
-                            android:text="距开课15天"
-                            android:textColor="#666"
-                            android:textSize="12sp" />
-
-                    </LinearLayout>
                 </LinearLayout>
-            </RelativeLayout>
-        </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/grade"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="年级"
+                        android:textColor="#666"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/subject"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="科目"
+                        android:textColor="#666"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/teacher"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="/老师"
+                        android:textColor="#666"
+                        android:textSize="12sp" />
+
+                    <!--<View-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_weight="1" />-->
+
+                    <!--<TextView-->
+                    <!--android:id="@+id/status"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="待上课"-->
+                    <!--android:textColor="#ccc" />-->
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/teaching_time"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:maxLines="1"
+                        android:text="距开课15天"
+                        android:textColor="#666"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 </LinearLayout>
