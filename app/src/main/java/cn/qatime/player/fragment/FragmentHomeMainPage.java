@@ -370,6 +370,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         Map<String, String> map = new HashMap<>();
         try {
             map.put("city_name", URLEncoder.encode(BaseApplication.getCurrentCity().getName(), "UTF-8"));
+            map.put("per_page", "4");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -440,7 +441,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
      */
     private void initRecentPublished() {
         Map<String, String> map = new HashMap<>();
-        map.put("count", "5");
+        map.put("count", "2");
         JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecentPublished, map), null,
                 new VolleyListener(getActivity()) {
                     @Override
