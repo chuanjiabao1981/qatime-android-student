@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.netease.nimlib.sdk.msg.MessageBuilder;
@@ -80,6 +81,8 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
     private View exit;
     private LinearLayout bottomLayout;
     private Team team;
+    private TextView videoName;
+    private TextView viewCount;
 
 
     public VideoFloatFragment(String sessionId) {
@@ -91,8 +94,8 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
         exit = view.findViewById(R.id.player_exit);
         mainControl = view.findViewById(R.id.main_control);
         playToolbar = (RelativeLayout) view.findViewById(R.id.play_toolbar);
-//        videoName = (TextView) view.findViewById(R.id.video_name);
-//        viewCount = (TextView) view.findViewById(R.id.view_count);
+        videoName = (TextView) view.findViewById(R.id.video_name);
+        viewCount = (TextView) view.findViewById(R.id.view_count);
         bottomLayout = (LinearLayout) view.findViewById(R.id.bottom_layout);
         play = (ImageView) view.findViewById(R.id.play);
         commentLayout = (LinearLayout) view.findViewById(R.id.comment_layout);
@@ -405,7 +408,7 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
                 viewChange.setVisibility(View.GONE);
             }
             comment.setText("");
-//        videoName.setVisibility(View.GONE);
+            videoName.setVisibility(View.GONE);
         } else {
             KeyBoardUtils.closeKeybord(act);
             zoom.setVisibility(View.GONE);
@@ -413,7 +416,7 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
             //横平时 评论框出现
             commentLayout.setVisibility(View.VISIBLE);
             viewChange.setVisibility(View.GONE);
-//            videoName.setVisibility(View.VISIBLE);
+            videoName.setVisibility(View.VISIBLE);
         }
     }
 
@@ -614,6 +617,11 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
 
     public void setTeam(Team team) {
         this.team = team;
+    }
+
+    public void setNameAndCount(String name, int size) {
+        videoName.setText(name);
+        viewCount.setText("  " + size);
     }
 
     public interface CallBack {
