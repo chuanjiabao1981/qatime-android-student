@@ -66,6 +66,8 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
     private TextView className;
     private FlowLayout flow;
     private LinearLayout flowLayout;
+    private TextView target;
+    private TextView suitable;
 
     @Nullable
     @Override
@@ -87,6 +89,8 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
 
         flowLayout = (LinearLayout) view.findViewById(R.id.flow_layout);
         flow = (FlowLayout) view.findViewById(R.id.flow);
+        target = (TextView) view.findViewById(R.id.target);
+        suitable = (TextView) view.findViewById(R.id.suitable);
 
 //        courseDescribe = (WebView) view.findViewById(R.id.course_describe);
 //        courseDescribe.setOnLongClickListener(new View.OnLongClickListener() {
@@ -266,6 +270,12 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
                     }
                 } else {
                     flowLayout.setVisibility(GONE);
+                }
+                if (!StringUtils.isNullOrBlanK(data.getObjective())) {
+                    target.setText(data.getObjective());
+                }
+                if (!StringUtils.isNullOrBlanK(data.getSuit_crowd())) {
+                    suitable.setText(data.getSuit_crowd());
                 }
 //                String body =StringUtils.isNullOrBlanK(data.getDescription()) ? getString(R.string.no_desc) : data.getDescription();
 //                body = body.replace("\r\n", "<br>");

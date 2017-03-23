@@ -38,6 +38,8 @@ public class FragmentClassDetailClassInfo extends BaseFragment {
     private SimpleDateFormat parse2 = new SimpleDateFormat("yyyy-MM-dd");
     private LinearLayout flowLayout;
     private FlowLayout flow;
+    private TextView suitable;
+    private TextView target;
 
 
     @Nullable
@@ -53,6 +55,8 @@ public class FragmentClassDetailClassInfo extends BaseFragment {
     private void initview(View view) {
         subject = (TextView) view.findViewById(R.id.subject);
         grade = (TextView) view.findViewById(R.id.grade);
+        target = (TextView) view.findViewById(R.id.target);
+        suitable = (TextView) view.findViewById(R.id.suitable);
         classStartTime = (TextView) view.findViewById(R.id.class_start_time);
         classEndTime = (TextView) view.findViewById(R.id.class_end_time);
         totalclass = (TextView) view.findViewById(R.id.total_class);
@@ -128,6 +132,12 @@ public class FragmentClassDetailClassInfo extends BaseFragment {
                 }
             } else {
                 flowLayout.setVisibility(GONE);
+            }
+            if (!StringUtils.isNullOrBlanK(bean.getData().getObjective())) {
+                target.setText(bean.getData().getObjective());
+            }
+            if (!StringUtils.isNullOrBlanK(bean.getData().getSuit_crowd())) {
+                suitable.setText(bean.getData().getSuit_crowd());
             }
             String body = StringUtils.isNullOrBlanK(bean.getData().getDescription()) ? getString(R.string.no_desc) : bean.getData().getDescription();
             body = body.replace("\r\n", "<br>");
