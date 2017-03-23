@@ -37,6 +37,7 @@ public class FragmentNEVideoPlayerAdapter4 extends CommonAdapter<Announcements.D
 
     @Override
     public void convert(ViewHolder holder, Announcements.DataBean.MembersBean item, int position) {
+        if (item == null) return;
         if (!letterMap.containsKey(item.getFirstLetters())) {
             letterMap.put(item.getFirstLetters(), position);
         }
