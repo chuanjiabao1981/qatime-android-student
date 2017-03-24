@@ -351,8 +351,8 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
                         TextView select = holder.getView(R.id.select);
                         view.setText(item);
                         if (position == timesortposition) {
-                            view.setTextColor(0xffbe0b0b);
-                            select.setTextColor(0xffbe0b0b);
+                            view.setTextColor(0xffff5842);
+                            select.setTextColor(0xffff5842);
                             select.setVisibility(View.VISIBLE);
                         } else {
                             view.setTextColor(0xff999999);
@@ -409,8 +409,8 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
                         TextView select = holder.getView(R.id.select);
                         view.setText(item);
                         if (subjecttext.getText().toString().equals(item) || (subjecttext.getText().toString().equals(getResourceString(R.string.by_subject)) && position == 0)) {
-                            view.setTextColor(0xffbe0b0b);
-                            select.setTextColor(0xffbe0b0b);
+                            view.setTextColor(0xffff5842);
+                            select.setTextColor(0xffff5842);
                             select.setVisibility(View.VISIBLE);
                         } else {
                             view.setTextColor(0xff999999);
@@ -462,8 +462,8 @@ public class FragmentRemedialClassAll extends BaseFragment implements View.OnCli
                         TextView select = holder.getView(R.id.select);
                         view.setText(item);
                         if (classtext.getText().toString().equals(item) || (classtext.getText().toString().equals(getResourceString(R.string.by_grade)) && position == 0)) {
-                            view.setTextColor(0xffbe0b0b);
-                            select.setTextColor(0xffbe0b0b);
+                            view.setTextColor(0xffff5842);
+                            select.setTextColor(0xffff5842);
                             select.setVisibility(View.VISIBLE);
                         } else {
                             view.setTextColor(0xff999999);

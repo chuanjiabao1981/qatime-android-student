@@ -233,7 +233,7 @@
                     android:layout_toLeftOf="@id/started_text"
                     android:gravity="center"
                     android:text="√"
-                    android:textColor="#be0b0b" />
+                    android:textColor="@color/colorPrimary" />
             </RelativeLayout>
 
             <TextView
@@ -272,7 +272,7 @@
                     android:layout_toLeftOf="@id/recruiting_text"
                     android:gravity="center"
                     android:text="√"
-                    android:textColor="#be0b0b" />
+                    android:textColor="@color/colorPrimary" />
 
             </RelativeLayout>
 
