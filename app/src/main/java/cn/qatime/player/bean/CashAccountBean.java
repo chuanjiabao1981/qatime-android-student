@@ -9,18 +9,10 @@ public class CashAccountBean {
 
     /**
      * status : 1
-     * data : {"id":2866,"balance":"0.0","total_income":"0.0","total_expenditure":"0.0","has_password":true}
+     * data : {"id":70,"balance":"4244.86","total_income":"0.0","total_expenditure":"6046.15","has_password":true,"password_set_at":1484725785}
      */
 
     private int status;
-    /**
-     * id : 2866
-     * balance : 0.0
-     * total_income : 0.0
-     * total_expenditure : 0.0
-     * has_password : true
-     */
-
     private DataBean data;
 
     public int getStatus() {
@@ -40,11 +32,21 @@ public class CashAccountBean {
     }
 
     public static class DataBean {
+        /**
+         * id : 70
+         * balance : 4244.86
+         * total_income : 0.0
+         * total_expenditure : 6046.15
+         * has_password : true
+         * password_set_at : 1484725785
+         */
+
         private int id;
         private String balance;
         private String total_income;
         private String total_expenditure;
         private boolean has_password;
+        private long password_set_at;
 
         public int getId() {
             return id;
@@ -84,6 +86,14 @@ public class CashAccountBean {
 
         public void setHas_password(boolean has_password) {
             this.has_password = has_password;
+        }
+
+        public long getPassword_set_at() {
+            return password_set_at;
+        }
+
+        public void setPassword_set_at(long password_set_at) {
+            this.password_set_at = password_set_at;
         }
     }
 }
