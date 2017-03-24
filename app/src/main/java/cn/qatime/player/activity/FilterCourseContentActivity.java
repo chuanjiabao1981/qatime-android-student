@@ -289,9 +289,11 @@ public class FilterCourseContentActivity extends BaseActivity {
             public void convert(ViewHolder holder, String item, int position) {
                 holder.setText(R.id.text, item);
                 if (label.getText().toString().equals(labelData.get(position))) {
-                    ((TextView) holder.getView(R.id.text)).setBackgroundColor(0xffcccccc);
-                } else {
                     ((TextView) holder.getView(R.id.text)).setBackgroundResource(R.drawable.text_background_red);
+                    ((TextView) holder.getView(R.id.text)).setTextColor(getResources().getColor(R.color.colorPrimary));
+                } else {
+                    ((TextView) holder.getView(R.id.text)).setBackgroundResource(R.drawable.text_background);
+                    ((TextView) holder.getView(R.id.text)).setTextColor(0xff666666);
                 }
             }
         };

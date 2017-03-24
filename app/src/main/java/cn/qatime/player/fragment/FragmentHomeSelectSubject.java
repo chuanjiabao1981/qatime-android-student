@@ -67,7 +67,7 @@ public class FragmentHomeSelectSubject extends BaseFragment {
                     ((TextView) holder.getView(R.id.text)).setTextColor(getResources().getColor(R.color.colorPrimary));
                     holder.getView(R.id.text).setBackgroundColor(0xffffffff);
                 } else {
-                    ((TextView) holder.getView(R.id.text)).setTextColor(0xff333333);
+                    ((TextView) holder.getView(R.id.text)).setTextColor(0xff666666);
                     holder.getView(R.id.text).setBackgroundColor(0xfff2f2f2);
                 }
             }

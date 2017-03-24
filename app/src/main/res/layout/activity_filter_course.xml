@@ -21,7 +21,7 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:text="最新"
-            android:textColor="#666" />
+            android:textColor="@color/colorPrimary" />
 
         <TextView
             android:id="@+id/price"
