@@ -28,24 +28,17 @@ import libraryextra.adapter.ViewHolder;
 
 public class FragmentHomeSelectSubject extends BaseFragment {
 
-    private ListView listview;
-    private GridView gridView;
     private List<String> gradeData = new ArrayList<>();
     private List<String> subjectData = new ArrayList<>();
     private int gradeChecked = 0;
     private CommonAdapter<String> listAdapter;
+    private CommonAdapter<String> gridAdapter;
     //    private int subjectChecked = 0;
 
     private void assignViews(View view) {
-        listview = (ListView) view.findViewById(R.id.listview);
-        gridView = (GridView) view.findViewById(R.id.gridView);
-    }
+        ListView listview = (ListView) view.findViewById(R.id.listview);
+        GridView gridView = (GridView) view.findViewById(R.id.gridView);
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_screen_grade_and_subject, container, false);
-        assignViews(view);
         gradeData.add("高三");
         gradeData.add("高二");
         gradeData.add("高一");
@@ -73,13 +66,7 @@ public class FragmentHomeSelectSubject extends BaseFragment {
             }
         };
         listview.setAdapter(listAdapter);
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                gradeChecked = position;
-                listAdapter.notifyDataSetChanged();
-            }
-        });
+
         subjectData.add("全部");
         subjectData.add("语文");
         subjectData.add("数学");
@@ -90,7 +77,8 @@ public class FragmentHomeSelectSubject extends BaseFragment {
         subjectData.add("物理");
         subjectData.add("化学");
         subjectData.add("生物");
-        CommonAdapter<String> gridAdapter = new CommonAdapter<String>(getActivity(), subjectData, R.layout.item_subject) {
+        subjectData.add("科学");
+        gridAdapter = new CommonAdapter<String>(getActivity(), subjectData, R.layout.item_subject) {
             @Override
             public void convert(ViewHolder holder, String item, int position) {
                 holder.setText(R.id.text, subjectData.get(position));
@@ -106,11 +94,84 @@ public class FragmentHomeSelectSubject extends BaseFragment {
                 startActivity(intent);
             }
         });
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                gradeChecked = position;
+                listAdapter.notifyDataSetChanged();
+
+                notifySubject(position);
+            }
+        });
+    }
+
+    private void notifySubject(int position) {
+        subjectData.clear();
+        subjectData.add("全部");
+        subjectData.add("语文");
+        subjectData.add("数学");
+
+        switch (position) {
+            case 0:
+            case 1:
+            case 2:
+                subjectData.add("英语");
+                subjectData.add("政治");
+                subjectData.add("历史");
+                subjectData.add("地理");
+                subjectData.add("物理");
+                subjectData.add("化学");
+                subjectData.add("生物");
+                break;
+
+            case 3:
+                subjectData.add("英语");
+                subjectData.add("政治");
+                subjectData.add("历史");
+                subjectData.add("地理");
+                subjectData.add("生物");
+                break;
+            case 4:
+                subjectData.add("英语");
+                subjectData.add("政治");
+                subjectData.add("历史");
+                subjectData.add("地理");
+                subjectData.add("物理");
+                subjectData.add("化学");
+                break;
+            case 5:
+                subjectData.add("英语");
+                subjectData.add("政治");
+                subjectData.add("历史");
+                subjectData.add("物理");
+                subjectData.add("化学");
+                break;
+
+
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+                subjectData.add("英语");
+                break;
+        }
+        subjectData.add("科学");
+        gridAdapter.notifyDataSetChanged();
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_screen_grade_and_subject, container, false);
+        assignViews(view);
+
         return view;
     }
 
     public void setGrade(int position) {
         gradeChecked = position;
         listAdapter.notifyDataSetChanged();
+        notifySubject(position);
     }
 }
