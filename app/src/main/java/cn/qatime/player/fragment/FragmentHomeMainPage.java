@@ -271,7 +271,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
                 if (parent.getChildPosition(view) == 0)
                     outRect.left = 0;
-                if(parent.getChildAdapterPosition(view)==todayList.size())
+                if (parent.getChildAdapterPosition(view) == todayList.size())
                     outRect.right = 0;
             }
         });
@@ -284,7 +284,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             }
 
             @Override
-            public void onBindViewHolder(BaseViewHolder holder,final int position) {
+            public void onBindViewHolder(BaseViewHolder holder, final int position) {
                 LiveTodayBean.DataBean item = todayList.get(position);
                 holder.setText(R.id.teaching_time, item.getCourse().getName())
                         .setImageByUrl(R.id.image, item.getCourse().getPublicize(), R.mipmap.photo)
@@ -294,7 +294,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     public void onClick(View view) {
                         int courseId = todayList.get(position).getCourse().getId();
                         Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                        intent.putExtra("id",courseId);
+                        intent.putExtra("id", courseId);
                         startActivity(intent);
                     }
                 });
@@ -329,7 +329,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         gradeAdapter = new RecyclerView.Adapter() {
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View textView = View.inflate(getActivity(),R.layout.item_home_grade,null);
+                View textView = View.inflate(getActivity(), R.layout.item_home_grade, null);
                 return new BaseViewHolder(textView);
             }
 
@@ -342,7 +342,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     @Override
                     public void onClick(View view) {
                         MainActivity mainActivity = (MainActivity) getActivity();
-                        mainActivity.setCurrentPosition(1,position);
+                        mainActivity.setCurrentPosition(1, position);
                     }
                 });
             }
@@ -380,9 +380,10 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     protected void onSuccess(JSONObject response) {
                         EssenceContentBean data = JsonUtils.objectFromJson(response.toString(), EssenceContentBean.class);
                         listEssenceContent.clear();
-                        assert data != null;
-                        listEssenceContent.addAll(data.getData());
-                        essenceContentAdapter.notifyDataSetChanged();
+                        if (data != null && data.getData() != null) {
+                            listEssenceContent.addAll(data.getData());
+                            essenceContentAdapter.notifyDataSetChanged();
+                        }
                     }
 
                     @Override
@@ -413,9 +414,10 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     protected void onSuccess(JSONObject response) {
                         LiveTodayBean data = JsonUtils.objectFromJson(response.toString(), LiveTodayBean.class);
                         todayList.clear();
-                        assert data != null;
-                        todayList.addAll(data.getData());
-                        todayAdapter.notifyDataSetChanged();
+                        if (data != null && data.getData() != null) {
+                            todayList.addAll(data.getData());
+                            todayAdapter.notifyDataSetChanged();
+                        }
                     }
 
                     @Override
