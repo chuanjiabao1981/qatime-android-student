@@ -21,7 +21,9 @@ import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
@@ -47,7 +49,6 @@ import libraryextra.view.WheelView;
 public class RegisterPerfectActivity extends BaseActivity implements View.OnClickListener {
 
     private String imageUrl = "";
-    private GradeBean gradeBean;
     private CustomProgressDialog progress;
     private AlertDialog alertDialog;
 
@@ -57,6 +58,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
     private TextView editGrade;
     private TextView editMore;
     private TextView complete;
+    private List<String> grades;
 
     private void assignViews() {
         information = (LinearLayout) findViewById(R.id.information);
@@ -82,10 +84,11 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
         setContentView(R.layout.activity_register_perfect);
         setTitles(getResources().getString(R.string.information_perfect));
         assignViews();
-
+        grades = new ArrayList<>();
         String gradeString = FileUtil.readFile(getFilesDir() + "/grade.txt");
         if (!StringUtils.isNullOrBlanK(gradeString)) {
-            gradeBean = JsonUtils.objectFromJson(gradeString, GradeBean.class);
+            GradeBean gradeBean = JsonUtils.objectFromJson(gradeString, GradeBean.class);
+            grades = gradeBean.getData().getGrades();
         }
         information.setOnClickListener(this);
         complete.setOnClickListener(this);
@@ -101,7 +104,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
             case R.id.edit_more:
                 intent = new Intent(RegisterPerfectActivity.this, PersonalInformationChangeActivity.class);
                 int register_action = getIntent().getIntExtra("register_action", Constant.REGIST_1);
-                intent.putExtra("register_action",register_action);
+                intent.putExtra("register_action", register_action);
                 startActivityForResult(intent, register_action);
                 break;
             case R.id.grade:
@@ -142,7 +145,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                             BaseApplication.setProfile(profile);
                         }
                         DialogUtils.dismissDialog(progress);
-                        if(getIntent().getIntExtra("register_action",Constant.REGIST_1)==Constant.REGIST_1){
+                        if (getIntent().getIntExtra("register_action", Constant.REGIST_1) == Constant.REGIST_1) {
                             Intent data = new Intent(RegisterPerfectActivity.this, MainActivity.class);
                             startActivity(data);
                         }
@@ -190,8 +193,9 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
             final View view = View.inflate(RegisterPerfectActivity.this, R.layout.dialog_grade_picker, null);
             final WheelView grade = (WheelView) view.findViewById(R.id.grade);
             grade.setOffset(1);
-            grade.setItems(gradeBean.getData().getGrades());
-            grade.setSeletion(gradeBean.getData().getGrades().indexOf(editGrade.getText()));
+
+            grade.setItems(grades);
+            grade.setSeletion(grades.indexOf(editGrade.getText()));
             grade.setonItemClickListener(new WheelView.OnItemClickListener() {
                 @Override
                 public void onItemClick() {
@@ -256,7 +260,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
             startActivity(intent);
             setResult(resultCode);
             finish();
-        }else if (requestCode == Constant.REGIST_2 && resultCode == Constant.RESPONSE) {
+        } else if (requestCode == Constant.REGIST_2 && resultCode == Constant.RESPONSE) {
             setResult(resultCode);
             finish();
         }

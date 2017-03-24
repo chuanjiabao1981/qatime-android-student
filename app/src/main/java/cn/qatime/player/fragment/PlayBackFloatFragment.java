@@ -216,7 +216,7 @@ public class PlayBackFloatFragment extends Fragment implements View.OnClickListe
                 break;
             case R.id.sd:
                 videoDefinition.setText(getResources().getString(R.string.sd));
-                sd.setTextColor(0xffbe0b0b);
+                sd.setTextColor(0xffff5842);
                 hds.setTextColor(0xffffffff);
                 uhd.setTextColor(0xffffffff);
                 definition.setVisibility(View.GONE);
@@ -226,7 +226,7 @@ public class PlayBackFloatFragment extends Fragment implements View.OnClickListe
             case R.id.hd:
                 videoDefinition.setText(getResources().getString(R.string.hd));
                 sd.setTextColor(0xffffffff);
-                hds.setTextColor(0xffbe0b0b);
+                hds.setTextColor(0xffff5842);
                 uhd.setTextColor(0xffffffff);
                 definition.setVisibility(View.GONE);
                 startVanishTimer();
@@ -236,7 +236,7 @@ public class PlayBackFloatFragment extends Fragment implements View.OnClickListe
                 videoDefinition.setText(getResources().getString(R.string.uhd));
                 sd.setTextColor(0xffffffff);
                 hds.setTextColor(0xffffffff);
-                uhd.setTextColor(0xffbe0b0b);
+                uhd.setTextColor(0xffff5842);
                 definition.setVisibility(View.GONE);
                 startVanishTimer();
 

@@ -53,7 +53,6 @@ public class FragmentOrderUnpaid extends BaseFragment {
     private java.util.List<MyOrderBean.Data> list = new ArrayList<>();
     private CommonAdapter<MyOrderBean.Data> adapter;
     private int page = 1;
-    DecimalFormat df = new DecimalFormat("#.00");
 
     @Nullable
     @Override

@@ -30,7 +30,7 @@
             android:background="@drawable/text_background_red"
             android:gravity="center"
             android:text="@string/whole_country"
-            android:textColor="#BE0B0B"
+            android:textColor="@color/colorPrimary"
             android:textSize="14sp" />
 
         <View

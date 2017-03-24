@@ -35,7 +35,6 @@ import cn.qatime.player.view.CustomKeyboard;
 import cn.qatime.player.view.PayEditText;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -135,13 +134,11 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
             this.email.setText(getResourceString(R.string.not_bind));
             this.email.setTextColor(Color.RED);
         }
-        // TODO: 2017/3/7 将支付密码信息整合到接口中
         if (BaseApplication.getCashAccount() != null && BaseApplication.getCashAccount().getData() != null) {
             if (BaseApplication.getCashAccount().getData().isHas_password()) {
-                // TODO: 2017/3/7 判断密码是否可用
-                long changeAt = (long) SPUtils.get(this, "pay_pwd_change_at", 0l);
+                long changeAt = BaseApplication.getCashAccount().getData().getPassword_set_at();
 
-                int diff = 24 - (int) ((System.currentTimeMillis() - changeAt) / (1000 * 3600));
+                int diff = 24 - (int) ((System.currentTimeMillis()/1000  - changeAt) / 3600);
                 if (diff <= 24&&diff > 0) {
                     payPswText.setText(getString(R.string.new_pay_password_invalid, diff));
                     payPswText.setTextColor(0xff999999);
@@ -206,7 +203,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
             case R.id.bind_phone_number://绑定手机
                 Intent intent = new Intent(this, VerifyPhoneActivity.class);
                 intent.putExtra("next", "phone");
-                startActivityForResult(intent, Constant.REQUEST_EXIT_LOGIN);
+                startActivity(intent);
                 break;
             case R.id.bind_email://绑定邮箱
                 intent = new Intent(this, VerifyPhoneActivity.class);
@@ -249,10 +246,9 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
     @Subscribe
     public void onEvent(String code) {
         if (code.equals("pay_pwd_change")) {
-            // TODO: 2017/3/7 判断密码是否可用
-            long changeAt = (long) SPUtils.get(this, "pay_pwd_change_at", 0l);
+            long changeAt = BaseApplication.getCashAccount().getData().getPassword_set_at();
 
-            int diff = 24 - (int) ((System.currentTimeMillis() - changeAt) / (1000 * 3600));
+            int diff = 24 - (int) ((System.currentTimeMillis()/1000 - changeAt) / 3600);
             if (diff <= 24 && diff > 0) {
                 payPswText.setText(getString(R.string.new_pay_password_invalid, diff));
                 payPswText.setTextColor(0xff666666);

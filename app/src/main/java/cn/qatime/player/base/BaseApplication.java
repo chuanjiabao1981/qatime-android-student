@@ -151,7 +151,7 @@ public class BaseApplication extends Application {
             }
         };
         mPushAgent.setNotificationClickHandler(notificationClickHandler);
-        mPushAgent.setMessageHandler(new UmengMessageHandler(){
+        mPushAgent.setMessageHandler(new UmengMessageHandler() {
             @Override
             public void handleMessage(Context context, UMessage uMessage) {
                 EventBus.getDefault().postSticky("handleUPushMessage");
@@ -359,6 +359,12 @@ public class BaseApplication extends Application {
     }
 
     public static void clearToken() {
+//        Throwable ex = new Throwable();
+//
+//        StackTraceElement[] stackElements = ex.getStackTrace();
+//        for (int i = Math.min(4, stackElements.length); i > 0; i--) {
+//            Logger.e("classname:" + stackElements[i].getClassName() + "*********getMethodName:" + stackElements[i].getMethodName() + "*******LineNumber:" + stackElements[i].getLineNumber());
+//        }
         if (profile != null && profile.getData() != null) {
             profile.getData().setRemember_token("");
             if (profile.getData().getUser() != null && profile.getData().getUser().getChat_account() != null) {

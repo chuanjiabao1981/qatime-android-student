@@ -2,17 +2,19 @@ package cn.qatime.player.fragment;
 
 
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -33,7 +35,6 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,8 +47,11 @@ import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.BannerRecommendBean;
-import cn.qatime.player.bean.ClassRecommendBean;
+import cn.qatime.player.bean.EssenceContentBean;
+import cn.qatime.player.bean.LiveTodayBean;
+import cn.qatime.player.bean.RecentPublishedBean;
 import cn.qatime.player.bean.TeacherRecommendBean;
+import cn.qatime.player.holder.BaseViewHolder;
 import cn.qatime.player.qrcore.core.CaptureActivity;
 import cn.qatime.player.utils.AMapLocationUtils;
 import cn.qatime.player.utils.Constant;
@@ -56,38 +60,44 @@ import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.CityBean;
 import libraryextra.transformation.GlideCircleTransform;
+import libraryextra.utils.DensityUtils;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.ScreenUtils;
+import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
+import libraryextra.view.ListViewForScrollView;
 import libraryextra.view.TagViewPager;
-
-import static cn.qatime.player.R.id.count;
 
 public class FragmentHomeMainPage extends BaseFragment implements View.OnClickListener {
 
-
     private TagViewPager tagViewpagerImg;
     private GridView gridviewTeacher;
-    private View allClass;
-    private GridView gridviewClass;
-    private List<ClassRecommendBean.DataBean> listRecommendClass = new ArrayList<>();
-    private BaseAdapter classAdapter;
-    private View scan;
-    //    private ImageView message_x;
+    private ListViewForScrollView listViewEssenceContent;
+    private List<EssenceContentBean.DataBean> listEssenceContent = new ArrayList<>();
+    private CommonAdapter<EssenceContentBean.DataBean> essenceContentAdapter;
+    private CommonAdapter<RecentPublishedBean.DataBean.StartRankBean> startRankAdapter;
+    private CommonAdapter<RecentPublishedBean.DataBean.PublishedRankBean> publisheRankAdapter;
     private ArrayList<TeacherRecommendBean.DataBean> listRecommendTeacher = new ArrayList<>();
     private CommonAdapter<TeacherRecommendBean.DataBean> teacherAdapter;
-    private GridView gridviewSubject;
-    private View citySelect;
     private TextView cityName;
     private List<CityBean.Data> listCity;
     private CityBean.Data locationCity;
     private AMapLocationUtils utils;
     private List<BannerRecommendBean.DataBean> listBanner = new ArrayList<>();
-//    private View count;
 
     private BannerRecommendBean.DataBean noBanner;
     private PullToRefreshScrollView scrollView;
+    private RecyclerView recyclerGrade;
+    private List<String> gradeList;
+    private RecyclerView.Adapter gradeAdapter;
+    private RecyclerView recyclerToday;
+    private RecyclerView.Adapter todayAdapter;
+    private List<LiveTodayBean.DataBean> todayList;
+    private ListViewForScrollView listViewStartRank;//近期开课
+    private ListViewForScrollView listViewPublishedRank;//最新发布
+    private List<RecentPublishedBean.DataBean.StartRankBean> listStartRank = new ArrayList<>();
+    private List<RecentPublishedBean.DataBean.PublishedRankBean> listPublishedRank = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -130,36 +140,343 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
         tagViewpagerImg = (TagViewPager) view.findViewById(R.id.tag_viewpager_img);
         gridviewTeacher = (GridView) view.findViewById(R.id.gridview_teacher);
-        gridviewSubject = (GridView) view.findViewById(R.id.gridview_subject);
         cityName = (TextView) view.findViewById(R.id.city_name);
-        allClass = view.findViewById(R.id.all_class);
-        citySelect = view.findViewById(R.id.city_select);
-        gridviewClass = (GridView) view.findViewById(R.id.gridview_class);
-        scan = view.findViewById(R.id.scan);
-//        message_x = (ImageView) view.findViewById(R.id.message_x);
-//        count = view.findViewById(count);
+        View citySelect = view.findViewById(R.id.city_select);
+        listViewEssenceContent = (ListViewForScrollView) view.findViewById(R.id.listview_class);
+        listViewStartRank = (ListViewForScrollView) view.findViewById(R.id.listview_class1);
+        listViewPublishedRank = (ListViewForScrollView) view.findViewById(R.id.listview_class2);
+        View scan = view.findViewById(R.id.scan);
+        recyclerGrade = (RecyclerView) view.findViewById(R.id.recycler_grade);
+        recyclerToday = (RecyclerView) view.findViewById(R.id.recycler_today);
+
+
+        initBanner();
+        initGrade();
+        initToady();
+        initEssence();
+
+        initTeacher();
+        initStartRank();
+        initPublishedRank();
 
         setCity();
-
-        initTagImg();
-        initTagViewpagerSubject();
-        initGridTeacher();
-        initGridClass();
         initLocationData();
-        allClass.setOnClickListener(this);
         scan.setOnClickListener(this);
         citySelect.setOnClickListener(this);
+    }
+
+    private void initPublishedRank() {
+        //最新发布
+        publisheRankAdapter = new CommonAdapter<RecentPublishedBean.DataBean.PublishedRankBean>(getContext(), listPublishedRank, R.layout.item_course_rank) {
+            @Override
+            public void convert(ViewHolder holder, RecentPublishedBean.DataBean.PublishedRankBean item, int position) {
+                holder.setImageByUrl(R.id.image, item.getPublicize(), R.mipmap.photo)
+                        .setText(R.id.title, item.getName())
+                        .setText(R.id.teacher, item.getTeacher_name())
+                        .setText(R.id.grade_subject, item.getGrade() + item.getSubject());
+            }
+        };
+        listViewPublishedRank.setAdapter(publisheRankAdapter);
+        listViewPublishedRank.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int courseId = listPublishedRank.get(position).getId();
+                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                intent.putExtra("id", courseId);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void initStartRank() {
+        //近期开课
+        startRankAdapter = new CommonAdapter<RecentPublishedBean.DataBean.StartRankBean>(getContext(), listStartRank, R.layout.item_course_rank) {
+            @Override
+            public void convert(ViewHolder holder, RecentPublishedBean.DataBean.StartRankBean item, int position) {
+                holder.setImageByUrl(R.id.image, item.getPublicize(), R.mipmap.photo)
+                        .setText(R.id.title, item.getName())
+                        .setText(R.id.teacher, item.getTeacher_name())
+                        .setText(R.id.grade_subject, item.getGrade() + item.getSubject());
+            }
+        };
+        listViewStartRank.setAdapter(startRankAdapter);
+        listViewStartRank.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int courseId = listStartRank.get(position).getId();
+                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                intent.putExtra("id", courseId);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void initEssence() {
+        essenceContentAdapter = new CommonAdapter<EssenceContentBean.DataBean>(getContext(), listEssenceContent, R.layout.item_essence_content) {
+            @Override
+            public void convert(ViewHolder holder, EssenceContentBean.DataBean item, int position) {
+                holder.setImageByUrl(R.id.image, item.getLogo_url(), R.mipmap.photo)
+                        .setText(R.id.course_title, item.getLive_studio_course().getName())
+                        .setText(R.id.grade_subject, item.getLive_studio_course().getGrade() + item.getLive_studio_course().getSubject())
+                        .setText(R.id.teacher, item.getLive_studio_course().getTeacher_name());
+                holder.getView(R.id.reason1).setVisibility(StringUtils.isNullOrBlanK(item.getTag_one()) ? View.GONE : View.VISIBLE);
+                holder.setText(R.id.reason1, getTags(item.getTag_one()));
+                holder.getView(R.id.reason2).setVisibility(StringUtils.isNullOrBlanK(item.getTag_two()) ? View.GONE : View.VISIBLE);
+                holder.setText(R.id.reason2, getTags(item.getTag_two()));
+            }
+        };
+        listViewEssenceContent.setAdapter(essenceContentAdapter);
+        listViewEssenceContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int courseId = listEssenceContent.get(position).getLive_studio_course().getId();
+                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                intent.putExtra("id", courseId);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private String getTags(String tag) {
+        String result = "";
+        if (StringUtils.isNullOrBlanK(tag)) return result;
+        switch (tag) {
+            case "star_teacher":
+                result = "名师";
+                break;
+            case "best_seller":
+                result = "畅销";
+                break;
+            case "free_tastes":
+                result = "试听";
+                break;
+            case "join_cheap":
+                result = "试听";
+                break;
+        }
+        return result;
+    }
+
+    private void initToady() {
+        todayList = new ArrayList<>();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        recyclerToday.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                outRect.right = DensityUtils.dip2px(getActivity(), 10);
+                outRect.bottom = 0;
+                outRect.top = 0;
+                outRect.left = DensityUtils.dip2px(getActivity(), 10);
+
+                if (parent.getChildPosition(view) == 0)
+                    outRect.left = 0;
+                if(parent.getChildAdapterPosition(view)==todayList.size())
+                    outRect.right = 0;
+            }
+        });
+        recyclerToday.setLayoutManager(layoutManager);
+        todayAdapter = new RecyclerView.Adapter<BaseViewHolder>() {
+            @Override
+            public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                View item = View.inflate(getActivity(), R.layout.item_home_today, null);
+                return new BaseViewHolder(item);
+            }
+
+            @Override
+            public void onBindViewHolder(BaseViewHolder holder,final int position) {
+                LiveTodayBean.DataBean item = todayList.get(position);
+                holder.setText(R.id.teaching_time, item.getCourse().getName())
+                        .setImageByUrl(R.id.image, item.getCourse().getPublicize(), R.mipmap.photo)
+                        .setText(R.id.time, item.getLive_time());
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int courseId = todayList.get(position).getCourse().getId();
+                        Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                        intent.putExtra("id",courseId);
+                        startActivity(intent);
+                    }
+                });
+            }
+
+            @Override
+            public int getItemCount() {
+                return todayList.size();
+            }
+        };
+        recyclerToday.setAdapter(todayAdapter);
+
+    }
+
+    private void initGrade() {
+        gradeList = new ArrayList<>();
+        gradeList.add("高三");
+        gradeList.add("高二");
+        gradeList.add("高一");
+        gradeList.add("初三");
+        gradeList.add("初二");
+        gradeList.add("初一");
+        gradeList.add("六年级");
+        gradeList.add("五年级");
+        gradeList.add("四年级");
+        gradeList.add("三年级");
+        gradeList.add("二年级");
+        gradeList.add("一年级");
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        recyclerGrade.setLayoutManager(layoutManager);
+        gradeAdapter = new RecyclerView.Adapter() {
+            @Override
+            public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                View textView = View.inflate(getActivity(),R.layout.item_home_grade,null);
+                return new BaseViewHolder(textView);
+            }
+
+            @Override
+            public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+                String info = gradeList.get(position);
+                TextView textView = (TextView) holder.itemView;
+                textView.setText(info);
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        MainActivity mainActivity = (MainActivity) getActivity();
+                        mainActivity.setCurrentPosition(1,position);
+                    }
+                });
+            }
+
+            @Override
+            public int getItemCount() {
+                return gradeList.size();
+            }
+        };
+        recyclerGrade.setAdapter(gradeAdapter);
     }
 
 
     private void setCity() {
         cityName.setText(BaseApplication.getCurrentCity().getName());
+
         initBannerData();
+        initEssenceData();//精选内容
+        initToadyData();//今日直播
         initTeacherData();
-        initClassData();
+        initRecentPublished();//最新发布,近期开课
     }
 
-    private void initTagImg() {
+    private void initEssenceData() {
+        Map<String, String> map = new HashMap<>();
+        try {
+            map.put("city_name", URLEncoder.encode(BaseApplication.getCurrentCity().getName(), "UTF-8"));
+            map.put("per_page", "4");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecommend + "index_choiceness_item" + "/items", map), null,
+                new VolleyListener(getActivity()) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        EssenceContentBean data = JsonUtils.objectFromJson(response.toString(), EssenceContentBean.class);
+                        listEssenceContent.clear();
+                        assert data != null;
+                        listEssenceContent.addAll(data.getData());
+                        essenceContentAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
+    }
+
+    /**
+     * 今日直播数据
+     */
+    private void initToadyData() {
+        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.lessons + "today", null,
+                new VolleyListener(getActivity()) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        LiveTodayBean data = JsonUtils.objectFromJson(response.toString(), LiveTodayBean.class);
+                        todayList.clear();
+                        assert data != null;
+                        todayList.addAll(data.getData());
+                        todayAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
+    }
+
+    /**
+     * 最新发布,近期开课
+     */
+    private void initRecentPublished() {
+        Map<String, String> map = new HashMap<>();
+        map.put("count", "2");
+        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecentPublished, map), null,
+                new VolleyListener(getActivity()) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        RecentPublishedBean data = JsonUtils.objectFromJson(response.toString(), RecentPublishedBean.class);
+                        listStartRank.clear();
+                        listPublishedRank.clear();
+                        if (data != null && data.getData() != null) {
+                            listStartRank.addAll(data.getData().getStart_rank());
+                            listPublishedRank.addAll(data.getData().getPublished_rank());
+                            startRankAdapter.notifyDataSetChanged();
+                            publisheRankAdapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
+    }
+
+
+    private void initBanner() {
         ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()), ScreenUtils.getScreenWidth(getActivity()) / 3);
         tagViewpagerImg.setLayoutParams(params);
         noBanner = new BannerRecommendBean.DataBean();
@@ -224,34 +541,8 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         addToRequestQueue(request);
     }
 
-    private void initTagViewpagerSubject() {
-        String[] subject = getResources().getStringArray(R.array.subject);
-        final int[] icons = {R.mipmap.chinese, R.mipmap.math, R.mipmap.english, R.mipmap.physics, R.mipmap.chemistry, R.mipmap.biology, R.mipmap.history, R.mipmap.geography, R.mipmap.politics, R.mipmap.science};
-        final List<String> strings = Arrays.asList(subject);
-        gridviewSubject.setAdapter(new CommonAdapter<String>(getContext(), strings, R.layout.item_grid_subject) {
-            @Override
-            public int getCount() {
-                return strings.size();
-            }
 
-            @Override
-            public void convert(ViewHolder holder, String item, int position) {
-                String s = strings.get(position);
-                holder.setText(R.id.subject_text, s);
-                holder.setImageResource(R.id.subject_img, icons[position]);
-            }
-        });
-        gridviewSubject.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String s = strings.get(position);
-                MainActivity mainActivity = (MainActivity) getActivity();
-                mainActivity.setCurrentPosition(1, s);
-            }
-        });
-    }
-
-    private void initGridTeacher() {
+    private void initTeacher() {
         teacherAdapter = new CommonAdapter<TeacherRecommendBean.DataBean>(getContext(), listRecommendTeacher, R.layout.item_grid_teacher) {
             @Override
             public void convert(ViewHolder holder, TeacherRecommendBean.DataBean item, int position) {
@@ -308,7 +599,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     @Override
                     protected void onSuccess(JSONObject response) {
                         TeacherRecommendBean teacherRecommendBean = JsonUtils.objectFromJson(response.toString(), TeacherRecommendBean.class);
-                        //teacherRecommendBean.getData()==null有两种情况  1、没有更多的老师。2、本来就没有老师
                         listRecommendTeacher.clear();
                         if (teacherRecommendBean != null && teacherRecommendBean.getData() != null && teacherRecommendBean.getData().size() > 0) {
                             listRecommendTeacher.addAll(teacherRecommendBean.getData());
@@ -341,47 +631,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     }
 
 
-    private void initGridClass() {
-        classAdapter = new CommonAdapter<ClassRecommendBean.DataBean>(getContext(), listRecommendClass, R.layout.item_class_recommend) {
-            @Override
-            public int getCount() {
-                return listRecommendClass.size();
-            }
-
-            @Override
-            public void convert(ViewHolder holder, ClassRecommendBean.DataBean item, int position) {
-                if (item != null) {
-                    Glide.with(getActivity()).load(item.getLive_studio_course().getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) holder.getView(R.id.class_recommend_img)));
-                    holder.setText(R.id.course_title, item.getLive_studio_course().getName());
-                    holder.setText(R.id.grade, item.getLive_studio_course().getGrade());
-                    holder.setText(R.id.subject, item.getLive_studio_course().getSubject());
-                    holder.setText(count, item.getLive_studio_course().getBuy_tickets_count() + getString(R.string.purchased));
-                    ((TextView) holder.getView(R.id.reason)).setText(getReason(item.getReason()));
-                    ((TextView) holder.getView(R.id.reason)).setBackgroundColor(getReasonBackground(item.getReason()));
-                    ((TextView) holder.getView(R.id.reason)).setVisibility(View.VISIBLE);
-                } else {
-                    Glide.with(getActivity()).load(R.mipmap.photo).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) holder.getView(R.id.class_recommend_img)));
-                    holder.setText(R.id.course_title, getString(R.string.no_course_name));
-                    holder.setText(R.id.grade, getString(R.string.grade));
-                    holder.setText(R.id.subject, getString(R.string.subject));
-                    holder.setText(count, 0 + getString(R.string.purchased));
-                    ((TextView) holder.getView(R.id.reason)).setVisibility(View.INVISIBLE);
-                }
-            }
-        };
-        gridviewClass.setAdapter(classAdapter);
-        gridviewClass.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (listRecommendClass.get(position) != null) {
-                    Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                    intent.putExtra("id", listRecommendClass.get(position).getLive_studio_course().getId());
-                    startActivityForResult(intent, Constant.REQUEST);
-                }
-            }
-        });
-    }
-
     private String getReason(String reason) {
         if ("latest".equals(reason)) {
             return getString(R.string.lastest);
@@ -400,55 +649,10 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         return 0x00000000;
     }
 
-    private void initClassData() {
-        Map<String, String> map = new HashMap<>();
-        map.put("page", String.valueOf(1));
-        map.put("per_page", String.valueOf(6));
-        try {
-            map.put("city_name", URLEncoder.encode(BaseApplication.getCurrentCity().getName(), "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecommend + "index_live_studio_course_recommend" + "/items", map), null,
-                new VolleyListener(getActivity()) {
-                    @Override
-                    protected void onSuccess(JSONObject response) {
-                        ClassRecommendBean classRecommendBean = JsonUtils.objectFromJson(response.toString(), ClassRecommendBean.class);
-                        listRecommendClass.clear();
-                        if (classRecommendBean != null && classRecommendBean.getData() != null) {
-                            listRecommendClass.addAll(classRecommendBean.getData());
-                        }
-                        while (listRecommendClass.size() < 6) {
-                            listRecommendClass.add(null);
-                        }
-                        classAdapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    protected void onError(JSONObject response) {
-                    }
-
-                    @Override
-                    protected void onTokenOut() {
-                        tokenOut();
-                    }
-
-                }, new VolleyErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
-            }
-        });
-        addToRequestQueue(request);
-    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //  注册/注销观察者
-//        EventBus.getDefault().unregister(this);
-//        NIMClient.getService(MsgServiceObserve.class)
-//                .observeRecentContact(messageObserver, false);
     }
 
     @Override
@@ -456,9 +660,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         MainActivity mainActivity = (MainActivity) getActivity();
         Intent intent;
         switch (v.getId()) {
-            case R.id.all_class:
-                mainActivity.setCurrentPosition(1, getResourceString(R.string.whole));
-                break;
             case R.id.scan:
                 intent = new Intent(getActivity(), CaptureActivity.class);
                 mainActivity.startActivityForResult(intent, Constant.REQUEST);

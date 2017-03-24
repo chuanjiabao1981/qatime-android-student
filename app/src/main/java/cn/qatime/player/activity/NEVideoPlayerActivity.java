@@ -45,6 +45,7 @@ import cn.qatime.player.barrage.model.Status;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.bean.InputPanel;
+import cn.qatime.player.bean.LiveStatusBean;
 import cn.qatime.player.bean.VideoState;
 import cn.qatime.player.fragment.VideoFloatFragment;
 import cn.qatime.player.utils.ScreenSwitchUtils;
@@ -353,7 +354,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         fragmentLayout.setScorllToNext(true);
         fragmentLayout.setScorll(true);
         fragmentLayout.setWhereTab(1);
-        fragmentLayout.setTabHeight(4, 0xffbe0b0b);
+        fragmentLayout.setTabHeight(4, 0xffff5842);
         fragmentLayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
@@ -749,7 +750,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     }
 
     private void queryVideoState() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlCourses + id + "/live_status",
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlCourses + id + "/status",
                 null, new VolleyListener(NEVideoPlayerActivity.this) {
             @Override
             protected void onTokenOut() {
@@ -759,10 +760,12 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             @Override
             protected void onSuccess(JSONObject response) {
                 reload = 0;
-                try {
-                    JSONObject data = response.getJSONObject("data");
-                    int board = data.getInt("board");
-                    int camera = data.getInt("camera");
+//              JSONObject data = response.getJSONObject("data");
+                LiveStatusBean data = JsonUtils.objectFromJson(response.toString(), LiveStatusBean.class);
+                if (data != null && data.getData() != null && data.getData().getLive_info() != null) {
+                    int board = data.getData().getLive_info().getBoard();
+                    int camera = data.getData().getLive_info().getCamera();
+
                     if (camera == 0 && board == 0) {
                         setVideoState(VideoState.UNPLAY);
                     } else if (camera == 2 && board == 1) {
@@ -770,9 +773,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                     } else if (camera == 1 && board == 1) {
                         setVideoState(VideoState.PLAYING);
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Logger.e("成功--异常");
+
+                    floatFragment.setNameAndCount(data.getData().getLive_info().getName(), data.getData().getOnline_users().size());
                 }
             }
 
