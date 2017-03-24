@@ -16,8 +16,7 @@
         <ImageView
             android:id="@+id/tab_img1"
             style="@style/tab_menu_icon_size"
-            android:tint="@color/colorPrimary"
-            android:src="@mipmap/tab_home" />
+            android:src="@mipmap/tab_home1" />
 
         <TextView
             android:id="@+id/tab_text1"
@@ -38,7 +37,7 @@
         <ImageView
             android:id="@+id/tab_img2"
             style="@style/tab_menu_icon_size"
-            android:src="@mipmap/tab_tutorship" />
+            android:src="@mipmap/tab_tutorship2" />
 
         <TextView
             android:id="@+id/tab_text2"
@@ -59,7 +58,7 @@
         <ImageView
             android:id="@+id/tab_img3"
             style="@style/tab_menu_icon_size"
-            android:src="@mipmap/tab_moments" />
+            android:src="@mipmap/tab_moments2" />
 
         <TextView
             android:id="@+id/tab_text3"
@@ -85,7 +84,7 @@
             <ImageView
                 android:id="@+id/tab_img4"
                 style="@style/tab_menu_icon_size"
-                android:src="@mipmap/tab_message" />
+                android:src="@mipmap/tab_message2" />
 
 
             <ImageView
@@ -94,8 +93,8 @@
                 android:layout_height="8dp"
                 android:layout_alignRight="@id/tab_img4"
                 android:layout_alignTop="@id/tab_img4"
-                android:visibility="gone"
-                android:src="@mipmap/message_x" />
+                android:src="@mipmap/message_x"
+                android:visibility="gone" />
         </RelativeLayout>
 
         <TextView
@@ -118,7 +117,7 @@
         <ImageView
             android:id="@+id/tab_img5"
             style="@style/tab_menu_icon_size"
-            android:src="@mipmap/tab_person" />
+            android:src="@mipmap/tab_person2" />
 
         <TextView
             android:id="@+id/tab_text5"

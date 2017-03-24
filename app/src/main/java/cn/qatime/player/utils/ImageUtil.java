@@ -20,11 +20,6 @@ import java.io.IOException;
  */
 
 public class ImageUtil {
-    public static Drawable tintDrawable(Drawable drawable, ColorStateList colors) {
-        final Drawable wrappedDrawable = DrawableCompat.wrap(drawable);
-        DrawableCompat.setTintList(wrappedDrawable, colors);
-        return wrappedDrawable;
-    }
 
     /**
      * 下载失败与获取失败时都统一显示默认下载失败图片

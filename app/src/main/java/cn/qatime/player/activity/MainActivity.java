@@ -81,6 +81,13 @@ public class MainActivity extends BaseFragmentActivity {
     private int[] tab_img = {R.id.tab_img1, R.id.tab_img2, R.id.tab_img3, R.id.tab_img4, R.id.tab_img5};
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3, R.id.tab_text4, R.id.tab_text5};
     private View message_x;
+    private int image_list[][] = new int[][]{
+            {R.mipmap.tab_home1, R.mipmap.tab_home2},
+            {R.mipmap.tab_tutorship1, R.mipmap.tab_tutorship2},
+            {R.mipmap.tab_moments1, R.mipmap.tab_moments2},
+            {R.mipmap.tab_message1, R.mipmap.tab_message2},
+            {R.mipmap.tab_person1, R.mipmap.tab_person2},
+    };
     //      创建观察者对象
     Observer<List<RecentContact>> messageObserver =
             new Observer<List<RecentContact>>() {
@@ -166,10 +173,8 @@ public class MainActivity extends BaseFragmentActivity {
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff666666);
                 ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffff5842);
-                Drawable lastDrawable = ((ImageView) lastTabView.findViewById(tab_img[lastPosition])).getDrawable().mutate();
-                ((ImageView) lastTabView.findViewById(tab_img[lastPosition])).setImageDrawable(ImageUtil.tintDrawable(lastDrawable, ColorStateList.valueOf(0xff666666)));
-                Drawable currentDrawable = ((ImageView) currentTabView.findViewById(tab_img[position])).getDrawable().mutate();
-                ((ImageView) currentTabView.findViewById(tab_img[position])).setImageDrawable(ImageUtil.tintDrawable(currentDrawable, ColorStateList.valueOf(0xffff5842)));
+                ((ImageView) lastTabView.findViewById(tab_img[lastPosition])).setImageResource(image_list[lastPosition][1]);
+                ((ImageView) currentTabView.findViewById(tab_img[position])).setImageResource(image_list[position][0]);
                 if (position == 3) {
                     /**
                      * 设置最近联系人的消息为已读
@@ -357,68 +362,68 @@ public class MainActivity extends BaseFragmentActivity {
 //    }
 
 
-    //省份列表
-    public void GetProvinceslist() {
-
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/provinces", null,
-                new VolleyListener(MainActivity.this) {
-                    @Override
-
-
-                    protected void onSuccess(JSONObject response) {
-
-                    }
-
-                    @Override
-                    protected void onError(JSONObject response) {
-
-                    }
-
-                    @Override
-                    protected void onTokenOut() {
-                        tokenOut();
-                    }
-                }, new VolleyErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
-            }
-        });
-        //TODO
-//        addToRequestQueue(request);
-    }
+//    //省份列表
+//    public void GetProvinceslist() {
+//
+//        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/provinces", null,
+//                new VolleyListener(MainActivity.this) {
+//                    @Override
+//
+//
+//                    protected void onSuccess(JSONObject response) {
+//
+//                    }
+//
+//                    @Override
+//                    protected void onError(JSONObject response) {
+//
+//                    }
+//
+//                    @Override
+//                    protected void onTokenOut() {
+//                        tokenOut();
+//                    }
+//                }, new VolleyErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError volleyError) {
+//                super.onErrorResponse(volleyError);
+//            }
+//        });
+//        //TODO
+////        addToRequestQueue(request);
+//    }
 
     //城市列表
-    public void GetCitieslist() {
-
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,
-                new VolleyListener(MainActivity.this) {
-
-                    @Override
-                    protected void onSuccess(JSONObject response) {
-                        boolean value = FileUtil.writeFile(new ByteArrayInputStream(response.toString().getBytes()), getCacheDir().getAbsolutePath() + "/city.txt", true);
-                        SPUtils.put(MainActivity.this, "city", value);
-                    }
-
-                    @Override
-                    protected void onError(JSONObject response) {
-
-                    }
-
-                    @Override
-                    protected void onTokenOut() {
-                        tokenOut();
-                    }
-
-                }, new VolleyErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
-            }
-        });
-        //TODO
-//        addToRequestQueue(request);
-    }
+//    public void GetCitieslist() {
+//
+//        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,
+//                new VolleyListener(MainActivity.this) {
+//
+//                    @Override
+//                    protected void onSuccess(JSONObject response) {
+//                        boolean value = FileUtil.writeFile(new ByteArrayInputStream(response.toString().getBytes()), getCacheDir().getAbsolutePath() + "/city.txt", true);
+//                        SPUtils.put(MainActivity.this, "city", value);
+//                    }
+//
+//                    @Override
+//                    protected void onError(JSONObject response) {
+//
+//                    }
+//
+//                    @Override
+//                    protected void onTokenOut() {
+//                        tokenOut();
+//                    }
+//
+//                }, new VolleyErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError volleyError) {
+//                super.onErrorResponse(volleyError);
+//            }
+//        });
+//        //TODO
+////        addToRequestQueue(request);
+//    }
 
     //学校列表
     public void GetSchoolslist() {
@@ -590,9 +595,11 @@ public class MainActivity extends BaseFragmentActivity {
         });
         addToRequestQueue(request);
     }
-    public void more(View v){
-        setCurrentPosition(1,0);
+
+    public void more(View v) {
+        setCurrentPosition(1, 0);
     }
+
     public void setCurrentPosition(int currentPosition, int position) {
         fragmentlayout.setCurrenItem(currentPosition);
         FragmentHomeSelectSubject fragmentHomeSelectSubject = (FragmentHomeSelectSubject) fragBaseFragments.get(1);
