@@ -42,8 +42,8 @@ public class FragmentNEVideoPlayerAdapter4 extends CommonAdapter<Announcements.D
             letterMap.put(item.getFirstLetters(), position);
         }
         if (item.isOwner()) {
-            ((TextView) holder.getView(R.id.name)).setTextColor(0xffbe0b0b);
-            ((TextView) holder.getView(R.id.role)).setTextColor(0xffbe0b0b);
+            ((TextView) holder.getView(R.id.name)).setTextColor(0xffff5842);
+            ((TextView) holder.getView(R.id.role)).setTextColor(0xffff5842);
             ((TextView) holder.getView(R.id.role)).setText(R.string.teacher_translate);
         } else {
             ((TextView) holder.getView(R.id.name)).setTextColor(0xff666666);

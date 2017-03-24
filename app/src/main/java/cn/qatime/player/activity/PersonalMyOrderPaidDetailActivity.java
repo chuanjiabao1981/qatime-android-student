@@ -127,7 +127,7 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
             refund.setBackgroundResource(R.drawable.button_background_light);
         } else {
             refund.setText(R.string.apply_refund);
-            refund.setTextColor(0xffbe0b0b);
+            refund.setTextColor(0xffff5842);
             refund.setBackgroundResource(R.drawable.button_background_normal);
             if (data.status.equals("paid")) {//正在交易
                 status.setImageResource(R.mipmap.paying);

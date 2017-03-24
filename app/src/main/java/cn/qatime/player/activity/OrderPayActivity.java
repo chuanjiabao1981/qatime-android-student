@@ -57,7 +57,6 @@ public class OrderPayActivity extends BaseActivity {
     private IWXAPI api;
 
 
-    DecimalFormat df = new DecimalFormat("#.00");
     private AppPayParamsBean weixinData;
     private String payType = "weixin";
     private String aliPayData;
