@@ -22,7 +22,6 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
-import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.StringUtils;
@@ -126,7 +125,7 @@ public class VerifyPhoneActivity extends BaseActivity implements View.OnClickLis
                             String next = getIntent().getStringExtra("next");
                             if ("phone".equals(next)) {
                                 Intent intent = new Intent(VerifyPhoneActivity.this, BindPhoneActivity.class);
-                                startActivityForResult(intent, Constant.REQUEST_EXIT_LOGIN);
+                                startActivity(intent);
                             } else if ("email".equals(next)) {
                                 Intent intent = new Intent(VerifyPhoneActivity.this, BindEmailActivity.class);
                                 startActivity(intent);
@@ -172,13 +171,6 @@ public class VerifyPhoneActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constant.REQUEST_EXIT_LOGIN && resultCode == Constant.RESPONSE_EXIT_LOGIN) {
-            setResult(Constant.RESPONSE_EXIT_LOGIN);
-            finish();
-        }
-    }
 
     @Override
     protected void onResume() {

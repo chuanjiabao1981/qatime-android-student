@@ -114,7 +114,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
                 if (alertDialog == null) {
                     View view = View.inflate(PersonalMyWalletActivity.this, R.layout.dialog_cancel_or_confirm, null);
                     TextView text = (TextView) view.findViewById(R.id.text);
-                    text.setText(getResourceString(R.string.call_customer_service_phone) +  Constant.phoneNumber);
+                    text.setText(getResourceString(R.string.call_customer_service_phone) + Constant.phoneNumber);
                     Button cancel = (Button) view.findViewById(R.id.cancel);
                     Button confirm = (Button) view.findViewById(R.id.confirm);
                     cancel.setOnClickListener(new View.OnClickListener() {
@@ -127,7 +127,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
                         @Override
                         public void onClick(View v) {
                             alertDialog.dismiss();
-                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" +  Constant.phoneNumber));
+                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.phoneNumber));
                             startActivity(intent);
                         }
                     });
@@ -145,44 +145,43 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
                 break;
             case R.id.withdraw_cash:
                 intent = new Intent(this, WithdrawCashActivity.class);
-                startActivityForResult(intent, Constant.REQUEST);
+                startActivity(intent);
                 break;
             case R.id.recharge_record:
                 intent = new Intent(this, RecordFundActivity.class);
                 intent.putExtra("page", 0);
-                startActivityForResult(intent,Constant.REQUEST);
+                startActivity(intent);
                 break;
             case R.id.withdraw_record:
                 intent = new Intent(this, RecordFundActivity.class);
                 intent.putExtra("page", 1);
-                startActivityForResult(intent,Constant.REQUEST);
+                startActivity(intent);
                 break;
             case R.id.consumption_record:
                 intent = new Intent(this, RecordFundActivity.class);
                 intent.putExtra("page", 2);
-                startActivityForResult(intent,Constant.REQUEST);
+                startActivity(intent);
                 break;
             case R.id.refund_record:
                 intent = new Intent(this, RecordFundActivity.class);
                 intent.putExtra("page", 3);
-                startActivityForResult(intent,Constant.REQUEST);
+                startActivity(intent);
                 break;
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
-            refreshCashAccount();
-            setResult(Constant.RESPONSE);
-        }
-    }
 
     @Subscribe
     public void onEvent(PayResultState state) {
         refreshCashAccount();
-        setResult(Constant.RESPONSE);
     }
+
+    @Subscribe
+    public void onEvent(String event) {
+        if ("refreshCashAccount".equals(event))
+            refreshCashAccount();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -221,6 +220,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
         super.onPause();
         MobclickAgent.onPause(this);
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

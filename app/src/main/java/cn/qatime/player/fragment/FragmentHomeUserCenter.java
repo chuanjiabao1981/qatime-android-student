@@ -94,7 +94,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
             case R.id.my_wallet:
                 if (BaseApplication.getCashAccount() != null && BaseApplication.getCashAccount().getData() != null) {
                     intent = new Intent(getActivity(), PersonalMyWalletActivity.class);
-                    startActivityForResult(intent, Constant.REQUEST);
+                    startActivity(intent);
                 } else {
                     Toast.makeText(getActivity(), R.string.get_wallet_info_error, Toast.LENGTH_SHORT).show();
                 }
@@ -109,7 +109,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
                 break;
             case R.id.security:// 安全管理
                 intent = new Intent(getActivity(), SecurityManagerActivity.class);
-                getActivity().startActivityForResult(intent, Constant.REQUEST_EXIT_LOGIN);
+                startActivity(intent);
                 break;
             case R.id.setting:// 设置
                 intent = new Intent(getActivity(), SystemSettingActivity.class);
@@ -124,12 +124,6 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
         if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
             Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).placeholder(R.mipmap.personal_information_head).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
             name.setText(StringUtils.isNullOrBlanK(BaseApplication.getProfile().getData().getUser().getName()) ? " " : BaseApplication.getProfile().getData().getUser().getName());
-            CashAccountBean cashAccount = BaseApplication.getCashAccount();
-            if (cashAccount != null && cashAccount.getData() != null) {
-                initData();
-            } else {
-                refreshCashAccount();
-            }
         }
     }
 
@@ -137,7 +131,11 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
     public void onEvent(PayResultState state) {
         refreshCashAccount();
     }
-
+    @Subscribe
+    public void onEvent(String event) {
+        if ("refreshCashAccount".equals(event))
+            refreshCashAccount();
+    }
     private void refreshCashAccount() {
         addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.urlpayment + BaseApplication.getUserId() + "/cash", null, new VolleyListener(getActivity()) {
 

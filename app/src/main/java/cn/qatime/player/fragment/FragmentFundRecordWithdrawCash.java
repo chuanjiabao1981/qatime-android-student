@@ -19,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -32,7 +33,6 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
@@ -228,7 +228,7 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
             protected void onSuccess(JSONObject response) {
                 if (!response.isNull("data")) {
                     Toast.makeText(getActivity(), R.string.withdraw_cancel_success, Toast.LENGTH_SHORT).show();
-                    getActivity().setResult(Constant.RESPONSE);
+                    EventBus.getDefault().post("refreshCashAccount");
                     initData(1);
                 } else {
                     onError(response);

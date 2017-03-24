@@ -203,7 +203,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
             case R.id.bind_phone_number://绑定手机
                 Intent intent = new Intent(this, VerifyPhoneActivity.class);
                 intent.putExtra("next", "phone");
-                startActivityForResult(intent, Constant.REQUEST_EXIT_LOGIN);
+                startActivity(intent);
                 break;
             case R.id.bind_email://绑定邮箱
                 intent = new Intent(this, VerifyPhoneActivity.class);

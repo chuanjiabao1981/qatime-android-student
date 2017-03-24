@@ -138,7 +138,7 @@ public class FragmentFundRecordConsumption extends BaseFragment {
 
             @Override
             public void convert(ViewHolder helper, ConsumptionRecordBean.DataBean item, int position) {
-                String price = df.format(0 - Double.valueOf(item.getAmount()));
+                String price = df.format(Math.abs(Double.valueOf(item.getAmount())));
                 if (price.startsWith(".")) {
                     price = "0" + price;
                 }
