@@ -1,8 +1,6 @@
 package cn.qatime.player.activity;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -61,7 +59,6 @@ import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
-import cn.qatime.player.utils.ImageUtil;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
@@ -294,11 +291,11 @@ public class MainActivity extends BaseFragmentActivity {
                         startActivity(intentAction);
                     }
                 }
-            } else {
-                //云信通知消息
-                setIntent(intent);
-                parseIntent();
             }
+        }else {
+            //云信通知消息
+            setIntent(intent);
+            parseIntent();
         }
     }
 
@@ -309,7 +306,7 @@ public class MainActivity extends BaseFragmentActivity {
             if (data.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT) ||
                     //转到系统消息页面
                     (data.hasExtra("type") && data.getStringExtra("type").equals("system_message"))) {
-                if (fragBaseFragments != null && fragBaseFragments.size() > 0 && fragBaseFragments.get(3) instanceof FragmentHomeMainPage) {
+                if (fragBaseFragments != null && fragBaseFragments.size() > 0 && fragBaseFragments.get(3) instanceof FragmentHomeMessage) {
                     ((FragmentHomeMessage) fragBaseFragments.get(3)).setMessage(data);
                 }
 //                Intent intent = new Intent(this, MessageFragmentActivity.class);
