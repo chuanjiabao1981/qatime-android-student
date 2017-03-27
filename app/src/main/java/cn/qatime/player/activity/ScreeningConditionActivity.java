@@ -71,7 +71,7 @@ public class ScreeningConditionActivity extends BaseActivity {
                     ((TextView) holder.getView(R.id.text)).setTextColor(getResources().getColor(R.color.colorPrimary));
                 } else {
                     ((TextView) holder.getView(R.id.text)).setBackgroundResource(R.drawable.text_background);
-                    ((TextView) holder.getView(R.id.text)).setTextColor(0xff666666);
+                    ((TextView) holder.getView(R.id.text)).setTextColor(0xff999999);
                 }
             }
         };
@@ -96,7 +96,7 @@ public class ScreeningConditionActivity extends BaseActivity {
                     ((TextView) holder.getView(R.id.text)).setTextColor(getResources().getColor(R.color.colorPrimary));
                 } else {
                     ((TextView) holder.getView(R.id.text)).setBackgroundResource(R.drawable.text_background);
-                    ((TextView) holder.getView(R.id.text)).setTextColor(0xff666666);
+                    ((TextView) holder.getView(R.id.text)).setTextColor(0xff999999);
                 }
             }
         };
