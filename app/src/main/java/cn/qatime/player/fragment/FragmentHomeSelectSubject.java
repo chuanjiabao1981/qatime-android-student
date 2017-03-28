@@ -125,7 +125,6 @@ public class FragmentHomeSelectSubject extends BaseFragment {
                 subjectData.add("化学");
                 subjectData.add("生物");
                 break;
-
             case 3:
                 subjectData.add("英语");
                 subjectData.add("政治");
@@ -148,8 +147,6 @@ public class FragmentHomeSelectSubject extends BaseFragment {
                 subjectData.add("物理");
                 subjectData.add("化学");
                 break;
-
-
             case 6:
             case 7:
             case 8:

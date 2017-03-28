@@ -261,6 +261,7 @@
     <string name="send">发送</string>
     <string name="notice">公告</string>
     <string name="chat">聊天</string>
+    <string name="white_board">白板</string>
     <string name="live_details">详情</string>
     <string name="member_list">成员</string>
     <string name="buffering">缓冲中</string>
@@ -630,4 +631,6 @@
     <string name="not_set">未设置</string>
     <string name="new_pay_password_invalid">新密码%1$d小时后可用</string>
     <string name="select_subject">选课</string>
+    <string name="join_tip">加入互动后可在上方涂鸦</string>
+    <string name="server_broken">与服务器连接断开</string>
 </resources>

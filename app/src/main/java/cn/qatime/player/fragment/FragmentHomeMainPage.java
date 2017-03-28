@@ -41,6 +41,7 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.CitySelectActivity;
+import cn.qatime.player.activity.InteractiveLiveActivity;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
@@ -659,12 +660,13 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        MainActivity mainActivity = (MainActivity) getActivity();
         Intent intent;
         switch (v.getId()) {
             case R.id.scan:
-                intent = new Intent(getActivity(), CaptureActivity.class);
-                mainActivity.startActivityForResult(intent, Constant.REQUEST);
+//                intent = new Intent(getActivity(), CaptureActivity.class);
+//                mainActivity.startActivityForResult(intent, Constant.REQUEST);
+                intent = new Intent(getActivity(), InteractiveLiveActivity.class);
+                startActivity(intent);
                 break;
             case R.id.city_select:
                 intent = new Intent(getActivity(), CitySelectActivity.class);
