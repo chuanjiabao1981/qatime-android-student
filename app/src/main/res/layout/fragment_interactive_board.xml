@@ -16,7 +16,7 @@
             android:gravity="center_horizontal"
             android:text="正在进行白板演示"
             android:textColor="#333"
-            android:textSize="15sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -24,7 +24,8 @@
             android:layout_marginTop="2dp"
             android:gravity="center_horizontal"
             android:text="(请在老师指示下使用白板功能)"
-            android:textSize="13sp" />
+            android:textColor="#ccc"
+            android:textSize="14sp" />
 
         <cn.qatime.player.im.doodle.DoodleView
             android:id="@+id/doodleView"
@@ -67,6 +68,7 @@
         </LinearLayout>
 
     </com.zhy.android.percent.support.PercentLinearLayout>
+
     <LinearLayout
         android:id="@+id/palette_layout"
         android:layout_width="match_parent"

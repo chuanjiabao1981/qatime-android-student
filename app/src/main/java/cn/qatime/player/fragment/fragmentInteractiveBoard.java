@@ -112,7 +112,7 @@ public class FragmentInteractiveBoard extends BaseFragment implements View.OnCli
 //                Logger.e("Doodle", "doodleView marginTop =" + marginTop);
                 int marginLeft = doodleView.getLeft();
 //                Logger.e("Doodle", "doodleView marginLeft =" + marginLeft);
-                float offsetY = statusBarHeight + marginTop + DensityUtils.dip2px(getActivity(), 85);
+                float offsetY = statusBarHeight + marginTop + DensityUtils.dip2px(getActivity(), 220 + 87);
 
                 doodleView.setPaintOffset((float) marginLeft, offsetY);
                 Logger.e("Doodle", "client1 offsetX = " + (float) marginLeft + ", offsetY = " + offsetY);
