@@ -126,7 +126,7 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
         WebSettings settingsT = teacherDescribe.getSettings();
         settingsT.setDefaultTextEncodingName("UTF-8");
         settingsT.setBlockNetworkImage(false);
-        settingsT.setDefaultFontSize(13);
+        settingsT.setDefaultFontSize(14);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             settingsT.setMixedContentMode(settingsT.MIXED_CONTENT_ALWAYS_ALLOW);  //注意安卓5.0以上的权限
         }
@@ -304,7 +304,7 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
                 }
                 String body = StringUtils.isNullOrBlanK(data.getTeacher().getDesc()) ? getString(R.string.no_desc) : data.getTeacher().getDesc();
                 body = body.replace("\r\n", "<br>");
-                String css = "<style>* {color:#999999;}</style>";//默认color
+                String css = "<style>* {color:#666666;}</style>";//默认color
                 teacherDescribe.loadDataWithBaseURL(null, css + body, "text/html", "UTF-8", null);
                 SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getCacheDir() + "/school.txt").toString(), SchoolBean.class);
                 if (schoolBean != null && schoolBean.getData() != null) {

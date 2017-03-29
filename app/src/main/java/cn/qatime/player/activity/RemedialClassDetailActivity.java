@@ -185,7 +185,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                         data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
 
                         if (data != null && data.getData() != null && data.getData().getLive_start_time() != null) {
-
+                            handleLayout.setVisibility(View.VISIBLE);
                             Glide.with(getApplicationContext()).load(data.getData().getPublicize()).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
                             status.setText(getStatus(data.getData().getStatus()));
                             name.setText(data.getData().getName());

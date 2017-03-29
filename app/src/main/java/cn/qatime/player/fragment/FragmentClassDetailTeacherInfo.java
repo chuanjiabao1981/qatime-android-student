@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.orhanobut.logger.Logger;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.TeacherDataActivity;
@@ -64,7 +63,7 @@ public class FragmentClassDetailTeacherInfo extends BaseFragment {
         WebSettings settings = describe.getSettings();
         settings.setDefaultTextEncodingName("UTF-8");
         settings.setBlockNetworkImage(false);
-        settings.setDefaultFontSize(13);
+        settings.setDefaultFontSize(14);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             settings.setMixedContentMode(settings.MIXED_CONTENT_ALWAYS_ALLOW);  //注意安卓5.0以上的权限
         }
@@ -110,7 +109,7 @@ public class FragmentClassDetailTeacherInfo extends BaseFragment {
             });
             String body = StringUtils.isNullOrBlanK(data.getData().getTeacher().getDesc()) ? getString(R.string.no_desc) : data.getData().getTeacher().getDesc();
             body = body.replace("\r\n", "<br>");
-            String css = "<style>* {color:#999999;}</style>";//默认color（android标签下以及所有未设置颜色的标签）
+            String css = "<style>* {color:#666666;margin:0;padding:0}</style>";//默认color（android标签下以及所有未设置颜色的标签）
             describe.loadDataWithBaseURL(null, css + body, "text/html", "UTF-8", null);
         }
 
