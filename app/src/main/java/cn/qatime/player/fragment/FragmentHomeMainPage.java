@@ -286,9 +286,11 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             @Override
             public void onBindViewHolder(BaseViewHolder holder, final int position) {
                 LiveTodayBean.DataBean item = todayList.get(position);
-                holder.setText(R.id.teaching_time, item.getCourse().getName())
+                holder.setText(R.id.teaching_name, item.getName())
                         .setImageByUrl(R.id.image, item.getCourse().getPublicize(), R.mipmap.photo)
-                        .setText(R.id.time, item.getLive_time());
+                        .setText(R.id.time, item.getLive_time())
+                        .setText(R.id.status,getTodayStatusText(item.getStatus()))
+                        .setTextColor(R.id.status,getTodayStatusColor(item.getStatus()));
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -633,22 +635,23 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     }
 
 
-    private String getReason(String reason) {
-        if ("latest".equals(reason)) {
-            return getString(R.string.lastest);
-        } else if ("hottest".equals(reason)) {
-            return getString(R.string.hottest);
+    private int getTodayStatusColor(String status) {
+        if("ready".equals(status)){
+            return 0xff4873ff;
+        }else if("closed".equals(status)){
+            return 0xff999999;
+        }else{
+            return 0xffff5842;
         }
-        return "";
     }
-
-    private int getReasonBackground(String reason) {
-        if ("latest".equals(reason)) {
-            return 0xff66cccc;
-        } else if ("hottest".equals(reason)) {
-            return 0xffff9999;
+    private String getTodayStatusText(String status) {
+        if("ready".equals(status)){
+            return "尚未直播";
+        }else if("closed".equals(status)){
+            return "直播结束";
+        }else{
+            return "正在直播";
         }
-        return 0x00000000;
     }
 
 
