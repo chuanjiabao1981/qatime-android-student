@@ -137,7 +137,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
         mIndicator = (SimpleViewPagerIndicator) findViewById(R.id.id_stickynavlayout_indicator);
         mViewPager = (ViewPager) findViewById(R.id.id_stickynavlayout_viewpager);
-        mTitles = new String[]{getString(R.string.remedial_detail), getString(R.string.teacher_info), getString(R.string.course_arrangement)};
+        mTitles = new String[]{getString(R.string.remedial_detail), getString(R.string.teacher_detail), getString(R.string.course_arrangement)};
         mIndicator.setTitles(mTitles);
         mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override

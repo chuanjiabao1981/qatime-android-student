@@ -3,50 +3,41 @@ package cn.qatime.player.fragment;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.view.FlowLayout;
+import libraryextra.bean.InteractCourseDetailBean;
 import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.StringUtils;
 
-import static android.view.ViewGroup.GONE;
-import static android.view.ViewGroup.LayoutParams;
-import static android.view.ViewGroup.MarginLayoutParams;
-
-public class FragmentClassDetailClassInfo extends BaseFragment {
+public class FragmentInteractDetailClassInfo extends BaseFragment {
 
     WebView webView;
-    TextView classStartTime;
-    TextView classEndTime;
     TextView subject;
     TextView grade;
-    TextView totalclass;
+    TextView totalTime;
     TextView classType;
     RemedialClassDetailBean data;
     private SimpleDateFormat parse1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private SimpleDateFormat parse2 = new SimpleDateFormat("yyyy-MM-dd");
-    private LinearLayout flowLayout;
-    private FlowLayout flow;
     private TextView suitable;
     private TextView target;
+    private TextView averageTime;
+    private TextView totalCount;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_class_detail_class_info, container, false);
+        View view = inflater.inflate(R.layout.fragment_interact_detail_class_info, container, false);
         initview(view);
 
         return view;
@@ -56,16 +47,13 @@ public class FragmentClassDetailClassInfo extends BaseFragment {
     private void initview(View view) {
         subject = (TextView) view.findViewById(R.id.subject);
         grade = (TextView) view.findViewById(R.id.grade);
-        target = (TextView) view.findViewById(R.id.target);
-        suitable = (TextView) view.findViewById(R.id.suitable);
-        classStartTime = (TextView) view.findViewById(R.id.class_start_time);
-        classEndTime = (TextView) view.findViewById(R.id.class_end_time);
-        totalclass = (TextView) view.findViewById(R.id.total_class);
+        totalTime = (TextView) view.findViewById(R.id.total_time);
         classType = (TextView) view.findViewById(R.id.class_type);
+        averageTime = (TextView) view.findViewById(R.id.average_time);
+        totalCount = (TextView) view.findViewById(R.id.total_count);
+        suitable = (TextView) view.findViewById(R.id.suitable);
+        target = (TextView) view.findViewById(R.id.target);
         webView = (WebView) view.findViewById(R.id.describe);
-        flowLayout = (LinearLayout) view.findViewById(R.id.flow_layout);
-        flow = (FlowLayout) view.findViewById(R.id.flow);
-//        String[] value = new String[]{"高考", "小學考試", "期中考試", "期末", "模擬考", "高高考", "小學考試", "期中考試", "期末", "模擬考"};
 
         webView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -85,39 +73,16 @@ public class FragmentClassDetailClassInfo extends BaseFragment {
             settings.setMixedContentMode(settings.MIXED_CONTENT_ALWAYS_ALLOW);  //注意安卓5.0以上的权限
         }
 
-//        ((TextView) view.findViewById(R.id.notice)).setText(Html.fromHtml());
     }
 
-    public void setData(RemedialClassDetailBean bean) {
+    public void setData(InteractCourseDetailBean bean) {
         if (bean != null && bean.getData() != null) {
             subject.setText((StringUtils.isNullOrBlanK(bean.getData().getSubject()) ? "" : bean.getData().getSubject()));
-            try {
-                classStartTime.setText((bean.getData().getLive_start_time() == null ? "" : parse2.format(parse1.parse(bean.getData().getLive_start_time()))));
-                classEndTime.setText(parse2.format(parse1.parse(bean.getData().getLive_end_time())));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
             grade.setText((bean.getData().getGrade() == null ? "" : bean.getData().getGrade()));
-            totalclass.setText(getString(R.string.lesson_count, bean.getData().getPreset_lesson_count()));
-            if (!StringUtils.isNullOrBlanK(bean.getData().getTag_list())) {
-                for (int va = 0; va < bean.getData().getTag_list().size(); va++) {
-                    TextView textView = new TextView(getActivity());
-                    textView.setGravity(Gravity.CENTER);
-                    textView.setTextColor(0xff999999);
-                    textView.setTextSize(13);
-                    textView.setBackgroundResource(R.drawable.text_background_flowlayout);
-                    MarginLayoutParams params = new MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-                    params.leftMargin = 2;
-                    params.rightMargin = 2;
-                    params.topMargin = 2;
-                    params.bottomMargin = 2;
-                    textView.setLayoutParams(params);
-                    textView.setText(bean.getData().getTag_list().get(va));
-                    flow.addView(textView);
-                }
-            } else {
-                flowLayout.setVisibility(GONE);
-            }
+            totalCount.setText(getString(R.string.lesson_count, bean.getData().getLessons_count()));
+            //时长，平均时长
+//            totalTime.setText(bean.getData().get);
+//            averageTime.setText();
             if (!StringUtils.isNullOrBlanK(bean.getData().getObjective())) {
                 target.setText(bean.getData().getObjective());
             }

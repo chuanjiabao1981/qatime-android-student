@@ -130,10 +130,11 @@
     <string name="pay_remind">请您在24小时内完成支付，否则订单会自动取消。</string>
     <string name="problem_phone">遇到问题请拨打客服电话</string>
     <!--//详情-->
-    <string name="information_detail">辅导概况</string>
+    <string name="information_detail">课程介绍</string>
 
     <string name="teacher_detail">教师资料</string>
-    <string name="course_list">课程列表</string>
+    <string name="teachers_detail">教师组资料</string>
+    <string name="course_list">上课安排</string>
     <!--//课程详情-->
     <string name="student_number">报名人数 %1$d</string>
     <string name="Join_the_audition">加入试听</string>
@@ -456,7 +457,7 @@
     <string name="code_use_already">验证码已失效</string>
     <string name="withdraw_existed">存在未完成的提现订单</string>
     <string name="start_audition">开始试听</string>
-    <string name="course_arrangement">课程安排</string>
+    <string name="course_arrangement">上课安排</string>
     <string name="audition_over">试听结束</string>
     <string name="class_missed">待补课</string>
     <string name="unlogin_alert">您还未登录,请先登录!</string>
@@ -522,7 +523,7 @@
     <string name="this_phone_number_already_regist">该手机号已注册,请直接登录</string>
     <string name="use_a_new_number">新号码注册</string>
     <string name="this_month_non_lesson">本月暂无课程</string>
-    <string name="remedial_detail">辅导详情</string>
+    <string name="remedial_detail">课程介绍</string>
     <string name="teacher_info">教师资料</string>
     <string name="continue_buy_lasses_lesson">该辅导班已开课，是否继续购买</string>
     <string name="the_course_not_support_audition">该课程不支持试听</string>

@@ -3,12 +3,9 @@ package cn.qatime.player.activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.text.format.DateUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,23 +26,19 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.bean.FilterCourseContentBean;
-import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
 /**
- * @author lungtify
- * @Time 2017/3/14 15:29
- * @Describe 筛选课程内容页面
+ * @Describe 一对一课程筛选页
  */
 
-public class FilterCourseContentActivity extends BaseActivity {
+public class InteractCourseContentFilterActivity extends BaseActivity {
 
 
     private String grade;
@@ -54,23 +47,17 @@ public class FilterCourseContentActivity extends BaseActivity {
     private CommonAdapter<FilterCourseContentBean.DataBean> adapter;
     private List<FilterCourseContentBean.DataBean> datas = new ArrayList<>();
     private int latestResult = 1;//0上1下-1未选
-    private int popularityResult = -1;
     private int priceResult = -1;
     private int page = 1;
-    private String tag = null;//标签
-    private String range = null;//查询范围
-    private String courseStatus = null;//课程状态
-    private String endTime = null;
-    private String startTime = null;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_filter_course);
+        setContentView(R.layout.activity_interact_course_filter);
         grade = getIntent().getStringExtra("grade");
         subject = getIntent().getStringExtra("subject");
-        setTitles(grade + subject+"直播课");
+        setTitles(grade + subject + "一对一");
         initView();
         getData(0);
     }
@@ -95,12 +82,6 @@ public class FilterCourseContentActivity extends BaseActivity {
             } else {
                 map.put("sort_by", "left_price.asc");
             }
-        } else if (popularityResult != -1) {
-            if (popularityResult == 0) {
-                map.put("sort_by", "buy_tickets_count");
-            } else {
-                map.put("sort_by", "buy_tickets_count.asc");
-            }
         }
         try {
             map.put("q[grade_eq]", URLEncoder.encode(grade, "UTF-8"));
@@ -115,25 +96,9 @@ public class FilterCourseContentActivity extends BaseActivity {
             e.printStackTrace();
         }
 
-        if (!StringUtils.isNullOrBlanK(tag)) {
-            try {
-                map.put("tags", URLEncoder.encode(tag, "UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        }
-        if (!StringUtils.isNullOrBlanK(range)) {
-            map.put("range", range);
-        }
-        if (!StringUtils.isNullOrBlanK(courseStatus)) {
-            map.put("q[status_eq]", courseStatus);
-        }
-        if (!StringUtils.isNullOrBlanK(startTime) && !StringUtils.isNullOrBlanK(endTime)) {
-            map.put("q[class_date_gteq]", startTime);
-            map.put("q[class_date_lt]", endTime);
-        }
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlSearch, map), null, new VolleyListener(this) {
+
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlInteractCourses+"search", map), null, new VolleyListener(this) {
             @Override
             protected void onTokenOut() {
 
@@ -144,7 +109,7 @@ public class FilterCourseContentActivity extends BaseActivity {
                 if (type == 0) {
                     datas.clear();
                 }
-                String label = DateUtils.formatDateTime(FilterCourseContentActivity.this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+                String label = DateUtils.formatDateTime(InteractCourseContentFilterActivity.this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
                 listview.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
                 listview.onRefreshComplete();
                 FilterCourseContentBean data = JsonUtils.objectFromJson(response.toString(), FilterCourseContentBean.class);
@@ -164,7 +129,6 @@ public class FilterCourseContentActivity extends BaseActivity {
     private void initView() {
         final TextView latest = (TextView) findViewById(R.id.latest);
         final TextView price = (TextView) findViewById(R.id.price);
-        final TextView popularity = (TextView) findViewById(R.id.popularity);
 
         latest.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,10 +141,8 @@ public class FilterCourseContentActivity extends BaseActivity {
                     latestResult = 0;
                 }
                 priceResult = -1;
-                popularityResult = -1;
                 refreshState(latest, latestResult);
                 refreshState(price, priceResult);
-                refreshState(popularity, popularityResult);
                 getData(0);
             }
         });
@@ -195,28 +157,8 @@ public class FilterCourseContentActivity extends BaseActivity {
                     priceResult = 0;
                 }
                 latestResult = -1;
-                popularityResult = -1;
                 refreshState(latest, latestResult);
                 refreshState(price, priceResult);
-                refreshState(popularity, popularityResult);
-                getData(0);
-            }
-        });
-        popularity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (popularityResult == -1) {
-                    popularityResult = 1;
-                } else if (popularityResult == 0) {
-                    popularityResult = 1;
-                } else if (popularityResult == 1) {
-                    popularityResult = 0;
-                }
-                latestResult = -1;
-                priceResult = -1;
-                refreshState(latest, latestResult);
-                refreshState(price, priceResult);
-                refreshState(popularity, popularityResult);
                 getData(0);
             }
         });
@@ -234,7 +176,7 @@ public class FilterCourseContentActivity extends BaseActivity {
         adapter = new CommonAdapter<FilterCourseContentBean.DataBean>(this, datas, R.layout.item_filter_course) {
             @Override
             public void convert(ViewHolder holder, FilterCourseContentBean.DataBean item, int position) {
-                Glide.with(FilterCourseContentActivity.this).load(item.getPublicize()).crossFade().placeholder(R.mipmap.photo).into((ImageView) holder.getView(R.id.image));
+                Glide.with(InteractCourseContentFilterActivity.this).load(item.getPublicize()).crossFade().placeholder(R.mipmap.photo).into((ImageView) holder.getView(R.id.image));
                 holder.setText(R.id.name, item.getName())
                         .setText(R.id.price, "￥" + item.getPrice())
                         .setText(R.id.teacher, item.getTeacher_name());
@@ -244,7 +186,7 @@ public class FilterCourseContentActivity extends BaseActivity {
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(FilterCourseContentActivity.this, RemedialClassDetailActivity.class);
+                Intent intent = new Intent(InteractCourseContentFilterActivity.this, InteractCourseDetailActivity.class);
                 intent.putExtra("id", datas.get(position - 1).getId());
                 startActivity(intent);
             }
@@ -260,78 +202,6 @@ public class FilterCourseContentActivity extends BaseActivity {
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page += 1;
                 getData(1);
-            }
-        });
-        final List<String> labelData = new ArrayList<>();
-        labelData.add("不限");
-        labelData.add("高考");
-        labelData.add("中考");
-        labelData.add("会考");
-        labelData.add("小升初考试");
-        labelData.add("高考志愿");
-        labelData.add("英语考级");
-        labelData.add("奥数竞赛");
-        labelData.add("历年真题");
-        labelData.add("期中期末试卷");
-        labelData.add("自编试卷");
-        labelData.add("暑假课");
-        labelData.add("寒假课");
-        labelData.add("周末课");
-        labelData.add("国庆假期课");
-        labelData.add("基础课");
-        labelData.add("巩固课");
-        labelData.add("提高课");
-        labelData.add("外教");
-        labelData.add("冲刺");
-        labelData.add("重点难点");
-        final CommonAdapter<String> labelAdapter = new CommonAdapter<String>(this, labelData, R.layout.item_screening_condition) {
-            @Override
-            public void convert(ViewHolder holder, String item, int position) {
-                holder.setText(R.id.text, item);
-                if (label.getText().toString().equals(labelData.get(position))) {
-                    ((TextView) holder.getView(R.id.text)).setBackgroundResource(R.drawable.text_background_red);
-                    ((TextView) holder.getView(R.id.text)).setTextColor(getResources().getColor(R.color.colorPrimary));
-                } else {
-                    ((TextView) holder.getView(R.id.text)).setBackgroundResource(R.drawable.text_background);
-                    ((TextView) holder.getView(R.id.text)).setTextColor(0xff999999);
-                }
-            }
-        };
-        label.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //标签
-                final AlertDialog dialog = new AlertDialog.Builder(FilterCourseContentActivity.this).create();
-                View view = LayoutInflater.from(FilterCourseContentActivity.this).inflate(R.layout.dialog_grid, null);
-                GridView gridView = (GridView) view.findViewById(R.id.grid);
-                gridView.setAdapter(labelAdapter);
-                gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        label.setText(labelData.get(position));
-                        if (labelData.get(position).equals("不限")) {
-                            tag = null;
-                        } else {
-                            tag = labelData.get(position);
-                        }
-                        getData(0);
-                        dialog.dismiss();
-                    }
-                });
-                dialog.setView(view);
-                dialog.show();
-            }
-        });
-
-        screen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FilterCourseContentActivity.this, ScreeningConditionActivity.class);
-                intent.putExtra("range", range);
-                intent.putExtra("courseStatus", courseStatus);
-                intent.putExtra("startTime", startTime);
-                intent.putExtra("endTime", endTime);
-                startActivityForResult(intent, Constant.REQUEST);
             }
         });
     }
@@ -350,20 +220,6 @@ public class FilterCourseContentActivity extends BaseActivity {
             down.setBounds(0, 0, down.getMinimumWidth(), down.getMinimumHeight());
             view.setCompoundDrawables(null, null, down, null);
             view.setTextColor(getResources().getColor(R.color.colorPrimary));
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
-            if (data != null) {
-                range = data.getStringExtra("range");
-                courseStatus = data.getStringExtra("courseStatus");
-                startTime = data.getStringExtra("startTime");
-                endTime = data.getStringExtra("endTime");
-                getData(0);
-            }
         }
     }
 }
