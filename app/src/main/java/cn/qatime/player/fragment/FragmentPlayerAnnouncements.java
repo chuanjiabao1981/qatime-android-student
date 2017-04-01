@@ -21,7 +21,6 @@ import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.Announcements;
 
 public class FragmentPlayerAnnouncements extends BaseFragment {
-    private PullToRefreshListView listView;
     private CommonAdapter<Announcements.DataBean.AnnouncementsBean> adapter;
     private List<Announcements.DataBean.AnnouncementsBean> items = new ArrayList<>();
     private boolean hasLoad = false;
@@ -52,7 +51,7 @@ public class FragmentPlayerAnnouncements extends BaseFragment {
     }
 
     private void initview(View view) {
-        listView = (PullToRefreshListView) view.findViewById(R.id.list);
+        PullToRefreshListView listView = (PullToRefreshListView) view.findViewById(R.id.list);
         View empty = View.inflate(getActivity(), R.layout.empty_view, null);
         TextView textEmpty = (TextView) empty.findViewById(R.id.text_empty);
         textEmpty.setText(R.string.no_course_announcements);

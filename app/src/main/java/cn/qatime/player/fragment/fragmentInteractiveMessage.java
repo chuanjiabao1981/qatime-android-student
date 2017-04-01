@@ -48,7 +48,6 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
 
     private Team team;
 
-
     private String sessionId = "";
     private Callback chatCallback;
 

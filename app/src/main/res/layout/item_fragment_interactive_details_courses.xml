@@ -16,20 +16,11 @@
         android:textSize="16sp" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:orientation="vertical"
         android:paddingRight="10dp">
-
-
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:singleLine="true"
-            android:text="第一课，北京的天为什么一直是灰蒙蒙的，物理角度解其中缘。"
-            android:textColor="#666" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -54,30 +45,23 @@
 
         </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:text="第一课，北京的天为什么一直是灰蒙蒙的，物理角度解其中缘。"
+            android:textColor="#666" />
 
-            <TextView
-                android:id="@+id/status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="已结束"
-                android:textColor="#999"
-                android:textSize="12sp" />
 
-            <TextView
-                android:id="@+id/view_playback"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="2dp"
-                android:paddingRight="5dp"
-                android:text="还可回放0次>"
-                android:textColor="@color/colorPrimary"
-                android:textSize="12sp" />
-        </RelativeLayout>
+        <TextView
+            android:id="@+id/teacher_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="5dp"
+            android:text="老师"
+            android:textColor="#999"
+            android:textSize="12sp" />
 
         <View
             android:layout_width="match_parent"
@@ -85,4 +69,14 @@
             android:layout_marginTop="10dp"
             android:background="#dfdddd" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:text="已结束"
+        android:textColor="#999"
+        android:textSize="12sp" />
 </LinearLayout>
