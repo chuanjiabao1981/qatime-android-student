@@ -81,7 +81,7 @@ public class FragmentInteractDetailClassInfo extends BaseFragment {
             grade.setText((bean.getData().getGrade() == null ? "" : bean.getData().getGrade()));
             totalCount.setText(getString(R.string.lesson_count, bean.getData().getLessons_count()));
             //时长，平均时长
-//            totalTime.setText(bean.getData().get);
+            totalTime.setText(bean.getData().getLessons_count() * 45 + "分钟");
 //            averageTime.setText();
             if (!StringUtils.isNullOrBlanK(bean.getData().getObjective())) {
                 target.setText(bean.getData().getObjective());
@@ -94,7 +94,7 @@ public class FragmentInteractDetailClassInfo extends BaseFragment {
             body = body.replace("\r\n", "<br>");
             //......
             String footer = "<p></p><p style='margin-top:20'><font style='font-size:15;color:#333333'}>上课流程</font></p>" +
-                    "<p style='margin-top:5;'><img style='width:100%;height:auto' src='file:///android_res/mipmap/image_default.png' /><p/>"+
+                    "<p style='margin-top:5;'><img style='width:100%;height:auto' src='file:///android_res/mipmap/image_default.png' /><p/>" +
                     "<p style='margin-top:20'><font style='font-size:15;color:#333333'}>学习须知</font></p>" +
                     "<p style='margin-top:5;'><font style='font-size:15;color:#333333'}>上课前</font></p>" +
                     "<p><font>1.做好课程预习，预先了解本课所讲内容，更好的吸收课程精华；<br>" +

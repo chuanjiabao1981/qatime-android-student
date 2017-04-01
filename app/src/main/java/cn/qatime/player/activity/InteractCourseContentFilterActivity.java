@@ -25,7 +25,7 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
-import cn.qatime.player.bean.FilterCourseContentBean;
+import cn.qatime.player.bean.InteractCourseContentFilterBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
@@ -44,8 +44,8 @@ public class InteractCourseContentFilterActivity extends BaseActivity {
     private String grade;
     private String subject;
     private PullToRefreshListView listview;
-    private CommonAdapter<FilterCourseContentBean.DataBean> adapter;
-    private List<FilterCourseContentBean.DataBean> datas = new ArrayList<>();
+    private CommonAdapter<InteractCourseContentFilterBean.DataBean> adapter;
+    private List<InteractCourseContentFilterBean.DataBean> datas = new ArrayList<>();
     private int latestResult = 1;//0上1下-1未选
     private int priceResult = -1;
     private int page = 1;
@@ -97,8 +97,7 @@ public class InteractCourseContentFilterActivity extends BaseActivity {
         }
 
 
-
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlInteractCourses+"search", map), null, new VolleyListener(this) {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlInteractCourses + "search", map), null, new VolleyListener(this) {
             @Override
             protected void onTokenOut() {
 
@@ -112,7 +111,7 @@ public class InteractCourseContentFilterActivity extends BaseActivity {
                 String label = DateUtils.formatDateTime(InteractCourseContentFilterActivity.this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
                 listview.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
                 listview.onRefreshComplete();
-                FilterCourseContentBean data = JsonUtils.objectFromJson(response.toString(), FilterCourseContentBean.class);
+                InteractCourseContentFilterBean data = JsonUtils.objectFromJson(response.toString(), InteractCourseContentFilterBean.class);
                 assert data != null;
                 datas.addAll(data.getData());
                 adapter.notifyDataSetChanged();
@@ -162,8 +161,6 @@ public class InteractCourseContentFilterActivity extends BaseActivity {
                 getData(0);
             }
         });
-        final TextView label = (TextView) findViewById(R.id.label);
-        View screen = findViewById(R.id.screen);
 
         listview = (PullToRefreshListView) findViewById(R.id.listview);
         listview.setMode(PullToRefreshBase.Mode.BOTH);
@@ -173,13 +170,21 @@ public class InteractCourseContentFilterActivity extends BaseActivity {
         listview.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
         listview.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         listview.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
-        adapter = new CommonAdapter<FilterCourseContentBean.DataBean>(this, datas, R.layout.item_filter_course) {
+        adapter = new CommonAdapter<InteractCourseContentFilterBean.DataBean>(this, datas, R.layout.item_filter_course) {
             @Override
-            public void convert(ViewHolder holder, FilterCourseContentBean.DataBean item, int position) {
-                Glide.with(InteractCourseContentFilterActivity.this).load(item.getPublicize()).crossFade().placeholder(R.mipmap.photo).into((ImageView) holder.getView(R.id.image));
+            public void convert(ViewHolder holder, InteractCourseContentFilterBean.DataBean item, int position) {
+                Glide.with(InteractCourseContentFilterActivity.this).load(item.getPublicize_url()).crossFade().placeholder(R.mipmap.photo).into((ImageView) holder.getView(R.id.image));
+                List<InteractCourseContentFilterBean.DataBean.TeachersBean> teachers = item.getTeachers();
+                StringBuffer teacheNames = new StringBuffer();
+                for (int i = 0; i < teachers.size(); i++) {
+                    teacheNames.append(teachers.get(0).getName());
+                    if (i != teachers.size() - 1) {
+                        teacheNames.append("/");
+                    }
+                }
                 holder.setText(R.id.name, item.getName())
                         .setText(R.id.price, "￥" + item.getPrice())
-                        .setText(R.id.teacher, item.getTeacher_name());
+                        .setText(R.id.teacher, teacheNames.toString());
             }
         };
         listview.setAdapter(adapter);

@@ -42,30 +42,25 @@ public class FragmentInteractDetailClassList extends BaseFragment {
             @Override
             public void convert(ViewHolder holder, InteractCourseDetailBean.DataBean.InteractiveLessonsBean item, int position) {
                 holder.setText(R.id.name, item.getName());
-                holder.setText(R.id.teacher_name, "教师：" + item.getTeacher().getNick_name());
-//                一对一 课程时间 状态
+                holder.setText(R.id.teacher_name, "教师：" + item.getTeacher().getName());
+                holder.setText(R.id.class_date, item.getClass_date());
+                holder.setText(R.id.live_time, item.getStart_time() + "-" + item.getEnd_time());
+                if (item.getStatus().equals("missed")) {
+                    holder.setText(R.id.status, getResourceString(R.string.class_missed));
+                } else if (item.getStatus().equals("init")) {//未开始
+                    holder.setText(R.id.status, getResourceString(R.string.class_init));
+                } else if (item.getStatus().equals("ready")) {//待开课
+                    holder.setText(R.id.status, getResourceString(R.string.class_ready));
+                } else if (item.getStatus().equals("teaching")) {//直播中
+                    holder.setText(R.id.status, getResourceString(R.string.class_teaching));
+                } else if (item.getStatus().equals("closed")) {//已直播
+                    holder.setText(R.id.status, getResourceString(R.string.class_closed));
+                } else if (item.getStatus().equals("paused")) {
+                    holder.setText(R.id.status, getResourceString(R.string.class_teaching));
+                } else {//closed finished billing completed
+                    holder.setText(R.id.status, getResourceString(R.string.class_over));//已结束
+                }
 
-//                holder.setText(R.id.live_time, item.getLive_time());
-//                if (item.getStatus().equals("missed")) {
-//                    holder.setText(status, getResourceString(R.string.class_missed));
-//                } else if (item.getStatus().equals("init")) {//未开始
-//                    holder.setText(status, getResourceString(R.string.class_init));
-//                } else if (item.getStatus().equals("ready")) {//待开课
-//                    holder.setText(status, getResourceString(R.string.class_ready));
-//                } else if (item.getStatus().equals("teaching")) {//直播中
-//                    holder.setText(status, getResourceString(R.string.class_teaching));
-//                } else if (item.getStatus().equals("closed")) {//已直播
-//                    holder.setText(status, getResourceString(R.string.class_closed));
-//                } else if (item.getStatus().equals("paused")) {
-//                    holder.setText(status, getResourceString(R.string.class_teaching));
-//                } else {//closed finished billing completed
-//                    holder.setText(status, getResourceString(R.string.class_over));//已结束
-//                }
-//                try {
-//                    holder.setText(R.id.class_date, format.format(parse.parse(item.getClass_date())));
-//                } catch (ParseException e) {
-//                    e.printStackTrace();
-//                }
 
             }
         };

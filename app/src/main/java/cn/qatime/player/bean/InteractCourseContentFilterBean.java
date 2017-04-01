@@ -77,6 +77,15 @@ public class InteractCourseContentFilterBean implements Serializable {
         private String publicize_list_url;
         private String publicize_app_url;
         private int created_at;
+        private List<TeachersBean> teachers;
+
+        public List<TeachersBean> getTeachers() {
+            return teachers;
+        }
+
+        public void setTeachers(List<TeachersBean> teachers) {
+            this.teachers = teachers;
+        }
 
         public int getId() {
             return id;
@@ -228,6 +237,182 @@ public class InteractCourseContentFilterBean implements Serializable {
 
         public void setCreated_at(int created_at) {
             this.created_at = created_at;
+        }
+
+        public static class TeachersBean {
+            /**
+             * id : 541
+             * name : 教师
+             * nick_name : 春意盎然
+             * avatar_url : http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/ed8858f5ed860b8e94226f37446b89c1.jpg
+             * ex_big_avatar_url : http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/ex_big_ed8858f5ed860b8e94226f37446b89c1.jpg
+             * login_mobile : null
+             * email : qatime@8.cn
+             * teaching_years : within_three_years
+             * category : 高中
+             * subject : 数学
+             * grade_range : []
+             * gender : null
+             * birthday : null
+             * province : 1
+             * city : 1
+             * school : 1
+             * desc :
+             */
+
+            private int id;
+            private String name;
+            private String nick_name;
+            private String avatar_url;
+            private String ex_big_avatar_url;
+            private String login_mobile;
+            private String email;
+            private String teaching_years;
+            private String category;
+            private String subject;
+            private String gender;
+            private String birthday;
+            private int province;
+            private int city;
+            private int school;
+            private String desc;
+            private List<String> grade_range;
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public String getNick_name() {
+                return nick_name;
+            }
+
+            public void setNick_name(String nick_name) {
+                this.nick_name = nick_name;
+            }
+
+            public String getAvatar_url() {
+                return avatar_url;
+            }
+
+            public void setAvatar_url(String avatar_url) {
+                this.avatar_url = avatar_url;
+            }
+
+            public String getEx_big_avatar_url() {
+                return ex_big_avatar_url;
+            }
+
+            public void setEx_big_avatar_url(String ex_big_avatar_url) {
+                this.ex_big_avatar_url = ex_big_avatar_url;
+            }
+
+            public String getLogin_mobile() {
+                return login_mobile;
+            }
+
+            public void setLogin_mobile(String login_mobile) {
+                this.login_mobile = login_mobile;
+            }
+
+            public String getEmail() {
+                return email;
+            }
+
+            public void setEmail(String email) {
+                this.email = email;
+            }
+
+            public String getTeaching_years() {
+                return teaching_years;
+            }
+
+            public void setTeaching_years(String teaching_years) {
+                this.teaching_years = teaching_years;
+            }
+
+            public String getCategory() {
+                return category;
+            }
+
+            public void setCategory(String category) {
+                this.category = category;
+            }
+
+            public String getSubject() {
+                return subject;
+            }
+
+            public void setSubject(String subject) {
+                this.subject = subject;
+            }
+
+            public String getGender() {
+                return gender;
+            }
+
+            public void setGender(String gender) {
+                this.gender = gender;
+            }
+
+            public String getBirthday() {
+                return birthday;
+            }
+
+            public void setBirthday(String birthday) {
+                this.birthday = birthday;
+            }
+
+            public int getProvince() {
+                return province;
+            }
+
+            public void setProvince(int province) {
+                this.province = province;
+            }
+
+            public int getCity() {
+                return city;
+            }
+
+            public void setCity(int city) {
+                this.city = city;
+            }
+
+            public int getSchool() {
+                return school;
+            }
+
+            public void setSchool(int school) {
+                this.school = school;
+            }
+
+            public String getDesc() {
+                return desc;
+            }
+
+            public void setDesc(String desc) {
+                this.desc = desc;
+            }
+
+            public List<String> getGrade_range() {
+                return grade_range;
+            }
+
+            public void setGrade_range(List<String> grade_range) {
+                this.grade_range = grade_range;
+            }
         }
     }
 }
