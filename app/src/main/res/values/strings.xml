@@ -631,4 +631,5 @@
     <string name="not_set">未设置</string>
     <string name="new_pay_password_invalid">新密码%1$d小时后可用</string>
     <string name="select_subject">选课</string>
+    <string name="my_interact">我的一对一</string>
 </resources>

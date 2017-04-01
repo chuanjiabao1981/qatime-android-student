@@ -21,6 +21,7 @@ import org.json.JSONObject;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.PersonalInformationActivity;
+import cn.qatime.player.activity.PersonalMyInteractActivity;
 import cn.qatime.player.activity.PersonalMyOrderActivity;
 import cn.qatime.player.activity.PersonalMyTutorshipActivity;
 import cn.qatime.player.activity.PersonalMyWalletActivity;
@@ -44,6 +45,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
     private LinearLayout order;
     private LinearLayout wallet;
     private LinearLayout course;
+    private LinearLayout myInteract;
     private LinearLayout security;
     private LinearLayout setting;
     private TextView newVersion;
@@ -64,6 +66,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
         order.setOnClickListener(this);
         wallet.setOnClickListener(this);
         course.setOnClickListener(this);
+        myInteract.setOnClickListener(this);
         information.setOnClickListener(this);
 
         security.setOnClickListener(this);
@@ -105,6 +108,10 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
                 break;
             case R.id.my_course:
                 intent = new Intent(getActivity(), PersonalMyTutorshipActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.my_interact:
+                intent = new Intent(getActivity(), PersonalMyInteractActivity.class);
                 startActivity(intent);
                 break;
             case R.id.security:// 安全管理
@@ -171,6 +178,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
         order = (LinearLayout) view.findViewById(R.id.my_order);
         wallet = (LinearLayout) view.findViewById(R.id.my_wallet);
         course = (LinearLayout) view.findViewById(R.id.my_course);
+        myInteract = (LinearLayout) view.findViewById(R.id.my_interact);
         security = (LinearLayout) view.findViewById(R.id.security);
         setting = (LinearLayout) view.findViewById(R.id.setting);
         newVersion = (TextView) view.findViewById(R.id.new_version);
