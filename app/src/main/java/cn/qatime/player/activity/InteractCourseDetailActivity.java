@@ -24,6 +24,7 @@ import org.json.JSONObject;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
@@ -36,6 +37,7 @@ import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.InteractCourseDetailBean;
+import libraryextra.bean.OrderPayBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -154,8 +156,6 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
                         if (data != null && data.getData() != null && data.getData().getLive_start_time() != null) {
                             handleLayout.setVisibility(View.VISIBLE);
                             Glide.with(getApplicationContext()).load(data.getData().getPublicize_url()).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
-//                            status.setText(getStatus(data.getData().getStatus()));
-//                            studentnumber.setText(getString(R.string.student_number, data.getData().getBuy_tickets_count()));
                             name.setText(data.getData().getName());
                             title.setText(data.getData().getName());
                             String price;
@@ -269,21 +269,29 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
     }
 
     private void payRemedial() {
-        // TODO: 2017/3/31 跳转订单页面
-        Toast.makeText(this, "跳转订单页面", Toast.LENGTH_SHORT).show();
-//        Intent intent = new Intent(InteractCourseDetailActivity.this, OrderConfirmActivity.class);
-//        intent.putExtra("id", id);
-//        intent.putExtra("coupon", getIntent().getStringExtra("coupon"));
-//        OrderPayBean bean = new OrderPayBean();
-//        bean.name = data.getData().getName();
-//        bean.subject = data.getData().getSubject();
-//        bean.grade = data.getData().getGrade();
-//        bean.classnumber = data.getData().getPreset_lesson_count();
-//        bean.teacher = data.getData().getTeacher().getName();
-//        bean.current_price = data.getData().getCurrent_price();
-//
-//        intent.putExtra("data", bean);
-//        startActivity(intent);
+        Intent intent = new Intent(InteractCourseDetailActivity.this, OrderConfirmActivity.class);
+        intent.putExtra("courseType", "interact");
+        intent.putExtra("id", id);
+        intent.putExtra("coupon", getIntent().getStringExtra("coupon"));
+        OrderPayBean bean = new OrderPayBean();
+        bean.name = data.getData().getName();
+        bean.subject = data.getData().getSubject();
+        bean.grade = data.getData().getGrade();
+        bean.classnumber = data.getData().getLessons_count();
+        List<InteractCourseDetailBean.DataBean.TeachersBean> teachers = data.getData().getTeachers();
+//        StringBuffer teacherNames = new StringBuffer();
+//        for (int i = 0; i < teachers.size(); i++) {
+//            teacherNames.append(teachers.get(0).getName());
+//            if (i != teachers.size() - 1) {
+//                teacherNames.append("/");
+//            }
+//        }
+//        bean.teacher = teacherNames.toString();
+        bean.teacher = teachers.get(0).getName() + "...";
+        bean.current_price = Float.valueOf(data.getData().getPrice());
+
+        intent.putExtra("data", bean);
+        startActivity(intent);
     }
 
 

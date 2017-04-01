@@ -175,16 +175,16 @@ public class InteractCourseContentFilterActivity extends BaseActivity {
             public void convert(ViewHolder holder, InteractCourseContentFilterBean.DataBean item, int position) {
                 Glide.with(InteractCourseContentFilterActivity.this).load(item.getPublicize_url()).crossFade().placeholder(R.mipmap.photo).into((ImageView) holder.getView(R.id.image));
                 List<InteractCourseContentFilterBean.DataBean.TeachersBean> teachers = item.getTeachers();
-                StringBuffer teacheNames = new StringBuffer();
+                StringBuffer teacherNames = new StringBuffer();
                 for (int i = 0; i < teachers.size(); i++) {
-                    teacheNames.append(teachers.get(0).getName());
+                    teacherNames.append(teachers.get(0).getName());
                     if (i != teachers.size() - 1) {
-                        teacheNames.append("/");
+                        teacherNames.append("/");
                     }
                 }
                 holder.setText(R.id.name, item.getName())
                         .setText(R.id.price, "￥" + item.getPrice())
-                        .setText(R.id.teacher, teacheNames.toString());
+                        .setText(R.id.teacher, teacherNames.toString());
             }
         };
         listview.setAdapter(adapter);
