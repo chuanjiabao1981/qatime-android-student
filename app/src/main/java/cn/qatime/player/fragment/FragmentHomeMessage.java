@@ -26,7 +26,7 @@ import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.bean.BusEvent;
+import libraryextra.utils.StringUtils;
 import libraryextra.view.FragmentLayoutWithLine;
 
 /**
@@ -92,11 +92,11 @@ public class FragmentHomeMessage extends BaseFragment {
     }
 
     @Subscribe(sticky = true)
-    public void onEvent(BusEvent event) {
-        if (event==BusEvent.HANDLE_U_PUSH_MESSAGE) {
-            EventBus.getDefault().removeStickyEvent(event);
+    public void onEvent(String msg) {
+        if (!StringUtils.isNullOrBlanK(msg) && "handleUPushMessage".equals(msg)) {
+            EventBus.getDefault().removeStickyEvent(msg);
             fragmentlayout.getTabLayout().findViewById(R.id.flag2).setVisibility(View.VISIBLE);
-        }else if(event==BusEvent.REFRESH_NOTIFICATIONS){
+        }else if(!StringUtils.isNullOrBlanK(msg) && "refreshNotifications".equals(msg)){
             //系统消息刷新event flag2消失
             Logger.e("refreshNotifications");
             fragmentlayout.getTabLayout().findViewById(R.id.flag2).setVisibility(View.INVISIBLE);

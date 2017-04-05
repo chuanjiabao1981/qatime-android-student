@@ -23,7 +23,6 @@ import java.text.DecimalFormat;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
-import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.bean.CashAccountBean;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.Constant;
@@ -178,8 +177,8 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
     }
 
     @Subscribe
-    public void onEvent(BusEvent event) {
-        if (event==BusEvent.REFRESH_CASH_ACCOUNT)
+    public void onEvent(String event) {
+        if ("refreshCashAccount".equals(event))
             refreshCashAccount();
     }
 

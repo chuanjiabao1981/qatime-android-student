@@ -31,7 +31,6 @@ import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.SystemSettingActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
@@ -145,7 +144,7 @@ public class FragmentMessageNotifyNews extends BaseFragment {
                         listView.onRefreshComplete();
                     }
                 }, 200);
-                EventBus.getDefault().post(BusEvent.REFRESH_NOTIFICATIONS);
+                EventBus.getDefault().post("refreshNotifications");
                 initData(1);
             }
 
