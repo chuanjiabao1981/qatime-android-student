@@ -234,9 +234,16 @@ public class FragmentOrderPaid extends BaseFragment {
                         Intent intent = new Intent(getActivity(), ApplyRefundActivity.class);
                         intent.putExtra("response", response.toString());
                         intent.putExtra("order_id", item.getId());
-                        intent.putExtra("name",item.getProduct().getName());
-                        intent.putExtra("preset_lesson_count",item.getProduct().getPreset_lesson_count());
-                        intent.putExtra("completed_lesson_count",item.getProduct().getCompleted_lesson_count());
+                        if("LiveStudio::Course".equals(item.getProduct_type())){
+                            intent.putExtra("name",item.getProduct().getName());
+                            intent.putExtra("preset_lesson_count",item.getProduct().getPreset_lesson_count());
+                            intent.putExtra("completed_lesson_count",item.getProduct().getCompleted_lesson_count());
+                        }else if("LiveStudio::InteractiveCourse".equals(item.getProduct_type())){
+                            intent.putExtra("name",item.getProduct_interactive_course().getName());
+                            intent.putExtra("preset_lesson_count",item.getProduct_interactive_course().getLessons_count());
+                            intent.putExtra("completed_lesson_count",item.getProduct_interactive_course().getCompleted_lessons_count());
+                        }
+
                         startActivityForResult(intent, Constant.REQUEST);
                     }
 

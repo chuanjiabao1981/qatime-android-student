@@ -150,9 +150,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawablePadding="3dp"
+                    android:id="@+id/more1"
                     android:drawableRight="@mipmap/home_right_arrow"
                     android:text="@string/more"
-                    android:onClick="more"
                     android:textColor="#999"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -238,7 +238,7 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="3dp"
                     android:drawableRight="@mipmap/home_right_arrow"
-                    android:onClick="more"
+                    android:id="@+id/more2"
                     android:text="@string/more"
                     android:textColor="#999"
                     android:textSize="12sp" />
@@ -284,7 +284,7 @@
                     android:drawablePadding="3dp"
                     android:drawableRight="@mipmap/home_right_arrow"
                     android:text="@string/more"
-                    android:onClick="more"
+                    android:id="@+id/more3"
                     android:textColor="#999"
                     android:textSize="12sp" />
             </LinearLayout>

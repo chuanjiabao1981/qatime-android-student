@@ -120,8 +120,7 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
             }
         };
 
-        mViewPager.setAdapter(mAdapter);
-        mViewPager.setCurrentItem(pager);
+
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -144,6 +143,9 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
                 mViewPager.setCurrentItem(position);
             }
         });
+
+        mViewPager.setAdapter(mAdapter);
+        mViewPager.setCurrentItem(pager);
     }
 
     private void initData() {

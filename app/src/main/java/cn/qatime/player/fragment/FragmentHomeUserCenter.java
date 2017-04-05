@@ -29,6 +29,7 @@ import cn.qatime.player.activity.SecurityManagerActivity;
 import cn.qatime.player.activity.SystemSettingActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.bean.CashAccountBean;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.Constant;
@@ -139,8 +140,8 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
         refreshCashAccount();
     }
     @Subscribe
-    public void onEvent(String event) {
-        if ("refreshCashAccount".equals(event))
+    public void onEvent(BusEvent event) {
+        if (event==BusEvent.REFRESH_CASH_ACCOUNT)
             refreshCashAccount();
     }
     private void refreshCashAccount() {

@@ -148,7 +148,9 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         View scan = view.findViewById(R.id.scan);
         recyclerGrade = (RecyclerView) view.findViewById(R.id.recycler_grade);
         recyclerToday = (RecyclerView) view.findViewById(R.id.recycler_today);
-
+        view.findViewById(R.id.more1).setOnClickListener(this);
+        view.findViewById(R.id.more2).setOnClickListener(this);
+        view.findViewById(R.id.more3).setOnClickListener(this);
 
         initBanner();
         initGrade();
@@ -665,6 +667,11 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         MainActivity mainActivity = (MainActivity) getActivity();
         Intent intent;
         switch (v.getId()) {
+            case R.id.more1:
+            case R.id.more2:
+            case R.id.more3:
+                mainActivity.setCurrentPosition(1, 0);
+                break;
             case R.id.scan:
                 intent = new Intent(getActivity(), CaptureActivity.class);
                 mainActivity.startActivityForResult(intent, Constant.REQUEST);

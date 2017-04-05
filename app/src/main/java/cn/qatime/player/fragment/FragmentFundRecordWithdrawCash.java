@@ -33,6 +33,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
@@ -228,7 +229,7 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
             protected void onSuccess(JSONObject response) {
                 if (!response.isNull("data")) {
                     Toast.makeText(getActivity(), R.string.withdraw_cancel_success, Toast.LENGTH_SHORT).show();
-                    EventBus.getDefault().post("refreshCashAccount");
+                    EventBus.getDefault().post(BusEvent.REFRESH_CASH_ACCOUNT);
                     initData(1);
                 } else {
                     onError(response);

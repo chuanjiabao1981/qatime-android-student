@@ -151,9 +151,6 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
             }
         };
 
-        mViewPager.setAdapter(mAdapter);
-        mViewPager.setCurrentItem(pager);
-        mViewPager.setOffscreenPageLimit(2);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -175,6 +172,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 mViewPager.setCurrentItem(position);
             }
         });
+        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setAdapter(mAdapter);
+        mViewPager.setCurrentItem(pager);
     }
 
     private void initData() {

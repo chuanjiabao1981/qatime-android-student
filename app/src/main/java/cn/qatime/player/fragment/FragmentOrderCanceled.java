@@ -79,7 +79,7 @@ public class FragmentOrderCanceled extends BaseFragment {
                             .setText(R.id.describe, sp.toString());
                 }else if("LiveStudio::InteractiveCourse".equals(item.getProduct_type())){
                     sp.append("一对一/");
-                    sp.append(item.getProduct().getGrade()).append(item.getProduct_interactive_course().getSubject()).append("/共").append(item.getProduct_interactive_course().getLessons_count())
+                    sp.append(item.getProduct_interactive_course().getGrade()).append(item.getProduct_interactive_course().getSubject()).append("/共").append(item.getProduct_interactive_course().getLessons_count())
                             .append("课/").append(item.getProduct_interactive_course().getTeachers().get(0).getName());
                     if(item.getProduct_interactive_course().getTeachers().size()>1){
                         sp.append("...");
@@ -88,10 +88,7 @@ public class FragmentOrderCanceled extends BaseFragment {
                             .setText(R.id.describe, sp.toString());
                 }
 
-                sp.append(item.getProduct().getGrade()).append(item.getProduct().getSubject()).append("/共").append(item.getProduct().getPreset_lesson_count())
-                        .append("课/").append(item.getProduct().getTeacher_name());
-                helper.setText(R.id.classname, item.getProduct().getName())
-                        .setText(R.id.describe, sp.toString());
+
                 if (item.getStatus().equals("refunded")) {//交易关闭
                     helper.setText(R.id.status, getString(R.string.refunded));
                 } else if (item.getStatus().equals("canceled")) {//交易关闭
