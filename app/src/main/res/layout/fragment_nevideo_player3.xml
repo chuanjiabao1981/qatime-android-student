@@ -14,8 +14,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="4dp">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/class_name"
@@ -31,6 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:layout_marginBottom="5dp"
                 android:text="基本属性"
                 android:textColor="#333"
                 android:textSize="15sp" />
@@ -38,8 +38,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -50,9 +51,8 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingLeft="6dp"
-                        android:paddingTop="6dp">
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -74,8 +74,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingLeft="6dp"
-                        android:paddingTop="6dp">
+                        android:layout_marginBottom="10dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -107,8 +106,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingLeft="6dp"
-                        android:paddingTop="6dp">
+                        android:layout_marginBottom="10dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -131,8 +129,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingLeft="6dp"
-                        android:paddingTop="6dp">
+                        android:layout_marginBottom="10dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -158,8 +155,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingLeft="6dp"
-                android:paddingTop="6dp">
+                android:layout_marginLeft="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -200,7 +196,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:paddingTop="6dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="5dp"
                     android:text="课程标签"
                     android:textColor="#333"
                     android:textSize="15sp" />
@@ -216,7 +213,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:paddingTop="6dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="5dp"
                 android:text="课程目标"
                 android:textColor="#333"
                 android:textSize="15sp" />
@@ -234,7 +232,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:paddingTop="6dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="5dp"
                 android:text="适合人群"
                 android:textColor="#333"
                 android:textSize="15sp" />
@@ -245,6 +244,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
                 android:background="#00000000"
                 android:text="无" />
 
@@ -274,7 +274,7 @@
                     android:id="@+id/image"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="10dp"
                     android:scaleType="fitXY"
                     android:src="@mipmap/error_header" />
 
@@ -310,8 +310,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginBottom="5dp"
                 android:text="所在学校"
                 android:textColor="#333"
                 android:textSize="14sp" />
@@ -327,8 +327,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginBottom="5dp"
                 android:text="教师标签"
                 android:textColor="#333"
                 android:textSize="14sp" />
@@ -344,8 +344,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginBottom="5dp"
                 android:text="教师简介"
                 android:textColor="#333"
                 android:textSize="14sp" />
@@ -354,6 +354,7 @@
                 android:id="@+id/teacher_describe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:background="#00000000" />
 
         </LinearLayout>
