@@ -27,6 +27,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,8 +50,8 @@ import libraryextra.utils.VolleyListener;
 
 public class FragmentOrderUnpaid extends BaseFragment {
     private PullToRefreshListView listView;
-    private java.util.List<MyOrderBean.DataBean> list = new ArrayList<>();
-    private CommonAdapter<MyOrderBean.DataBean> adapter;
+    private java.util.List<MyOrderBean.Data> list = new ArrayList<>();
+    private CommonAdapter<MyOrderBean.Data> adapter;
     private int page = 1;
 
     @Nullable
@@ -78,32 +79,16 @@ public class FragmentOrderUnpaid extends BaseFragment {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
 
-        adapter = new CommonAdapter<MyOrderBean.DataBean>(getActivity(), list, R.layout.item_fragment_personal_my_order1) {
+        adapter = new CommonAdapter<MyOrderBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_order1) {
             @Override
-            public void convert(ViewHolder helper, final MyOrderBean.DataBean item, final int position) {
+            public void convert(ViewHolder helper, final MyOrderBean.Data item, final int position) {
                 StringBuilder sp = new StringBuilder();
-                if("LiveStudio::Course".equals(item.getProduct_type())){
-                    sp.append("直播课/");
-                    sp.append(item.getProduct().getGrade())
-                            .append(item.getProduct().getSubject())
-                            .append("/共").append(item.getProduct().getPreset_lesson_count()).append("课")
-                            .append("/").append(item.getProduct().getTeacher_name());
-                    helper.setText(R.id.classname, item.getProduct().getName())
-                            .setText(R.id.describe, sp.toString());
-                }else if("LiveStudio::InteractiveCourse".equals(item.getProduct_type())){
-                    sp.append("一对一/");
-                    sp.append(item.getProduct_interactive_course().getGrade())
-                            .append(item.getProduct_interactive_course().getSubject())
-                            .append("/共").append(item.getProduct_interactive_course().getLessons_count()).append("课")
-                            .append("/").append(item.getProduct_interactive_course().getTeachers().get(0).getName());
-                    if(item.getProduct_interactive_course().getTeachers().size()>1){
-                        sp.append("...");
-                    }
-                    helper.setText(R.id.classname, item.getProduct_interactive_course().getName())
-                            .setText(R.id.describe, sp.toString());
-                }
-
-
+                sp.append(item.getProduct().getGrade())
+                        .append(item.getProduct().getSubject())
+                        .append("/共").append(item.getProduct().getPreset_lesson_count()).append("课")
+                        .append("/").append(item.getProduct().getTeacher_name());
+                helper.setText(R.id.classname, item.getProduct().getName())
+                        .setText(R.id.describe, sp.toString());
 
                 if (item.getStatus().equals("unpaid")) {//待付款
                     helper.setText(R.id.status, getResourceString(R.string.waiting_for_payment));

@@ -46,7 +46,6 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
-import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.fragment.FragmentHomeClassTable;
 import cn.qatime.player.fragment.FragmentHomeMainPage;
@@ -206,7 +205,7 @@ public class MainActivity extends BaseFragmentActivity {
                         if (data != null && data.getData() != null) {
                             for (SystemNotifyBean.DataBean bean : data.getData()) {
                                 if (!bean.isRead()) {//有未读发送未读event
-                                    EventBus.getDefault().postSticky(BusEvent.HANDLE_U_PUSH_MESSAGE);
+                                    EventBus.getDefault().postSticky("handleUPushMessage");
                                     break;
                                 }
                             }
@@ -508,12 +507,12 @@ public class MainActivity extends BaseFragmentActivity {
     };
 
     @Subscribe
-    public void onEvent(BusEvent event) {
-        if (event==BusEvent.PAY_SUCCESS) {
+    public void onEvent(String event) {
+        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
             if (StringUtils.isNullOrBlanK(BaseApplication.getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getAccountToken())) {
                 getAccount();
             }
-        } else if (event==BusEvent.HANDLE_U_PUSH_MESSAGE) {
+        } else if (!StringUtils.isNullOrBlanK(event) && "handleUPushMessage".equals(event)) {
             if (fragmentlayout.getCurrentPosition() != 3) {
                 message_x.setVisibility(View.VISIBLE);
             }
@@ -594,6 +593,9 @@ public class MainActivity extends BaseFragmentActivity {
         addToRequestQueue(request);
     }
 
+    public void more(View v) {
+        setCurrentPosition(1, 0);
+    }
 
     public void setCurrentPosition(int currentPosition, int position) {
         fragmentlayout.setCurrenItem(currentPosition);

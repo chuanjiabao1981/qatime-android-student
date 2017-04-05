@@ -3,6 +3,7 @@ package cn.qatime.player.wxapi;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.orhanobut.logger.Logger;
 import com.tencent.mm.sdk.modelbase.BaseReq;
 import com.tencent.mm.sdk.modelbase.BaseResp;
@@ -12,9 +13,12 @@ import com.tencent.mm.sdk.openapi.IWXAPIEventHandler;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONObject;
 
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.utils.Constant;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 
 /**
  * @author lungtify

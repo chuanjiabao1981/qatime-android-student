@@ -39,6 +39,7 @@ import libraryextra.utils.VolleyListener;
  * @Description
  */
 public class SystemSettingActivity extends BaseActivity implements View.OnClickListener {
+    private LinearLayout learningProcess;
     private LinearLayout notifySetting;
     private LinearLayout checkUpdate;
     private TextView version;
@@ -54,6 +55,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
     private View updateView;
 
     private void assignViews() {
+        learningProcess = (LinearLayout) findViewById(R.id.learning_process);
         notifySetting = (LinearLayout) findViewById(R.id.notify_setting);
         checkUpdate = (LinearLayout) findViewById(R.id.check_update);
         version = (TextView) findViewById(R.id.version);
@@ -85,6 +87,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
         notifySetting.setOnClickListener(this);
         checkUpdate.setOnClickListener(this);
         cleanCache.setOnClickListener(this);
+        learningProcess.setOnClickListener(this);
         feedback.setOnClickListener(this);
         about.setOnClickListener(this);
 
@@ -185,6 +188,10 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 Toast.makeText(SystemSettingActivity.this, getString(R.string.clean_cache_success) + cacheSize.getText().toString(), Toast.LENGTH_SHORT).show();
                 DataCleanUtils.clearAllCache(this);
                 setCache();
+                break;
+            case R.id.learning_process:
+                intent = new Intent(SystemSettingActivity.this, LearningProcessActivity.class);
+                startActivity(intent);
                 break;
             case R.id.feedback:
                 intent = new Intent(SystemSettingActivity.this, FeedBackActivity.class);

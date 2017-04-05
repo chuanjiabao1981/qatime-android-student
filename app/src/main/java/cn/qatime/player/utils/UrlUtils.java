@@ -35,8 +35,6 @@ public class UrlUtils {
     public static String urlWeChatRegister = baseUrl + "api/v1/user/wechat_register";
     //课程
     public static String urlCourses = baseUrl + "api/v1/live_studio/courses/";
-    //一对一
-    public static String urlInteractCourses = baseUrl + "api/v1/live_studio/interactive_courses/";
     //课程
     public static String urlSearch = baseUrl + "api/v1/live_studio/courses/search";
     //辅导班排行

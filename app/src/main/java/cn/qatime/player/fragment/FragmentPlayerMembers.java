@@ -60,7 +60,7 @@ public class FragmentPlayerMembers extends BaseFragment {
      * @param accounts
      */
     public void setData(Announcements.DataBean accounts) {
-        if (accounts != null && accounts.getMembers()!=null) {
+        if (accounts != null) {
             list.clear();
             list.addAll(accounts.getMembers());
             Iterator<Announcements.DataBean.MembersBean> it = list.iterator();
