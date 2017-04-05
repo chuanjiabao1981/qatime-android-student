@@ -80,6 +80,10 @@ public class FilterCourseContentActivity extends BaseActivity {
      */
     private void getData(final int type) {
         Map<String, String> map = new HashMap<>();
+        if(type == 0){
+            page = 1;
+        }
+
         map.put("per_page", "20");
         map.put("page", String.valueOf(page));
 
