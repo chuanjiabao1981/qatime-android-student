@@ -311,8 +311,8 @@ public class MessageListPanel {
 
             // 如果是第一次加载，updateShowTimeItem返回的就是lastShowTimeItem
             if (firstLoad) {
-//                doScrollToBottom();
-                doScrollToRead();
+                doScrollToBottom();
+//                doScrollToRead();
             }
 //            refreshMessageList();
             firstLoad = false;
