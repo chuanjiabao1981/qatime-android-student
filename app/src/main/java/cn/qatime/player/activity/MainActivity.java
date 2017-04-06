@@ -183,7 +183,7 @@ public class MainActivity extends BaseFragmentActivity {
                     message_x.setVisibility(View.GONE);
                     NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
                 } else {
-                    NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
+                    NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.isChatMessageNotifyStatus() ? MsgService.MSG_CHATTING_ACCOUNT_NONE : MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
                 }
             }
         });

@@ -78,7 +78,6 @@ public class FragmentHomeSelectSubject extends BaseFragment {
         subjectData.add("物理");
         subjectData.add("化学");
         subjectData.add("生物");
-        subjectData.add("科学");
         gridAdapter = new CommonAdapter<String>(getActivity(), subjectData, R.layout.item_subject) {
             @Override
             public void convert(ViewHolder holder, String item, int position) {
@@ -112,12 +111,13 @@ public class FragmentHomeSelectSubject extends BaseFragment {
         subjectData.add("全部");
         subjectData.add("语文");
         subjectData.add("数学");
+        subjectData.add("英语");
+
 
         switch (position) {
             case 0:
             case 1:
             case 2:
-                subjectData.add("英语");
                 subjectData.add("政治");
                 subjectData.add("历史");
                 subjectData.add("地理");
@@ -127,26 +127,23 @@ public class FragmentHomeSelectSubject extends BaseFragment {
                 break;
 
             case 3:
-                subjectData.add("英语");
+                subjectData.add("政治");
+                subjectData.add("历史");
+                subjectData.add("物理");
+                subjectData.add("化学");
+                break;
+            case 4:
+                subjectData.add("政治");
+                subjectData.add("历史");
+                subjectData.add("地理");
+                subjectData.add("物理");
+                subjectData.add("生物");
+                break;
+            case 5:
                 subjectData.add("政治");
                 subjectData.add("历史");
                 subjectData.add("地理");
                 subjectData.add("生物");
-                break;
-            case 4:
-                subjectData.add("英语");
-                subjectData.add("政治");
-                subjectData.add("历史");
-                subjectData.add("地理");
-                subjectData.add("物理");
-                subjectData.add("化学");
-                break;
-            case 5:
-                subjectData.add("英语");
-                subjectData.add("政治");
-                subjectData.add("历史");
-                subjectData.add("物理");
-                subjectData.add("化学");
                 break;
 
 
@@ -154,10 +151,9 @@ public class FragmentHomeSelectSubject extends BaseFragment {
             case 7:
             case 8:
             case 9:
-                subjectData.add("英语");
+                subjectData.add("科学");
                 break;
         }
-        subjectData.add("科学");
         gridAdapter.notifyDataSetChanged();
     }
 
