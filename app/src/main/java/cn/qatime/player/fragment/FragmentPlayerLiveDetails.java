@@ -304,7 +304,7 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
                 }
                 String body = StringUtils.isNullOrBlanK(data.getTeacher().getDesc()) ? getString(R.string.no_desc) : data.getTeacher().getDesc();
                 body = body.replace("\r\n", "<br>");
-                String css = "<style>* {color:#666666;}</style>";//默认color
+                String css = "<style>* {color:#666666;margin:0;padding:0;}</style>";//默认color
                 teacherDescribe.loadDataWithBaseURL(null, css + body, "text/html", "UTF-8", null);
                 SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getCacheDir() + "/school.txt").toString(), SchoolBean.class);
                 if (schoolBean != null && schoolBean.getData() != null) {

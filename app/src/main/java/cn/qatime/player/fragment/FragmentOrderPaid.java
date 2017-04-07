@@ -41,15 +41,14 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.OrderDetailBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
 public class FragmentOrderPaid extends BaseFragment {
     private PullToRefreshListView listView;
-    private java.util.List<MyOrderBean.Data> list = new ArrayList<>();
-    private CommonAdapter<MyOrderBean.Data> adapter;
+    private java.util.List<MyOrderBean.DataBean> list = new ArrayList<>();
+    private CommonAdapter<MyOrderBean.DataBean> adapter;
     private int page = 1;
     DecimalFormat df = new DecimalFormat("#.00");
 
@@ -77,14 +76,28 @@ public class FragmentOrderPaid extends BaseFragment {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
 
-        adapter = new CommonAdapter<MyOrderBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_order2) {
+        adapter = new CommonAdapter<MyOrderBean.DataBean>(getActivity(), list, R.layout.item_fragment_personal_my_order2) {
             @Override
-            public void convert(ViewHolder helper, final MyOrderBean.Data item, int position) {
+            public void convert(ViewHolder helper, final MyOrderBean.DataBean item, int position) {
+
                 StringBuilder sp = new StringBuilder();
-                sp.append(item.getProduct().getGrade()).append(item.getProduct().getSubject()).append("/共").append(item.getProduct().getPreset_lesson_count())
-                        .append("课/").append(item.getProduct().getTeacher_name());
-                helper.setText(R.id.classname, item.getProduct().getName())
-                        .setText(R.id.describe, sp.toString());
+                if("LiveStudio::Course".equals(item.getProduct_type())){
+                    sp.append("直播课/");
+                    sp.append(item.getProduct().getGrade()).append(item.getProduct().getSubject()).append("/共").append(item.getProduct().getPreset_lesson_count())
+                            .append("课/").append(item.getProduct().getTeacher_name());
+                    helper.setText(R.id.classname, item.getProduct().getName())
+                            .setText(R.id.describe, sp.toString());
+                }else if("LiveStudio::InteractiveCourse".equals(item.getProduct_type())){
+                    sp.append("一对一/");
+                    sp.append(item.getProduct_interactive_course().getGrade()).append(item.getProduct_interactive_course().getSubject()).append("/共").append(item.getProduct_interactive_course().getLessons_count())
+                            .append("课/").append(item.getProduct_interactive_course().getTeachers().get(0).getName());
+                    if(item.getProduct_interactive_course().getTeachers().size()>1){
+                        sp.append("...");
+                    }
+                    helper.setText(R.id.classname, item.getProduct_interactive_course().getName())
+                            .setText(R.id.describe, sp.toString());
+                }
+
 
                 TextView refund = helper.getView(R.id.apply_refund);
                 if (item.getStatus().equals("refunding")) {//正在交易
@@ -148,30 +161,14 @@ public class FragmentOrderPaid extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), PersonalMyOrderPaidDetailActivity.class);
-                intent.putExtra("id", list.get(position - 1).getId());
-                OrderDetailBean bean = new OrderDetailBean();
-                bean.image = list.get(position - 1).getProduct().getPublicize();
-                bean.id = list.get(position - 1).getProduct().getId();
-                bean.name = list.get(position - 1).getProduct().getName();
-                bean.subject = list.get(position - 1).getProduct().getSubject();
-                bean.status = list.get(position - 1).getStatus();
-                bean.grade = list.get(position - 1).getProduct().getGrade();
-                bean.teacher = list.get(position - 1).getProduct().getTeacher_name();
-                bean.Preset_lesson_count = list.get(position - 1).getProduct().getPreset_lesson_count();
-                bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
-                bean.current_price = list.get(position - 1).getProduct().getCurrent_price();
-                bean.amount = list.get(position - 1).getAmount();
-                intent.putExtra("data", bean);
-                intent.putExtra("payType", list.get(position - 1).getPay_type());
-                intent.putExtra("created_at", list.get(position - 1).getCreated_at());
-                intent.putExtra("pay_at", list.get(position - 1).getPay_at());
+                intent.putExtra("data", list.get(position - 1));
                 startActivityForResult(intent,Constant.REQUEST);
             }
         });
 
     }
 
-    protected void dialog(final MyOrderBean.Data item) {
+    protected void dialog(final MyOrderBean.DataBean item) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final AlertDialog alertDialog = builder.create();
         View view = View.inflate(getActivity(), R.layout.dialog_cancel_or_confirm, null);
@@ -199,7 +196,7 @@ public class FragmentOrderPaid extends BaseFragment {
 //        alertDialog.getWindow().setAttributes(attributes);
     }
 
-    private void cancelRefund(MyOrderBean.Data item) {
+    private void cancelRefund(MyOrderBean.DataBean item) {
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.urlpayment + BaseApplication.getUserId() + "/refunds/" + item.getId() + "/cancel", null,
                 new VolleyListener(getActivity()) {
                     @Override
@@ -227,7 +224,7 @@ public class FragmentOrderPaid extends BaseFragment {
         addToRequestQueue(request);
     }
 
-    private void applyRefund(final MyOrderBean.Data item) {
+    private void applyRefund(final MyOrderBean.DataBean item) {
         Map<String, String> map = new HashMap<>();
         map.put("order_id", item.getId());
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/refunds/info", map), null,
@@ -237,9 +234,16 @@ public class FragmentOrderPaid extends BaseFragment {
                         Intent intent = new Intent(getActivity(), ApplyRefundActivity.class);
                         intent.putExtra("response", response.toString());
                         intent.putExtra("order_id", item.getId());
-                        intent.putExtra("name",item.getProduct().getName());
-                        intent.putExtra("preset_lesson_count",item.getProduct().getPreset_lesson_count());
-                        intent.putExtra("completed_lesson_count",item.getProduct().getCompleted_lesson_count());
+                        if("LiveStudio::Course".equals(item.getProduct_type())){
+                            intent.putExtra("name",item.getProduct().getName());
+                            intent.putExtra("preset_lesson_count",item.getProduct().getPreset_lesson_count());
+                            intent.putExtra("completed_lesson_count",item.getProduct().getCompleted_lesson_count());
+                        }else if("LiveStudio::InteractiveCourse".equals(item.getProduct_type())){
+                            intent.putExtra("name",item.getProduct_interactive_course().getName());
+                            intent.putExtra("preset_lesson_count",item.getProduct_interactive_course().getLessons_count());
+                            intent.putExtra("completed_lesson_count",item.getProduct_interactive_course().getCompleted_lessons_count());
+                        }
+
                         startActivityForResult(intent, Constant.REQUEST);
                     }
 

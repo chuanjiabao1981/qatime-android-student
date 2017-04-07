@@ -70,7 +70,7 @@ public class FilterCourseContentActivity extends BaseActivity {
         setContentView(R.layout.activity_filter_course);
         grade = getIntent().getStringExtra("grade");
         subject = getIntent().getStringExtra("subject");
-        setTitles(grade + subject);
+        setTitles(grade + subject+"直播课");
         initView();
         getData(0);
     }
