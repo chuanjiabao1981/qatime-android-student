@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.netease.nimlib.sdk.AbortableFuture;
@@ -46,6 +47,8 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
+import cn.qatime.player.bean.CashAccountBean;
+import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.fragment.FragmentHomeClassTable;
 import cn.qatime.player.fragment.FragmentHomeMainPage;
@@ -151,8 +154,9 @@ public class MainActivity extends BaseFragmentActivity {
         if (BaseApplication.isLogined()) {
             fragBaseFragments.add(new FragmentHomeClassTable());
             fragBaseFragments.add(new FragmentHomeMessage());
-            initMessage();
             fragBaseFragments.add(new FragmentHomeUserCenter());
+            initMessage();
+            refreshCashAccount();
         } else {
             fragBaseFragments.add(new FragmentUnLoginHomeClassTable());
             fragBaseFragments.add(new FragmentUnLoginHomeMessage());
@@ -292,7 +296,7 @@ public class MainActivity extends BaseFragmentActivity {
                     }
                 }
             }
-        }else {
+        } else {
             //云信通知消息
             setIntent(intent);
             parseIntent();
@@ -516,7 +520,10 @@ public class MainActivity extends BaseFragmentActivity {
             if (fragmentlayout.getCurrentPosition() != 3) {
                 message_x.setVisibility(View.VISIBLE);
             }
+        } else if ("refreshCashAccount".equals(event)) {
+            refreshCashAccount();
         }
+
     }
 
     /**
@@ -601,6 +608,38 @@ public class MainActivity extends BaseFragmentActivity {
         fragmentlayout.setCurrenItem(currentPosition);
         FragmentHomeSelectSubject fragmentHomeSelectSubject = (FragmentHomeSelectSubject) fragBaseFragments.get(1);
         fragmentHomeSelectSubject.setGrade(position);
+    }
+
+    @Subscribe
+    public void onEvent(PayResultState state) {
+        refreshCashAccount();
+    }
+
+    private void refreshCashAccount() {
+        addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.urlpayment + BaseApplication.getUserId() + "/cash", null, new VolleyListener(MainActivity.this) {
+
+            @Override
+            protected void onTokenOut() {
+                tokenOut();
+            }
+
+            @Override
+            protected void onSuccess(JSONObject response) {
+                CashAccountBean cashAccount = JsonUtils.objectFromJson(response.toString(), CashAccountBean.class);
+                BaseApplication.setCashAccount(cashAccount);
+                EventBus.getDefault().post("onRefreshCashAccount");
+            }
+
+            @Override
+            protected void onError(JSONObject response) {
+                Toast.makeText(MainActivity.this, getResourceString(R.string.get_wallet_info_error), Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Toast.makeText(MainActivity.this, getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
+            }
+        }));
     }
 
 }
