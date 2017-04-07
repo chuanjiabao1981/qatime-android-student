@@ -129,7 +129,7 @@ public class  PayPSWForgetActivity extends BaseActivity implements View.OnClickL
                                     e.printStackTrace();
                                 }
                                 startActivity(intent);
-                                setResult(Constant.CHANGE_PAY_PSW);
+                                setResult(Constant.CHANGE_PAY_PSW);//仅对PayPSWVerifyActivity跳转过来的有用，用于关闭验证页面，否则返回验证密码页面
                                 finish();
                             }
 
