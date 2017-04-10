@@ -8,7 +8,6 @@ import android.widget.Toast;
 
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
-import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
@@ -18,16 +17,11 @@ import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.umeng.analytics.MobclickAgent;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-
-import java.io.File;
 import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
-import cn.qatime.player.bean.ChatVideoBean;
 import cn.qatime.player.bean.Container;
 import cn.qatime.player.bean.InputPanel;
 import cn.qatime.player.bean.MessageListPanel;
@@ -35,7 +29,6 @@ import cn.qatime.player.bean.ModuleProxy;
 import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.utils.Constant;
-import libraryextra.bean.ImageItem;
 import libraryextra.utils.StringUtils;
 
 /**
@@ -60,7 +53,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         super.onCreate(savedInstanceState);
         rootView = View.inflate(this, R.layout.activity_message, null);
         setContentView(rootView);
-        EventBus.getDefault().register(this);
+//        EventBus.getDefault().register(this);
         String name = getIntent().getStringExtra("name");
         if (!StringUtils.isNullOrBlanK(name)) {
             setTitles(name);
@@ -68,18 +61,24 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
             setTitles(getResources().getString(R.string.team_group));
         }
         sessionId = getIntent().getStringExtra("sessionId");
+        final String type = getIntent().getStringExtra("type");//直播类型，正常/一对一
         sessionType = (SessionTypeEnum) getIntent().getSerializableExtra("sessionType");
         courseId = getIntent().getIntExtra("courseId", 0);
 
+        if (StringUtils.isNullOrBlanK(type)) {
+            findViewById(R.id.right).setVisibility(View.GONE);
+        }
         setRightImage(R.mipmap.online_room, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MessageActivity.this, NEVideoPlayerActivity.class);
-//                intent.putExtra("camera", camera);
-//                intent.putExtra("board", board);
-                intent.putExtra("id", courseId);
-                intent.putExtra("sessionId", sessionId);
-                startActivityForResult(intent, Constant.REQUEST);
+                if ("custom".equals(type)) {
+                    Intent intent = new Intent(MessageActivity.this, NEVideoPlayerActivity.class);
+                    intent.putExtra("id", courseId);
+                    intent.putExtra("sessionId", sessionId);
+                    startActivityForResult(intent, Constant.REQUEST);
+                } else if ("interactive".equals(type)) {
+
+                }
             }
         });
         registerObservers(true);
@@ -142,7 +141,6 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         super.onActivityResult(requestCode, resultCode, data);
         inputpanel.onActivityResult(requestCode, resultCode, data);
     }
-
 
 
     /**
@@ -290,20 +288,20 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
     }
 
-    @Subscribe
-    public void onEvent(ChatVideoBean event) {
-        if (event != null) {
-            this.courseId = event.getCourseId();
-            if (messageListPanel != null) {
-                messageListPanel.setOwner(event.getChat_team_owner());
-            }
-            if (!StringUtils.isNullOrBlanK(event.getName())) {
-                setTitles(event.getName());
-            } else {
-                setTitles(getResources().getString(R.string.team_group));
-            }
-        }
-    }
+//    @Subscribe
+//    public void onEvent(ChatVideoBean event) {
+//        if (event != null) {
+//            this.courseId = event.getCourseId();
+//            if (messageListPanel != null) {
+//                messageListPanel.setOwner(event.getChat_team_owner());
+//            }
+//            if (!StringUtils.isNullOrBlanK(event.getName())) {
+//                setTitles(event.getName());
+//            } else {
+//                setTitles(getResources().getString(R.string.team_group));
+//            }
+//        }
+//    }
 
     @Override
     protected void onDestroy() {
@@ -311,7 +309,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         registerObservers(false);
         registerTeamUpdateObserver(false);
         messageListPanel.onDestroy();
-        EventBus.getDefault().unregister(this);
+//        EventBus.getDefault().unregister(this);
     }
 
 }

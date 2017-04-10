@@ -13,6 +13,7 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.umeng.analytics.MobclickAgent;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -130,7 +131,7 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
                             intent.putExtra("id",bean.getData().getTransaction_no());
                             intent.putExtra("create_at",bean.getData().getCreated_at());
                             startActivity(intent);
-
+                            EventBus.getDefault().post("refreshCashAccount");
                             finish();
                         } else {
                             onError(response);

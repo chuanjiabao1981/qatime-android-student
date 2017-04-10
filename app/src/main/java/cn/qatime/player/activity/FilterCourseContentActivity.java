@@ -29,6 +29,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.bean.FilterCourseContentBean;
+import cn.qatime.player.bean.LabelBean;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -62,6 +63,8 @@ public class FilterCourseContentActivity extends BaseActivity {
     private String courseStatus = null;//课程状态
     private String endTime = null;
     private String startTime = null;
+    private List<LabelBean.DataBean> labelData;
+    private CommonAdapter<LabelBean.DataBean> labelAdapter;
 
 
     @Override
@@ -80,6 +83,10 @@ public class FilterCourseContentActivity extends BaseActivity {
      */
     private void getData(final int type) {
         Map<String, String> map = new HashMap<>();
+        if(type == 0){
+            page = 1;
+        }
+
         map.put("per_page", "20");
         map.put("page", String.valueOf(page));
 
@@ -262,33 +269,13 @@ public class FilterCourseContentActivity extends BaseActivity {
                 getData(1);
             }
         });
-        final List<String> labelData = new ArrayList<>();
-        labelData.add("不限");
-        labelData.add("高考");
-        labelData.add("中考");
-        labelData.add("会考");
-        labelData.add("小升初考试");
-        labelData.add("高考志愿");
-        labelData.add("英语考级");
-        labelData.add("奥数竞赛");
-        labelData.add("历年真题");
-        labelData.add("期中期末试卷");
-        labelData.add("自编试卷");
-        labelData.add("暑假课");
-        labelData.add("寒假课");
-        labelData.add("周末课");
-        labelData.add("国庆假期课");
-        labelData.add("基础课");
-        labelData.add("巩固课");
-        labelData.add("提高课");
-        labelData.add("外教");
-        labelData.add("冲刺");
-        labelData.add("重点难点");
-        final CommonAdapter<String> labelAdapter = new CommonAdapter<String>(this, labelData, R.layout.item_screening_condition) {
+        labelData = new ArrayList<>();
+        initLabel();
+        labelAdapter = new CommonAdapter<LabelBean.DataBean>(this, labelData, R.layout.item_screening_condition) {
             @Override
-            public void convert(ViewHolder holder, String item, int position) {
-                holder.setText(R.id.text, item);
-                if (label.getText().toString().equals(labelData.get(position))) {
+            public void convert(ViewHolder holder, LabelBean.DataBean item, int position) {
+                holder.setText(R.id.text, item.getName());
+                if (label.getText().toString().equals(item.getName())) {
                     ((TextView) holder.getView(R.id.text)).setBackgroundResource(R.drawable.text_background_red);
                     ((TextView) holder.getView(R.id.text)).setTextColor(getResources().getColor(R.color.colorPrimary));
                 } else {
@@ -308,11 +295,11 @@ public class FilterCourseContentActivity extends BaseActivity {
                 gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        label.setText(labelData.get(position));
+                        label.setText(labelData.get(position).getName());
                         if (labelData.get(position).equals("不限")) {
                             tag = null;
                         } else {
-                            tag = labelData.get(position);
+                            tag = labelData.get(position).getName();
                         }
                         getData(0);
                         dialog.dismiss();
@@ -334,6 +321,34 @@ public class FilterCourseContentActivity extends BaseActivity {
                 startActivityForResult(intent, Constant.REQUEST);
             }
         });
+    }
+
+    private void initLabel() {
+        Map<String, String> map = new HashMap<>();
+        map.put("cates",grade+","+subject);
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlAppconstantInformation+"/tags", map), null, new VolleyListener(this) {
+            @Override
+            protected void onTokenOut() {
+
+            }
+
+            @Override
+            protected void onSuccess(JSONObject response) {
+                LabelBean labelBean = JsonUtils.objectFromJson(response.toString(), LabelBean.class);
+                if(labelBean!=null&&labelBean.getData()!=null){
+                    labelData.addAll(labelBean.getData());
+                    adapter.notifyDataSetChanged();
+                }
+
+
+            }
+
+            @Override
+            protected void onError(JSONObject response) {
+
+            }
+        }, new VolleyErrorListener());
+        addToRequestQueue(request);
     }
 
     private void refreshState(TextView view, int result) {//-1未选 0上 1下

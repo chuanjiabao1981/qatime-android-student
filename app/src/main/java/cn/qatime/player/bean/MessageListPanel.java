@@ -26,6 +26,7 @@ import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.AttachmentProgress;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.QueryDirectionEnum;
+import com.netease.nimlib.sdk.msg.model.RecentContact;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -311,6 +312,7 @@ public class MessageListPanel {
             // 如果是第一次加载，updateShowTimeItem返回的就是lastShowTimeItem
             if (firstLoad) {
                 doScrollToBottom();
+//                doScrollToRead();
             }
 //            refreshMessageList();
             firstLoad = false;
@@ -379,6 +381,23 @@ public class MessageListPanel {
 
     private void doScrollToBottom() {
         messageListView.scrollToPosition(adapter.getBottomDataPosition());
+    }
+
+    private void doScrollToRead() {
+        NIMClient.getService(MsgService.class).queryRecentContacts()
+                .setCallback(new RequestCallbackWrapper<List<RecentContact>>() {
+                    @Override
+                    public void onResult(int code, List<RecentContact> recents, Throwable e) {
+                        // recents参数即为最近联系人列表（最近会话列表）
+                        for (RecentContact recent : recents) {
+                            if(container.account.equals(recent.getContactId())){
+                                messageListView.scrollToPosition(adapter.getBottomDataPosition()-recent.getUnreadCount());
+                                break;
+                            }
+                        }
+                    }
+                });
+
     }
 
     // 刷新消息列表
