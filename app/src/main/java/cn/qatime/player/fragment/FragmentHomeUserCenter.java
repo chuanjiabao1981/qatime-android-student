@@ -15,7 +15,6 @@ import com.bumptech.glide.Glide;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.json.JSONObject;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.PersonalInformationActivity;
@@ -77,7 +76,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
             }
             balance.setText(price);
         } else {
-            EventBus.getDefault().post("refreshCashAccount");
+            EventBus.getDefault().post(BusEvent.REFRESH_CASH_ACCOUNT);
         }
     }
 
@@ -129,8 +128,8 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
     }
 
     @Subscribe
-    public void onEvent(String event) {
-        if ("onRefreshCashAccount".equals(event))
+    public void onEvent(BusEvent event) {
+        if (BusEvent.ON_REFRESH_CASH_ACCOUNT==event)
             initData();
     }
 

@@ -521,7 +521,7 @@ public class MainActivity extends BaseFragmentActivity {
             if (fragmentlayout.getCurrentPosition() != 3) {
                 message_x.setVisibility(View.VISIBLE);
             }
-        } else if ("refreshCashAccount".equals(event)) {
+        } else if (event==BusEvent.REFRESH_CASH_ACCOUNT) {
             refreshCashAccount();
         }
 
@@ -625,7 +625,7 @@ public class MainActivity extends BaseFragmentActivity {
             protected void onSuccess(JSONObject response) {
                 CashAccountBean cashAccount = JsonUtils.objectFromJson(response.toString(), CashAccountBean.class);
                 BaseApplication.setCashAccount(cashAccount);
-                EventBus.getDefault().post("onRefreshCashAccount");
+                EventBus.getDefault().post(BusEvent.ON_REFRESH_CASH_ACCOUNT);
             }
 
             @Override

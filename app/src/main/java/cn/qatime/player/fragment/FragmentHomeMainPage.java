@@ -50,6 +50,7 @@ import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.BannerRecommendBean;
+import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.bean.CashAccountBean;
 import cn.qatime.player.bean.EssenceContentBean;
 import cn.qatime.player.bean.LiveTodayBean;
@@ -177,8 +178,8 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         citySelect.setOnClickListener(this);
     }
     @Subscribe
-    public void onEvent(String event) {
-        if ("onRefreshCashAccount".equals(event)&&!flag)
+    public void onEvent(BusEvent event) {
+        if (BusEvent.ON_REFRESH_CASH_ACCOUNT==event&&!flag)
             initCashAccountSafe();
     }
     private void initCashAccountSafe() {
@@ -191,7 +192,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
               flag = true;
           }
         } else {
-            EventBus.getDefault().post("refreshCashAccount");
+            EventBus.getDefault().post(BusEvent.REFRESH_CASH_ACCOUNT);
         }
     }
 

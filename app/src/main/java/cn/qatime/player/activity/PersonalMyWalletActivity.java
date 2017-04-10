@@ -95,7 +95,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
             }
             consumption.setText(price1);
         } else {
-            EventBus.getDefault().post("refreshCashAccount");
+            EventBus.getDefault().post(BusEvent.REFRESH_CASH_ACCOUNT);
         }
     }
 
@@ -162,20 +162,9 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
         }
     }
 
-
-    @Subscribe
-    public void onEvent(PayResultState state) {
-        refreshCashAccount();
-    }
-
     @Subscribe
     public void onEvent(BusEvent event) {
-        if (event==BusEvent.REFRESH_CASH_ACCOUNT)
-            refreshCashAccount();
-    }
-    @Subscribe
-    public void onEvent(String event) {
-        if ("onRefreshCashAccount".equals(event))
+        if (event==BusEvent.ON_REFRESH_CASH_ACCOUNT)
             initData();
     }
 
