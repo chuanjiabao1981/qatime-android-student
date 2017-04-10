@@ -40,7 +40,6 @@ import org.json.JSONObject;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
-import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.bean.CashAccountBean;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.im.LoginSyncDataStatusObserver;
@@ -155,7 +154,7 @@ public class BaseApplication extends Application {
         mPushAgent.setMessageHandler(new UmengMessageHandler() {
             @Override
             public void handleMessage(Context context, UMessage uMessage) {
-                EventBus.getDefault().postSticky(BusEvent.HANDLE_U_PUSH_MESSAGE);
+                EventBus.getDefault().postSticky("handleUPushMessage");
                 super.handleMessage(context, uMessage);
             }
         });

@@ -16,7 +16,7 @@
         android:id="@+id/title"
         android:layout_centerInParent="true"
         android:ellipsize="end"
-        android:maxEms="7"
+        android:maxEms="6"
         android:singleLine="true"
         style="@style/backbar_text_style" />
 

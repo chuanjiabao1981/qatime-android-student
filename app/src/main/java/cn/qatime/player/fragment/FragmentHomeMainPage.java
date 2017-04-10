@@ -30,6 +30,8 @@ import com.bumptech.glide.Glide;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -42,11 +44,13 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.CitySelectActivity;
 import cn.qatime.player.activity.MainActivity;
+import cn.qatime.player.activity.PayPSWForgetActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.BannerRecommendBean;
+import cn.qatime.player.bean.CashAccountBean;
 import cn.qatime.player.bean.EssenceContentBean;
 import cn.qatime.player.bean.LiveTodayBean;
 import cn.qatime.player.bean.RecentPublishedBean;
@@ -98,6 +102,9 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private ListViewForScrollView listViewPublishedRank;//最新发布
     private List<RecentPublishedBean.DataBean.StartRankBean> listStartRank = new ArrayList<>();
     private List<RecentPublishedBean.DataBean.PublishedRankBean> listPublishedRank = new ArrayList<>();
+    private View cashAccountSafe;
+    private View close;
+    private boolean flag = false;//是否提示过未设置支付密码
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -146,11 +153,11 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         listViewStartRank = (ListViewForScrollView) view.findViewById(R.id.listview_class1);
         listViewPublishedRank = (ListViewForScrollView) view.findViewById(R.id.listview_class2);
         View scan = view.findViewById(R.id.scan);
+        cashAccountSafe = view.findViewById(R.id.cash_account_safe);
+        close = view.findViewById(R.id.close);
         recyclerGrade = (RecyclerView) view.findViewById(R.id.recycler_grade);
         recyclerToday = (RecyclerView) view.findViewById(R.id.recycler_today);
-        view.findViewById(R.id.more1).setOnClickListener(this);
-        view.findViewById(R.id.more2).setOnClickListener(this);
-        view.findViewById(R.id.more3).setOnClickListener(this);
+
 
         initBanner();
         initGrade();
@@ -163,8 +170,27 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
         setCity();
         initLocationData();
+        initCashAccountSafe();
         scan.setOnClickListener(this);
         citySelect.setOnClickListener(this);
+    }
+    @Subscribe
+    public void onEvent(String event) {
+        if ("onRefreshCashAccount".equals(event)&&!flag)
+            initCashAccountSafe();
+    }
+    private void initCashAccountSafe() {
+        CashAccountBean cashAccount = BaseApplication.getCashAccount();
+        if (cashAccount != null && cashAccount.getData() != null) {
+          if(!cashAccount.getData().isHas_password()){
+              cashAccountSafe.setVisibility(View.VISIBLE);
+              cashAccountSafe.setOnClickListener(this);
+              close.setOnClickListener(this);
+              flag = true;
+          }
+        } else {
+            EventBus.getDefault().post("refreshCashAccount");
+        }
     }
 
     private void initPublishedRank() {
@@ -288,11 +314,9 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             @Override
             public void onBindViewHolder(BaseViewHolder holder, final int position) {
                 LiveTodayBean.DataBean item = todayList.get(position);
-                holder.setText(R.id.teaching_name, item.getName())
+                holder.setText(R.id.teaching_time, item.getCourse().getName())
                         .setImageByUrl(R.id.image, item.getCourse().getPublicize(), R.mipmap.photo)
-                        .setText(R.id.time, item.getLive_time())
-                        .setText(R.id.status,getTodayStatusText(item.getStatus()))
-                        .setTextColor(R.id.status,getTodayStatusColor(item.getStatus()));
+                        .setText(R.id.time, item.getLive_time());
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -637,23 +661,22 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     }
 
 
-    private int getTodayStatusColor(String status) {
-        if("ready".equals(status)){
-            return 0xff4873ff;
-        }else if("closed".equals(status)){
-            return 0xff999999;
-        }else{
-            return 0xffff5842;
+    private String getReason(String reason) {
+        if ("latest".equals(reason)) {
+            return getString(R.string.lastest);
+        } else if ("hottest".equals(reason)) {
+            return getString(R.string.hottest);
         }
+        return "";
     }
-    private String getTodayStatusText(String status) {
-        if("ready".equals(status)){
-            return "尚未直播";
-        }else if("closed".equals(status)){
-            return "直播结束";
-        }else{
-            return "正在直播";
+
+    private int getReasonBackground(String reason) {
+        if ("latest".equals(reason)) {
+            return 0xff66cccc;
+        } else if ("hottest".equals(reason)) {
+            return 0xffff9999;
         }
+        return 0x00000000;
     }
 
 
@@ -667,11 +690,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         MainActivity mainActivity = (MainActivity) getActivity();
         Intent intent;
         switch (v.getId()) {
-            case R.id.more1:
-            case R.id.more2:
-            case R.id.more3:
-                mainActivity.setCurrentPosition(1, 0);
-                break;
             case R.id.scan:
                 intent = new Intent(getActivity(), CaptureActivity.class);
                 mainActivity.startActivityForResult(intent, Constant.REQUEST);
@@ -679,6 +697,13 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             case R.id.city_select:
                 intent = new Intent(getActivity(), CitySelectActivity.class);
                 startActivityForResult(intent, Constant.REQUEST);
+                break;
+            case R.id.cash_account_safe:
+                intent = new Intent(getActivity(), PayPSWForgetActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.close:
+               cashAccountSafe.setVisibility(View.GONE);
                 break;
         }
     }

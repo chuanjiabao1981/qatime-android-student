@@ -52,8 +52,6 @@
                     android:id="@+id/teacher"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxEms="7"
-                    android:singleLine="true"
                     android:text="老师名字"
                     android:textSize="13sp" />
             </LinearLayout>

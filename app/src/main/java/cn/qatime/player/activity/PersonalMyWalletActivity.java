@@ -8,29 +8,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
-import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.bean.CashAccountBean;
-import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.Constant;
-import cn.qatime.player.utils.DaYiJsonObjectRequest;
-import cn.qatime.player.utils.UrlUtils;
-import libraryextra.utils.JsonUtils;
-import libraryextra.utils.VolleyListener;
 
 /**
  * @author Tianhaoranly
@@ -104,7 +94,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
             }
             consumption.setText(price1);
         } else {
-            refreshCashAccount();
+            EventBus.getDefault().post("refreshCashAccount");
         }
     }
 
@@ -171,16 +161,10 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
         }
     }
 
-
     @Subscribe
-    public void onEvent(PayResultState state) {
-        refreshCashAccount();
-    }
-
-    @Subscribe
-    public void onEvent(BusEvent event) {
-        if (event==BusEvent.REFRESH_CASH_ACCOUNT)
-            refreshCashAccount();
+    public void onEvent(String event) {
+        if ("onRefreshCashAccount".equals(event))
+            initData();
     }
 
     @Override
@@ -189,32 +173,32 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
         MobclickAgent.onResume(this);
     }
 
-    private void refreshCashAccount() {
-        addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.urlpayment + BaseApplication.getUserId() + "/cash", null, new VolleyListener(PersonalMyWalletActivity.this) {
-
-            @Override
-            protected void onTokenOut() {
-                tokenOut();
-            }
-
-            @Override
-            protected void onSuccess(JSONObject response) {
-                CashAccountBean cashAccount = JsonUtils.objectFromJson(response.toString(), CashAccountBean.class);
-                BaseApplication.setCashAccount(cashAccount);
-                initData();
-            }
-
-            @Override
-            protected void onError(JSONObject response) {
-                Toast.makeText(PersonalMyWalletActivity.this, getResourceString(R.string.get_wallet_info_error), Toast.LENGTH_SHORT).show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                Toast.makeText(PersonalMyWalletActivity.this, getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
-            }
-        }));
-    }
+//    private void refreshCashAccount() {
+//        addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.urlpayment + BaseApplication.getUserId() + "/cash", null, new VolleyListener(PersonalMyWalletActivity.this) {
+//
+//            @Override
+//            protected void onTokenOut() {
+//                tokenOut();
+//            }
+//
+//            @Override
+//            protected void onSuccess(JSONObject response) {
+//                CashAccountBean cashAccount = JsonUtils.objectFromJson(response.toString(), CashAccountBean.class);
+//                BaseApplication.setCashAccount(cashAccount);
+//                initData();
+//            }
+//
+//            @Override
+//            protected void onError(JSONObject response) {
+//                Toast.makeText(PersonalMyWalletActivity.this, getResourceString(R.string.get_wallet_info_error), Toast.LENGTH_SHORT).show();
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError volleyError) {
+//                Toast.makeText(PersonalMyWalletActivity.this, getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
+//            }
+//        }));
+//    }
 
     @Override
     protected void onPause() {

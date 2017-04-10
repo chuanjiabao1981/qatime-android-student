@@ -16,7 +16,6 @@ import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.FilterCourseContentActivity;
-import cn.qatime.player.activity.InteractCourseContentFilterActivity;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
@@ -70,53 +69,29 @@ public class FragmentHomeSelectSubject extends BaseFragment {
         listview.setAdapter(listAdapter);
 
         subjectData.add("全部");
-        subjectData.add("全部");
-        subjectData.add("语文");
         subjectData.add("语文");
         subjectData.add("数学");
-        subjectData.add("数学");
-        subjectData.add("英语");
         subjectData.add("英语");
         subjectData.add("政治");
-        subjectData.add("政治");
-        subjectData.add("历史");
         subjectData.add("历史");
         subjectData.add("地理");
-        subjectData.add("地理");
-        subjectData.add("物理");
         subjectData.add("物理");
         subjectData.add("化学");
-        subjectData.add("化学");
         subjectData.add("生物");
-        subjectData.add("生物");
-        subjectData.add("科学");
-        subjectData.add("科学");
         gridAdapter = new CommonAdapter<String>(getActivity(), subjectData, R.layout.item_subject) {
             @Override
             public void convert(ViewHolder holder, String item, int position) {
-                if(position%2==0){
-                    holder.setText(R.id.text, subjectData.get(position)+"直播课");
-                }else{
-                    holder.setText(R.id.text, subjectData.get(position)+"一对一");
-                }
-
+                holder.setText(R.id.text, subjectData.get(position));
             }
         };
         gridView.setAdapter(gridAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(position%2==0){
-                    Intent intent = new Intent(getActivity(), FilterCourseContentActivity.class);
-                    intent.putExtra("grade", gradeData.get(gradeChecked));
-                    intent.putExtra("subject", subjectData.get(position));
-                    startActivity(intent);
-                }else{
-                    Intent intent = new Intent(getActivity(), InteractCourseContentFilterActivity.class);
-                    intent.putExtra("grade", gradeData.get(gradeChecked));
-                    intent.putExtra("subject", subjectData.get(position));
-                    startActivity(intent);
-                }
+                Intent intent = new Intent(getActivity(), FilterCourseContentActivity.class);
+                intent.putExtra("grade", gradeData.get(gradeChecked));
+                intent.putExtra("subject", subjectData.get(position));
+                startActivity(intent);
             }
         });
 
@@ -134,69 +109,41 @@ public class FragmentHomeSelectSubject extends BaseFragment {
     private void notifySubject(int position) {
         subjectData.clear();
         subjectData.add("全部");
-        subjectData.add("全部");
-        subjectData.add("语文");
         subjectData.add("语文");
         subjectData.add("数学");
-        subjectData.add("数学");
+        subjectData.add("英语");
+
 
         switch (position) {
             case 0:
             case 1:
             case 2:
-                subjectData.add("英语");
-                subjectData.add("英语");
-                subjectData.add("政治");
                 subjectData.add("政治");
                 subjectData.add("历史");
-                subjectData.add("历史");
-                subjectData.add("地理");
                 subjectData.add("地理");
                 subjectData.add("物理");
-                subjectData.add("物理");
                 subjectData.add("化学");
-                subjectData.add("化学");
-                subjectData.add("生物");
                 subjectData.add("生物");
                 break;
 
             case 3:
-                subjectData.add("英语");
-                subjectData.add("英语");
-                subjectData.add("政治");
                 subjectData.add("政治");
                 subjectData.add("历史");
-                subjectData.add("历史");
-                subjectData.add("地理");
-                subjectData.add("地理");
-                subjectData.add("生物");
-                subjectData.add("生物");
+                subjectData.add("物理");
+                subjectData.add("化学");
                 break;
             case 4:
-                subjectData.add("英语");
-                subjectData.add("英语");
-                subjectData.add("政治");
                 subjectData.add("政治");
                 subjectData.add("历史");
-                subjectData.add("历史");
-                subjectData.add("地理");
                 subjectData.add("地理");
                 subjectData.add("物理");
-                subjectData.add("物理");
-                subjectData.add("化学");
-                subjectData.add("化学");
+                subjectData.add("生物");
                 break;
             case 5:
-                subjectData.add("英语");
-                subjectData.add("英语");
-                subjectData.add("政治");
                 subjectData.add("政治");
                 subjectData.add("历史");
-                subjectData.add("历史");
-                subjectData.add("物理");
-                subjectData.add("物理");
-                subjectData.add("化学");
-                subjectData.add("化学");
+                subjectData.add("地理");
+                subjectData.add("生物");
                 break;
 
 
@@ -204,12 +151,9 @@ public class FragmentHomeSelectSubject extends BaseFragment {
             case 7:
             case 8:
             case 9:
-                subjectData.add("英语");
-                subjectData.add("英语");
+                subjectData.add("科学");
                 break;
         }
-        subjectData.add("科学");
-        subjectData.add("科学");
         gridAdapter.notifyDataSetChanged();
     }
 
