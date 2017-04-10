@@ -1,12 +1,14 @@
-package cn.qatime.player.activity;
+package cn.qatime.player.fragment;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -27,7 +29,9 @@ import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
-import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.activity.RemedialClassDetailActivity;
+import cn.qatime.player.activity.ScreeningConditionActivity;
+import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.FilterCourseContentBean;
 import cn.qatime.player.bean.LabelBean;
 import cn.qatime.player.utils.Constant;
@@ -41,13 +45,11 @@ import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
 /**
- * @author lungtify
- * @Time 2017/3/14 15:29
- * @Describe 筛选课程内容页面
+ * @author Tianhaoranly
+ * @date 2017/4/10 18:15
+ * @Description:
  */
-
-public class FilterCourseContentActivity extends BaseActivity {
-
+public class FragmentFilterClassLive extends BaseFragment{
 
     private String grade;
     private String subject;
@@ -66,17 +68,31 @@ public class FilterCourseContentActivity extends BaseActivity {
     private List<LabelBean.DataBean> labelData;
     private CommonAdapter<LabelBean.DataBean> labelAdapter;
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_filter_course);
-        grade = getIntent().getStringExtra("grade");
-        subject = getIntent().getStringExtra("subject");
-        setTitles(grade + subject+"直播课");
-        initView();
-        getData(0);
+    public BaseFragment setArguments(String grade, String subject) {
+        this.grade = grade;
+        this.subject = subject;
+        return this;
     }
+
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_filter_live_course, container, false);
+        initView(view);
+        getData(0);
+        return view;
+    }
+
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_filter_course);
+//        grade = getIntent().getStringExtra("grade");
+//        subject = getIntent().getStringExtra("subject");
+//        setTitles(grade + subject+"直播课");
+//        initView();
+//    }
 
     /**
      * @param type 0下拉1上啦
@@ -140,7 +156,7 @@ public class FilterCourseContentActivity extends BaseActivity {
             map.put("q[class_date_lt]", endTime);
         }
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlSearch, map), null, new VolleyListener(this) {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlSearch, map), null, new VolleyListener(getActivity()) {
             @Override
             protected void onTokenOut() {
 
@@ -151,7 +167,7 @@ public class FilterCourseContentActivity extends BaseActivity {
                 if (type == 0) {
                     datas.clear();
                 }
-                String label = DateUtils.formatDateTime(FilterCourseContentActivity.this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+                String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
                 listview.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
                 listview.onRefreshComplete();
                 FilterCourseContentBean data = JsonUtils.objectFromJson(response.toString(), FilterCourseContentBean.class);
@@ -168,10 +184,10 @@ public class FilterCourseContentActivity extends BaseActivity {
         addToRequestQueue(request);
     }
 
-    private void initView() {
-        final TextView latest = (TextView) findViewById(R.id.latest);
-        final TextView price = (TextView) findViewById(R.id.price);
-        final TextView popularity = (TextView) findViewById(R.id.popularity);
+    private void initView(View view) {
+        final TextView latest = (TextView)view.findViewById(R.id.latest);
+        final TextView price = (TextView) view.findViewById(R.id.price);
+        final TextView popularity = (TextView) view.findViewById(R.id.popularity);
 
         latest.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -227,10 +243,10 @@ public class FilterCourseContentActivity extends BaseActivity {
                 getData(0);
             }
         });
-        final TextView label = (TextView) findViewById(R.id.label);
-        View screen = findViewById(R.id.screen);
+        final TextView label = (TextView) view.findViewById(R.id.label);
+        View screen = view.findViewById(R.id.screen);
 
-        listview = (PullToRefreshListView) findViewById(R.id.listview);
+        listview = (PullToRefreshListView) view.findViewById(R.id.listview);
         listview.setMode(PullToRefreshBase.Mode.BOTH);
         listview.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
         listview.getLoadingLayoutProxy(false, true).setPullLabel(getResources().getString(R.string.pull_to_load));
@@ -238,10 +254,10 @@ public class FilterCourseContentActivity extends BaseActivity {
         listview.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
         listview.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         listview.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
-        adapter = new CommonAdapter<FilterCourseContentBean.DataBean>(this, datas, R.layout.item_filter_course) {
+        adapter = new CommonAdapter<FilterCourseContentBean.DataBean>(getActivity(), datas, R.layout.item_filter_course) {
             @Override
             public void convert(ViewHolder holder, FilterCourseContentBean.DataBean item, int position) {
-                Glide.with(FilterCourseContentActivity.this).load(item.getPublicize()).crossFade().placeholder(R.mipmap.photo).into((ImageView) holder.getView(R.id.image));
+                Glide.with(getActivity()).load(item.getPublicize()).crossFade().placeholder(R.mipmap.photo).into((ImageView) holder.getView(R.id.image));
                 holder.setText(R.id.name, item.getName())
                         .setText(R.id.price, "￥" + item.getPrice())
                         .setText(R.id.teacher, item.getTeacher_name());
@@ -251,7 +267,7 @@ public class FilterCourseContentActivity extends BaseActivity {
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(FilterCourseContentActivity.this, RemedialClassDetailActivity.class);
+                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
                 intent.putExtra("id", datas.get(position - 1).getId());
                 startActivity(intent);
             }
@@ -271,7 +287,7 @@ public class FilterCourseContentActivity extends BaseActivity {
         });
         labelData = new ArrayList<>();
         initLabel();
-        labelAdapter = new CommonAdapter<LabelBean.DataBean>(this, labelData, R.layout.item_screening_condition) {
+        labelAdapter = new CommonAdapter<LabelBean.DataBean>(getActivity(), labelData, R.layout.item_screening_condition) {
             @Override
             public void convert(ViewHolder holder, LabelBean.DataBean item, int position) {
                 holder.setText(R.id.text, item.getName());
@@ -288,8 +304,8 @@ public class FilterCourseContentActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //标签
-                final AlertDialog dialog = new AlertDialog.Builder(FilterCourseContentActivity.this).create();
-                View view = LayoutInflater.from(FilterCourseContentActivity.this).inflate(R.layout.dialog_grid, null);
+                final AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
+                View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_grid, null);
                 GridView gridView = (GridView) view.findViewById(R.id.grid);
                 gridView.setAdapter(labelAdapter);
                 gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -313,7 +329,7 @@ public class FilterCourseContentActivity extends BaseActivity {
         screen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FilterCourseContentActivity.this, ScreeningConditionActivity.class);
+                Intent intent = new Intent(getActivity(), ScreeningConditionActivity.class);
                 intent.putExtra("range", range);
                 intent.putExtra("courseStatus", courseStatus);
                 intent.putExtra("startTime", startTime);
@@ -326,7 +342,7 @@ public class FilterCourseContentActivity extends BaseActivity {
     private void initLabel() {
         Map<String, String> map = new HashMap<>();
         map.put("cates",grade+","+subject);
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlAppconstantInformation+"/tags", map), null, new VolleyListener(this) {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlAppconstantInformation+"/tags", map), null, new VolleyListener(getActivity()) {
             @Override
             protected void onTokenOut() {
 
@@ -369,7 +385,7 @@ public class FilterCourseContentActivity extends BaseActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
             if (data != null) {

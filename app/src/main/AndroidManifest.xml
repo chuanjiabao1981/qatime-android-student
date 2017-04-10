@@ -164,8 +164,8 @@
         <activity
             android:name=".activity.OrderConfirmActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".activity.OrderPayActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -361,14 +361,6 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".activity.FilterCourseContentActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.InteractCourseContentFilterActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.InteractCourseDetailActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
@@ -404,9 +396,13 @@
             android:name=".qrcore.core.CaptureActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.PersonalMyInteractActivity"
+        <activity
+            android:name=".activity.PersonalMyInteractActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.FilterCourseActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
     </application>
 </manifest>

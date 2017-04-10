@@ -1,10 +1,13 @@
-package cn.qatime.player.activity;
+package cn.qatime.player.fragment;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -24,7 +27,8 @@ import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
-import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.activity.InteractCourseDetailActivity;
+import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.InteractCourseContentFilterBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -35,10 +39,11 @@ import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
 /**
- * @Describe 一对一课程筛选页
+ * @author Tianhaoranly
+ * @date 2017/4/10 18:16
+ * @Description:
  */
-
-public class InteractCourseContentFilterActivity extends BaseActivity {
+public class FragmentFilterClassInteract extends BaseFragment {
 
 
     private String grade;
@@ -50,17 +55,30 @@ public class InteractCourseContentFilterActivity extends BaseActivity {
     private int priceResult = -1;
     private int page = 1;
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_interact_course_filter);
-        grade = getIntent().getStringExtra("grade");
-        subject = getIntent().getStringExtra("subject");
-        setTitles(grade + subject + "一对一");
-        initView();
-        getData(0);
+    public BaseFragment setArguments(String grade, String subject) {
+        this.grade = grade;
+        this.subject = subject;
+        return this;
     }
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_filter_interact_course, container, false);
+        initView(view);
+        getData(0);
+        return view;
+    }
+
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.fragment_filter_interact_course);
+//        grade = getIntent().getStringExtra("grade");
+//        subject = getIntent().getStringExtra("subject");
+//        setTitles(grade + subject + "一对一");
+//        initView();
+//        getData(0);
+//    }
 
     /**
      * @param type 0下拉1上啦
@@ -97,7 +115,7 @@ public class InteractCourseContentFilterActivity extends BaseActivity {
         }
 
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlInteractCourses + "search", map), null, new VolleyListener(this) {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlInteractCourses + "search", map), null, new VolleyListener(getActivity()) {
             @Override
             protected void onTokenOut() {
 
@@ -108,7 +126,7 @@ public class InteractCourseContentFilterActivity extends BaseActivity {
                 if (type == 0) {
                     datas.clear();
                 }
-                String label = DateUtils.formatDateTime(InteractCourseContentFilterActivity.this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+                String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
                 listview.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
                 listview.onRefreshComplete();
                 InteractCourseContentFilterBean data = JsonUtils.objectFromJson(response.toString(), InteractCourseContentFilterBean.class);
@@ -125,9 +143,9 @@ public class InteractCourseContentFilterActivity extends BaseActivity {
         addToRequestQueue(request);
     }
 
-    private void initView() {
-        final TextView latest = (TextView) findViewById(R.id.latest);
-        final TextView price = (TextView) findViewById(R.id.price);
+    private void initView(View view) {
+        final TextView latest = (TextView) view.findViewById(R.id.latest);
+        final TextView price = (TextView) view.findViewById(R.id.price);
 
         latest.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,7 +180,7 @@ public class InteractCourseContentFilterActivity extends BaseActivity {
             }
         });
 
-        listview = (PullToRefreshListView) findViewById(R.id.listview);
+        listview = (PullToRefreshListView) view.findViewById(R.id.listview);
         listview.setMode(PullToRefreshBase.Mode.BOTH);
         listview.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
         listview.getLoadingLayoutProxy(false, true).setPullLabel(getResources().getString(R.string.pull_to_load));
@@ -170,10 +188,10 @@ public class InteractCourseContentFilterActivity extends BaseActivity {
         listview.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
         listview.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         listview.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
-        adapter = new CommonAdapter<InteractCourseContentFilterBean.DataBean>(this, datas, R.layout.item_filter_course) {
+        adapter = new CommonAdapter<InteractCourseContentFilterBean.DataBean>(getActivity(), datas, R.layout.item_filter_course) {
             @Override
             public void convert(ViewHolder holder, InteractCourseContentFilterBean.DataBean item, int position) {
-                Glide.with(InteractCourseContentFilterActivity.this).load(item.getPublicize_url()).crossFade().placeholder(R.mipmap.photo).into((ImageView) holder.getView(R.id.image));
+                Glide.with(getActivity()).load(item.getPublicize_url()).crossFade().placeholder(R.mipmap.photo).into((ImageView) holder.getView(R.id.image));
                 List<InteractCourseContentFilterBean.DataBean.TeachersBean> teachers = item.getTeachers();
                 StringBuffer teacherNames = new StringBuffer();
                 for (int i = 0; i < teachers.size(); i++) {
@@ -191,7 +209,7 @@ public class InteractCourseContentFilterActivity extends BaseActivity {
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(InteractCourseContentFilterActivity.this, InteractCourseDetailActivity.class);
+                Intent intent = new Intent(getActivity(), InteractCourseDetailActivity.class);
                 intent.putExtra("id", datas.get(position - 1).getId());
                 startActivity(intent);
             }
