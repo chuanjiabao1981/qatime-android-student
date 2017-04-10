@@ -89,7 +89,7 @@ public class RecordFundActivity extends BaseFragmentActivity{
         fragmentlayout.setScorllToNext(true);
         fragmentlayout.setScorll(true);
         fragmentlayout.setWhereTab(1);
-        fragmentlayout.setTabHeight(4,0xffbe0b0b);
+        fragmentlayout.setTabHeight(4,0xffff5842);
         fragmentlayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {

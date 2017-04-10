@@ -18,8 +18,8 @@ public class MessageListBean implements Serializable {
     private MsgStatusEnum msgStatus;
     private long time;
     private int unreadCount;
-//    private String camera;
-//    private String board;
+    private String icon;
+    private String courseType;
     private String name;
     private int courseId;
     private boolean mute;
@@ -39,6 +39,22 @@ public class MessageListBean implements Serializable {
     @Override
     public int hashCode() {
         return contactId != null ? contactId.hashCode() : 0;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getCourseType() {
+        return courseType;
+    }
+
+    public void setCourseType(String courseType) {
+        this.courseType = courseType;
     }
 
     public String getOwner() {

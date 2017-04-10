@@ -134,10 +134,17 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
             this.email.setText(getResourceString(R.string.not_bind));
             this.email.setTextColor(Color.RED);
         }
-        // TODO: 2017/3/7 将支付密码信息整合到接口中
         if (BaseApplication.getCashAccount() != null && BaseApplication.getCashAccount().getData() != null) {
             if (BaseApplication.getCashAccount().getData().isHas_password()) {
-                // TODO: 2017/3/7 判断密码是否可用
+                long changeAt = BaseApplication.getCashAccount().getData().getPassword_set_at();
+
+                int diff = 24 - (int) ((System.currentTimeMillis()/1000  - changeAt) / 3600);
+                if (diff <= 24&&diff > 0) {
+                    payPswText.setText(getString(R.string.new_pay_password_invalid, diff));
+                    payPswText.setTextColor(0xff999999);
+                } else {
+                    payPswText.setText("");
+                }
             } else {
                 payPswText.setText(getResourceString(R.string.not_set));
                 payPswText.setTextColor(Color.RED);
@@ -196,7 +203,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
             case R.id.bind_phone_number://绑定手机
                 Intent intent = new Intent(this, VerifyPhoneActivity.class);
                 intent.putExtra("next", "phone");
-                startActivityForResult(intent, Constant.REQUEST_EXIT_LOGIN);
+                startActivity(intent);
                 break;
             case R.id.bind_email://绑定邮箱
                 intent = new Intent(this, VerifyPhoneActivity.class);
@@ -238,29 +245,41 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
 
     @Subscribe
     public void onEvent(String code) {
-        //收到微信登錄code
-        Map<String, String> map = new HashMap<>();
-        map.put("code", code);
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST,
-                UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getUserId() + "/wechat", map), null, new VolleyListener(SecurityManagerActivity.this) {
-            @Override
-            protected void onTokenOut() {
-                tokenOut();
-            }
+        if (code.equals("pay_pwd_change")) {
+            long changeAt = BaseApplication.getCashAccount().getData().getPassword_set_at();
 
-            @Override
-            protected void onSuccess(JSONObject response) {
-                Logger.e("微信綁定" + response.toString());
-                initData();
+            int diff = 24 - (int) ((System.currentTimeMillis()/1000 - changeAt) / 3600);
+            if (diff <= 24 && diff > 0) {
+                payPswText.setText(getString(R.string.new_pay_password_invalid, diff));
+                payPswText.setTextColor(0xff666666);
+            } else {
+                payPswText.setText("");
             }
+        } else {
+            //收到微信登錄code
+            Map<String, String> map = new HashMap<>();
+            map.put("code", code);
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST,
+                    UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getUserId() + "/wechat", map), null, new VolleyListener(SecurityManagerActivity.this) {
+                @Override
+                protected void onTokenOut() {
+                    tokenOut();
+                }
 
-            @Override
-            protected void onError(JSONObject response) {
-                enableClick(true);
-                Toast.makeText(SecurityManagerActivity.this, R.string.bind_error, Toast.LENGTH_SHORT).show();
-            }
-        }, new VolleyErrorListener());
-        addToRequestQueue(request);
+                @Override
+                protected void onSuccess(JSONObject response) {
+                    Logger.e("微信綁定" + response.toString());
+                    initData();
+                }
+
+                @Override
+                protected void onError(JSONObject response) {
+                    enableClick(true);
+                    Toast.makeText(SecurityManagerActivity.this, R.string.bind_error, Toast.LENGTH_SHORT).show();
+                }
+            }, new VolleyErrorListener());
+            addToRequestQueue(request);
+        }
     }
 
     private void dialogNotify() {

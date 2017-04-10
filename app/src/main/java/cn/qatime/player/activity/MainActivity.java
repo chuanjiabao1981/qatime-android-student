@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.netease.nimlib.sdk.AbortableFuture;
@@ -46,12 +47,14 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
+import cn.qatime.player.bean.CashAccountBean;
+import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.fragment.FragmentHomeClassTable;
 import cn.qatime.player.fragment.FragmentHomeMainPage;
 import cn.qatime.player.fragment.FragmentHomeMessage;
+import cn.qatime.player.fragment.FragmentHomeSelectSubject;
 import cn.qatime.player.fragment.FragmentHomeUserCenter;
-import cn.qatime.player.fragment.FragmentRemedialClassAll;
 import cn.qatime.player.fragment.FragmentUnLoginHomeClassTable;
 import cn.qatime.player.fragment.FragmentUnLoginHomeMessage;
 import cn.qatime.player.fragment.FragmentUnLoginHomeUserCenter;
@@ -77,19 +80,20 @@ public class MainActivity extends BaseFragmentActivity {
     public ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
     private int[] tab_img = {R.id.tab_img1, R.id.tab_img2, R.id.tab_img3, R.id.tab_img4, R.id.tab_img5};
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3, R.id.tab_text4, R.id.tab_text5};
-    private int tabImages[][] = {
-            {R.mipmap.tab_home_1, R.mipmap.tab_home_2},
-            {R.mipmap.tab_tutorship_1, R.mipmap.tab_tutorship_2},
-            {R.mipmap.tab_moments_1, R.mipmap.tab_moments_2},
-            {R.mipmap.tab_message_1, R.mipmap.tab_message_2},
-            {R.mipmap.tab_person_1, R.mipmap.tab_person_2}};
     private View message_x;
-//      创建观察者对象
+    private int image_list[][] = new int[][]{
+            {R.mipmap.tab_home1, R.mipmap.tab_home2},
+            {R.mipmap.tab_tutorship1, R.mipmap.tab_tutorship2},
+            {R.mipmap.tab_moments1, R.mipmap.tab_moments2},
+            {R.mipmap.tab_message1, R.mipmap.tab_message2},
+            {R.mipmap.tab_person1, R.mipmap.tab_person2},
+    };
+    //      创建观察者对象
     Observer<List<RecentContact>> messageObserver =
             new Observer<List<RecentContact>>() {
                 @Override
                 public void onEvent(List<RecentContact> messages) {
-                    if(fragmentlayout.getCurrentPosition()!=3){
+                    if (fragmentlayout.getCurrentPosition() != 3) {
                         refreshUnreadNum();
                     }
                 }
@@ -100,7 +104,7 @@ public class MainActivity extends BaseFragmentActivity {
      */
     private void refreshUnreadNum() {
         int unreadNum = NIMClient.getService(MsgService.class).getTotalUnreadCount();
-                    Logger.e("unreadNum" + unreadNum);
+        Logger.e("unreadNum" + unreadNum);
         message_x.setVisibility(unreadNum == 0 ? View.GONE : View.VISIBLE);
     }
 
@@ -144,13 +148,15 @@ public class MainActivity extends BaseFragmentActivity {
 
         //添加fragment
         fragBaseFragments.add(new FragmentHomeMainPage());
-        fragBaseFragments.add(new FragmentRemedialClassAll());
+//        fragBaseFragments.add(new FragmentRemedialClassAll());
+        fragBaseFragments.add(new FragmentHomeSelectSubject());
 
         if (BaseApplication.isLogined()) {
             fragBaseFragments.add(new FragmentHomeClassTable());
             fragBaseFragments.add(new FragmentHomeMessage());
-            initMessage();
             fragBaseFragments.add(new FragmentHomeUserCenter());
+            initMessage();
+            refreshCashAccount();
         } else {
             fragBaseFragments.add(new FragmentUnLoginHomeClassTable());
             fragBaseFragments.add(new FragmentUnLoginHomeMessage());
@@ -167,10 +173,9 @@ public class MainActivity extends BaseFragmentActivity {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff666666);
-                ((ImageView) lastTabView.findViewById(tab_img[lastPosition])).setImageResource(tabImages[lastPosition][1]);
-                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffbe0b0b);
-                ((ImageView) currentTabView.findViewById(tab_img[position])).setImageResource(tabImages[position][0]);
-//                enableMsgNotification(false);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffff5842);
+                ((ImageView) lastTabView.findViewById(tab_img[lastPosition])).setImageResource(image_list[lastPosition][1]);
+                ((ImageView) currentTabView.findViewById(tab_img[position])).setImageResource(image_list[position][0]);
                 if (position == 3) {
                     /**
                      * 设置最近联系人的消息为已读
@@ -182,13 +187,13 @@ public class MainActivity extends BaseFragmentActivity {
                     message_x.setVisibility(View.GONE);
                     NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
                 } else {
-                    NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
+                    NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.isChatMessageNotifyStatus() ? MsgService.MSG_CHATTING_ACCOUNT_NONE : MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
                 }
             }
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout, 0x1000);
         fragmentlayout.getViewPager().setOffscreenPageLimit(4);
-        message_x=fragmentlayout.getTabLayout().findViewById(R.id.message_x);
+        message_x = fragmentlayout.getTabLayout().findViewById(R.id.message_x);
 
 
     }
@@ -202,7 +207,7 @@ public class MainActivity extends BaseFragmentActivity {
                     protected void onSuccess(JSONObject response) {
                         SystemNotifyBean data = JsonUtils.objectFromJson(response.toString(), SystemNotifyBean.class);
                         if (data != null && data.getData() != null) {
-                            for (SystemNotifyBean.DataBean bean : data.getData()){
+                            for (SystemNotifyBean.DataBean bean : data.getData()) {
                                 if (!bean.isRead()) {//有未读发送未读event
                                     EventBus.getDefault().postSticky("handleUPushMessage");
                                     break;
@@ -228,8 +233,6 @@ public class MainActivity extends BaseFragmentActivity {
         });
         addToRequestQueue(request);
     }
-
-
 
 
     @Override
@@ -292,11 +295,11 @@ public class MainActivity extends BaseFragmentActivity {
                         startActivity(intentAction);
                     }
                 }
-            } else {
-                //云信通知消息
-                setIntent(intent);
-                parseIntent();
             }
+        } else {
+            //云信通知消息
+            setIntent(intent);
+            parseIntent();
         }
     }
 
@@ -307,7 +310,7 @@ public class MainActivity extends BaseFragmentActivity {
             if (data.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT) ||
                     //转到系统消息页面
                     (data.hasExtra("type") && data.getStringExtra("type").equals("system_message"))) {
-                if (fragBaseFragments != null && fragBaseFragments.size() > 0 && fragBaseFragments.get(3) instanceof FragmentHomeMainPage) {
+                if (fragBaseFragments != null && fragBaseFragments.size() > 0 && fragBaseFragments.get(3) instanceof FragmentHomeMessage) {
                     ((FragmentHomeMessage) fragBaseFragments.get(3)).setMessage(data);
                 }
 //                Intent intent = new Intent(this, MessageFragmentActivity.class);
@@ -360,68 +363,68 @@ public class MainActivity extends BaseFragmentActivity {
 //    }
 
 
-    //省份列表
-    public void GetProvinceslist() {
-
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/provinces", null,
-                new VolleyListener(MainActivity.this) {
-                    @Override
-
-
-                    protected void onSuccess(JSONObject response) {
-
-                    }
-
-                    @Override
-                    protected void onError(JSONObject response) {
-
-                    }
-
-                    @Override
-                    protected void onTokenOut() {
-                        tokenOut();
-                    }
-                }, new VolleyErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
-            }
-        });
-        //TODO
-//        addToRequestQueue(request);
-    }
+//    //省份列表
+//    public void GetProvinceslist() {
+//
+//        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/provinces", null,
+//                new VolleyListener(MainActivity.this) {
+//                    @Override
+//
+//
+//                    protected void onSuccess(JSONObject response) {
+//
+//                    }
+//
+//                    @Override
+//                    protected void onError(JSONObject response) {
+//
+//                    }
+//
+//                    @Override
+//                    protected void onTokenOut() {
+//                        tokenOut();
+//                    }
+//                }, new VolleyErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError volleyError) {
+//                super.onErrorResponse(volleyError);
+//            }
+//        });
+//        //TODO
+////        addToRequestQueue(request);
+//    }
 
     //城市列表
-    public void GetCitieslist() {
-
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,
-                new VolleyListener(MainActivity.this) {
-
-                    @Override
-                    protected void onSuccess(JSONObject response) {
-                        boolean value = FileUtil.writeFile(new ByteArrayInputStream(response.toString().getBytes()), getCacheDir().getAbsolutePath() + "/city.txt", true);
-                        SPUtils.put(MainActivity.this, "city", value);
-                    }
-
-                    @Override
-                    protected void onError(JSONObject response) {
-
-                    }
-
-                    @Override
-                    protected void onTokenOut() {
-                        tokenOut();
-                    }
-
-                }, new VolleyErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
-            }
-        });
-        //TODO
-//        addToRequestQueue(request);
-    }
+//    public void GetCitieslist() {
+//
+//        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,
+//                new VolleyListener(MainActivity.this) {
+//
+//                    @Override
+//                    protected void onSuccess(JSONObject response) {
+//                        boolean value = FileUtil.writeFile(new ByteArrayInputStream(response.toString().getBytes()), getCacheDir().getAbsolutePath() + "/city.txt", true);
+//                        SPUtils.put(MainActivity.this, "city", value);
+//                    }
+//
+//                    @Override
+//                    protected void onError(JSONObject response) {
+//
+//                    }
+//
+//                    @Override
+//                    protected void onTokenOut() {
+//                        tokenOut();
+//                    }
+//
+//                }, new VolleyErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError volleyError) {
+//                super.onErrorResponse(volleyError);
+//            }
+//        });
+//        //TODO
+////        addToRequestQueue(request);
+//    }
 
     //学校列表
     public void GetSchoolslist() {
@@ -514,10 +517,13 @@ public class MainActivity extends BaseFragmentActivity {
                 getAccount();
             }
         } else if (!StringUtils.isNullOrBlanK(event) && "handleUPushMessage".equals(event)) {
-            if(fragmentlayout.getCurrentPosition()!=3) {
+            if (fragmentlayout.getCurrentPosition() != 3) {
                 message_x.setVisibility(View.VISIBLE);
             }
+        } else if ("refreshCashAccount".equals(event)) {
+            refreshCashAccount();
         }
+
     }
 
     /**
@@ -594,12 +600,46 @@ public class MainActivity extends BaseFragmentActivity {
         addToRequestQueue(request);
     }
 
-    public void setCurrentPosition(int currentPosition, String s) {
+    public void more(View v) {
+        setCurrentPosition(1, 0);
+    }
+
+    public void setCurrentPosition(int currentPosition, int position) {
         fragmentlayout.setCurrenItem(currentPosition);
-        if (!StringUtils.isNullOrBlanK(s)) {
-            FragmentRemedialClassAll fragmentRemedialClassAll = (FragmentRemedialClassAll) fragBaseFragments.get(1);
-            fragmentRemedialClassAll.initDataAsSubject(s);
-        }
+        FragmentHomeSelectSubject fragmentHomeSelectSubject = (FragmentHomeSelectSubject) fragBaseFragments.get(1);
+        fragmentHomeSelectSubject.setGrade(position);
+    }
+
+    @Subscribe
+    public void onEvent(PayResultState state) {
+        refreshCashAccount();
+    }
+
+    private void refreshCashAccount() {
+        addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.urlpayment + BaseApplication.getUserId() + "/cash", null, new VolleyListener(MainActivity.this) {
+
+            @Override
+            protected void onTokenOut() {
+                tokenOut();
+            }
+
+            @Override
+            protected void onSuccess(JSONObject response) {
+                CashAccountBean cashAccount = JsonUtils.objectFromJson(response.toString(), CashAccountBean.class);
+                BaseApplication.setCashAccount(cashAccount);
+                EventBus.getDefault().post("onRefreshCashAccount");
+            }
+
+            @Override
+            protected void onError(JSONObject response) {
+                Toast.makeText(MainActivity.this, getResourceString(R.string.get_wallet_info_error), Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Toast.makeText(MainActivity.this, getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
+            }
+        }));
     }
 
 }

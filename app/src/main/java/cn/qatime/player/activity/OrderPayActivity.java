@@ -26,7 +26,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -57,7 +56,6 @@ public class OrderPayActivity extends BaseActivity {
     private IWXAPI api;
 
 
-    DecimalFormat df = new DecimalFormat("#.00");
     private AppPayParamsBean weixinData;
     private String payType = "weixin";
     private String aliPayData;
@@ -207,7 +205,14 @@ public class OrderPayActivity extends BaseActivity {
                 } else if (payType.equals("account")) {
                     Logger.e("钱包支付");
                     if(BaseApplication.getCashAccount().getData().isHas_password()){
-                        showPSWPop();
+                        long changeAt = BaseApplication.getCashAccount().getData().getPassword_set_at();
+
+                        int diff = 24 - (int) ((System.currentTimeMillis()/1000  - changeAt) / 3600);
+                        if (diff <= 24&&diff > 0) {
+                            dialogServerError(getString(R.string.pay_password_not_enough_24));//未满24小时
+                        } else {
+                            showPSWPop();
+                        }
                     }else{
                         Toast.makeText(OrderPayActivity.this, R.string.pay_password_not_set, Toast.LENGTH_SHORT).show();
                     }

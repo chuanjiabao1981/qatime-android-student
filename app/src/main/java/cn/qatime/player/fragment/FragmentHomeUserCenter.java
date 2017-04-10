@@ -11,13 +11,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.json.JSONObject;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.PersonalInformationActivity;
@@ -29,14 +26,9 @@ import cn.qatime.player.activity.SystemSettingActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.CashAccountBean;
-import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.Constant;
-import cn.qatime.player.utils.DaYiJsonObjectRequest;
-import cn.qatime.player.utils.UrlUtils;
 import libraryextra.transformation.GlideCircleTransform;
-import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
-import libraryextra.utils.VolleyListener;
 
 public class FragmentHomeUserCenter extends BaseFragment implements View.OnClickListener {
     private LinearLayout information;
@@ -55,12 +47,12 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
         EventBus.getDefault().register(this);
         View view = inflater.inflate(R.layout.fragment_home_user_center, container, false);
         assignViews(view);
+        initData();
         newVersion.setVisibility(BaseApplication.newVersion ? View.VISIBLE : View.INVISIBLE);
         if (BaseApplication.getProfile().getData() != null && BaseApplication.getProfile().getData().getUser() != null) {
             Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).placeholder(R.mipmap.personal_information_head).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
         }
         name.setText(StringUtils.isNullOrBlanK(BaseApplication.getProfile().getData().getUser().getName()) ? "null" : BaseApplication.getProfile().getData().getUser().getName());
-        refreshCashAccount();
         order.setOnClickListener(this);
         wallet.setOnClickListener(this);
         course.setOnClickListener(this);
@@ -80,7 +72,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
             }
             balance.setText(price);
         } else {
-            refreshCashAccount();
+            EventBus.getDefault().post("refreshCashAccount");
         }
     }
 
@@ -94,7 +86,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
             case R.id.my_wallet:
                 if (BaseApplication.getCashAccount() != null && BaseApplication.getCashAccount().getData() != null) {
                     intent = new Intent(getActivity(), PersonalMyWalletActivity.class);
-                    startActivityForResult(intent, Constant.REQUEST);
+                    startActivity(intent);
                 } else {
                     Toast.makeText(getActivity(), R.string.get_wallet_info_error, Toast.LENGTH_SHORT).show();
                 }
@@ -109,7 +101,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
                 break;
             case R.id.security:// 安全管理
                 intent = new Intent(getActivity(), SecurityManagerActivity.class);
-                getActivity().startActivityForResult(intent, Constant.REQUEST_EXIT_LOGIN);
+                startActivity(intent);
                 break;
             case R.id.setting:// 设置
                 intent = new Intent(getActivity(), SystemSettingActivity.class);
@@ -124,45 +116,13 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
         if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
             Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).placeholder(R.mipmap.personal_information_head).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
             name.setText(StringUtils.isNullOrBlanK(BaseApplication.getProfile().getData().getUser().getName()) ? " " : BaseApplication.getProfile().getData().getUser().getName());
-            CashAccountBean cashAccount = BaseApplication.getCashAccount();
-            if (cashAccount != null && cashAccount.getData() != null) {
-                initData();
-            } else {
-                refreshCashAccount();
-            }
         }
     }
 
     @Subscribe
-    public void onEvent(PayResultState state) {
-        refreshCashAccount();
-    }
-
-    private void refreshCashAccount() {
-        addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.urlpayment + BaseApplication.getUserId() + "/cash", null, new VolleyListener(getActivity()) {
-
-            @Override
-            protected void onTokenOut() {
-                tokenOut();
-            }
-
-            @Override
-            protected void onSuccess(JSONObject response) {
-                CashAccountBean cashAccount = JsonUtils.objectFromJson(response.toString(), CashAccountBean.class);
-                BaseApplication.setCashAccount(cashAccount);
-                initData();
-            }
-
-            @Override
-            protected void onError(JSONObject response) {
-                Toast.makeText(getActivity(), getResourceString(R.string.get_wallet_info_error), Toast.LENGTH_SHORT).show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                Toast.makeText(getActivity(), getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
-            }
-        }));
+    public void onEvent(String event) {
+        if ("onRefreshCashAccount".equals(event))
+            initData();
     }
 
     private void assignViews(View view) {

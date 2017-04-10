@@ -50,7 +50,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
     private Button exit;
     private String totalCacheSize;
     private android.app.AlertDialog alertDialog;
-    private String apkUrl;
+//    private String apkUrl;
     private String downLoadLinks;
     private View updateView;
 

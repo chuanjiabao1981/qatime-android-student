@@ -184,8 +184,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     protected void onSuccess(JSONObject response) {
                         data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
 
-                        if (data.getData() != null && data.getData().getLive_start_time() != null) {
-
+                        if (data != null && data.getData() != null && data.getData().getLive_start_time() != null) {
+                            handleLayout.setVisibility(View.VISIBLE);
                             Glide.with(getApplicationContext()).load(data.getData().getPublicize()).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
                             status.setText(getStatus(data.getData().getStatus()));
                             name.setText(data.getData().getName());
@@ -227,13 +227,13 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                                     progress.setVisibility(View.VISIBLE);
                                     timeToStart.setVisibility(View.GONE);
                                     layoutView.setBackgroundColor(0xff00a0e9);
-                                    progress.setText(getString(R.string.progress, data.getData().getCompleted_lesson_count(), data.getData().getPreset_lesson_count()));
+                                    progress.setText(getString(R.string.progress, data.getData().getClosed_lessons_count(), data.getData().getPreset_lesson_count()));
                                 } else if (Constant.CourseStatus.finished.equals(data.getData().getStatus()) || Constant.CourseStatus.completed.equals(data.getData().getStatus())) {
                                     handleLayout.setVisibility(View.GONE);//已结束的课程隐藏操作按钮
                                     progress.setVisibility(View.VISIBLE);
                                     timeToStart.setVisibility(View.GONE);
                                     layoutView.setBackgroundColor(0xff999999);
-                                    progress.setText(getString(R.string.progress, data.getData().getCompleted_lesson_count(), data.getData().getPreset_lesson_count()));
+                                    progress.setText(getString(R.string.progress, data.getData().getClosed_lessons_count(), data.getData().getPreset_lesson_count()));
                                 } else {
                                     layoutView.setVisibility(View.GONE);
                                 }

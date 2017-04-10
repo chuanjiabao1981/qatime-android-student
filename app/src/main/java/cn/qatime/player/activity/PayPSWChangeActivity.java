@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -112,20 +113,21 @@ public class PayPSWChangeActivity extends BaseActivity implements View.OnClickLi
             }
         });
     }
+
     @Override
     public void backClick(View v) {
-        if(over.getVisibility() == View.INVISIBLE ){
+        if (over.getVisibility() == View.INVISIBLE) {
             super.backClick(v);
-        }else {
+        } else {
             reset();
         }
     }
 
     @Override
     public void onBackPressed() {
-        if(over.getVisibility() == View.INVISIBLE ){
+        if (over.getVisibility() == View.INVISIBLE) {
             super.onBackPressed();
-        }else {
+        } else {
             reset();
         }
     }
@@ -135,7 +137,7 @@ public class PayPSWChangeActivity extends BaseActivity implements View.OnClickLi
         switch (v.getId()) {
             case R.id.over:
                 if (!tempPassword.equals(payEditText.getText())) {
-                    Toast.makeText(PayPSWChangeActivity.this,R.string.password_and_repassword_are_incongruous, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PayPSWChangeActivity.this, R.string.password_and_repassword_are_incongruous, Toast.LENGTH_SHORT).show();
                     reset();
                     return;
                 }
@@ -147,12 +149,14 @@ public class PayPSWChangeActivity extends BaseActivity implements View.OnClickLi
                             @Override
                             protected void onSuccess(JSONObject response) {
                                 Toast.makeText(PayPSWChangeActivity.this, R.string.change_pay_password_success, Toast.LENGTH_SHORT).show();
-                                BaseApplication.getCashAccount().getData().setHas_password(true);
+                                BaseApplication.getCashAccount().getData().setPassword_set_at(System.currentTimeMillis()/1000);
+                                EventBus.getDefault().post("pay_pwd_change");
+                                EventBus.getDefault().post("refreshCashAccount");
                                 finish();
                             }
 
                             protected void onError(JSONObject response) {
-                                try {
+                                     try {
                                     int errorCode = response.getJSONObject("error").getInt("code");
                                     if (errorCode == 2007) {
                                         Toast.makeText(PayPSWChangeActivity.this, R.string.token_error, Toast.LENGTH_SHORT).show();
