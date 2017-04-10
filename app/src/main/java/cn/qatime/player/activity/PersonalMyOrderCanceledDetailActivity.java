@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
-import libraryextra.bean.OrderDetailBean;
+import cn.qatime.player.bean.MyOrderBean;
 import libraryextra.utils.StringUtils;
 
 
@@ -45,43 +45,66 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
         setTitles(getResources().getString(R.string.detail_of_order));
         initView();
 
-        OrderDetailBean data = (OrderDetailBean) getIntent().getSerializableExtra("data");
+        MyOrderBean.DataBean data = (MyOrderBean.DataBean) getIntent().getSerializableExtra("data");
 
         if (data != null) {
             setValue(data);
         }
     }
 
-    private void setValue(OrderDetailBean data) {
-        classid = getIntent().getIntExtra("id", 0);
-
-        if (StringUtils.isNullOrBlanK(data.name)) {
-            name.setText(getResourceString(R.string.cancel_order_name));
-        } else {
-            name.setText(data.name);
-        }
-        if (StringUtils.isNullOrBlanK(data.grade)) {
-            grade.setText(getResourceString(R.string.grade));
-        } else {
-            grade.setText(data.grade);
-        }
-        if (StringUtils.isNullOrBlanK(data.subject)) {
-            subject.setText(getResourceString(R.string.subject));
-        } else {
-            subject.setText(data.subject);
-        }
-        if (StringUtils.isNullOrBlanK(data.teacher)) {
-            teacher.setText(getResourceString(R.string.cancel_order_teacher));
-        } else {
-            teacher.setText(data.teacher);
-        }
-
-        if (data.status.equals("refunded")) {//交易关闭
-            status.setImageResource(R.mipmap.refunded);
-        } else if (data.status.equals("canceled")) {//交易关闭
-            status.setImageResource(R.mipmap.close_pay);
-        } else if (data.status.equals("expired")) {//交易关闭
-            status.setImageResource(R.mipmap.close_pay);
+    private void setValue(MyOrderBean.DataBean data) {
+//        商品信息
+        if("LiveStudio::Course".equals(data.getProduct_type())){
+            classid = data.getProduct().getId();
+            if (StringUtils.isNullOrBlanK(data.getProduct().getName())) {
+                name.setText(getResourceString(R.string.cancel_order_name));
+            } else {
+                name.setText(data.getProduct().getName());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct().getGrade())) {
+                grade.setText("直播课/"+getResourceString(R.string.grade));
+            } else {
+                grade.setText("直播课/" +data.getProduct().getGrade());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct().getSubject())) {
+                subject.setText(getResourceString(R.string.subject));
+            } else {
+                subject.setText(data.getProduct().getSubject());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct().getTeacher_name())) {
+                teacher.setText(getResourceString(R.string.cancel_order_teacher));
+            } else {
+                teacher.setText(data.getProduct().getTeacher_name());
+            }
+            progress.setText(String.format(getString(R.string.lesson_count),data.getProduct().getLesson_count()));
+        }else if("LiveStudio::InteractiveCourse".equals(data.getProduct_type())){
+            classid = data.getProduct_interactive_course().getId();
+            if (StringUtils.isNullOrBlanK(data.getProduct_interactive_course().getName())) {
+                name.setText(getResourceString(R.string.cancel_order_name));
+            } else {
+                name.setText(data.getProduct_interactive_course().getName());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct_interactive_course().getGrade())) {
+                grade.setText("一对一/"+getResourceString(R.string.grade));
+            } else {
+                grade.setText("一对一/"+data.getProduct_interactive_course().getGrade());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct_interactive_course().getSubject())) {
+                subject.setText(getResourceString(R.string.subject));
+            } else {
+                subject.setText(data.getProduct_interactive_course().getSubject());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct_interactive_course().getTeachers().get(0).getName())) {
+                teacher.setText(getResourceString(R.string.cancel_order_teacher));
+            } else {
+                StringBuffer sp = new StringBuffer();
+                sp.append(data.getProduct_interactive_course().getTeachers().get(0).getName());
+                if(data.getProduct_interactive_course().getTeachers().size()>1){
+                    sp.append("...");
+                }
+                teacher.setText(data.getProduct_interactive_course().getTeachers().get(0).getName());
+            }
+            progress.setText(String.format(getString(R.string.lesson_count),data.getProduct_interactive_course().getLessons_count()));
         }
         ordernumber.setText(getIntent().getStringExtra("order_id"));
         if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("created_at"))) {
@@ -107,8 +130,7 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
                 paytype.setText(getResourceString(R.string.account_payment));
             }
         }
-        progress.setText(String.format(getString(R.string.lesson_count),data.Preset_lesson_count));
-        payprice.setText("￥" + data.amount);
+        payprice.setText("￥" + data.getAmount());
     }
 
     public void initView() {

@@ -69,6 +69,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     private LinearLayout couponPriceLayout;
     private TextView couponPrice;
     private TextView balance;
+    private String courseType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,9 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         setContentView(R.layout.activity_order_confirm);
         setTitles(getResources().getString(R.string.order_confirm));
         coupon = getIntent().getStringExtra("coupon");
+        courseType = getIntent().getStringExtra("courseType");
+
+
         initView();
 
         EventBus.getDefault().register(this);
@@ -143,7 +147,12 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         if (!StringUtils.isNullOrBlanK(coupon)) {
             map.put("coupon_code", coupon);
         }
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlCourses + id + "/orders", map), null,
+        String url = UrlUtils.getUrl(UrlUtils.urlCourses + id + "/orders", map);
+        if (!StringUtils.isNullOrBlanK(courseType)) {
+            url = UrlUtils.getUrl(UrlUtils.urlInteractCourses + id + "/orders", map);
+        }
+
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, url, null,
                 new VolleyListener(OrderConfirmActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {

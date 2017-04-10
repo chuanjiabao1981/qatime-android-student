@@ -9,12 +9,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="5dp"
             android:text="基本属性"
             android:textColor="#333"
             android:textSize="15sp" />
@@ -34,9 +35,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="6dp">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -57,9 +56,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="6dp">
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -90,9 +88,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="6dp">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -111,29 +107,6 @@
                 </LinearLayout>
 
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingLeft="10dp"
-                    android:paddingTop="6dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingRight="5dp"
-                        android:text="◇"
-                        android:textColor="#00a0e9"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/class_type"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="在线直播"
-                        android:textColor="#666" />
-                </LinearLayout>
-
             </LinearLayout>
 
         </LinearLayout>
@@ -141,9 +114,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:paddingTop="6dp">
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -183,8 +155,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:paddingTop="6dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="20dp"
                 android:text="课程标签"
                 android:textColor="#333"
                 android:textSize="15sp" />
@@ -192,15 +164,14 @@
             <cn.qatime.player.view.FlowLayout
                 android:id="@+id/flow"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:paddingTop="6dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="20dp"
             android:text="课程目标"
             android:textColor="#333"
             android:textSize="15sp" />
@@ -210,16 +181,15 @@
             android:id="@+id/target"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="6dp"
-            android:layout_marginLeft="10dp"
+
             android:background="#00000000"
             android:text="无" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:paddingTop="6dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="20dp"
             android:text="适合人群"
             android:textColor="#333"
             android:textSize="15sp" />
@@ -229,17 +199,15 @@
             android:id="@+id/suitable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:paddingTop="6dp"
             android:background="#00000000"
             android:text="无" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:paddingTop="6dp"
-            android:text="辅导介绍"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="20dp"
+            android:text="详细说明"
             android:textColor="#333"
             android:textSize="15sp" />
 
@@ -248,28 +216,8 @@
             android:id="@+id/describe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="6dp"
             android:background="#00000000"
             tools:ignore="WebViewLayout" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="6dp"
-            android:text="学习须知"
-            android:textColor="#333"
-            android:textSize="15sp" />
-
-        <TextView
-            android:id="@+id/notice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="6dp"
-            android:background="#00000000"
-            android:text="无" />
 
     </LinearLayout>
 </ScrollView>

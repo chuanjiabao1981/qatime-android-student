@@ -137,7 +137,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
         mIndicator = (SimpleViewPagerIndicator) findViewById(R.id.id_stickynavlayout_indicator);
         mViewPager = (ViewPager) findViewById(R.id.id_stickynavlayout_viewpager);
-        mTitles = new String[]{getString(R.string.remedial_detail), getString(R.string.teacher_info), getString(R.string.course_arrangement)};
+        mTitles = new String[]{getString(R.string.remedial_detail), getString(R.string.teacher_detail), getString(R.string.course_arrangement)};
         mIndicator.setTitles(mTitles);
         mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
@@ -151,9 +151,6 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
             }
         };
 
-        mViewPager.setAdapter(mAdapter);
-        mViewPager.setCurrentItem(pager);
-        mViewPager.setOffscreenPageLimit(2);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -175,6 +172,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 mViewPager.setCurrentItem(position);
             }
         });
+        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setAdapter(mAdapter);
+        mViewPager.setCurrentItem(pager);
     }
 
     private void initData() {

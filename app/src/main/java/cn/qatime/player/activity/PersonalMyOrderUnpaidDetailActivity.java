@@ -54,7 +54,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
     private TextView payprice;
     private int classid;
     DecimalFormat df = new DecimalFormat("#.00");
-    private MyOrderBean.Data data;
+    private MyOrderBean.DataBean data;
     SimpleDateFormat parseISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
     SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -65,7 +65,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         setTitles(getResources().getString(R.string.detail_of_order));
         initView();
         EventBus.getDefault().register(this);
-        data = (MyOrderBean.Data) getIntent().getSerializableExtra("data");
+        data = (MyOrderBean.DataBean) getIntent().getSerializableExtra("data");
 
         if (data != null) {
             setValue();
@@ -73,32 +73,62 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
     }
 
     private void setValue() {
-        classid = data.getProduct().getId();
-//        if (data.getStatus().equals("unpaid")) {//等待付款
-//            status.setText(getResources().getString(R.string.waiting_for_payment));
-//        } else {//空
-//            status.setText("        ");
-//        }
-        if (StringUtils.isNullOrBlanK(data.getProduct().getName())) {
-            name.setText(getResourceString(R.string.cancel_order_name));
-        } else {
-            name.setText(data.getProduct().getName());
+        //商品信息
+        if ("LiveStudio::Course".equals(data.getProduct_type())) {
+            classid = data.getProduct().getId();
+            if (StringUtils.isNullOrBlanK(data.getProduct().getName())) {
+                name.setText(getResourceString(R.string.cancel_order_name));
+            } else {
+                name.setText(data.getProduct().getName());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct().getGrade())) {
+                grade.setText("直播课/" +getResourceString(R.string.grade));
+            } else {
+                grade.setText("直播课/" + data.getProduct().getGrade());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct().getSubject())) {
+                subject.setText(getResourceString(R.string.subject));
+            } else {
+                subject.setText(data.getProduct().getSubject());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct().getTeacher_name())) {
+                teacher.setText(getResourceString(R.string.cancel_order_teacher));
+            } else {
+                teacher.setText(data.getProduct().getTeacher_name());
+            }
+            progress.setText(String.format(getResourceString(R.string.lesson_count), data.getProduct().getPreset_lesson_count()));
+
+
+        } else if ("LiveStudio::InteractiveCourse".equals(data.getProduct_type())) {
+            classid = data.getProduct_interactive_course().getId();
+            if (StringUtils.isNullOrBlanK(data.getProduct_interactive_course().getName())) {
+                name.setText(getResourceString(R.string.cancel_order_name));
+            } else {
+                name.setText(data.getProduct_interactive_course().getName());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct_interactive_course().getGrade())) {
+                grade.setText("一对一/" +getResourceString(R.string.grade));
+            } else {
+                grade.setText("一对一/" + data.getProduct_interactive_course().getGrade());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct_interactive_course().getSubject())) {
+                subject.setText(getResourceString(R.string.subject));
+            } else {
+                subject.setText(data.getProduct_interactive_course().getSubject());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct_interactive_course().getTeachers().get(0).getName())) {
+                teacher.setText(getResourceString(R.string.cancel_order_teacher));
+            } else {
+                StringBuffer sp = new StringBuffer();
+                sp.append(data.getProduct_interactive_course().getTeachers().get(0).getName());
+                if (data.getProduct_interactive_course().getTeachers().size() > 1) {
+                    sp.append("...");
+                }
+                teacher.setText(data.getProduct_interactive_course().getTeachers().get(0).getName());
+            }
+            progress.setText(String.format(getResourceString(R.string.lesson_count), data.getProduct_interactive_course().getLessons_count()));
         }
-        if (StringUtils.isNullOrBlanK(data.getProduct().getGrade())) {
-            grade.setText(getResourceString(R.string.grade));
-        } else {
-            grade.setText(data.getProduct().getGrade());
-        }
-        if (StringUtils.isNullOrBlanK(data.getProduct().getSubject())) {
-            subject.setText(getResourceString(R.string.subject));
-        } else {
-            subject.setText(data.getProduct().getSubject());
-        }
-        if (StringUtils.isNullOrBlanK(data.getProduct().getTeacher_name())) {
-            teacher.setText(getResourceString(R.string.cancel_order_teacher));
-        } else {
-            teacher.setText(data.getProduct().getTeacher_name());
-        }
+
 
         ordernumber.setText(data.getId());
         //创建时间
@@ -120,7 +150,6 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         } else {
             paytype.setText(getResourceString(R.string.account_payment));
         }
-        progress.setText(String.format(getResourceString(R.string.lesson_count),data.getProduct().getPreset_lesson_count()));
         payprice.setText("￥" + data.getAmount());
     }
 

@@ -15,9 +15,11 @@ import com.bumptech.glide.Glide;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONObject;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.PersonalInformationActivity;
+import cn.qatime.player.activity.PersonalMyInteractActivity;
 import cn.qatime.player.activity.PersonalMyOrderActivity;
 import cn.qatime.player.activity.PersonalMyTutorshipActivity;
 import cn.qatime.player.activity.PersonalMyWalletActivity;
@@ -25,6 +27,7 @@ import cn.qatime.player.activity.SecurityManagerActivity;
 import cn.qatime.player.activity.SystemSettingActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.bean.CashAccountBean;
 import cn.qatime.player.utils.Constant;
 import libraryextra.transformation.GlideCircleTransform;
@@ -36,6 +39,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
     private LinearLayout order;
     private LinearLayout wallet;
     private LinearLayout course;
+    private LinearLayout myInteract;
     private LinearLayout security;
     private LinearLayout setting;
     private TextView newVersion;
@@ -56,6 +60,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
         order.setOnClickListener(this);
         wallet.setOnClickListener(this);
         course.setOnClickListener(this);
+        myInteract.setOnClickListener(this);
         information.setOnClickListener(this);
 
         security.setOnClickListener(this);
@@ -99,6 +104,10 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
                 intent = new Intent(getActivity(), PersonalMyTutorshipActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.my_interact:
+                intent = new Intent(getActivity(), PersonalMyInteractActivity.class);
+                startActivity(intent);
+                break;
             case R.id.security:// 安全管理
                 intent = new Intent(getActivity(), SecurityManagerActivity.class);
                 startActivity(intent);
@@ -133,6 +142,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
         order = (LinearLayout) view.findViewById(R.id.my_order);
         wallet = (LinearLayout) view.findViewById(R.id.my_wallet);
         course = (LinearLayout) view.findViewById(R.id.my_course);
+        myInteract = (LinearLayout) view.findViewById(R.id.my_interact);
         security = (LinearLayout) view.findViewById(R.id.security);
         setting = (LinearLayout) view.findViewById(R.id.setting);
         newVersion = (TextView) view.findViewById(R.id.new_version);

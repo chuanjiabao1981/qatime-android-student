@@ -28,6 +28,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -138,8 +139,8 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
             if (BaseApplication.getCashAccount().getData().isHas_password()) {
                 long changeAt = BaseApplication.getCashAccount().getData().getPassword_set_at();
 
-                int diff = 24 - (int) ((System.currentTimeMillis()/1000  - changeAt) / 3600);
-                if (diff <= 24&&diff > 0) {
+                int diff = 24 - (int) ((System.currentTimeMillis() / 1000 - changeAt) / 3600);
+                if (diff <= 24 && diff > 0) {
                     payPswText.setText(getString(R.string.new_pay_password_invalid, diff));
                     payPswText.setTextColor(0xff999999);
                 } else {
@@ -244,42 +245,45 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
 
 
     @Subscribe
-    public void onEvent(String code) {
-        if (code.equals("pay_pwd_change")) {
+    public void onEvent(BusEvent event) {
+        if (event == BusEvent.PAY_PASSWORD_CHANGE) {
             long changeAt = BaseApplication.getCashAccount().getData().getPassword_set_at();
 
-            int diff = 24 - (int) ((System.currentTimeMillis()/1000 - changeAt) / 3600);
+            int diff = 24 - (int) ((System.currentTimeMillis() / 1000 - changeAt) / 3600);
             if (diff <= 24 && diff > 0) {
                 payPswText.setText(getString(R.string.new_pay_password_invalid, diff));
                 payPswText.setTextColor(0xff666666);
             } else {
                 payPswText.setText("");
             }
-        } else {
-            //收到微信登錄code
-            Map<String, String> map = new HashMap<>();
-            map.put("code", code);
-            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST,
-                    UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getUserId() + "/wechat", map), null, new VolleyListener(SecurityManagerActivity.this) {
-                @Override
-                protected void onTokenOut() {
-                    tokenOut();
-                }
-
-                @Override
-                protected void onSuccess(JSONObject response) {
-                    Logger.e("微信綁定" + response.toString());
-                    initData();
-                }
-
-                @Override
-                protected void onError(JSONObject response) {
-                    enableClick(true);
-                    Toast.makeText(SecurityManagerActivity.this, R.string.bind_error, Toast.LENGTH_SHORT).show();
-                }
-            }, new VolleyErrorListener());
-            addToRequestQueue(request);
         }
+    }
+
+    @Subscribe
+    public void onEvent(String code) {
+        //收到微信登錄code
+        Map<String, String> map = new HashMap<>();
+        map.put("code", code);
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST,
+                UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getUserId() + "/wechat", map), null, new VolleyListener(SecurityManagerActivity.this) {
+            @Override
+            protected void onTokenOut() {
+                tokenOut();
+            }
+
+            @Override
+            protected void onSuccess(JSONObject response) {
+                Logger.e("微信綁定" + response.toString());
+                initData();
+            }
+
+            @Override
+            protected void onError(JSONObject response) {
+                enableClick(true);
+                Toast.makeText(SecurityManagerActivity.this, R.string.bind_error, Toast.LENGTH_SHORT).show();
+            }
+        }, new VolleyErrorListener());
+        addToRequestQueue(request);
     }
 
     private void dialogNotify() {

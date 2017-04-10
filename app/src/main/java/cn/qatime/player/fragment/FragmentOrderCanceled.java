@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.InteractCourseDetailActivity;
 import cn.qatime.player.activity.PersonalMyOrderCanceledDetailActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.base.BaseFragment;
@@ -33,17 +34,14 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.OrderDetailBean;
-import libraryextra.bean.OrderPayBean;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
 public class FragmentOrderCanceled extends BaseFragment {
     private PullToRefreshListView listView;
-    private java.util.List<MyOrderBean.Data> list = new ArrayList<>();
-    private CommonAdapter<MyOrderBean.Data> adapter;
+    private java.util.List<MyOrderBean.DataBean> list = new ArrayList<>();
+    private CommonAdapter<MyOrderBean.DataBean> adapter;
     private int page = 1;
     DecimalFormat df = new DecimalFormat("#.00");
 
@@ -69,14 +67,28 @@ public class FragmentOrderCanceled extends BaseFragment {
         listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
-        adapter = new CommonAdapter<MyOrderBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_order3) {
+        adapter = new CommonAdapter<MyOrderBean.DataBean>(getActivity(), list, R.layout.item_fragment_personal_my_order3) {
             @Override
-            public void convert(ViewHolder helper, final MyOrderBean.Data item, final int position) {
+            public void convert(ViewHolder helper, final MyOrderBean.DataBean item, final int position) {
                 StringBuilder sp = new StringBuilder();
-                sp.append(item.getProduct().getGrade()).append(item.getProduct().getSubject()).append("/共").append(item.getProduct().getPreset_lesson_count())
-                        .append("课/").append(item.getProduct().getTeacher_name());
-                helper.setText(R.id.classname, item.getProduct().getName())
-                        .setText(R.id.describe, sp.toString());
+                if("LiveStudio::Course".equals(item.getProduct_type())){
+                    sp.append("直播课/");
+                    sp.append(item.getProduct().getGrade()).append(item.getProduct().getSubject()).append("/共").append(item.getProduct().getPreset_lesson_count())
+                            .append("课/").append(item.getProduct().getTeacher_name());
+                    helper.setText(R.id.classname, item.getProduct().getName())
+                            .setText(R.id.describe, sp.toString());
+                }else if("LiveStudio::InteractiveCourse".equals(item.getProduct_type())){
+                    sp.append("一对一/");
+                    sp.append(item.getProduct_interactive_course().getGrade()).append(item.getProduct_interactive_course().getSubject()).append("/共").append(item.getProduct_interactive_course().getLessons_count())
+                            .append("课/").append(item.getProduct_interactive_course().getTeachers().get(0).getName());
+                    if(item.getProduct_interactive_course().getTeachers().size()>1){
+                        sp.append("...");
+                    }
+                    helper.setText(R.id.classname, item.getProduct_interactive_course().getName())
+                            .setText(R.id.describe, sp.toString());
+                }
+
+
                 if (item.getStatus().equals("refunded")) {//交易关闭
                     helper.setText(R.id.status, getString(R.string.refunded));
                 } else if (item.getStatus().equals("canceled")) {//交易关闭
@@ -96,10 +108,18 @@ public class FragmentOrderCanceled extends BaseFragment {
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                                intent.putExtra("id", item.getProduct().getId());
-                                intent.putExtra("page", 0);
-                                startActivity(intent);
+                                if("LiveStudio::Course".equals(item.getProduct_type())){
+                                    Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                                    intent.putExtra("id", item.getProduct().getId());
+                                    intent.putExtra("page", 0);
+                                    startActivity(intent);
+                                }else if("LiveStudio::InteractiveCourse".equals(item.getProduct_type())){
+                                    Intent intent = new Intent(getActivity(), InteractCourseDetailActivity.class);
+                                    intent.putExtra("id", item.getProduct().getId());
+                                    intent.putExtra("page", 0);
+                                    startActivity(intent);
+                                }
+
                             }
                         });
             }
@@ -123,40 +143,7 @@ public class FragmentOrderCanceled extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), PersonalMyOrderCanceledDetailActivity.class);
-                Logger.e(list.get(position - 1).getId());
-                intent.putExtra("id", list.get(position - 1).getProduct().getId());
-                intent.putExtra("order_id", list.get(position - 1).getId());
-                intent.putExtra("created_at", list.get(position - 1).getCreated_at());
-                intent.putExtra("payType", list.get(position - 1).getPay_type());
-                OrderPayBean payBean = new OrderPayBean();//重新下单数据
-                payBean.image = list.get(position - 1).getProduct().getPublicize();
-                payBean.name = list.get(position - 1).getProduct().getName();
-                payBean.subject = list.get(position - 1).getProduct().getSubject();
-                payBean.grade = list.get(position - 1).getProduct().getGrade();
-                payBean.classnumber = list.get(position - 1).getProduct().getPreset_lesson_count();
-                payBean.teacher = list.get(position - 1).getProduct().getTeacher_name();
-                payBean.classendtime = list.get(position - 1).getProduct().getLive_end_time();
-                payBean.classstarttime = list.get(position - 1).getProduct().getLive_start_time();
-                if (StringUtils.isNullOrBlanK(list.get(position - 1).getProduct().getStatus())) {
-                    payBean.status = " ";
-                } else {
-                    payBean.status = list.get(position - 1).getProduct().getStatus();
-                }
-                payBean.current_price = list.get(position - 1).getProduct().getCurrent_price();
-                intent.putExtra("pay_data", payBean);
-
-                OrderDetailBean bean = new OrderDetailBean();//订单详情数据
-                bean.image = list.get(position - 1).getProduct().getPublicize();
-                bean.name = list.get(position - 1).getProduct().getName();
-                bean.subject = list.get(position - 1).getProduct().getSubject();
-                bean.grade = list.get(position - 1).getProduct().getGrade();
-                bean.status = list.get(position - 1).getStatus();
-                bean.teacher = list.get(position - 1).getProduct().getTeacher_name();
-                bean.Preset_lesson_count = list.get(position - 1).getProduct().getPreset_lesson_count();
-                bean.Completed_lesson_count = list.get(position - 1).getProduct().getCompleted_lesson_count();
-                bean.current_price = list.get(position - 1).getProduct().getCurrent_price();
-                bean.amount = list.get(position-1).getAmount();
-                intent.putExtra("data", bean);
+                intent.putExtra("data", list.get(position - 1));
                 startActivity(intent);
             }
         });
