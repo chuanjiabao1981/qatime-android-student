@@ -228,7 +228,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
                 }
                 break;
             case R.id.parent_phone_number://家长手机
-                intent = new Intent(this, ParentPhoneActivity.class);
+                intent = new Intent(this, VerifyPasswordActivity.class);
                 intent.putExtra("phoneP", phoneNumberP.getText());
                 startActivity(intent);
                 break;
