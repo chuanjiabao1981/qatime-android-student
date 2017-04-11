@@ -98,7 +98,7 @@ public class FragmentClassDetailTeacherInfo extends BaseFragment {
                 school.setText(R.string.not_available);
             }
 
-            Glide.with(this).load(data.getData().getTeacher().getAvatar_url()).bitmapTransform(new GlideCircleTransform(getActivity())).placeholder(R.mipmap.error_header_rect).crossFade().into(image);
+            Glide.with(this).load(data.getData().getTeacher().getAvatar_url()).bitmapTransform(new GlideCircleTransform(getActivity())).placeholder(R.mipmap.error_header).crossFade().into(image);
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

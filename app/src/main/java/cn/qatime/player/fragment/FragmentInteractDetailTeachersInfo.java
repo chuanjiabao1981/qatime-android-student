@@ -108,7 +108,7 @@ public class FragmentInteractDetailTeachersInfo extends BaseFragment {
                         school.setText(R.string.not_available);
                     }
 
-                    Glide.with(getActivity()).load(item.getAvatar_url()).bitmapTransform(new GlideCircleTransform(getActivity())).placeholder(R.mipmap.error_header_rect).crossFade().into(image);
+                    Glide.with(getActivity()).load(item.getAvatar_url()).bitmapTransform(new GlideCircleTransform(getActivity())).placeholder(R.mipmap.error_header).crossFade().into(image);
                     image.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
