@@ -632,4 +632,5 @@
     <string name="new_pay_password_invalid">新密码%1$d小时后可用</string>
     <string name="select_subject">选课</string>
     <string name="my_interact">我的一对一</string>
+    <string name="my_video">我的视频课</string>
 </resources>
