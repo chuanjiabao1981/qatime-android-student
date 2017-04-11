@@ -169,39 +169,28 @@
                 android:paddingTop="3dp"
                 android:text="自我介绍描述..." />
 
-            <View
+            <LinearLayout
+                android:id="@+id/live_layout"
                 android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:layout_marginTop="10dp"
-                android:background="#f7f7f7" />
-
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="TA的课程"
-                android:textColor="#333"
-                android:textSize="16sp" />
+                android:orientation="vertical">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#f7f7f7" />
 
                 <TextView
-                    android:id="@+id/rel_empty"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:text="暂无课程"
-                    android:textColor="#999"
-                    android:visibility="invisible" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="直播课"
+                    android:textColor="#333"
+                    android:textSize="16sp" />
 
                 <libraryextra.view.GridViewForScrollView
-                    android:id="@+id/grid"
+                    android:id="@+id/live_grid"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="#fff"
@@ -212,7 +201,77 @@
                     android:paddingRight="10dp"
                     android:scrollbars="none"
                     android:verticalSpacing="20dp" />
-            </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/interactive_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#f7f7f7" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="一对一"
+                    android:textColor="#333"
+                    android:textSize="16sp" />
+
+
+                <libraryextra.view.GridViewForScrollView
+                    android:id="@+id/interactive_grid"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#fff"
+                    android:cacheColorHint="@null"
+                    android:horizontalSpacing="10dp"
+                    android:numColumns="2"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:scrollbars="none"
+                    android:verticalSpacing="20dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/video_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#f7f7f7" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="视频课"
+                    android:textColor="#333"
+                    android:textSize="16sp" />
+
+                <libraryextra.view.GridViewForScrollView
+                    android:id="@+id/video_grid"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#fff"
+                    android:cacheColorHint="@null"
+                    android:horizontalSpacing="10dp"
+                    android:numColumns="2"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:scrollbars="none"
+                    android:verticalSpacing="20dp" />
+            </LinearLayout>
+
         </com.zhy.android.percent.support.PercentLinearLayout>
     </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
 </LinearLayout>

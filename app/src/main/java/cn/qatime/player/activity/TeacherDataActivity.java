@@ -47,7 +47,6 @@ public class TeacherDataActivity extends BaseActivity {
     private TextView sex;
     private TextView name;
     private TextView describe;
-    private GridViewForScrollView grid;
     private List<TeacherDataBean.DataBean.Course> list = new ArrayList<>();
     private TextView teachAge;
     private TextView school;
@@ -56,10 +55,16 @@ public class TeacherDataActivity extends BaseActivity {
     private TextView province;
     private TextView city;
     private TextView town;
-    private CommonAdapter<TeacherDataBean.DataBean.Course> adapter;
     private DecimalFormat df = new DecimalFormat("#.00");
     private int teacherId;
-    private View relEmpty;
+    private GridViewForScrollView videoGrid;
+    private GridViewForScrollView liveGrid;
+    private GridViewForScrollView interactiveGrid;
+    private CommonAdapter<TeacherDataBean.DataBean.Course> videoAdapter;
+    private CommonAdapter<TeacherDataBean.DataBean.Course> liveAdapter;
+    private CommonAdapter<TeacherDataBean.DataBean.Course> interactiveAdapter;
+//    private View
+// ;
 
     private void assignViews() {
         PullToRefreshScrollView scroll = (PullToRefreshScrollView) findViewById(R.id.scroll);
@@ -75,9 +80,11 @@ public class TeacherDataActivity extends BaseActivity {
         province = (TextView) findViewById(R.id.province);
         city = (TextView) findViewById(R.id.city);
         town = (TextView) findViewById(R.id.town);
-        relEmpty = findViewById(R.id.rel_empty);
+//        relEmpty = findViewById(R.id.rel_empty);
         describe = (TextView) findViewById(R.id.describe);
-        grid = (GridViewForScrollView) findViewById(R.id.grid);
+        liveGrid = (GridViewForScrollView) findViewById(R.id.live_grid);
+        interactiveGrid = (GridViewForScrollView) findViewById(R.id.interactive_grid);
+        videoGrid = (GridViewForScrollView) findViewById(R.id.video_grid);
     }
 
     @Override
@@ -89,7 +96,7 @@ public class TeacherDataActivity extends BaseActivity {
         teacherId = getIntent().getIntExtra("teacherId", 0);
 
         initData(1);
-        adapter = new CommonAdapter<TeacherDataBean.DataBean.Course>(this, list, R.layout.item_teacher_data) {
+        liveAdapter = new CommonAdapter<TeacherDataBean.DataBean.Course>(this, list, R.layout.item_teacher_data) {
 
             @Override
             public void convert(ViewHolder helper, TeacherDataBean.DataBean.Course item, int position) {
@@ -108,7 +115,7 @@ public class TeacherDataActivity extends BaseActivity {
                 helper.setText(R.id.price, "￥" + price);
             }
         };
-        grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        liveGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(TeacherDataActivity.this, RemedialClassDetailActivity.class);
@@ -116,7 +123,64 @@ public class TeacherDataActivity extends BaseActivity {
                 startActivityForResult(intent, Constant.REQUEST);
             }
         });
-        grid.setAdapter(adapter);
+        liveGrid.setAdapter(liveAdapter);
+
+        interactiveAdapter = new CommonAdapter<TeacherDataBean.DataBean.Course>(this, list, R.layout.item_teacher_data) {
+
+            @Override
+            public void convert(ViewHolder helper, TeacherDataBean.DataBean.Course item, int position) {
+                if (item == null) {
+                    Logger.e("item數據空");
+                    return;
+                }
+                Glide.with(TeacherDataActivity.this).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.image)));
+                helper.setText(R.id.grade, item.getGrade());
+                helper.setText(R.id.subject, item.getSubject());
+                helper.setText(R.id.course_title, item.getName());
+                String price = df.format(item.getCurrent_price());
+                if (price.startsWith(".")) {
+                    price = "0" + price;
+                }
+                helper.setText(R.id.price, "￥" + price);
+            }
+        };
+        interactiveGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(TeacherDataActivity.this, RemedialClassDetailActivity.class);
+                intent.putExtra("id", list.get(position).getId());
+                startActivityForResult(intent, Constant.REQUEST);
+            }
+        });
+        interactiveGrid.setAdapter(interactiveAdapter);
+        videoAdapter = new CommonAdapter<TeacherDataBean.DataBean.Course>(this, list, R.layout.item_teacher_data) {
+
+            @Override
+            public void convert(ViewHolder helper, TeacherDataBean.DataBean.Course item, int position) {
+                if (item == null) {
+                    Logger.e("item數據空");
+                    return;
+                }
+                Glide.with(TeacherDataActivity.this).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.image)));
+                helper.setText(R.id.grade, item.getGrade());
+                helper.setText(R.id.subject, item.getSubject());
+                helper.setText(R.id.course_title, item.getName());
+                String price = df.format(item.getCurrent_price());
+                if (price.startsWith(".")) {
+                    price = "0" + price;
+                }
+                helper.setText(R.id.price, "￥" + price);
+            }
+        };
+        videoGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(TeacherDataActivity.this, RemedialClassDetailActivity.class);
+                intent.putExtra("id", list.get(position).getId());
+                startActivityForResult(intent, Constant.REQUEST);
+            }
+        });
+        videoGrid.setAdapter(videoAdapter);
     }
 
     @Override
@@ -164,11 +228,14 @@ public class TeacherDataActivity extends BaseActivity {
                                 school.setText(bean.getData().getSchool());
                                 if (bean.getData().getCourses() != null && bean.getData().getCourses().size() > 0) {
                                     list.addAll(bean.getData().getCourses());
-                                } else {
-                                    relEmpty.setVisibility(View.VISIBLE);
                                 }
+//                                else {
+//                                    relEmpty.setVisibility(View.VISIBLE);
+//                                }
                             }
-                            adapter.notifyDataSetChanged();
+                            liveAdapter.notifyDataSetChanged();
+                            interactiveAdapter.notifyDataSetChanged();
+                            videoAdapter.notifyDataSetChanged();
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
                         }
