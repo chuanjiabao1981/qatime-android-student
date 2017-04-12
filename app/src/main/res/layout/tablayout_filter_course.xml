@@ -20,7 +20,6 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:padding="1dp"
         android:background="@drawable/shape_bg_course_filter"
         android:orientation="horizontal">
 
@@ -33,16 +32,15 @@
             android:paddingRight="10dp"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
-            android:background="#ffffff"
             android:text="直播课"
-            android:textColor="@color/colorPrimary"
+            android:background="@drawable/shape_bg_course_filter_item_left"
+            android:textColor="@drawable/text_course_filter_color_selector"
             android:textSize="14.0sp" />
 
 
         <TextView
             android:id="@+id/tab_text2"
             android:layout_width="wrap_content"
-
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingLeft="10dp"
@@ -50,7 +48,8 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:text="一对一"
-            android:textColor="#fff"
+            android:background="@drawable/shape_bg_course_filter_item_center"
+            android:textColor="@drawable/text_course_filter_color_selector"
             android:textSize="14.0sp" />
 
 
@@ -64,7 +63,8 @@
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:text="视频课"
-            android:textColor="#fff"
+            android:background="@drawable/shape_bg_course_filter_item_right"
+            android:textColor="@drawable/text_course_filter_color_selector"
             android:textSize="14.0sp" />
     </LinearLayout>
 

@@ -51,6 +51,7 @@ public class FilterCourseActivity extends BaseFragmentActivity implements View.O
         views.add(tab1);
         views.add(tab2);
         views.add(tab3);
+        views.get(0).setSelected(true);
 
         grade = getIntent().getStringExtra("grade");
         subject = getIntent().getStringExtra("subject");
@@ -78,10 +79,12 @@ public class FilterCourseActivity extends BaseFragmentActivity implements View.O
 
             @Override
             public void onPageSelected(int position) {
-                ((TextView) views.get(position)).setTextColor(getResources().getColor(R.color.colorPrimary));
-                views.get(position).setBackgroundColor(0xffffffff);
-                ((TextView) views.get(lastPosition)).setTextColor(0xffffffff);
-                views.get(lastPosition).setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                ((TextView) views.get(position)).setSelected(true);
+                ((TextView) views.get(lastPosition)).setSelected(false);
+//                ((TextView) views.get(position)).setTextColor(getResources().getColor(R.color.colorPrimary));
+//                views.get(position).setBackgroundColor(0xffffffff);
+//                ((TextView) views.get(lastPosition)).setTextColor(0xffffffff);
+//                views.get(lastPosition).setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 lastPosition = position;
             }
 
