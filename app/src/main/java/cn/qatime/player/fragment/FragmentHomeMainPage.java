@@ -47,6 +47,7 @@ import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.PayPSWForgetActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
+import cn.qatime.player.activity.VideoCoursesPlayActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.BannerRecommendBean;
@@ -602,7 +603,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
             }
         });
-
     }
 
     //gridview横向布局方法
@@ -702,8 +702,10 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 mainActivity.setCurrentPosition(1, 0);
                 break;
             case R.id.scan:
-                intent = new Intent(getActivity(), CaptureActivity.class);
-                mainActivity.startActivityForResult(intent, Constant.REQUEST);
+//                intent = new Intent(getActivity(), CaptureActivity.class);
+//                mainActivity.startActivityForResult(intent, Constant.REQUEST);
+                intent=new Intent(getActivity(), VideoCoursesPlayActivity.class);
+                startActivity(intent);
                 break;
             case R.id.city_select:
                 intent = new Intent(getActivity(), CitySelectActivity.class);

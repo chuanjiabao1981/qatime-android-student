@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="cn.qatime.player"
     android:versionCode="20"
     android:versionName="1.1.0">
@@ -47,6 +48,7 @@
     <!-- 接收 SDK 消息广播权限， 第三方 APP 接入时，请将 com.netease.nim.demo 替换为自己的包名 -->
     <uses-permission android:name="${package_name}.permission.RECEIVE_MSG" />
     <application
+        tools:replace="android:label"
         android:name=".base.BaseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -121,6 +123,7 @@
             android:name="UMENG_CHANNEL"
             android:value="umeng" />
         <!--友盟推送end-->
+
         <activity
             android:name=".activity.StartActivity"
             android:exported="true"
@@ -402,6 +405,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.FilterCourseActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.VideoCoursesPlayActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
     </application>
