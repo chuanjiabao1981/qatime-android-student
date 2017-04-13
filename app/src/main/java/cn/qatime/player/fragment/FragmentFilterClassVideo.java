@@ -89,7 +89,7 @@ public class FragmentFilterClassVideo extends BaseFragment {
      */
     private void getData(final int type) {
         Map<String, String> map = new HashMap<>();
-        if(type == 0){
+        if (type == 0) {
             page = 1;
         }
 
@@ -158,7 +158,7 @@ public class FragmentFilterClassVideo extends BaseFragment {
     }
 
     private void initView(View view) {
-        final TextView latest = (TextView)view.findViewById(R.id.latest);
+        final TextView latest = (TextView) view.findViewById(R.id.latest);
         final TextView price = (TextView) view.findViewById(R.id.price);
         final TextView popularity = (TextView) view.findViewById(R.id.popularity);
         final CheckBox freeC = (CheckBox) view.findViewById(R.id.free);
@@ -166,7 +166,7 @@ public class FragmentFilterClassVideo extends BaseFragment {
         freeC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                free  = freeC.isChecked();
+                free = freeC.isChecked();
                 getData(0);
             }
         });
@@ -225,8 +225,6 @@ public class FragmentFilterClassVideo extends BaseFragment {
                 getData(0);
             }
         });
-        final TextView label = (TextView) view.findViewById(R.id.label);
-        View screen = view.findViewById(R.id.screen);
 
         listview = (PullToRefreshListView) view.findViewById(R.id.listview);
         listview.setMode(PullToRefreshBase.Mode.BOTH);

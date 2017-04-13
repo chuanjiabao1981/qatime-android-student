@@ -49,7 +49,7 @@ import libraryextra.utils.VolleyListener;
  * @date 2017/4/10 18:15
  * @Description:
  */
-public class FragmentFilterClassLive extends BaseFragment{
+public class FragmentFilterClassLive extends BaseFragment {
 
     private String grade;
     private String subject;
@@ -99,7 +99,7 @@ public class FragmentFilterClassLive extends BaseFragment{
      */
     private void getData(final int type) {
         Map<String, String> map = new HashMap<>();
-        if(type == 0){
+        if (type == 0) {
             page = 1;
         }
 
@@ -185,7 +185,7 @@ public class FragmentFilterClassLive extends BaseFragment{
     }
 
     private void initView(View view) {
-        final TextView latest = (TextView)view.findViewById(R.id.latest);
+        final TextView latest = (TextView) view.findViewById(R.id.latest);
         final TextView price = (TextView) view.findViewById(R.id.price);
         final TextView popularity = (TextView) view.findViewById(R.id.popularity);
 
@@ -341,8 +341,8 @@ public class FragmentFilterClassLive extends BaseFragment{
 
     private void initLabel() {
         Map<String, String> map = new HashMap<>();
-        map.put("cates",grade+","+subject);
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlAppconstantInformation+"/tags", map), null, new VolleyListener(getActivity()) {
+        map.put("cates", grade + "," + subject);
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlAppconstantInformation + "/tags", map), null, new VolleyListener(getActivity()) {
             @Override
             protected void onTokenOut() {
 
@@ -351,7 +351,7 @@ public class FragmentFilterClassLive extends BaseFragment{
             @Override
             protected void onSuccess(JSONObject response) {
                 LabelBean labelBean = JsonUtils.objectFromJson(response.toString(), LabelBean.class);
-                if(labelBean!=null&&labelBean.getData()!=null){
+                if (labelBean != null && labelBean.getData() != null) {
                     labelData.addAll(labelBean.getData());
                     adapter.notifyDataSetChanged();
                 }

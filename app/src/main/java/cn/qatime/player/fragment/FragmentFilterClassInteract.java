@@ -60,6 +60,7 @@ public class FragmentFilterClassInteract extends BaseFragment {
         this.subject = subject;
         return this;
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -87,6 +88,10 @@ public class FragmentFilterClassInteract extends BaseFragment {
         Map<String, String> map = new HashMap<>();
         map.put("per_page", "20");
         map.put("page", String.valueOf(page));
+
+        if (type == 0) {
+            page = 1;
+        }
 
         if (latestResult != -1) {//0上1下-1未选
             if (latestResult == 0) {
