@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.bean.VideoCoursesDetailsBean;
 import libraryextra.utils.StringUtils;
 
 /**
@@ -99,5 +100,9 @@ public class FragmentVideoCoursesClassInfo extends BaseFragment {
                 "3.观看过程中请做好笔记，能够帮助学生快速掌握视频中的知识。<br> \n" +
                 "4.学习结束后请尽量关闭视频，以免过多占用网络资源影响您浏览其他内容。</font></p> ";
         notify.loadDataWithBaseURL(null, header + footer, "text/html", "UTF-8", null);
+    }
+
+    public void setData(VideoCoursesDetailsBean data) {
+
     }
 }

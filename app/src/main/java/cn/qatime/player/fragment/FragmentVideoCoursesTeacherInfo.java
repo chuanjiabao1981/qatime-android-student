@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.bean.VideoCoursesDetailsBean;
 
 /**
  * @author lungtify
@@ -66,5 +67,9 @@ public class FragmentVideoCoursesTeacherInfo extends BaseFragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             settings.setMixedContentMode(settings.MIXED_CONTENT_ALWAYS_ALLOW);  //注意安卓5.0以上的权限
         }
+    }
+
+    public void setData(VideoCoursesDetailsBean data) {
+
     }
 }
