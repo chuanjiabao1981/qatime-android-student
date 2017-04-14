@@ -5,26 +5,32 @@ import android.graphics.PixelFormat;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.orhanobut.logger.Logger;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragmentActivity;
+import cn.qatime.player.fragment.FragmentVideoCoursesDetail;
+import cn.qatime.player.fragment.FragmentVideoCoursesList;
 import cn.qatime.player.fragment.VideoCoursesFloatFragment;
 import cn.qatime.player.utils.ScreenSwitchUtils;
 import io.vov.vitamio.MediaPlayer;
 import io.vov.vitamio.Vitamio;
 import libraryextra.utils.DensityUtils;
 import libraryextra.utils.ScreenUtils;
+import libraryextra.view.FragmentLayoutWithLine;
 
 /**
  * @author lungtify
@@ -41,6 +47,8 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
     private boolean isPrepared = false;
     private ScreenSwitchUtils screenSwitchUtils;
     private RelativeLayout video;
+    private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
+    private int[] tab_text = {R.id.tab_text1, R.id.tab_text2};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +138,23 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
                 return isPrepared;
             }
         });
+
+        fragBaseFragments.add(new FragmentVideoCoursesList());
+        fragBaseFragments.add(new FragmentVideoCoursesDetail());
+        FragmentLayoutWithLine fragmentLayout = (FragmentLayoutWithLine) findViewById(R.id.fragmentlayout);
+
+        fragmentLayout.setScorllToNext(true);
+        fragmentLayout.setScorll(true);
+        fragmentLayout.setWhereTab(1);
+        fragmentLayout.setTabHeight(4, 0xffff5842);
+        fragmentLayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
+            @Override
+            public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
+                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff999999);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff333333);
+            }
+        });
+        fragmentLayout.setAdapter(fragBaseFragments, R.layout.tablayout_video_courses, 0x0102);
     }
 
     @Override
