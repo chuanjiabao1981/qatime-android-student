@@ -58,7 +58,7 @@ public class FragmentInteractDetailTeachersInfo extends BaseFragment {
                     ImageView image =holder.getView(R.id.image);
                     TextView teachingyears =holder.getView(R.id.teaching_years);
                     TextView school =holder.getView(R.id.school);
-                    TextView sex =holder.getView(R.id.sex);
+                    ImageView sex =holder.getView(R.id.sex);
                     WebView describe = holder.getView(R.id.describe);
 
                     describe.setOnLongClickListener(new View.OnLongClickListener() {
@@ -80,9 +80,9 @@ public class FragmentInteractDetailTeachersInfo extends BaseFragment {
                     }
 
 
-
-                    sex.setText(getSex(item.getGender()));
-                    sex.setTextColor(getSexColor(item.getGender()));
+                    sex.setImageResource("male".equals(item.getGender()) ? R.mipmap.male : R.mipmap.female);
+//                    sex.setText(getSex(item.getGender()));
+//                    sex.setTextColor(getSexColor(item.getGender()));
                     name.setText(item.getName());
                     if (!StringUtils.isNullOrBlanK(item.getTeaching_years())) {
                         if (item.getTeaching_years().equals("within_three_years")) {

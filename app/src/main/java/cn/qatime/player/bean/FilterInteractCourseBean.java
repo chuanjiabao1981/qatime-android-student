@@ -9,7 +9,7 @@ import java.util.List;
  * @Describe
  */
 
-public class InteractCourseContentFilterBean implements Serializable {
+public class FilterInteractCourseBean implements Serializable {
 
     /**
      * status : 1
