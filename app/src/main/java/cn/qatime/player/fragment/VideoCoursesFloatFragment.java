@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,6 +19,8 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
+
 import java.util.Locale;
 
 import cn.qatime.player.R;
@@ -29,11 +32,13 @@ import cn.qatime.player.R;
  */
 public class VideoCoursesFloatFragment extends Fragment implements View.OnClickListener {
     private boolean showState = true;//是否是显示状态
-    private boolean isPlaying = false;//正在播放
 
     private Activity act;
 
     private final int sDefaultVanishTime = 5000;
+    private final int HIDE = 1001;
+    private boolean mDragging;
+    private final int PROGRESS = 1002;
 
     private View mainControl;
     private RelativeLayout playToolbar;
@@ -41,13 +46,43 @@ public class VideoCoursesFloatFragment extends Fragment implements View.OnClickL
     //    private TextView viewCount;
     private ImageView play;
 
-    private Handler hd = new Handler();
-    private Runnable runnable = new Runnable() {
+    private Handler hd = new Handler() {
         @Override
-        public void run() {
-            vanish();
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case HIDE:
+                    vanish();
+                    break;
+                case PROGRESS:
+                    setProgress();
+                    if (!mDragging && showState) {
+                        msg = obtainMessage(PROGRESS);
+                        sendMessageDelayed(msg, 1000);
+                        setPlayOrPause(callback.isPlaying());
+                    }
+                    break;
+            }
         }
     };
+    private Runnable lastRunnable;
+    private ImageView zoom;
+
+    private void setProgress() {
+        if (callback == null || mDragging)
+            return;
+        Logger.e("setProgress");
+        long position = callback.getCurrentPosition();
+        long duration = callback.getDuration();
+        if (seekBar != null) {
+            seekBar.setProgress(Integer.parseInt(String.valueOf(position)));
+        }
+        if (time != null && duration > 0)
+            time.setText(stringForTime(duration));
+        else
+            time.setText("--:--:--");
+
+    }
+
     private CallBack callback;
     private View exit;
     private LinearLayout bottomLayout;
@@ -72,6 +107,7 @@ public class VideoCoursesFloatFragment extends Fragment implements View.OnClickL
         bottomLayout = (LinearLayout) view.findViewById(R.id.bottom_layout);
         play = (ImageView) view.findViewById(R.id.play);
         seekBar = (SeekBar) view.findViewById(R.id.seekBar);
+        zoom = (ImageView) view.findViewById(R.id.zoom);
         time = (TextView) view.findViewById(R.id.time);
         definition = (TextView) view.findViewById(R.id.definition);
         list = (ListView) view.findViewById(R.id.list);
@@ -83,7 +119,48 @@ public class VideoCoursesFloatFragment extends Fragment implements View.OnClickL
         exit.setOnClickListener(this);
         mainControl.setOnClickListener(this);
         play.setOnClickListener(this);
+        zoom.setOnClickListener(this);
         listSwitch.setOnClickListener(this);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, final int progress, boolean fromUser) {
+                if (!fromUser || !callback.isPrepared()) return;
+
+//                String time = stringForTime(newposition);
+
+                Logger.e("progress" + progress + "*******durcation" + callback.getDuration());
+                hd.removeCallbacks(lastRunnable);
+                lastRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.seekTo(progress);
+                    }
+                };
+                hd.postDelayed(lastRunnable, 200);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                if (callback.isPrepared()) {
+                    mDragging = true;
+                    hd.removeMessages(HIDE);
+                    hd.removeMessages(PROGRESS);
+                }
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                if (callback.isPrepared()) {
+                    callback.seekTo((callback.getDuration() * seekBar.getProgress()) / 1000);
+                    mDragging = false;
+                    startVanishTimer();
+                    hd.removeMessages(PROGRESS);
+                    hd.sendEmptyMessageDelayed(PROGRESS, 1000);
+                } else {
+                    seekBar.setProgress(0);
+                }
+            }
+        });
     }
 
     @Nullable
@@ -131,17 +208,18 @@ public class VideoCoursesFloatFragment extends Fragment implements View.OnClickL
                     return;
                 }
                 if (callback.isPlaying()) {
-                    isPlaying = false;
                     callback.pause();
                     play.setImageResource(R.mipmap.nemediacontroller_pause);
                 } else {
-                    isPlaying = true;
                     callback.play();
                     play.setImageResource(R.mipmap.nemediacontroller_play);
                 }
                 break;
             case R.id.list_switch:
                 list.setVisibility(View.VISIBLE);
+                break;
+            case R.id.zoom:
+                callback.zoom();
                 break;
         }
     }
@@ -151,8 +229,8 @@ public class VideoCoursesFloatFragment extends Fragment implements View.OnClickL
         if (!showState) {
             return;
         }
-        hd.removeCallbacks(runnable);
-        hd.postDelayed(runnable, sDefaultVanishTime);
+        hd.removeMessages(HIDE);
+        hd.sendEmptyMessageDelayed(HIDE, sDefaultVanishTime);
     }
 
     /**
@@ -161,6 +239,9 @@ public class VideoCoursesFloatFragment extends Fragment implements View.OnClickL
     private void vanish() {
         if (act == null) {
             return;
+        }
+        if (list.getVisibility() == View.VISIBLE) {
+            list.setVisibility(View.GONE);
         }
         showState = false;
         float[] arrayOfFloat1 = new float[2];
@@ -197,6 +278,9 @@ public class VideoCoursesFloatFragment extends Fragment implements View.OnClickL
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.play(localObjectAnimator1).with(localObjectAnimator2);
         animatorSet.start();
+        if (callback.isPlaying()) {
+            hd.sendEmptyMessageDelayed(PROGRESS, 1000);
+        }
     }
 
 
@@ -217,13 +301,14 @@ public class VideoCoursesFloatFragment extends Fragment implements View.OnClickL
     @Override
     public void onPause() {
         super.onPause();
-        hd.removeCallbacks(runnable);
+        hd.removeMessages(HIDE);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        hd.removeCallbacks(runnable);
+        hd.removeMessages(HIDE);
+        hd.removeMessages(PROGRESS);
     }
 
     @Override
@@ -239,9 +324,10 @@ public class VideoCoursesFloatFragment extends Fragment implements View.OnClickL
         videoName.setText(name);
     }
 
-    public void setBuffering(int percent, int duration) {
-        seekBar.setMax(duration);
-        seekBar.setSecondaryProgress(percent);
+    public void setBuffering(int percent, long duration) {
+        seekBar.setMax(Integer.parseInt(String.valueOf(duration)));
+//        Logger.e(duration + "****buffering" + Integer.parseInt(String.valueOf(duration)) + "**percent" + Integer.parseInt(String.valueOf(percent * duration / 100)));
+        seekBar.setSecondaryProgress(Integer.parseInt(String.valueOf(percent * duration / 100)));
         time.setText(stringForTime(duration));
     }
 
@@ -251,7 +337,23 @@ public class VideoCoursesFloatFragment extends Fragment implements View.OnClickL
         int seconds = totalSeconds % 60;
         int minutes = (totalSeconds / 60) % 60;
         int hours = totalSeconds / 3600;
-        return String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds);
+        return String.format(Locale.CHINESE, "%02d:%02d:%02d", hours, minutes, seconds);
+    }
+
+    public void setPortrait(boolean isPortrait) {
+        if (isPortrait) {
+            zoom.setVisibility(View.VISIBLE);
+            listSwitch.setVisibility(View.GONE);
+            definition.setVisibility(View.GONE);
+            if (list.getVisibility() == View.VISIBLE) {
+                list.setVisibility(View.GONE);
+            }
+        } else {
+            zoom.setVisibility(View.GONE);
+            listSwitch.setVisibility(View.VISIBLE);
+            definition.setVisibility(View.VISIBLE);
+
+        }
     }
 
     public interface CallBack {
@@ -264,5 +366,26 @@ public class VideoCoursesFloatFragment extends Fragment implements View.OnClickL
         boolean isPlaying();
 
         boolean isPortrait();
+
+        long getCurrentPosition();
+
+        long getDuration();
+
+        void seekTo(long position);
+
+        void zoom();
+
+        boolean isPrepared();
+    }
+
+    /**
+     * @param isplaying 正在播放
+     */
+    public void setPlayOrPause(boolean isplaying) {
+        if (isplaying) {
+            play.setImageResource(R.mipmap.nemediacontroller_play);
+        } else {
+            play.setImageResource(R.mipmap.nemediacontroller_pause);
+        }
     }
 }

@@ -100,5 +100,6 @@ dependencies {
     compile project(':library_pulltorefresh')
     compile project(':common')
     compile project(':pushSDK')
+    compile project(':vitamio')
 }
 
