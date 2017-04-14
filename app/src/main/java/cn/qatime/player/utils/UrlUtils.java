@@ -69,6 +69,8 @@ public class UrlUtils {
     public static String cashAccounts = baseUrl + "/api/v1/payment/cash_accounts/";
     //
     public static String lessons = baseUrl + "/api/v1/live_studio/lessons/";
+    //
+    public static String urlVideoCourses = baseUrl + "/api/v1/live_studio/video_courses/";
 
 
     public static String getUrl(String function, Map<String, String> params) {
