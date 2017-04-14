@@ -46,21 +46,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="￥0.00"
+                android:textSize="12sp"
                 android:textColor="@color/colorPrimary" />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
 
             <TextView
+                android:layout_marginTop="5dp"
                 android:id="@+id/teacher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxEms="7"
                 android:singleLine="true"
                 android:text="老师名字"
-                android:textSize="13sp" />
+                android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
