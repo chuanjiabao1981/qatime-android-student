@@ -74,15 +74,6 @@ public class FragmentFilterClassVideo extends BaseFragment {
         return view;
     }
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_filter_course);
-//        grade = getIntent().getStringExtra("grade");
-//        subject = getIntent().getStringExtra("subject");
-//        setTitles(grade + subject+"直播课");
-//        initView();
-//    }
 
     /**
      * @param type 0下拉1上啦
@@ -129,7 +120,7 @@ public class FragmentFilterClassVideo extends BaseFragment {
         }
 
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlSearch, map), null, new VolleyListener(getActivity()) {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlVideoCourses+"/search", map), null, new VolleyListener(getActivity()) {
             @Override
             protected void onTokenOut() {
 
