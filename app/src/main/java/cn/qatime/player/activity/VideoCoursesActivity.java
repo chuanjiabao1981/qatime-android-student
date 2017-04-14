@@ -1,5 +1,7 @@
 package cn.qatime.player.activity;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -10,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -20,6 +23,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import cn.qatime.player.R;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.bean.VideoCoursesDetailsBean;
 import cn.qatime.player.fragment.FragmentVideoCoursesClassInfo;
@@ -28,6 +32,7 @@ import cn.qatime.player.fragment.FragmentVideoCoursesTeacherInfo;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.bean.OrderPayBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -39,7 +44,7 @@ import libraryextra.view.SimpleViewPagerIndicator;
  * @Describe 视频课详情
  */
 
-public class VideoCoursesActivity extends BaseFragmentActivity {
+public class VideoCoursesActivity extends BaseFragmentActivity implements View.OnClickListener {
     private String[] mTitles;
     private SimpleViewPagerIndicator mIndicator;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
@@ -58,6 +63,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity {
     private Button pay;
     private LinearLayout startStudyView;
     private Button startStudy;
+    private AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +87,6 @@ public class VideoCoursesActivity extends BaseFragmentActivity {
                             name.setText(data.getData().getName());
                             setTitles(data.getData().getName());
                             studentNumber.setText(getString(R.string.student_number, data.getData().getBuy_tickets_count()));
-
 
                             if (data.getData().getSell_type().equals("charge")) {
                                 String price;
@@ -109,9 +114,6 @@ public class VideoCoursesActivity extends BaseFragmentActivity {
                                 } else {//显示加入试听按钮
                                     audition.setText(getResources().getString(R.string.Join_the_audition));
                                     auditionStart.setVisibility(View.GONE);
-//                                if(data.getData().getTaste_count() == 0){//试听数目为0则该课不支持试听
-//                                    audition.setEnabled(false);
-//                                }
                                 }
 
                                 if (data.getData().getIs_bought()) {
@@ -136,7 +138,6 @@ public class VideoCoursesActivity extends BaseFragmentActivity {
                                 }
                             }
 
-
                             ((FragmentVideoCoursesClassInfo) fragBaseFragments.get(0)).setData(data);
                             ((FragmentVideoCoursesTeacherInfo) fragBaseFragments.get(1)).setData(data);
                             ((FragmentVideoCoursesClassList) fragBaseFragments.get(2)).setData(data);
@@ -152,9 +153,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity {
                     protected void onTokenOut() {
                         tokenOut();
                     }
-                }
-
-                , new VolleyErrorListener() {
+                }, new VolleyErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
@@ -175,6 +174,11 @@ public class VideoCoursesActivity extends BaseFragmentActivity {
         pay = (Button) findViewById(R.id.pay);
         startStudyView = (LinearLayout) findViewById(R.id.start_study_view);
         startStudy = (Button) findViewById(R.id.start_study);
+
+        audition.setOnClickListener(this);
+        auditionStart.setOnClickListener(this);
+        pay.setOnClickListener(this);
+        startStudy.setOnClickListener(this);
 
         fragBaseFragments.add(new FragmentVideoCoursesClassInfo());
         fragBaseFragments.add(new FragmentVideoCoursesTeacherInfo());
@@ -222,4 +226,117 @@ public class VideoCoursesActivity extends BaseFragmentActivity {
         mViewPager.setAdapter(mAdapter);
     }
 
+    @Override
+    public void onClick(View v) {
+        if (data == null || data.getData() == null) {
+            return;
+        }
+        Intent intent;
+        switch (v.getId()) {
+            case R.id.audition_start:
+                if (BaseApplication.isLogined()) {
+                    if ("init".equals(data.getData().getStatus()) || "published".equals(data.getData().getStatus())) {
+                        Toast.makeText(this, getString(R.string.published_course_unable_enter) + getString(R.string.audition), Toast.LENGTH_SHORT).show();
+                    } else {
+                        intent = new Intent(VideoCoursesActivity.this, NEVideoPlayerActivity.class);
+//                    intent.putExtra("camera", data.getData().getCamera());
+//                    intent.putExtra("board", data.getData().getBoard());
+                        intent.putExtra("id", data.getData().getId());
+                        intent.putExtra("sessionId", data.getData().getChat_team_id());
+                        startActivity(intent);
+                    }
+                } else {
+                    intent = new Intent(VideoCoursesActivity.this, LoginActivity2.class);
+                    intent.putExtra("activity_action", Constant.LoginAction.toRemedialClassDetail);
+                    startActivity(intent);
+                }
+                break;
+            case R.id.audition:
+                if (BaseApplication.isLogined()) {
+                    joinAudition();
+                } else {
+                    intent = new Intent(VideoCoursesActivity.this, LoginActivity2.class);
+                    intent.putExtra("activity_action", Constant.LoginAction.toRemedialClassDetail);
+                    startActivity(intent);
+                }
+                break;
+            case R.id.start_study:
+                if (BaseApplication.isLogined()) {
+                    if ("init".equals(data.getData().getStatus()) || "published".equals(data.getData().getStatus())) {
+                        Toast.makeText(this, getString(R.string.published_course_unable_enter) + getString(R.string.study), Toast.LENGTH_SHORT).show();
+                    } else {
+                        intent = new Intent(VideoCoursesActivity.this, NEVideoPlayerActivity.class);
+//                    intent.putExtra("camera", data.getData().getCamera());
+//                    intent.putExtra("board", data.getData().getBoard());
+                        intent.putExtra("id", data.getData().getId());
+                        intent.putExtra("sessionId", data.getData().getChat_team_id());
+                        startActivity(intent);
+                    }
+                } else {
+                    intent = new Intent(VideoCoursesActivity.this, LoginActivity2.class);
+                    intent.putExtra("activity_action", Constant.LoginAction.toRemedialClassDetail);
+                    startActivity(intent);
+                }
+                break;
+            case R.id.pay:
+                if (BaseApplication.isLogined()) {
+                    if ("teaching".equals(data.getData().getStatus())) {
+                        if (alertDialog == null) {
+                            View view = View.inflate(VideoCoursesActivity.this, R.layout.dialog_cancel_or_confirm, null);
+                            Button cancel = (Button) view.findViewById(R.id.cancel);
+                            Button confirm = (Button) view.findViewById(R.id.confirm);
+                            TextView text = (TextView) view.findViewById(R.id.text);
+                            text.setText(R.string.continue_buy_lasses_lesson);
+                            cancel.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    alertDialog.dismiss();
+                                }
+                            });
+                            confirm.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    payRemedial();
+                                    alertDialog.dismiss();
+                                }
+                            });
+                            AlertDialog.Builder builder = new AlertDialog.Builder(VideoCoursesActivity.this);
+                            alertDialog = builder.create();
+                            alertDialog.show();
+                            alertDialog.setContentView(view);
+                        } else {
+                            alertDialog.show();
+                        }
+                    } else {
+                        payRemedial();
+                    }
+                } else {
+                    intent = new Intent(VideoCoursesActivity.this, LoginActivity2.class);
+                    intent.putExtra("activity_action", Constant.LoginAction.toRemedialClassDetail);
+                    intent.putExtra("id", id);
+                    startActivity(intent);
+                }
+                break;
+        }
+    }
+
+    private void payRemedial() {
+        Intent intent = new Intent(VideoCoursesActivity.this, OrderConfirmActivity.class);
+        intent.putExtra("id", id);
+        intent.putExtra("coupon", getIntent().getStringExtra("coupon"));
+        OrderPayBean bean = new OrderPayBean();
+        bean.name = data.getData().getName();
+        bean.subject = data.getData().getSubject();
+        bean.grade = data.getData().getGrade();
+        bean.classnumber = data.getData().getPreset_lesson_count();
+        bean.teacher = data.getData().getTeacher().getName();
+        bean.current_price = data.getData().getCurrent_price();
+
+        intent.putExtra("data", bean);
+        startActivity(intent);
+    }
+
+    private void joinAudition() {
+
+    }
 }

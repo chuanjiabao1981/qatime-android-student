@@ -10,12 +10,14 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.VideoCoursesDetailsBean;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
+import libraryextra.utils.DateUtils;
 
 import static cn.qatime.player.R.id.status;
 
@@ -52,33 +54,29 @@ public class FragmentVideoCoursesClassList extends BaseFragment {
             @Override
             public void convert(ViewHolder holder, VideoCoursesDetailsBean.VideoLessonsBean item, int position) {
                 holder.setText(R.id.name, item.getName());
-                if (item.getStatus().equals("missed")) {
-                    holder.setText(status, getResourceString(R.string.class_missed));
-                } else if (item.getStatus().equals("init")) {//未开始
-                    holder.setText(status, getResourceString(R.string.class_init));
-                } else if (item.getStatus().equals("ready")) {//待开课
-                    holder.setText(status, getResourceString(R.string.class_ready));
-                } else if (item.getStatus().equals("teaching")) {//直播中
-                    holder.setText(status, getResourceString(R.string.class_teaching));
-                } else if (item.getStatus().equals("closed")) {//已直播
-                    holder.setText(status, getResourceString(R.string.class_closed));
-                } else if (item.getStatus().equals("paused")) {
-                    holder.setText(status, getResourceString(R.string.class_teaching));
-                } else {//closed finished billing completed
-                    holder.setText(status, getResourceString(R.string.class_over));//已结束
-                }
-                holder.setText(R.id.time, timeToString(item.getVideo().getDuration()));
+//                if (item.getStatus().equals("missed")) {
+//                    holder.setText(status, getResourceString(R.string.class_missed));
+//                } else if (item.getStatus().equals("init")) {//未开始
+//                    holder.setText(status, getResourceString(R.string.class_init));
+//                } else if (item.getStatus().equals("ready")) {//待开课
+//                    holder.setText(status, getResourceString(R.string.class_ready));
+//                } else if (item.getStatus().equals("teaching")) {//直播中
+//                    holder.setText(status, getResourceString(R.string.class_teaching));
+//                } else if (item.getStatus().equals("closed")) {//已直播
+//                    holder.setText(status, getResourceString(R.string.class_closed));
+//                } else if (item.getStatus().equals("paused")) {
+//                    holder.setText(status, getResourceString(R.string.class_teaching));
+//                } else {//closed finished billing completed
+//                    holder.setText(status, getResourceString(R.string.class_over));//已结束
+//                }
+                holder.setText(R.id.time, item.getVideo().getFormat_tmp_duration());
                 if (isFinished(item)) {
                     ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xff999999);
-                    ((TextView) holder.getView(status)).setTextColor(0xff999999);
-//                    holder.getView(R.id.view_playback).setVisibility(data.getIs_bought() && item.isReplayable() ? View.VISIBLE : View.GONE);
                 } else {
                     ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff00a0e9);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xff666666);
-                    ((TextView) holder.getView(R.id.status)).setTextColor(0xff666666);
                 }
-
             }
         };
         listView.setAdapter(adapter);
@@ -103,10 +101,6 @@ public class FragmentVideoCoursesClassList extends BaseFragment {
 //                }
 //            }
 //        });
-    }
-
-    private String timeToString(int duration) {
-        return "";
     }
 
     private boolean isFinished(VideoCoursesDetailsBean.VideoLessonsBean item) {
