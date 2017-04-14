@@ -71,7 +71,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="20dp"
-        android:text="教师标签"
+        android:text="执教年龄"
         android:textColor="#333"
         android:textSize="14sp" />
 

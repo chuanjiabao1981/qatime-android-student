@@ -35,8 +35,8 @@ public class FragmentVideoCoursesClassList extends BaseFragment {
     private List<RemedialClassDetailBean.Lessons> list = new ArrayList<>();
     private CommonAdapter<RemedialClassDetailBean.Lessons> adapter;
 
-    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
+//    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
     @Nullable
     @Override
@@ -53,12 +53,11 @@ public class FragmentVideoCoursesClassList extends BaseFragment {
     private void initView() {
         ListView listView = (ListView) findViewById(R.id.id_stickynavlayout_innerscrollview);
         listView.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
-        adapter = new CommonAdapter<RemedialClassDetailBean.Lessons>(getActivity(), list, R.layout.item_fragment_remedial_class_detail3) {
+        adapter = new CommonAdapter<RemedialClassDetailBean.Lessons>(getActivity(), list, R.layout.item_fragment_video_courses_class_list) {
 
             @Override
             public void convert(ViewHolder holder, RemedialClassDetailBean.Lessons item, int position) {
                 holder.setText(R.id.name, item.getName());
-                holder.setText(R.id.live_time, item.getLive_time());
                 if (item.getStatus().equals("missed")) {
                     holder.setText(status, getResourceString(R.string.class_missed));
                 } else if (item.getStatus().equals("init")) {//未开始
@@ -74,26 +73,16 @@ public class FragmentVideoCoursesClassList extends BaseFragment {
                 } else {//closed finished billing completed
                     holder.setText(status, getResourceString(R.string.class_over));//已结束
                 }
-                try {
-                    holder.setText(R.id.class_date, format.format(parse.parse(item.getClass_date())));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                holder.setText(R.id.view_playback, getString(R.string.playback_count, item.getLeft_replay_times()));
+                holder.setText(R.id.time, "");
                 if (isFinished(item)) {
                     ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xff999999);
-                    ((TextView) holder.getView(R.id.live_time)).setTextColor(0xff999999);
                     ((TextView) holder.getView(status)).setTextColor(0xff999999);
-                    ((TextView) holder.getView(R.id.class_date)).setTextColor(0xff999999);
 //                    holder.getView(R.id.view_playback).setVisibility(data.getIs_bought() && item.isReplayable() ? View.VISIBLE : View.GONE);
                 } else {
                     ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff00a0e9);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xff666666);
-                    ((TextView) holder.getView(R.id.live_time)).setTextColor(0xff666666);
                     ((TextView) holder.getView(R.id.status)).setTextColor(0xff666666);
-                    ((TextView) holder.getView(R.id.class_date)).setTextColor(0xff666666);
-                    holder.getView(R.id.view_playback).setVisibility(View.GONE);
                 }
 
             }
