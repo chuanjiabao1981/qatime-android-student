@@ -151,10 +151,10 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff999999);
-                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff333333);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffff5842);
             }
         });
-        fragmentLayout.setAdapter(fragBaseFragments, R.layout.tablayout_video_courses, 0x0102);
+        fragmentLayout.setAdapter(fragBaseFragments, R.layout.tablayout_video_courses, 0x0120);
     }
 
     @Override
