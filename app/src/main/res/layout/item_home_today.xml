@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:scaleType="fitXY"
             android:src="@mipmap/photo"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent" />
 
         <TextView
             android:id="@+id/teaching_name"
@@ -25,7 +25,7 @@
               android:background="#22000000"
             android:ellipsize="middle"
             android:maxLines="1"
-            android:text="第三节体操运动"
+            android:text="暂无直播"
             android:textColor="#fff"
             android:textSize="12sp" />
     </RelativeLayout>
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="17:00-18:00"
+            android:text="00:00-00:00"
             android:textSize="14sp" />
         <TextView
             android:id="@+id/status"
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textColor="#cccccc"
-            android:text="正在直播"
+            android:text="暂无直播"
             android:textSize="14sp" />
 
     </LinearLayout>

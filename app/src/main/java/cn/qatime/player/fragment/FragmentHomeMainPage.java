@@ -47,6 +47,7 @@ import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.PayPSWForgetActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
+import cn.qatime.player.activity.VideoCoursesPlayActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.BannerRecommendBean;
@@ -177,20 +178,22 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         scan.setOnClickListener(this);
         citySelect.setOnClickListener(this);
     }
+
     @Subscribe
     public void onEvent(BusEvent event) {
-        if (BusEvent.ON_REFRESH_CASH_ACCOUNT==event&&!flag)
+        if (BusEvent.ON_REFRESH_CASH_ACCOUNT == event && !flag)
             initCashAccountSafe();
     }
+
     private void initCashAccountSafe() {
         CashAccountBean cashAccount = BaseApplication.getCashAccount();
         if (cashAccount != null && cashAccount.getData() != null) {
-          if(!cashAccount.getData().isHas_password()){
-              cashAccountSafe.setVisibility(View.VISIBLE);
-              cashAccountSafe.setOnClickListener(this);
-              close.setOnClickListener(this);
-              flag = true;
-          }
+            if (!cashAccount.getData().isHas_password()) {
+                cashAccountSafe.setVisibility(View.VISIBLE);
+                cashAccountSafe.setOnClickListener(this);
+                close.setOnClickListener(this);
+                flag = true;
+            }
         } else {
             EventBus.getDefault().post(BusEvent.REFRESH_CASH_ACCOUNT);
         }
@@ -208,6 +211,11 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             }
         };
         listViewPublishedRank.setAdapter(publisheRankAdapter);
+        ViewGroup parent = (ViewGroup) listViewPublishedRank.getParent();
+        View inflate = View.inflate(getActivity(), R.layout.empty_view, null);
+        inflate.setBackgroundColor(0xffffffff);
+        parent.addView(inflate, parent.indexOfChild(listViewPublishedRank) + 1);
+        listViewPublishedRank.setEmptyView(inflate);
         listViewPublishedRank.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -231,6 +239,11 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             }
         };
         listViewStartRank.setAdapter(startRankAdapter);
+        ViewGroup parent = (ViewGroup) listViewStartRank.getParent();
+        View inflate = View.inflate(getActivity(), R.layout.empty_view, null);
+        parent.addView(inflate, parent.indexOfChild(listViewStartRank) + 1);
+        inflate.setBackgroundColor(0xffffffff);
+        listViewStartRank.setEmptyView(inflate);
         listViewStartRank.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -257,6 +270,11 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             }
         };
         listViewEssenceContent.setAdapter(essenceContentAdapter);
+        ViewGroup parent = (ViewGroup) listViewEssenceContent.getParent();
+        View inflate = View.inflate(getActivity(), R.layout.empty_view, null);
+        inflate.setBackgroundColor(0xffffffff);
+        parent.addView(inflate, parent.indexOfChild(listViewEssenceContent) + 1);
+        listViewEssenceContent.setEmptyView(inflate);
         listViewEssenceContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -316,26 +334,28 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
             @Override
             public void onBindViewHolder(BaseViewHolder holder, final int position) {
-                LiveTodayBean.DataBean item = todayList.get(position);
-                holder.setText(R.id.teaching_name, item.getName())
-                        .setImageByUrl(R.id.image, item.getCourse().getPublicize(), R.mipmap.photo)
-                        .setText(R.id.time, item.getLive_time())
-                        .setText(R.id.status,getTodayStatusText(item.getStatus()))
-                        .setTextColor(R.id.status,getTodayStatusColor(item.getStatus()));
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        int courseId = todayList.get(position).getCourse().getId();
-                        Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                        intent.putExtra("id", courseId);
-                        startActivity(intent);
-                    }
-                });
+                if (todayList.size() > 0) {
+                    LiveTodayBean.DataBean item = todayList.get(position);
+                    holder.setText(R.id.teaching_name, item.getName())
+                            .setImageByUrl(R.id.image, item.getCourse().getPublicize(), R.mipmap.photo)
+                            .setText(R.id.time, item.getLive_time())
+                            .setText(R.id.status, getTodayStatusText(item.getStatus()))
+                            .setTextColor(R.id.status, getTodayStatusColor(item.getStatus()));
+                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            int courseId = todayList.get(position).getCourse().getId();
+                            Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                            intent.putExtra("id", courseId);
+                            startActivity(intent);
+                        }
+                    });
+                }
             }
 
             @Override
             public int getItemCount() {
-                return todayList.size();
+                return todayList.size() > 0 ? todayList.size() : 1;
             }
         };
         recyclerToday.setAdapter(todayAdapter);
@@ -602,7 +622,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
             }
         });
-
     }
 
     //gridview横向布局方法
@@ -667,20 +686,21 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
 
     private int getTodayStatusColor(String status) {
-        if("ready".equals(status)){
+        if ("ready".equals(status)) {
             return 0xff4873ff;
-        }else if("closed".equals(status)){
+        } else if ("closed".equals(status)) {
             return 0xff999999;
-        }else{
+        } else {
             return 0xffff5842;
         }
     }
+
     private String getTodayStatusText(String status) {
-        if("ready".equals(status)){
+        if ("ready".equals(status)) {
             return "尚未直播";
-        }else if("closed".equals(status)){
+        } else if ("closed".equals(status)) {
             return "直播结束";
-        }else{
+        } else {
             return "正在直播";
         }
     }
@@ -714,7 +734,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 startActivity(intent);
                 break;
             case R.id.close:
-               cashAccountSafe.setVisibility(View.GONE);
+                cashAccountSafe.setVisibility(View.GONE);
                 break;
         }
     }

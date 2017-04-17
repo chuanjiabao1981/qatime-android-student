@@ -49,7 +49,7 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
     private TextView classEndTime;
     //    private WebView courseDescribe;
     private TextView name;
-    private TextView sex;
+    private ImageView sex;
     private TextView teachingYears;
     private TextView school;
     private WebView teacherDescribe;
@@ -80,7 +80,7 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
         classStartTime = (TextView) view.findViewById(R.id.class_start_time);
         classEndTime = (TextView) view.findViewById(R.id.class_end_time);
         name = (TextView) view.findViewById(R.id.name);
-        sex = (TextView) view.findViewById(R.id.sex);
+        sex = (ImageView) view.findViewById(R.id.sex);
         teachingYears = (TextView) view.findViewById(R.id.teaching_years);
         school = (TextView) view.findViewById(R.id.school);
         image = (ImageView) view.findViewById(R.id.image);
@@ -288,8 +288,9 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
         @Override
         public void run() {
             if (getActivity() != null && getActivity().getResources() != null) {
-                sex.setText(getSex(data.getTeacher().getGender()));
-                sex.setTextColor(getSexColor(data.getTeacher().getGender()));
+//                sex.setText(getSex(data.getTeacher().getGender()));
+//                sex.setTextColor(getSexColor(data.getTeacher().getGender()));
+                sex.setImageResource("male".equals(data.getTeacher().getGender()) ? R.mipmap.male : R.mipmap.female);
                 name.setText(data.getTeacher().getName());
                 if (!StringUtils.isNullOrBlanK(data.getTeacher().getTeaching_years())) {
                     if (data.getTeacher().getTeaching_years().equals("within_three_years")) {

@@ -11,7 +11,6 @@ import java.util.List;
 public class ClassTimeTableBean implements Serializable {
 
 
-
     private int status;
     private List<DataBean> data;
 
@@ -316,8 +315,6 @@ public class ClassTimeTableBean implements Serializable {
                 private String chat_team_id;
                 private String chat_team_owner;
                 private int closed_lessons_count;
-                private int completed_lesson_count;
-                private int completed_lessons_count;
                 private float current_price;
                 private String grade;
                 private int id;
@@ -364,22 +361,6 @@ public class ClassTimeTableBean implements Serializable {
 
                 public void setClosed_lessons_count(int closed_lessons_count) {
                     this.closed_lessons_count = closed_lessons_count;
-                }
-
-                public int getCompleted_lesson_count() {
-                    return completed_lesson_count;
-                }
-
-                public void setCompleted_lesson_count(int completed_lesson_count) {
-                    this.completed_lesson_count = completed_lesson_count;
-                }
-
-                public int getCompleted_lessons_count() {
-                    return completed_lessons_count;
-                }
-
-                public void setCompleted_lessons_count(int completed_lessons_count) {
-                    this.completed_lessons_count = completed_lessons_count;
                 }
 
                 public float getCurrent_price() {
@@ -530,7 +511,6 @@ public class ClassTimeTableBean implements Serializable {
 
                 private String chat_team_id;
                 private int closed_lessons_count;
-                private int completed_lessons_count;
                 private int created_at;
                 private String description;
                 private String grade;
@@ -564,14 +544,6 @@ public class ClassTimeTableBean implements Serializable {
 
                 public void setClosed_lessons_count(int closed_lessons_count) {
                     this.closed_lessons_count = closed_lessons_count;
-                }
-
-                public int getCompleted_lessons_count() {
-                    return completed_lessons_count;
-                }
-
-                public void setCompleted_lessons_count(int completed_lessons_count) {
-                    this.completed_lessons_count = completed_lessons_count;
                 }
 
                 public int getCreated_at() {
