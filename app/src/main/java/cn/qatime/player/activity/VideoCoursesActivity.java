@@ -322,6 +322,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
 
     private void payRemedial() {
         Intent intent = new Intent(VideoCoursesActivity.this, OrderConfirmActivity.class);
+        intent.putExtra("courseType", "video");
         intent.putExtra("id", id);
         intent.putExtra("coupon", getIntent().getStringExtra("coupon"));
         OrderPayBean bean = new OrderPayBean();

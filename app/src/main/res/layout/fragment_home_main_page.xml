@@ -78,6 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/toolbar"
             android:orientation="horizontal"
+            android:background="#ffffe4"
             android:visibility="gone">
 
             <ImageView
@@ -91,6 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:padding="3dp"
+                android:textSize="12sp"
                 android:text="尚未设置支付密码，点击设置"
                 android:textColor="@color/colorPrimary" />
 

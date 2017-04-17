@@ -35,7 +35,7 @@ public class FragmentVideoCoursesTeacherInfo extends BaseFragment {
     private ImageView image;
     private TextView teachingyears;
     private TextView school;
-    private TextView sex;
+    private ImageView sex;
     private WebView describe;
 
     @Nullable
@@ -55,7 +55,7 @@ public class FragmentVideoCoursesTeacherInfo extends BaseFragment {
         image = (ImageView) findViewById(R.id.image);
         teachingyears = (TextView) findViewById(R.id.teaching_years);
         school = (TextView) findViewById(R.id.school);
-        sex = (TextView) findViewById(R.id.sex);
+        sex = (ImageView) findViewById(R.id.sex);
 
         describe = (WebView) findViewById(R.id.describe);
 
@@ -79,8 +79,9 @@ public class FragmentVideoCoursesTeacherInfo extends BaseFragment {
     }
 
     public void setData(final VideoCoursesDetailsBean data) {
-        sex.setText(getSex(data.getData().getTeacher().getGender()));
-        sex.setTextColor(getSexColor(data.getData().getTeacher().getGender()));
+//        sex.setText(getSex(data.getData().getTeacher().getGender()));
+//        sex.setTextColor(getSexColor(data.getData().getTeacher().getGender()));
+        sex.setImageResource("male".equals(data.getData().getTeacher().getGender()) ? R.mipmap.male : R.mipmap.female);
         name.setText(data.getData().getTeacher().getName());
         if (!StringUtils.isNullOrBlanK(data.getData().getTeacher().getTeaching_years())) {
             if (data.getData().getTeacher().getTeaching_years().equals("within_three_years")) {
@@ -106,7 +107,7 @@ public class FragmentVideoCoursesTeacherInfo extends BaseFragment {
             school.setText(R.string.not_available);
         }
 
-        Glide.with(this).load(data.getData().getTeacher().getAvatar_url()).bitmapTransform(new GlideCircleTransform(getActivity())).placeholder(R.mipmap.error_header_rect).crossFade().into(image);
+        Glide.with(this).load(data.getData().getTeacher().getAvatar_url()).bitmapTransform(new GlideCircleTransform(getActivity())).placeholder(R.mipmap.error_header).crossFade().into(image);
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

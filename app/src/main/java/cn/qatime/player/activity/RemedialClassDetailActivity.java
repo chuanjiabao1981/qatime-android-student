@@ -386,6 +386,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
     private void payRemedial() {
         Intent intent = new Intent(RemedialClassDetailActivity.this, OrderConfirmActivity.class);
+        intent.putExtra("courseType", "live");
         intent.putExtra("id", id);
         intent.putExtra("coupon", getIntent().getStringExtra("coupon"));
         OrderPayBean bean = new OrderPayBean();

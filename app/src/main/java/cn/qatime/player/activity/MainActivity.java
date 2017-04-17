@@ -240,6 +240,7 @@ public class MainActivity extends BaseFragmentActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Constant.QRCODE_SUCCESS) {//扫描二维码返回数据跳转至辅导班详情页
+            // TODO: 2017/4/17 判断优惠码跳转?
             Intent intent = new Intent(this, RemedialClassDetailActivity.class);
             intent.putExtra("id", data.getIntExtra("id", 0));
             intent.putExtra("coupon", data.getStringExtra("coupon"));
