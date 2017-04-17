@@ -231,7 +231,6 @@ public class MyOrderBean implements Serializable {
             private String status;
             private String description;
             private int lessons_count;
-            private int completed_lessons_count;
             private int closed_lessons_count;
             private String live_start_time;
             private String live_end_time;
@@ -309,13 +308,6 @@ public class MyOrderBean implements Serializable {
                 this.lessons_count = lessons_count;
             }
 
-            public int getCompleted_lessons_count() {
-                return completed_lessons_count;
-            }
-
-            public void setCompleted_lessons_count(int completed_lessons_count) {
-                this.completed_lessons_count = completed_lessons_count;
-            }
 
             public int getClosed_lessons_count() {
                 return closed_lessons_count;
@@ -615,7 +607,7 @@ public class MyOrderBean implements Serializable {
 
             private int preset_lesson_count;
 
-            private int completed_lesson_count;
+            private int closed_lessons_count;
 
             private String live_start_time;
 
@@ -626,6 +618,14 @@ public class MyOrderBean implements Serializable {
             private List<Lessons> lessons;
 
             private Chat_team chat_team;
+
+            public int getClosed_lessons_count() {
+                return closed_lessons_count;
+            }
+
+            public void setClosed_lessons_count(int closed_lessons_count) {
+                this.closed_lessons_count = closed_lessons_count;
+            }
 
             public void setId(int id) {
                 this.id = id;
@@ -731,13 +731,7 @@ public class MyOrderBean implements Serializable {
                 return this.preset_lesson_count;
             }
 
-            public void setCompleted_lesson_count(int completed_lesson_count) {
-                this.completed_lesson_count = completed_lesson_count;
-            }
 
-            public int getCompleted_lesson_count() {
-                return this.completed_lesson_count;
-            }
 
             public void setLive_start_time(String live_start_time) {
                 this.live_start_time = live_start_time;

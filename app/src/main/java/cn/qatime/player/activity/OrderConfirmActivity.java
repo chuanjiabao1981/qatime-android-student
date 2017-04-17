@@ -148,8 +148,10 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
             map.put("coupon_code", coupon);
         }
         String url = UrlUtils.getUrl(UrlUtils.urlCourses + id + "/orders", map);
-        if (!StringUtils.isNullOrBlanK(courseType)) {
+        if (!StringUtils.isNullOrBlanK(courseType)&&"interact".equals(courseType)) {
             url = UrlUtils.getUrl(UrlUtils.urlInteractCourses + id + "/orders", map);
+        }else if(!StringUtils.isNullOrBlanK(courseType)&&"video".equals(courseType)){
+            url = UrlUtils.getUrl(UrlUtils.urlVideoCourses + id + "/orders", map);
         }
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, url, null,

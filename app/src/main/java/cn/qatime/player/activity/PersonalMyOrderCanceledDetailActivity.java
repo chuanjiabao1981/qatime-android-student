@@ -76,7 +76,7 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
             } else {
                 teacher.setText(data.getProduct().getTeacher_name());
             }
-            progress.setText(String.format(getString(R.string.lesson_count),data.getProduct().getLesson_count()));
+            progress.setText(String.format(getString(R.string.lesson_count),data.getProduct().getPreset_lesson_count()));
         }else if("LiveStudio::InteractiveCourse".equals(data.getProduct_type())){
             classid = data.getProduct_interactive_course().getId();
             if (StringUtils.isNullOrBlanK(data.getProduct_interactive_course().getName())) {

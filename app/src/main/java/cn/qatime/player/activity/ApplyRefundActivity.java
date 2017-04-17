@@ -74,7 +74,7 @@ public class ApplyRefundActivity extends BaseActivity {
 
         orderId.setText(getIntent().getStringExtra("order_id"));
         productName.setText(getIntent().getStringExtra("name"));
-        progress.setText(getIntent().getIntExtra("completed_lesson_count", 0) + "/" + getIntent().getIntExtra("preset_lesson_count", 0));
+        progress.setText(getIntent().getIntExtra("closed_lessons_count", 0) + "/" + getIntent().getIntExtra("preset_lesson_count", 0));
         price.setText("￥" + orderRefundBean.getData().getAmount());
         usedAmount.setText("￥" + (Double.valueOf(orderRefundBean.getData().getAmount()) - Double.valueOf(orderRefundBean.getData().getRefund_amount())));
         String pay_type = orderRefundBean.getData().getPay_type();
