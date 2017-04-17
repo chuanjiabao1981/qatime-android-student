@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
-import cn.qatime.player.activity.RemedialClassDetailActivity;
+import cn.qatime.player.activity.VideoCoursesActivity;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.FilterVideoCourseBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
@@ -238,7 +238,7 @@ public class FragmentFilterClassVideo extends BaseFragment {
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                Intent intent = new Intent(getActivity(), VideoCoursesActivity.class);
                 intent.putExtra("id", datas.get(position - 1).getId());
                 startActivity(intent);
             }

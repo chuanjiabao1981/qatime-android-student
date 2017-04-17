@@ -472,7 +472,6 @@
     <string name="refund_record">退款记录</string>
     <string name="notify_mode">通知方式</string>
     <string name="course_message_notify">辅导班消息通知</string>
-    <string name="live_courses">直播课程</string>
     <string name="teacher_recommendation">名师推荐</string>
     <string name="cancel">取消</string>
     <string name="other_method_of_login">其他登录方式</string>
@@ -632,4 +631,7 @@
     <string name="new_pay_password_invalid">新密码%1$d小时后可用</string>
     <string name="select_subject">选课</string>
     <string name="my_interact">我的一对一</string>
+    <string name="interact_courses">一对一</string>
+    <string name="video_courses">视频课</string>
+    <string name="live_courses">直播课</string>
 </resources>
