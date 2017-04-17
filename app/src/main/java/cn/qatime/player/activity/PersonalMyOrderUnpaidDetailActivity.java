@@ -98,7 +98,6 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
             }
             progress.setText(String.format(getResourceString(R.string.lesson_count), data.getProduct().getPreset_lesson_count()));
 
-
         } else if ("LiveStudio::InteractiveCourse".equals(data.getProduct_type())) {
             classid = data.getProduct_interactive_course().getId();
             if (StringUtils.isNullOrBlanK(data.getProduct_interactive_course().getName())) {

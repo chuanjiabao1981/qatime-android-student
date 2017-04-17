@@ -237,11 +237,11 @@ public class FragmentOrderPaid extends BaseFragment {
                         if("LiveStudio::Course".equals(item.getProduct_type())){
                             intent.putExtra("name",item.getProduct().getName());
                             intent.putExtra("preset_lesson_count",item.getProduct().getPreset_lesson_count());
-                            intent.putExtra("completed_lesson_count",item.getProduct().getCompleted_lesson_count());
+                            intent.putExtra("closed_lessons_count",item.getProduct().getClosed_lessons_count());
                         }else if("LiveStudio::InteractiveCourse".equals(item.getProduct_type())){
                             intent.putExtra("name",item.getProduct_interactive_course().getName());
                             intent.putExtra("preset_lesson_count",item.getProduct_interactive_course().getLessons_count());
-                            intent.putExtra("completed_lesson_count",item.getProduct_interactive_course().getCompleted_lessons_count());
+                            intent.putExtra("closed_lessons_count",item.getProduct_interactive_course().getClosed_lessons_count());
                         }
 
                         startActivityForResult(intent, Constant.REQUEST);

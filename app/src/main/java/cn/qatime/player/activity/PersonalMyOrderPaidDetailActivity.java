@@ -92,7 +92,7 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
             } else {
                 teacher.setText(data.getProduct().getTeacher_name());
             }
-            progress.setText(String.format(getString(R.string.lesson_count),data.getProduct().getLesson_count()));
+            progress.setText(String.format(getString(R.string.lesson_count),data.getProduct().getPreset_lesson_count()));
         }else if("LiveStudio::InteractiveCourse".equals(data.getProduct_type())){
             classid = data.getProduct_interactive_course().getId();
             if (StringUtils.isNullOrBlanK(data.getProduct_interactive_course().getName())) {
@@ -227,11 +227,11 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
                         if("LiveStudio::Course".equals(data.getProduct_type())){
                             intent.putExtra("name", data.getProduct().getName());
                             intent.putExtra("preset_lesson_count", data.getProduct().getPreset_lesson_count());
-                            intent.putExtra("completed_lesson_count", data.getProduct().getCompleted_lesson_count());
+                            intent.putExtra("closed_lessons_count", data.getProduct().getClosed_lessons_count());
                         }else if("LiveStudio::InteractiveCourse".equals(data.getProduct_type())){
                             intent.putExtra("name", data.getProduct_interactive_course().getName());
                             intent.putExtra("preset_lesson_count", data.getProduct_interactive_course().getLessons_count());
-                            intent.putExtra("completed_lesson_count", data.getProduct_interactive_course().getCompleted_lessons_count());
+                            intent.putExtra("closed_lessons_count", data.getProduct_interactive_course().getClosed_lessons_count());
                         }
 
                         startActivityForResult(intent, Constant.REQUEST);
