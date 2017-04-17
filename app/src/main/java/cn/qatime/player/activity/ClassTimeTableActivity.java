@@ -225,6 +225,7 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         monthDateView.setOnCalendarPageChangeListener(new MonthDateView.OnCalendarPageChangeListener() {
             @Override
             public void onPageChange(int type) {
+                cancelAll(this);//旧请求取消
                 getDate();
                 initData();
             }

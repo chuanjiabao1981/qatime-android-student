@@ -37,7 +37,9 @@ public class UrlUtils {
     public static String urlCourses = baseUrl + "api/v1/live_studio/courses/";
     //一对一
     public static String urlInteractCourses = baseUrl + "api/v1/live_studio/interactive_courses/";
-    //课程
+    //视频课
+    public static String urlVideoCourses = baseUrl + "api/v1/live_studio/video_courses/";
+    //直播课搜索
     public static String urlSearch = baseUrl + "api/v1/live_studio/courses/search";
     //辅导班排行
     public static String urlRecentPublished = baseUrl + "/api/v1/live_studio/courses/rank/published_rank,start_rank";
@@ -67,6 +69,8 @@ public class UrlUtils {
     public static String cashAccounts = baseUrl + "/api/v1/payment/cash_accounts/";
     //
     public static String lessons = baseUrl + "/api/v1/live_studio/lessons/";
+    //
+    public static String urlVideoCourses = baseUrl + "/api/v1/live_studio/video_courses/";
 
 
     public static String getUrl(String function, Map<String, String> params) {
