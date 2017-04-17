@@ -15,21 +15,30 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragmentActivity;
+import cn.qatime.player.bean.VideoCoursesDetailsBean;
 import cn.qatime.player.fragment.FragmentVideoCoursesDetail;
 import cn.qatime.player.fragment.FragmentVideoCoursesList;
 import cn.qatime.player.fragment.VideoCoursesFloatFragment;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.ScreenSwitchUtils;
+import cn.qatime.player.utils.UrlUtils;
 import io.vov.vitamio.MediaPlayer;
 import io.vov.vitamio.Vitamio;
 import libraryextra.utils.DensityUtils;
-import libraryextra.utils.ScreenUtils;
+import libraryextra.utils.JsonUtils;
+import libraryextra.utils.StringUtils;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 import libraryextra.view.FragmentLayoutWithLine;
 
 /**
@@ -41,7 +50,6 @@ import libraryextra.view.FragmentLayoutWithLine;
 public class VideoCoursesPlayActivity extends BaseFragmentActivity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener {
 
     private VideoCoursesFloatFragment floatFragment;
-    private SurfaceHolder holder;
     private boolean isCreated = false;
     private MediaPlayer mMediaPlayer;
     private boolean isPrepared = false;
@@ -49,6 +57,9 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
     private RelativeLayout video;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2};
+    private int id;
+    private VideoCoursesDetailsBean data;
+    private SurfaceHolder holder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,23 +69,54 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
             Toast.makeText(this, "播放器初始化失败", Toast.LENGTH_SHORT).show();
             return;
         }
+        id = getIntent().getIntExtra("id", 0);
+        id=3;
         initView();
 
         screenSwitchUtils = ScreenSwitchUtils.init(this.getApplicationContext());
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (isCreated) {
-                        mMediaPlayer.setDataSource("http://192.168.1.136:8080/media/28.mp4");
-                        mMediaPlayer.prepareAsync();
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    if (isCreated) {
+//                        createMedia("http://192.168.1.136:8080/media/28.mp4");
+//                    }
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }, 5000);
+        initData();
+    }
+
+    private void initData() {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlVideoCourses + "/" + id, null,
+                new VolleyListener(VideoCoursesPlayActivity.this) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        data = JsonUtils.objectFromJson(response.toString(), VideoCoursesDetailsBean.class);
+
+                        if (data != null && data.getData() != null) {
+                            ((FragmentVideoCoursesList) fragBaseFragments.get(0)).setData(data.getData().getVideo_lessons());
+                            ((FragmentVideoCoursesDetail) fragBaseFragments.get(1)).setData(data);
+                        }
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-//                mMediaPlayer.start();
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
             }
-        }, 5000);
+        });
+        addToRequestQueue(request);
     }
 
     private void initView() {
@@ -174,10 +216,13 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
     public void surfaceCreated(SurfaceHolder holder) {
         isCreated = true;
         // Create a new media player and set the listeners
+    }
+
+    private void createMedia(String path) throws IOException {
         mMediaPlayer = new MediaPlayer(this);
-//        mMediaPlayer.setDataSource(path);
+        mMediaPlayer.setDataSource(path);
         mMediaPlayer.setDisplay(holder);
-//        mMediaPlayer.prepareAsync();
+        mMediaPlayer.prepareAsync();
         mMediaPlayer.setOnBufferingUpdateListener(this);
         mMediaPlayer.setOnCompletionListener(this);
         mMediaPlayer.setOnPreparedListener(this);
@@ -272,4 +317,18 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
         screenSwitchUtils.stop();
     }
 
+    public void playCourses(VideoCoursesDetailsBean.VideoLessonsBean videoLessonsBean) {
+        if (videoLessonsBean != null) {
+            if (!StringUtils.isNullOrBlanK(videoLessonsBean.getVideo().getName_url())) {
+                releaseMediaPlayer();
+                if (isCreated) {
+                    try {
+                        createMedia(videoLessonsBean.getVideo().getName_url());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
 }
