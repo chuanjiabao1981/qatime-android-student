@@ -47,6 +47,7 @@ import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.PayPSWForgetActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
+import cn.qatime.player.activity.VideoCoursesPlayActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.BannerRecommendBean;
@@ -621,7 +622,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
             }
         });
-
     }
 
     //gridview横向布局方法
