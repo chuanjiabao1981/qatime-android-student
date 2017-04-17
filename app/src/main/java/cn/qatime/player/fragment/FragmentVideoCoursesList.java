@@ -75,6 +75,7 @@ public class FragmentVideoCoursesList extends BaseFragment {
     }
 
     private String getPosition(int position) {
+        position += 1;
         if (position < 10) return "0" + position;
         return String.valueOf(position);
     }

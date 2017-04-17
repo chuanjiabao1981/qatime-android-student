@@ -722,10 +722,8 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 mainActivity.setCurrentPosition(1, 0);
                 break;
             case R.id.scan:
-//                intent = new Intent(getActivity(), CaptureActivity.class);
-//                mainActivity.startActivityForResult(intent, Constant.REQUEST);
-                intent=new Intent(getActivity(), VideoCoursesPlayActivity.class);
-                startActivity(intent);
+                intent = new Intent(getActivity(), CaptureActivity.class);
+                mainActivity.startActivityForResult(intent, Constant.REQUEST);
                 break;
             case R.id.city_select:
                 intent = new Intent(getActivity(), CitySelectActivity.class);
