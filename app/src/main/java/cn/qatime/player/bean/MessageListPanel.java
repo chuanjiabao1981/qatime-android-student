@@ -133,11 +133,11 @@ public class MessageListPanel {
     public void onIncomingMessage(List<IMMessage> messages) {
 //        boolean needScrollToBottom = isLastMessageVisible();
         boolean needRefresh = false;
-        List<IMMessage> addedListItems = new ArrayList<>(messages.size());
+//        List<IMMessage> addedListItems = new ArrayList<>(messages.size());
         for (IMMessage message : messages) {
             if (isMyMessage(message)) {
                 items.add(message);
-                addedListItems.add(message);
+//                addedListItems.add(message);
                 needRefresh = true;
             }
         }
@@ -146,14 +146,13 @@ public class MessageListPanel {
             adapter.notifyDataSetChanged();
         }
 
-        adapter.updateShowTimeItem(addedListItems, false, true);
-
+//        adapter.updateShowTimeItem(addedListItems, false, true);
 
         // incoming messages tip
         IMMessage lastMsg = messages.get(messages.size() - 1);
         if (isMyMessage(lastMsg)) {
 //            if (needScrollToBottom) {
-                doScrollToBottom();
+            doScrollToBottom();
 //            } else if (incomingMsgPrompt != null && lastMsg.getSessionType() != SessionTypeEnum.ChatRoom) {
 //                incomingMsgPrompt.show(lastMsg);
 //            }
@@ -211,7 +210,7 @@ public class MessageListPanel {
     public void onMsgSend(IMMessage message) {
         List<IMMessage> addedListItems = new ArrayList<>(1);
         addedListItems.add(message);
-        adapter.updateShowTimeItem(addedListItems, false, true);
+//        adapter.updateShowTimeItem(addedListItems, false, true);
 
         adapter.appendData(message);
 
@@ -291,15 +290,15 @@ public class MessageListPanel {
             }
 
             // 在更新前，先确定一些标记
-            List<IMMessage> total = new ArrayList<>();
-            total.addAll(items);
-            boolean isBottomLoad = direction == QueryDirectionEnum.QUERY_NEW;
-            if (isBottomLoad) {
-                total.addAll(messages);
-            } else {
-                total.addAll(0, messages);
-            }
-            adapter.updateShowTimeItem(total, true, firstLoad); // 更新要显示时间的消息
+//            List<IMMessage> total = new ArrayList<>();
+//            total.addAll(items);
+//            boolean isBottomLoad = direction == QueryDirectionEnum.QUERY_NEW;
+//            if (isBottomLoad) {
+//                total.addAll(messages);
+//            } else {
+//                total.addAll(0, messages);
+//            }
+//            adapter.updateShowTimeItem(total, true, firstLoad); // 更新要显示时间的消息
 
             // 顶部加载
             int count = messages.size();
@@ -333,9 +332,9 @@ public class MessageListPanel {
             }
 
             // resend的的情况，可能时间已经变化了，这里要重新检查是否要显示时间
-            List<IMMessage> msgList = new ArrayList<>(1);
-            msgList.add(message);
-            adapter.updateShowTimeItem(msgList, false, true);
+//            List<IMMessage> msgList = new ArrayList<>(1);
+//            msgList.add(message);
+//            adapter.updateShowTimeItem(msgList, false, true);
 
             refreshViewHolderByIndex(index);
         }
@@ -390,8 +389,8 @@ public class MessageListPanel {
                     public void onResult(int code, List<RecentContact> recents, Throwable e) {
                         // recents参数即为最近联系人列表（最近会话列表）
                         for (RecentContact recent : recents) {
-                            if(container.account.equals(recent.getContactId())){
-                                messageListView.scrollToPosition(adapter.getBottomDataPosition()-recent.getUnreadCount());
+                            if (container.account.equals(recent.getContactId())) {
+                                messageListView.scrollToPosition(adapter.getBottomDataPosition() - recent.getUnreadCount());
                                 break;
                             }
                         }
