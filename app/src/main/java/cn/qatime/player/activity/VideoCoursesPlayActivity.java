@@ -277,6 +277,7 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
     public void onPrepared(MediaPlayer mp) {
         isPrepared = true;
         mMediaPlayer.start();
+        floatFragment.setPlayOrPause(mp.isPlaying());
     }
 
     @Override
