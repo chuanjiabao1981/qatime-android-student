@@ -55,6 +55,7 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.TutorialClassBean;
+import libraryextra.utils.DateUtils;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -206,7 +207,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                 ((ImageView) holder.getView(R.id.notify)).setVisibility(item.isMute() ? View.VISIBLE : View.GONE);
                 holder.getView(R.id.count).setVisibility(item.getUnreadCount() == 0 ? View.GONE : View.VISIBLE);
                 holder.setText(R.id.count, String.valueOf(item.getUnreadCount()));
-                String timeString = TimeUtil.getTimeShowString(item.getTime(), true);
+                String timeString = DateUtils.getTimeShowString(item.getTime(), false);
                 holder.setText(R.id.time, timeString);
             }
         };
