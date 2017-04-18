@@ -13,12 +13,12 @@ import java.util.ArrayList;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.base.BaseFragmentActivity;
-import cn.qatime.player.fragment.FragmentVideoBought;
-import cn.qatime.player.fragment.FragmentVideoFree;
+import cn.qatime.player.fragment.FragmentMyVideoBought;
+import cn.qatime.player.fragment.FragmentMyVideoFree;
 import libraryextra.view.FragmentLayoutWithLine;
 
 /**
- * 我的一对一
+ * 我的视频课
  */
 public class PersonalMyVideoActivity extends BaseFragmentActivity {
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2};
@@ -45,8 +45,8 @@ public class PersonalMyVideoActivity extends BaseFragmentActivity {
     private void initView() {
         findViewById(R.id.right).setVisibility(View.GONE);
 
-        fragBaseFragments.add(new FragmentVideoBought());
-        fragBaseFragments.add(new FragmentVideoFree());
+        fragBaseFragments.add(new FragmentMyVideoBought());
+        fragBaseFragments.add(new FragmentMyVideoFree());
 
         fragmentlayout = (FragmentLayoutWithLine) findViewById(R.id.fragmentlayout);
         fragmentlayout.setScorllToNext(true);

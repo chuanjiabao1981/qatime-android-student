@@ -482,7 +482,7 @@ public class FilterVideoCourseBean {
 
             private Announcements.DataBean.AnnouncementsBean announcement;
             private String team_id;
-            private List<Announcements.DataBean.AnnouncementsBean> team_announcements;
+            private List<MyOrderBean.DataBean.Team_announcements> team_announcements;
             private List<RemedialClassDetailBean.ChatTeam.Accounts> accounts;
 
             public Announcements.DataBean.AnnouncementsBean getAnnouncement() {
@@ -501,11 +501,11 @@ public class FilterVideoCourseBean {
                 this.team_id = team_id;
             }
 
-            public List<Announcements.DataBean.AnnouncementsBean> getTeam_announcements() {
+            public List<MyOrderBean.DataBean.Team_announcements> getTeam_announcements() {
                 return team_announcements;
             }
 
-            public void setTeam_announcements(List<Announcements.DataBean.AnnouncementsBean> team_announcements) {
+            public void setTeam_announcements(List<MyOrderBean.DataBean.Team_announcements> team_announcements) {
                 this.team_announcements = team_announcements;
             }
 

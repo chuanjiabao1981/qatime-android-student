@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
+import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.bean.VideoCoursesDetailsBean;
 import cn.qatime.player.fragment.FragmentVideoCoursesClassInfo;
 import cn.qatime.player.fragment.FragmentVideoCoursesClassList;
@@ -335,6 +337,15 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
 
         intent.putExtra("data", bean);
         startActivity(intent);
+    }
+
+    @Subscribe
+    public void onEvent(PayResultState code) {
+//        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
+//
+//            finish();
+//        }
+        finish();
     }
 
     private void joinAudition() {

@@ -32,15 +32,15 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.InteractClassBean;
+import libraryextra.bean.MyInteractClassBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
 public class FragmentInteractOver extends BaseFragment {
     private PullToRefreshListView listView;
-    private java.util.List<InteractClassBean.DataBean> list = new ArrayList<>();
-    private CommonAdapter<InteractClassBean.DataBean> adapter;
+    private java.util.List<MyInteractClassBean.DataBean> list = new ArrayList<>();
+    private CommonAdapter<MyInteractClassBean.DataBean> adapter;
     private int page = 1;
 
     @Nullable
@@ -63,9 +63,9 @@ public class FragmentInteractOver extends BaseFragment {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
 
-        adapter = new CommonAdapter<InteractClassBean.DataBean>(getActivity(), list, R.layout.item_fragment_my_interact_over) {
+        adapter = new CommonAdapter<MyInteractClassBean.DataBean>(getActivity(), list, R.layout.item_fragment_my_interact_over) {
             @Override
-            public void convert(ViewHolder helper, InteractClassBean.DataBean item, int position) {
+            public void convert(ViewHolder helper, MyInteractClassBean.DataBean item, int position) {
                 Glide.with(getActivity()).load(item.getPublicize_url()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.grade, item.getGrade());
@@ -136,14 +136,10 @@ public class FragmentInteractOver extends BaseFragment {
                         listView.onRefreshComplete();
 
                         try {
-                            InteractClassBean data = JsonUtils.objectFromJson(response.toString(), InteractClassBean.class);
-                            if (data != null) {
-                                for(InteractClassBean.DataBean item : data.getData()){
-                                    if ("completed".equals(item.getStatus())) {//只显示结束
-                                        list.add(item);
-                                    }
+                            MyInteractClassBean data = JsonUtils.objectFromJson(response.toString(), MyInteractClassBean.class);
+                                if (data != null&&data.getData()!=null) {
+                                    list.addAll(data.getData());
                                 }
-                            }
                             adapter.notifyDataSetChanged();
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();

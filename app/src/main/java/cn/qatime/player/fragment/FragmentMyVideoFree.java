@@ -25,29 +25,30 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
-import cn.qatime.player.activity.InteractCourseDetailActivity;
+import cn.qatime.player.activity.VideoCoursesActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.InteractClassBean;
+import libraryextra.bean.MyVideoClassBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
-public class FragmentVideoBought extends BaseFragment {
+public class FragmentMyVideoFree extends BaseFragment {
     private PullToRefreshListView listView;
-    private java.util.List<InteractClassBean.DataBean> list = new ArrayList<>();
-    private CommonAdapter<InteractClassBean.DataBean> adapter;
+    private java.util.List<MyVideoClassBean.DataBean> list = new ArrayList<>();
+    private CommonAdapter<MyVideoClassBean.DataBean> adapter;
     private int page = 1;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_my_video_bought, container, false);
+        View view = inflater.inflate(R.layout.fragment_my_video_free, container, false);
         initview(view);
         initOver = true;
         return view;
@@ -64,15 +65,15 @@ public class FragmentVideoBought extends BaseFragment {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
 
-        adapter = new CommonAdapter<InteractClassBean.DataBean>(getActivity(), list, R.layout.item_fragment_my_interact_teaching) {
+        adapter = new CommonAdapter<MyVideoClassBean.DataBean>(getActivity(), list, R.layout.item_fragment_my_video_free) {
             @Override
-            public void convert(ViewHolder helper, final InteractClassBean.DataBean item, int position) {
+            public void convert(ViewHolder helper, final MyVideoClassBean.DataBean item, int position) {
 
 
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // TODO: 2017/4/1 跳转互动页面
+                        // TODO: 2017/4/1 跳转视频课
 //                        Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
 //                        intent.putExtra("camera", item.getCamera());
 //                        intent.putExtra("board", item.getBoard());
@@ -81,11 +82,15 @@ public class FragmentVideoBought extends BaseFragment {
 //                        startActivity(intent);
                     }
                 });
-                Glide.with(getActivity()).load(item.getPublicize_url()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
+                Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.subject, item.getSubject());
-                helper.setText(R.id.teacher, "/" + item.getTeachers().get(0).getName() + (item.getTeachers().size() > 1 ? "..." : ""));
-                helper.setText(R.id.progress, getString(R.string.progress, item.getClosed_lessons_count(), item.getLessons_count()));
+                helper.setText(R.id.teacher, "/" + item.getTeacher().getName());
+                if(item.getStatus().equals(Constant.CourseStatus.completed)||item.getStatus().equals(Constant.CourseStatus.finished)){
+                    helper.setText(R.id.progress, getString(R.string.all_class_has_over));
+                }else{
+                    helper.setText(R.id.progress, getString(R.string.progress, item.getClosed_lessons_count(), item.getPreset_lesson_count()));
+                }
                 helper.setText(R.id.grade, item.getGrade());
             }
 
@@ -110,7 +115,7 @@ public class FragmentVideoBought extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), InteractCourseDetailActivity.class);
+                Intent intent = new Intent(getActivity(), VideoCoursesActivity.class);
                 intent.putExtra("id", list.get(position - 1).getId());
                 startActivity(intent);
             }
@@ -135,8 +140,9 @@ public class FragmentVideoBought extends BaseFragment {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(page));
         map.put("per_page", "10");
+        map.put("sell_type", "free");
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/interactive_courses", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/video_courses", map), null,
                 new VolleyListener(getActivity()) {
 
 
@@ -152,13 +158,9 @@ public class FragmentVideoBought extends BaseFragment {
                         listView.onRefreshComplete();
 
                         try {
-                            InteractClassBean data = JsonUtils.objectFromJson(response.toString(), InteractClassBean.class);
-                            if (data != null) {
-                                for (InteractClassBean.DataBean item : data.getData()) {
-                                    if (!"completed".equals(item.getStatus())) {//只显示未结束
-                                        list.add(item);
-                                    }
-                                }
+                            MyVideoClassBean data = JsonUtils.objectFromJson(response.toString(), MyVideoClassBean.class);
+                            if (data != null&&data.getData()!=null) {
+                                        list.addAll(data.getData());
                             }
                             adapter.notifyDataSetChanged();
                         } catch (JsonSyntaxException e) {

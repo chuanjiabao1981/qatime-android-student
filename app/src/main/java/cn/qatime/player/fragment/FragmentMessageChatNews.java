@@ -28,7 +28,6 @@ import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
-import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.netease.nimlib.sdk.team.TeamService;
@@ -54,7 +53,7 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.TutorialClassBean;
+import libraryextra.bean.MyTutorialClassBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -76,7 +75,7 @@ public class FragmentMessageChatNews extends BaseFragment {
     private List<RecentContact> loadedRecents;
     private UserInfoObservable.UserInfoObserver userInfoObserver;
     private UserInfoObservable userInfoObservable;
-//    private TutorialClassBean courses;
+//    private MyTutorialClassBean courses;
 //    private boolean shouldPost = false;//是否需要向messageactivity发推流地址
 //    private String sessionId;
 
@@ -96,11 +95,11 @@ public class FragmentMessageChatNews extends BaseFragment {
                     protected void onSuccess(JSONObject response) {
                         try {
                             Logger.e(response.toString());
-                            TutorialClassBean data = JsonUtils.objectFromJson(response.toString(), TutorialClassBean.class);
+                            MyTutorialClassBean data = JsonUtils.objectFromJson(response.toString(), MyTutorialClassBean.class);
                             if (data != null && data.getData() != null) {
                                 synchronized (items) {
                                     for (MessageListBean item : items) {
-                                        for (TutorialClassBean.Data bean : data.getData()) {
+                                        for (MyTutorialClassBean.Data bean : data.getData()) {
                                             if (item.getContactId().equals(bean.getChat_team_id())) {
                                                 item.setCourseId(bean.getId());
                                                 item.setCourseType("custom");
@@ -136,11 +135,11 @@ public class FragmentMessageChatNews extends BaseFragment {
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-//                        TutorialClassBean data = JsonUtils.objectFromJson(response.toString(), TutorialClassBean.class);
+//                        MyTutorialClassBean data = JsonUtils.objectFromJson(response.toString(), MyTutorialClassBean.class);
 //                        if (data != null && data.getData() != null) {
 //                            synchronized (items) {
 //                                for (MessageListBean item : items) {
-//                                    for (TutorialClassBean.Data bean : data.getData()) {
+//                                    for (MyTutorialClassBean.Data bean : data.getData()) {
 //                                        if (item.getContactId().equals(bean.getChat_team_id())) {
 //                                            item.setCourseId(bean.getId());
 //                                            item.setCourseType("interactive");
@@ -456,7 +455,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                     bean = items.get(index);
 //                    boolean haveData = false;
 //                    if (courses != null && courses.getData() != null) {
-//                        for (TutorialClassBean.Data data : courses.getData()) {
+//                        for (MyTutorialClassBean.Data data : courses.getData()) {
 //                            if (data != null && bean != null) {
 //                                if (data.getChat_team_id().equals(bean.getContactId())) {
 //                                    haveData = true;
@@ -471,7 +470,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                 }
 //                else {
 //                    if (courses != null && courses.getData() != null) {
-//                        for (TutorialClassBean.Data data : courses.getData()) {
+//                        for (MyTutorialClassBean.Data data : courses.getData()) {
 //                            if (data.getChat_team_id().equals(msg.getContactId())) {
 //                                bean.setName(data.getName());
 ////                                bean.setCamera(data.getCamera());
