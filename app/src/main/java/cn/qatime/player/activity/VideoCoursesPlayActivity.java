@@ -60,6 +60,7 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
     private int id;
     private VideoCoursesDetailsBean data;
     private SurfaceHolder holder;
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,7 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
             return;
         }
         id = getIntent().getIntExtra("id", 0);
-        id=3;
+//        id=3;
         initView();
 
         screenSwitchUtils = ScreenSwitchUtils.init(this.getApplicationContext());
@@ -141,7 +142,18 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
 
             @Override
             public void play() {
-                mMediaPlayer.start();
+                if(!StringUtils.isNullOrBlanK(url)){
+                    mMediaPlayer.start();
+                }else{
+//                    播放到进度
+                    String url = "";
+                    if (data.getData().getClosed_lessons_count()==data.getData().getPreset_lesson_count()) {//全部看完,放第一集
+                        url = data.getData().getVideo_lessons().get(0).getVideo().getName_url();
+                    }else{
+                        url = data.getData().getVideo_lessons().get(data.getData().getClosed_lessons_count()).getVideo().getName_url();
+                    }
+                    playCourses(url);
+                }
             }
 
             @Override
@@ -317,16 +329,15 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
         screenSwitchUtils.stop();
     }
 
-    public void playCourses(VideoCoursesDetailsBean.VideoLessonsBean videoLessonsBean) {
-        if (videoLessonsBean != null) {
-            if (!StringUtils.isNullOrBlanK(videoLessonsBean.getVideo().getName_url())) {
-                releaseMediaPlayer();
-                if (isCreated) {
-                    try {
-                        createMedia(videoLessonsBean.getVideo().getName_url());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+    public void playCourses(String url) {
+        if (!StringUtils.isNullOrBlanK(url)) {
+            this.url=url;
+            releaseMediaPlayer();
+            if (isCreated) {
+                try {
+                    createMedia(url);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }

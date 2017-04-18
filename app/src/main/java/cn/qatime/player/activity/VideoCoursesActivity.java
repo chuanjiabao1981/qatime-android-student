@@ -264,16 +264,9 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                 break;
             case R.id.start_study:
                 if (BaseApplication.isLogined()) {
-                    if ("init".equals(data.getData().getStatus()) || "published".equals(data.getData().getStatus())) {
-                        Toast.makeText(this, getString(R.string.published_course_unable_enter) + getString(R.string.study), Toast.LENGTH_SHORT).show();
-                    } else {
-                        intent = new Intent(VideoCoursesActivity.this, NEVideoPlayerActivity.class);
-//                    intent.putExtra("camera", data.getData().getCamera());
-//                    intent.putExtra("board", data.getData().getBoard());
+                        intent = new Intent(VideoCoursesActivity.this, VideoCoursesPlayActivity.class);
                         intent.putExtra("id", data.getData().getId());
-                        intent.putExtra("sessionId", data.getData().getChat_team_id());
                         startActivity(intent);
-                    }
                 } else {
                     intent = new Intent(VideoCoursesActivity.this, LoginActivity2.class);
                     intent.putExtra("activity_action", Constant.LoginAction.toRemedialClassDetail);

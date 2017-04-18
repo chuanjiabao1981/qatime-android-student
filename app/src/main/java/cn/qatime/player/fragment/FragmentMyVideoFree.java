@@ -26,6 +26,7 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.VideoCoursesActivity;
+import cn.qatime.player.activity.VideoCoursesPlayActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.utils.Constant;
@@ -73,13 +74,9 @@ public class FragmentMyVideoFree extends BaseFragment {
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // TODO: 2017/4/1 跳转视频课
-//                        Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
-//                        intent.putExtra("camera", item.getCamera());
-//                        intent.putExtra("board", item.getBoard());
-//                        intent.putExtra("id", item.getId());
-//                        intent.putExtra("sessionId", item.getChat_team_id());
-//                        startActivity(intent);
+                        Intent intent = new Intent(getActivity(),VideoCoursesPlayActivity.class);
+                        intent.putExtra("id", item.getId());
+                        startActivity(intent);
                     }
                 });
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
