@@ -70,7 +70,7 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
             return;
         }
         id = getIntent().getIntExtra("id", 0);
-        id=3;
+        id = 3;
         initView();
 
         screenSwitchUtils = ScreenSwitchUtils.init(this.getApplicationContext());
@@ -265,6 +265,7 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
     public void onPrepared(MediaPlayer mp) {
         isPrepared = true;
         mMediaPlayer.start();
+        floatFragment.setPlayOrPause(mp.isPlaying());
     }
 
     @Override
