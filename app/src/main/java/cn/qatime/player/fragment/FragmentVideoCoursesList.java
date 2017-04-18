@@ -18,7 +18,6 @@ import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.VideoCoursesDetailsBean;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.utils.DateUtils;
 
 /**
  * @author lungtify
@@ -69,7 +68,7 @@ public class FragmentVideoCoursesList extends BaseFragment {
                     return;
                 }
                 playingData = list.get(position);
-                context.playCourses(playingData);
+                context.playCourses(playingData.getVideo().getName_url());
             }
         });
     }

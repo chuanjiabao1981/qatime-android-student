@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
+import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.bean.VideoCoursesDetailsBean;
 import cn.qatime.player.fragment.FragmentVideoCoursesClassInfo;
 import cn.qatime.player.fragment.FragmentVideoCoursesClassList;
@@ -262,16 +264,9 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                 break;
             case R.id.start_study:
                 if (BaseApplication.isLogined()) {
-                    if ("init".equals(data.getData().getStatus()) || "published".equals(data.getData().getStatus())) {
-                        Toast.makeText(this, getString(R.string.published_course_unable_enter) + getString(R.string.study), Toast.LENGTH_SHORT).show();
-                    } else {
-                        intent = new Intent(VideoCoursesActivity.this, NEVideoPlayerActivity.class);
-//                    intent.putExtra("camera", data.getData().getCamera());
-//                    intent.putExtra("board", data.getData().getBoard());
+                        intent = new Intent(VideoCoursesActivity.this, VideoCoursesPlayActivity.class);
                         intent.putExtra("id", data.getData().getId());
-                        intent.putExtra("sessionId", data.getData().getChat_team_id());
                         startActivity(intent);
-                    }
                 } else {
                     intent = new Intent(VideoCoursesActivity.this, LoginActivity2.class);
                     intent.putExtra("activity_action", Constant.LoginAction.toRemedialClassDetail);
@@ -335,6 +330,15 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
 
         intent.putExtra("data", bean);
         startActivity(intent);
+    }
+
+    @Subscribe
+    public void onEvent(PayResultState code) {
+//        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
+//
+//            finish();
+//        }
+        finish();
     }
 
     private void joinAudition() {

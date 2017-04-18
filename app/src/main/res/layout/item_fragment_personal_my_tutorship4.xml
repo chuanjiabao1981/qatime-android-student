@@ -109,7 +109,7 @@
                             android:id="@+id/class_over"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="全部课程已完成"
+                            android:text="@string/all_class_has_over"
                             android:textColor="#666"
                             android:textSize="12sp" />
                     </LinearLayout>

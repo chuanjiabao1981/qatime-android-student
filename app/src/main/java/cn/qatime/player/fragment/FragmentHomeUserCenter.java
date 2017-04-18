@@ -21,6 +21,7 @@ import cn.qatime.player.activity.PersonalInformationActivity;
 import cn.qatime.player.activity.PersonalMyInteractActivity;
 import cn.qatime.player.activity.PersonalMyOrderActivity;
 import cn.qatime.player.activity.PersonalMyTutorshipActivity;
+import cn.qatime.player.activity.PersonalMyVideoActivity;
 import cn.qatime.player.activity.PersonalMyWalletActivity;
 import cn.qatime.player.activity.SecurityManagerActivity;
 import cn.qatime.player.activity.SystemSettingActivity;
@@ -39,6 +40,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
     private LinearLayout wallet;
     private LinearLayout course;
     private LinearLayout myInteract;
+    private LinearLayout myVideo;
     private LinearLayout security;
     private LinearLayout setting;
     private TextView newVersion;
@@ -60,6 +62,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
         wallet.setOnClickListener(this);
         course.setOnClickListener(this);
         myInteract.setOnClickListener(this);
+        myVideo.setOnClickListener(this);
         information.setOnClickListener(this);
 
         security.setOnClickListener(this);
@@ -107,6 +110,10 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
                 intent = new Intent(getActivity(), PersonalMyInteractActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.my_video:
+                intent = new Intent(getActivity(), PersonalMyVideoActivity.class);
+                startActivity(intent);
+                break;
             case R.id.security:// 安全管理
                 intent = new Intent(getActivity(), SecurityManagerActivity.class);
                 startActivity(intent);
@@ -129,7 +136,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
 
     @Subscribe
     public void onEvent(BusEvent event) {
-        if (BusEvent.ON_REFRESH_CASH_ACCOUNT==event)
+        if (BusEvent.ON_REFRESH_CASH_ACCOUNT == event)
             initData();
     }
 
@@ -142,6 +149,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
         wallet = (LinearLayout) view.findViewById(R.id.my_wallet);
         course = (LinearLayout) view.findViewById(R.id.my_course);
         myInteract = (LinearLayout) view.findViewById(R.id.my_interact);
+        myVideo = (LinearLayout) view.findViewById(R.id.my_video);
         security = (LinearLayout) view.findViewById(R.id.security);
         setting = (LinearLayout) view.findViewById(R.id.setting);
         newVersion = (TextView) view.findViewById(R.id.new_version);

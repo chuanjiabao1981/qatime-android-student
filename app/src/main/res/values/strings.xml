@@ -634,4 +634,6 @@
     <string name="interact_courses">一对一</string>
     <string name="video_courses">视频课</string>
     <string name="live_courses">直播课</string>
+    <string name="my_video">我的视频课</string>
+    <string name="all_class_has_over">全部课程已完成</string>
 </resources>
