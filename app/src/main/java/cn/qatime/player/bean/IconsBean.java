@@ -1,6 +1,8 @@
 package cn.qatime.player.bean;
 
-public class IconsBean {
+import java.io.Serializable;
+
+public class IconsBean implements Serializable{
     /**
      * free_taste : false
      * coupon_free : true

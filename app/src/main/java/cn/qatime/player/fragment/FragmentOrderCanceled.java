@@ -28,6 +28,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.activity.InteractCourseDetailActivity;
 import cn.qatime.player.activity.PersonalMyOrderCanceledDetailActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
+import cn.qatime.player.activity.VideoCoursesActivity;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.MyOrderBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
@@ -73,9 +74,9 @@ public class FragmentOrderCanceled extends BaseFragment {
                 StringBuilder sp = new StringBuilder();
                 if("LiveStudio::Course".equals(item.getProduct_type())){
                     sp.append("直播课/");
-                    sp.append(item.getProductLIveCourseBean().getGrade()).append(item.getProductLIveCourseBean().getSubject()).append("/共").append(item.getProductLIveCourseBean().getPreset_lesson_count())
-                            .append("课/").append(item.getProductLIveCourseBean().getTeacher_name());
-                    helper.setText(R.id.classname, item.getProductLIveCourseBean().getName())
+                    sp.append(item.getProduct().getGrade()).append(item.getProduct().getSubject()).append("/共").append(item.getProduct().getPreset_lesson_count())
+                            .append("课/").append(item.getProduct().getTeacher_name());
+                    helper.setText(R.id.classname, item.getProduct().getName())
                             .setText(R.id.describe, sp.toString());
                 }else if("LiveStudio::InteractiveCourse".equals(item.getProduct_type())){
                     sp.append("一对一/");
@@ -85,6 +86,14 @@ public class FragmentOrderCanceled extends BaseFragment {
                         sp.append("...");
                     }
                     helper.setText(R.id.classname, item.getProduct_interactive_course().getName())
+                            .setText(R.id.describe, sp.toString());
+                }else if("LiveStudio::VideoCourse".equals(item.getProduct_type())){
+                    sp.append("视频课/");
+                    sp.append(item.getProduct_video_course().getGrade())
+                            .append(item.getProduct_video_course().getSubject())
+                            .append("/共").append(item.getProduct_video_course().getPreset_lesson_count()).append("课")
+                            .append("/").append(item.getProduct_video_course().getTeacher().getName());
+                    helper.setText(R.id.classname, item.getProduct_video_course().getName())
                             .setText(R.id.describe, sp.toString());
                 }
 
@@ -110,12 +119,17 @@ public class FragmentOrderCanceled extends BaseFragment {
                             public void onClick(View v) {
                                 if("LiveStudio::Course".equals(item.getProduct_type())){
                                     Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                                    intent.putExtra("id", item.getProductLIveCourseBean().getId());
+                                    intent.putExtra("id", item.getProduct().getId());
                                     intent.putExtra("page", 0);
                                     startActivity(intent);
                                 }else if("LiveStudio::InteractiveCourse".equals(item.getProduct_type())){
                                     Intent intent = new Intent(getActivity(), InteractCourseDetailActivity.class);
-                                    intent.putExtra("id", item.getProductLIveCourseBean().getId());
+                                    intent.putExtra("id", item.getProduct_interactive_course().getId());
+                                    intent.putExtra("page", 0);
+                                    startActivity(intent);
+                                }else if("LiveStudio::VideoCourse".equals(item.getProduct_type())){
+                                    Intent intent = new Intent(getActivity(), VideoCoursesActivity.class);
+                                    intent.putExtra("id", item.getProduct_video_course().getId());
                                     intent.putExtra("page", 0);
                                     startActivity(intent);
                                 }

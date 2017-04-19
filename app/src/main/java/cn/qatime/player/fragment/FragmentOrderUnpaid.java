@@ -84,11 +84,11 @@ public class FragmentOrderUnpaid extends BaseFragment {
                 StringBuilder sp = new StringBuilder();
                 if("LiveStudio::Course".equals(item.getProduct_type())){
                     sp.append("直播课/");
-                    sp.append(item.getProductLIveCourseBean().getGrade())
-                            .append(item.getProductLIveCourseBean().getSubject())
-                            .append("/共").append(item.getProductLIveCourseBean().getPreset_lesson_count()).append("课")
-                            .append("/").append(item.getProductLIveCourseBean().getTeacher_name());
-                    helper.setText(R.id.classname, item.getProductLIveCourseBean().getName())
+                    sp.append(item.getProduct().getGrade())
+                            .append(item.getProduct().getSubject())
+                            .append("/共").append(item.getProduct().getPreset_lesson_count()).append("课")
+                            .append("/").append(item.getProduct().getTeacher_name());
+                    helper.setText(R.id.classname, item.getProduct().getName())
                             .setText(R.id.describe, sp.toString());
                 }else if("LiveStudio::InteractiveCourse".equals(item.getProduct_type())){
                     sp.append("一对一/");
@@ -102,16 +102,13 @@ public class FragmentOrderUnpaid extends BaseFragment {
                     helper.setText(R.id.classname, item.getProduct_interactive_course().getName())
                             .setText(R.id.describe, sp.toString());
                 }else if("LiveStudio::VideoCourse".equals(item.getProduct_type())){
-//                    sp.append("视频课/");
-//                    sp.append(item.getProduct_interactive_course().getGrade())
-//                            .append(item.getProduct_interactive_course().getSubject())
-//                            .append("/共").append(item.getProduct_interactive_course().getLessons_count()).append("课")
-//                            .append("/").append(item.getProduct_interactive_course().getTeachers().get(0).getName());
-//                    if(item.getProduct_interactive_course().getTeachers().size()>1){
-//                        sp.append("...");
-//                    }
-//                    helper.setText(R.id.classname, item.getProduct_interactive_course().getName())
-//                            .setText(R.id.describe, sp.toString());
+                    sp.append("视频课/");
+                    sp.append(item.getProduct_video_course().getGrade())
+                            .append(item.getProduct_video_course().getSubject())
+                            .append("/共").append(item.getProduct_video_course().getPreset_lesson_count()).append("课")
+                            .append("/").append(item.getProduct_video_course().getTeacher().getName());
+                    helper.setText(R.id.classname, item.getProduct_video_course().getName())
+                            .setText(R.id.describe, sp.toString());
                 }
 
 

@@ -1,5 +1,7 @@
 package cn.qatime.player.bean;
 
+import java.io.Serializable;
+
 import libraryextra.bean.TeacherBean;
 
 /**
@@ -7,7 +9,7 @@ import libraryextra.bean.TeacherBean;
  * @date 2017/4/19 13:20
  * @Description:
  */
-public class ProductVideoCourseBean {
+public class ProductVideoCourseBean implements Serializable{
 
     /**
      * id : 3
@@ -56,8 +58,8 @@ public class ProductVideoCourseBean {
     private int taste_count;
     private int completed_lessons_count;
     private int closed_lessons_count;
-    private Object objective;
-    private Object suit_crowd;
+    private String objective;
+    private String suit_crowd;
     private String publicize;
     private String sell_type;
     private int total_duration;
@@ -215,19 +217,19 @@ public class ProductVideoCourseBean {
         this.closed_lessons_count = closed_lessons_count;
     }
 
-    public Object getObjective() {
+    public String getObjective() {
         return objective;
     }
 
-    public void setObjective(Object objective) {
+    public void setObjective(String objective) {
         this.objective = objective;
     }
 
-    public Object getSuit_crowd() {
+    public String getSuit_crowd() {
         return suit_crowd;
     }
 
-    public void setSuit_crowd(Object suit_crowd) {
+    public void setSuit_crowd(String suit_crowd) {
         this.suit_crowd = suit_crowd;
     }
 

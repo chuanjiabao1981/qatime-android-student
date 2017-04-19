@@ -75,28 +75,28 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
     private void setValue() {
         //商品信息
         if ("LiveStudio::Course".equals(data.getProduct_type())) {
-            classid = data.getProductLIveCourseBean().getId();
-            if (StringUtils.isNullOrBlanK(data.getProductLIveCourseBean().getName())) {
+            classid = data.getProduct().getId();
+            if (StringUtils.isNullOrBlanK(data.getProduct().getName())) {
                 name.setText(getResourceString(R.string.cancel_order_name));
             } else {
-                name.setText(data.getProductLIveCourseBean().getName());
+                name.setText(data.getProduct().getName());
             }
-            if (StringUtils.isNullOrBlanK(data.getProductLIveCourseBean().getGrade())) {
+            if (StringUtils.isNullOrBlanK(data.getProduct().getGrade())) {
                 grade.setText("直播课/" +getResourceString(R.string.grade));
             } else {
-                grade.setText("直播课/" + data.getProductLIveCourseBean().getGrade());
+                grade.setText("直播课/" + data.getProduct().getGrade());
             }
-            if (StringUtils.isNullOrBlanK(data.getProductLIveCourseBean().getSubject())) {
+            if (StringUtils.isNullOrBlanK(data.getProduct().getSubject())) {
                 subject.setText(getResourceString(R.string.subject));
             } else {
-                subject.setText(data.getProductLIveCourseBean().getSubject());
+                subject.setText(data.getProduct().getSubject());
             }
-            if (StringUtils.isNullOrBlanK(data.getProductLIveCourseBean().getTeacher_name())) {
+            if (StringUtils.isNullOrBlanK(data.getProduct().getTeacher_name())) {
                 teacher.setText(getResourceString(R.string.cancel_order_teacher));
             } else {
-                teacher.setText(data.getProductLIveCourseBean().getTeacher_name());
+                teacher.setText(data.getProduct().getTeacher_name());
             }
-            progress.setText(String.format(getResourceString(R.string.lesson_count), data.getProductLIveCourseBean().getPreset_lesson_count()));
+            progress.setText(String.format(getResourceString(R.string.lesson_count), data.getProduct().getPreset_lesson_count()));
 
         } else if ("LiveStudio::InteractiveCourse".equals(data.getProduct_type())) {
             classid = data.getProduct_interactive_course().getId();
@@ -126,6 +126,29 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
                 teacher.setText(data.getProduct_interactive_course().getTeachers().get(0).getName());
             }
             progress.setText(String.format(getResourceString(R.string.lesson_count), data.getProduct_interactive_course().getLessons_count()));
+        }else if ("LiveStudio::VideoCourse".equals(data.getProduct_type())) {
+            classid = data.getProduct_video_course().getId();
+            if (StringUtils.isNullOrBlanK(data.getProduct_video_course().getName())) {
+                name.setText(getResourceString(R.string.cancel_order_name));
+            } else {
+                name.setText(data.getProduct_video_course().getName());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct_video_course().getGrade())) {
+                grade.setText("视频课/" +getResourceString(R.string.grade));
+            } else {
+                grade.setText("视频课/" + data.getProduct_video_course().getGrade());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct_video_course().getSubject())) {
+                subject.setText(getResourceString(R.string.subject));
+            } else {
+                subject.setText(data.getProduct_video_course().getSubject());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct_video_course().getTeacher().getName())) {
+                teacher.setText(getResourceString(R.string.cancel_order_teacher));
+            } else {
+                teacher.setText(data.getProduct_video_course().getTeacher().getName());
+            }
+            progress.setText(String.format(getResourceString(R.string.lesson_count), data.getProduct_video_course().getPreset_lesson_count()));
         }
 
 

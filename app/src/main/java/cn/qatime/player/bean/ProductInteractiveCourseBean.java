@@ -1,11 +1,12 @@
 package cn.qatime.player.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 import libraryextra.bean.TeacherBean;
 
 
-public class ProductInteractiveCourseBean {
+public class ProductInteractiveCourseBean implements Serializable {
     /**
      * chat_team_id : 28054274
      * closed_lessons_count : 0
