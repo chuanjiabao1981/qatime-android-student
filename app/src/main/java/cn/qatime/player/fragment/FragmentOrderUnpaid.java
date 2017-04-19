@@ -102,16 +102,13 @@ public class FragmentOrderUnpaid extends BaseFragment {
                     helper.setText(R.id.classname, item.getProduct_interactive_course().getName())
                             .setText(R.id.describe, sp.toString());
                 }else if("LiveStudio::VideoCourse".equals(item.getProduct_type())){
-//                    sp.append("视频课/");
-//                    sp.append(item.getProduct_interactive_course().getGrade())
-//                            .append(item.getProduct_interactive_course().getSubject())
-//                            .append("/共").append(item.getProduct_interactive_course().getLessons_count()).append("课")
-//                            .append("/").append(item.getProduct_interactive_course().getTeachers().get(0).getName());
-//                    if(item.getProduct_interactive_course().getTeachers().size()>1){
-//                        sp.append("...");
-//                    }
-//                    helper.setText(R.id.classname, item.getProduct_interactive_course().getName())
-//                            .setText(R.id.describe, sp.toString());
+                    sp.append("视频课/");
+                    sp.append(item.getProduct_video_course().getGrade())
+                            .append(item.getProduct_video_course().getSubject())
+                            .append("/共").append(item.getProduct_video_course().getPreset_lesson_count()).append("课")
+                            .append("/").append(item.getProduct_video_course().getTeacher().getName());
+                    helper.setText(R.id.classname, item.getProduct_video_course().getName())
+                            .setText(R.id.describe, sp.toString());
                 }
 
 

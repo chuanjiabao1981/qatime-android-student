@@ -53,7 +53,7 @@ public class RechargeRecordBean {
         private String source;
         private String created_at;
         private String updated_at;
-        private Object pay_at;
+        private String pay_at;
 
         public String getId() {
             return id;
@@ -111,11 +111,11 @@ public class RechargeRecordBean {
             this.updated_at = updated_at;
         }
 
-        public Object getPay_at() {
+        public String getPay_at() {
             return pay_at;
         }
 
-        public void setPay_at(Object pay_at) {
+        public void setPay_at(String pay_at) {
             this.pay_at = pay_at;
         }
 

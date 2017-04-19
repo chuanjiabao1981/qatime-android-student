@@ -38,6 +38,7 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.InteractCourseDetailBean;
 import libraryextra.bean.OrderPayBean;
+import libraryextra.bean.TeacherBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -280,7 +281,7 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
         bean.subject = data.getData().getSubject();
         bean.grade = data.getData().getGrade();
         bean.classnumber = data.getData().getLessons_count();
-        List<InteractCourseDetailBean.DataBean.TeachersBean> teachers = data.getData().getTeachers();
+        List<TeacherBean> teachers = data.getData().getTeachers();
 //        StringBuffer teacherNames = new StringBuffer();
 //        for (int i = 0; i < teachers.size(); i++) {
 //            teacherNames.append(teachers.get(0).getName());

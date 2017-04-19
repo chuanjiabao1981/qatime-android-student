@@ -34,6 +34,7 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
+import libraryextra.bean.TeacherBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -197,7 +198,7 @@ public class FragmentFilterClassInteract extends BaseFragment {
             @Override
             public void convert(ViewHolder holder, FilterInteractCourseBean.DataBean item, int position) {
                 Glide.with(getActivity()).load(item.getPublicize_url()).crossFade().placeholder(R.mipmap.photo).into((ImageView) holder.getView(R.id.image));
-                List<FilterInteractCourseBean.DataBean.TeachersBean> teachers = item.getTeachers();
+                List<TeacherBean> teachers = item.getTeachers();
                 StringBuffer teacherNames = new StringBuffer();
                 for (int i = 0; i < teachers.size(); i++) {
                     teacherNames.append(teachers.get(0).getName());

@@ -25,6 +25,7 @@ import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.InteractCourseDetailBean;
 import libraryextra.bean.SchoolBean;
+import libraryextra.bean.TeacherBean;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
@@ -33,8 +34,8 @@ import libraryextra.utils.StringUtils;
 public class FragmentInteractDetailTeachersInfo extends BaseFragment {
 
     private ListView listView;
-    private CommonAdapter<InteractCourseDetailBean.DataBean.TeachersBean> adapter;
-    private List<InteractCourseDetailBean.DataBean.TeachersBean> list;
+    private CommonAdapter<TeacherBean> adapter;
+    private List<TeacherBean> list;
 
     @Nullable
     @Override
@@ -49,10 +50,10 @@ public class FragmentInteractDetailTeachersInfo extends BaseFragment {
         listView = (ListView)view.findViewById(R.id.id_stickynavlayout_innerscrollview);
         listView.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
         list = new ArrayList<>();
-        adapter = new CommonAdapter<InteractCourseDetailBean.DataBean.TeachersBean>(getActivity(), list, R.layout.item_course_teacher_info) {
+        adapter = new CommonAdapter<TeacherBean>(getActivity(), list, R.layout.item_course_teacher_info) {
 
             @Override
-            public void convert(ViewHolder holder, InteractCourseDetailBean.DataBean.TeachersBean item, final int position) {
+            public void convert(ViewHolder holder, TeacherBean item, final int position) {
                 if (item!=null) {
                     TextView name =holder.getView(R.id.name);
                     ImageView image =holder.getView(R.id.image);

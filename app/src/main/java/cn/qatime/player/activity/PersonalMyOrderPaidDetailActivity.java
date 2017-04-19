@@ -121,6 +121,29 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
                 teacher.setText(data.getProduct_interactive_course().getTeachers().get(0).getName());
             }
             progress.setText(String.format(getString(R.string.lesson_count),data.getProduct_interactive_course().getLessons_count()));
+        }else if("LiveStudio::VideoCourse".equals(data.getProduct_type())){
+            classid = data.getProduct_video_course().getId();
+            if (StringUtils.isNullOrBlanK(data.getProduct_video_course().getName())) {
+                name.setText(getResourceString(R.string.cancel_order_name));
+            } else {
+                name.setText(data.getProduct_video_course().getName());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct_video_course().getGrade())) {
+                grade.setText("视频课/"+getResourceString(R.string.grade));
+            } else {
+                grade.setText("视频课/"+data.getProduct_video_course().getGrade());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct_video_course().getSubject())) {
+                subject.setText(getResourceString(R.string.subject));
+            } else {
+                subject.setText(data.getProduct_video_course().getSubject());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct_video_course().getTeacher().getName())) {
+                teacher.setText(getResourceString(R.string.cancel_order_teacher));
+            } else {
+                teacher.setText(data.getProduct_video_course().getTeacher().getName());
+            }
+            progress.setText(String.format(getString(R.string.lesson_count),data.getProduct_video_course().getPreset_lesson_count()));
         }
 
         ordernumber.setText(data.getId());
@@ -232,6 +255,10 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
                             intent.putExtra("name", data.getProduct_interactive_course().getName());
                             intent.putExtra("preset_lesson_count", data.getProduct_interactive_course().getLessons_count());
                             intent.putExtra("closed_lessons_count", data.getProduct_interactive_course().getClosed_lessons_count());
+                        }else if("LiveStudio::VideoCourse".equals(data.getProduct_type())){
+                            intent.putExtra("name", data.getProduct_video_course().getName());
+                            intent.putExtra("preset_lesson_count", data.getProduct_video_course().getPreset_lesson_count());
+                            intent.putExtra("closed_lessons_count", data.getProduct_video_course().getClosed_lessons_count());
                         }
 
                         startActivityForResult(intent, Constant.REQUEST);

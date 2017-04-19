@@ -31,6 +31,7 @@ import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.view.FlowLayout;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
+import libraryextra.bean.Lessons;
 import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.bean.SchoolBean;
 import libraryextra.utils.FileUtil;
@@ -56,9 +57,9 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
     private ImageView image;
     private ListViewForScrollView list;
     private RemedialClassDetailBean.Data data;
-    private CommonAdapter<RemedialClassDetailBean.Lessons> adapter;
+    private CommonAdapter<Lessons> adapter;
 
-    private List<RemedialClassDetailBean.Lessons> classList = new ArrayList<>();
+    private List<Lessons> classList = new ArrayList<>();
     private SimpleDateFormat parse1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private SimpleDateFormat parse2 = new SimpleDateFormat("yyyy-MM-dd");
     private Handler hd = new Handler();
@@ -138,10 +139,10 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
 
     private void initList() {
         list.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
-        adapter = new CommonAdapter<RemedialClassDetailBean.Lessons>(getActivity(), classList, R.layout.item_fragment_nevideo_player33) {
+        adapter = new CommonAdapter<Lessons>(getActivity(), classList, R.layout.item_fragment_nevideo_player33) {
 
             @Override
-            public void convert(ViewHolder holder, RemedialClassDetailBean.Lessons item, int position) {
+            public void convert(ViewHolder holder, Lessons item, int position) {
                 holder.setText(R.id.name, item.getName());
                 holder.setText(R.id.live_time, item.getLive_time());
                 if (item.getStatus().equals("missed")) {
@@ -184,7 +185,7 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                RemedialClassDetailBean.Lessons item = classList.get(position);
+                Lessons item = classList.get(position);
                 if (isFinished(item)) {
                     if (data.getIs_bought()) {
                         if (!item.isReplayable()) {
@@ -205,7 +206,7 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
         });
     }
 
-    private boolean isFinished(RemedialClassDetailBean.Lessons item) {
+    private boolean isFinished(Lessons item) {
         return item.getStatus().equals("closed") || item.getStatus().equals("finished") || item.getStatus().equals("billing") || item.getStatus().equals("completed");
     }
 

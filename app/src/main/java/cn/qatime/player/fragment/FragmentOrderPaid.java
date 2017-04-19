@@ -96,6 +96,14 @@ public class FragmentOrderPaid extends BaseFragment {
                     }
                     helper.setText(R.id.classname, item.getProduct_interactive_course().getName())
                             .setText(R.id.describe, sp.toString());
+                }else if("LiveStudio::VideoCourse".equals(item.getProduct_type())){
+                    sp.append("视频课/");
+                    sp.append(item.getProduct_video_course().getGrade())
+                            .append(item.getProduct_video_course().getSubject())
+                            .append("/共").append(item.getProduct_video_course().getPreset_lesson_count()).append("课")
+                            .append("/").append(item.getProduct_video_course().getTeacher().getName());
+                    helper.setText(R.id.classname, item.getProduct_video_course().getName())
+                            .setText(R.id.describe, sp.toString());
                 }
 
 
@@ -242,6 +250,10 @@ public class FragmentOrderPaid extends BaseFragment {
                             intent.putExtra("name",item.getProduct_interactive_course().getName());
                             intent.putExtra("preset_lesson_count",item.getProduct_interactive_course().getLessons_count());
                             intent.putExtra("closed_lessons_count",item.getProduct_interactive_course().getClosed_lessons_count());
+                        }else if("LiveStudio::VideoCourse".equals(item.getProduct_type())){
+                            intent.putExtra("name",item.getProduct_video_course().getName());
+                            intent.putExtra("preset_lesson_count",item.getProduct_video_course().getPreset_lesson_count());
+                            intent.putExtra("closed_lessons_count",item.getProduct_video_course().getClosed_lessons_count());
                         }
 
                         startActivityForResult(intent, Constant.REQUEST);

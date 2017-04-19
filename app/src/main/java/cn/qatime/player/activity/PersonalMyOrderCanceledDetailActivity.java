@@ -37,6 +37,7 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
     DecimalFormat df = new DecimalFormat("#.00");
     SimpleDateFormat parseISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
     SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private MyOrderBean.DataBean data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
         setTitles(getResources().getString(R.string.detail_of_order));
         initView();
 
-        MyOrderBean.DataBean data = (MyOrderBean.DataBean) getIntent().getSerializableExtra("data");
+        data = (MyOrderBean.DataBean) getIntent().getSerializableExtra("data");
 
         if (data != null) {
             setValue(data);
@@ -105,6 +106,29 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
                 teacher.setText(data.getProduct_interactive_course().getTeachers().get(0).getName());
             }
             progress.setText(String.format(getString(R.string.lesson_count),data.getProduct_interactive_course().getLessons_count()));
+        }else if("LiveStudio::VideoCourse".equals(data.getProduct_type())){
+            classid = data.getProduct_video_course().getId();
+            if (StringUtils.isNullOrBlanK(data.getProduct_video_course().getName())) {
+                name.setText(getResourceString(R.string.cancel_order_name));
+            } else {
+                name.setText(data.getProduct_video_course().getName());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct_video_course().getGrade())) {
+                grade.setText("视频课/"+getResourceString(R.string.grade));
+            } else {
+                grade.setText("视频课/"+data.getProduct_video_course().getGrade());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct_video_course().getSubject())) {
+                subject.setText(getResourceString(R.string.subject));
+            } else {
+                subject.setText(data.getProduct_video_course().getSubject());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct_video_course().getTeacher().getName())) {
+                teacher.setText(getResourceString(R.string.cancel_order_teacher));
+            } else {
+                teacher.setText(data.getProduct_video_course().getTeacher().getName());
+            }
+            progress.setText(String.format(getString(R.string.lesson_count),data.getProduct_video_course().getPreset_lesson_count()));
         }
         ordernumber.setText(getIntent().getStringExtra("order_id"));
         if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("created_at"))) {
@@ -149,7 +173,14 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
         listitem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PersonalMyOrderCanceledDetailActivity.this, RemedialClassDetailActivity.class);
+                Intent intent = new Intent();
+                if("LiveStudio::Course".equals(data.getProduct_type())){
+                    intent.setClass(PersonalMyOrderCanceledDetailActivity.this, RemedialClassDetailActivity.class);
+                }else if("LiveStudio::InteractiveCourse".equals(data.getProduct_type())){
+                    intent.setClass(PersonalMyOrderCanceledDetailActivity.this, InteractCourseDetailActivity.class);
+                }else if("LiveStudio::VideoCourse".equals(data.getProduct_type())){
+                    intent.setClass(PersonalMyOrderCanceledDetailActivity.this, VideoCoursesActivity.class);
+                }
                 intent.putExtra("id", classid);
                 intent.putExtra("page", 0);
                 startActivity(intent);
