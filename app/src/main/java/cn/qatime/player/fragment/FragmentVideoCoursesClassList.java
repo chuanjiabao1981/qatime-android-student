@@ -10,16 +10,13 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.VideoCoursesDetailsBean;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.utils.DateUtils;
-
-import static cn.qatime.player.R.id.status;
+import libraryextra.bean.VideoLessonsBean;
 
 /**
  * @author lungtify
@@ -28,8 +25,8 @@ import static cn.qatime.player.R.id.status;
  */
 
 public class FragmentVideoCoursesClassList extends BaseFragment {
-    private List<VideoCoursesDetailsBean.VideoLessonsBean> list = new ArrayList<>();
-    private CommonAdapter<VideoCoursesDetailsBean.VideoLessonsBean> adapter;
+    private List<VideoLessonsBean> list = new ArrayList<>();
+    private CommonAdapter<VideoLessonsBean> adapter;
 
 //    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
 //    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -49,10 +46,10 @@ public class FragmentVideoCoursesClassList extends BaseFragment {
     private void initView() {
         ListView listView = (ListView) findViewById(R.id.id_stickynavlayout_innerscrollview);
         listView.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
-        adapter = new CommonAdapter<VideoCoursesDetailsBean.VideoLessonsBean>(getActivity(), list, R.layout.item_fragment_video_courses_class_list) {
+        adapter = new CommonAdapter<VideoLessonsBean>(getActivity(), list, R.layout.item_fragment_video_courses_class_list) {
 
             @Override
-            public void convert(ViewHolder holder, VideoCoursesDetailsBean.VideoLessonsBean item, int position) {
+            public void convert(ViewHolder holder, VideoLessonsBean item, int position) {
                 holder.setText(R.id.name, item.getName());
 //                if (item.getStatus().equals("missed")) {
 //                    holder.setText(status, getResourceString(R.string.class_missed));
@@ -103,7 +100,7 @@ public class FragmentVideoCoursesClassList extends BaseFragment {
 //        });
     }
 
-    private boolean isFinished(VideoCoursesDetailsBean.VideoLessonsBean item) {
+    private boolean isFinished(VideoLessonsBean item) {
         return item.getStatus().equals("closed") || item.getStatus().equals("finished") || item.getStatus().equals("billing") || item.getStatus().equals("completed");
     }
 

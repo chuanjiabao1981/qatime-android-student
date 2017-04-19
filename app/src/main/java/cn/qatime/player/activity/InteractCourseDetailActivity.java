@@ -23,7 +23,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +38,7 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.InteractCourseDetailBean;
 import libraryextra.bean.OrderPayBean;
+import libraryextra.bean.TeacherBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -56,7 +56,6 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
     private ViewPager mViewPager;
     private int pager = 0;
     TextView price;
-    //    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     DecimalFormat df = new DecimalFormat("#.00");
     private AlertDialog alertDialog;
     private Button startStudy;
@@ -286,7 +285,7 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
         bean.subject = data.getData().getSubject();
         bean.grade = data.getData().getGrade();
         bean.classnumber = data.getData().getLessons_count();
-        List<InteractCourseDetailBean.DataBean.TeachersBean> teachers = data.getData().getTeachers();
+        List<TeacherBean> teachers = data.getData().getTeachers();
 //        StringBuffer teacherNames = new StringBuffer();
 //        for (int i = 0; i < teachers.size(); i++) {
 //            teacherNames.append(teachers.get(0).getName());
