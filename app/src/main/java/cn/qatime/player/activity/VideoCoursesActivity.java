@@ -2,6 +2,7 @@ package cn.qatime.player.activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -66,6 +67,8 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
     private LinearLayout startStudyView;
     private Button startStudy;
     private AlertDialog alertDialog;
+    private TextView freeTaste;
+    private TextView joinCheap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +143,14 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                                 }
                             }
 
+                            if (data.getData().getIcons() != null) {
+                                if (!data.getData().getIcons().isFree_taste()) {
+                                    freeTaste.setVisibility(View.GONE);
+                                }
+                                if (!data.getData().getIcons().isJoin_cheap()) {
+                                    joinCheap.setVisibility(View.GONE);
+                                }
+                            }
                             ((FragmentVideoCoursesClassInfo) fragBaseFragments.get(0)).setData(data);
                             ((FragmentVideoCoursesTeacherInfo) fragBaseFragments.get(1)).setData(data);
                             ((FragmentVideoCoursesClassList) fragBaseFragments.get(2)).setData(data);
@@ -165,6 +176,8 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
     }
 
     private void initView() {
+        freeTaste = (TextView) findViewById(R.id.free_taste);
+        joinCheap = (TextView) findViewById(R.id.join_cheap);
         image = (ImageView) findViewById(R.id.image);
         name = (TextView) findViewById(R.id.name);
         price = (TextView) findViewById(R.id.price);
@@ -264,9 +277,9 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                 break;
             case R.id.start_study:
                 if (BaseApplication.isLogined()) {
-                        intent = new Intent(VideoCoursesActivity.this, VideoCoursesPlayActivity.class);
-                        intent.putExtra("id", data.getData().getId());
-                        startActivity(intent);
+                    intent = new Intent(VideoCoursesActivity.this, VideoCoursesPlayActivity.class);
+                    intent.putExtra("id", data.getData().getId());
+                    startActivity(intent);
                 } else {
                     intent = new Intent(VideoCoursesActivity.this, LoginActivity2.class);
                     intent.putExtra("activity_action", Constant.LoginAction.toRemedialClassDetail);

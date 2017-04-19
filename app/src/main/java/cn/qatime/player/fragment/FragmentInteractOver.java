@@ -48,14 +48,14 @@ public class FragmentInteractOver extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my_interact_over, container, false);
         initview(view);
-        initOver=true;
+        initOver = true;
         return view;
     }
 
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
         listView.setMode(PullToRefreshBase.Mode.BOTH);
-        listView.setEmptyView(View.inflate(getActivity(),R.layout.empty_view,null));
+        listView.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setPullLabel(getResourceString(R.string.pull_to_load));
         listView.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResourceString(R.string.refreshing));
@@ -69,8 +69,8 @@ public class FragmentInteractOver extends BaseFragment {
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.grade, item.getGrade());
-                helper.setText(R.id.subject,item.getSubject());
-                helper.setText(R.id.teacher,"/"+ item.getTeacher_name());
+                helper.setText(R.id.subject, item.getSubject());
+                helper.setText(R.id.teacher, "/" + item.getTeacher_name());
             }
 
 
@@ -104,7 +104,7 @@ public class FragmentInteractOver extends BaseFragment {
         if (!isLoad) {
             if (initOver) {
                 initData(1);
-            }else{
+            } else {
                 super.onShow();
             }
         }
@@ -137,9 +137,9 @@ public class FragmentInteractOver extends BaseFragment {
 
                         try {
                             MyInteractClassBean data = JsonUtils.objectFromJson(response.toString(), MyInteractClassBean.class);
-                                if (data != null&&data.getData()!=null) {
-                                    list.addAll(data.getData());
-                                }
+                            if (data != null && data.getData() != null) {
+                                list.addAll(data.getData());
+                            }
                             adapter.notifyDataSetChanged();
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();

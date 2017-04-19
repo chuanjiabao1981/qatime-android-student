@@ -21,10 +21,6 @@ public class FragmentInteractDetailClassList extends BaseFragment {
     private CommonAdapter<InteractCourseDetailBean.DataBean.InteractiveLessonsBean> adapter;
     private List<InteractCourseDetailBean.DataBean.InteractiveLessonsBean> list = new ArrayList<>();
 
-    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-    private InteractCourseDetailBean.DataBean data;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -69,7 +65,6 @@ public class FragmentInteractDetailClassList extends BaseFragment {
 
     public void setData(InteractCourseDetailBean data) {
         if (data != null && data.getData() != null) {
-            this.data = data.getData();
             list.clear();
             list.addAll(data.getData().getInteractive_lessons());
             if (adapter != null) {
