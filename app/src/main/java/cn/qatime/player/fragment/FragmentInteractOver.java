@@ -66,11 +66,11 @@ public class FragmentInteractOver extends BaseFragment {
         adapter = new CommonAdapter<MyInteractClassBean.DataBean>(getActivity(), list, R.layout.item_fragment_my_interact_over) {
             @Override
             public void convert(ViewHolder helper, MyInteractClassBean.DataBean item, int position) {
-                Glide.with(getActivity()).load(item.getPublicize_url()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
+                Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.subject,item.getSubject());
-                helper.setText(R.id.teacher,"/"+ item.getTeachers().get(0).getName()+(item.getTeachers().size()>1?"...":""));
+                helper.setText(R.id.teacher,"/"+ item.getTeacher_name());
             }
 
 

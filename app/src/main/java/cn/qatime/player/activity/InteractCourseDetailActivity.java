@@ -22,7 +22,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +57,6 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
     private FragmentPagerAdapter mAdapter;
     private int pager = 0;
     TextView price;
-    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     DecimalFormat df = new DecimalFormat("#.00");
     private AlertDialog alertDialog;
     private Button startStudy;
