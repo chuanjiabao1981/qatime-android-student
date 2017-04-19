@@ -15,9 +15,9 @@ import java.util.List;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.VideoCoursesPlayActivity;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.bean.VideoCoursesDetailsBean;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
+import libraryextra.bean.VideoLessonsBean;
 
 /**
  * @author lungtify
@@ -26,10 +26,10 @@ import libraryextra.adapter.ViewHolder;
  */
 
 public class FragmentVideoCoursesList extends BaseFragment {
-    private List<VideoCoursesDetailsBean.VideoLessonsBean> list = new ArrayList<>();
-    private CommonAdapter<VideoCoursesDetailsBean.VideoLessonsBean> adapter;
+    private List<VideoLessonsBean> list = new ArrayList<>();
+    private CommonAdapter<VideoLessonsBean> adapter;
     private VideoCoursesPlayActivity context;
-    private VideoCoursesDetailsBean.VideoLessonsBean playingData;
+    private VideoLessonsBean playingData;
 
     @Nullable
     @Override
@@ -51,9 +51,9 @@ public class FragmentVideoCoursesList extends BaseFragment {
 
     private void initView(View view) {
         ListView listView = (ListView) view.findViewById(R.id.listView);
-        adapter = new CommonAdapter<VideoCoursesDetailsBean.VideoLessonsBean>(getActivity(), list, R.layout.item_video_courses_list) {
+        adapter = new CommonAdapter<VideoLessonsBean>(getActivity(), list, R.layout.item_video_courses_list) {
             @Override
-            public void convert(ViewHolder holder, VideoCoursesDetailsBean.VideoLessonsBean item, int position) {
+            public void convert(ViewHolder holder, VideoLessonsBean item, int position) {
                 holder.setText(R.id.number, getPosition(position))
                         .setText(R.id.name, item.getName())
                         .setText(R.id.time_length, "时长 " + item.getVideo().getFormat_tmp_duration())
@@ -80,7 +80,7 @@ public class FragmentVideoCoursesList extends BaseFragment {
     }
 
 
-    public void setData(List<VideoCoursesDetailsBean.VideoLessonsBean> video_lessons) {
+    public void setData(List<VideoLessonsBean> video_lessons) {
         list.addAll(video_lessons);
         if (adapter != null) {
             adapter.notifyDataSetChanged();

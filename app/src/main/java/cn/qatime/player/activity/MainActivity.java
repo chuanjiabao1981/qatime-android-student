@@ -47,9 +47,9 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
+import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.bean.CashAccountBean;
 import cn.qatime.player.bean.PayResultState;
-import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.fragment.FragmentHomeClassTable;
 import cn.qatime.player.fragment.FragmentHomeMainPage;
@@ -104,9 +104,11 @@ public class MainActivity extends BaseFragmentActivity {
      * 刷新未读
      */
     private void refreshUnreadNum() {
-        int unreadNum = NIMClient.getService(MsgService.class).getTotalUnreadCount();
-        Logger.e("unreadNum" + unreadNum);
-        message_x.setVisibility(unreadNum == 0 ? View.GONE : View.VISIBLE);
+        if (BaseApplication.isLogined()) {
+            int unreadNum = NIMClient.getService(MsgService.class).getTotalUnreadCount();
+            Logger.e("unreadNum" + unreadNum);
+            message_x.setVisibility(unreadNum == 0 ? View.GONE : View.VISIBLE);
+        }
     }
 
     @Override
@@ -514,15 +516,15 @@ public class MainActivity extends BaseFragmentActivity {
 
     @Subscribe
     public void onEvent(BusEvent event) {
-        if (event==BusEvent.PAY_SUCCESS) {
+        if (event == BusEvent.PAY_SUCCESS) {
             if (StringUtils.isNullOrBlanK(BaseApplication.getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getAccountToken())) {
                 getAccount();
             }
-        } else if (event==BusEvent.HANDLE_U_PUSH_MESSAGE) {
+        } else if (event == BusEvent.HANDLE_U_PUSH_MESSAGE) {
             if (fragmentlayout.getCurrentPosition() != 3) {
                 message_x.setVisibility(View.VISIBLE);
             }
-        } else if (event==BusEvent.REFRESH_CASH_ACCOUNT) {
+        } else if (event == BusEvent.REFRESH_CASH_ACCOUNT) {
             refreshCashAccount();
         }
 
@@ -615,30 +617,32 @@ public class MainActivity extends BaseFragmentActivity {
     }
 
     private void refreshCashAccount() {
-        addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.urlpayment + BaseApplication.getUserId() + "/cash", null, new VolleyListener(MainActivity.this) {
+        if (BaseApplication.isLogined()) {
+            addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.urlpayment + BaseApplication.getUserId() + "/cash", null, new VolleyListener(MainActivity.this) {
 
-            @Override
-            protected void onTokenOut() {
-                tokenOut();
-            }
+                @Override
+                protected void onTokenOut() {
 
-            @Override
-            protected void onSuccess(JSONObject response) {
-                CashAccountBean cashAccount = JsonUtils.objectFromJson(response.toString(), CashAccountBean.class);
-                BaseApplication.setCashAccount(cashAccount);
-                EventBus.getDefault().post(BusEvent.ON_REFRESH_CASH_ACCOUNT);
-            }
+                }
 
-            @Override
-            protected void onError(JSONObject response) {
-                Toast.makeText(MainActivity.this, getResourceString(R.string.get_wallet_info_error), Toast.LENGTH_SHORT).show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                Toast.makeText(MainActivity.this, getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
-            }
-        }));
+                @Override
+                protected void onSuccess(JSONObject response) {
+                    CashAccountBean cashAccount = JsonUtils.objectFromJson(response.toString(), CashAccountBean.class);
+                    BaseApplication.setCashAccount(cashAccount);
+                    EventBus.getDefault().post(BusEvent.ON_REFRESH_CASH_ACCOUNT);
+                }
+
+                @Override
+                protected void onError(JSONObject response) {
+                    Toast.makeText(MainActivity.this, getResourceString(R.string.get_wallet_info_error), Toast.LENGTH_SHORT).show();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Toast.makeText(MainActivity.this, getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
+                }
+            }));
+        }
     }
 
 }

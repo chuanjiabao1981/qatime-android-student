@@ -73,9 +73,9 @@ public class FragmentOrderCanceled extends BaseFragment {
                 StringBuilder sp = new StringBuilder();
                 if("LiveStudio::Course".equals(item.getProduct_type())){
                     sp.append("直播课/");
-                    sp.append(item.getProduct().getGrade()).append(item.getProduct().getSubject()).append("/共").append(item.getProduct().getPreset_lesson_count())
-                            .append("课/").append(item.getProduct().getTeacher_name());
-                    helper.setText(R.id.classname, item.getProduct().getName())
+                    sp.append(item.getProductLIveCourseBean().getGrade()).append(item.getProductLIveCourseBean().getSubject()).append("/共").append(item.getProductLIveCourseBean().getPreset_lesson_count())
+                            .append("课/").append(item.getProductLIveCourseBean().getTeacher_name());
+                    helper.setText(R.id.classname, item.getProductLIveCourseBean().getName())
                             .setText(R.id.describe, sp.toString());
                 }else if("LiveStudio::InteractiveCourse".equals(item.getProduct_type())){
                     sp.append("一对一/");
@@ -110,12 +110,12 @@ public class FragmentOrderCanceled extends BaseFragment {
                             public void onClick(View v) {
                                 if("LiveStudio::Course".equals(item.getProduct_type())){
                                     Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                                    intent.putExtra("id", item.getProduct().getId());
+                                    intent.putExtra("id", item.getProductLIveCourseBean().getId());
                                     intent.putExtra("page", 0);
                                     startActivity(intent);
                                 }else if("LiveStudio::InteractiveCourse".equals(item.getProduct_type())){
                                     Intent intent = new Intent(getActivity(), InteractCourseDetailActivity.class);
-                                    intent.putExtra("id", item.getProduct().getId());
+                                    intent.putExtra("id", item.getProductLIveCourseBean().getId());
                                     intent.putExtra("page", 0);
                                     startActivity(intent);
                                 }

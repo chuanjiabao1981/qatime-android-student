@@ -84,11 +84,11 @@ public class FragmentOrderUnpaid extends BaseFragment {
                 StringBuilder sp = new StringBuilder();
                 if("LiveStudio::Course".equals(item.getProduct_type())){
                     sp.append("直播课/");
-                    sp.append(item.getProduct().getGrade())
-                            .append(item.getProduct().getSubject())
-                            .append("/共").append(item.getProduct().getPreset_lesson_count()).append("课")
-                            .append("/").append(item.getProduct().getTeacher_name());
-                    helper.setText(R.id.classname, item.getProduct().getName())
+                    sp.append(item.getProductLIveCourseBean().getGrade())
+                            .append(item.getProductLIveCourseBean().getSubject())
+                            .append("/共").append(item.getProductLIveCourseBean().getPreset_lesson_count()).append("课")
+                            .append("/").append(item.getProductLIveCourseBean().getTeacher_name());
+                    helper.setText(R.id.classname, item.getProductLIveCourseBean().getName())
                             .setText(R.id.describe, sp.toString());
                 }else if("LiveStudio::InteractiveCourse".equals(item.getProduct_type())){
                     sp.append("一对一/");

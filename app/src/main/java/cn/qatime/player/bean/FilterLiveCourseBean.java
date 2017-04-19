@@ -177,7 +177,6 @@ public class FilterLiveCourseBean implements Serializable {
         }
 
 
-
         public int getTaste_count() {
             return taste_count;
         }
