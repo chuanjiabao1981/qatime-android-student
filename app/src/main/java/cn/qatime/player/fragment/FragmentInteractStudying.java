@@ -81,11 +81,11 @@ public class FragmentInteractStudying extends BaseFragment {
 //                        startActivity(intent);
                     }
                 });
-                Glide.with(getActivity()).load(item.getPublicize_url()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
+                Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.subject, item.getSubject());
-                helper.setText(R.id.teacher, "/" + item.getTeachers().get(0).getName() + (item.getTeachers().size() > 1 ? "..." : ""));
-                helper.setText(R.id.progress, getString(R.string.progress, item.getClosed_lessons_count(), item.getLessons_count()));
+                helper.setText(R.id.teacher, "/" + item.getTeacher_name());
+                helper.setText(R.id.progress, getString(R.string.progress, item.getClosed_lessons_count(), item.getPreset_lesson_count()));
                 helper.setText(R.id.grade, item.getGrade());
             }
 

@@ -99,9 +99,56 @@ public class VideoCoursesDetailsBean implements Serializable {
         private boolean is_tasting;
         private boolean is_bought;
         private boolean tasted;
-        private List<?> tag_list;
+        private List<String> tag_list;
         private List<VideoLessonsBean> video_lessons;
+        private Icons icons;
 
+        public Icons getIcons() {
+            return icons;
+        }
+
+        public void setIcons(Icons icons) {
+            this.icons = icons;
+        }
+
+        public static class Icons {
+            private boolean refund_any_time;
+            private boolean coupon_free;
+            private boolean join_cheap;
+            private boolean free_taste;
+
+            public boolean isRefund_any_time() {
+                return refund_any_time;
+            }
+
+            public void setRefund_any_time(boolean refund_any_time) {
+                this.refund_any_time = refund_any_time;
+            }
+
+            public boolean isCoupon_free() {
+                return coupon_free;
+            }
+
+            public void setCoupon_free(boolean coupon_free) {
+                this.coupon_free = coupon_free;
+            }
+
+            public boolean isJoin_cheap() {
+                return join_cheap;
+            }
+
+            public void setJoin_cheap(boolean join_cheap) {
+                this.join_cheap = join_cheap;
+            }
+
+            public boolean isFree_taste() {
+                return free_taste;
+            }
+
+            public void setFree_taste(boolean free_taste) {
+                this.free_taste = free_taste;
+            }
+        }
         public int getId() {
             return id;
         }
@@ -326,11 +373,11 @@ public class VideoCoursesDetailsBean implements Serializable {
             this.tasted = tasted;
         }
 
-        public List<?> getTag_list() {
+        public List<String> getTag_list() {
             return tag_list;
         }
 
-        public void setTag_list(List<?> tag_list) {
+        public void setTag_list(List<String> tag_list) {
             this.tag_list = tag_list;
         }
 
