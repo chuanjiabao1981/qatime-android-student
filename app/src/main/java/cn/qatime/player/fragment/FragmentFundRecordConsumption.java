@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -130,8 +129,6 @@ public class FragmentFundRecordConsumption extends BaseFragment {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
         View empty = View.inflate(getActivity(), R.layout.empty_view, null);
-        TextView textEmpty = (TextView) empty.findViewById(R.id.text_empty);
-        textEmpty.setText(R.string.not_found_related_order);
         listView.setEmptyView(empty);
 
         adapter = new CommonAdapter<ConsumptionRecordBean.DataBean>(getActivity(), data, R.layout.item_fragment_fund_record3) {

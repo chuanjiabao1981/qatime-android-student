@@ -10,6 +10,6 @@
         android:layout_height="wrap_content"
         android:minHeight="160dp"
         android:gravity="center"
-        android:text="未找到相关课程"
+        android:text="暂无数据"
         android:textColor="#999" />
 </RelativeLayout>

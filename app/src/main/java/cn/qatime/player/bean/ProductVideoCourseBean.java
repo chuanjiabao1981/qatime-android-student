@@ -2,6 +2,7 @@ package cn.qatime.player.bean;
 
 import java.io.Serializable;
 
+import libraryextra.bean.IconsBean;
 import libraryextra.bean.TeacherBean;
 
 /**
