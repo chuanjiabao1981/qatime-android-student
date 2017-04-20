@@ -133,8 +133,6 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
         View empty = View.inflate(getActivity(),R.layout.empty_view,null);
-        TextView textEmpty = (TextView) empty.findViewById(R.id.text_empty);
-        textEmpty.setText(R.string.not_found_related_order);
         listView.setEmptyView(empty);
 
         adapter = new CommonAdapter<WithdrawCashRecordBean.DataBean>(getActivity(), data, R.layout.item_fragment_fund_record2) {

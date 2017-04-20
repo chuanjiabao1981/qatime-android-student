@@ -17,6 +17,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.AboutUsActivity;
 import cn.qatime.player.activity.PersonalInformationActivity;
 import cn.qatime.player.activity.PersonalMyInteractActivity;
 import cn.qatime.player.activity.PersonalMyOrderActivity;
@@ -46,6 +47,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
     private TextView newVersion;
     private TextView name;
     private TextView balance;
+    private LinearLayout about;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,7 +66,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
         myInteract.setOnClickListener(this);
         myVideo.setOnClickListener(this);
         information.setOnClickListener(this);
-
+        about.setOnClickListener(this);
         security.setOnClickListener(this);
         setting.setOnClickListener(this);
         return view;
@@ -122,6 +124,10 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
                 intent = new Intent(getActivity(), SystemSettingActivity.class);
                 getActivity().startActivity(intent);
                 break;
+            case R.id.about:
+                intent = new Intent(getActivity(), AboutUsActivity.class);
+                startActivity(intent);
+                break;
         }
     }
 
@@ -153,6 +159,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
         security = (LinearLayout) view.findViewById(R.id.security);
         setting = (LinearLayout) view.findViewById(R.id.setting);
         newVersion = (TextView) view.findViewById(R.id.new_version);
+        about = (LinearLayout) view.findViewById(R.id.about);
     }
 
     @Override

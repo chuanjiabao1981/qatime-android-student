@@ -45,13 +45,13 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
     private LinearLayout cleanCache;
     private TextView cacheSize;
     private LinearLayout feedback;
-    private LinearLayout about;
     private Button exit;
     private String totalCacheSize;
     private android.app.AlertDialog alertDialog;
 //    private String apkUrl;
     private String downLoadLinks;
     private View updateView;
+    private LinearLayout about;
 
     private void assignViews() {
         notifySetting = (LinearLayout) findViewById(R.id.notify_setting);
@@ -60,7 +60,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
         cleanCache = (LinearLayout) findViewById(R.id.clean_cache);
         cacheSize = (TextView) findViewById(R.id.cache_size);
         feedback = (LinearLayout) findViewById(R.id.feedback);
-        about = (LinearLayout) findViewById(R.id.about);
+
         exit = (Button) findViewById(R.id.exit);
     }
 
@@ -86,7 +86,6 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
         checkUpdate.setOnClickListener(this);
         cleanCache.setOnClickListener(this);
         feedback.setOnClickListener(this);
-        about.setOnClickListener(this);
 
 
     }
@@ -188,11 +187,6 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 break;
             case R.id.feedback:
                 intent = new Intent(SystemSettingActivity.this, FeedBackActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.about:
-                Logger.e("about click");
-                intent = new Intent(SystemSettingActivity.this, AboutUsActivity.class);
                 startActivity(intent);
                 break;
             case R.id.download:
