@@ -21,13 +21,14 @@ import cn.qatime.player.activity.NEVideoPlaybackActivity;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
+import libraryextra.bean.Lessons;
 import libraryextra.bean.RemedialClassDetailBean;
 
 import static cn.qatime.player.R.id.status;
 
 public class FragmentClassDetailClassList extends BaseFragment {
-    private CommonAdapter<RemedialClassDetailBean.Lessons> adapter;
-    private List<RemedialClassDetailBean.Lessons> list = new ArrayList<>();
+    private CommonAdapter<Lessons> adapter;
+    private List<Lessons> list = new ArrayList<>();
 
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -45,10 +46,10 @@ public class FragmentClassDetailClassList extends BaseFragment {
     private void initview(View view) {
         ListView listView = (ListView) view.findViewById(R.id.id_stickynavlayout_innerscrollview);
         listView.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
-        adapter = new CommonAdapter<RemedialClassDetailBean.Lessons>(getActivity(), list, R.layout.item_fragment_remedial_class_detail3) {
+        adapter = new CommonAdapter<Lessons>(getActivity(), list, R.layout.item_fragment_remedial_class_detail3) {
 
             @Override
-            public void convert(ViewHolder holder, RemedialClassDetailBean.Lessons item, int position) {
+            public void convert(ViewHolder holder, Lessons item, int position) {
                 holder.setText(R.id.name, item.getName());
                 holder.setText(R.id.live_time, item.getLive_time());
                 if (item.getStatus().equals("missed")) {
@@ -94,7 +95,7 @@ public class FragmentClassDetailClassList extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                RemedialClassDetailBean.Lessons item = list.get(position);
+                Lessons item = list.get(position);
                 if (isFinished(item)) {
                     if (data.getIs_bought()) {
                     if (!item.isReplayable()) {
@@ -114,7 +115,7 @@ public class FragmentClassDetailClassList extends BaseFragment {
         });
     }
 
-    private boolean isFinished(RemedialClassDetailBean.Lessons item) {
+    private boolean isFinished(Lessons item) {
         return item.getStatus().equals("closed") || item.getStatus().equals("finished") || item.getStatus().equals("billing") || item.getStatus().equals("completed");
     }
 

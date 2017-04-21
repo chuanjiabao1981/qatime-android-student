@@ -2,19 +2,17 @@ package cn.qatime.player.activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
-import com.bumptech.glide.Glide;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -53,14 +51,12 @@ import libraryextra.bean.Profile;
 import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.SPUtils;
-import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.SimpleViewPagerIndicator;
 
 public class RemedialClassDetailActivity extends BaseFragmentActivity implements View.OnClickListener {
-    ImageView image;
     private int id;
     private String[] mTitles;
     private SimpleViewPagerIndicator mIndicator;
@@ -70,23 +66,26 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     private TextView title;
     private RemedialClassDetailBean data;
     private ViewPager mViewPager;
-    private FragmentPagerAdapter mAdapter;
     private int pager = 0;
     TextView price;
     TextView studentnumber;
-    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
     DecimalFormat df = new DecimalFormat("#.00");
     private AlertDialog alertDialog;
     private Button startStudy;
     private View startStudyView;
-    private View rlImage;
+    private Button auditionStart;
+    private TextView transferPrice;
+    private View handleLayout;
+    private TextView refundAnyTime;
+    private TextView freeTaste;
+    private TextView couponFree;
+    private TextView joinCheap;
+
     private TextView progress;
     private TextView status;
     private TextView timeToStart;
     private View layoutView;
-    private Button auditionStart;
-    private TextView transferPrice;
-    private View handleLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,14 +106,20 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
     public void initView() {
         EventBus.getDefault().register(this);
-        image = (ImageView) findViewById(R.id.image);
-        rlImage = findViewById(R.id.rl_image);
         name = (TextView) findViewById(R.id.name);
-        rlImage.setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenWidth(this) * 5 / 8));
 
         fragBaseFragments.add(new FragmentClassDetailClassInfo());
         fragBaseFragments.add(new FragmentClassDetailTeacherInfo());
         fragBaseFragments.add(new FragmentClassDetailClassList());
+
+        refundAnyTime = (TextView) findViewById(R.id.refund_any_time);
+        freeTaste = (TextView) findViewById(R.id.free_taste);
+        couponFree = (TextView) findViewById(R.id.coupon_free);
+        joinCheap = (TextView) findViewById(R.id.join_cheap);
+        progress = (TextView) findViewById(R.id.progress);
+        timeToStart = (TextView) findViewById(R.id.time_to_start);
+        status = (TextView) findViewById(R.id.status);
+        layoutView = findViewById(R.id.layout_view);
 
         audition = (Button) findViewById(R.id.audition);
         auditionStart = (Button) findViewById(R.id.audition_start);
@@ -125,10 +130,6 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         price = (TextView) findViewById(R.id.price);
         transferPrice = (TextView) findViewById(R.id.transfer_price);
         studentnumber = (TextView) findViewById(R.id.student_number);
-        progress = (TextView) findViewById(R.id.progress);
-        timeToStart = (TextView) findViewById(R.id.time_to_start);
-        status = (TextView) findViewById(R.id.status);
-        layoutView = findViewById(R.id.layout_view);
         handleLayout = findViewById(R.id.handle_layout);
         audition.setOnClickListener(this);
         auditionStart.setOnClickListener(this);
@@ -137,9 +138,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
         mIndicator = (SimpleViewPagerIndicator) findViewById(R.id.id_stickynavlayout_indicator);
         mViewPager = (ViewPager) findViewById(R.id.id_stickynavlayout_viewpager);
-        mTitles = new String[]{getString(R.string.remedial_detail), getString(R.string.teacher_info), getString(R.string.course_arrangement)};
+        mTitles = new String[]{getString(R.string.remedial_detail), getString(R.string.teacher_detail), getString(R.string.course_arrangement)};
         mIndicator.setTitles(mTitles);
-        mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
+        FragmentPagerAdapter mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public int getCount() {
                 return mTitles.length;
@@ -151,9 +152,6 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
             }
         };
 
-        mViewPager.setAdapter(mAdapter);
-        mViewPager.setCurrentItem(pager);
-        mViewPager.setOffscreenPageLimit(2);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -175,6 +173,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 mViewPager.setCurrentItem(position);
             }
         });
+        mViewPager.setOffscreenPageLimit(2);
+        mViewPager.setAdapter(mAdapter);
+        mViewPager.setCurrentItem(pager);
     }
 
     private void initData() {
@@ -185,8 +186,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                         data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
 
                         if (data != null && data.getData() != null && data.getData().getLive_start_time() != null) {
-
-                            Glide.with(getApplicationContext()).load(data.getData().getPublicize()).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
+                            handleLayout.setVisibility(View.VISIBLE);
                             status.setText(getStatus(data.getData().getStatus()));
                             name.setText(data.getData().getName());
                             title.setText(data.getData().getName());
@@ -206,8 +206,20 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                             } else {
                                 transferPrice.setVisibility(View.GONE);
                             }
-
-
+                            if (data.getData().getIcons() != null) {
+                                if (!data.getData().getIcons().isCoupon_free()) {
+                                    couponFree.setVisibility(View.GONE);
+                                }
+                                if (!data.getData().getIcons().isRefund_any_time()) {
+                                    refundAnyTime.setVisibility(View.GONE);
+                                }
+                                if (!data.getData().getIcons().isFree_taste()) {
+                                    freeTaste.setVisibility(View.GONE);
+                                }
+                                if (!data.getData().getIcons().isJoin_cheap()) {
+                                    joinCheap.setVisibility(View.GONE);
+                                }
+                            }
                             try {
                                 if ("init".equals(data.getData().getStatus()) || "published".equals(data.getData().getStatus())) {
                                     long time = parse.parse(data.getData().getLive_start_time()).getTime() - System.currentTimeMillis();
@@ -386,6 +398,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
     private void payRemedial() {
         Intent intent = new Intent(RemedialClassDetailActivity.this, OrderConfirmActivity.class);
+        intent.putExtra("courseType", "live");
         intent.putExtra("id", id);
         intent.putExtra("coupon", getIntent().getStringExtra("coupon"));
         OrderPayBean bean = new OrderPayBean();

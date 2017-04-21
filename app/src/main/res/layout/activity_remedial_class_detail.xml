@@ -17,116 +17,133 @@
             android:id="@+id/id_stickynavlayout_topview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="6dp">
 
-            <RelativeLayout
-                android:id="@+id/rl_image"
+            <TextView
+                android:id="@+id/name"
                 android:layout_width="match_parent"
-                android:layout_height="200dp">
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textColor="#333"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-                <ImageView
-                    android:id="@+id/image"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="fitXY" />
+            <LinearLayout
+                android:id="@+id/layout_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#6c9"
+                android:orientation="horizontal"
+                android:padding="2dp">
 
-                <LinearLayout
-                    android:id="@+id/layout_view"
+                <TextView
+                    android:id="@+id/status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:background="#6c9"
-                    android:orientation="horizontal"
-                    android:padding="2dp">
+                    android:text="招生中"
+                    android:textColor="#fff"
+                    android:textSize="12sp" />
 
-                    <TextView
-                        android:id="@+id/status"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="招生中"
-                        android:textColor="#fff"
-                        android:textSize="12sp" />
+                <TextView
+                    android:id="@+id/time_to_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#fff"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
 
-                    <TextView
-                        android:id="@+id/time_to_start"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#fff"
-                        android:textSize="12sp"
-                        android:visibility="gone" />
+                <TextView
+                    android:id="@+id/progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#fff"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+            </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/progress"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#fff"
-                        android:textSize="12sp"
-                        android:visibility="gone" />
-                </LinearLayout>
+            <cn.qatime.player.view.FlowLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            </RelativeLayout>
+                <TextView
+                    android:id="@+id/refund_any_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/identification_light"
+                    android:gravity="center"
+                    android:padding="3dp"
+                    android:text=" 随时可退"
+                    android:textColor="#109f10" />
+
+                <TextView
+                    android:id="@+id/free_taste"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/identification_light"
+                    android:gravity="center"
+                    android:padding="3dp"
+                    android:text=" 免费试听"
+                    android:textColor="#109f10" />
+
+                <TextView
+                    android:id="@+id/coupon_free"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/identification_light"
+                    android:gravity="center"
+                    android:padding="3dp"
+                    android:text=" 插班优惠"
+                    android:textColor="#109f10" />
+
+                <TextView
+                    android:id="@+id/join_cheap"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/identification_light"
+                    android:gravity="center"
+                    android:padding="3dp"
+                    android:text=" 报名立减"
+                    android:textColor="#109f10" />
+            </cn.qatime.player.view.FlowLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="6dp">
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/name"
-                    android:layout_width="match_parent"
+                    android:id="@+id/price"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:textColor="#333"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                    android:text="0.00"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp" /> <!--价格-->
+                <TextView
+                    android:id="@+id/transfer_price"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal">
+                    android:layout_marginLeft="5dp"
+                    android:text="(插班价)"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
 
-                    <TextView
-                        android:id="@+id/price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="100.00"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="14sp" /> <!--价格-->
-                    <TextView
-                        android:id="@+id/transfer_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:text="(插班价)"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="14sp"
-                        android:visibility="gone" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
 
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:layout_weight="1" />
-
-                    <TextView
-                        android:id="@+id/student_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#999"
-                        android:textSize="12sp" />
-                    <!--已报人数-->
-                </LinearLayout>
-
+                <TextView
+                    android:id="@+id/student_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#999"
+                    android:textSize="12sp" />
+                <!--已报人数-->
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#ccc" />
         </LinearLayout>
         <!--<libraryextra.view.FragmentLayoutWithLine-->
         <!--android:id="@+id/fragmentlayout"-->
@@ -148,7 +165,8 @@
     <RelativeLayout
         android:id="@+id/handle_layout"
         android:layout_width="match_parent"
-        android:layout_height="48dp">
+        android:layout_height="48dp"
+        android:visibility="invisible">
 
 
         <LinearLayout
