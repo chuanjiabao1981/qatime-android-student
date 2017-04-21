@@ -713,6 +713,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
+        MainActivity mainActivity = (MainActivity) getActivity();
         Intent intent;
         switch (v.getId()) {
             case R.id.more1:
