@@ -6,8 +6,10 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -20,7 +22,7 @@ import libraryextra.utils.StringUtils;
 
 public class FragmentInteractDetailClassInfo extends BaseFragment {
 
-    WebView webView;
+    WebView describe;
     TextView subject;
     TextView grade;
     TextView totalTime;
@@ -32,6 +34,7 @@ public class FragmentInteractDetailClassInfo extends BaseFragment {
     private TextView target;
     private TextView averageTime;
     private TextView totalCount;
+    private WebView learningTips;
 
 
     @Nullable
@@ -53,8 +56,14 @@ public class FragmentInteractDetailClassInfo extends BaseFragment {
         totalCount = (TextView) view.findViewById(R.id.total_count);
         suitable = (TextView) view.findViewById(R.id.suitable);
         target = (TextView) view.findViewById(R.id.target);
-        webView = (WebView) view.findViewById(R.id.describe);
+        describe = (WebView) view.findViewById(R.id.describe);
+        learningTips = (WebView) view.findViewById(R.id.learning_tips);
+        initWebView(describe);
+        initWebView(learningTips);
+    }
 
+
+    private void initWebView(WebView webView) {
         webView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -63,7 +72,11 @@ public class FragmentInteractDetailClassInfo extends BaseFragment {
         });
         webView.setBackgroundColor(0); // 设置背景色
         webView.getBackground().setAlpha(0); // 设置填充透明度 范围：0-255
-        webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY); //取消滚动条白边效果
+        webView.setFocusable(false);//防止加载之后webview滚动
+        webView.setVerticalScrollBarEnabled(false);
+        webView.setHorizontalScrollBarEnabled(false);
+        webView.setWebChromeClient(new WebChromeClient());
+        webView.setWebViewClient(new WebViewClient());
         WebSettings settings = webView.getSettings();
         settings.setDefaultTextEncodingName("UTF-8");
         settings.setBlockNetworkImage(false);
@@ -72,8 +85,8 @@ public class FragmentInteractDetailClassInfo extends BaseFragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             settings.setMixedContentMode(settings.MIXED_CONTENT_ALWAYS_ALLOW);  //注意安卓5.0以上的权限
         }
-
     }
+
 
     public void setData(InteractCourseDetailBean bean) {
         if (bean != null && bean.getData() != null) {
@@ -89,12 +102,13 @@ public class FragmentInteractDetailClassInfo extends BaseFragment {
             if (!StringUtils.isNullOrBlanK(bean.getData().getSuit_crowd())) {
                 suitable.setText(bean.getData().getSuit_crowd());
             }
-            String header = "<style>* {color:#666666;margin:0;padding:0;}p {margin-bottom:3}</style>";//默认color段落间距
+            String header = "<style>* {color:#666666;margin:0;padding:0;}.one {float: left;width:50%;height:auto;position: relative;text-align: center;}.two {width:100%;height:100%;top: 0;left:0;position: absolute;text-align: center;}</style>";//默认color段落间距
             String body = StringUtils.isNullOrBlanK(bean.getData().getDescription()) ? getString(R.string.no_desc) : bean.getData().getDescription();
             body = body.replace("\r\n", "<br>");
             //......
-            String footer = "<p></p><p style='margin-top:20'><font style='font-size:15;color:#333333'}>上课流程</font></p>" +
-                    "<p style='margin-top:5;'><img style='width:100%;height:auto' src='file:///android_res/mipmap/image_default.png' /><p/>" +
+            String footer =
+//                    "<p></p><p style='margin-top:20'><font style='font-size:15;color:#333333'}>上课流程</font></p>" +
+//                    "<p style='margin-top:5;'><img style='width:100%;height:auto' src='file:///android_res/mipmap/image_default.png' /><p/>" +
                     "<p style='margin-top:20'><font style='font-size:15;color:#333333'}>学习须知</font></p>" +
                     "<p style='margin-top:5;'><font style='font-size:15;color:#333333'}>上课前</font></p>" +
                     "<p><font>1.做好课程预习，预先了解本课所讲内容，更好的吸收课程精华；<br>" +
@@ -112,7 +126,8 @@ public class FragmentInteractDetailClassInfo extends BaseFragment {
                     "<p style='margin-top:5;'><font style='font-size:15;color:#333333'>上课后</font></p>" +
                     "<p><font>1.直播结束后请大家仍可以在直播教室内进行聊天和讨论，老师也会适时解答；<br>" +
                     "2.请同学按时完成老师布置的作业任务。</font></p>";
-            webView.loadDataWithBaseURL(null, header + body + footer, "text/html", "UTF-8", null);
+            describe.loadDataWithBaseURL(null, header + body, "text/html", "UTF-8", null);
+            learningTips.loadDataWithBaseURL(null, header + footer, "text/html", "UTF-8", null);
         }
     }
 }

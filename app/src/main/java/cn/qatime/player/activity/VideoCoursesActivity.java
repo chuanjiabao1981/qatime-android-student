@@ -2,7 +2,6 @@ package cn.qatime.player.activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -16,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
-import com.bumptech.glide.Glide;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
@@ -88,7 +86,6 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
 
                         if (data != null && data.getData() != null) {
                             handleLayout.setVisibility(View.VISIBLE);
-                            Glide.with(getApplicationContext()).load(data.getData().getPublicize()).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
                             name.setText(data.getData().getName());
                             setTitles(data.getData().getName());
                             studentNumber.setText(getString(R.string.student_number, data.getData().getBuy_tickets_count()));

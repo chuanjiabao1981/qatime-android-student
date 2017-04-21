@@ -6,8 +6,10 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import cn.qatime.player.R;
@@ -59,7 +61,11 @@ public class FragmentVideoCoursesClassInfo extends BaseFragment {
         });
         webView.setBackgroundColor(0); // 设置背景色
         webView.getBackground().setAlpha(0); // 设置填充透明度 范围：0-255
-        webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY); //取消滚动条白边效果
+        webView.setFocusable(false);//防止加载之后webview滚动
+        webView.setVerticalScrollBarEnabled(false);
+        webView.setHorizontalScrollBarEnabled(false);
+        webView.setWebChromeClient(new WebChromeClient());
+        webView.setWebViewClient(new WebViewClient());
         WebSettings settings = webView.getSettings();
         settings.setDefaultTextEncodingName("UTF-8");
         settings.setBlockNetworkImage(false);

@@ -8,92 +8,130 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/learn_progress_top"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="购买课程"
-        android:textColor="#fff"
-        android:textSize="18sp" />
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="20dp"
+        android:text="学习流程"
+        android:textColor="#333"
+        android:textSize="15sp" />
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/learn_progress_bottom"
-        android:gravity="center"
-        android:padding="5dp"
-        android:text="支付退款，放心购买"
-        android:textColor="#999"
-        android:textSize="12sp" />
+        android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@mipmap/process_1"
+            android:gravity="center"
+            android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/learn_progress_top"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="购买课程"
-        android:textColor="#fff"
-        android:textSize="18sp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/learn_progress_bottom"
-        android:gravity="center"
-        android:padding="5dp"
-        android:text="支付退款，放心购买"
-        android:textColor="#999"
-        android:textSize="12sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="购买课程"
+                android:textColor="#fff"
+                android:textSize="14sp" />
 
-    <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:gravity="center"
+                android:text="支持购买,放心退款"
+                android:textColor="#fff"
+                android:textSize="12sp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/learn_progress_top"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="购买课程"
-        android:textColor="#fff"
-        android:textSize="18sp" />
+        </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/learn_progress_bottom"
-        android:gravity="center"
-        android:padding="5dp"
-        android:text="支付退款，放心购买"
-        android:textColor="#999"
-        android:textSize="12sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:background="@mipmap/process_2"
+            android:gravity="center"
+            android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/learn_progress_top"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="购买课程"
-        android:textColor="#fff"
-        android:textSize="18sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="购买课程"
+                android:textColor="#fff"
+                android:textSize="14sp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/learn_progress_bottom"
-        android:gravity="center"
-        android:padding="5dp"
-        android:text="支付退款，放心购买"
-        android:textColor="#999"
-        android:textSize="12sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:gravity="center"
+                android:text="支持购买,放心退款"
+                android:textColor="#fff"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:background="@mipmap/process_3"
+            android:gravity="center"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="购买课程"
+                android:textColor="#fff"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:gravity="center"
+                android:text="支持购买,放心退款"
+                android:textColor="#fff"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:background="@mipmap/process_4"
+            android:gravity="center"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="购买课程"
+                android:textColor="#fff"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:gravity="center"
+                android:text="支持购买,放心退款"
+                android:textColor="#fff"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>
