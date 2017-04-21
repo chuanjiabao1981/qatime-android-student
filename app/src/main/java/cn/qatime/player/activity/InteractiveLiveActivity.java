@@ -60,7 +60,6 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.InputPanel;
-import cn.qatime.player.bean.InteractiveLiveBean;
 import cn.qatime.player.fragment.FragmentInteractiveAnnouncements;
 import cn.qatime.player.fragment.FragmentInteractiveBoard;
 import cn.qatime.player.fragment.FragmentInteractiveDetails;
@@ -81,6 +80,7 @@ import cn.qatime.player.utils.annotation.OnMPermissionDenied;
 import cn.qatime.player.utils.annotation.OnMPermissionGranted;
 import cn.qatime.player.utils.annotation.OnMPermissionNeverAskAgain;
 import cn.qatime.player.view.VideoLayout;
+import libraryextra.bean.InteractCourseDetailBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -188,11 +188,11 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
     private void initData() {
         if (id != 0) {
-            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlInteractiveCourses + id, null,
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlInteractCourses + id, null,
                     new VolleyListener(InteractiveLiveActivity.this) {
                         @Override
                         protected void onSuccess(JSONObject response) {
-                            InteractiveLiveBean data = JsonUtils.objectFromJson(response.toString(), InteractiveLiveBean.class);
+                            InteractCourseDetailBean data = JsonUtils.objectFromJson(response.toString(), InteractCourseDetailBean.class);
                             if (data != null && data.getData() != null) {
                                 ((FragmentInteractiveDetails) fragBaseFragments.get(3)).setData(data.getData());
                             }

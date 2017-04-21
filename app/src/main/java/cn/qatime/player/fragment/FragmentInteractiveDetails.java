@@ -9,21 +9,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.bean.InteractiveLiveBean;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
+import libraryextra.bean.InteractCourseDetailBean;
+import libraryextra.bean.TeacherBean;
 import libraryextra.utils.StringUtils;
 import libraryextra.view.ListViewForScrollView;
 
@@ -38,10 +37,10 @@ public class FragmentInteractiveDetails extends BaseFragment {
     private TextView subject;
     private TextView grade;
     private ListViewForScrollView list;
-    private InteractiveLiveBean.DataBean data;
-    private CommonAdapter<InteractiveLiveBean.InteractiveLessonsBean> adapter;
+    private InteractCourseDetailBean.DataBean data;
+    private CommonAdapter<InteractCourseDetailBean.DataBean.InteractiveLessonsBean> adapter;
 
-    private List<InteractiveLiveBean.InteractiveLessonsBean> classList = new ArrayList<>();
+    private List<InteractCourseDetailBean.DataBean.InteractiveLessonsBean> classList = new ArrayList<>();
     //    private SimpleDateFormat parse1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 //    private SimpleDateFormat parse2 = new SimpleDateFormat("yyyy-MM-dd");
     private Handler hd = new Handler();
@@ -49,9 +48,9 @@ public class FragmentInteractiveDetails extends BaseFragment {
     private TextView className;
     private TextView target;
     private TextView suitable;
-    private CommonAdapter<InteractiveLiveBean.TeachersBean> teacherAdapter;
-    private List<InteractiveLiveBean.TeachersBean> teacherTotalList = new ArrayList<>();
-    private List<InteractiveLiveBean.TeachersBean> teacherList = new ArrayList<>();
+    private CommonAdapter<TeacherBean> teacherAdapter;
+    private List<TeacherBean> teacherTotalList = new ArrayList<>();
+    private List<TeacherBean> teacherList = new ArrayList<>();
     private TextView showAll;
     private ListViewForScrollView teacherListView;
 
@@ -83,10 +82,10 @@ public class FragmentInteractiveDetails extends BaseFragment {
 
     private void initList() {
         list.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
-        adapter = new CommonAdapter<InteractiveLiveBean.InteractiveLessonsBean>(getActivity(), classList, R.layout.item_fragment_interactive_details_courses) {
+        adapter = new CommonAdapter<InteractCourseDetailBean.DataBean.InteractiveLessonsBean>(getActivity(), classList, R.layout.item_fragment_interactive_details_courses) {
 
             @Override
-            public void convert(ViewHolder holder, InteractiveLiveBean.InteractiveLessonsBean item, int position) {
+            public void convert(ViewHolder holder, InteractCourseDetailBean.DataBean.InteractiveLessonsBean item, int position) {
                 holder.setText(R.id.name, item.getName());
                 holder.setText(R.id.live_time, item.getEnd_time());
                 if (item.getStatus().equals("missed")) {
@@ -127,7 +126,7 @@ public class FragmentInteractiveDetails extends BaseFragment {
 //        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                InteractiveLiveBean.InteractiveLessonsBean item = classList.get(position);
+//                InteractCourseDetailBean.InteractiveLessonsBean item = classList.get(position);
 //                if (isFinished(item)) {
 //                    if (data.getIs_bought()) {
 //                        if (!item.isReplayable()) {
@@ -146,14 +145,14 @@ public class FragmentInteractiveDetails extends BaseFragment {
 //                }
 //            }
 //        });
-        teacherAdapter = new CommonAdapter<InteractiveLiveBean.TeachersBean>(getActivity(), teacherList, R.layout.item_interactive_details) {
+        teacherAdapter = new CommonAdapter<TeacherBean>(getActivity(), teacherList, R.layout.item_interactive_details) {
             @Override
-            public void convert(ViewHolder holder, InteractiveLiveBean.TeachersBean item, int position) {
+            public void convert(ViewHolder holder, TeacherBean item, int position) {
                 Glide.with(getActivity()).load(item.getAvatar_url()).placeholder(R.mipmap.error_header).crossFade().into((ImageView) holder.getView(R.id.image));
 
                 holder.setText(R.id.name, item.getName())
                         .setText(R.id.sex, getSex(item.getGender()))
-                        .setText(R.id.school, item.getSchool())
+                        .setText(R.id.school, item.getSchool() + "")
                         .setText(R.id.teaching_years, getTeacheringYears(item.getTeaching_years()));
                 ((TextView) holder.getView(R.id.sex)).setTextColor(getSexColor(item.getGender()));
             }
@@ -178,11 +177,11 @@ public class FragmentInteractiveDetails extends BaseFragment {
         });
     }
 
-    private boolean isFinished(InteractiveLiveBean.InteractiveLessonsBean item) {
+    private boolean isFinished(InteractCourseDetailBean.DataBean.InteractiveLessonsBean item) {
         return item.getStatus().equals("closed") || item.getStatus().equals("finished") || item.getStatus().equals("billing") || item.getStatus().equals("completed");
     }
 
-    public void setData(InteractiveLiveBean.DataBean data) {
+    public void setData(InteractCourseDetailBean.DataBean data) {
         this.data = data;
         setDataClassDetails();
         setDataTeacherDetails();
