@@ -36,15 +36,15 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.TutorialClassBean;
+import libraryextra.bean.MyTutorialClassBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
 public class FragmentTutorshipTaste extends BaseFragment {
     private PullToRefreshListView listView;
-    private java.util.List<TutorialClassBean.Data> list = new ArrayList<>();
-    private CommonAdapter<TutorialClassBean.Data> adapter;
+    private java.util.List<MyTutorialClassBean.Data> list = new ArrayList<>();
+    private CommonAdapter<MyTutorialClassBean.Data> adapter;
     private int page = 1;
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
@@ -68,9 +68,9 @@ public class FragmentTutorshipTaste extends BaseFragment {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
 
-        adapter = new CommonAdapter<TutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship5) {
+        adapter = new CommonAdapter<MyTutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship5) {
             @Override
-            public void convert(ViewHolder helper, final TutorialClassBean.Data item, int position) {
+            public void convert(ViewHolder helper, final MyTutorialClassBean.Data item, int position) {
                 /**
                  * 已购买的已在获取数据时候排除，当前只填充试听的课程（已试听。试听中）
                  */
@@ -208,9 +208,9 @@ public class FragmentTutorshipTaste extends BaseFragment {
                         listView.onRefreshComplete();
 
                         try {
-                            TutorialClassBean data = JsonUtils.objectFromJson(response.toString(), TutorialClassBean.class);
+                            MyTutorialClassBean data = JsonUtils.objectFromJson(response.toString(), MyTutorialClassBean.class);
                             if (data != null) {
-                                for (TutorialClassBean.Data item : data.getData()) {
+                                for (MyTutorialClassBean.Data item : data.getData()) {
                                     if (!item.isIs_bought() && (item.isIs_tasting() || item.isTasted())) {//只显示试听
                                         list.add(item);
                                     }

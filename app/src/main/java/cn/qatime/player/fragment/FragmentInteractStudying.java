@@ -32,15 +32,15 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.InteractClassBean;
+import libraryextra.bean.MyInteractClassBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
 public class FragmentInteractStudying extends BaseFragment {
     private PullToRefreshListView listView;
-    private java.util.List<InteractClassBean.DataBean> list = new ArrayList<>();
-    private CommonAdapter<InteractClassBean.DataBean> adapter;
+    private java.util.List<MyInteractClassBean.DataBean> list = new ArrayList<>();
+    private CommonAdapter<MyInteractClassBean.DataBean> adapter;
     private int page = 1;
 
 
@@ -64,9 +64,9 @@ public class FragmentInteractStudying extends BaseFragment {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
 
-        adapter = new CommonAdapter<InteractClassBean.DataBean>(getActivity(), list, R.layout.item_fragment_my_interact_teaching) {
+        adapter = new CommonAdapter<MyInteractClassBean.DataBean>(getActivity(), list, R.layout.item_fragment_my_interact_teaching) {
             @Override
-            public void convert(ViewHolder helper, final InteractClassBean.DataBean item, int position) {
+            public void convert(ViewHolder helper, final MyInteractClassBean.DataBean item, int position) {
 
 
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
@@ -84,7 +84,7 @@ public class FragmentInteractStudying extends BaseFragment {
                 Glide.with(getActivity()).load(item.getPublicize_url()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.subject, item.getSubject());
-                helper.setText(R.id.teacher, "/" + item.getTeachers().get(0).getName() + (item.getTeachers().size() > 1 ? "..." : ""));
+                helper.setText(R.id.teacher, "/" + item.getTeachers().get(0).getName()+(item.getTeachers().size()>1?"...":""));
                 helper.setText(R.id.progress, getString(R.string.progress, item.getClosed_lessons_count(), item.getLessons_count()));
                 helper.setText(R.id.grade, item.getGrade());
             }
@@ -152,9 +152,9 @@ public class FragmentInteractStudying extends BaseFragment {
                         listView.onRefreshComplete();
 
                         try {
-                            InteractClassBean data = JsonUtils.objectFromJson(response.toString(), InteractClassBean.class);
+                            MyInteractClassBean data = JsonUtils.objectFromJson(response.toString(), MyInteractClassBean.class);
                             if (data != null) {
-                                for (InteractClassBean.DataBean item : data.getData()) {
+                                for (MyInteractClassBean.DataBean item : data.getData()) {
                                     if (!"completed".equals(item.getStatus())) {//只显示未结束
                                         list.add(item);
                                     }

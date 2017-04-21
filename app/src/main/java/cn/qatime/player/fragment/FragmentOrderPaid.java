@@ -65,8 +65,6 @@ public class FragmentOrderPaid extends BaseFragment {
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
         View empty = View.inflate(getActivity(),R.layout.empty_view,null);
-        TextView textEmpty = (TextView) empty.findViewById(R.id.text_empty);
-        textEmpty.setText(R.string.not_found_related_order);
         listView.setEmptyView(empty);
         listView.setMode(PullToRefreshBase.Mode.BOTH);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
@@ -95,6 +93,14 @@ public class FragmentOrderPaid extends BaseFragment {
                         sp.append("...");
                     }
                     helper.setText(R.id.classname, item.getProduct_interactive_course().getName())
+                            .setText(R.id.describe, sp.toString());
+                }else if("LiveStudio::VideoCourse".equals(item.getProduct_type())){
+                    sp.append("视频课/");
+                    sp.append(item.getProduct_video_course().getGrade())
+                            .append(item.getProduct_video_course().getSubject())
+                            .append("/共").append(item.getProduct_video_course().getPreset_lesson_count()).append("课")
+                            .append("/").append(item.getProduct_video_course().getTeacher().getName());
+                    helper.setText(R.id.classname, item.getProduct_video_course().getName())
                             .setText(R.id.describe, sp.toString());
                 }
 
@@ -225,6 +231,10 @@ public class FragmentOrderPaid extends BaseFragment {
     }
 
     private void applyRefund(final MyOrderBean.DataBean item) {
+        if("LiveStudio::VideoCourse".equals(item.getProduct_type())){
+            Toast.makeText(getActivity(), "此订单类型暂不支持退款", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Map<String, String> map = new HashMap<>();
         map.put("order_id", item.getId());
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/refunds/info", map), null,
@@ -237,11 +247,17 @@ public class FragmentOrderPaid extends BaseFragment {
                         if("LiveStudio::Course".equals(item.getProduct_type())){
                             intent.putExtra("name",item.getProduct().getName());
                             intent.putExtra("preset_lesson_count",item.getProduct().getPreset_lesson_count());
-                            intent.putExtra("completed_lesson_count",item.getProduct().getCompleted_lesson_count());
+                            intent.putExtra("closed_lessons_count",item.getProduct().getClosed_lessons_count());
                         }else if("LiveStudio::InteractiveCourse".equals(item.getProduct_type())){
                             intent.putExtra("name",item.getProduct_interactive_course().getName());
                             intent.putExtra("preset_lesson_count",item.getProduct_interactive_course().getLessons_count());
-                            intent.putExtra("completed_lesson_count",item.getProduct_interactive_course().getCompleted_lessons_count());
+                            intent.putExtra("closed_lessons_count",item.getProduct_interactive_course().getClosed_lessons_count());
+                        }else if("LiveStudio::VideoCourse".equals(item.getProduct_type())){
+//                            intent.putExtra("name",item.getProduct_video_course().getName());
+//                            intent.putExtra("preset_lesson_count",item.getProduct_video_course().getPreset_lesson_count());
+//                            intent.putExtra("closed_lessons_count",item.getProduct_video_course().getClosed_lessons_count());
+                            Logger.e("error");
+                            return;
                         }
 
                         startActivityForResult(intent, Constant.REQUEST);

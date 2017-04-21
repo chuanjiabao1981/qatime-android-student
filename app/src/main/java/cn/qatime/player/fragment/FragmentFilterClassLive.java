@@ -32,7 +32,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.ScreeningConditionActivity;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.bean.FilterCourseContentBean;
+import cn.qatime.player.bean.FilterLiveCourseBean;
 import cn.qatime.player.bean.LabelBean;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
@@ -49,13 +49,13 @@ import libraryextra.utils.VolleyListener;
  * @date 2017/4/10 18:15
  * @Description:
  */
-public class FragmentFilterClassLive extends BaseFragment{
+public class FragmentFilterClassLive extends BaseFragment {
 
     private String grade;
     private String subject;
     private PullToRefreshListView listview;
-    private CommonAdapter<FilterCourseContentBean.DataBean> adapter;
-    private List<FilterCourseContentBean.DataBean> datas = new ArrayList<>();
+    private CommonAdapter<FilterLiveCourseBean.DataBean> adapter;
+    private List<FilterLiveCourseBean.DataBean> datas = new ArrayList<>();
     private int latestResult = 1;//0上1下-1未选
     private int popularityResult = -1;
     private int priceResult = -1;
@@ -99,7 +99,7 @@ public class FragmentFilterClassLive extends BaseFragment{
      */
     private void getData(final int type) {
         Map<String, String> map = new HashMap<>();
-        if(type == 0){
+        if (type == 0) {
             page = 1;
         }
 
@@ -170,7 +170,7 @@ public class FragmentFilterClassLive extends BaseFragment{
                 String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
                 listview.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
                 listview.onRefreshComplete();
-                FilterCourseContentBean data = JsonUtils.objectFromJson(response.toString(), FilterCourseContentBean.class);
+                FilterLiveCourseBean data = JsonUtils.objectFromJson(response.toString(), FilterLiveCourseBean.class);
                 assert data != null;
                 datas.addAll(data.getData());
                 adapter.notifyDataSetChanged();
@@ -185,7 +185,7 @@ public class FragmentFilterClassLive extends BaseFragment{
     }
 
     private void initView(View view) {
-        final TextView latest = (TextView)view.findViewById(R.id.latest);
+        final TextView latest = (TextView) view.findViewById(R.id.latest);
         final TextView price = (TextView) view.findViewById(R.id.price);
         final TextView popularity = (TextView) view.findViewById(R.id.popularity);
 
@@ -254,9 +254,9 @@ public class FragmentFilterClassLive extends BaseFragment{
         listview.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
         listview.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         listview.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
-        adapter = new CommonAdapter<FilterCourseContentBean.DataBean>(getActivity(), datas, R.layout.item_filter_course) {
+        adapter = new CommonAdapter<FilterLiveCourseBean.DataBean>(getActivity(), datas, R.layout.item_filter_course) {
             @Override
-            public void convert(ViewHolder holder, FilterCourseContentBean.DataBean item, int position) {
+            public void convert(ViewHolder holder, FilterLiveCourseBean.DataBean item, int position) {
                 Glide.with(getActivity()).load(item.getPublicize()).crossFade().placeholder(R.mipmap.photo).into((ImageView) holder.getView(R.id.image));
                 holder.setText(R.id.name, item.getName())
                         .setText(R.id.price, "￥" + item.getPrice())
@@ -341,8 +341,8 @@ public class FragmentFilterClassLive extends BaseFragment{
 
     private void initLabel() {
         Map<String, String> map = new HashMap<>();
-        map.put("cates",grade+","+subject);
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlAppconstantInformation+"/tags", map), null, new VolleyListener(getActivity()) {
+        map.put("cates", grade + "," + subject);
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlAppconstantInformation + "/tags", map), null, new VolleyListener(getActivity()) {
             @Override
             protected void onTokenOut() {
 
@@ -351,7 +351,7 @@ public class FragmentFilterClassLive extends BaseFragment{
             @Override
             protected void onSuccess(JSONObject response) {
                 LabelBean labelBean = JsonUtils.objectFromJson(response.toString(), LabelBean.class);
-                if(labelBean!=null&&labelBean.getData()!=null){
+                if (labelBean != null && labelBean.getData() != null) {
                     labelData.addAll(labelBean.getData());
                     adapter.notifyDataSetChanged();
                 }

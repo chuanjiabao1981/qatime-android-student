@@ -29,11 +29,12 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.InteractCourseDetailActivity;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.bean.InteractCourseContentFilterBean;
+import cn.qatime.player.bean.FilterInteractCourseBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
+import libraryextra.bean.TeacherBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -49,8 +50,8 @@ public class FragmentFilterClassInteract extends BaseFragment {
     private String grade;
     private String subject;
     private PullToRefreshListView listview;
-    private CommonAdapter<InteractCourseContentFilterBean.DataBean> adapter;
-    private List<InteractCourseContentFilterBean.DataBean> datas = new ArrayList<>();
+    private CommonAdapter<FilterInteractCourseBean.DataBean> adapter;
+    private List<FilterInteractCourseBean.DataBean> datas = new ArrayList<>();
     private int latestResult = 1;//0上1下-1未选
     private int priceResult = -1;
     private int page = 1;
@@ -60,6 +61,7 @@ public class FragmentFilterClassInteract extends BaseFragment {
         this.subject = subject;
         return this;
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -87,6 +89,10 @@ public class FragmentFilterClassInteract extends BaseFragment {
         Map<String, String> map = new HashMap<>();
         map.put("per_page", "20");
         map.put("page", String.valueOf(page));
+
+        if (type == 0) {
+            page = 1;
+        }
 
         if (latestResult != -1) {//0上1下-1未选
             if (latestResult == 0) {
@@ -129,7 +135,7 @@ public class FragmentFilterClassInteract extends BaseFragment {
                 String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
                 listview.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
                 listview.onRefreshComplete();
-                InteractCourseContentFilterBean data = JsonUtils.objectFromJson(response.toString(), InteractCourseContentFilterBean.class);
+                FilterInteractCourseBean data = JsonUtils.objectFromJson(response.toString(), FilterInteractCourseBean.class);
                 assert data != null;
                 datas.addAll(data.getData());
                 adapter.notifyDataSetChanged();
@@ -188,11 +194,11 @@ public class FragmentFilterClassInteract extends BaseFragment {
         listview.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
         listview.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         listview.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
-        adapter = new CommonAdapter<InteractCourseContentFilterBean.DataBean>(getActivity(), datas, R.layout.item_filter_course) {
+        adapter = new CommonAdapter<FilterInteractCourseBean.DataBean>(getActivity(), datas, R.layout.item_filter_course) {
             @Override
-            public void convert(ViewHolder holder, InteractCourseContentFilterBean.DataBean item, int position) {
+            public void convert(ViewHolder holder, FilterInteractCourseBean.DataBean item, int position) {
                 Glide.with(getActivity()).load(item.getPublicize_url()).crossFade().placeholder(R.mipmap.photo).into((ImageView) holder.getView(R.id.image));
-                List<InteractCourseContentFilterBean.DataBean.TeachersBean> teachers = item.getTeachers();
+                List<TeacherBean> teachers = item.getTeachers();
                 StringBuffer teacherNames = new StringBuffer();
                 for (int i = 0; i < teachers.size(); i++) {
                     teacherNames.append(teachers.get(0).getName());

@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.google.gson.JsonSyntaxException;
@@ -28,6 +27,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.activity.InteractCourseDetailActivity;
 import cn.qatime.player.activity.PersonalMyOrderCanceledDetailActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
+import cn.qatime.player.activity.VideoCoursesActivity;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.MyOrderBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
@@ -57,8 +57,6 @@ public class FragmentOrderCanceled extends BaseFragment {
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
         View empty = View.inflate(getActivity(),R.layout.empty_view,null);
-        TextView textEmpty = (TextView) empty.findViewById(R.id.text_empty);
-        textEmpty.setText(R.string.not_found_related_order);
         listView.setEmptyView(empty);
         listView.setMode(PullToRefreshBase.Mode.BOTH);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
@@ -85,6 +83,14 @@ public class FragmentOrderCanceled extends BaseFragment {
                         sp.append("...");
                     }
                     helper.setText(R.id.classname, item.getProduct_interactive_course().getName())
+                            .setText(R.id.describe, sp.toString());
+                }else if("LiveStudio::VideoCourse".equals(item.getProduct_type())){
+                    sp.append("视频课/");
+                    sp.append(item.getProduct_video_course().getGrade())
+                            .append(item.getProduct_video_course().getSubject())
+                            .append("/共").append(item.getProduct_video_course().getPreset_lesson_count()).append("课")
+                            .append("/").append(item.getProduct_video_course().getTeacher().getName());
+                    helper.setText(R.id.classname, item.getProduct_video_course().getName())
                             .setText(R.id.describe, sp.toString());
                 }
 
@@ -115,7 +121,12 @@ public class FragmentOrderCanceled extends BaseFragment {
                                     startActivity(intent);
                                 }else if("LiveStudio::InteractiveCourse".equals(item.getProduct_type())){
                                     Intent intent = new Intent(getActivity(), InteractCourseDetailActivity.class);
-                                    intent.putExtra("id", item.getProduct().getId());
+                                    intent.putExtra("id", item.getProduct_interactive_course().getId());
+                                    intent.putExtra("page", 0);
+                                    startActivity(intent);
+                                }else if("LiveStudio::VideoCourse".equals(item.getProduct_type())){
+                                    Intent intent = new Intent(getActivity(), VideoCoursesActivity.class);
+                                    intent.putExtra("id", item.getProduct_video_course().getId());
                                     intent.putExtra("page", 0);
                                     startActivity(intent);
                                 }

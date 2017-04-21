@@ -33,15 +33,15 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.TutorialClassBean;
+import libraryextra.bean.MyTutorialClassBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
 public class FragmentTutorshipTeaching extends BaseFragment {
     private PullToRefreshListView listView;
-    private java.util.List<TutorialClassBean.Data> list = new ArrayList<>();
-    private CommonAdapter<TutorialClassBean.Data> adapter;
+    private java.util.List<MyTutorialClassBean.Data> list = new ArrayList<>();
+    private CommonAdapter<MyTutorialClassBean.Data> adapter;
     private int page = 1;
 
 
@@ -65,9 +65,9 @@ public class FragmentTutorshipTeaching extends BaseFragment {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
 
-        adapter = new CommonAdapter<TutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship3) {
+        adapter = new CommonAdapter<MyTutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship3) {
             @Override
-            public void convert(ViewHolder helper, final TutorialClassBean.Data item, int position) {
+            public void convert(ViewHolder helper, final MyTutorialClassBean.Data item, int position) {
 
 
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
@@ -155,9 +155,9 @@ public class FragmentTutorshipTeaching extends BaseFragment {
                         listView.onRefreshComplete();
 
                         try {
-                            TutorialClassBean data = JsonUtils.objectFromJson(response.toString(), TutorialClassBean.class);
+                            MyTutorialClassBean data = JsonUtils.objectFromJson(response.toString(), MyTutorialClassBean.class);
                             if (data != null) {
-                                for (TutorialClassBean.Data item : data.getData()) {
+                                for (MyTutorialClassBean.Data item : data.getData()) {
                                     if (item.isIs_bought() || item.isIs_tasting()) {//只显示试听未过期或已购买
                                         list.add(item);
                                     }

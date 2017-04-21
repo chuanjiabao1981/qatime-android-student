@@ -30,7 +30,7 @@ public class FragmentClassDetailTeacherInfo extends BaseFragment {
     private TextView teachingyears;
     private TextView school;
     private WebView describe;
-    private TextView sex;
+    private ImageView sex;
 
     @Nullable
     @Override
@@ -46,7 +46,7 @@ public class FragmentClassDetailTeacherInfo extends BaseFragment {
         image = (ImageView) view.findViewById(R.id.image);
         teachingyears = (TextView) view.findViewById(R.id.teaching_years);
         school = (TextView) view.findViewById(R.id.school);
-        sex = (TextView) view.findViewById(R.id.sex);
+        sex = (ImageView) view.findViewById(R.id.sex);
 
         describe = (WebView) view.findViewById(R.id.describe);
 
@@ -71,8 +71,9 @@ public class FragmentClassDetailTeacherInfo extends BaseFragment {
 
     public void setData(final RemedialClassDetailBean data) {
         if (data.getData() != null && data.getData().getTeacher() != null) {
-            sex.setText(getSex(data.getData().getTeacher().getGender()));
-            sex.setTextColor(getSexColor(data.getData().getTeacher().getGender()));
+//            sex.setText(getSex(data.getData().getTeacher().getGender()));
+//            sex.setTextColor(getSexColor(data.getData().getTeacher().getGender()));
+            sex.setImageResource("male".equals(data.getData().getTeacher().getGender()) ? R.mipmap.male : R.mipmap.female);
             name.setText(data.getData().getTeacher().getName());
             if (!StringUtils.isNullOrBlanK(data.getData().getTeacher().getTeaching_years())) {
                 if (data.getData().getTeacher().getTeaching_years().equals("within_three_years")) {
@@ -86,7 +87,7 @@ public class FragmentClassDetailTeacherInfo extends BaseFragment {
                 }
             }
 
-            SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getCacheDir() + "/school.txt").toString(), SchoolBean.class);
+            SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getCacheDir() + "/school.txt"), SchoolBean.class);
             if (schoolBean != null && schoolBean.getData() != null) {
                 for (int i = 0; i < schoolBean.getData().size(); i++) {
                     if (data.getData().getTeacher().getSchool() == schoolBean.getData().get(i).getId()) {
@@ -98,7 +99,7 @@ public class FragmentClassDetailTeacherInfo extends BaseFragment {
                 school.setText(R.string.not_available);
             }
 
-            Glide.with(this).load(data.getData().getTeacher().getAvatar_url()).bitmapTransform(new GlideCircleTransform(getActivity())).placeholder(R.mipmap.error_header_rect).crossFade().into(image);
+            Glide.with(this).load(data.getData().getTeacher().getAvatar_url()).bitmapTransform(new GlideCircleTransform(getActivity())).placeholder(R.mipmap.error_header).crossFade().into(image);
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

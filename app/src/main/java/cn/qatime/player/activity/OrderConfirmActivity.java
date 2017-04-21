@@ -69,7 +69,9 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     private LinearLayout couponPriceLayout;
     private TextView couponPrice;
     private TextView balance;
+    private TextView textCourseType;
     private String courseType;
+    private View tip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +97,16 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 
 
     private void setValue(OrderPayBean data) {
+        if (!StringUtils.isNullOrBlanK(courseType)) {
+            if ("live".equals(courseType)) {
+                textCourseType.setText(R.string.live_courses);
+            } else if ("interact".equals(courseType)) {
+                textCourseType.setText(R.string.interact_courses);
+            } else if ("video".equals(courseType)) {
+                textCourseType.setText(R.string.video_courses);
+                tip.setVisibility(View.VISIBLE);
+            }
+        }
 
         name.setText(data.name);
         project.setText(data.subject);
@@ -147,9 +159,15 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         if (!StringUtils.isNullOrBlanK(coupon)) {
             map.put("coupon_code", coupon);
         }
-        String url = UrlUtils.getUrl(UrlUtils.urlCourses + id + "/orders", map);
+        String url = "";
         if (!StringUtils.isNullOrBlanK(courseType)) {
-            url = UrlUtils.getUrl(UrlUtils.urlInteractCourses + id + "/orders", map);
+            if ("live".equals(courseType)) {
+                url = UrlUtils.getUrl(UrlUtils.urlCourses + id + "/orders", map);
+            } else if ("interact".equals(courseType)) {
+                url = UrlUtils.getUrl(UrlUtils.urlInteractCourses + id + "/orders", map);
+            } else if ("video".equals(courseType)) {
+                url = UrlUtils.getUrl(UrlUtils.urlVideoCourses + id + "/orders", map);
+            }
         }
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, url, null,
@@ -248,10 +266,12 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         project = (TextView) findViewById(R.id.project);
         grade = (TextView) findViewById(R.id.grade);
         teacher = (TextView) findViewById(R.id.teacher);
+        textCourseType = (TextView) findViewById(R.id.course_type);
         classnumber = (TextView) findViewById(R.id.class_number);
         wechatLayout = findViewById(R.id.wechat_layout);
         alipayLayout = findViewById(R.id.alipay_layout);
         accountLayout = findViewById(R.id.account_layout);
+        tip = findViewById(R.id.tip);
         balance = (TextView) findViewById(R.id.balance);
 
         couponLayout = findViewById(R.id.coupon_layout);

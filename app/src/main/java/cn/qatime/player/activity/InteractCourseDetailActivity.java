@@ -2,6 +2,7 @@ package cn.qatime.player.activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -22,7 +23,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +38,7 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.InteractCourseDetailBean;
 import libraryextra.bean.OrderPayBean;
+import libraryextra.bean.TeacherBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -45,7 +46,6 @@ import libraryextra.utils.VolleyListener;
 import libraryextra.view.SimpleViewPagerIndicator;
 
 public class InteractCourseDetailActivity extends BaseFragmentActivity implements View.OnClickListener {
-    ImageView image;
     private int id;
     private String[] mTitles;
     private SimpleViewPagerIndicator mIndicator;
@@ -54,16 +54,15 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
     private TextView title;
     private InteractCourseDetailBean data;
     private ViewPager mViewPager;
-    private FragmentPagerAdapter mAdapter;
     private int pager = 0;
     TextView price;
-    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     DecimalFormat df = new DecimalFormat("#.00");
     private AlertDialog alertDialog;
     private Button startStudy;
     private View startStudyView;
-    private View rlImage;
     private View handleLayout;
+    private TextView refundAnyTime;
+    private TextView joinCheap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,14 +83,14 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
 
     public void initView() {
         EventBus.getDefault().register(this);
-        image = (ImageView) findViewById(R.id.image);
-        rlImage = findViewById(R.id.rl_image);
         name = (TextView) findViewById(R.id.name);
-        rlImage.setLayoutParams(new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(this), ScreenUtils.getScreenWidth(this) * 5 / 8));
 
         fragBaseFragments.add(new FragmentInteractDetailClassInfo());
         fragBaseFragments.add(new FragmentInteractDetailTeachersInfo());
         fragBaseFragments.add(new FragmentInteractDetailClassList());
+
+        refundAnyTime = (TextView) findViewById(R.id.refund_any_time);
+        joinCheap = (TextView) findViewById(R.id.join_cheap);
 
         title = (TextView) findViewById(R.id.title);
         price = (TextView) findViewById(R.id.price);
@@ -108,7 +107,7 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
         mViewPager = (ViewPager) findViewById(R.id.id_stickynavlayout_viewpager);
         mTitles = new String[]{getString(R.string.remedial_detail), getString(R.string.teachers_detail), getString(R.string.course_arrangement)};
         mIndicator.setTitles(mTitles);
-        mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
+        FragmentPagerAdapter mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public int getCount() {
                 return mTitles.length;
@@ -157,7 +156,6 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
 
                         if (data != null && data.getData() != null && data.getData().getLive_start_time() != null) {
                             handleLayout.setVisibility(View.VISIBLE);
-                            Glide.with(getApplicationContext()).load(data.getData().getPublicize_url()).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
                             name.setText(data.getData().getName());
                             title.setText(data.getData().getName());
                             String price;
@@ -178,7 +176,14 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
                                     startStudy.setEnabled(false);
                                 }
                             }
-
+                            if (data.getData().getIcons() != null) {
+                                if (!data.getData().getIcons().isRefund_any_time()) {
+                                    refundAnyTime.setVisibility(View.GONE);
+                                }
+                                if (!data.getData().getIcons().isJoin_cheap()) {
+                                    joinCheap.setVisibility(View.GONE);
+                                }
+                            }
                         }
                     }
 
@@ -280,7 +285,7 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
         bean.subject = data.getData().getSubject();
         bean.grade = data.getData().getGrade();
         bean.classnumber = data.getData().getLessons_count();
-        List<InteractCourseDetailBean.DataBean.TeachersBean> teachers = data.getData().getTeachers();
+        List<TeacherBean> teachers = data.getData().getTeachers();
 //        StringBuffer teacherNames = new StringBuffer();
 //        for (int i = 0; i < teachers.size(); i++) {
 //            teacherNames.append(teachers.get(0).getName());

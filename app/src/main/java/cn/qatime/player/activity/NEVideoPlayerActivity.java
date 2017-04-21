@@ -359,7 +359,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff999999);
-                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff333333);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffff5842);
                 if (position == 1) {
                     inputPanel.visibilityInput();
                 } else {

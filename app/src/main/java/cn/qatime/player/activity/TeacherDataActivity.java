@@ -44,7 +44,7 @@ import libraryextra.view.GridViewForScrollView;
 public class TeacherDataActivity extends BaseActivity {
     //    private ImageView banner;
     private ImageView headSculpture;
-    private TextView sex;
+    private ImageView sex;
     private TextView name;
     private TextView describe;
     private List<TeacherDataBean.DataBean.Course> list = new ArrayList<>();
@@ -70,7 +70,7 @@ public class TeacherDataActivity extends BaseActivity {
         scroll.setMode(PullToRefreshBase.Mode.DISABLED);
 //        banner = (ImageView) findViewById(R.id.banner);
         headSculpture = (ImageView) findViewById(R.id.head_sculpture);
-        sex = (TextView) findViewById(R.id.sex);
+        sex = (ImageView) findViewById(R.id.sex);
         name = (TextView) findViewById(R.id.name);
         teachAge = (TextView) findViewById(R.id.teach_age);
         school = (TextView) findViewById(R.id.school);
@@ -219,8 +219,7 @@ public class TeacherDataActivity extends BaseActivity {
                                 subject.setText(bean.getData().getSubject());
                                 province.setText(bean.getData().getProvince());
                                 city.setText(bean.getData().getCity());
-                                sex.setText(getSex(bean.getData().getGender()));
-                                sex.setTextColor(getSexColor(bean.getData().getGender()));
+                                sex.setImageResource("male".equals(bean.getData().getGender())?R.mipmap.male:R.mipmap.female);
                                 Glide.with(TeacherDataActivity.this).load(bean.getData().getAvatar_url()).transform(new GlideCircleTransform(TeacherDataActivity.this)).placeholder(R.mipmap.error_header_rect).crossFade().into(headSculpture);
                                 school.setText(bean.getData().getSchool());
                                 if (bean.getData().getCourses() != null && bean.getData().getCourses().size() > 0) {
