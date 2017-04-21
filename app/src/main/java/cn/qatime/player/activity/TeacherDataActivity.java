@@ -54,7 +54,6 @@ public class TeacherDataActivity extends BaseActivity {
     private TextView subject;
     private TextView province;
     private TextView city;
-    private TextView town;
     private DecimalFormat df = new DecimalFormat("#.00");
     private int teacherId;
     private GridViewForScrollView videoGrid;
@@ -79,7 +78,6 @@ public class TeacherDataActivity extends BaseActivity {
         subject = (TextView) findViewById(R.id.subject);
         province = (TextView) findViewById(R.id.province);
         city = (TextView) findViewById(R.id.city);
-        town = (TextView) findViewById(R.id.town);
 //        relEmpty = findViewById(R.id.rel_empty);
         describe = (TextView) findViewById(R.id.describe);
         liveGrid = (GridViewForScrollView) findViewById(R.id.live_grid);
@@ -221,7 +219,6 @@ public class TeacherDataActivity extends BaseActivity {
                                 subject.setText(bean.getData().getSubject());
                                 province.setText(bean.getData().getProvince());
                                 city.setText(bean.getData().getCity());
-                                town.setText(bean.getData().getTown());
                                 sex.setText(getSex(bean.getData().getGender()));
                                 sex.setTextColor(getSexColor(bean.getData().getGender()));
                                 Glide.with(TeacherDataActivity.this).load(bean.getData().getAvatar_url()).transform(new GlideCircleTransform(TeacherDataActivity.this)).placeholder(R.mipmap.error_header_rect).crossFade().into(headSculpture);
