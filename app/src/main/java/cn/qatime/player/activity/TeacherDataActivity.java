@@ -1,6 +1,7 @@
 package cn.qatime.player.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -47,7 +48,9 @@ public class TeacherDataActivity extends BaseActivity {
     private ImageView sex;
     private TextView name;
     private TextView describe;
-    private List<TeacherDataBean.DataBean.Course> list = new ArrayList<>();
+    private List<TeacherDataBean.DataBean.Course> liveList = new ArrayList<>();
+    private List<TeacherDataBean.DataBean.VideoCoursesBean> videoList = new ArrayList<>();
+    private List<TeacherDataBean.DataBean.InteractiveCourses> interactiveList = new ArrayList<>();
     private TextView teachAge;
     private TextView school;
     private TextView category;
@@ -59,9 +62,16 @@ public class TeacherDataActivity extends BaseActivity {
     private GridViewForScrollView videoGrid;
     private GridViewForScrollView liveGrid;
     private GridViewForScrollView interactiveGrid;
-    private CommonAdapter<TeacherDataBean.DataBean.Course> videoAdapter;
+    private CommonAdapter<TeacherDataBean.DataBean.VideoCoursesBean> videoAdapter;
     private CommonAdapter<TeacherDataBean.DataBean.Course> liveAdapter;
-    private CommonAdapter<TeacherDataBean.DataBean.Course> interactiveAdapter;
+    private CommonAdapter<TeacherDataBean.DataBean.InteractiveCourses> interactiveAdapter;
+    private View liveLayout;
+    private View interactiveLayout;
+    private View videoLayout;
+    private TextView courseCanRefund;
+    private TextView infoComplete;
+    private TextView teachOnline;
+
 //    private View
 // ;
 
@@ -70,6 +80,9 @@ public class TeacherDataActivity extends BaseActivity {
         scroll.setMode(PullToRefreshBase.Mode.DISABLED);
 //        banner = (ImageView) findViewById(R.id.banner);
         headSculpture = (ImageView) findViewById(R.id.head_sculpture);
+        courseCanRefund = (TextView) findViewById(R.id.course_can_refund);
+        infoComplete = (TextView) findViewById(R.id.info_complete);
+        teachOnline = (TextView) findViewById(R.id.teach_online);
         sex = (ImageView) findViewById(R.id.sex);
         name = (TextView) findViewById(R.id.name);
         teachAge = (TextView) findViewById(R.id.teach_age);
@@ -83,6 +96,9 @@ public class TeacherDataActivity extends BaseActivity {
         liveGrid = (GridViewForScrollView) findViewById(R.id.live_grid);
         interactiveGrid = (GridViewForScrollView) findViewById(R.id.interactive_grid);
         videoGrid = (GridViewForScrollView) findViewById(R.id.video_grid);
+        liveLayout = findViewById(R.id.live_layout);
+        interactiveLayout = findViewById(R.id.interactive_layout);
+        videoLayout = findViewById(R.id.video_layout);
     }
 
     @Override
@@ -94,7 +110,7 @@ public class TeacherDataActivity extends BaseActivity {
         teacherId = getIntent().getIntExtra("teacherId", 0);
 
         initData(1);
-        liveAdapter = new CommonAdapter<TeacherDataBean.DataBean.Course>(this, list, R.layout.item_teacher_data) {
+        liveAdapter = new CommonAdapter<TeacherDataBean.DataBean.Course>(this, liveList, R.layout.item_teacher_data) {
 
             @Override
             public void convert(ViewHolder helper, TeacherDataBean.DataBean.Course item, int position) {
@@ -117,16 +133,16 @@ public class TeacherDataActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(TeacherDataActivity.this, RemedialClassDetailActivity.class);
-                intent.putExtra("id", list.get(position).getId());
+                intent.putExtra("id", liveList.get(position).getId());
                 startActivityForResult(intent, Constant.REQUEST);
             }
         });
         liveGrid.setAdapter(liveAdapter);
 
-        interactiveAdapter = new CommonAdapter<TeacherDataBean.DataBean.Course>(this, list, R.layout.item_teacher_data) {
+        interactiveAdapter = new CommonAdapter<TeacherDataBean.DataBean.InteractiveCourses>(this, interactiveList, R.layout.item_teacher_data) {
 
             @Override
-            public void convert(ViewHolder helper, TeacherDataBean.DataBean.Course item, int position) {
+            public void convert(ViewHolder helper, TeacherDataBean.DataBean.InteractiveCourses item, int position) {
                 if (item == null) {
                     Logger.e("item數據空");
                     return;
@@ -146,15 +162,15 @@ public class TeacherDataActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(TeacherDataActivity.this, RemedialClassDetailActivity.class);
-                intent.putExtra("id", list.get(position).getId());
+                intent.putExtra("id", interactiveList.get(position).getId());
                 startActivityForResult(intent, Constant.REQUEST);
             }
         });
         interactiveGrid.setAdapter(interactiveAdapter);
-        videoAdapter = new CommonAdapter<TeacherDataBean.DataBean.Course>(this, list, R.layout.item_teacher_data) {
+        videoAdapter = new CommonAdapter<TeacherDataBean.DataBean.VideoCoursesBean>(this, videoList, R.layout.item_teacher_data) {
 
             @Override
-            public void convert(ViewHolder helper, TeacherDataBean.DataBean.Course item, int position) {
+            public void convert(ViewHolder helper, TeacherDataBean.DataBean.VideoCoursesBean item, int position) {
                 if (item == null) {
                     Logger.e("item數據空");
                     return;
@@ -174,7 +190,7 @@ public class TeacherDataActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(TeacherDataActivity.this, RemedialClassDetailActivity.class);
-                intent.putExtra("id", list.get(position).getId());
+                intent.putExtra("id", videoList.get(position).getId());
                 startActivityForResult(intent, Constant.REQUEST);
             }
         });
@@ -203,7 +219,9 @@ public class TeacherDataActivity extends BaseActivity {
                     protected void onSuccess(JSONObject response) {
                         Logger.e(response.toString());
                         if (type == 1) {
-                            list.clear();
+                            liveList.clear();
+                            interactiveList.clear();
+                            videoList.clear();
                         }
                         try {
                             TeacherDataBean bean = JsonUtils.objectFromJson(response.toString(), TeacherDataBean.class);
@@ -213,25 +231,58 @@ public class TeacherDataActivity extends BaseActivity {
                                     setTitles(name);
                                     TeacherDataActivity.this.name.setText(name);
                                 }
+                                if (bean.getData().getIcons() != null) {
+                                    Drawable light = getResources().getDrawable(R.mipmap.identification_light);
+                                    light.setBounds(0, 0, light.getMinimumWidth(), light.getMinimumHeight());
+                                    Drawable dark = getResources().getDrawable(R.mipmap.identification_dark);
+                                    dark.setBounds(0, 0, dark.getMinimumWidth(), dark.getMinimumHeight());
+                                    if (bean.getData().getIcons().isCourse_can_refund()) {
+                                        courseCanRefund.setTextColor(0xff109f10);
+                                        courseCanRefund.setCompoundDrawables(light, null, null, null);
+                                    } else {
+                                        courseCanRefund.setTextColor(0xff999999);
+                                        courseCanRefund.setCompoundDrawables(dark, null, null, null);
+                                    }
+                                    if (bean.getData().getIcons().isInfo_complete()) {
+                                        infoComplete.setTextColor(0xff109f10);
+                                        infoComplete.setCompoundDrawables(light, null, null, null);
+                                    } else {
+                                        infoComplete.setTextColor(0xff999999);
+                                        infoComplete.setCompoundDrawables(dark, null, null, null);
+                                    }
+                                    if (bean.getData().getIcons().isTeach_online()) {
+                                        teachOnline.setTextColor(0xff109f10);
+                                        teachOnline.setCompoundDrawables(light, null, null, null);
+                                    } else {
+                                        teachOnline.setTextColor(0xff999999);
+                                        teachOnline.setCompoundDrawables(dark, null, null, null);
+                                    }
+                                }
                                 describe.setText(StringUtils.isNullOrBlanK(bean.getData().getDesc()) ? getString(R.string.not_available) : bean.getData().getDesc());
                                 teachAge.setText(getTeachingYear(bean.getData().getTeaching_years()));
                                 category.setText(bean.getData().getCategory());
                                 subject.setText(bean.getData().getSubject());
                                 province.setText(bean.getData().getProvince());
                                 city.setText(bean.getData().getCity());
-                                sex.setImageResource("male".equals(bean.getData().getGender())?R.mipmap.male:R.mipmap.female);
+                                sex.setImageResource("male".equals(bean.getData().getGender()) ? R.mipmap.male : R.mipmap.female);
                                 Glide.with(TeacherDataActivity.this).load(bean.getData().getAvatar_url()).transform(new GlideCircleTransform(TeacherDataActivity.this)).placeholder(R.mipmap.error_header_rect).crossFade().into(headSculpture);
                                 school.setText(bean.getData().getSchool());
+
                                 if (bean.getData().getCourses() != null && bean.getData().getCourses().size() > 0) {
-                                    list.addAll(bean.getData().getCourses());
-                                }
-//                                else {
-//                                    relEmpty.setVisibility(View.VISIBLE);
-//                                }
+                                    liveList.addAll(bean.getData().getCourses());
+                                    liveAdapter.notifyDataSetChanged();
+                                } else liveLayout.setVisibility(View.GONE);
+
+                                if (bean.getData().getInteractive_courses() != null && bean.getData().getInteractive_courses().size() > 0) {
+                                    interactiveList.addAll(bean.getData().getInteractive_courses());
+                                    interactiveAdapter.notifyDataSetChanged();
+                                } else interactiveLayout.setVisibility(View.GONE);
+
+                                if (bean.getData().getVideo_courses() != null && bean.getData().getVideo_courses().size() > 0) {
+                                    videoList.addAll(bean.getData().getVideo_courses());
+                                    videoAdapter.notifyDataSetChanged();
+                                } else videoLayout.setVisibility(View.GONE);
                             }
-                            liveAdapter.notifyDataSetChanged();
-                            interactiveAdapter.notifyDataSetChanged();
-                            videoAdapter.notifyDataSetChanged();
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
                         }

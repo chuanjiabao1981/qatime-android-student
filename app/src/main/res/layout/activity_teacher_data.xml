@@ -80,42 +80,75 @@
                 android:layout_alignParentBottom="true"
                 android:orientation="horizontal">
 
-                <TextView
+                <View
                     android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/course_can_refund"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:drawableLeft="@mipmap/identification_light"
                     android:gravity="center"
                     android:padding="3dp"
-                    android:text="课程可退"
+                    android:text=" 课程可退"
                     android:textColor="#109f10" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
 
                 <View
                     android:layout_width="1px"
                     android:layout_height="match_parent"
                     android:background="#ccc" />
 
-                <TextView
+                <View
                     android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/info_complete"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:drawableLeft="@mipmap/identification_light"
                     android:gravity="center"
                     android:padding="3dp"
-                    android:text="资料完整"
+                    android:text=" 资料完整"
                     android:textColor="#109f10" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
 
                 <View
                     android:layout_width="1px"
                     android:layout_height="match_parent"
                     android:background="#ccc" />
 
-                <TextView
+                <View
                     android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/teach_online"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:drawableLeft="@mipmap/identification_light"
                     android:gravity="center"
                     android:padding="3dp"
-                    android:text="在线授课"
+                    android:text=" 在线授课"
                     android:textColor="#109f10" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
             </LinearLayout>
 
             <View
