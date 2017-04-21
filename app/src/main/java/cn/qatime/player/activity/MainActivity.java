@@ -9,6 +9,8 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +41,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -99,6 +102,7 @@ public class MainActivity extends BaseFragmentActivity {
                     }
                 }
             };
+    private View linear_bar;
 
     /**
      * 刷新未读
@@ -115,6 +119,27 @@ public class MainActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        linear_bar = findViewById(R.id.ll_bar);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+                    | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            //透明状态栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //透明导航栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            linear_bar.setVisibility(View.VISIBLE);
+            //获取到状态栏的高度
+            int statusHeight = getStatusBarHeight();
+            //动态的设置隐藏布局的高度
+            ViewGroup.LayoutParams params = linear_bar.getLayoutParams();
+            params.height = statusHeight;
+            linear_bar.setLayoutParams(params);
+        }
         initView();
         EventBus.getDefault().register(this);
         //  注册/注销观察者
@@ -192,6 +217,26 @@ public class MainActivity extends BaseFragmentActivity {
                 } else {
                     NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.isChatMessageNotifyStatus() ? MsgService.MSG_CHATTING_ACCOUNT_NONE : MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
                 }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+                }
+
+                //Android4.4及以上版本才能设置此效果
+
+                //Android5.0版本
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+                    if (position == 4) {
+                        //设置状态栏颜色
+                        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+                        linear_bar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                    } else {
+                        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+                        linear_bar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                    }
+                }
             }
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout, 0x1000);
@@ -199,6 +244,24 @@ public class MainActivity extends BaseFragmentActivity {
         message_x = fragmentlayout.getTabLayout().findViewById(R.id.message_x);
 
 
+    }
+
+    /**
+     * 通过反射的方式获取状态栏高度
+     *
+     * @return
+     */
+    private int getStatusBarHeight() {
+        try {
+            Class<?> c = Class.forName("com.android.internal.R$dimen");
+            Object obj = c.newInstance();
+            Field field = c.getField("status_bar_height");
+            int x = Integer.parseInt(field.get(obj).toString());
+            return getResources().getDimensionPixelSize(x);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     private void initMessage() {

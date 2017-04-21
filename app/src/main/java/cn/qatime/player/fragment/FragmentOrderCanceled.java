@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.google.gson.JsonSyntaxException;
@@ -58,8 +57,6 @@ public class FragmentOrderCanceled extends BaseFragment {
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
         View empty = View.inflate(getActivity(),R.layout.empty_view,null);
-        TextView textEmpty = (TextView) empty.findViewById(R.id.text_empty);
-        textEmpty.setText(R.string.not_found_related_order);
         listView.setEmptyView(empty);
         listView.setMode(PullToRefreshBase.Mode.BOTH);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));

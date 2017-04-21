@@ -70,17 +70,17 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
 
     private void setValue() {
 //        商品信息
-        if("LiveStudio::Course".equals(data.getProduct_type())){
-                classid = data.getProduct().getId();
+        if ("LiveStudio::Course".equals(data.getProduct_type())) {
+            classid = data.getProduct().getId();
             if (StringUtils.isNullOrBlanK(data.getProduct().getName())) {
                 name.setText(getResourceString(R.string.cancel_order_name));
             } else {
                 name.setText(data.getProduct().getName());
             }
             if (StringUtils.isNullOrBlanK(data.getProduct().getGrade())) {
-                grade.setText("直播课/"+getResourceString(R.string.grade));
+                grade.setText("直播课/" + getResourceString(R.string.grade));
             } else {
-                grade.setText("直播课/" +data.getProduct().getGrade());
+                grade.setText("直播课/" + data.getProduct().getGrade());
             }
             if (StringUtils.isNullOrBlanK(data.getProduct().getSubject())) {
                 subject.setText(getResourceString(R.string.subject));
@@ -92,8 +92,8 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
             } else {
                 teacher.setText(data.getProduct().getTeacher_name());
             }
-            progress.setText(String.format(getString(R.string.lesson_count),data.getProduct().getPreset_lesson_count()));
-        }else if("LiveStudio::InteractiveCourse".equals(data.getProduct_type())){
+            progress.setText(String.format(getString(R.string.lesson_count), data.getProduct().getPreset_lesson_count()));
+        } else if ("LiveStudio::InteractiveCourse".equals(data.getProduct_type())) {
             classid = data.getProduct_interactive_course().getId();
             if (StringUtils.isNullOrBlanK(data.getProduct_interactive_course().getName())) {
                 name.setText(getResourceString(R.string.cancel_order_name));
@@ -101,9 +101,9 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
                 name.setText(data.getProduct_interactive_course().getName());
             }
             if (StringUtils.isNullOrBlanK(data.getProduct_interactive_course().getGrade())) {
-                grade.setText("一对一/"+getResourceString(R.string.grade));
+                grade.setText("一对一/" + getResourceString(R.string.grade));
             } else {
-                grade.setText("一对一/"+data.getProduct_interactive_course().getGrade());
+                grade.setText("一对一/" + data.getProduct_interactive_course().getGrade());
             }
             if (StringUtils.isNullOrBlanK(data.getProduct_interactive_course().getSubject())) {
                 subject.setText(getResourceString(R.string.subject));
@@ -115,13 +115,13 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
             } else {
                 StringBuffer sp = new StringBuffer();
                 sp.append(data.getProduct_interactive_course().getTeachers().get(0).getName());
-                if(data.getProduct_interactive_course().getTeachers().size()>1){
+                if (data.getProduct_interactive_course().getTeachers().size() > 1) {
                     sp.append("...");
                 }
                 teacher.setText(data.getProduct_interactive_course().getTeachers().get(0).getName());
             }
-            progress.setText(String.format(getString(R.string.lesson_count),data.getProduct_interactive_course().getLessons_count()));
-        }else if("LiveStudio::VideoCourse".equals(data.getProduct_type())){
+            progress.setText(String.format(getString(R.string.lesson_count), data.getProduct_interactive_course().getLessons_count()));
+        } else if ("LiveStudio::VideoCourse".equals(data.getProduct_type())) {
             classid = data.getProduct_video_course().getId();
             if (StringUtils.isNullOrBlanK(data.getProduct_video_course().getName())) {
                 name.setText(getResourceString(R.string.cancel_order_name));
@@ -129,9 +129,9 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
                 name.setText(data.getProduct_video_course().getName());
             }
             if (StringUtils.isNullOrBlanK(data.getProduct_video_course().getGrade())) {
-                grade.setText("视频课/"+getResourceString(R.string.grade));
+                grade.setText("视频课/" + getResourceString(R.string.grade));
             } else {
-                grade.setText("视频课/"+data.getProduct_video_course().getGrade());
+                grade.setText("视频课/" + data.getProduct_video_course().getGrade());
             }
             if (StringUtils.isNullOrBlanK(data.getProduct_video_course().getSubject())) {
                 subject.setText(getResourceString(R.string.subject));
@@ -143,7 +143,7 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
             } else {
                 teacher.setText(data.getProduct_video_course().getTeacher().getName());
             }
-            progress.setText(String.format(getString(R.string.lesson_count),data.getProduct_video_course().getPreset_lesson_count()));
+            progress.setText(String.format(getString(R.string.lesson_count), data.getProduct_video_course().getPreset_lesson_count()));
         }
 
         ordernumber.setText(data.getId());
@@ -236,7 +236,15 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 申请退款
+     */
     private void applyRefund() {
+        if ("LiveStudio::VideoCourse".equals(data.getProduct_type())) {
+            Toast.makeText(PersonalMyOrderPaidDetailActivity.this, "此订单类型暂不支持退款", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Map<String, String> map = new HashMap<>();
         map.put("order_id", ordernumber.getText().toString());
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/refunds/info", map), null,
@@ -247,18 +255,19 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
                         intent.putExtra("response", response.toString());
                         intent.putExtra("order_id", ordernumber.getText().toString());
 
-                        if("LiveStudio::Course".equals(data.getProduct_type())){
+                        if ("LiveStudio::Course".equals(data.getProduct_type())) {
                             intent.putExtra("name", data.getProduct().getName());
                             intent.putExtra("preset_lesson_count", data.getProduct().getPreset_lesson_count());
                             intent.putExtra("closed_lessons_count", data.getProduct().getClosed_lessons_count());
-                        }else if("LiveStudio::InteractiveCourse".equals(data.getProduct_type())){
+                        } else if ("LiveStudio::InteractiveCourse".equals(data.getProduct_type())) {
                             intent.putExtra("name", data.getProduct_interactive_course().getName());
                             intent.putExtra("preset_lesson_count", data.getProduct_interactive_course().getLessons_count());
                             intent.putExtra("closed_lessons_count", data.getProduct_interactive_course().getClosed_lessons_count());
-                        }else if("LiveStudio::VideoCourse".equals(data.getProduct_type())){
-                            intent.putExtra("name", data.getProduct_video_course().getName());
-                            intent.putExtra("preset_lesson_count", data.getProduct_video_course().getPreset_lesson_count());
-                            intent.putExtra("closed_lessons_count", data.getProduct_video_course().getClosed_lessons_count());
+                        } else if ("LiveStudio::VideoCourse".equals(data.getProduct_type())) {
+//                            intent.putExtra("name", data.getProduct_video_course().getName());
+//                            intent.putExtra("preset_lesson_count", data.getProduct_video_course().getPreset_lesson_count());
+//                            intent.putExtra("closed_lessons_count", data.getProduct_video_course().getClosed_lessons_count());
+                            Logger.e("error");
                         }
 
                         startActivityForResult(intent, Constant.REQUEST);
@@ -314,7 +323,7 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode==Constant.REQUEST&&resultCode==Constant.RESPONSE) {
+        if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
             setResult(Constant.RESPONSE);
             finish();
         }
