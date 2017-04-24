@@ -77,6 +77,7 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
                     textGetcode.setEnabled(true);
                 } else {
                     textGetcode.setEnabled(false);
+                    Toast.makeText(ParentPhoneActivity.this, R.string.phone_number_is_incorrect, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -109,7 +110,6 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
         switch (v.getId()) {
 
             case R.id.text_getcode:
-                phone = newParentPhone.getText().toString().trim();
                 phone = newParentPhone.getText().toString().trim();
                 if (!StringUtils.isPhone(phone)) {//手机号不正确
                     Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
