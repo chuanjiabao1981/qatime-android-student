@@ -11,6 +11,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
@@ -331,7 +332,7 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
         float touchY = event.getRawY();
         touchX -= paintOffsetX;
         touchY -= paintOffsetY;
-        Logger.e(TAG, "x=" + touchX + ", y=" + touchY);
+//        Logger.e(TAG, "x=" + touchX + ", y=" + touchY);
 
         switch (action) {
             case MotionEvent.ACTION_DOWN:
@@ -392,7 +393,8 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
     @Override
     public void onTransaction(String account, final List<Transaction> transactions) {
         if (transactions.size() > 0 && transactions.get(0).isSync()
-                && transactions.get(0).getUid().equals(BaseApplication.getAccount())) {
+//                && transactions.get(0).getUid().equals(BaseApplication.getAccount())
+                ) {
             // 断网重连，主播同步数据，收到自己的数据
             if (!isSurfaceViewCreated) {
                 postDelayed(new Runnable() {
@@ -806,5 +808,27 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
     public void sendFlipData(String docId, int currentPageNum, int pageCount, int type) {
         transactionManager.sendFlipTransaction(docId, currentPageNum, pageCount, type);
         saveUserData(BaseApplication.getAccount(), new Transaction().makeFlipTranscation(docId, currentPageNum, pageCount, type), false, false, true);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+//        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        int width = MeasureSpec.getSize(widthMeasureSpec);
+        int height = MeasureSpec.getSize(heightMeasureSpec);
+        if (width > height) {
+            if (width > height * 4 / 3) {
+                width = (int) (height * 4 / 3 + 0.5);
+            } else {
+                height = (int) (width * 3 / 4 + 0.5);
+            }
+        } else {
+            if (height > width * 3 / 4) {
+                width = (int) (height * 4 / 3 + 0.5);
+            } else {
+                height = (int) (width * 3 / 4 + 0.5);
+            }
+        }
+        setMeasuredDimension(width, height);
     }
 }

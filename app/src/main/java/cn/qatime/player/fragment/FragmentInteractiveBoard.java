@@ -54,7 +54,6 @@ public class FragmentInteractiveBoard extends BaseFragment implements View.OnCli
     private int choosedColor;
 
     private String sessionId; // 白板sessionId
-    private ChatRoomInfo roomInfo;
 
 
     private void assignViews() {
@@ -86,9 +85,8 @@ public class FragmentInteractiveBoard extends BaseFragment implements View.OnCli
         setListeners();
     }
 
-    public void initRTSView(ChatRoomInfo roomInfo) {
-        this.sessionId = roomInfo.getRoomId();
-        this.roomInfo = roomInfo;
+    public void initRTSView(String roomId) {
+        this.sessionId = roomId;
         initView();
         initDoodleView(null);
         registerObservers(true);
@@ -112,7 +110,7 @@ public class FragmentInteractiveBoard extends BaseFragment implements View.OnCli
 //                Logger.e("Doodle", "doodleView marginTop =" + marginTop);
                 int marginLeft = doodleView.getLeft();
 //                Logger.e("Doodle", "doodleView marginLeft =" + marginLeft);
-                float offsetY = statusBarHeight + marginTop + DensityUtils.dip2px(getActivity(), 220 + 87);
+                float offsetY = statusBarHeight + marginTop + DensityUtils.dip2px(getActivity(), 220 + 45);
 
                 doodleView.setPaintOffset((float) marginLeft, offsetY);
                 Logger.e("Doodle", "client1 offsetX = " + (float) marginLeft + ", offsetY = " + offsetY);
@@ -170,6 +168,11 @@ public class FragmentInteractiveBoard extends BaseFragment implements View.OnCli
         }
     };
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        doodleView.onResume();
+    }
 
     @Override
     public void onDestroy() {
@@ -193,7 +196,7 @@ public class FragmentInteractiveBoard extends BaseFragment implements View.OnCli
     }
 
     // 初始化是否开启白板
-    private void initView() {
+    public void initView() {
         if (ChatRoomMemberCache.getInstance().isRTSOpen()) {
             playBack.setBackgroundResource(R.mipmap.rts_back);
             playBack.setEnabled(true);

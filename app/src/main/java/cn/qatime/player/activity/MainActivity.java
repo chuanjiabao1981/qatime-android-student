@@ -559,19 +559,19 @@ public class MainActivity extends BaseFragmentActivity {
         public void onEvent(StatusCode code) {
             if (code.wontAutoLogin()) {
 //                kickOut(code);
-                Logger.e("未登录成功");
+                Logger.e("userStatus未登录成功");
             } else {
                 if (code == StatusCode.NET_BROKEN) {
-                    Logger.e("当前网络不可用");
+                    Logger.e("userStatus当前网络不可用");
                 } else if (code == StatusCode.UNLOGIN) {
-                    Logger.e("未登录");
+                    Logger.e("userStatus未登录");
                 } else if (code == StatusCode.CONNECTING) {
-                    Logger.e("连接中...");
+                    Logger.e("userStatus连接中...");
                 } else if (code == StatusCode.LOGINING) {
-                    Logger.e("登录中...");
+                    Logger.e("userStatus登录中...");
                 } else {
 //                    onRecentContactsLoaded();
-                    Logger.e("其他" + code);
+                    Logger.e("userStatus。。" + code);
                 }
             }
         }

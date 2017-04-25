@@ -1,7 +1,6 @@
 package cn.qatime.player.activity;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -19,8 +18,7 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.RequestCallback;
-import com.netease.nimlib.sdk.ResponseCode;
+import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.avchat.AVChatCallback;
 import com.netease.nimlib.sdk.avchat.AVChatManager;
 import com.netease.nimlib.sdk.avchat.AVChatStateObserver;
@@ -35,14 +33,17 @@ import com.netease.nimlib.sdk.avchat.model.AVChatParameters;
 import com.netease.nimlib.sdk.avchat.model.AVChatVideoFrame;
 import com.netease.nimlib.sdk.avchat.model.AVChatVideoRender;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomInfo;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
-import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.netease.nimlib.sdk.rts.RTSCallback;
+import com.netease.nimlib.sdk.rts.RTSChannelStateObserver;
 import com.netease.nimlib.sdk.rts.RTSManager2;
+import com.netease.nimlib.sdk.rts.constant.RTSTunnelType;
+import com.netease.nimlib.sdk.rts.model.RTSData;
+import com.netease.nimlib.sdk.rts.model.RTSTunData;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.netease.nrtc.sdk.NRtcParameters;
@@ -50,6 +51,7 @@ import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -68,8 +70,8 @@ import cn.qatime.player.fragment.FragmentInteractiveMessage;
 import cn.qatime.player.im.cache.ChatRoomMemberCache;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.doodle.MsgHelper;
-import cn.qatime.player.im.model.FullScreenType;
-import cn.qatime.player.im.model.MeetingConstant;
+import cn.qatime.player.im.doodle.Transaction;
+import cn.qatime.player.im.doodle.TransactionCenter;
 import cn.qatime.player.im.model.MeetingOptCommand;
 import cn.qatime.player.im.view.DialogMaker;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
@@ -121,7 +123,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
      */
     private String roomId;
     private String sessionId;
-    private ChatRoomInfo roomInfo;
+    //    private ChatRoomInfo roomInfo;
     private FragmentInteractiveBoard rtsFragment;
     private Handler hd = new Handler();
     private Runnable hideBackLayout = new Runnable() {
@@ -135,6 +137,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     private InputPanel inputPanel;
     private int id;
     private FragmentInteractiveMessage messageFragment;
+    private String sessionName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,44 +149,22 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         sessionId = "28054274";
         initView();
 
-//        AVChatManager.getInstance().createRoom("8457125", "avchat test", new AVChatCallback<AVChatChannelInfo>() {
-//            @Override
-//            public void onSuccess(AVChatChannelInfo avChatChannelInfo) {
-////                DialogMaker.dismissProgressDialog();
-////                ChatRoomActivity.start(EnterRoomActivity.this, roomId, true);
-////                finish();
-//                Logger.e("av" + avChatChannelInfo.toString());
-//            }
-//
-//            @Override
-//            public void onFailed(int i) {
-////                DialogMaker.dismissProgressDialog();
-////                Toast.makeText(EnterRoomActivity.this, "创建频道失败, code:" + i, Toast.LENGTH_SHORT).show();
-//                Logger.e("av"+i);
-//            }
-//
-//            @Override
-//            public void onException(Throwable throwable) {
-//                Logger.e("av"+throwable.toString());
-//            }
-//        });
 
         // 注册监听
 //        registerObservers(true);
         updateControlUI();
 
-//        hd.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                if (!isPermissionInit) {
-//                    requestPermissionMembers();
-//                }
-//            }
-//        }, 5000);
         requestLivePermission();
         id = getIntent().getIntExtra("id", 0);
         id = 2;
-        initData();
+//        initData();
+       hd.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                roomId = "12345678";
+                enterRoom();
+            }
+        }, 5000);
     }
 
     private void initData() {
@@ -248,7 +229,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
         fragmentlayout = (FragmentLayoutWithLine) findViewById(R.id.fragmentlayout);
 
-        fragmentlayout.setScorllToNext(true);
+        fragmentlayout.setScorllToNext(false);
         fragmentlayout.setScorll(true);
         fragmentlayout.setWhereTab(1);
         fragmentlayout.setTabHeight(4, 0xffff5842);
@@ -307,8 +288,8 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 //                floatFragment.setTeam(team);
             }
         });
-        messageFragment.setSessionId(sessionId);
-        messageFragment.requestTeamInfo();
+//        messageFragment.setSessionId(sessionId);
+//        messageFragment.requestTeamInfo();
 
         inputPanel.setOnInputShowListener(new InputPanel.OnInputShowListener() {
             @Override
@@ -319,54 +300,91 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     }
 
     private void enterRoom() {
-        DialogMaker.showProgressDialog(this, null, "", true, new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                if (enterRequest != null) {
-                    enterRequest.abort();
-                    onLoginDone();
-                    finish();
-                }
-            }
-        }).setCanceledOnTouchOutside(false);
-        EnterChatRoomData data = new EnterChatRoomData(roomId);
-        enterRequest = NIMClient.getService(ChatRoomService.class).enterChatRoom(data);
-        enterRequest.setCallback(new RequestCallback<EnterChatRoomResultData>() {
-            @Override
-            public void onSuccess(EnterChatRoomResultData result) {
-                onLoginDone();
-                roomInfo = result.getRoomInfo();
-                ChatRoomMember member = result.getMember();
-                member.setRoomId(roomInfo.getRoomId());
-                ChatRoomMemberCache.getInstance().saveMyMember(member);
+//        DialogMaker.showProgressDialog(this, null, "", true, new DialogInterface.OnCancelListener() {
+//            @Override
+//            public void onCancel(DialogInterface dialog) {
+//                if (enterRequest != null) {
+//                    enterRequest.abort();
+//                    onLoginDone();
+//                    finish();
+//                }
+//            }
+//        }).setCanceledOnTouchOutside(false);
+//        EnterChatRoomData data = new EnterChatRoomData(roomId);
+//        enterRequest = NIMClient.getService(ChatRoomService.class).enterChatRoom(data);
+//        enterRequest.setCallback(new RequestCallback<EnterChatRoomResultData>() {
+//            @Override
+//            public void onSuccess(EnterChatRoomResultData result) {
+//                onLoginDone();
+//                roomInfo = result.getRoomInfo();
+//                ChatRoomMember member = result.getMember();
+//                member.setRoomId(roomInfo.getRoomId());
+//                ChatRoomMemberCache.getInstance().saveMyMember(member);
 //                if (roomInfo.getExtension() != null) {
 //                    shareUrl = (String) roomInfo.getExtension().get(KEY_SHARE_URL);
 //                }
-                initLiveVideo();
-                rtsFragment.initRTSView(roomInfo);
-//                registerRTSObservers(roomInfo.getRoomId(), true);
+        initLiveVideo();
+        rtsFragment.initRTSView(roomId);
+        joinRTSSession();
+        registerRTSObservers(roomId, true);
+//            }
+//
+//            @Override
+//            public void onFailed(int code) {
+//                onLoginDone();
+//                if (code == ResponseCode.RES_CHATROOM_BLACKLIST) {
+//                    Toast.makeText(InteractiveLiveActivity.this, "你已被拉入黑名单，不能再进入", Toast.LENGTH_SHORT).show();
+//                } else if (code == ResponseCode.RES_ENONEXIST) {
+//                    Toast.makeText(InteractiveLiveActivity.this, "该聊天室不存在", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(InteractiveLiveActivity.this, "enter chat room failed, code=" + code, Toast.LENGTH_SHORT).show();
+//                }
+//                finish();
+//            }
+//
+//            @Override
+//            public void onException(Throwable exception) {
+//                onLoginDone();
+//                Toast.makeText(InteractiveLiveActivity.this, "enter chat room exception, e=" + exception.getMessage(), Toast.LENGTH_SHORT).show();
+//                finish();
+//            }
+//        });
+    }
+
+    // 加入多人白板session
+    private void joinRTSSession() {
+        RTSManager2.getInstance().joinSession(roomId, true, new RTSCallback<RTSData>() {
+            @Override
+            public void onSuccess(RTSData rtsData) {
+                Logger.e("rts extra:" + rtsData.getExtra());
+                // 主播的白板默认为开启状态
+                ChatRoomMemberCache.getInstance().setRTSOpen(true);
+                updateRTSFragment();
             }
 
             @Override
-            public void onFailed(int code) {
-                onLoginDone();
-                if (code == ResponseCode.RES_CHATROOM_BLACKLIST) {
-                    Toast.makeText(InteractiveLiveActivity.this, "你已被拉入黑名单，不能再进入", Toast.LENGTH_SHORT).show();
-                } else if (code == ResponseCode.RES_ENONEXIST) {
-                    Toast.makeText(InteractiveLiveActivity.this, "该聊天室不存在", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(InteractiveLiveActivity.this, "enter chat room failed, code=" + code, Toast.LENGTH_SHORT).show();
-                }
-                finish();
+            public void onFailed(int i) {
+                Logger.e("join rts session failed, code:" + i);
             }
 
             @Override
-            public void onException(Throwable exception) {
-                onLoginDone();
-                Toast.makeText(InteractiveLiveActivity.this, "enter chat room exception, e=" + exception.getMessage(), Toast.LENGTH_SHORT).show();
-                finish();
+            public void onException(Throwable throwable) {
+
             }
         });
+    }
+
+    private void updateRTSFragment() {
+        if (rtsFragment != null) {
+            rtsFragment.initView();
+        } else {
+            hd.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    updateRTSFragment();
+                }
+            }, 50);
+        }
     }
 
     private void initLiveVideo() {
@@ -397,7 +415,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         });
 
         updateControlUI();
-        HandsUp();
+//        HandsUp();
         updateVideoAudioUI();
     }
 
@@ -421,11 +439,10 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     /**
      * 没有互动的用户交互，只有内部主动申请互动
      */
-    private void HandsUp() {
-        MsgHelper.getInstance().sendP2PCustomNotification(roomId, MeetingOptCommand.SPEAK_REQUEST.getValue(), roomInfo.getCreator(), null);
-        ChatRoomMemberCache.getInstance().saveMyHandsUpDown(roomId, true);
-    }
-
+//    private void HandsUp() {
+//        MsgHelper.getInstance().sendP2PCustomNotification(roomId, MeetingOptCommand.SPEAK_REQUEST.getValue(), roomInfo.getCreator(), null);
+//        ChatRoomMemberCache.getInstance().saveMyHandsUpDown(roomId, true);
+//    }
     private void onLoginDone() {
         enterRequest = null;
         DialogMaker.dismissProgressDialog();
@@ -536,14 +553,14 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     // 显示成员图像
     private void showView(Map<Integer, String> imageMap, String a) {
         if (userJoinedList != null && userJoinedList.contains(a)
-                && !roomInfo.getCreator().equals(a)
+//                && !roomInfo.getCreator().equals(a)
                 && !imageMap.containsValue(a) && imageMap.size() < 1) {
             if (!imageMap.containsKey(0)) {
                 AVChatVideoRender render = new AVChatVideoRender(InteractiveLiveActivity.this);
                 boolean isSetup = false;
                 try {
                     isSetup = AVChatManager.getInstance().setupRemoteVideoRender(a, render, false, AVChatVideoScalingType.SCALE_ASPECT_BALANCED);
-                    Logger.e("setup render, creator account:" + roomInfo.getCreator() + ", render account:" + a + ", isSetup:" + isSetup);
+//                    Logger.e("setup render, creator account:" + roomInfo.getCreator() + ", render account:" + a + ", isSetup:" + isSetup);
                 } catch (Exception e) {
                     Logger.e("set up video render error:" + e.getMessage());
                     e.printStackTrace();
@@ -618,40 +635,40 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         public void onRoomMemberIn(ChatRoomMember member) {
             onMasterJoin(member.getAccount());
 
-            if (BaseApplication.getAccount().equals(roomInfo.getCreator())
-                    && !member.getAccount().equals(BaseApplication.getAccount())) {
-                // 主持人点对点通知有权限的成员列表
-                // 主持人自己进来，不需要通知自己
-                MsgHelper.getInstance().sendP2PCustomNotification(roomId, MeetingOptCommand.ALL_STATUS.getValue(),
-                        member.getAccount(), ChatRoomMemberCache.getInstance().getPermissionMems(roomId));
-            }
-
-            if (member.getAccount().equals(roomInfo.getCreator())) {
-                // 主持人重新进来,观众要取消自己的举手状态
-                ChatRoomMemberCache.getInstance().saveMyHandsUpDown(roomId, false);
-            }
-
-            if (member.getAccount().equals(roomInfo.getCreator()) && BaseApplication.getAccount().equals(roomInfo.getCreator())) {
-                // 主持人自己重新进来，清空观众的举手状态
-                ChatRoomMemberCache.getInstance().clearAllHandsUp(roomId);
-                // 重新向所有成员请求权限
-//                requestPermissionMembers();
-            }
+//            if (BaseApplication.getAccount().equals(roomInfo.getCreator())
+//                    && !member.getAccount().equals(BaseApplication.getAccount())) {
+//                // 主持人点对点通知有权限的成员列表
+//                // 主持人自己进来，不需要通知自己
+//                MsgHelper.getInstance().sendP2PCustomNotification(roomId, MeetingOptCommand.ALL_STATUS.getValue(),
+//                        member.getAccount(), ChatRoomMemberCache.getInstance().getPermissionMems(roomId));
+//            }
+//
+//            if (member.getAccount().equals(roomInfo.getCreator())) {
+//                // 主持人重新进来,观众要取消自己的举手状态
+//                ChatRoomMemberCache.getInstance().saveMyHandsUpDown(roomId, false);
+//            }
+//
+//            if (member.getAccount().equals(roomInfo.getCreator()) && BaseApplication.getAccount().equals(roomInfo.getCreator())) {
+//                // 主持人自己重新进来，清空观众的举手状态
+//                ChatRoomMemberCache.getInstance().clearAllHandsUp(roomId);
+//                // 重新向所有成员请求权限
+////                requestPermissionMembers();
+//            }
         }
 
         @Override
         public void onRoomMemberExit(ChatRoomMember member) {
             // 主持人要清空离开成员的举手
-            if (BaseApplication.getAccount().equals(roomInfo.getCreator())) {
-                ChatRoomMemberCache.getInstance().removeHandsUpMem(roomId, member.getAccount());
-            }
-
-            // 用户离开频道，如果是有权限用户，移除下画布
-            if (member.getAccount().equals(roomInfo.getCreator())) {
-                masterVideoLayout.removeAllViews();
-            } else if (ChatRoomMemberCache.getInstance().hasPermission(roomId, member.getAccount())) {
-//                removeMemberPermission(member.getAccount());
-            }
+//            if (BaseApplication.getAccount().equals(roomInfo.getCreator())) {
+//                ChatRoomMemberCache.getInstance().removeHandsUpMem(roomId, member.getAccount());
+//            }
+//
+//            // 用户离开频道，如果是有权限用户，移除下画布
+//            if (member.getAccount().equals(roomInfo.getCreator())) {
+//                masterVideoLayout.removeAllViews();
+//            } else if (ChatRoomMemberCache.getInstance().hasPermission(roomId, member.getAccount())) {
+////                removeMemberPermission(member.getAccount());
+//            }
         }
     };
 
@@ -670,6 +687,9 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     public void onDestroy() {
         super.onDestroy();
         registerObservers(false);
+        if (!TextUtils.isEmpty(sessionName)) {
+            registerRTSObservers(sessionName, false);
+        }
 
         if (roomId != null) {
             NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
@@ -830,19 +850,19 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     public void onUserJoined(String s) {
         userJoinedList.add(s);
         onMasterJoin(s);
-        if (ChatRoomMemberCache.getInstance().hasPermission(roomId, s) && !s.equals(roomInfo.getCreator())) {
-            onVideoOn(s);
-        }
+//        if (ChatRoomMemberCache.getInstance().hasPermission(roomId, s) && !s.equals(roomInfo.getCreator())) {
+        onVideoOn(s);
+//        }
     }
 
     @Override
     public void onUserLeave(String s, int i) {
         // 用户离开频道，如果是有权限用户，移除下画布
-        if (ChatRoomMemberCache.getInstance().hasPermission(roomId, s) && !s.equals(roomInfo.getCreator())) {
-            onVideoOff(s);
-        } else if (s.equals(roomInfo.getCreator())) {
-            masterVideoLayout.removeAllViews();
-        }
+//        if (ChatRoomMemberCache.getInstance().hasPermission(roomId, s) && !s.equals(roomInfo.getCreator())) {
+//            onVideoOff(s);
+//        } else if (s.equals(roomInfo.getCreator())) {
+//            masterVideoLayout.removeAllViews();
+//        }
         ChatRoomMemberCache.getInstance().removePermissionMem(roomId, s);
 //        videoListener.onUserLeave(s);
         userJoinedList.remove(s);
@@ -923,17 +943,17 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
      ****************************/
     // 主持人进入频道
     private void onMasterJoin(String s) {
-        if (userJoinedList != null && userJoinedList.contains(s) && s.equals(roomInfo.getCreator())) {
-            if (masterRender == null) {
-                masterRender = new AVChatVideoRender(InteractiveLiveActivity.this);
-            }
-            boolean isSetup = setupMasterRender(s, AVChatVideoScalingType.SCALE_ASPECT_BALANCED);
-            if (isSetup && masterRender != null) {
-                addIntoMasterPreviewLayout(masterRender);
-                ChatRoomMemberCache.getInstance().savePermissionMemberbyId(roomId, roomInfo.getCreator());
-                updateDeskShareUI();
-            }
-        }
+//        if (userJoinedList != null && userJoinedList.contains(s) && s.equals(roomInfo.getCreator())) {
+//            if (masterRender == null) {
+//                masterRender = new AVChatVideoRender(InteractiveLiveActivity.this);
+//            }
+//            boolean isSetup = setupMasterRender(s, AVChatVideoScalingType.SCALE_ASPECT_BALANCED);
+//            if (isSetup && masterRender != null) {
+//                addIntoMasterPreviewLayout(masterRender);
+//                ChatRoomMemberCache.getInstance().savePermissionMemberbyId(roomId, roomInfo.getCreator());
+////                updateDeskShareUI();
+//            }
+//        }
     }
 
     // 将主持人添加到主持人画布
@@ -956,15 +976,15 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     }
 
     private void updateDeskShareUI() {
-        Map<String, Object> ext = roomInfo.getExtension();
-        if (ext != null && ext.containsKey(MeetingConstant.FULL_SCREEN_TYPE)) {
-            int fullScreenType = (int) ext.get(MeetingConstant.FULL_SCREEN_TYPE);
-            if (fullScreenType == FullScreenType.CLOSE.getValue()) {
-                fullScreenImage.setVisibility(View.GONE);
-            } else if (fullScreenType == FullScreenType.OPEN.getValue()) {
-                fullScreenImage.setVisibility(View.VISIBLE);
-            }
-        }
+//        Map<String, Object> ext = roomInfo.getExtension();
+//        if (ext != null && ext.containsKey(MeetingConstant.FULL_SCREEN_TYPE)) {
+//            int fullScreenType = (int) ext.get(MeetingConstant.FULL_SCREEN_TYPE);
+//            if (fullScreenType == FullScreenType.CLOSE.getValue()) {
+//                fullScreenImage.setVisibility(View.GONE);
+//            } else if (fullScreenType == FullScreenType.OPEN.getValue()) {
+//                fullScreenImage.setVisibility(View.VISIBLE);
+//            }
+//        }
     }
 
     @Override
@@ -983,4 +1003,94 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         NIMClient.getService(MsgService.class).sendMessage(message, true);
         messageFragment.onMsgSend(message);
     }
+
+    private void registerRTSObservers(String sessionName, boolean register) {
+        this.sessionName = sessionName;
+        RTSManager2.getInstance().observeChannelState(sessionName, channelStateObserver, register);
+        RTSManager2.getInstance().observeReceiveData(sessionName, receiveDataObserver, register);
+    }
+
+    /**
+     * 监听当前会话的状态
+     */
+    private RTSChannelStateObserver channelStateObserver = new RTSChannelStateObserver() {
+
+        @Override
+        public void onConnectResult(String localSessionId, RTSTunnelType tunType, long channelId, int code, String recordFile) {
+            Toast.makeText(InteractiveLiveActivity.this, "onConnectResult, tunType=" + tunType.toString() +
+                    ", channelId=" + channelId + ", code=" + code, Toast.LENGTH_SHORT).show();
+            if (code != 200) {
+                RTSManager2.getInstance().leaveSession(sessionId, null);
+                return;
+            }
+
+            List<Transaction> cache = new ArrayList<>(1);
+            // 非主播进入房间，发送同步请求，请求主播向他同步之前的白板笔记
+            Toast.makeText(InteractiveLiveActivity.this, "send sync request", Toast.LENGTH_SHORT).show();
+            TransactionCenter.getInstance().onNetWorkChange(sessionId, false);
+            cache.add(new Transaction().makeSyncRequestTransaction());
+            TransactionCenter.getInstance().sendToRemote(sessionId, null, cache);
+        }
+
+        @Override
+        public void onChannelEstablished(String sessionId, RTSTunnelType tunType) {
+            Toast.makeText(InteractiveLiveActivity.this, "onCallEstablished,tunType=" + tunType.toString(), Toast.LENGTH_SHORT).show();
+
+            if (tunType == RTSTunnelType.AUDIO) {
+                RTSManager2.getInstance().setSpeaker(sessionId, true); // 默认开启扬声器
+            }
+        }
+
+        @Override
+        public void onUserJoin(String sessionId, RTSTunnelType tunType, String account) {
+            Logger.e("On User Join, account:" + account);
+        }
+
+        @Override
+        public void onUserLeave(String sessionId, RTSTunnelType tunType, String account, int event) {
+            Logger.e("On User Leave, account:" + account);
+        }
+
+        @Override
+        public void onDisconnectServer(String sessionId, RTSTunnelType tunType) {
+            Toast.makeText(InteractiveLiveActivity.this, "onDisconnectServer, tunType=" + tunType.toString(), Toast
+                    .LENGTH_SHORT).show();
+            if (tunType == RTSTunnelType.DATA) {
+                // 如果数据通道断了，那么关闭会话
+                Toast.makeText(InteractiveLiveActivity.this, "TCP通道断开，自动结束会话", Toast.LENGTH_SHORT).show();
+                RTSManager2.getInstance().leaveSession(sessionId, null);
+            } else if (tunType == RTSTunnelType.AUDIO) {
+            }
+        }
+
+        @Override
+        public void onError(String sessionId, RTSTunnelType tunType, int code) {
+            Toast.makeText(InteractiveLiveActivity.this, "onError, tunType=" + tunType.toString() + ", error=" + code,
+                    Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onNetworkStatusChange(String sessionId, RTSTunnelType tunType, int value) {
+            // 网络信号强弱
+            Logger.e("network status:" + value);
+        }
+    };
+
+    /**
+     * 监听收到对方发送的通道数据
+     */
+    private Observer<RTSTunData> receiveDataObserver = new Observer<RTSTunData>() {
+        @Override
+        public void onEvent(RTSTunData rtsTunData) {
+            Logger.e("receive data");
+            String data = "[parse bytes error]";
+            try {
+                data = new String(rtsTunData.getData(), 0, rtsTunData.getLength(), "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+            TransactionCenter.getInstance().onReceive(roomId, rtsTunData.getAccount(), data);
+        }
+    };
 }

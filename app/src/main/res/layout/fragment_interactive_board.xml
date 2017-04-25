@@ -9,30 +9,37 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="center_horizontal"
-            android:text="正在进行白板演示"
-            android:textColor="#333"
-            android:textSize="16sp" />
+        <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:gravity="center_horizontal"-->
+        <!--android:text="正在进行白板演示"-->
+        <!--android:textColor="#333"-->
+        <!--android:textSize="16sp" />-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:gravity="center_horizontal"
-            android:text="(请在老师指示下使用白板功能)"
-            android:textColor="#ccc"
-            android:textSize="14sp" />
+        <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="2dp"-->
+        <!--android:gravity="center_horizontal"-->
+        <!--android:text="(请在老师指示下使用白板功能)"-->
+        <!--android:textColor="#ccc"-->
+        <!--android:textSize="14sp" />-->
 
-        <cn.qatime.player.im.doodle.DoodleView
-            android:id="@+id/doodleView"
+        <RelativeLayout
             android:layout_width="match_parent"
+            android:gravity="center"
             android:layout_height="0dp"
-            android:layout_margin="10dp"
-            android:layout_weight="1" />
+            android:layout_weight="1">
+
+            <cn.qatime.player.im.doodle.DoodleView
+                android:id="@+id/doodleView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp" />
+        </RelativeLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
