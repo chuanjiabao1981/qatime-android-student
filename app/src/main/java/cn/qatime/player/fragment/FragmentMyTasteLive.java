@@ -41,12 +41,12 @@ import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
-public class FragmentTutorshipTaste extends BaseFragment {
+public class FragmentMyTasteLive extends BaseFragment {
     private PullToRefreshListView listView;
     private java.util.List<MyTutorialClassBean.Data> list = new ArrayList<>();
     private CommonAdapter<MyTutorialClassBean.Data> adapter;
     private int page = 1;
-    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    SimpleDateFormat parseISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
 
     @Nullable
     @Override
@@ -116,7 +116,7 @@ public class FragmentTutorshipTaste extends BaseFragment {
                     helper.getView(R.id.class_over).setVisibility(View.GONE);
                     helper.getView(R.id.progress).setVisibility(View.GONE);
                     try {
-                        long time =parse.parse(item.getPreview_time()).getTime()- System.currentTimeMillis();
+                        long time =parseISO.parse(item.getPreview_time()).getTime()- System.currentTimeMillis();
                         int value = 0;
                         if (time > 0) {
                             value = (int) (time / (1000 * 3600 * 24));

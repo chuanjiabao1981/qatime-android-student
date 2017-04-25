@@ -13,24 +13,23 @@ import java.util.ArrayList;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.base.BaseFragmentActivity;
-import cn.qatime.player.fragment.FragmentTutorshipOver;
-import cn.qatime.player.fragment.FragmentTutorshipPreview;
-import cn.qatime.player.fragment.FragmentTutorshipTeaching;
+import cn.qatime.player.fragment.FragmentMyTasteLive;
+import cn.qatime.player.fragment.FragmentMyTasteVideo;
 import libraryextra.view.FragmentLayoutWithLine;
 
 /**
- * 我的辅导
+ * 我的一对一
  */
-public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
-    private int[] tab_text = {R.id.tab_text2, R.id.tab_text3, R.id.tab_text4};
+public class PersonalMyTasteActivity extends BaseFragmentActivity {
+    private int[] tab_text = {R.id.tab_text1, R.id.tab_text2};
     FragmentLayoutWithLine fragmentlayout;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_personal_my_tutorship);
-        setTitles(getResources().getString(R.string.my_course));
+        setContentView(R.layout.activity_personal_my_taste);
+        setTitles(getResources().getString(R.string.my_taste));
 
 //        setRightImage(R.mipmap.audition_records, new View.OnClickListener() {
 //            @Override
@@ -46,13 +45,10 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
     private void initView() {
         findViewById(R.id.right).setVisibility(View.GONE);
 
-//        fragBaseFragments.add(new FragmentTutorshipToday());
-        fragBaseFragments.add(new FragmentTutorshipPreview());
-        fragBaseFragments.add(new FragmentTutorshipTeaching());
-        fragBaseFragments.add(new FragmentTutorshipOver());
+        fragBaseFragments.add(new FragmentMyTasteLive());
+        fragBaseFragments.add(new FragmentMyTasteVideo());
 
         fragmentlayout = (FragmentLayoutWithLine) findViewById(R.id.fragmentlayout);
-
         fragmentlayout.setScorllToNext(true);
         fragmentlayout.setScorll(true);
         fragmentlayout.setWhereTab(1);
@@ -71,8 +67,8 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
                 ((BaseFragment) fragBaseFragments.get(position)).onShow();
             }
         });
-        fragmentlayout.setAdapter(fragBaseFragments, R.layout.tableout_personal_my_tutor, 0x0311);
-        fragmentlayout.getViewPager().setOffscreenPageLimit(3);
+        fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_personal_my_taste, 0x0311);
+        fragmentlayout.getViewPager().setOffscreenPageLimit(2);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

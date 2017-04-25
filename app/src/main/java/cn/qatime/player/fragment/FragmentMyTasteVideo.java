@@ -17,7 +17,6 @@ import com.bumptech.glide.Glide;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
@@ -29,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
-import cn.qatime.player.activity.MessageActivity;
+import cn.qatime.player.activity.NEVideoPlayerActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
@@ -42,19 +41,20 @@ import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
-public class FragmentTutorshipPreview extends BaseFragment {
+public class FragmentMyTasteVideo extends BaseFragment {
     private PullToRefreshListView listView;
     private java.util.List<MyTutorialClassBean.Data> list = new ArrayList<>();
     private CommonAdapter<MyTutorialClassBean.Data> adapter;
     private int page = 1;
     SimpleDateFormat parseISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_tutorship_preview, container, false);
+        View view = inflater.inflate(R.layout.fragment_tutorship_taste, container, false);
         initview(view);
-        initOver=true;
+        initOver = true;
         return view;
     }
 
@@ -68,48 +68,78 @@ public class FragmentTutorshipPreview extends BaseFragment {
         listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResourceString(R.string.loading));
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
-        adapter = new CommonAdapter<MyTutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship2) {
 
-
+        adapter = new CommonAdapter<MyTutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship5) {
             @Override
             public void convert(ViewHolder helper, final MyTutorialClassBean.Data item, int position) {
-                boolean isBought = item.isIs_bought();//已经购买
+                /**
+                 * 已购买的已在获取数据时候排除，当前只填充试听的课程（已试听。试听中）
+                 */
+                String status = item.getStatus();
+
+                boolean isTeaching = "teaching".equals(status);//是否是开课中
+
+                //进入状态
+                helper.getView(R.id.enter).setVisibility(isTeaching ? View.VISIBLE : View.GONE);//进入播放器按钮显示或隐藏
+                helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
+//                        intent.putExtra("camera", item.getCamera());
+//                        intent.putExtra("board", item.getBoard());
+                        intent.putExtra("id", item.getId());
+                        intent.putExtra("sessionId", item.getChat_team_id());
+                        startActivity(intent);
+                    }
+                });
+
                 //试听状态
                 TextView taste = helper.getView(R.id.taste);
+                if (!item.isTasted()) {//tasted为true为已经试听
+                    taste.setText(R.string.tasting);
+                    taste.setBackgroundColor(0xffff9966);
+                    helper.getView(R.id.enter).setEnabled(true);//按钮是否能被点击
+                } else {
+                    taste.setText(R.string.tasted);
+                    taste.setBackgroundColor(0xffcccccc);
+                    helper.getView(R.id.enter).setEnabled(false);//按钮是否能被点击
+                }
 
-                taste.setVisibility(isBought ? View.GONE : View.VISIBLE);//已购买不显示
-helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View view) {
-        Intent intent = new Intent(getActivity(), MessageActivity.class);
-        intent.putExtra("sessionId", item.getChat_team_id());
-        intent.putExtra("sessionType", SessionTypeEnum.Team);
-        intent.putExtra("courseId", item.getId());
-        intent.putExtra("name", item.getName());
-        intent.putExtra("type","custom");
-        intent.putExtra("owner", item.getChat_team_owner());
-        startActivity(intent);
-    }
-});
+
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
-                try {
-                    long time = parseISO.parse(item.getPreview_time()).getTime()-System.currentTimeMillis();
-                    int value = 0;
-                    if (time > 0) {
-                        value = (int) (time / (1000 * 3600 * 24));
-                    }
-                    if(value!=0){
-                        helper.setText(R.id.teaching_time, getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day));
-                    }else{
-                        helper.setText(R.id.teaching_time,getString(R.string.ready_to_start));
-                    }
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
                 helper.setText(R.id.grade, item.getGrade());
+
+                if ("init".equals(status) || "published".equals(status) || "ready".equals(status)) {
+                    helper.getView(R.id.teaching_time).setVisibility(View.VISIBLE);
+                    helper.getView(R.id.class_over).setVisibility(View.GONE);
+                    helper.getView(R.id.progress).setVisibility(View.GONE);
+                    try {
+                        long time =parseISO.parse(item.getPreview_time()).getTime()- System.currentTimeMillis();
+                        int value = 0;
+                        if (time > 0) {
+                            value = (int) (time / (1000 * 3600 * 24));
+                        }
+                        if(value!=0){
+                            helper.setText(R.id.teaching_time, getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day));
+                        }else{
+                            helper.setText(R.id.teaching_time,getString(R.string.ready_to_start));
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                } else if ("completed".equals(status) || "finished".equals(status)) {
+                    helper.getView(R.id.class_over).setVisibility(View.VISIBLE);
+                    helper.getView(R.id.teaching_time).setVisibility(View.GONE);
+                    helper.getView(R.id.progress).setVisibility(View.GONE);
+                } else {
+                    helper.getView(R.id.progress).setVisibility(View.VISIBLE);
+                    helper.getView(R.id.teaching_time).setVisibility(View.GONE);
+                    helper.getView(R.id.class_over).setVisibility(View.GONE);
+                    helper.setText(R.id.progress,getString(R.string.progress, item.getClosed_lessons_count(), item.getPreset_lesson_count()));
+                }
             }
         };
         listView.setAdapter(adapter);
@@ -135,6 +165,13 @@ helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                 startActivity(intent);
             }
         });
+        listView.getRefreshableView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                //TODO  长按点击事件
+                return true;
+            }
+        });
     }
 
     public void onShow() {
@@ -155,10 +192,11 @@ helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(page));
         map.put("per_page", "10");
-        map.put("status", "published");
+        map.put("cate", "taste");
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/courses", map), null,
                 new VolleyListener(getActivity()) {
+
                     @Override
                     protected void onSuccess(JSONObject response) {
                         isLoad = true;
@@ -166,10 +204,7 @@ helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                         if (type == 1) {
                             list.clear();
                         }
-                        String label = null;
-                        if (getActivity() != null) {
-                            label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
-                        }
+                        String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
                         listView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
                         listView.onRefreshComplete();
 
@@ -177,7 +212,7 @@ helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                             MyTutorialClassBean data = JsonUtils.objectFromJson(response.toString(), MyTutorialClassBean.class);
                             if (data != null) {
                                 for (MyTutorialClassBean.Data item : data.getData()) {
-                                    if (item.isIs_bought() || item.isIs_tasting()) {//只显示试听未过期或已购买
+                                    if (!item.isIs_bought() && (item.isIs_tasting() || item.isTasted())) {//只显示试听
                                         list.add(item);
                                     }
                                 }
@@ -206,6 +241,7 @@ helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     protected void onTokenOut() {
                         tokenOut();
                     }
+
                 }, new VolleyErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
