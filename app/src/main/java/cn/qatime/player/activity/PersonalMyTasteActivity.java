@@ -1,5 +1,6 @@
 package cn.qatime.player.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -31,19 +32,18 @@ public class PersonalMyTasteActivity extends BaseFragmentActivity {
         setContentView(R.layout.activity_personal_my_taste);
         setTitles(getResources().getString(R.string.my_taste));
 
-//        setRightImage(R.mipmap.audition_records, new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(PersonalMyTutorshipActivity.this, AuditionRecordsActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        setRightImage(R.mipmap.my_taste_record, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PersonalMyTasteActivity.this, AuditionRecordsActivity.class);
+                startActivity(intent);
+            }
+        });
         initView();
     }
 
 
     private void initView() {
-        findViewById(R.id.right).setVisibility(View.GONE);
 
         fragBaseFragments.add(new FragmentMyTasteLive());
         fragBaseFragments.add(new FragmentMyTasteVideo());

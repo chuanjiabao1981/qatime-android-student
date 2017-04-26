@@ -239,7 +239,7 @@
                 android:orientation="horizontal">
                 <ImageView
                     android:layout_width="18dp"
-                    android:src="@mipmap/center_my_video"
+                    android:src="@mipmap/center_my_tasted"
                     android:layout_marginLeft="10dp"
                     android:layout_height="18dp" />
                 <TextView

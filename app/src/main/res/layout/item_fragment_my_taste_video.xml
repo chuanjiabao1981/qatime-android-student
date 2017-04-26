@@ -65,8 +65,10 @@
                 android:id="@+id/progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2017-04-26 15:33"
+                android:text="已试听1/4"
                 android:textColor="#999" />
         </LinearLayout>
+
+
     </LinearLayout>
 </LinearLayout>
