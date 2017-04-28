@@ -98,7 +98,7 @@ public class VideoCoursesFloatFragment extends Fragment implements View.OnClickL
     private TextView videoName;
     private SeekBar seekBar;
     private TextView time;
-//    private TextView definition;
+    //    private TextView definition;
     private ListView list;
     private View listSwitch;
 
@@ -140,7 +140,7 @@ public class VideoCoursesFloatFragment extends Fragment implements View.OnClickL
                     return;
                 }
                 act.playingData = datas.get(position);
-                act.playCourses(act.playingData.getVideo().getName_url());
+                act.playCourses(act.playingData);
             }
         });
         startVanishTimer();

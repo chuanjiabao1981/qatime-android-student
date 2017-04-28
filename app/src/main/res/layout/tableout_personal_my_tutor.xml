@@ -79,21 +79,6 @@
                 android:text="@string/done" />
         </LinearLayout>
 
-        <LinearLayout
-            style="@style/tab_item_height"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tab_text5"
-                style="@style/tab_text_color_normal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:text="@string/audition" />
-        </LinearLayout>
-
 
     </LinearLayout>
 
