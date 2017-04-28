@@ -158,10 +158,10 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         id = getIntent().getIntExtra("id", 0);
         id = 2;
 //        initData();
-       hd.postDelayed(new Runnable() {
+        hd.postDelayed(new Runnable() {
             @Override
             public void run() {
-                roomId = "12345678";
+                roomId = "36309070";
                 enterRoom();
             }
         }, 5000);
@@ -420,20 +420,18 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     }
 
     private void updateVideoAudioUI() {
-        videoPermission.setBackgroundResource(!AVChatManager.getInstance().isLocalVideoMuted()
-                ? R.mipmap.video_on : R.mipmap.video_off);
-        audioPermission.setBackgroundResource(!AVChatManager.getInstance().isLocalAudioMuted()
-                ? R.mipmap.audio_on : R.mipmap.audio_off);
+        videoPermission.setBackgroundResource(!AVChatManager.getInstance().isLocalVideoMuted() ? R.mipmap.video_on : R.mipmap.video_off);
+        audioPermission.setBackgroundResource(!AVChatManager.getInstance().isLocalAudioMuted() ? R.mipmap.audio_on : R.mipmap.audio_off);
     }
 
     private void updateControlUI() {
-        if (ChatRoomMemberCache.getInstance().hasPermission(roomId, BaseApplication.getAccount())) {
-            videoPermission.setVisibility(View.VISIBLE);
-            audioPermission.setVisibility(View.VISIBLE);
-        } else {
-            videoPermission.setVisibility(View.GONE);
-            audioPermission.setVisibility(View.GONE);
-        }
+//        if (ChatRoomMemberCache.getInstance().hasPermission(roomId, BaseApplication.getAccount())) {
+        videoPermission.setVisibility(View.VISIBLE);
+        audioPermission.setVisibility(View.VISIBLE);
+//        } else {
+//            videoPermission.setVisibility(View.GONE);
+//            audioPermission.setVisibility(View.GONE);
+//        }
     }
 
     /**
@@ -454,89 +452,9 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 //        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
 
         AVChatManager.getInstance().observeAVChatState(this, register);
-        ChatRoomMemberCache.getInstance().registerMeetingControlObserver(meetingControlObserver, register);
         ChatRoomMemberCache.getInstance().registerRoomMemberChangedObserver(roomMemberChangedObserver, register);
         ChatRoomMemberCache.getInstance().registerRoomInfoChangedObserver(roomInfoChangedObserver, register);
     }
-
-    ChatRoomMemberCache.MeetingControlObserver meetingControlObserver = new ChatRoomMemberCache.MeetingControlObserver() {
-        @Override
-        public void onAccept(String roomID) {
-            if (checkRoom(roomID)) {
-                return;
-            }
-            chooseSpeechType();
-        }
-
-        @Override
-        public void onReject(String roomID) {
-
-        }
-
-        @Override
-        public void onPermissionResponse(String roomId, List<String> accounts) {
-            if (checkRoom(roomId)) {
-                return;
-            }
-            for (String a : accounts) {
-                Logger.e("on permission response, account:" + a);
-                ChatRoomMemberCache.getInstance().savePermissionMemberbyId(roomId, a);
-                onVideoOn(a);
-            }
-        }
-
-        @Override
-        public void onSendMyPermission(String roomID, String toAccount) {
-            if (checkRoom(roomID)) {
-                return;
-            }
-
-            if (ChatRoomMemberCache.getInstance().hasPermission(roomID, BaseApplication.getAccount())) {
-                List<String> accounts = new ArrayList<>(1);
-                accounts.add(BaseApplication.getAccount());
-                MsgHelper.getInstance().sendP2PCustomNotification(roomID, MeetingOptCommand.STATUS_RESPONSE.getValue(), toAccount, accounts);
-            }
-        }
-
-        @Override
-        public void onSaveMemberPermission(String roomID, List<String> accounts) {
-            if (checkRoom(roomID)) {
-                return;
-            }
-//            saveMemberPermission(accounts);
-        }
-
-        @Override
-        public void onHandsUp(String roomID, String account) {
-            if (checkRoom(roomID)) {
-                return;
-            }
-            ChatRoomMemberCache.getInstance().saveMemberHandsUpDown(roomId, account, true);
-//            onTabChange(true);
-        }
-
-        @Override
-        public void onHandsDown(String roomID, String account) {
-            if (checkRoom(roomID)) {
-                return;
-            }
-            ChatRoomMemberCache.getInstance().saveMemberHandsUpDown(roomID, account, false);
-//            onTabChange(false);
-            if (ChatRoomMemberCache.getInstance().hasPermission(roomID, account)) {
-//                removeMemberPermission(account);
-            }
-        }
-
-        @Override
-        public void onStatusNotify(String roomID, List<String> accounts) {
-            if (checkRoom(roomID)) {
-                return;
-            }
-//            onPermissionChange(accounts);
-            updateControlUI();
-        }
-    };
-
 
     // 将有权限的成员添加到画布
     public void onVideoOn(String account) {
@@ -708,14 +626,10 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.video_permission:
-                if (ChatRoomMemberCache.getInstance().hasPermission(roomId, BaseApplication.getAccount())) {
-                    setVideoState();
-                }
+                setVideoState();
                 break;
             case R.id.audio_permission:
-                if (ChatRoomMemberCache.getInstance().hasPermission(roomId, BaseApplication.getAccount())) {
-                    setAudioState();
-                }
+                setAudioState();
                 break;
         }
     }
@@ -863,7 +777,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 //        } else if (s.equals(roomInfo.getCreator())) {
 //            masterVideoLayout.removeAllViews();
 //        }
-        ChatRoomMemberCache.getInstance().removePermissionMem(roomId, s);
+//        ChatRoomMemberCache.getInstance().removePermissionMem(roomId, s);
 //        videoListener.onUserLeave(s);
         userJoinedList.remove(s);
     }
@@ -943,17 +857,16 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
      ****************************/
     // 主持人进入频道
     private void onMasterJoin(String s) {
-//        if (userJoinedList != null && userJoinedList.contains(s) && s.equals(roomInfo.getCreator())) {
-//            if (masterRender == null) {
-//                masterRender = new AVChatVideoRender(InteractiveLiveActivity.this);
-//            }
-//            boolean isSetup = setupMasterRender(s, AVChatVideoScalingType.SCALE_ASPECT_BALANCED);
-//            if (isSetup && masterRender != null) {
-//                addIntoMasterPreviewLayout(masterRender);
-//                ChatRoomMemberCache.getInstance().savePermissionMemberbyId(roomId, roomInfo.getCreator());
-////                updateDeskShareUI();
-//            }
-//        }
+        if (userJoinedList != null && userJoinedList.contains(s) && !s.equals(BaseApplication.getAccount())) {
+            if (masterRender == null) {
+                masterRender = new AVChatVideoRender(InteractiveLiveActivity.this);
+            }
+            boolean isSetup = setupMasterRender(s, AVChatVideoScalingType.SCALE_ASPECT_BALANCED);
+            if (isSetup && masterRender != null) {
+                addIntoMasterPreviewLayout(masterRender);
+//                updateDeskShareUI();
+            }
+        }
     }
 
     // 将主持人添加到主持人画布

@@ -230,136 +230,136 @@ public class ChatRoomMemberCache {
     /**
      * 存储拥有音视频权限的成员列表
      */
-    public void savePermissionMemberbyId(String roomId, String account) {
-        if (TextUtils.isEmpty(account)) {
-            return;
-        }
-
-        ChatRoomMember member = getChatRoomMember(roomId, account);
-        if (member != null) {
-            savePermissionMem(member);
-        } else {
-            fetchMember(roomId, account, new SimpleCallback<ChatRoomMember>() {
-                @Override
-                public void onResult(boolean success, ChatRoomMember result) {
-                    if (success) {
-                        savePermissionMem(result);
-                    }
-                }
-            });
-        }
-    }
+//    public void savePermissionMemberbyId(String roomId, String account) {
+//        if (TextUtils.isEmpty(account)) {
+//            return;
+//        }
+//
+//        ChatRoomMember member = getChatRoomMember(roomId, account);
+//        if (member != null) {
+//            savePermissionMem(member);
+//        } else {
+//            fetchMember(roomId, account, new SimpleCallback<ChatRoomMember>() {
+//                @Override
+//                public void onResult(boolean success, ChatRoomMember result) {
+//                    if (success) {
+//                        savePermissionMem(result);
+//                    }
+//                }
+//            });
+//        }
+//    }
 
     /**
      * 单独存储有用音视频权限的成员
      */
-    private void savePermissionMem(ChatRoomMember member) {
-        if (member != null && !TextUtils.isEmpty(member.getRoomId()) && !TextUtils.isEmpty(member.getAccount())) {
-            Map<String, ChatRoomMember> members = permissionCache.get(member.getRoomId());
-
-            if (members == null) {
-                members = new HashMap<>();
-                permissionCache.put(member.getRoomId(), members);
-            }
-
-            members.put(member.getAccount(), member);
-        }
-    }
+//    private void savePermissionMem(ChatRoomMember member) {
+//        if (member != null && !TextUtils.isEmpty(member.getRoomId()) && !TextUtils.isEmpty(member.getAccount())) {
+//            Map<String, ChatRoomMember> members = permissionCache.get(member.getRoomId());
+//
+//            if (members == null) {
+//                members = new HashMap<>();
+//                permissionCache.put(member.getRoomId(), members);
+//            }
+//
+//            members.put(member.getAccount(), member);
+//        }
+//    }
 
     /**
      * 取消成员的音视频权限
      */
-    public void removePermissionMem(String roomId, String account) {
-        if (TextUtils.isEmpty(account)) {
-            return;
-        }
-
-        Map<String, ChatRoomMember> map = permissionCache.get(roomId);
-
-        if (map == null || map.isEmpty()) {
-            return;
-        }
-
-       if (map.containsKey(account)) {
-           map.remove(account);
-       }
-    }
-
-    /**
-     * 判断成员是否拥有音视频权限
-     */
-    public boolean hasPermission(String roomId, String account) {
-        if (TextUtils.isEmpty(account)) {
-            return false;
-        }
-
-        Map<String, ChatRoomMember> map = permissionCache.get(roomId);
-        if (map != null && !map.isEmpty() && map.containsKey(account)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * 获取拥有音视频权限的成员帐号列表
-     */
-    public List<String> getPermissionMems(String roomId) {
-        List<String> accounts = new ArrayList<>();
-        Map<String, ChatRoomMember> map = permissionCache.get(roomId);
-
-        if (map == null) {
-            return null;
-        }
-
-        Iterator it = map.keySet().iterator();
-        while (it.hasNext()) {
-            String key = it.next().toString();
-            accounts.add(key);
-        }
-        return accounts;
-    }
-
-    /**
-     * 获取拥有音视频权限的成员列表
-     */
-    public List<ChatRoomMember> getPermissionMemsEx(String roomId) {
-        List<ChatRoomMember> members = new ArrayList<>();
-        Map<String, ChatRoomMember> map = permissionCache.get(roomId);
-
-        if (map == null) {
-            return null;
-        }
-
-        Iterator it = map.keySet().iterator();
-        while (it.hasNext()) {
-            String key = it.next().toString();
-            members.add(map.get(key));
-        }
-        return members;
-    }
+//    public void removePermissionMem(String roomId, String account) {
+//        if (TextUtils.isEmpty(account)) {
+//            return;
+//        }
+//
+//        Map<String, ChatRoomMember> map = permissionCache.get(roomId);
+//
+//        if (map == null || map.isEmpty()) {
+//            return;
+//        }
+//
+//       if (map.containsKey(account)) {
+//           map.remove(account);
+//       }
+//    }
+//
+//    /**
+//     * 判断成员是否拥有音视频权限
+//     */
+//    public boolean hasPermission(String roomId, String account) {
+//        if (TextUtils.isEmpty(account)) {
+//            return false;
+//        }
+//
+//        Map<String, ChatRoomMember> map = permissionCache.get(roomId);
+//        if (map != null && !map.isEmpty() && map.containsKey(account)) {
+//            return true;
+//        }
+//
+//        return false;
+//    }
+//
+//    /**
+//     * 获取拥有音视频权限的成员帐号列表
+//     */
+//    public List<String> getPermissionMems(String roomId) {
+//        List<String> accounts = new ArrayList<>();
+//        Map<String, ChatRoomMember> map = permissionCache.get(roomId);
+//
+//        if (map == null) {
+//            return null;
+//        }
+//
+//        Iterator it = map.keySet().iterator();
+//        while (it.hasNext()) {
+//            String key = it.next().toString();
+//            accounts.add(key);
+//        }
+//        return accounts;
+//    }
+//
+//    /**
+//     * 获取拥有音视频权限的成员列表
+//     */
+//    public List<ChatRoomMember> getPermissionMemsEx(String roomId) {
+//        List<ChatRoomMember> members = new ArrayList<>();
+//        Map<String, ChatRoomMember> map = permissionCache.get(roomId);
+//
+//        if (map == null) {
+//            return null;
+//        }
+//
+//        Iterator it = map.keySet().iterator();
+//        while (it.hasNext()) {
+//            String key = it.next().toString();
+//            members.add(map.get(key));
+//        }
+//        return members;
+//    }
 
 
 
     /********************************** 在线教育画布缓存 *******************************/
 
-    /**
-     * 获取画布缓存
-     */
-    public Map<Integer, String> getImageMap(String roomId) {
-        if (imageCache.containsKey(roomId)) {
-            return imageCache.get(roomId);
-        }
-
-        return null;
-    }
-
-    /**
-     * 存储画布缓存
-     */
-    public void saveImageMap(String roomId, Map<Integer, String> imageMap) {
-        imageCache.put(roomId, imageMap);
-    }
+//    /**
+//     * 获取画布缓存
+//     */
+//    public Map<Integer, String> getImageMap(String roomId) {
+//        if (imageCache.containsKey(roomId)) {
+//            return imageCache.get(roomId);
+//        }
+//
+//        return null;
+//    }
+//
+//    /**
+//     * 存储画布缓存
+//     */
+//    public void saveImageMap(String roomId, Map<Integer, String> imageMap) {
+//        imageCache.put(roomId, imageMap);
+//    }
 
     /************************** 成员是否举手缓存 *******************************/
 
