@@ -69,8 +69,7 @@ public class FragmentMyTasteLive extends BaseFragment {
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
                 helper.setText(R.id.grade, item.getGrade());
-                //todo 已试听个数
-                helper.setText(R.id.progress, getString(R.string.progress_taste, item.getClosed_lessons_count(), item.getTaste_count()));
+                helper.setText(R.id.progress, getString(R.string.progress_taste, item.getClosed_lessons_count()>item.getTaste_count()?item.getTaste_count():item.getClosed_lessons_count(), item.getTaste_count()));
             }
         };
         listView.setAdapter(adapter);

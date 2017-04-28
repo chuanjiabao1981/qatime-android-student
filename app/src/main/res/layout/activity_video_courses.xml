@@ -131,18 +131,6 @@
                 android:layout_weight="1">
 
                 <Button
-                    android:id="@+id/audition"
-                    android:layout_width="match_parent"
-                    android:layout_height="36dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="6dp"
-                    android:background="@drawable/button_bg_selector_red_with_stork"
-                    android:clickable="true"
-                    android:text="加入试听"
-                    android:textColor="@drawable/text_selector_white_red" />
-
-                <Button
                     android:id="@+id/audition_start"
                     android:layout_width="match_parent"
                     android:layout_height="36dp"
@@ -153,8 +141,7 @@
                     android:clickable="true"
                     android:gravity="center"
                     android:text="进入试听"
-                    android:textColor="#fff"
-                    android:visibility="gone" />
+                    android:textColor="#fff" />
             </RelativeLayout>
 
             <RelativeLayout

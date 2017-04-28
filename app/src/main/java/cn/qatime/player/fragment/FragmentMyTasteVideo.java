@@ -23,22 +23,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
-import cn.qatime.player.activity.RemedialClassDetailActivity;
+import cn.qatime.player.activity.VideoCoursesActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.MyTutorialClassBean;
+import libraryextra.bean.MyVideoClassBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
 public class FragmentMyTasteVideo extends BaseFragment {
     private PullToRefreshListView listView;
-    private java.util.List<MyTutorialClassBean.Data> list = new ArrayList<>();
-    private CommonAdapter<MyTutorialClassBean.Data> adapter;
+    private java.util.List<MyVideoClassBean.DataBean> list = new ArrayList<>();
+    private CommonAdapter<MyVideoClassBean.DataBean> adapter;
     private int page = 1;
 
 
@@ -62,17 +62,15 @@ public class FragmentMyTasteVideo extends BaseFragment {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
 
-        adapter = new CommonAdapter<MyTutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_my_taste_video) {
+        adapter = new CommonAdapter<MyVideoClassBean.DataBean>(getActivity(), list, R.layout.item_fragment_my_taste_video) {
             @Override
-            public void convert(ViewHolder helper, final MyTutorialClassBean.Data item, int position) {
+            public void convert(ViewHolder helper, final MyVideoClassBean.DataBean item, int position) {
 
 
                 helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
                 helper.setText(R.id.grade, item.getGrade());
-                //todo 已试听个数
-                helper.setText(R.id.progress, getString(R.string.progress_taste, item.getClosed_lessons_count(), item.getTaste_count()));
             }
         };
         listView.setAdapter(adapter);
@@ -93,7 +91,7 @@ public class FragmentMyTasteVideo extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                Intent intent = new Intent(getActivity(), VideoCoursesActivity.class);
                 intent.putExtra("id", list.get(position - 1).getId());
                 startActivity(intent);
             }
@@ -111,7 +109,7 @@ public class FragmentMyTasteVideo extends BaseFragment {
         if (!isLoad) {
             if (initOver) {
                 initData(1);
-            }else{
+            } else {
                 super.onShow();
             }
         }
@@ -127,7 +125,7 @@ public class FragmentMyTasteVideo extends BaseFragment {
         map.put("per_page", "10");
         map.put("cate", "taste");
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/courses", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/video_courses/tasting", map), null,
                 new VolleyListener(getActivity()) {
 
                     @Override
@@ -142,16 +140,15 @@ public class FragmentMyTasteVideo extends BaseFragment {
                         listView.onRefreshComplete();
 
                         try {
-                            MyTutorialClassBean data = JsonUtils.objectFromJson(response.toString(), MyTutorialClassBean.class);
+                            MyVideoClassBean data = JsonUtils.objectFromJson(response.toString(), MyVideoClassBean.class);
                             if (data != null) {
-                                for (MyTutorialClassBean.Data item : data.getData()) {
-                                    if (item.isIs_tasting() && !item.isTasted()) {//只显示试听中
-                                        list.add(item);
-                                    }
-                                }
+                                list.addAll(data.getData());
                             }
                             adapter.notifyDataSetChanged();
-                        } catch (JsonSyntaxException e) {
+                        } catch (
+                                JsonSyntaxException e)
+
+                        {
                             e.printStackTrace();
                         }
                     }
@@ -175,13 +172,16 @@ public class FragmentMyTasteVideo extends BaseFragment {
                         tokenOut();
                     }
 
-                }, new VolleyErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
-                listView.onRefreshComplete();
-            }
-        });
+                }, new
+
+                VolleyErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        super.onErrorResponse(volleyError);
+                        listView.onRefreshComplete();
+                    }
+                });
+
         addToRequestQueue(request);
     }
 }
