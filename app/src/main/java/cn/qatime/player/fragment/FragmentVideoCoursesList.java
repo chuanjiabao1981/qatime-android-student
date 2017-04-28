@@ -29,7 +29,6 @@ public class FragmentVideoCoursesList extends BaseFragment {
     private List<VideoLessonsBean> list = new ArrayList<>();
     private CommonAdapter<VideoLessonsBean> adapter;
     private VideoCoursesPlayActivity context;
-    private VideoLessonsBean playingData;
 
     @Nullable
     @Override
@@ -64,11 +63,11 @@ public class FragmentVideoCoursesList extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (playingData != null && playingData.getVideo().getId() == list.get(position).getVideo().getId()) {
+                if (context.playingData != null && context.playingData.getVideo().getId() == list.get(position).getVideo().getId()) {
                     return;
                 }
-                playingData = list.get(position);
-                context.playCourses(playingData.getVideo().getName_url());
+                context.playingData = list.get(position);
+                context.playCourses(context.playingData);
             }
         });
     }
@@ -81,7 +80,17 @@ public class FragmentVideoCoursesList extends BaseFragment {
 
 
     public void setData(List<VideoLessonsBean> video_lessons) {
-        list.addAll(video_lessons);
+//        video_lessons.get(0)
+        list.clear();
+        if (context.isTasting()) {
+            for (VideoLessonsBean videoLessonsBean : video_lessons) {
+                if (videoLessonsBean.isTastable()) {//只显示可试听的课
+                    list.add(videoLessonsBean);
+                }
+            }
+        } else {
+            list.addAll(video_lessons);
+        }
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }

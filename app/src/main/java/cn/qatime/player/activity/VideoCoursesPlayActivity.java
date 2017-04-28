@@ -34,9 +34,9 @@ import cn.qatime.player.utils.ScreenSwitchUtils;
 import cn.qatime.player.utils.UrlUtils;
 import io.vov.vitamio.MediaPlayer;
 import io.vov.vitamio.Vitamio;
+import libraryextra.bean.VideoLessonsBean;
 import libraryextra.utils.DensityUtils;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.FragmentLayoutWithLine;
@@ -60,7 +60,8 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
     private int id;
     private VideoCoursesDetailsBean data;
     private SurfaceHolder holder;
-    private String url;
+    private boolean tasting;//是否试听
+    public VideoLessonsBean playingData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +72,7 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
             return;
         }
         id = getIntent().getIntExtra("id", 0);
+        tasting = getIntent().getBooleanExtra("tasting", true);
 //        id=3;
         initView();
 
@@ -99,6 +101,7 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
 
                         if (data != null && data.getData() != null) {
                             ((FragmentVideoCoursesList) fragBaseFragments.get(0)).setData(data.getData().getVideo_lessons());
+                            floatFragment.setData(data.getData().getVideo_lessons());
                             ((FragmentVideoCoursesDetail) fragBaseFragments.get(1)).setData(data);
                         }
                     }
@@ -142,17 +145,18 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
 
             @Override
             public void play() {
-                if(!StringUtils.isNullOrBlanK(url)){
+                if (playingData == null) {
                     mMediaPlayer.start();
-                }else{
+                } else {
 //                    播放到进度
-                    String url = "";
-                    if (data.getData().getClosed_lessons_count()==data.getData().getPreset_lesson_count()) {//全部看完,放第一集
-                        url = data.getData().getVideo_lessons().get(0).getVideo().getName_url();
-                    }else{
-                        url = data.getData().getVideo_lessons().get(data.getData().getClosed_lessons_count()).getVideo().getName_url();
+                    VideoLessonsBean playingData = null;
+
+                    if (data.getData().getClosed_lessons_count() == data.getData().getPreset_lesson_count()) {//全部看完,放第一集
+                        playingData = data.getData().getVideo_lessons().get(0);
+                    } else {
+                        playingData = data.getData().getVideo_lessons().get(data.getData().getClosed_lessons_count());
                     }
-                    playCourses(url);
+                    playCourses(playingData);
                 }
             }
 
@@ -161,10 +165,10 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
                 return mMediaPlayer != null && mMediaPlayer.isPlaying();
             }
 
-            @Override
-            public boolean isPortrait() {
-                return screenSwitchUtils.isPortrait();
-            }
+//            @Override
+//            public boolean isPortrait() {
+//                return screenSwitchUtils.isPortrait();
+//            }
 
             @Override
             public long getCurrentPosition() {
@@ -330,17 +334,27 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
         screenSwitchUtils.stop();
     }
 
-    public void playCourses(String url) {
-        if (!StringUtils.isNullOrBlanK(url)) {
-            this.url=url;
+    public void playCourses(VideoLessonsBean playingData) {
+        if(tasting){
+            if(!playingData.getVideo().isTastable()){
+                Toast.makeText(this, "该课程需要购买", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+        if (playingData != null) {
+            this.playingData = playingData;
             releaseMediaPlayer();
             if (isCreated) {
                 try {
-                    createMedia(url);
+                    createMedia(playingData.getVideo().getName_url());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }
+    }
+
+    public boolean isTasting(){
+        return tasting;
     }
 }

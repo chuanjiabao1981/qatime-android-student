@@ -105,6 +105,7 @@
         android:layout_above="@id/bottom_layout"
         android:layout_alignParentRight="true"
         android:layout_below="@id/play_toolbar"
+        android:background="#b3000000"
         android:visibility="gone"
-        custom:layout_widthPercent="40%" />
+        custom:layout_widthPercent="35%" />
 </com.zhy.android.percent.support.PercentRelativeLayout>

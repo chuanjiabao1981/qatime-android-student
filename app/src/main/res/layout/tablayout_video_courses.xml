@@ -25,7 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="进度"
+                android:text="课时安排"
                 android:textColor="#ff5842"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -42,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="详情"
+                android:text="课程详情"
                 android:textColor="#999"
                 android:textSize="14sp" />
         </LinearLayout>

@@ -8,53 +8,46 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.bumptech.glide.Glide;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
-import cn.qatime.player.activity.MessageActivity;
-import cn.qatime.player.activity.RemedialClassDetailActivity;
+import cn.qatime.player.activity.VideoCoursesActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.MyTutorialClassBean;
+import libraryextra.bean.MyVideoClassBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
-public class FragmentTutorshipPreview extends BaseFragment {
+public class FragmentMyTasteVideo extends BaseFragment {
     private PullToRefreshListView listView;
-    private java.util.List<MyTutorialClassBean.Data> list = new ArrayList<>();
-    private CommonAdapter<MyTutorialClassBean.Data> adapter;
+    private java.util.List<MyVideoClassBean.DataBean> list = new ArrayList<>();
+    private CommonAdapter<MyVideoClassBean.DataBean> adapter;
     private int page = 1;
-    SimpleDateFormat parseISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_tutorship_preview, container, false);
+        View view = inflater.inflate(R.layout.fragment_my_taste_video, container, false);
         initview(view);
-        initOver=true;
+        initOver = true;
         return view;
     }
 
@@ -68,47 +61,15 @@ public class FragmentTutorshipPreview extends BaseFragment {
         listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResourceString(R.string.loading));
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
-        adapter = new CommonAdapter<MyTutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship2) {
 
-
+        adapter = new CommonAdapter<MyVideoClassBean.DataBean>(getActivity(), list, R.layout.item_fragment_my_taste_video) {
             @Override
-            public void convert(ViewHolder helper, final MyTutorialClassBean.Data item, int position) {
-                boolean isBought = item.isIs_bought();//已经购买
-                //试听状态
-                TextView taste = helper.getView(R.id.taste);
+            public void convert(ViewHolder helper, final MyVideoClassBean.DataBean item, int position) {
 
-                taste.setVisibility(isBought ? View.GONE : View.VISIBLE);//已购买不显示
-helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View view) {
-        Intent intent = new Intent(getActivity(), MessageActivity.class);
-        intent.putExtra("sessionId", item.getChat_team_id());
-        intent.putExtra("sessionType", SessionTypeEnum.Team);
-        intent.putExtra("courseId", item.getId());
-        intent.putExtra("name", item.getName());
-        intent.putExtra("type","custom");
-        intent.putExtra("owner", item.getChat_team_owner());
-        startActivity(intent);
-    }
-});
-                Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
+
                 helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
-                try {
-                    long time = parseISO.parse(item.getPreview_time()).getTime()-System.currentTimeMillis();
-                    int value = 0;
-                    if (time > 0) {
-                        value = (int) (time / (1000 * 3600 * 24));
-                    }
-                    if(value!=0){
-                        helper.setText(R.id.teaching_time, getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day));
-                    }else{
-                        helper.setText(R.id.teaching_time,getString(R.string.ready_to_start));
-                    }
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
                 helper.setText(R.id.grade, item.getGrade());
             }
         };
@@ -130,9 +91,16 @@ helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                Intent intent = new Intent(getActivity(), VideoCoursesActivity.class);
                 intent.putExtra("id", list.get(position - 1).getId());
                 startActivity(intent);
+            }
+        });
+        listView.getRefreshableView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                //TODO  长按点击事件
+                return true;
             }
         });
     }
@@ -141,7 +109,7 @@ helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
         if (!isLoad) {
             if (initOver) {
                 initData(1);
-            }else{
+            } else {
                 super.onShow();
             }
         }
@@ -155,10 +123,11 @@ helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(page));
         map.put("per_page", "10");
-        map.put("status", "published");
+        map.put("cate", "taste");
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/courses", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/video_courses/tasting", map), null,
                 new VolleyListener(getActivity()) {
+
                     @Override
                     protected void onSuccess(JSONObject response) {
                         isLoad = true;
@@ -166,24 +135,20 @@ helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                         if (type == 1) {
                             list.clear();
                         }
-                        String label = null;
-                        if (getActivity() != null) {
-                            label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
-                        }
+                        String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
                         listView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
                         listView.onRefreshComplete();
 
                         try {
-                            MyTutorialClassBean data = JsonUtils.objectFromJson(response.toString(), MyTutorialClassBean.class);
+                            MyVideoClassBean data = JsonUtils.objectFromJson(response.toString(), MyVideoClassBean.class);
                             if (data != null) {
-                                for (MyTutorialClassBean.Data item : data.getData()) {
-                                    if (item.isIs_bought() || item.isIs_tasting()) {//只显示试听未过期或已购买
-                                        list.add(item);
-                                    }
-                                }
+                                list.addAll(data.getData());
                             }
                             adapter.notifyDataSetChanged();
-                        } catch (JsonSyntaxException e) {
+                        } catch (
+                                JsonSyntaxException e)
+
+                        {
                             e.printStackTrace();
                         }
                     }
@@ -206,13 +171,17 @@ helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     protected void onTokenOut() {
                         tokenOut();
                     }
-                }, new VolleyErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
-                listView.onRefreshComplete();
-            }
-        });
+
+                }, new
+
+                VolleyErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        super.onErrorResponse(volleyError);
+                        listView.onRefreshComplete();
+                    }
+                });
+
         addToRequestQueue(request);
     }
 }

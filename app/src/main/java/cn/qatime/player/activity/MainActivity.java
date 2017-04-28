@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -120,7 +119,7 @@ public class MainActivity extends BaseFragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         linear_bar = findViewById(R.id.ll_bar);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
                     | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -129,16 +128,16 @@ public class MainActivity extends BaseFragmentActivity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             //透明状态栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            //透明导航栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            linear_bar.setVisibility(View.VISIBLE);
-            //获取到状态栏的高度
-            int statusHeight = getStatusBarHeight();
-            //动态的设置隐藏布局的高度
-            ViewGroup.LayoutParams params = linear_bar.getLayoutParams();
-            params.height = statusHeight;
-            linear_bar.setLayoutParams(params);
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            //透明导航栏
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+////            linear_bar.setVisibility(View.VISIBLE);
+//            //获取到状态栏的高度
+//            int statusHeight = getStatusBarHeight();
+//            //动态的设置隐藏布局的高度
+//            ViewGroup.LayoutParams params = linear_bar.getLayoutParams();
+//            params.height = statusHeight;
+//            linear_bar.setLayoutParams(params);
         }
         initView();
         EventBus.getDefault().register(this);
@@ -219,27 +218,22 @@ public class MainActivity extends BaseFragmentActivity {
                 }
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-                }
-
-                //Android4.4及以上版本才能设置此效果
-
-                //Android5.0版本
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
                     if (position == 4) {
-                        //设置状态栏颜色
                         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
-                        linear_bar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                     } else {
                         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
-                        linear_bar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                     }
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//
+//                    if (position == 4) {
+//                        linear_bar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+//                    } else {
+//                        linear_bar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+//                    }
                 }
             }
         });
-        fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout, 0x1000);
+        fragmentlayout.setAdapter(fragBaseFragments,R.layout.tablayout, 0x1000);
         fragmentlayout.getViewPager().setOffscreenPageLimit(4);
         message_x = fragmentlayout.getTabLayout().findViewById(R.id.message_x);
 

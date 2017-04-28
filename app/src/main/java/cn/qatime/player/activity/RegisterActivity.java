@@ -102,6 +102,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     }
                 } else {
                     getcode.setEnabled(false);
+                    if(phone.getText().toString().length()==11) {
+                        Toast.makeText(RegisterActivity.this, R.string.phone_number_is_incorrect, Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

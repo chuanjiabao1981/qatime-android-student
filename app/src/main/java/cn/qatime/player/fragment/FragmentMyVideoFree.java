@@ -76,6 +76,7 @@ public class FragmentMyVideoFree extends BaseFragment {
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(),VideoCoursesPlayActivity.class);
                         intent.putExtra("id", item.getId());
+                        intent.putExtra("tasting",false);
                         startActivity(intent);
                     }
                 });
