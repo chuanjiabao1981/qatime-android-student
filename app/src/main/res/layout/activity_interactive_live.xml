@@ -8,7 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="220dp">
 
-
         <FrameLayout
             android:id="@+id/master_video_layout"
             android:layout_width="match_parent"
@@ -125,14 +124,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:padding="10dp"
-                android:src="@mipmap/video_on" />
+                android:src="@mipmap/video_on"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/audio_permission"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:padding="10dp"
-                android:src="@mipmap/audio_on" />
+                android:src="@mipmap/audio_on"
+                android:visibility="gone" />
         </LinearLayout>
         <!--<include layout="@layout/permission_control_layout" />-->
 

@@ -53,14 +53,6 @@ public class MsgHelper {
         NIMClient.getService(MsgService.class).sendCustomNotification(notification);
     }
 
-    // 群发自定义消息
-    public void sendCustomMsg(String roomId, MeetingOptCommand command) {
-        PermissionAttachment attachment = new PermissionAttachment(roomId, command, ChatRoomMemberCache.getInstance().getPermissionMems(roomId));
-
-        ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomCustomMessage(roomId, attachment);
-        NIMClient.getService(ChatRoomService.class).sendMessage(message, false);
-    }
-
     /**
      * ************************************ 单例 ***************************************
      */
