@@ -13,7 +13,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.netease.nimlib.sdk.AbortableFuture;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -27,14 +34,21 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.bean.VideoCoursesDetailsBean;
+import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.fragment.FragmentVideoCoursesClassInfo;
 import cn.qatime.player.fragment.FragmentVideoCoursesClassList;
 import cn.qatime.player.fragment.FragmentVideoCoursesTeacherInfo;
+import cn.qatime.player.im.cache.TeamDataCache;
+import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.OrderPayBean;
+import libraryextra.bean.PersonalInformationBean;
+import libraryextra.bean.Profile;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.SPUtils;
+import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.SimpleViewPagerIndicator;
@@ -106,11 +120,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                                 }
                                 if (data.getData().getIs_tasting() || data.getData().isTasted()) {//显示进入试听按钮
                                     auditionStart.setVisibility(View.VISIBLE);
-                                    if (data.getData().isTasted()) {
-                                        auditionStart.setText(getResourceString(R.string.audition_over));
-                                        auditionStart.setEnabled(false);
-                                    }
-                                } else {//显示加入试听按钮
+                                } else {
                                     auditionStart.setVisibility(View.GONE);
                                 }
 
@@ -240,11 +250,12 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
         switch (v.getId()) {
             case R.id.audition_start:
                 if (BaseApplication.isLogined()) {
-                    if ("init".equals(data.getData().getStatus()) || "published".equals(data.getData().getStatus())) {
-                        Toast.makeText(this, getString(R.string.published_course_unable_enter) + getString(R.string.audition), Toast.LENGTH_SHORT).show();
+                    if (!(data.getData().getIs_tasting() || data.getData().isTasted())) { //不在试听状态则加入试听
+                        joinAudition();
                     } else {
                         intent = new Intent(VideoCoursesActivity.this, VideoCoursesPlayActivity.class);
                         intent.putExtra("id", data.getData().getId());
+                        intent.putExtra("tasting", true);
                         startActivity(intent);
                     }
                 } else {
@@ -257,6 +268,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                 if (BaseApplication.isLogined()) {
                     intent = new Intent(VideoCoursesActivity.this, VideoCoursesPlayActivity.class);
                     intent.putExtra("id", data.getData().getId());
+                    intent.putExtra("tasting", false);
                     startActivity(intent);
                 } else {
                     intent = new Intent(VideoCoursesActivity.this, LoginActivity2.class);
@@ -332,6 +344,112 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
         finish();
     }
 
+    private void joinAudition() {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.urlVideoCourses + id + "/taste", null,
+                new VolleyListener(VideoCoursesActivity.this) {
+
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        //已加入试听
+                        data.getData().setIs_tasting(true);
+                        Intent intent = new Intent(VideoCoursesActivity.this, VideoCoursesPlayActivity.class);
+                        intent.putExtra("id", data.getData().getId());
+                        intent.putExtra("tasting", true);
+                        startActivity(intent);
+                        if (StringUtils.isNullOrBlanK(BaseApplication.getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getAccountToken())) {
+                            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null,
+                                    new VolleyListener(VideoCoursesActivity.this) {
+                                        @Override
+                                        protected void onSuccess(JSONObject response) {
+                                            PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
+                                            if (bean != null && bean.getData() != null && bean.getData().getChat_account() != null) {
+                                                Profile profile = BaseApplication.getProfile();
+                                                profile.getData().getUser().setChat_account(bean.getData().getChat_account());
+                                                BaseApplication.setProfile(profile);
+
+                                                String account = BaseApplication.getAccount();
+                                                String token = BaseApplication.getAccountToken();
+
+                                                if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
+                                                    AbortableFuture<LoginInfo> loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, token));
+                                                    loginRequest.setCallback(new RequestCallback<LoginInfo>() {
+                                                        @Override
+                                                        public void onSuccess(LoginInfo o) {
+                                                            Logger.e("云信登录成功" + o.getAccount());
+                                                            // 初始化消息提醒
+                                                            NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
+
+                                                            NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
+                                                            //缓存
+                                                            UserInfoCache.getInstance().clear();
+                                                            TeamDataCache.getInstance().clear();
+
+                                                            UserInfoCache.getInstance().buildCache();
+                                                            TeamDataCache.getInstance().buildCache();
+
+                                                            UserInfoCache.getInstance().registerObservers(true);
+                                                            TeamDataCache.getInstance().registerObservers(true);
+                                                        }
+
+                                                        @Override
+                                                        public void onFailed(int code) {
+//                                                            BaseApplication.clearToken();
+                                                            Profile profile = BaseApplication.getProfile();
+                                                            profile.getData().setRemember_token("");
+                                                            SPUtils.putObject(VideoCoursesActivity.this, "profile", profile);
+                                                        }
+
+                                                        @Override
+                                                        public void onException(Throwable throwable) {
+                                                            Logger.e(throwable.getMessage());
+                                                            BaseApplication.clearToken();
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        protected void onError(JSONObject response) {
+
+                                        }
+
+                                        @Override
+                                        protected void onTokenOut() {
+                                            tokenOut();
+                                        }
+                                    }, new VolleyErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError volleyError) {
+                                    super.onErrorResponse(volleyError);
+                                }
+                            });
+                            addToRequestQueue(request);
+                        }
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+//                            if(response.getJSONObject("error").getInt("code")==3004){//CourseTasteLimit
+                        Toast.makeText(VideoCoursesActivity.this, R.string.the_course_not_support_audition, Toast.LENGTH_SHORT).show();
+//                                            }
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+
+                }
+
+                , new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

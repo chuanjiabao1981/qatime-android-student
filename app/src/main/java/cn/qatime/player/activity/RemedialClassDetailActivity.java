@@ -28,8 +28,6 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
@@ -413,9 +411,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     }
 
     private void joinAudition() {
-        Map<String, String> map = new HashMap<>();
-        map.put("id", String.valueOf(id));
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass + "/" + id + "/taste", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass + "/" + id + "/taste", null,
                 new VolleyListener(RemedialClassDetailActivity.this) {
 
                     @Override

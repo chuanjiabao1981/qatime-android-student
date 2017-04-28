@@ -68,7 +68,7 @@ public class FragmentVideoCoursesList extends BaseFragment {
                     return;
                 }
                 playingData = list.get(position);
-                context.playCourses(playingData.getVideo().getName_url());
+                context.playCourses(playingData);
             }
         });
     }
@@ -81,7 +81,17 @@ public class FragmentVideoCoursesList extends BaseFragment {
 
 
     public void setData(List<VideoLessonsBean> video_lessons) {
-        list.addAll(video_lessons);
+//        video_lessons.get(0)
+        list.clear();
+        if(context.isTasting()){
+                for (VideoLessonsBean videoLessonsBean : video_lessons) {
+                    if(videoLessonsBean.isTastable()){//只显示可试听的课
+                        list.add(videoLessonsBean);
+                    }
+                }
+        }else{
+            list.addAll(video_lessons);
+        }
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
