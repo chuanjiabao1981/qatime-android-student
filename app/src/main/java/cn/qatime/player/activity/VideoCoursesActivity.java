@@ -2,21 +2,18 @@ package cn.qatime.player.activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
-import com.bumptech.glide.Glide;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
@@ -55,15 +52,12 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
     private int id;
     private VideoCoursesDetailsBean data;
     DecimalFormat df = new DecimalFormat("#.00");
-    private ImageView image;
     private TextView name;
     private TextView price;
     private TextView transferPrice;
     private TextView studentNumber;
     private RelativeLayout handleLayout;
-    private Button audition;
     private Button auditionStart;
-    private Button pay;
     private LinearLayout startStudyView;
     private Button startStudy;
     private AlertDialog alertDialog;
@@ -80,7 +74,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
     }
 
     private void initData() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlVideoCourses + "/" + id, null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlVideoCourses + id, null,
                 new VolleyListener(VideoCoursesActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -88,7 +82,6 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
 
                         if (data != null && data.getData() != null) {
                             handleLayout.setVisibility(View.VISIBLE);
-                            Glide.with(getApplicationContext()).load(data.getData().getPublicize()).placeholder(R.mipmap.photo).fitCenter().crossFade().into(image);
                             name.setText(data.getData().getName());
                             setTitles(data.getData().getName());
                             studentNumber.setText(getString(R.string.student_number, data.getData().getBuy_tickets_count()));
@@ -111,13 +104,11 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                                 }
                                 if (data.getData().getIs_tasting() || data.getData().isTasted()) {//显示进入试听按钮
                                     auditionStart.setVisibility(View.VISIBLE);
-                                    audition.setVisibility(View.GONE);
                                     if (data.getData().isTasted()) {
                                         auditionStart.setText(getResourceString(R.string.audition_over));
                                         auditionStart.setEnabled(false);
                                     }
                                 } else {//显示加入试听按钮
-                                    audition.setText(getResources().getString(R.string.Join_the_audition));
                                     auditionStart.setVisibility(View.GONE);
                                 }
 
@@ -178,19 +169,16 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
     private void initView() {
         freeTaste = (TextView) findViewById(R.id.free_taste);
         joinCheap = (TextView) findViewById(R.id.join_cheap);
-        image = (ImageView) findViewById(R.id.image);
         name = (TextView) findViewById(R.id.name);
         price = (TextView) findViewById(R.id.price);
         transferPrice = (TextView) findViewById(R.id.transfer_price);
         studentNumber = (TextView) findViewById(R.id.student_number);
         handleLayout = (RelativeLayout) findViewById(R.id.handle_layout);
-        audition = (Button) findViewById(R.id.audition);
         auditionStart = (Button) findViewById(R.id.audition_start);
-        pay = (Button) findViewById(R.id.pay);
+        Button pay = (Button) findViewById(R.id.pay);
         startStudyView = (LinearLayout) findViewById(R.id.start_study_view);
         startStudy = (Button) findViewById(R.id.start_study);
 
-        audition.setOnClickListener(this);
         auditionStart.setOnClickListener(this);
         pay.setOnClickListener(this);
         startStudy.setOnClickListener(this);
@@ -253,22 +241,10 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                     if ("init".equals(data.getData().getStatus()) || "published".equals(data.getData().getStatus())) {
                         Toast.makeText(this, getString(R.string.published_course_unable_enter) + getString(R.string.audition), Toast.LENGTH_SHORT).show();
                     } else {
-                        intent = new Intent(VideoCoursesActivity.this, NEVideoPlayerActivity.class);
-//                    intent.putExtra("camera", data.getData().getCamera());
-//                    intent.putExtra("board", data.getData().getBoard());
+                        intent = new Intent(VideoCoursesActivity.this, VideoCoursesPlayActivity.class);
                         intent.putExtra("id", data.getData().getId());
-                        intent.putExtra("sessionId", data.getData().getChat_team_id());
                         startActivity(intent);
                     }
-                } else {
-                    intent = new Intent(VideoCoursesActivity.this, LoginActivity2.class);
-                    intent.putExtra("activity_action", Constant.LoginAction.toRemedialClassDetail);
-                    startActivity(intent);
-                }
-                break;
-            case R.id.audition:
-                if (BaseApplication.isLogined()) {
-                    joinAudition();
                 } else {
                     intent = new Intent(VideoCoursesActivity.this, LoginActivity2.class);
                     intent.putExtra("activity_action", Constant.LoginAction.toRemedialClassDetail);
@@ -352,9 +328,5 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
 //            finish();
 //        }
         finish();
-    }
-
-    private void joinAudition() {
-
     }
 }
