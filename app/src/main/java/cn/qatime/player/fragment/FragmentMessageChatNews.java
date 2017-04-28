@@ -52,6 +52,7 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
+import libraryextra.bean.MyInteractClassBean;
 import libraryextra.bean.MyTutorialClassBean;
 import libraryextra.utils.DateUtils;
 import libraryextra.utils.JsonUtils;
@@ -75,6 +76,7 @@ public class FragmentMessageChatNews extends BaseFragment {
     private List<RecentContact> loadedRecents;
     private UserInfoObservable.UserInfoObserver userInfoObserver;
     private UserInfoObservable userInfoObservable;
+    private int listSize = 0;
 //    private MyTutorialClassBean courses;
 //    private boolean shouldPost = false;//是否需要向messageactivity发推流地址
 //    private String sessionId;
@@ -109,6 +111,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                                         }
                                     }
                                 }
+                                listSize = items.size();
                                 refreshMessages();
                             }
                         } catch (JsonSyntaxException e) {
@@ -135,22 +138,23 @@ public class FragmentMessageChatNews extends BaseFragment {
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-//                        MyTutorialClassBean data = JsonUtils.objectFromJson(response.toString(), MyTutorialClassBean.class);
-//                        if (data != null && data.getData() != null) {
-//                            synchronized (items) {
-//                                for (MessageListBean item : items) {
-//                                    for (MyTutorialClassBean.Data bean : data.getData()) {
-//                                        if (item.getContactId().equals(bean.getChat_team_id())) {
-//                                            item.setCourseId(bean.getId());
-//                                            item.setCourseType("interactive");
-//                                            item.setIcon(bean.getPublicize());
-//                                            item.setName(bean.getName());
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                            refreshMessages();
-//                        }
+                        MyInteractClassBean data = JsonUtils.objectFromJson(response.toString(), MyInteractClassBean.class);
+                        if (data != null && data.getData() != null) {
+                            synchronized (items) {
+                                for (MessageListBean item : items) {
+                                    for (MyInteractClassBean.DataBean bean : data.getData()) {
+                                        if (item.getContactId().equals(bean.getChat_team_id())) {
+                                            item.setCourseId(bean.getId());
+                                            item.setCourseType("interactive");
+                                            item.setIcon(bean.getPublicize_url());
+                                            item.setName(bean.getName());
+                                        }
+                                    }
+                                }
+                            }
+                            listSize = items.size();
+                            refreshMessages();
+                        }
                     }
 
                     @Override
@@ -357,6 +361,9 @@ public class FragmentMessageChatNews extends BaseFragment {
     private void sortRecentContacts(List<MessageListBean> list) {
         if (list.size() == 0) {
             return;
+        }
+        if (listSize != list.size()) {
+            getCourses();
         }
         Collections.sort(list, comp);
     }

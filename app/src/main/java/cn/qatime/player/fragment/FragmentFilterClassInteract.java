@@ -199,7 +199,7 @@ public class FragmentFilterClassInteract extends BaseFragment {
             public void convert(ViewHolder holder, FilterInteractCourseBean.DataBean item, int position) {
                 Glide.with(getActivity()).load(item.getPublicize_url()).crossFade().placeholder(R.mipmap.photo).into((ImageView) holder.getView(R.id.image));
                 List<TeacherBean> teachers = item.getTeachers();
-                StringBuffer teacherNames = new StringBuffer();
+                StringBuilder teacherNames = new StringBuilder();
                 for (int i = 0; i < teachers.size(); i++) {
                     teacherNames.append(teachers.get(0).getName());
                     if (i != teachers.size() - 1) {
