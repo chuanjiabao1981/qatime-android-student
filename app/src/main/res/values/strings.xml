@@ -188,7 +188,8 @@
     <string name="class_name">课程名称：</string>
     <string name="subject_type">科目类型：</string>
     <string name="teacher">授课教师：</string>
-    <string name="progress">[进度%1$d/%2$d]</string>
+    <string name="progress">进度%1$d/%2$d</string>
+    <string name="progress_live">[进度%1$d/%2$d]</string>
     <string name="progress_taste">已试听%1$d/%2$d</string>
     <string name="teach_way">授课方式：</string>
     <string name="remain_class">剩余课时：</string>

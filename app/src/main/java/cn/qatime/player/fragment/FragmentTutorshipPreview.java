@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -74,10 +73,7 @@ public class FragmentTutorshipPreview extends BaseFragment {
             @Override
             public void convert(ViewHolder helper, final MyTutorialClassBean.Data item, int position) {
                 boolean isBought = item.isIs_bought();//已经购买
-                //试听状态
-                TextView taste = helper.getView(R.id.taste);
 
-                taste.setVisibility(isBought ? View.GONE : View.VISIBLE);//已购买不显示
 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View view) {
@@ -104,7 +100,7 @@ helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     if(value!=0){
                         helper.setText(R.id.teaching_time, getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day));
                     }else{
-                        helper.setText(R.id.teaching_time,getString(R.string.ready_to_start));
+                        helper.setText(R.id.teaching_time,"即将开课");
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();

@@ -35,11 +35,13 @@ public class FragmentUnLoginHomeUserCenter extends BaseFragment implements View.
         LinearLayout about = (LinearLayout) v.findViewById(R.id.about);
         LinearLayout myInteract = (LinearLayout) v.findViewById(R.id.my_interact);
         LinearLayout myVideo = (LinearLayout) v.findViewById(R.id.my_video);
+        LinearLayout myTaste = (LinearLayout) v.findViewById(R.id.my_taste);
         about.setOnClickListener(this);
         myInteract.setOnClickListener(this);
         myVideo.setOnClickListener(this);
         information.setOnClickListener(this);
         name.setOnClickListener(this);
+        myTaste.setOnClickListener(this);
 
         myWallet.setOnClickListener(this);
         myOrder.setOnClickListener(this);
@@ -78,8 +80,12 @@ public class FragmentUnLoginHomeUserCenter extends BaseFragment implements View.
             case R.id.my_course:
             case R.id.my_interact:
             case R.id.my_video:
+            case R.id.my_taste:
             case R.id.security:
             case R.id.setting:
+                Toast.makeText(getActivity(), getResourceString(R.string.unlogin_alert), Toast.LENGTH_SHORT).show();
+                break;
+            default:
                 Toast.makeText(getActivity(), getResourceString(R.string.unlogin_alert), Toast.LENGTH_SHORT).show();
                 break;
         }

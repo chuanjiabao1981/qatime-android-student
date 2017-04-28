@@ -30,7 +30,7 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_my_tutorship);
-        setTitles(getResources().getString(R.string.my_course));
+        setTitles("我的直播课");
 
 //        setRightImage(R.mipmap.audition_records, new View.OnClickListener() {
 //            @Override
