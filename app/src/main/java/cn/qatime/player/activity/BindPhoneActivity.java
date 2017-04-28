@@ -64,6 +64,9 @@ public class BindPhoneActivity extends BaseActivity implements View.OnClickListe
                     textGetcode.setEnabled(true);
                 } else {
                     textGetcode.setEnabled(false);
+                    if(targetPhone.getText().toString().length()==11) {
+                        Toast.makeText(BindPhoneActivity.this, R.string.phone_number_is_incorrect, Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

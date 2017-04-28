@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.AboutUsActivity;
 import cn.qatime.player.activity.LoginActivity2;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.utils.Constant;
@@ -31,8 +32,16 @@ public class FragmentUnLoginHomeUserCenter extends BaseFragment implements View.
         LinearLayout myCourse = (LinearLayout) v.findViewById(R.id.my_course);
         LinearLayout security = (LinearLayout) v.findViewById(R.id.security);
         LinearLayout setting = (LinearLayout) v.findViewById(R.id.setting);
+        LinearLayout about = (LinearLayout) v.findViewById(R.id.about);
+        LinearLayout myInteract = (LinearLayout) v.findViewById(R.id.my_interact);
+        LinearLayout myVideo = (LinearLayout) v.findViewById(R.id.my_video);
+        LinearLayout myTaste = (LinearLayout) v.findViewById(R.id.my_taste);
+        about.setOnClickListener(this);
+        myInteract.setOnClickListener(this);
+        myVideo.setOnClickListener(this);
         information.setOnClickListener(this);
         name.setOnClickListener(this);
+        myTaste.setOnClickListener(this);
 
         myWallet.setOnClickListener(this);
         myOrder.setOnClickListener(this);
@@ -62,11 +71,21 @@ public class FragmentUnLoginHomeUserCenter extends BaseFragment implements View.
                 intent.putExtra("activity_action", Constant.LoginAction.toPage5);
                 startActivity(intent);
                 break;
+            case R.id.about:
+                intent = new Intent(getActivity(), AboutUsActivity.class);
+                startActivity(intent);
+                break;
             case R.id.my_wallet:
             case R.id.my_order:
             case R.id.my_course:
+            case R.id.my_interact:
+            case R.id.my_video:
+            case R.id.my_taste:
             case R.id.security:
             case R.id.setting:
+                Toast.makeText(getActivity(), getResourceString(R.string.unlogin_alert), Toast.LENGTH_SHORT).show();
+                break;
+            default:
                 Toast.makeText(getActivity(), getResourceString(R.string.unlogin_alert), Toast.LENGTH_SHORT).show();
                 break;
         }

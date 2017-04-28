@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="10dp">
+    android:paddingRight="10dp"
+    android:paddingLeft="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/text_stroke_background"
-        android:orientation="horizontal"
-        android:padding="1px">
+        android:orientation="horizontal">
 
         <RelativeLayout
             android:id="@+id/rel_img"

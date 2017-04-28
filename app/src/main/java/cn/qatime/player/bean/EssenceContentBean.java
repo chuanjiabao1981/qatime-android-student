@@ -147,16 +147,14 @@ public class EssenceContentBean implements Serializable {
             private String subject;
             private String grade;
             private String teacher_name;
-            private int price;
-            private int current_price;
+            private float price;
+            private float current_price;
             private String chat_team_id;
             private String chat_team_owner;
             private int buy_tickets_count;
             private String status;
             private int preset_lesson_count;
-            private int completed_lesson_count;
             private int taste_count;
-            private int completed_lessons_count;
             private String live_start_time;
             private String live_end_time;
             private String publicize;
@@ -201,19 +199,19 @@ public class EssenceContentBean implements Serializable {
                 this.teacher_name = teacher_name;
             }
 
-            public int getPrice() {
+            public float getPrice() {
                 return price;
             }
 
-            public void setPrice(int price) {
+            public void setPrice(float price) {
                 this.price = price;
             }
 
-            public int getCurrent_price() {
+            public float getCurrent_price() {
                 return current_price;
             }
 
-            public void setCurrent_price(int current_price) {
+            public void setCurrent_price(float current_price) {
                 this.current_price = current_price;
             }
 
@@ -257,13 +255,6 @@ public class EssenceContentBean implements Serializable {
                 this.preset_lesson_count = preset_lesson_count;
             }
 
-            public int getCompleted_lesson_count() {
-                return completed_lesson_count;
-            }
-
-            public void setCompleted_lesson_count(int completed_lesson_count) {
-                this.completed_lesson_count = completed_lesson_count;
-            }
 
             public int getTaste_count() {
                 return taste_count;
@@ -271,14 +262,6 @@ public class EssenceContentBean implements Serializable {
 
             public void setTaste_count(int taste_count) {
                 this.taste_count = taste_count;
-            }
-
-            public int getCompleted_lessons_count() {
-                return completed_lessons_count;
-            }
-
-            public void setCompleted_lessons_count(int completed_lessons_count) {
-                this.completed_lessons_count = completed_lessons_count;
             }
 
             public String getLive_start_time() {

@@ -39,30 +39,28 @@ import libraryextra.utils.VolleyListener;
  * @Description
  */
 public class SystemSettingActivity extends BaseActivity implements View.OnClickListener {
-    private LinearLayout learningProcess;
     private LinearLayout notifySetting;
     private LinearLayout checkUpdate;
     private TextView version;
     private LinearLayout cleanCache;
     private TextView cacheSize;
     private LinearLayout feedback;
-    private LinearLayout about;
     private Button exit;
     private String totalCacheSize;
     private android.app.AlertDialog alertDialog;
 //    private String apkUrl;
     private String downLoadLinks;
     private View updateView;
+    private LinearLayout about;
 
     private void assignViews() {
-        learningProcess = (LinearLayout) findViewById(R.id.learning_process);
         notifySetting = (LinearLayout) findViewById(R.id.notify_setting);
         checkUpdate = (LinearLayout) findViewById(R.id.check_update);
         version = (TextView) findViewById(R.id.version);
         cleanCache = (LinearLayout) findViewById(R.id.clean_cache);
         cacheSize = (TextView) findViewById(R.id.cache_size);
         feedback = (LinearLayout) findViewById(R.id.feedback);
-        about = (LinearLayout) findViewById(R.id.about);
+
         exit = (Button) findViewById(R.id.exit);
     }
 
@@ -87,9 +85,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
         notifySetting.setOnClickListener(this);
         checkUpdate.setOnClickListener(this);
         cleanCache.setOnClickListener(this);
-        learningProcess.setOnClickListener(this);
         feedback.setOnClickListener(this);
-        about.setOnClickListener(this);
 
 
     }
@@ -189,17 +185,8 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
                 DataCleanUtils.clearAllCache(this);
                 setCache();
                 break;
-            case R.id.learning_process:
-                intent = new Intent(SystemSettingActivity.this, LearningProcessActivity.class);
-                startActivity(intent);
-                break;
             case R.id.feedback:
                 intent = new Intent(SystemSettingActivity.this, FeedBackActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.about:
-                Logger.e("about click");
-                intent = new Intent(SystemSettingActivity.this, AboutUsActivity.class);
                 startActivity(intent);
                 break;
             case R.id.download:

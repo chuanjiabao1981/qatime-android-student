@@ -105,4 +105,8 @@ public class BaseFragment extends Fragment {
     protected String getResourceString(int id) {
         return getResources().getString(id);
     }
+
+    protected <T extends View> T findViewById(int resId) {
+        return (T) (getView().findViewById(resId));
+    }
 }

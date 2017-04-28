@@ -8,6 +8,8 @@
         android:id="@+id/text_empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="未找到相关课程"
+        android:minHeight="160dp"
+        android:gravity="center"
+        android:text="暂无数据"
         android:textColor="#999" />
 </RelativeLayout>

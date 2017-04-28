@@ -102,6 +102,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     }
                 } else {
                     getcode.setEnabled(false);
+                    if(phone.getText().toString().length()==11) {
+                        Toast.makeText(RegisterActivity.this, R.string.phone_number_is_incorrect, Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -209,7 +212,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             return;
         }
         if (!StringUtils.isGoodPWD(password.getText().toString().trim())) {
-            Toast.makeText(this, getResources().getString(R.string.password_6_16), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getResources().getString(R.string.password_format_error), Toast.LENGTH_LONG).show();
             next.setClickable(true);
             return;
         }

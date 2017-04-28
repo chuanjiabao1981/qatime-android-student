@@ -96,7 +96,7 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
         time = new TimeCount(60000, 1000);
         getCode.setOnClickListener(this);
         grade.setOnClickListener(this);
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        checkBox.setOnCheckedChangeListener(  new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 next.setEnabled(isChecked);
@@ -123,6 +123,9 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
                     }
                 } else {
                     getCode.setEnabled(false);
+                    if(phone.getText().toString().length()==11){
+                        Toast.makeText(WeChatBindActivity.this, R.string.phone_number_is_incorrect, Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

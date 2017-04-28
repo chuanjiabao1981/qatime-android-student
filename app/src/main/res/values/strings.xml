@@ -130,10 +130,11 @@
     <string name="pay_remind">请您在24小时内完成支付，否则订单会自动取消。</string>
     <string name="problem_phone">遇到问题请拨打客服电话</string>
     <!--//详情-->
-    <string name="information_detail">辅导概况</string>
+    <string name="information_detail">课程介绍</string>
 
     <string name="teacher_detail">教师资料</string>
-    <string name="course_list">课程列表</string>
+    <string name="teachers_detail">教师组资料</string>
+    <string name="course_list">上课安排</string>
     <!--//课程详情-->
     <string name="student_number">报名人数 %1$d</string>
     <string name="Join_the_audition">加入试听</string>
@@ -187,7 +188,9 @@
     <string name="class_name">课程名称：</string>
     <string name="subject_type">科目类型：</string>
     <string name="teacher">授课教师：</string>
-    <string name="progress">[进度%1$d/%2$d]</string>
+    <string name="progress">进度%1$d/%2$d</string>
+    <string name="progress_live">[进度%1$d/%2$d]</string>
+    <string name="progress_taste">已试听%1$d/%2$d</string>
     <string name="teach_way">授课方式：</string>
     <string name="remain_class">剩余课时：</string>
     <string name="total_class_hours">课时总数：</string>
@@ -456,7 +459,7 @@
     <string name="code_use_already">验证码已失效</string>
     <string name="withdraw_existed">存在未完成的提现订单</string>
     <string name="start_audition">开始试听</string>
-    <string name="course_arrangement">课程安排</string>
+    <string name="course_arrangement">上课安排</string>
     <string name="audition_over">试听结束</string>
     <string name="class_missed">待补课</string>
     <string name="unlogin_alert">您还未登录,请先登录!</string>
@@ -471,7 +474,6 @@
     <string name="refund_record">退款记录</string>
     <string name="notify_mode">通知方式</string>
     <string name="course_message_notify">辅导班消息通知</string>
-    <string name="live_courses">直播课程</string>
     <string name="teacher_recommendation">名师推荐</string>
     <string name="cancel">取消</string>
     <string name="other_method_of_login">其他登录方式</string>
@@ -522,7 +524,7 @@
     <string name="this_phone_number_already_regist">该手机号已注册,请直接登录</string>
     <string name="use_a_new_number">新号码注册</string>
     <string name="this_month_non_lesson">本月暂无课程</string>
-    <string name="remedial_detail">辅导详情</string>
+    <string name="remedial_detail">课程介绍</string>
     <string name="teacher_info">教师资料</string>
     <string name="continue_buy_lasses_lesson">该辅导班已开课，是否继续购买</string>
     <string name="the_course_not_support_audition">该课程不支持试听</string>
@@ -630,4 +632,11 @@
     <string name="not_set">未设置</string>
     <string name="new_pay_password_invalid">新密码%1$d小时后可用</string>
     <string name="select_subject">选课</string>
+    <string name="my_interact">我的一对一</string>
+    <string name="interact_courses">一对一</string>
+    <string name="video_courses">视频课</string>
+    <string name="live_courses">直播课</string>
+    <string name="my_video">我的视频课</string>
+    <string name="all_class_has_over">全部课程已完成</string>
+    <string name="my_taste">我的试听</string>
 </resources>

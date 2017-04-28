@@ -32,15 +32,15 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.TutorialClassBean;
+import libraryextra.bean.MyTutorialClassBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
 public class FragmentTutorshipOver extends BaseFragment {
     private PullToRefreshListView listView;
-    private java.util.List<TutorialClassBean.Data> list = new ArrayList<>();
-    private CommonAdapter<TutorialClassBean.Data> adapter;
+    private java.util.List<MyTutorialClassBean.Data> list = new ArrayList<>();
+    private CommonAdapter<MyTutorialClassBean.Data> adapter;
     private int page = 1;
 
     @Nullable
@@ -63,9 +63,9 @@ public class FragmentTutorshipOver extends BaseFragment {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
 
-        adapter = new CommonAdapter<TutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship4) {
+        adapter = new CommonAdapter<MyTutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship4) {
             @Override
-            public void convert(ViewHolder helper, TutorialClassBean.Data item, int position) {
+            public void convert(ViewHolder helper, MyTutorialClassBean.Data item, int position) {
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.grade, item.getGrade());
@@ -136,9 +136,9 @@ public class FragmentTutorshipOver extends BaseFragment {
                         listView.onRefreshComplete();
 
                         try {
-                            TutorialClassBean data = JsonUtils.objectFromJson(response.toString(), TutorialClassBean.class);
+                            MyTutorialClassBean data = JsonUtils.objectFromJson(response.toString(), MyTutorialClassBean.class);
                             if (data != null) {
-                                for(TutorialClassBean.Data item : data.getData()){
+                                for(MyTutorialClassBean.Data item : data.getData()){
                                     if(item.isIs_bought()){//只显示已购买
                                         list.add(item);
                                     }

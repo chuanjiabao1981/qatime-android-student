@@ -1,8 +1,6 @@
 package cn.qatime.player.activity;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,10 +9,12 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.netease.nimlib.sdk.AbortableFuture;
@@ -40,6 +40,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +49,9 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
+import cn.qatime.player.bean.BusEvent;
+import cn.qatime.player.bean.CashAccountBean;
+import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.fragment.FragmentHomeClassTable;
 import cn.qatime.player.fragment.FragmentHomeMainPage;
@@ -61,7 +65,6 @@ import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
-import cn.qatime.player.utils.ImageUtil;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
@@ -98,20 +101,44 @@ public class MainActivity extends BaseFragmentActivity {
                     }
                 }
             };
+    private View linear_bar;
 
     /**
      * 刷新未读
      */
     private void refreshUnreadNum() {
-        int unreadNum = NIMClient.getService(MsgService.class).getTotalUnreadCount();
-        Logger.e("unreadNum" + unreadNum);
-        message_x.setVisibility(unreadNum == 0 ? View.GONE : View.VISIBLE);
+        if (BaseApplication.isLogined()) {
+            int unreadNum = NIMClient.getService(MsgService.class).getTotalUnreadCount();
+            Logger.e("unreadNum" + unreadNum);
+            message_x.setVisibility(unreadNum == 0 ? View.GONE : View.VISIBLE);
+        }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        linear_bar = findViewById(R.id.ll_bar);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+                    | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            //透明状态栏
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            //透明导航栏
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+////            linear_bar.setVisibility(View.VISIBLE);
+//            //获取到状态栏的高度
+//            int statusHeight = getStatusBarHeight();
+//            //动态的设置隐藏布局的高度
+//            ViewGroup.LayoutParams params = linear_bar.getLayoutParams();
+//            params.height = statusHeight;
+//            linear_bar.setLayoutParams(params);
+        }
         initView();
         EventBus.getDefault().register(this);
         //  注册/注销观察者
@@ -154,8 +181,9 @@ public class MainActivity extends BaseFragmentActivity {
         if (BaseApplication.isLogined()) {
             fragBaseFragments.add(new FragmentHomeClassTable());
             fragBaseFragments.add(new FragmentHomeMessage());
-            initMessage();
             fragBaseFragments.add(new FragmentHomeUserCenter());
+            initMessage();
+            refreshCashAccount();
         } else {
             fragBaseFragments.add(new FragmentUnLoginHomeClassTable());
             fragBaseFragments.add(new FragmentUnLoginHomeMessage());
@@ -186,15 +214,48 @@ public class MainActivity extends BaseFragmentActivity {
                     message_x.setVisibility(View.GONE);
                     NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
                 } else {
-                    NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
+                    NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.isChatMessageNotifyStatus() ? MsgService.MSG_CHATTING_ACCOUNT_NONE : MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if (position == 4) {
+                        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+                    } else {
+                        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+                    }
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//
+//                    if (position == 4) {
+//                        linear_bar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+//                    } else {
+//                        linear_bar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+//                    }
                 }
             }
         });
-        fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout, 0x1000);
+        fragmentlayout.setAdapter(fragBaseFragments,R.layout.tablayout, 0x1000);
         fragmentlayout.getViewPager().setOffscreenPageLimit(4);
         message_x = fragmentlayout.getTabLayout().findViewById(R.id.message_x);
 
 
+    }
+
+    /**
+     * 通过反射的方式获取状态栏高度
+     *
+     * @return
+     */
+    private int getStatusBarHeight() {
+        try {
+            Class<?> c = Class.forName("com.android.internal.R$dimen");
+            Object obj = c.newInstance();
+            Field field = c.getField("status_bar_height");
+            int x = Integer.parseInt(field.get(obj).toString());
+            return getResources().getDimensionPixelSize(x);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     private void initMessage() {
@@ -208,7 +269,7 @@ public class MainActivity extends BaseFragmentActivity {
                         if (data != null && data.getData() != null) {
                             for (SystemNotifyBean.DataBean bean : data.getData()) {
                                 if (!bean.isRead()) {//有未读发送未读event
-                                    EventBus.getDefault().postSticky("handleUPushMessage");
+                                    EventBus.getDefault().postSticky(BusEvent.HANDLE_U_PUSH_MESSAGE);
                                     break;
                                 }
                             }
@@ -238,6 +299,7 @@ public class MainActivity extends BaseFragmentActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Constant.QRCODE_SUCCESS) {//扫描二维码返回数据跳转至辅导班详情页
+            // TODO: 2017/4/17 判断优惠码跳转?
             Intent intent = new Intent(this, RemedialClassDetailActivity.class);
             intent.putExtra("id", data.getIntExtra("id", 0));
             intent.putExtra("coupon", data.getStringExtra("coupon"));
@@ -294,11 +356,11 @@ public class MainActivity extends BaseFragmentActivity {
                         startActivity(intentAction);
                     }
                 }
-            } else {
-                //云信通知消息
-                setIntent(intent);
-                parseIntent();
             }
+        } else {
+            //云信通知消息
+            setIntent(intent);
+            parseIntent();
         }
     }
 
@@ -309,7 +371,7 @@ public class MainActivity extends BaseFragmentActivity {
             if (data.hasExtra(NimIntent.EXTRA_NOTIFY_CONTENT) ||
                     //转到系统消息页面
                     (data.hasExtra("type") && data.getStringExtra("type").equals("system_message"))) {
-                if (fragBaseFragments != null && fragBaseFragments.size() > 0 && fragBaseFragments.get(3) instanceof FragmentHomeMainPage) {
+                if (fragBaseFragments != null && fragBaseFragments.size() > 0 && fragBaseFragments.get(3) instanceof FragmentHomeMessage) {
                     ((FragmentHomeMessage) fragBaseFragments.get(3)).setMessage(data);
                 }
 //                Intent intent = new Intent(this, MessageFragmentActivity.class);
@@ -510,16 +572,19 @@ public class MainActivity extends BaseFragmentActivity {
     };
 
     @Subscribe
-    public void onEvent(String event) {
-        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
+    public void onEvent(BusEvent event) {
+        if (event == BusEvent.PAY_SUCCESS) {
             if (StringUtils.isNullOrBlanK(BaseApplication.getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getAccountToken())) {
                 getAccount();
             }
-        } else if (!StringUtils.isNullOrBlanK(event) && "handleUPushMessage".equals(event)) {
+        } else if (event == BusEvent.HANDLE_U_PUSH_MESSAGE) {
             if (fragmentlayout.getCurrentPosition() != 3) {
                 message_x.setVisibility(View.VISIBLE);
             }
+        } else if (event == BusEvent.REFRESH_CASH_ACCOUNT) {
+            refreshCashAccount();
         }
+
     }
 
     /**
@@ -596,14 +661,45 @@ public class MainActivity extends BaseFragmentActivity {
         addToRequestQueue(request);
     }
 
-    public void more(View v) {
-        setCurrentPosition(1, 0);
-    }
 
     public void setCurrentPosition(int currentPosition, int position) {
         fragmentlayout.setCurrenItem(currentPosition);
         FragmentHomeSelectSubject fragmentHomeSelectSubject = (FragmentHomeSelectSubject) fragBaseFragments.get(1);
         fragmentHomeSelectSubject.setGrade(position);
+    }
+
+    @Subscribe
+    public void onEvent(PayResultState state) {
+        refreshCashAccount();
+    }
+
+    private void refreshCashAccount() {
+        if (BaseApplication.isLogined()) {
+            addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.urlpayment + BaseApplication.getUserId() + "/cash", null, new VolleyListener(MainActivity.this) {
+
+                @Override
+                protected void onTokenOut() {
+
+                }
+
+                @Override
+                protected void onSuccess(JSONObject response) {
+                    CashAccountBean cashAccount = JsonUtils.objectFromJson(response.toString(), CashAccountBean.class);
+                    BaseApplication.setCashAccount(cashAccount);
+                    EventBus.getDefault().post(BusEvent.ON_REFRESH_CASH_ACCOUNT);
+                }
+
+                @Override
+                protected void onError(JSONObject response) {
+                    Toast.makeText(MainActivity.this, getResourceString(R.string.get_wallet_info_error), Toast.LENGTH_SHORT).show();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    Toast.makeText(MainActivity.this, getResourceString(R.string.server_error), Toast.LENGTH_SHORT).show();
+                }
+            }));
+        }
     }
 
 }
