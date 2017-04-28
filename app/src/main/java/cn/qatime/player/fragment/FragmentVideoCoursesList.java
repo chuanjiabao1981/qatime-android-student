@@ -29,7 +29,6 @@ public class FragmentVideoCoursesList extends BaseFragment {
     private List<VideoLessonsBean> list = new ArrayList<>();
     private CommonAdapter<VideoLessonsBean> adapter;
     private VideoCoursesPlayActivity context;
-    private VideoLessonsBean playingData;
 
     @Nullable
     @Override
@@ -64,11 +63,11 @@ public class FragmentVideoCoursesList extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (playingData != null && playingData.getVideo().getId() == list.get(position).getVideo().getId()) {
+                if (context.playingData != null && context.playingData.getVideo().getId() == list.get(position).getVideo().getId()) {
                     return;
                 }
-                playingData = list.get(position);
-                context.playCourses(playingData.getVideo().getName_url());
+                context.playingData = list.get(position);
+                context.playCourses(context.playingData.getVideo().getName_url());
             }
         });
     }

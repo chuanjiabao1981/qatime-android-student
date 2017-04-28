@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -21,9 +22,15 @@ import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.VideoCoursesPlayActivity;
+import libraryextra.adapter.CommonAdapter;
+import libraryextra.adapter.ViewHolder;
+import libraryextra.bean.VideoLessonsBean;
 
 /**
  * @author lungtify
@@ -33,7 +40,7 @@ import cn.qatime.player.R;
 public class VideoCoursesFloatFragment extends Fragment implements View.OnClickListener {
     private boolean showState = true;//是否是显示状态
 
-    private Activity act;
+    private VideoCoursesPlayActivity act;
 
     private final int sDefaultVanishTime = 5000;
     private final int HIDE = 1001;
@@ -66,6 +73,8 @@ public class VideoCoursesFloatFragment extends Fragment implements View.OnClickL
     };
     private Runnable lastRunnable;
     private ImageView zoom;
+    private CommonAdapter<VideoLessonsBean> adapter;
+    private List<VideoLessonsBean> datas = new ArrayList<>();
 
     private void setProgress() {
         if (callback == null || mDragging)
@@ -89,7 +98,7 @@ public class VideoCoursesFloatFragment extends Fragment implements View.OnClickL
     private TextView videoName;
     private SeekBar seekBar;
     private TextView time;
-    private TextView definition;
+//    private TextView definition;
     private ListView list;
     private View listSwitch;
 
@@ -109,10 +118,38 @@ public class VideoCoursesFloatFragment extends Fragment implements View.OnClickL
         seekBar = (SeekBar) view.findViewById(R.id.seekBar);
         zoom = (ImageView) view.findViewById(R.id.zoom);
         time = (TextView) view.findViewById(R.id.time);
-        definition = (TextView) view.findViewById(R.id.definition);
+//        definition = (TextView) view.findViewById(R.id.definition);
         list = (ListView) view.findViewById(R.id.list);
-
+        adapter = new CommonAdapter<VideoLessonsBean>(getActivity(), datas, R.layout.item_fragment_video_courses_list) {
+            @Override
+            public void convert(ViewHolder holder, VideoLessonsBean item, int position) {
+                holder.setText(R.id.number, getPosition(position))
+                        .setText(R.id.name, item.getName());
+//                if (act != null && act.playingData != null) {
+//                    ((TextView)holder.getView(R.id.number)).setTextColor();
+//                } else {
+//
+//                }
+            }
+        };
+        list.setAdapter(adapter);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (act.playingData != null && act.playingData.getVideo().getId() == datas.get(position).getVideo().getId()) {
+                    return;
+                }
+                act.playingData = datas.get(position);
+                act.playCourses(act.playingData.getVideo().getName_url());
+            }
+        });
         startVanishTimer();
+    }
+
+    private String getPosition(int position) {
+        position += 1;
+        if (position < 10) return "0" + position;
+        return String.valueOf(position);
     }
 
     private void registerListener() {
@@ -287,14 +324,14 @@ public class VideoCoursesFloatFragment extends Fragment implements View.OnClickL
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        act = activity;
+        act = (VideoCoursesPlayActivity) activity;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof Activity) {
-            act = (Activity) context;
+            act = (VideoCoursesPlayActivity) context;
         }
     }
 
@@ -344,16 +381,22 @@ public class VideoCoursesFloatFragment extends Fragment implements View.OnClickL
         if (isPortrait) {
             zoom.setVisibility(View.VISIBLE);
             listSwitch.setVisibility(View.GONE);
-            definition.setVisibility(View.GONE);
+//            definition.setVisibility(View.GONE);
             if (list.getVisibility() == View.VISIBLE) {
                 list.setVisibility(View.GONE);
             }
         } else {
             zoom.setVisibility(View.GONE);
             listSwitch.setVisibility(View.VISIBLE);
-            definition.setVisibility(View.VISIBLE);
+//            definition.setVisibility(View.VISIBLE);
 
         }
+    }
+
+    public void setData(List<VideoLessonsBean> video_lessons) {
+        datas.clear();
+        datas.addAll(video_lessons);
+        adapter.notifyDataSetChanged();
     }
 
     public interface CallBack {
@@ -365,7 +408,6 @@ public class VideoCoursesFloatFragment extends Fragment implements View.OnClickL
 
         boolean isPlaying();
 
-        boolean isPortrait();
 
         long getCurrentPosition();
 

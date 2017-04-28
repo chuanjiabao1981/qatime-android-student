@@ -8,7 +8,7 @@ import java.util.List;
  * @date 2016/11/1 9:30
  * @Description:
  */
-public class TeacherDataBean implements Serializable{
+public class TeacherDataBean implements Serializable {
 
     /**
      * status : 1
@@ -244,7 +244,7 @@ public class TeacherDataBean implements Serializable{
             private String name;
             private String grade;
             private String price;
-            private int current_price;
+            private double current_price;
             private String subject;
             private int buy_tickets_count;
             private String publicize;
@@ -284,11 +284,11 @@ public class TeacherDataBean implements Serializable{
                 this.price = price;
             }
 
-            public int getCurrent_price() {
+            public double getCurrent_price() {
                 return current_price;
             }
 
-            public void setCurrent_price(int current_price) {
+            public void setCurrent_price(double current_price) {
                 this.current_price = current_price;
             }
 

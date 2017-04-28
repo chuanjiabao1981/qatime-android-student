@@ -34,6 +34,7 @@ import cn.qatime.player.utils.ScreenSwitchUtils;
 import cn.qatime.player.utils.UrlUtils;
 import io.vov.vitamio.MediaPlayer;
 import io.vov.vitamio.Vitamio;
+import libraryextra.bean.VideoLessonsBean;
 import libraryextra.utils.DensityUtils;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
@@ -61,6 +62,7 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
     private VideoCoursesDetailsBean data;
     private SurfaceHolder holder;
     private String url;
+    public VideoLessonsBean playingData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +101,7 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
 
                         if (data != null && data.getData() != null) {
                             ((FragmentVideoCoursesList) fragBaseFragments.get(0)).setData(data.getData().getVideo_lessons());
+                            floatFragment.setData(data.getData().getVideo_lessons());
                             ((FragmentVideoCoursesDetail) fragBaseFragments.get(1)).setData(data);
                         }
                     }
@@ -161,10 +164,10 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
                 return mMediaPlayer != null && mMediaPlayer.isPlaying();
             }
 
-            @Override
-            public boolean isPortrait() {
-                return screenSwitchUtils.isPortrait();
-            }
+//            @Override
+//            public boolean isPortrait() {
+//                return screenSwitchUtils.isPortrait();
+//            }
 
             @Override
             public long getCurrentPosition() {

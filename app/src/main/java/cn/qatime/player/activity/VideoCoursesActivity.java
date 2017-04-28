@@ -86,7 +86,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                             handleLayout.setVisibility(View.VISIBLE);
                             name.setText(data.getData().getName());
                             setTitles(data.getData().getName());
-                            studentNumber.setText("报名人数" + data.getData().getBuy_tickets_count());
+                            studentNumber.setText("学习人数" + data.getData().getBuy_tickets_count());
 
                             if (data.getData().getSell_type().equals("charge")) {
                                 String price;
@@ -104,13 +104,9 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                                 } else {
                                     transferPrice.setVisibility(View.GONE);
                                 }
-                                if (data.getData().getIs_tasting() || data.getData().isTasted()) {//显示进入试听按钮
+                                if (data.getData().getTaste_count() > 0) {//显示进入试听按钮
                                     auditionStart.setVisibility(View.VISIBLE);
-                                    if (data.getData().isTasted()) {
-                                        auditionStart.setText(getResourceString(R.string.audition_over));
-                                        auditionStart.setEnabled(false);
-                                    }
-                                } else {//显示加入试听按钮
+                                } else {
                                     auditionStart.setVisibility(View.GONE);
                                 }
 
