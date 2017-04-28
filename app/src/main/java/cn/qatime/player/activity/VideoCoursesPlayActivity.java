@@ -93,7 +93,7 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
     }
 
     private void initData() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlVideoCourses + "/" + id, null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlVideoCourses + id, null,
                 new VolleyListener(VideoCoursesPlayActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -140,22 +140,19 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
 
             @Override
             public void pause() {
-                mMediaPlayer.pause();
+                if (mMediaPlayer != null) {
+                    mMediaPlayer.pause();
+                }
             }
 
             @Override
             public void play() {
-                if (playingData == null) {
-                    mMediaPlayer.start();
-                } else {
-//                    播放到进度
-                    VideoLessonsBean playingData = null;
-
-                    if (data.getData().getClosed_lessons_count() == data.getData().getPreset_lesson_count()) {//全部看完,放第一集
-                        playingData = data.getData().getVideo_lessons().get(0);
-                    } else {
-                        playingData = data.getData().getVideo_lessons().get(data.getData().getClosed_lessons_count());
+                if (playingData != null) {
+                    if (mMediaPlayer != null) {
+                        mMediaPlayer.start();
                     }
+                } else {
+                    playingData = data.getData().getVideo_lessons().get(0);
                     playCourses(playingData);
                 }
             }
@@ -205,7 +202,9 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
         fragmentLayout.setScorll(true);
         fragmentLayout.setWhereTab(1);
         fragmentLayout.setTabHeight(4, 0xffff5842);
-        fragmentLayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
+        fragmentLayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener()
+
+        {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff999999);
@@ -335,12 +334,12 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
     }
 
     public void playCourses(VideoLessonsBean playingData) {
-        if(tasting){
-            if(!playingData.getVideo().isTastable()){
-                Toast.makeText(this, "该课程需要购买", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }
+//        if (tasting) {
+//            if (!playingData.getVideo().isTastable()) {
+//                Toast.makeText(this, "该课程需要购买", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//        }
         if (playingData != null) {
             this.playingData = playingData;
             releaseMediaPlayer();
@@ -354,7 +353,7 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
         }
     }
 
-    public boolean isTasting(){
+    public boolean isTasting() {
         return tasting;
     }
 }

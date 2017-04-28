@@ -125,11 +125,13 @@ public class VideoCoursesFloatFragment extends Fragment implements View.OnClickL
             public void convert(ViewHolder holder, VideoLessonsBean item, int position) {
                 holder.setText(R.id.number, getPosition(position))
                         .setText(R.id.name, item.getName());
-//                if (act != null && act.playingData != null) {
-//                    ((TextView)holder.getView(R.id.number)).setTextColor();
-//                } else {
-//
-//                }
+                if (act != null && act.playingData != null && act.playingData.getId() == item.getId()) {
+                    ((TextView) holder.getView(R.id.number)).setTextColor(0xffff5842);
+                    ((TextView) holder.getView(R.id.name)).setTextColor(0xffff5842);
+                } else {
+                    ((TextView) holder.getView(R.id.number)).setTextColor(0xffffffff);
+                    ((TextView) holder.getView(R.id.name)).setTextColor(0xffffffff);
+                }
             }
         };
         list.setAdapter(adapter);

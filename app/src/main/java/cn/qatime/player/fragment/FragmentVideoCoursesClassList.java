@@ -86,9 +86,15 @@ public class FragmentVideoCoursesClassList extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (data.getData().getIs_bought() || list.get(position).isTastable()) {
+                if (data.getData().getIs_bought()) {
                     Intent intent = new Intent(getActivity(), VideoCoursesPlayActivity.class);
-                    intent.putExtra("id", list.get(position).getId());
+                    intent.putExtra("id", list.get(position).getVideo_course_id());
+                    intent.putExtra("tasting", false);
+                    startActivity(intent);
+                } else if (list.get(position).isTastable()) {
+                    Intent intent = new Intent(getActivity(), VideoCoursesPlayActivity.class);
+                    intent.putExtra("id", list.get(position).getVideo_course_id());
+                    intent.putExtra("tasting", true);
                     startActivity(intent);
                 }
             }
