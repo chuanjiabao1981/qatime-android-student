@@ -82,8 +82,13 @@ public class FragmentVideoCoursesList extends BaseFragment {
 
     public void setData(List<VideoLessonsBean> video_lessons) {
 //        video_lessons.get(0)
+        list.clear();
         if(context.isTasting()){
-            // TODO: 2017/4/28 如果是试听状态 去掉不能试听的课程
+                for (VideoLessonsBean videoLessonsBean : video_lessons) {
+                    if(videoLessonsBean.isTastable()){//只显示可试听的课
+                        list.add(videoLessonsBean);
+                    }
+                }
         }else{
             list.addAll(video_lessons);
         }

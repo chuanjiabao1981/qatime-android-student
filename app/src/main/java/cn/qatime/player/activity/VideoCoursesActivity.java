@@ -248,13 +248,14 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
         switch (v.getId()) {
             case R.id.audition_start:
                 if (BaseApplication.isLogined()) {
-//                    if (!(data.getData().getIs_tasting()||data.getData().isTasted())) { //不在试听状态则加入试听
-//                        joinAudition();
-//                    }
-//                    intent = new Intent(VideoCoursesActivity.this, VideoCoursesPlayActivity.class);
-//                    intent.putExtra("id", data.getData().getId());
-//                    intent.putExtra("tasting",true);
-//                    startActivity(intent);
+                    if (!(data.getData().getIs_tasting()||data.getData().isTasted())) { //不在试听状态则加入试听
+                        joinAudition();
+                    }else{
+                        intent = new Intent(VideoCoursesActivity.this, VideoCoursesPlayActivity.class);
+                        intent.putExtra("id", data.getData().getId());
+                        intent.putExtra("tasting",true);
+                        startActivity(intent);
+                    }
                 } else {
                     intent = new Intent(VideoCoursesActivity.this, LoginActivity2.class);
                     intent.putExtra("activity_action", Constant.LoginAction.toRemedialClassDetail);
@@ -265,6 +266,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                 if (BaseApplication.isLogined()) {
                     intent = new Intent(VideoCoursesActivity.this, VideoCoursesPlayActivity.class);
                     intent.putExtra("id", data.getData().getId());
+                    intent.putExtra("tasting",false);
                     startActivity(intent);
                 } else {
                     intent = new Intent(VideoCoursesActivity.this, LoginActivity2.class);
@@ -348,6 +350,10 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                     protected void onSuccess(JSONObject response) {
                         //已加入试听
                         data.getData().setIs_tasting(true);
+                        Intent intent = new Intent(VideoCoursesActivity.this, VideoCoursesPlayActivity.class);
+                        intent.putExtra("id", data.getData().getId());
+                        intent.putExtra("tasting",true);
+                        startActivity(intent);
                         if (StringUtils.isNullOrBlanK(BaseApplication.getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getAccountToken())) {
                             DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null,
                                     new VolleyListener(VideoCoursesActivity.this) {

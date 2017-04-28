@@ -75,18 +75,19 @@ public class FragmentMyVideoBought extends BaseFragment {
                     @Override
                     public void onClick(View v) {
 
-                        Intent intent = new Intent(getActivity(),VideoCoursesPlayActivity.class);
-                            intent.putExtra("id", item.getId());
-                            startActivity(intent);
+                        Intent intent = new Intent(getActivity(), VideoCoursesPlayActivity.class);
+                        intent.putExtra("id", item.getId());
+                        intent.putExtra("tasting", false);
+                        startActivity(intent);
                     }
                 });
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.teacher, "/" + item.getTeacher().getName());
-                if(item.getStatus().equals(Constant.CourseStatus.completed)||item.getStatus().equals(Constant.CourseStatus.finished)){
+                if (item.getStatus().equals(Constant.CourseStatus.completed) || item.getStatus().equals(Constant.CourseStatus.finished)) {
                     helper.setText(R.id.progress, getString(R.string.all_class_has_over));
-                }else{
+                } else {
                     helper.setText(R.id.progress, getString(R.string.progress, item.getClosed_lessons_count(), item.getPreset_lesson_count()));
                 }
                 helper.setText(R.id.grade, item.getGrade());

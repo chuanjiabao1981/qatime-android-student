@@ -335,9 +335,10 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
 
     public void playCourses(VideoLessonsBean playingData) {
         if(tasting){
-            //        video_lessons.get(0)
-            // TODO: 2017/4/28 如果是试听状态 去掉不能试听的课程
-//            if(playingData.getVideo().isTastable)//判断将要播放的课程是否支持试听
+            if(!playingData.getVideo().isTastable()){
+                Toast.makeText(this, "该课程需要购买", Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
         if (playingData != null) {
             this.playingData = playingData;
