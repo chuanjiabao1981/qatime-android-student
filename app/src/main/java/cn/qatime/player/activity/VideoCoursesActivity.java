@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,6 +22,7 @@ import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.orhanobut.logger.Logger;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
@@ -67,14 +67,12 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
     private int id;
     private VideoCoursesDetailsBean data;
     DecimalFormat df = new DecimalFormat("#.00");
-    private ImageView image;
     private TextView name;
     private TextView price;
     private TextView transferPrice;
     private TextView studentNumber;
     private RelativeLayout handleLayout;
     private Button auditionStart;
-    private Button pay;
     private LinearLayout startStudyView;
     private Button startStudy;
     private AlertDialog alertDialog;
@@ -86,12 +84,13 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_courses);
         id = getIntent().getIntExtra("id", 0);//联网id
+        EventBus.getDefault().register(this);
         initView();
         initData();
     }
 
     private void initData() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlVideoCourses + "/" + id, null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlVideoCourses + id, null,
                 new VolleyListener(VideoCoursesActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -101,7 +100,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                             handleLayout.setVisibility(View.VISIBLE);
                             name.setText(data.getData().getName());
                             setTitles(data.getData().getName());
-                            studentNumber.setText(getString(R.string.student_number, data.getData().getBuy_tickets_count()));
+                            studentNumber.setText("报名人数" + data.getData().getBuy_tickets_count());
 
                             if (data.getData().getSell_type().equals("charge")) {
                                 String price;
@@ -119,7 +118,11 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                                 } else {
                                     transferPrice.setVisibility(View.GONE);
                                 }
-
+                                if (data.getData().getIs_tasting() || data.getData().isTasted()) {//显示进入试听按钮
+                                    auditionStart.setVisibility(View.VISIBLE);
+                                } else {
+                                    auditionStart.setVisibility(View.GONE);
+                                }
 
                                 if (data.getData().getIs_bought()) {
                                     startStudyView.setVisibility(View.VISIBLE);
@@ -178,14 +181,13 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
     private void initView() {
         freeTaste = (TextView) findViewById(R.id.free_taste);
         joinCheap = (TextView) findViewById(R.id.join_cheap);
-        image = (ImageView) findViewById(R.id.image);
         name = (TextView) findViewById(R.id.name);
         price = (TextView) findViewById(R.id.price);
         transferPrice = (TextView) findViewById(R.id.transfer_price);
         studentNumber = (TextView) findViewById(R.id.student_number);
         handleLayout = (RelativeLayout) findViewById(R.id.handle_layout);
         auditionStart = (Button) findViewById(R.id.audition_start);
-        pay = (Button) findViewById(R.id.pay);
+        Button pay = (Button) findViewById(R.id.pay);
         startStudyView = (LinearLayout) findViewById(R.id.start_study_view);
         startStudy = (Button) findViewById(R.id.start_study);
 
@@ -199,7 +201,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
 
         mIndicator = (SimpleViewPagerIndicator) findViewById(R.id.id_stickynavlayout_indicator);
         mViewPager = (ViewPager) findViewById(R.id.id_stickynavlayout_viewpager);
-        mTitles = new String[]{getString(R.string.remedial_detail), getString(R.string.teacher_detail), getString(R.string.course_arrangement)};
+        mTitles = new String[]{getString(R.string.remedial_detail), getString(R.string.teacher_detail), "课时安排"};
         mIndicator.setTitles(mTitles);
 
         FragmentPagerAdapter mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
@@ -447,5 +449,10 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
             }
         });
         addToRequestQueue(request);
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

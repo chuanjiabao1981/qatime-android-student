@@ -1,10 +1,12 @@
 package cn.qatime.player.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.VideoCoursesPlayActivity;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.VideoCoursesDetailsBean;
 import libraryextra.adapter.CommonAdapter;
@@ -27,6 +30,7 @@ import libraryextra.bean.VideoLessonsBean;
 public class FragmentVideoCoursesClassList extends BaseFragment {
     private List<VideoLessonsBean> list = new ArrayList<>();
     private CommonAdapter<VideoLessonsBean> adapter;
+    private VideoCoursesDetailsBean data;
 
 //    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
 //    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -66,7 +70,7 @@ public class FragmentVideoCoursesClassList extends BaseFragment {
 //                } else {//closed finished billing completed
 //                    holder.setText(status, getResourceString(R.string.class_over));//已结束
 //                }
-                holder.setText(R.id.time, item.getVideo().getFormat_tmp_duration());
+                holder.setText(R.id.time, "时长" + item.getVideo().getFormat_tmp_duration());
                 if (isFinished(item)) {
                     ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xff999999);
@@ -74,30 +78,21 @@ public class FragmentVideoCoursesClassList extends BaseFragment {
                     ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff00a0e9);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xff666666);
                 }
+
+                holder.getView(R.id.taste).setVisibility((!data.getData().getIs_bought() && item.isTastable()) ? View.VISIBLE : View.GONE);
             }
         };
         listView.setAdapter(adapter);
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                RemedialClassDetailBean.Lessons item = list.get(position);
-//                if (isFinished(item)) {
-//                    if (data.getIs_bought()) {
-//                        if (!item.isReplayable()) {
-////                        Toast.makeText(getActivity(), getResourceString(R.string.no_playback_video), Toast.LENGTH_SHORT).show();
-//                            return;
-//                        }
-//                        if (item.getLeft_replay_times() <= 0) {
-//                            Toast.makeText(getActivity(), getResourceString(R.string.have_no_left_playback_count), Toast.LENGTH_SHORT).show();
-//                            return;
-//                        }
-//                        Intent intent = new Intent(getActivity(), NEVideoPlaybackActivity.class);
-//                        intent.putExtra("id", item.getId());
-//                        startActivity(intent);
-//                    }
-//                }
-//            }
-//        });
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (data.getData().getIs_bought() || list.get(position).isTastable()) {
+                    Intent intent = new Intent(getActivity(), VideoCoursesPlayActivity.class);
+                    intent.putExtra("id", list.get(position).getId());
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     private boolean isFinished(VideoLessonsBean item) {
@@ -105,6 +100,7 @@ public class FragmentVideoCoursesClassList extends BaseFragment {
     }
 
     public void setData(VideoCoursesDetailsBean data) {
+        this.data = data;
         list.clear();
         list.addAll(data.getData().getVideo_lessons());
         if (adapter != null) {

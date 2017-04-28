@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"
-                android:text="@string/remedial_class_message" />
+                android:text="聊天消息" />
 
             <ImageView
                 android:id="@+id/flag1"

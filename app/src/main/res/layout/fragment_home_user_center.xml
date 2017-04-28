@@ -149,7 +149,7 @@
                     android:layout_height="18dp" />
                 <TextView
                     style="@style/setting_text_style"
-                    android:text="@string/my_course" />
+                    android:text="我的直播课" />
 
                 <View
                     android:layout_width="0dp"
