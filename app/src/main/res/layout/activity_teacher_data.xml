@@ -93,7 +93,8 @@
                     android:gravity="center"
                     android:padding="3dp"
                     android:text=" 课程可退"
-                    android:textColor="#109f10" />
+                    android:textColor="#109f10"
+                    android:textSize="11dp" />
 
                 <View
                     android:layout_width="0dp"
@@ -118,7 +119,8 @@
                     android:gravity="center"
                     android:padding="3dp"
                     android:text=" 资料完整"
-                    android:textColor="#109f10" />
+                    android:textColor="#109f10"
+                    android:textSize="11dp" />
 
                 <View
                     android:layout_width="0dp"
@@ -143,7 +145,8 @@
                     android:gravity="center"
                     android:padding="3dp"
                     android:text=" 在线授课"
-                    android:textColor="#109f10" />
+                    android:textColor="#109f10"
+                    android:textSize="11dp" />
 
                 <View
                     android:layout_width="0dp"

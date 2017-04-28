@@ -161,9 +161,9 @@ public class TeacherDataActivity extends BaseActivity {
         interactiveGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(TeacherDataActivity.this, RemedialClassDetailActivity.class);
-                intent.putExtra("id", interactiveList.get(position).getId());
-                startActivityForResult(intent, Constant.REQUEST);
+//                Intent intent = new Intent(TeacherDataActivity.this, inter.class);
+//                intent.putExtra("id", interactiveList.get(position).getId());
+//                startActivityForResult(intent, Constant.REQUEST);
             }
         });
         interactiveGrid.setAdapter(interactiveAdapter);
@@ -189,7 +189,7 @@ public class TeacherDataActivity extends BaseActivity {
         videoGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(TeacherDataActivity.this, RemedialClassDetailActivity.class);
+                Intent intent = new Intent(TeacherDataActivity.this, VideoCoursesActivity.class);
                 intent.putExtra("id", videoList.get(position).getId());
                 startActivityForResult(intent, Constant.REQUEST);
             }

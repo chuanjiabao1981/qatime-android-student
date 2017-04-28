@@ -42,7 +42,8 @@
                     android:gravity="center"
                     android:padding="3dp"
                     android:text=" 免费试听"
-                    android:textColor="#109f10" />
+                    android:textColor="#109f10"
+                    android:textSize="11dp" />
 
                 <TextView
                     android:id="@+id/join_cheap"
@@ -52,7 +53,8 @@
                     android:gravity="center"
                     android:padding="3dp"
                     android:text=" 报名立减"
-                    android:textColor="#109f10" />
+                    android:textColor="#109f10"
+                    android:textSize="11dp" />
             </LinearLayout>
 
             <LinearLayout

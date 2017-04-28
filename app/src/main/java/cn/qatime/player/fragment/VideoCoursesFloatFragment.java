@@ -395,8 +395,18 @@ public class VideoCoursesFloatFragment extends Fragment implements View.OnClickL
 
     public void setData(List<VideoLessonsBean> video_lessons) {
         datas.clear();
-        datas.addAll(video_lessons);
-        adapter.notifyDataSetChanged();
+        if (act.isTasting()) {
+            for (VideoLessonsBean videoLessonsBean : video_lessons) {
+                if (videoLessonsBean.isTastable()) {//只显示可试听的课
+                    datas.add(videoLessonsBean);
+                }
+            }
+        } else {
+            datas.addAll(video_lessons);
+        }
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
     }
 
     public interface CallBack {

@@ -74,7 +74,8 @@
                     android:gravity="center"
                     android:padding="3dp"
                     android:text=" 随时可退"
-                    android:textColor="#109f10" />
+                    android:textColor="#109f10"
+                    android:textSize="11dp" />
 
                 <TextView
                     android:id="@+id/free_taste"
@@ -84,7 +85,8 @@
                     android:gravity="center"
                     android:padding="3dp"
                     android:text=" 免费试听"
-                    android:textColor="#109f10" />
+                    android:textColor="#109f10"
+                    android:textSize="11dp" />
 
                 <TextView
                     android:id="@+id/coupon_free"
@@ -94,7 +96,8 @@
                     android:gravity="center"
                     android:padding="3dp"
                     android:text=" 插班优惠"
-                    android:textColor="#109f10" />
+                    android:textColor="#109f10"
+                    android:textSize="11dp" />
 
                 <TextView
                     android:id="@+id/join_cheap"
@@ -104,7 +107,8 @@
                     android:gravity="center"
                     android:padding="3dp"
                     android:text=" 报名立减"
-                    android:textColor="#109f10" />
+                    android:textColor="#109f10"
+                    android:textSize="11dp" />
             </cn.qatime.player.view.FlowLayout>
 
             <LinearLayout
