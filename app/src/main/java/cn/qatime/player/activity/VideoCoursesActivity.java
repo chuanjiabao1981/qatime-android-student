@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
@@ -69,6 +70,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_courses);
         id = getIntent().getIntExtra("id", 0);//联网id
+        EventBus.getDefault().register(this);
         initView();
         initData();
     }
@@ -84,7 +86,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                             handleLayout.setVisibility(View.VISIBLE);
                             name.setText(data.getData().getName());
                             setTitles(data.getData().getName());
-                            studentNumber.setText(getString(R.string.student_number, data.getData().getBuy_tickets_count()));
+                            studentNumber.setText("报名人数" + data.getData().getBuy_tickets_count());
 
                             if (data.getData().getSell_type().equals("charge")) {
                                 String price;
@@ -189,7 +191,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
 
         mIndicator = (SimpleViewPagerIndicator) findViewById(R.id.id_stickynavlayout_indicator);
         mViewPager = (ViewPager) findViewById(R.id.id_stickynavlayout_viewpager);
-        mTitles = new String[]{getString(R.string.remedial_detail), getString(R.string.teacher_detail), getString(R.string.course_arrangement)};
+        mTitles = new String[]{getString(R.string.remedial_detail), getString(R.string.teacher_detail), "课时安排"};
         mIndicator.setTitles(mTitles);
 
         FragmentPagerAdapter mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
@@ -328,5 +330,11 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
 //            finish();
 //        }
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }
