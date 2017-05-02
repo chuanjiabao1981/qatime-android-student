@@ -172,7 +172,6 @@
         android:layout_height="48dp"
         android:visibility="invisible">
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -182,6 +181,7 @@
 
             <RelativeLayout
                 android:layout_width="0dp"
+                android:id="@+id/audition_layout"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
 
