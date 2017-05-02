@@ -773,9 +773,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                                         if (!currentCity.equals(locationCity)) {
                                             if (locationCity.getWorkstations_count() != 0) {
                                                 dialogCity();
-//                                            } else {
-//                                                BaseApplication.setCurrentCity(locationCity);
-//                                                setCity();
                                             }
                                         }
                                     } else {

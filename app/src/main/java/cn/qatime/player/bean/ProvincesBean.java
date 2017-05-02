@@ -1,5 +1,6 @@
 package cn.qatime.player.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -34,7 +35,7 @@ public class ProvincesBean {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable{
         /**
          * id : 1
          * name : 山西省

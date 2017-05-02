@@ -77,7 +77,8 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
     }
 
     private void initData() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,
+
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities?scope=has_default_workstation", null,
                 new VolleyListener(this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -147,7 +148,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
                     Toast.makeText(CitySelectActivity.this, R.string.position_locate_error, Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (locationCity == null) {//如果没有被赋值，则默认全国
+                if (locationCity == null) {
                     Toast.makeText(CitySelectActivity.this,  R.string.position_locate_error, Toast.LENGTH_SHORT).show();
                 } else {
                     if (!BaseApplication.getCurrentCity().equals(locationCity)) {

@@ -60,7 +60,7 @@ public class RegionSelectActivity2 extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent data = new Intent();
-                data.putExtra("region", citiesList.get(position).getName());
+                data.putExtra("region_city", citiesList.get(position));
                 setResult(Constant.RESPONSE_REGION_SELECT, data);
                 finish();
             }
@@ -70,19 +70,14 @@ public class RegionSelectActivity2 extends BaseActivity {
     }
 
     private void initData() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities?province_id="+provincesId, null,
                 new VolleyListener(this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
                         CityBean cityBean = JsonUtils.objectFromJson(response.toString(), CityBean.class);
                         if (cityBean != null && cityBean.getData() != null) {
                             citiesList.clear();
-                            for (CityBean.Data data : cityBean.getData()) {
-                                if (data.getProvince_id().equals(provincesId)) {
-                                    citiesList.add(data);
-                                }
-                            }
-
+                            citiesList.addAll(cityBean.getData());
                             for (CityBean.Data item : citiesList) {
                                 if (StringUtils.isNullOrBlanK(item.getName())) {
                                     item.setFirstLetter("");

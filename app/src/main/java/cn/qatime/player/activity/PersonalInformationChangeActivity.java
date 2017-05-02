@@ -36,9 +36,11 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.bean.ProvincesBean;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.UpLoadUtil;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.bean.CityBean;
 import libraryextra.bean.GradeBean;
 import libraryextra.bean.ImageItem;
 import libraryextra.bean.PersonalInformationBean;
@@ -75,6 +77,8 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     private AlertDialog alertDialog;
     private String gender = "";
     private List<String> grades;
+    private ProvincesBean.DataBean province;
+    private CityBean.Data city;
     //    private EditText school;
 
     @Override
@@ -266,6 +270,8 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 map.put("avatar", imageUrl);
                 map.put("gender", gender);
                 map.put("birthday", birthday);
+                map.put("province_id", province.getId());
+                map.put("city_id",city.getId());
                 map.put("desc", desc);
                 Logger.e("--" + sName + "--" + grade + "--" + imageUrl + "--" + gender + "--" + birthday + "--" + desc + "--");
                 util.execute(map);
@@ -370,9 +376,11 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 }
             }
         } else if (requestCode == Constant.REQUEST_REGION_SELECT && resultCode == Constant.RESPONSE_REGION_SELECT) {
-            region.setText(data.getStringExtra("region"));
+            city = (CityBean.Data) data.getSerializableExtra("region_city");
+            province = (ProvincesBean.DataBean) data.getSerializableExtra("region_province");
+            region.setText(province.getName() + city.getName());
         }
-    }
+}
 
     @Override
     protected void onResume() {

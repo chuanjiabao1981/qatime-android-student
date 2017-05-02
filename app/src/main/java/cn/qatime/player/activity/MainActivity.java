@@ -156,10 +156,6 @@ public class MainActivity extends BaseFragmentActivity {
             }
         }
         parseIntent();
-        //        GetGradeslist();
-//        GetProvinceslist();
-//        GetCitieslist();
-        GetSchoolslist();
         NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, true);
     }
 
@@ -487,36 +483,7 @@ public class MainActivity extends BaseFragmentActivity {
 ////        addToRequestQueue(request);
 //    }
 
-    //学校列表
-    public void GetSchoolslist() {
 
-        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.urlAppconstantInformation + "/schools", null,
-                new VolleyListener(MainActivity.this) {
-
-                    @Override
-                    protected void onSuccess(JSONObject response) {
-                        boolean value = FileUtil.writeFile(new ByteArrayInputStream(response.toString().getBytes()), getCacheDir().getAbsolutePath() + "/school.txt", true);
-                        SPUtils.put(MainActivity.this, "school", value);
-                    }
-
-                    @Override
-                    protected void onError(JSONObject response) {
-
-                    }
-
-                    @Override
-                    protected void onTokenOut() {
-                        tokenOut();
-                    }
-
-                }, new VolleyErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
-            }
-        });
-        addToRequestQueue(request);
-    }
 
     @Override
     protected void onResume() {

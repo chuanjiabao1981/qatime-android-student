@@ -25,6 +25,7 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
+import libraryextra.bean.CityBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.PinyinUtils;
 import libraryextra.utils.StringUtils;
@@ -42,7 +43,7 @@ public class RegionSelectActivity1 extends BaseActivity {
     private List<ProvincesBean.DataBean> regionList;
     private ListView list;
     private CommonAdapter<ProvincesBean.DataBean> adapter;
-    private String selectCity = "";
+    private ProvincesBean.DataBean selectProvince;
     private AMapLocationUtils utils;
     private TextView currentRegion;
     private TextView location;
@@ -136,7 +137,7 @@ public class RegionSelectActivity1 extends BaseActivity {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectCity = regionList.get(position).getName();
+                selectProvince = regionList.get(position);
                 Intent intent = new Intent(RegionSelectActivity1.this, RegionSelectActivity2.class);
                 intent.putExtra("provinces_id", regionList.get(position).getId());
                 startActivityForResult(intent, Constant.REQUEST_REGION_SELECT);
@@ -147,7 +148,8 @@ public class RegionSelectActivity1 extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constant.REQUEST_REGION_SELECT && resultCode == Constant.RESPONSE_REGION_SELECT) {
-            data.putExtra("region", selectCity + data.getStringExtra("region"));
+            data.putExtra("region_city", (CityBean.Data)data.getSerializableExtra("region_city"));
+            data.putExtra("region_province", selectProvince);
             setResult(Constant.RESPONSE_REGION_SELECT, data);
             finish();
         }
