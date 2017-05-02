@@ -85,6 +85,9 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
                     getcode.setEnabled(true);
                 } else {
                     getcode.setEnabled(false);
+                    if(number.getText().toString().length()==11) {
+                        Toast.makeText(ForgetPasswordActivity.this, R.string.phone_number_is_incorrect, Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

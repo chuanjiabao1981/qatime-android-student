@@ -27,8 +27,10 @@ import com.umeng.analytics.MobclickAgent;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
@@ -69,10 +71,10 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
     private String imageUrl = "";
     private String select = "2000-01-01";//生日所选日期
-    private GradeBean gradeBean;
     private CustomProgressDialog progress;
     private AlertDialog alertDialog;
     private String gender = "";
+    private List<String> grades;
     //    private EditText school;
 
     @Override
@@ -88,8 +90,10 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
 //        }
         String gradeString = FileUtil.readFile(getFilesDir() + "/grade.txt");
 //        LogUtils.e("班级基础信息" + gradeString);
+        grades = new ArrayList<>();
         if (!StringUtils.isNullOrBlanK(gradeString)) {
-            gradeBean = JsonUtils.objectFromJson(gradeString, GradeBean.class);
+            GradeBean gradeBean = JsonUtils.objectFromJson(gradeString, GradeBean.class);
+            grades = gradeBean.getData().getGrades();
         }
 
 
@@ -133,8 +137,9 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
             select = parse.format(new Date());
         }
         if (!StringUtils.isNullOrBlanK(data.getData().getGrade())) {
-            for (int i = 0; i < gradeBean.getData().getGrades().size(); i++) {
-                if (data.getData().getGrade().equals(gradeBean.getData().getGrades().get(i))) {
+
+            for (int i = 0; i < grades.size(); i++) {
+                if (data.getData().getGrade().equals(grades.get(i))) {
                     textGrade.setText(data.getData().getGrade());
                     break;
                 }
@@ -182,7 +187,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                                 e.printStackTrace();
                             }
                         }
-                    }, parse.parse(select).getYear() + 1900, parse.parse(select).getMonth() + 1, parse.parse(select).getDay());
+                    }, parse.parse(select).getYear() + 1900, parse.parse(select).getMonth() + 1, parse.parse(select).getDate());
                     dataDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
                     dataDialog.show();
                 } catch (ParseException e) {
@@ -273,8 +278,8 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
             final View view = View.inflate(PersonalInformationChangeActivity.this, R.layout.dialog_grade_picker, null);
             final WheelView grade = (WheelView) view.findViewById(R.id.grade);
             grade.setOffset(1);
-            grade.setItems(gradeBean.getData().getGrades());
-            grade.setSeletion(gradeBean.getData().getGrades().indexOf(textGrade.getText()));
+            grade.setItems(grades);
+            grade.setSeletion(grades.indexOf(textGrade.getText()));
             grade.setonItemClickListener(new WheelView.OnItemClickListener() {
                 @Override
                 public void onItemClick() {

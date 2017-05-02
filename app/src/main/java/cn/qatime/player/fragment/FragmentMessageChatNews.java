@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -26,7 +27,6 @@ import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
-import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.netease.nimlib.sdk.team.TeamService;
@@ -34,7 +34,6 @@ import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.orhanobut.logger.Logger;
 
-import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -46,7 +45,6 @@ import cn.qatime.player.R;
 import cn.qatime.player.activity.MessageActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.bean.ChatVideoBean;
 import cn.qatime.player.bean.MessageListBean;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.observer.UserInfoObservable;
@@ -54,9 +52,10 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.TutorialClassBean;
+import libraryextra.bean.MyInteractClassBean;
+import libraryextra.bean.MyTutorialClassBean;
+import libraryextra.utils.DateUtils;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -77,47 +76,43 @@ public class FragmentMessageChatNews extends BaseFragment {
     private List<RecentContact> loadedRecents;
     private UserInfoObservable.UserInfoObserver userInfoObserver;
     private UserInfoObservable userInfoObservable;
-    private TutorialClassBean courses;
-    private boolean shouldPost = false;//是否需要向messageactivity发推流地址
-    private String sessionId;
+    private int listSize = 0;
+//    private MyTutorialClassBean courses;
+//    private boolean shouldPost = false;//是否需要向messageactivity发推流地址
+//    private String sessionId;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = View.inflate(getActivity(), R.layout.fragment_message_chat_news, null);
         initView(view);
-        getCourses();
+
         return view;
     }
 
     private void getCourses() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/courses", null,
+        DaYiJsonObjectRequest request1 = new DaYiJsonObjectRequest(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/courses", null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
                         try {
                             Logger.e(response.toString());
-                            courses = JsonUtils.objectFromJson(response.toString(), TutorialClassBean.class);
-//                            for (TutorialClassBean.Data data : courses.getData()) {
-//                                for (MessageListBean item : items) {
-//                                    if (data.getChat_team_id().equals(item.getContactId())) {
-//                                        item.setOwner(data.getChat_team_owner());
-//                                    }
-//                                }
-//                            }
-                            onRecentContactsLoaded();
-                            if (shouldPost) {
-                                if (!StringUtils.isNullOrBlanK(sessionId)) {
-                                    if (courses != null && courses.getData() != null) {
-                                        for (TutorialClassBean.Data data : courses.getData()) {
-                                            if (sessionId.equals(data.getChat_team_id())) {
-                                                EventBus.getDefault().post(new ChatVideoBean(data.getId(), data.getName(), data.getChat_team_owner()));
-                                                break;
+                            MyTutorialClassBean data = JsonUtils.objectFromJson(response.toString(), MyTutorialClassBean.class);
+                            if (data != null && data.getData() != null) {
+                                synchronized (items) {
+                                    for (MessageListBean item : items) {
+                                        for (MyTutorialClassBean.Data bean : data.getData()) {
+                                            if (item.getContactId().equals(bean.getChat_team_id())) {
+                                                item.setCourseId(bean.getId());
+                                                item.setCourseType("custom");
+                                                item.setIcon(bean.getPublicize());
+                                                item.setName(bean.getName());
                                             }
                                         }
                                     }
                                 }
-                                shouldPost = false;
+                                listSize = items.size();
+                                refreshMessages();
                             }
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
@@ -139,7 +134,46 @@ public class FragmentMessageChatNews extends BaseFragment {
                 super.onErrorResponse(volleyError);
             }
         });
-        addToRequestQueue(request);
+        DaYiJsonObjectRequest request2 = new DaYiJsonObjectRequest(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/interactive_courses", null,
+                new VolleyListener(getActivity()) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        MyInteractClassBean data = JsonUtils.objectFromJson(response.toString(), MyInteractClassBean.class);
+                        if (data != null && data.getData() != null) {
+                            synchronized (items) {
+                                for (MessageListBean item : items) {
+                                    for (MyInteractClassBean.DataBean bean : data.getData()) {
+                                        if (item.getContactId().equals(bean.getChat_team_id())) {
+                                            item.setCourseId(bean.getId());
+                                            item.setCourseType("interactive");
+                                            item.setIcon(bean.getPublicize_url());
+                                            item.setName(bean.getName());
+                                        }
+                                    }
+                                }
+                            }
+                            listSize = items.size();
+                            refreshMessages();
+                        }
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request1);
+        addToRequestQueue(request2);
     }
 
     private void initView(View view) {
@@ -152,6 +186,12 @@ public class FragmentMessageChatNews extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         initMessageList();
         requestMessages(true);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getCourses();
+            }
+        }, 2000);
         registerObservers(true);
     }
 
@@ -164,14 +204,13 @@ public class FragmentMessageChatNews extends BaseFragment {
         adapter = new CommonAdapter<MessageListBean>(getActivity(), items, R.layout.item_fragment_news1) {
             @Override
             public void convert(ViewHolder holder, MessageListBean item, int position) {
-                if (item.getSessionType() == SessionTypeEnum.Team) {
-                    ((TextView) holder.getView(R.id.name)).setMaxWidth((int) (ScreenUtils.getScreenWidth(getActivity()) * 0.8));
-                    holder.setText(R.id.name, item.getName());
-                }
+                Glide.with(getActivity()).load(item.getIcon()).placeholder(R.mipmap.photo).crossFade().into((ImageView) holder.getView(R.id.image));
+                holder.setText(R.id.name, item.getName());
                 ((ImageView) holder.getView(R.id.notify)).setVisibility(item.isMute() ? View.VISIBLE : View.GONE);
                 holder.getView(R.id.count).setVisibility(item.getUnreadCount() == 0 ? View.GONE : View.VISIBLE);
                 holder.setText(R.id.count, String.valueOf(item.getUnreadCount()));
-
+                String timeString = DateUtils.getTimeShowString(item.getTime(), false);
+                holder.setText(R.id.time, timeString);
             }
         };
 
@@ -184,6 +223,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                 intent.putExtra("sessionType", items.get(position - 1).getSessionType());
                 intent.putExtra("courseId", items.get(position - 1).getCourseId());
                 intent.putExtra("name", items.get(position - 1).getName());
+                intent.putExtra("type", items.get(position - 1).getCourseType());
                 intent.putExtra("owner", items.get(position - 1).getOwner());
                 startActivity(intent);
             }
@@ -280,42 +320,31 @@ public class FragmentMessageChatNews extends BaseFragment {
     }
 
     private void onRecentContactsLoaded() {
-        if (loadedRecents == null || courses == null) {
+        if (loadedRecents == null) {
             //当有任意一个为空都不加载...
             return;
         }
         items.clear();
         for (RecentContact item : loadedRecents) {
             MessageListBean bean = new MessageListBean();
-            for (TutorialClassBean.Data data : courses.getData()) {
-                if (data != null && !StringUtils.isNullOrBlanK(data.getChat_team_id()) && data.getChat_team_id().equals(item.getContactId())) {
-                    bean.setContactId(item.getContactId());
-                    Team team = TeamDataCache.getInstance().getTeamById(item.getContactId());
-                    bean.setMute(team.mute());
-                    bean.setSessionType(item.getSessionType());
-                    bean.setUnreadCount(item.getUnreadCount());
-                    bean.setTime(item.getTime());
-                    bean.setRecentMessageId(item.getRecentMessageId());
-//                    bean.setCamera(data.getCamera());
-//                    bean.setBoard(data.getBoard());
-                    if (StringUtils.isNullOrBlanK(bean.getName())) {
-                        bean.setName(item.getContent().replace("讨论组", ""));
-                    }
-                    bean.setCourseId(data.getId());
-                    bean.setName(data.getName());
-                    bean.setOwner(data.getChat_team_owner());
-                    if (!items.contains(bean)) {//依据contactId判断
-                        items.add(bean);
-                    }
-                    break;
-                }
+            bean.setContactId(item.getContactId());
+            Team team = TeamDataCache.getInstance().getTeamById(item.getContactId());
+            bean.setMute(team.mute());
+            bean.setSessionType(item.getSessionType());
+            bean.setUnreadCount(item.getUnreadCount());
+            bean.setTime(item.getTime());
+            bean.setRecentMessageId(item.getRecentMessageId());
+            if (StringUtils.isNullOrBlanK(bean.getName())) {
+                bean.setName(TeamDataCache.getInstance().getTeamName(item.getContactId()).replace("讨论组", ""));
+            }
+            if (!items.contains(bean)) {//依据contactId判断
+                items.add(bean);
             }
             if (item.getUnreadCount() != 0 && StringUtils.isNullOrBlanK(bean.getContactId())) {//如果未读数不为0并且不再items中显示的话(contactId未赋值)，则将未读消息数清空
                 NIMClient.getService(MsgService.class).clearUnreadCount(item.getContactId(), item.getSessionType());
             }
         }
         if (loadedRecents != null) {
-//            items.addAll(loadedRecents);
             loadedRecents = null;
         }
         refreshMessages();
@@ -324,24 +353,6 @@ public class FragmentMessageChatNews extends BaseFragment {
     private void refreshMessages() {
         sortRecentContacts(items);
         adapter.notifyDataSetChanged();
-
-//        if (unreadChanged) {
-
-        // 方式一：累加每个最近联系人的未读（快）
-            /*
-            int unreadNum = 0;
-            for (RecentContact r : items) {
-                unreadNum += r.getUnreadCount();
-            }
-            */
-
-        // 方式二：直接从SDK读取（相对慢）
-//            int unreadNum = NIMClient.getService(MsgService.class).getTotalUnreadCount();
-
-//            if (callback != null) {
-//                callback.onUnreadCountChange(unreadNum);
-//            }
-//        }
     }
 
     /**
@@ -350,6 +361,9 @@ public class FragmentMessageChatNews extends BaseFragment {
     private void sortRecentContacts(List<MessageListBean> list) {
         if (list.size() == 0) {
             return;
+        }
+        if (listSize != list.size()) {
+            getCourses();
         }
         Collections.sort(list, comp);
     }
@@ -446,34 +460,35 @@ public class FragmentMessageChatNews extends BaseFragment {
                 MessageListBean bean = new MessageListBean();
                 if (index >= 0) {
                     bean = items.get(index);
-                    boolean haveData = false;
-                    if (courses != null && courses.getData() != null) {
-                        for (TutorialClassBean.Data data : courses.getData()) {
-                            if (data != null && bean != null) {
-                                if (data.getChat_team_id().equals(bean.getContactId())) {
-                                    haveData = true;
-                                }
-                            }
-                        }
-                        if (!haveData) {
-                            getCourses();
-                        }
-                    }
+//                    boolean haveData = false;
+//                    if (courses != null && courses.getData() != null) {
+//                        for (MyTutorialClassBean.Data data : courses.getData()) {
+//                            if (data != null && bean != null) {
+//                                if (data.getChat_team_id().equals(bean.getContactId())) {
+//                                    haveData = true;
+//                                }
+//                            }
+//                        }
+//                        if (!haveData) {
+//                            getCourses();
+//                        }
+//                    }
                     items.remove(index);
-                } else {
-                    if (courses != null && courses.getData() != null) {
-                        for (TutorialClassBean.Data data : courses.getData()) {
-                            if (data.getChat_team_id().equals(msg.getContactId())) {
-                                bean.setName(data.getName());
-//                                bean.setCamera(data.getCamera());
-//                                bean.setBoard(data.getBoard());
-                                bean.setOwner(data.getChat_team_owner());
-                            }
-                        }
-                    } else {
-                        getCourses();
-                    }
                 }
+//                else {
+//                    if (courses != null && courses.getData() != null) {
+//                        for (MyTutorialClassBean.Data data : courses.getData()) {
+//                            if (data.getChat_team_id().equals(msg.getContactId())) {
+//                                bean.setName(data.getName());
+////                                bean.setCamera(data.getCamera());
+////                                bean.setBoard(data.getBoard());
+//                                bean.setOwner(data.getChat_team_owner());
+//                            }
+//                        }
+//                    } else {
+//                        getCourses();
+//                    }
+//                }
                 bean.setContactId(msg.getContactId());
                 Team team = TeamDataCache.getInstance().getTeamById(bean.getContactId());
                 bean.setMute(team.mute());
@@ -584,17 +599,8 @@ public class FragmentMessageChatNews extends BaseFragment {
 //            intent.putExtra("camera", items.get(position).getCamera());
 //            intent.putExtra("board", items.get(position).getBoard());
             intent.putExtra("name", items.get(position).getName());
+            intent.putExtra("type", items.get(position).getCourseType());
             intent.putExtra("owner", items.get(position).getOwner());
-            startActivity(intent);
-        } else {
-            shouldPost = true;
-            this.sessionId = message.getSessionId();
-            Intent intent = new Intent(getActivity(), MessageActivity.class);
-            intent.putExtra("sessionId", message.getSessionId());
-            intent.putExtra("sessionType", message.getSessionType());
-//            if (message.getMsgType() == MsgTypeEnum.text) {
-//                intent.putExtra("name", message.getContent().replace("讨论组", ""));
-//            }
             startActivity(intent);
         }
     }

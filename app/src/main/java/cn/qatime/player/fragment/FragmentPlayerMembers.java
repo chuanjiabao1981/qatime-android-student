@@ -60,12 +60,13 @@ public class FragmentPlayerMembers extends BaseFragment {
      * @param accounts
      */
     public void setData(Announcements.DataBean accounts) {
-        if (accounts != null) {
+        if (accounts != null && accounts.getMembers()!=null) {
             list.clear();
             list.addAll(accounts.getMembers());
             Iterator<Announcements.DataBean.MembersBean> it = list.iterator();
             while (it.hasNext()) {
                 Announcements.DataBean.MembersBean item = it.next();
+                if (item == null) return;
                 if (!StringUtils.isNullOrBlanK(accounts.getOwner())) {
                     if (accounts.getOwner().equals(item.getAccid())) {
                         item.setOwner(true);

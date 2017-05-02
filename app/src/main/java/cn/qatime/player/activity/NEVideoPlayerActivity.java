@@ -32,7 +32,6 @@ import com.zhy.android.percent.support.PercentRelativeLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -44,22 +43,24 @@ import cn.qatime.player.barrage.DanmuControl;
 import cn.qatime.player.barrage.model.Status;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
+import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.bean.InputPanel;
+import cn.qatime.player.bean.LiveStatusBean;
 import cn.qatime.player.bean.VideoState;
-import cn.qatime.player.fragment.VideoFloatFragment;
-import cn.qatime.player.utils.ScreenSwitchUtils;
-import libraryextra.bean.Announcements;
 import cn.qatime.player.fragment.FragmentPlayerAnnouncements;
 import cn.qatime.player.fragment.FragmentPlayerLiveDetails;
 import cn.qatime.player.fragment.FragmentPlayerMembers;
 import cn.qatime.player.fragment.FragmentPlayerMessage;
+import cn.qatime.player.fragment.VideoFloatFragment;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.presenter.VideoControlPresenter;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.ScreenSwitchUtils;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VideoActivityInterface;
 import cn.qatime.player.view.NEVideoView;
 import cn.qatime.player.view.VideoLayout;
+import libraryextra.bean.Announcements;
 import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.NetUtils;
@@ -353,12 +354,12 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         fragmentLayout.setScorllToNext(true);
         fragmentLayout.setScorll(true);
         fragmentLayout.setWhereTab(1);
-        fragmentLayout.setTabHeight(4, 0xffbe0b0b);
+        fragmentLayout.setTabHeight(4, 0xffff5842);
         fragmentLayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff999999);
-                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff333333);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffff5842);
                 if (position == 1) {
                     inputPanel.visibilityInput();
                 } else {
@@ -749,7 +750,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     }
 
     private void queryVideoState() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlCourses + id + "/live_status",
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlCourses + id + "/status",
                 null, new VolleyListener(NEVideoPlayerActivity.this) {
             @Override
             protected void onTokenOut() {
@@ -759,10 +760,12 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             @Override
             protected void onSuccess(JSONObject response) {
                 reload = 0;
-                try {
-                    JSONObject data = response.getJSONObject("data");
-                    int board = data.getInt("board");
-                    int camera = data.getInt("camera");
+//              JSONObject data = response.getJSONObject("data");
+                LiveStatusBean data = JsonUtils.objectFromJson(response.toString(), LiveStatusBean.class);
+                if (data != null && data.getData() != null && data.getData().getLive_info() != null) {
+                    int board = data.getData().getLive_info().getBoard();
+                    int camera = data.getData().getLive_info().getCamera();
+
                     if (camera == 0 && board == 0) {
                         setVideoState(VideoState.UNPLAY);
                     } else if (camera == 2 && board == 1) {
@@ -770,9 +773,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                     } else if (camera == 1 && board == 1) {
                         setVideoState(VideoState.PLAYING);
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Logger.e("成功--异常");
+
+                    floatFragment.setNameAndCount(data.getData().getLive_info().getName(), data.getData().getOnline_users().size());
                 }
             }
 
@@ -802,8 +804,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
 
     @Subscribe
-    public void onEvent(String event) {
-        if (!StringUtils.isNullOrBlanK(event) && event.equals("announcement")) {
+    public void onEvent(BusEvent event) {
+        if (event==BusEvent.ANNOUNCEMENT) {
             getAnnouncementsData();
         }
     }

@@ -186,7 +186,7 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
                 intent.putExtra("pay_type", payType);
                 intent.putExtra("amount", amount);
                 intent.putExtra("ticket_token",ticket_token);
-                startActivityForResult(intent, Constant.REQUEST);
+                startActivity(intent);
             }
 
             @Override
@@ -296,13 +296,6 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
-            setResult(resultCode);
-            finish();
-        }
-    }
-    @Override
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
@@ -358,7 +351,14 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
                 break;
             case R.id.recharge_now:
                 if(BaseApplication.getCashAccount().getData().isHas_password()){
-                    showPSWPop();
+                    long changeAt = BaseApplication.getCashAccount().getData().getPassword_set_at();
+
+                    int diff = 24 - (int) ((System.currentTimeMillis()/1000  - changeAt) / 3600);
+                    if (diff <= 24&&diff > 0) {
+                        dialogServerError(getString(R.string.pay_password_not_enough_24));//未满24小时
+                    } else {
+                        showPSWPop();
+                    }
                 }else{
                     Toast.makeText(WithdrawCashActivity.this, R.string.pay_password_not_set, Toast.LENGTH_SHORT).show();
                 }

@@ -5,6 +5,14 @@ properties.load(project.rootProject.file('local.properties').newDataInputStream(
 
 android {
     signingConfigs {
+        debug {
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+        release {
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
         config {
             keyAlias 'qatime'
             keyPassword '32147896'
@@ -12,8 +20,8 @@ android {
             storePassword '32147896'
         }
     }
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 25
+    buildToolsVersion '25.0.1'
 //    defaultConfig {
 //        applicationId "cn.qatime.player.debug"
 //        minSdkVersion 14
@@ -100,5 +108,6 @@ dependencies {
     compile project(':library_pulltorefresh')
     compile project(':common')
     compile project(':pushSDK')
+    compile project(':vitamio')
 }
 

@@ -45,13 +45,13 @@ import libraryextra.view.MonthDateView;
 
 public class ClassTimeTableActivity extends BaseActivity implements View.OnClickListener {
     private PullToRefreshListView listView;
-    private List<ClassTimeTableBean.DataEntity> totalList = new ArrayList<>();
-    private CommonAdapter<ClassTimeTableBean.DataEntity.LessonsEntity> adapter;
+    private List<ClassTimeTableBean.DataBean> totalList = new ArrayList<>();
+    private CommonAdapter<ClassTimeTableBean.DataBean.LessonsBean> adapter;
     private List<Integer> alertList = new ArrayList<>();
     private MonthDateView monthDateView;
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
     private String date = parse.format(new Date());
-    private List<ClassTimeTableBean.DataEntity.LessonsEntity> itemList = new ArrayList<>();
+    private List<ClassTimeTableBean.DataBean.LessonsBean> itemList = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -133,47 +133,66 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
-        listView.setEmptyView(View.inflate(ClassTimeTableActivity.this, R.layout.empty_view, null));
+        listView.setEmptyView(View.inflate  (ClassTimeTableActivity.this, R.layout.empty_view, null));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(ClassTimeTableActivity.this, RemedialClassDetailActivity.class);
-                intent.putExtra("id", Integer.valueOf(itemList.get(position - 1).getCourse_id()));
-                intent.putExtra("pager", 2);
-                startActivity(intent);
+                if("LiveStudio::Lesson".equals(itemList.get(position-1).getModal_type())){
+                    Intent intent = new Intent(ClassTimeTableActivity.this, RemedialClassDetailActivity.class);
+                    intent.putExtra("id", Integer.valueOf(itemList.get(position - 1).getProduct_id()));
+                    intent.putExtra("pager", 2);
+                    startActivity(intent);
+                }else if("LiveStudio::InteractiveLesson".equals(itemList.get(position-1).getModal_type())){
+                    Intent intent = new Intent(ClassTimeTableActivity.this, InteractCourseDetailActivity.class);
+                    intent.putExtra("id", Integer.valueOf(itemList.get(position - 1).getProduct_id()));
+                    intent.putExtra("pager", 2);
+                    startActivity(intent);
+                }
             }
         });
-        adapter = new CommonAdapter<ClassTimeTableBean.DataEntity.LessonsEntity>(this, itemList, R.layout.item_activity_class_time_table) {
+        adapter = new CommonAdapter<ClassTimeTableBean.DataBean.LessonsBean>(this, itemList, R.layout.item_activity_class_time_table) {
             @Override
-            public void convert(ViewHolder helper, final ClassTimeTableBean.DataEntity.LessonsEntity item, int position) {
+            public void convert(final ViewHolder helper, final ClassTimeTableBean.DataBean.LessonsBean item, final int position) {
                 Glide.with(ClassTimeTableActivity.this).load(item.getCourse_publicize()).placeholder(R.mipmap.error_header_rect).centerCrop().crossFade().dontAnimate().into((ImageView) helper.getView(R.id.image));
 //                helper.setText(R.id.course, item.getCourse_name());
                 helper.setText(R.id.classname, item.getName());
                 try {
                     Date date = parse.parse(item.getClass_date());
-                    helper.setText(R.id.class_date, date.getMonth() + "-" + date.getDay() + "  ");
+                    helper.setText(R.id.class_date, getMonth(date.getMonth()) + "-" + getDay(date.getDate()) + "  ");
                     helper.setText(R.id.status, getStatus(item.getStatus()));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+
                 helper.setText(R.id.live_time, item.getLive_time());
                 helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
-                String status = item.getStatus();
+                if("LiveStudio::Lesson".equals(itemList.get(position).getModal_type())){
+                    helper.getView(R.id.modal_type).setBackgroundColor(0xffff4856);
+                    helper.setText(R.id.modal_type,"直播课");
+                }else if("LiveStudio::InteractiveLesson".equals(itemList.get(position).getModal_type())){
+                    helper.getView(R.id.modal_type).setBackgroundColor(0xff4856ff);
+                    helper.setText(R.id.modal_type,"一对一");
+                }
 
+
+                String status = item.getStatus();
                 boolean showEnter = "ready".equals(status) || "paused".equals(status) || "closed".equals(status) || "teaching".equals(status);//是否是待上课、已直播、直播中
                 //进入状态
                 helper.getView(R.id.enter).setVisibility(showEnter ? View.VISIBLE : View.GONE);//进入播放器按钮显示或隐藏
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(ClassTimeTableActivity.this, NEVideoPlayerActivity.class);
-//                        intent.putExtra("camera", item.getCamera());
-//                        intent.putExtra("board", item.getBoard());
-                        intent.putExtra("id", Integer.valueOf(item.getCourse_id()));
-                        intent.putExtra("sessionId", item.getChat_team_id());
-                        startActivity(intent);
+                        if("LiveStudio::Lesson".equals(itemList.get(position).getModal_type())){
+                            Intent intent = new Intent(ClassTimeTableActivity.this, NEVideoPlayerActivity.class);
+                            intent.putExtra("id", Integer.valueOf(item.getProduct_id()));
+                            intent.putExtra("sessionId", item.getChat_team_id());
+                            startActivity(intent);
+                        }else if("LiveStudio::InteractiveLesson".equals(itemList.get(position).getModal_type())){
+
+                        }
+
                     }
                 });
             }
@@ -206,12 +225,26 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         monthDateView.setOnCalendarPageChangeListener(new MonthDateView.OnCalendarPageChangeListener() {
             @Override
             public void onPageChange(int type) {
+                cancelAll(this);//旧请求取消
                 getDate();
                 initData();
             }
         });
     }
 
+    private String getMonth(int month) {
+        month += 1;
+        if (month < 10) {
+            return "0" + month;
+        }
+        return String.valueOf(month);
+    }
+    private String getDay(int day) {
+        if (day < 10) {
+            return "0" + day;
+        }
+        return String.valueOf(day);
+    }
     private void getDate() {
         date = monthDateView.getmSelYear() + "-" + (monthDateView.getmSelMonth() + 1 < 10 ? "0" + (monthDateView.getmSelMonth() + 1) : monthDateView.getmSelMonth() + 1) + "-" +
                 (monthDateView.getmSelDay() < 10 ? "0" + monthDateView.getmSelDay() : monthDateView.getmSelDay());

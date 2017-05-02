@@ -39,17 +39,22 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
     private Button buttonOver;
     private EditText newParentPhone;
     private EditText code;
-    private EditText password;
     private TimeCount time;
     private TextView currentParentPhone;
     private String phone;
     private View currentParentPhoneLayout;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_parent_phone);
 
+        initView();
+        time = new TimeCount(60000, 1000);
+    }
     private void assignViews() {
         currentParentPhone = (TextView) findViewById(R.id.current_parent_phone);
         currentParentPhoneLayout = findViewById(R.id.current_parent_phone_layout);
-        password = (EditText) findViewById(R.id.password);
         newParentPhone = (EditText) findViewById(R.id.new_parent_phone);
         code = (EditText) findViewById(R.id.code);
         textGetcode = (TextView) findViewById(R.id.text_getcode);
@@ -72,32 +77,25 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
                     textGetcode.setEnabled(true);
                 } else {
                     textGetcode.setEnabled(false);
+                    Toast.makeText(ParentPhoneActivity.this, R.string.phone_number_is_incorrect, Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_parent_phone);
 
-        initView();
-        time = new TimeCount(60000, 1000);
-    }
 
     private void initView() {
         setTitles(getResources().getString(R.string.parent_phone_number));
         assignViews();
 
-        password.setHint(StringUtils.getSpannedString(this, R.string.hint_input_password));
         newParentPhone.setHint(StringUtils.getSpannedString(this, R.string.new_parent_phone));
         code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_verification_code));
 
         String phoneP = getIntent().getStringExtra("phoneP");
         currentParentPhone.setText(phoneP);
-        if (StringUtils.isPhone(phoneP)) {
+        if (!StringUtils.isNullOrBlanK(phoneP)&&StringUtils.isPhone(phoneP)) {
             currentParentPhoneLayout.setVisibility(View.VISIBLE);
         } else {
             currentParentPhoneLayout.setVisibility(View.GONE);
@@ -112,11 +110,6 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
         switch (v.getId()) {
 
             case R.id.text_getcode:
-                phone = newParentPhone.getText().toString().trim();
-                if (!StringUtils.isGoodPWD(password.getText().toString().trim())) {
-                    Toast.makeText(this, getResources().getString(R.string.password_6_16), Toast.LENGTH_LONG).show();
-                    return;
-                }
                 phone = newParentPhone.getText().toString().trim();
                 if (!StringUtils.isPhone(phone)) {//手机号不正确
                     Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
@@ -153,10 +146,6 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
                 time.start();
                 break;
             case R.id.button_over:
-                if (!StringUtils.isGoodPWD(password.getText().toString().trim())) {
-                    Toast.makeText(this, getResources().getString(R.string.password_6_16), Toast.LENGTH_LONG).show();
-                    return;
-                }
                 phone = newParentPhone.getText().toString().trim();
                 if (!StringUtils.isPhone(phone)) {//手机号不正确
                     Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
@@ -169,11 +158,11 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
 
                 map = new HashMap<>();
                 map.put("id", "" + BaseApplication.getUserId());
+                map.put("ticket_token", getIntent().getStringExtra("ticket_token"));
                 map.put("parent_phone", phone);
-                map.put("current_password", password.getText().toString().trim());
                 map.put("captcha_confirmation", code.getText().toString().trim());
 
-                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.getUrl(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/parent_phone", map), null, new VolleyListener(this) {
+                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.getUrl(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/parent_phone_ticket_token", map), null, new VolleyListener(this) {
                     @Override
                     protected void onTokenOut() {
                         tokenOut();

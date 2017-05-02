@@ -40,6 +40,7 @@ import org.json.JSONObject;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
+import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.bean.CashAccountBean;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.im.LoginSyncDataStatusObserver;
@@ -151,10 +152,10 @@ public class BaseApplication extends Application {
             }
         };
         mPushAgent.setNotificationClickHandler(notificationClickHandler);
-        mPushAgent.setMessageHandler(new UmengMessageHandler(){
+        mPushAgent.setMessageHandler(new UmengMessageHandler() {
             @Override
             public void handleMessage(Context context, UMessage uMessage) {
-                EventBus.getDefault().postSticky("handleUPushMessage");
+                EventBus.getDefault().postSticky(BusEvent.HANDLE_U_PUSH_MESSAGE);
                 super.handleMessage(context, uMessage);
             }
         });
@@ -359,6 +360,12 @@ public class BaseApplication extends Application {
     }
 
     public static void clearToken() {
+//        Throwable ex = new Throwable();
+//
+//        StackTraceElement[] stackElements = ex.getStackTrace();
+//        for (int i = Math.min(4, stackElements.length); i > 0; i--) {
+//            Logger.e("classname:" + stackElements[i].getClassName() + "*********getMethodName:" + stackElements[i].getMethodName() + "*******LineNumber:" + stackElements[i].getLineNumber());
+//        }
         if (profile != null && profile.getData() != null) {
             profile.getData().setRemember_token("");
             if (profile.getData().getUser() != null && profile.getData().getUser().getChat_account() != null) {

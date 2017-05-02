@@ -19,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -32,7 +33,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.utils.Constant;
+import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
@@ -132,8 +133,6 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
         View empty = View.inflate(getActivity(),R.layout.empty_view,null);
-        TextView textEmpty = (TextView) empty.findViewById(R.id.text_empty);
-        textEmpty.setText(R.string.not_found_related_order);
         listView.setEmptyView(empty);
 
         adapter = new CommonAdapter<WithdrawCashRecordBean.DataBean>(getActivity(), data, R.layout.item_fragment_fund_record2) {
@@ -228,7 +227,7 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
             protected void onSuccess(JSONObject response) {
                 if (!response.isNull("data")) {
                     Toast.makeText(getActivity(), R.string.withdraw_cancel_success, Toast.LENGTH_SHORT).show();
-                    getActivity().setResult(Constant.RESPONSE);
+                    EventBus.getDefault().post(BusEvent.REFRESH_CASH_ACCOUNT);
                     initData(1);
                 } else {
                     onError(response);

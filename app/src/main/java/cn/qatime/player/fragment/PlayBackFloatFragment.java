@@ -18,14 +18,10 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import cn.qatime.player.R;
 import cn.qatime.player.view.NEVideoView;
-import libraryextra.adapter.CommonAdapter;
-import libraryextra.adapter.ViewHolder;
 import libraryextra.utils.StringUtils;
 
 /**
@@ -112,7 +108,7 @@ public class PlayBackFloatFragment extends Fragment implements View.OnClickListe
         int seconds = totalSeconds % 60;
         int minutes = (totalSeconds / 60) % 60;
         int hours = totalSeconds / 3600;
-        return String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds).toString();
+        return String.format(Locale.CHINESE, "%02d:%02d:%02d", hours, minutes, seconds);
     }
 
     public PlayBackFloatFragment(Callback callback) {
@@ -216,7 +212,7 @@ public class PlayBackFloatFragment extends Fragment implements View.OnClickListe
                 break;
             case R.id.sd:
                 videoDefinition.setText(getResources().getString(R.string.sd));
-                sd.setTextColor(0xffbe0b0b);
+                sd.setTextColor(0xffff5842);
                 hds.setTextColor(0xffffffff);
                 uhd.setTextColor(0xffffffff);
                 definition.setVisibility(View.GONE);
@@ -226,7 +222,7 @@ public class PlayBackFloatFragment extends Fragment implements View.OnClickListe
             case R.id.hd:
                 videoDefinition.setText(getResources().getString(R.string.hd));
                 sd.setTextColor(0xffffffff);
-                hds.setTextColor(0xffbe0b0b);
+                hds.setTextColor(0xffff5842);
                 uhd.setTextColor(0xffffffff);
                 definition.setVisibility(View.GONE);
                 startVanishTimer();
@@ -236,7 +232,7 @@ public class PlayBackFloatFragment extends Fragment implements View.OnClickListe
                 videoDefinition.setText(getResources().getString(R.string.uhd));
                 sd.setTextColor(0xffffffff);
                 hds.setTextColor(0xffffffff);
-                uhd.setTextColor(0xffbe0b0b);
+                uhd.setTextColor(0xffff5842);
                 definition.setVisibility(View.GONE);
                 startVanishTimer();
 
@@ -376,5 +372,11 @@ public class PlayBackFloatFragment extends Fragment implements View.OnClickListe
         void exit();//返回键
 
         void playOrPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        hd.removeMessages(HIDE);
     }
 }

@@ -15,7 +15,6 @@ import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.fragment.FragmentTutorshipOver;
 import cn.qatime.player.fragment.FragmentTutorshipPreview;
-import cn.qatime.player.fragment.FragmentTutorshipTaste;
 import cn.qatime.player.fragment.FragmentTutorshipTeaching;
 import libraryextra.view.FragmentLayoutWithLine;
 
@@ -23,7 +22,7 @@ import libraryextra.view.FragmentLayoutWithLine;
  * 我的辅导
  */
 public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
-    private int[] tab_text = {R.id.tab_text2, R.id.tab_text3, R.id.tab_text4, R.id.tab_text5};
+    private int[] tab_text = {R.id.tab_text2, R.id.tab_text3, R.id.tab_text4};
     FragmentLayoutWithLine fragmentlayout;
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
 
@@ -31,7 +30,7 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_my_tutorship);
-        setTitles(getResources().getString(R.string.my_course));
+        setTitles("我的直播课");
 
 //        setRightImage(R.mipmap.audition_records, new View.OnClickListener() {
 //            @Override
@@ -51,14 +50,13 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
         fragBaseFragments.add(new FragmentTutorshipPreview());
         fragBaseFragments.add(new FragmentTutorshipTeaching());
         fragBaseFragments.add(new FragmentTutorshipOver());
-        fragBaseFragments.add(new FragmentTutorshipTaste());
 
         fragmentlayout = (FragmentLayoutWithLine) findViewById(R.id.fragmentlayout);
 
         fragmentlayout.setScorllToNext(true);
         fragmentlayout.setScorll(true);
         fragmentlayout.setWhereTab(1);
-        fragmentlayout.setTabHeight(4, 0xffbe0b0b);
+        fragmentlayout.setTabHeight(4, 0xffff5842);
         fragmentlayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
@@ -74,7 +72,7 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
             }
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tableout_personal_my_tutor, 0x0311);
-        fragmentlayout.getViewPager().setOffscreenPageLimit(4);
+        fragmentlayout.getViewPager().setOffscreenPageLimit(3);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

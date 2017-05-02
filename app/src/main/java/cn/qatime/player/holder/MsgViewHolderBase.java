@@ -59,7 +59,7 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
     private ImageView avatarLeft;
     private ImageView avatarRight;
 
-    private ImageView nameIconView;
+//    private ImageView nameIconView;
 
     // contentContainerView的默认长按事件。如果子类需要不同的处理，可覆盖onItemLongClick方法
     // 但如果某些子控件会拦截触摸消息，导致contentContainer收不到长按事件，子控件也可在inflate时重新设置
@@ -167,7 +167,7 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
         progressBar = findViewById(R.id.message_item_progress);
         nameTextView = findViewById(R.id.message_item_nickname);
         contentContainer = findViewById(R.id.message_item_content);
-        nameIconView = findViewById(R.id.message_item_name_icon);
+//        nameIconView = findViewById(R.id.message_item_name_icon);
         nameContainer = findViewById(R.id.message_item_name_layout);
 //        readReceiptTextView = findViewById(R.id.textViewAlreadyRead);
 
@@ -178,7 +178,7 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
         inflateContentView();
     }
 
-    protected final void refresh() {
+    private void refresh() {
         setHeadImageView();
         setNameTextView();
         setTimeTextView();
@@ -191,23 +191,27 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
         bindContentView();
     }
 
-    public void refreshCurrentItem() {
-        if (message != null) {
-            refresh();
-        }
-    }
-
     /**
      * 设置时间显示
      */
     private void setTimeTextView() {
-        if (getMsgAdapter().needShowTime(message)) {
-            timeTextView.setVisibility(View.VISIBLE);
+//        if (getMsgAdapter().needShowTime(message)) {
+//            timeTextView.setVisibility(View.VISIBLE);
+//        } else {
+//            timeTextView.setVisibility(View.GONE);
+//            return;
+//        }
+//
+        if (isReceivedMessage()) {
+            nameContainer.setGravity(Gravity.LEFT);
         } else {
-            timeTextView.setVisibility(View.GONE);
-            return;
+            nameContainer.setGravity(Gravity.RIGHT);
         }
-
+        int index = isReceivedMessage() ? 0 : 1;
+        if (nameContainer.getChildAt(index) != nameTextView) {
+            nameContainer.removeView(nameTextView);
+            nameContainer.addView(nameTextView, index);
+        }
         String text = DateUtils.getTimeShowString(message.getTime(), false);
         timeTextView.setText(text);
     }
@@ -320,14 +324,13 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
     }
 
     private void setNameTextView() {
-        if (message.getSessionType() == SessionTypeEnum.Team && isReceivedMessage() && !isMiddleItem()) {
-            nameTextView.setVisibility(View.VISIBLE);
+        if (message.getSessionType() == SessionTypeEnum.Team && !isMiddleItem()) {
             String name = TeamDataCache.getInstance().getTeamMemberDisplayName(message.getSessionId(), message.getFromAccount());
             String owner = getMsgAdapter().getOwner();
             if (!StringUtils.isNullOrBlanK(owner)) {
                 if (owner.equals(name)) {
                     nameTextView.setText(name + "(" + context.getString(R.string.teacher_translate) + ")");
-                    nameTextView.setTextColor(0xffbe0b0b);
+                    nameTextView.setTextColor(0xffff5842);
                 } else {
                     nameTextView.setText(name);
                     nameTextView.setTextColor(0xff333333);
@@ -335,16 +338,10 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
             } else {
                 nameTextView.setText(name);
             }
-        } else {
-            nameTextView.setVisibility(View.GONE);
         }
     }
 
     private void setContent() {
-        if (!isShowBubble() && !isMiddleItem()) {
-            return;
-        }
-
         LinearLayout bodyContainer = (LinearLayout) view.findViewById(R.id.message_item_body);
 
         // 调整container的位置

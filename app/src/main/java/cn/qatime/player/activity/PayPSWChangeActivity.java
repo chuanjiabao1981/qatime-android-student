@@ -19,11 +19,11 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.view.CustomKeyboard;
 import cn.qatime.player.view.PayEditText;
-import libraryextra.utils.SPUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -149,15 +149,15 @@ public class PayPSWChangeActivity extends BaseActivity implements View.OnClickLi
                         new VolleyListener(PayPSWChangeActivity.this) {
                             @Override
                             protected void onSuccess(JSONObject response) {
-                                SPUtils.put(PayPSWChangeActivity.this, "pay_pwd_change_at", System.currentTimeMillis());
-                                EventBus.getDefault().post("pay_pwd_change");
                                 Toast.makeText(PayPSWChangeActivity.this, R.string.change_pay_password_success, Toast.LENGTH_SHORT).show();
-                                BaseApplication.getCashAccount().getData().setHas_password(true);
+                                BaseApplication.getCashAccount().getData().setPassword_set_at(System.currentTimeMillis()/1000);
+                                EventBus.getDefault().post(BusEvent.PAY_PASSWORD_CHANGE);
+                                EventBus.getDefault().post(BusEvent.REFRESH_CASH_ACCOUNT);
                                 finish();
                             }
 
                             protected void onError(JSONObject response) {
-                                try {
+                                     try {
                                     int errorCode = response.getJSONObject("error").getInt("code");
                                     if (errorCode == 2007) {
                                         Toast.makeText(PayPSWChangeActivity.this, R.string.token_error, Toast.LENGTH_SHORT).show();
