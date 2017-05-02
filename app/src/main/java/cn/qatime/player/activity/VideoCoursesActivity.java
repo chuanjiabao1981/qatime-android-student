@@ -126,9 +126,6 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
 
                                 if (data.getData().getIs_bought()) {
                                     startStudyView.setVisibility(View.VISIBLE);
-                                    if (data.getData().getStatus().equals("completed") || data.getData().getStatus().equals("finished")) {
-                                        startStudy.setEnabled(false);
-                                    }
                                 }
 
                                 if (Constant.CourseStatus.finished.equals(data.getData().getStatus()) || Constant.CourseStatus.completed.equals(data.getData().getStatus())) {
@@ -139,11 +136,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                                 transferPrice.setText("免费");
                                 transferPrice.setVisibility(View.VISIBLE);
                                 price.setVisibility(View.GONE);
-
                                 startStudyView.setVisibility(View.VISIBLE);
-                                if (data.getData().getStatus().equals("completed") || data.getData().getStatus().equals("finished")) {
-                                    startStudy.setEnabled(false);
-                                }
                             }
 
                             if (data.getData().getIcons() != null) {
@@ -266,10 +259,16 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                 break;
             case R.id.start_study:
                 if (BaseApplication.isLogined()) {
-                    intent = new Intent(VideoCoursesActivity.this, VideoCoursesPlayActivity.class);
-                    intent.putExtra("id", data.getData().getId());
-                    intent.putExtra("tasting", false);
-                    startActivity(intent);
+                    if (!data.getData().getIs_bought()) {
+                        if (data.getData().getSell_type().equals("free")) {
+                            joinMyFreeVideo();//获取免费课程票号
+                        }
+                    } else {
+                        intent = new Intent(VideoCoursesActivity.this, VideoCoursesPlayActivity.class);
+                        intent.putExtra("id", data.getData().getId());
+                        intent.putExtra("tasting", false);
+                        startActivity(intent);
+                    }
                 } else {
                     intent = new Intent(VideoCoursesActivity.this, LoginActivity2.class);
                     intent.putExtra("activity_action", Constant.LoginAction.toRemedialClassDetail);
@@ -342,6 +341,109 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
 //            finish();
 //        }
         finish();
+    }
+
+    private void joinMyFreeVideo() {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.urlVideoCourses + id + "/deliver_free", null,
+                new VolleyListener(VideoCoursesActivity.this) {
+
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        data.getData().setIs_bought(true);
+                        Intent intent = new Intent(VideoCoursesActivity.this, VideoCoursesPlayActivity.class);
+                        intent.putExtra("id", data.getData().getId());
+                        intent.putExtra("tasting", false);
+                        startActivity(intent);
+                        if (StringUtils.isNullOrBlanK(BaseApplication.getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getAccountToken())) {
+                            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null,
+                                    new VolleyListener(VideoCoursesActivity.this) {
+                                        @Override
+                                        protected void onSuccess(JSONObject response) {
+                                            PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
+                                            if (bean != null && bean.getData() != null && bean.getData().getChat_account() != null) {
+                                                Profile profile = BaseApplication.getProfile();
+                                                profile.getData().getUser().setChat_account(bean.getData().getChat_account());
+                                                BaseApplication.setProfile(profile);
+
+                                                String account = BaseApplication.getAccount();
+                                                String token = BaseApplication.getAccountToken();
+
+                                                if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
+                                                    AbortableFuture<LoginInfo> loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, token));
+                                                    loginRequest.setCallback(new RequestCallback<LoginInfo>() {
+                                                        @Override
+                                                        public void onSuccess(LoginInfo o) {
+                                                            Logger.e("云信登录成功" + o.getAccount());
+                                                            // 初始化消息提醒
+                                                            NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
+
+                                                            NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
+                                                            //缓存
+                                                            UserInfoCache.getInstance().clear();
+                                                            TeamDataCache.getInstance().clear();
+
+                                                            UserInfoCache.getInstance().buildCache();
+                                                            TeamDataCache.getInstance().buildCache();
+
+                                                            UserInfoCache.getInstance().registerObservers(true);
+                                                            TeamDataCache.getInstance().registerObservers(true);
+                                                        }
+
+                                                        @Override
+                                                        public void onFailed(int code) {
+//                                                            BaseApplication.clearToken();
+                                                            Profile profile = BaseApplication.getProfile();
+                                                            profile.getData().setRemember_token("");
+                                                            SPUtils.putObject(VideoCoursesActivity.this, "profile", profile);
+                                                        }
+
+                                                        @Override
+                                                        public void onException(Throwable throwable) {
+                                                            Logger.e(throwable.getMessage());
+                                                            BaseApplication.clearToken();
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        protected void onError(JSONObject response) {
+
+                                        }
+
+                                        @Override
+                                        protected void onTokenOut() {
+                                            tokenOut();
+                                        }
+                                    }, new VolleyErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError volleyError) {
+                                    super.onErrorResponse(volleyError);
+                                }
+                            });
+                            addToRequestQueue(request);
+                        }
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+
+                }
+
+                , new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
     }
 
     private void joinAudition() {
@@ -450,6 +552,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
         });
         addToRequestQueue(request);
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

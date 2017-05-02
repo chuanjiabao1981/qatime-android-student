@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,30 +55,7 @@ public class FragmentVideoCoursesClassList extends BaseFragment {
             @Override
             public void convert(ViewHolder holder, VideoLessonsBean item, int position) {
                 holder.setText(R.id.name, item.getName());
-//                if (item.getStatus().equals("missed")) {
-//                    holder.setText(status, getResourceString(R.string.class_missed));
-//                } else if (item.getStatus().equals("init")) {//未开始
-//                    holder.setText(status, getResourceString(R.string.class_init));
-//                } else if (item.getStatus().equals("ready")) {//待开课
-//                    holder.setText(status, getResourceString(R.string.class_ready));
-//                } else if (item.getStatus().equals("teaching")) {//直播中
-//                    holder.setText(status, getResourceString(R.string.class_teaching));
-//                } else if (item.getStatus().equals("closed")) {//已直播
-//                    holder.setText(status, getResourceString(R.string.class_closed));
-//                } else if (item.getStatus().equals("paused")) {
-//                    holder.setText(status, getResourceString(R.string.class_teaching));
-//                } else {//closed finished billing completed
-//                    holder.setText(status, getResourceString(R.string.class_over));//已结束
-//                }
                 holder.setText(R.id.time, "时长" + item.getVideo().getFormat_tmp_duration());
-                if (isFinished(item)) {
-                    ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff999999);
-                    ((TextView) holder.getView(R.id.name)).setTextColor(0xff999999);
-                } else {
-                    ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff00a0e9);
-                    ((TextView) holder.getView(R.id.name)).setTextColor(0xff666666);
-                }
-
                 holder.getView(R.id.taste).setVisibility((!data.getData().getIs_bought() && item.isTastable()) ? View.VISIBLE : View.GONE);
             }
         };
@@ -96,14 +73,13 @@ public class FragmentVideoCoursesClassList extends BaseFragment {
                     intent.putExtra("id", list.get(position).getVideo_course_id());
                     intent.putExtra("tasting", true);
                     startActivity(intent);
+                }else{
+                    Toast.makeText(getActivity(), "该课程需要购买", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
-    private boolean isFinished(VideoLessonsBean item) {
-        return item.getStatus().equals("closed") || item.getStatus().equals("finished") || item.getStatus().equals("billing") || item.getStatus().equals("completed");
-    }
 
     public void setData(VideoCoursesDetailsBean data) {
         this.data = data;
