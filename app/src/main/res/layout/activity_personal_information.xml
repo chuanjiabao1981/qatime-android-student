@@ -173,7 +173,7 @@
 
                 <TextView
                     style="@style/setting_text_style"
-                    android:text="@string/grade" />
+                    android:text="@string/region" />
 
                 <View
                     android:layout_width="0dp"

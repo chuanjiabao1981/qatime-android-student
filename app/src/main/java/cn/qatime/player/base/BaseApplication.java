@@ -372,6 +372,7 @@ public class BaseApplication extends Application {
                 profile.getData().getUser().getChat_account().setAccid("");
                 profile.getData().getUser().getChat_account().setToken("");
             }
+            cashAccount = null;
             SPUtils.putObject(context, "profile", profile);
             LoginSyncDataStatusObserver.getInstance().reset();
             NIMClient.getService(AuthService.class).logout();

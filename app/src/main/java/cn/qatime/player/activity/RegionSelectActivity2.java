@@ -49,7 +49,6 @@ public class RegionSelectActivity2 extends BaseActivity {
         list = (ListView) findViewById(R.id.list);
         citiesList = new ArrayList<>();
         adapter = new CommonAdapter<CityBean.Data>(RegionSelectActivity2.this, citiesList, R.layout.item_region) {
-
             @Override
             public void convert(ViewHolder holder, CityBean.Data item, int position) {
                 holder.setText(R.id.region_text, item.getName());

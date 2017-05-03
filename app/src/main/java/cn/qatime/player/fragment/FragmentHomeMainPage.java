@@ -109,6 +109,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        EventBus.getDefault().register(this);
         View view = inflater.inflate(R.layout.fragment_home_main_page, container, false);
         assignViews(view);
         return view;
@@ -707,6 +708,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
     @Override
     public void onDestroy() {
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 
@@ -744,7 +746,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             setCity();
         }
     }
-
 
     private void initLocationData() {
         JsonObjectRequest request = new JsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,

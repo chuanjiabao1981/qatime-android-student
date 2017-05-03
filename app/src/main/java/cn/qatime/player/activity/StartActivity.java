@@ -39,6 +39,7 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.AppUtils;
 import libraryextra.utils.DownFileUtil;
 import libraryextra.utils.FileUtil;
+import libraryextra.utils.NetUtils;
 import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -47,8 +48,7 @@ import libraryextra.utils.VolleyListener;
 /**
  * 起始页
  */
-public class
-StartActivity extends BaseActivity implements View.OnClickListener {
+public class StartActivity extends BaseActivity implements View.OnClickListener {
     private AlertDialog alertDialog;
     private String downLoadLinks;
     private boolean updateEnforce;
@@ -57,29 +57,28 @@ StartActivity extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        ((TextView) findViewById(R.id.version)).setText("V " + AppUtils.getVersionName(this));
-        if ((boolean) SPUtils.get(this, "grade", false)) {
-            GetGradeslist();//加载年纪列表
-        }
-        if ((boolean) SPUtils.get(this, "school", false)) {
-            GetSchoolslist();
-        }
-        if ((boolean) SPUtils.get(this, "provinces", false)) {
-            getProviceslist();
-        }
-        if ((boolean) SPUtils.get(this, "cities", false)) {
-            getCitylist();
-        }
-
-        removeOldApk();
-        checkUpdate();
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
             }
         }
+        ((TextView) findViewById(R.id.version)).setText("V " + AppUtils.getVersionName(this));
+        boolean grade = !(boolean) SPUtils.get(this, "grade", false);
+        boolean school = !(boolean) SPUtils.get(this, "school", false);
+        boolean provinces = !(boolean) SPUtils.get(this, "provinces", false);
+        boolean cities = !(boolean) SPUtils.get(this, "cities", false);
+        if (!NetUtils.isConnected(StartActivity.this)) {
+            Toast.makeText(this, "网络不可用", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+        GetGradeslist();//加载年纪列表
+        GetSchoolslist();
+        getProviceslist();
+        getCitylist();
+
+        checkUpdate();
     }
 
     /**
@@ -94,6 +93,8 @@ StartActivity extends BaseActivity implements View.OnClickListener {
 
     private void checkUpdate() {
         //TODO 检查版本，进行更新
+        removeOldApk();
+
         Map<String, String> map = new HashMap<>();
         map.put("category", "student_client");
         map.put("platform", "android");

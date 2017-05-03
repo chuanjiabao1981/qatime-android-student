@@ -79,7 +79,8 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     private List<String> grades;
     private ProvincesBean.DataBean province;
     private CityBean.Data city;
-    //    private EditText school;
+    private ProvincesBean.DataBean regionProvince;
+    private CityBean.Data regionCity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +102,11 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         }
 
 
+        PersonalInformationBean data = (PersonalInformationBean) getIntent().getSerializableExtra("data");
+        if (data != null && data.getData() != null) {
+            initData(data);
+        }
+
         replace.setOnClickListener(this);
         men.setOnClickListener(this);
         women.setOnClickListener(this);
@@ -108,10 +114,6 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         complete.setOnClickListener(this);
         gradeView.setOnClickListener(this);
         regionView.setOnClickListener(this);
-        PersonalInformationBean data = (PersonalInformationBean) getIntent().getSerializableExtra("data");
-        if (data != null && data.getData() != null) {
-            initData(data);
-        }
     }
 
     private void initData(PersonalInformationBean data) {
@@ -149,6 +151,28 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 }
             }
         }
+        ProvincesBean provincesBean = JsonUtils.objectFromJson(FileUtil.readFile(getFilesDir() + "/provinces.txt").toString(), ProvincesBean.class);
+        CityBean cityBean = JsonUtils.objectFromJson(FileUtil.readFile(getFilesDir() + "/cities.txt").toString(), CityBean.class);
+
+        if (provincesBean != null && provincesBean.getData() != null) {
+            for (int i = 0; i < provincesBean.getData().size(); i++) {
+                if (provincesBean.getData().get(i).getId().equals(data.getData().getProvince())) {
+                    regionProvince = provincesBean.getData().get(i);
+                    break;
+                }
+            }
+        }
+        if (cityBean != null && cityBean.getData() != null) {
+            for (int i = 0; i < cityBean.getData().size(); i++) {
+                if (cityBean.getData().get(i).getId().equals(data.getData().getCity())) {
+                    regionCity = cityBean.getData().get(i);
+                    break;
+                }
+            }
+        }
+        if (regionCity != null && regionProvince != null) {
+            region.setText(regionProvince.getName() + regionCity.getName());
+        }
         describe.setText(data.getData().getDesc());
     }
 
@@ -158,7 +182,10 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         switch (v.getId()) {
             case R.id.region_view:
                 Intent regionIntent = new Intent(this, RegionSelectActivity1.class);
-                regionIntent.putExtra("region", region.getText().toString());
+                if (regionProvince != null && regionCity != null) {
+                    regionIntent.putExtra("region_province", regionProvince);
+                    regionIntent.putExtra("region_city", regionCity);
+                }
                 startActivityForResult(regionIntent, Constant.REQUEST_REGION_SELECT);
                 break;
             case R.id.men:
@@ -260,7 +287,10 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                     Toast.makeText(this, getResources().getString(R.string.grade_can_not_be_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                if (province == null || city == null) {
+                    Toast.makeText(this, "请选择城市", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 String birthday = select.equals(parse.format(new Date())) ? "" : select;
                 String desc = describe.getText().toString();
                 Map<String, String> map = new HashMap<>();
@@ -271,7 +301,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 map.put("gender", gender);
                 map.put("birthday", birthday);
                 map.put("province_id", province.getId());
-                map.put("city_id",city.getId());
+                map.put("city_id", city.getId());
                 map.put("desc", desc);
                 Logger.e("--" + sName + "--" + grade + "--" + imageUrl + "--" + gender + "--" + birthday + "--" + desc + "--");
                 util.execute(map);
@@ -378,9 +408,11 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         } else if (requestCode == Constant.REQUEST_REGION_SELECT && resultCode == Constant.RESPONSE_REGION_SELECT) {
             city = (CityBean.Data) data.getSerializableExtra("region_city");
             province = (ProvincesBean.DataBean) data.getSerializableExtra("region_province");
-            region.setText(province.getName() + city.getName());
+            if (city != null && province != null) {
+                region.setText(province.getName() + city.getName());
+            }
         }
-}
+    }
 
     @Override
     protected void onResume() {

@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.NimIntent;
@@ -37,7 +36,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -69,9 +67,7 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
 import libraryextra.bean.SystemNotifyBean;
-import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -330,6 +326,7 @@ public class MainActivity extends BaseFragmentActivity {
             if (!StringUtils.isNullOrBlanK(intent.getStringExtra("sign"))) {
                 start.putExtra("sign", intent.getStringExtra("sign"));
             }
+            BaseApplication.clearToken();
             startActivity(start);
             finish();
         } else if (!StringUtils.isNullOrBlanK(intent.getStringExtra("activity_action"))) {
