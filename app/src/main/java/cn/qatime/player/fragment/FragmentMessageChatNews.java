@@ -508,7 +508,7 @@ public class FragmentMessageChatNews extends BaseFragment {
         }
     };
 
-    Observer<IMMessage> statusObserver = new Observer<IMMessage>() {
+        Observer<IMMessage> statusObserver = new Observer<IMMessage>() {
         @Override
         public void onEvent(IMMessage message) {
             int index = getItemIndex(message.getUuid());
