@@ -114,6 +114,8 @@ public class MainActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        checkUserInfo();
+
         linear_bar = findViewById(R.id.ll_bar);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
@@ -153,6 +155,50 @@ public class MainActivity extends BaseFragmentActivity {
         }
         parseIntent();
         NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, true);
+    }
+
+
+    /**
+     * 检查用户信息是否完整
+     */
+    private void checkUserInfo() {
+        if (BaseApplication.isLogined()) {
+
+            DaYiJsonObjectRequest request1 = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null, new VolleyListener(MainActivity.this) {
+                @Override
+                protected void onTokenOut() {
+                    tokenOut();
+                }
+
+                @Override
+                protected void onSuccess(JSONObject response) {
+                    PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
+                    Logger.e(bean.toString());
+                    String name = bean.getData().getName();
+                    String grade = bean.getData().getGrade();
+                    String province = bean.getData().getProvince();
+                    String city = bean.getData().getCity();
+                    if (StringUtils.isNullOrBlanK(name) || StringUtils.isNullOrBlanK(grade) || StringUtils.isNullOrBlanK(province) || StringUtils.isNullOrBlanK(city)) {
+                        Toast.makeText(MainActivity.this, getResourceString(R.string.please_set_information), Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MainActivity.this, RegisterPerfectActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+
+                @Override
+                protected void onError(JSONObject response) {
+                    Toast.makeText(MainActivity.this, getResourceString(R.string.login_failed), Toast.LENGTH_SHORT).show();
+                    BaseApplication.clearToken();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    BaseApplication.clearToken();
+                }
+            });
+            addToRequestQueue(request1);
+        }
     }
 
     /**
@@ -225,7 +271,7 @@ public class MainActivity extends BaseFragmentActivity {
                 }
             }
         });
-        fragmentlayout.setAdapter(fragBaseFragments,R.layout.tablayout, 0x1000);
+        fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout, 0x1000);
         fragmentlayout.getViewPager().setOffscreenPageLimit(4);
         message_x = fragmentlayout.getTabLayout().findViewById(R.id.message_x);
 
@@ -321,6 +367,7 @@ public class MainActivity extends BaseFragmentActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
+        checkUserInfo();
         if (!StringUtils.isNullOrBlanK(intent.getStringExtra("out")) || (!StringUtils.isNullOrBlanK(intent.getStringExtra("sign")))) {
             Intent start = new Intent(this, LoginActivity.class);
             if (!StringUtils.isNullOrBlanK(intent.getStringExtra("sign"))) {
@@ -479,7 +526,6 @@ public class MainActivity extends BaseFragmentActivity {
 //        //TODO
 ////        addToRequestQueue(request);
 //    }
-
 
 
     @Override
