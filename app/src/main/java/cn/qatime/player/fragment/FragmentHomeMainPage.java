@@ -109,6 +109,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        EventBus.getDefault().register(this);
         View view = inflater.inflate(R.layout.fragment_home_main_page, container, false);
         assignViews(view);
         return view;
@@ -707,6 +708,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
     @Override
     public void onDestroy() {
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 
@@ -745,7 +747,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         }
     }
 
-
     private void initLocationData() {
         JsonObjectRequest request = new JsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,
                 new VolleyListener(getActivity()) {
@@ -760,7 +761,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                                 public void onLocationBack(String[] result) {
                                     if (result != null && result.length > 1) {
                                         for (CityBean.Data item : listCity) {
-                                            if (result[1].equals(item.getName()) || result[0].equals(item.getName())) {//需先对比区,区不对应往上对比市,不可颠倒
+                                            if (result[2].equals(item.getName()) || result[1].equals(item.getName())) {//需先对比区,区不对应往上对比市,不可颠倒
                                                 locationCity = item;
                                             }
                                         }
@@ -773,9 +774,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                                         if (!currentCity.equals(locationCity)) {
                                             if (locationCity.getWorkstations_count() != 0) {
                                                 dialogCity();
-//                                            } else {
-//                                                BaseApplication.setCurrentCity(locationCity);
-//                                                setCity();
                                             }
                                         }
                                     } else {

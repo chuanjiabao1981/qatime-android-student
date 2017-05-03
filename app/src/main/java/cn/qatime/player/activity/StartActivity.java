@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
@@ -38,6 +39,7 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.AppUtils;
 import libraryextra.utils.DownFileUtil;
 import libraryextra.utils.FileUtil;
+import libraryextra.utils.NetUtils;
 import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -46,8 +48,7 @@ import libraryextra.utils.VolleyListener;
 /**
  * 起始页
  */
-public class
-StartActivity extends BaseActivity implements View.OnClickListener {
+public class StartActivity extends BaseActivity implements View.OnClickListener {
     private AlertDialog alertDialog;
     private String downLoadLinks;
     private boolean updateEnforce;
@@ -56,17 +57,28 @@ StartActivity extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        ((TextView) findViewById(R.id.version)).setText("V " + AppUtils.getVersionName(this));
-        GetGradeslist();//加载年纪列表
-        removeOldApk();
-        checkUpdate();
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
             }
         }
+        ((TextView) findViewById(R.id.version)).setText("V " + AppUtils.getVersionName(this));
+        boolean grade = !(boolean) SPUtils.get(this, "grade", false);
+        boolean school = !(boolean) SPUtils.get(this, "school", false);
+        boolean provinces = !(boolean) SPUtils.get(this, "provinces", false);
+        boolean cities = !(boolean) SPUtils.get(this, "cities", false);
+        if (!NetUtils.isConnected(StartActivity.this)) {
+            Toast.makeText(this, "网络不可用", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+        GetGradeslist();//加载年纪列表
+        GetSchoolslist();
+        getProviceslist();
+        getCitylist();
+
+        checkUpdate();
     }
 
     /**
@@ -81,6 +93,8 @@ StartActivity extends BaseActivity implements View.OnClickListener {
 
     private void checkUpdate() {
         //TODO 检查版本，进行更新
+        removeOldApk();
+
         Map<String, String> map = new HashMap<>();
         map.put("category", "student_client");
         map.put("platform", "android");
@@ -129,9 +143,9 @@ StartActivity extends BaseActivity implements View.OnClickListener {
                             }
                         });
                         String descStr = response.getJSONObject("data").getString("description");
-                        desc.setText(StringUtils.isNullOrBlanK(descStr) ?"\n": descStr);
+                        desc.setText(StringUtils.isNullOrBlanK(descStr) ? "\n" : descStr);
                         downLoadLinks = response.getJSONObject("data").getString("download_links");
-                        newVersion.setText("(V" + response.getJSONObject("data").getString("version")+")");
+                        newVersion.setText("(V" + response.getJSONObject("data").getString("version") + ")");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -241,6 +255,96 @@ StartActivity extends BaseActivity implements View.OnClickListener {
         });
         addToRequestQueue(request);
     }
+
+    //年级列表
+    public void getProviceslist() {
+
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/provinces", null,
+                new VolleyListener(this) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        boolean value = FileUtil.writeFile(new ByteArrayInputStream(response.toString().getBytes()), getFilesDir().getAbsolutePath() + "/provinces.txt", true);
+                        SPUtils.put(StartActivity.this, "provinces", value);
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
+    }
+
+    //年级列表
+    public void getCitylist() {
+
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,
+                new VolleyListener(this) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        boolean value = FileUtil.writeFile(new ByteArrayInputStream(response.toString().getBytes()), getFilesDir().getAbsolutePath() + "/cities.txt", true);
+                        SPUtils.put(StartActivity.this, "cities", value);
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
+    }
+
+    //学校列表
+    public void GetSchoolslist() {
+
+        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.urlAppconstantInformation + "/schools", null,
+                new VolleyListener(StartActivity.this) {
+
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        boolean value = FileUtil.writeFile(new ByteArrayInputStream(response.toString().getBytes()), getCacheDir().getAbsolutePath() + "/school.txt", true);
+                        SPUtils.put(StartActivity.this, "school", value);
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
