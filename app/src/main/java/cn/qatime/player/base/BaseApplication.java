@@ -41,17 +41,17 @@ import org.json.JSONObject;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.bean.BusEvent;
-import libraryextra.bean.CashAccountBean;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.im.LoginSyncDataStatusObserver;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
+import cn.qatime.player.utils.SPUtils;
 import cn.qatime.player.utils.StorageUtil;
 import custom.Configure;
+import libraryextra.bean.CashAccountBean;
 import libraryextra.bean.CityBean;
 import libraryextra.bean.Profile;
 import libraryextra.utils.AppUtils;
-import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
 
 public class BaseApplication extends Application {
