@@ -26,7 +26,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:text="学习中"
-                style="@style/tab_text_color_select" />
+                android:textSize="14.0sp"
+                android:textColor="#333333" />
         </LinearLayout>
 
         <LinearLayout
@@ -41,7 +42,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:text="已结束"
-                style="@style/tab_text_color_normal" />
+                android:textSize="14.0sp"
+                android:textColor="#999999" />
         </LinearLayout>
     </LinearLayout>
 

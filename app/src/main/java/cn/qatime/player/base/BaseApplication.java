@@ -41,7 +41,7 @@ import org.json.JSONObject;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.bean.BusEvent;
-import cn.qatime.player.bean.CashAccountBean;
+import libraryextra.bean.CashAccountBean;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.im.LoginSyncDataStatusObserver;
 import cn.qatime.player.im.cache.TeamDataCache;

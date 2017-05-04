@@ -51,7 +51,7 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.BannerRecommendBean;
 import cn.qatime.player.bean.BusEvent;
-import cn.qatime.player.bean.CashAccountBean;
+import libraryextra.bean.CashAccountBean;
 import cn.qatime.player.bean.EssenceContentBean;
 import cn.qatime.player.bean.LiveTodayBean;
 import cn.qatime.player.bean.RecentPublishedBean;

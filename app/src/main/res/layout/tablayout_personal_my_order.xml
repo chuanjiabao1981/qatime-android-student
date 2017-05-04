@@ -19,8 +19,9 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/paying"
-                style="@style/tab_text_color_select"
-                android:layout_height="36dp" />
+                android:layout_height="36dp"
+                android:textSize="14.0sp"
+                android:textColor="#333333" />
 
 
 
@@ -30,8 +31,9 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/paid"
-                style="@style/tab_text_color_normal"
-                android:layout_height="36dp" />
+                android:layout_height="36dp"
+                android:textSize="14.0sp"
+                android:textColor="#999999" />
 
 
             <TextView
@@ -40,8 +42,9 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/cancelled"
-                style="@style/tab_text_color_normal"
-                android:layout_height="36dp" />
+                android:layout_height="36dp"
+                android:textSize="14.0sp"
+                android:textColor="#999999" />
     </LinearLayout>
 
 </FrameLayout>

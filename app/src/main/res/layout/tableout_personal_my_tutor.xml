@@ -40,11 +40,12 @@
             <!-- android:id="@+id/tab_text" -->
             <TextView
                 android:id="@+id/tab_text2"
-                style="@style/tab_text_color_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="@string/to_start" />
+                android:text="@string/to_start"
+                android:textSize="14.0sp"
+                android:textColor="#999999" />
         </LinearLayout>
 
         <LinearLayout
@@ -57,11 +58,12 @@
             <!-- android:id="@+id/tab_text" -->
             <TextView
                 android:id="@+id/tab_text3"
-                style="@style/tab_text_color_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="@string/started" />
+                android:text="@string/started"
+                android:textSize="14.0sp"
+                android:textColor="#999999" />
         </LinearLayout>
 
         <LinearLayout
@@ -72,11 +74,12 @@
 
             <TextView
                 android:id="@+id/tab_text4"
-                style="@style/tab_text_color_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="@string/done" />
+                android:text="@string/done"
+                android:textSize="14.0sp"
+                android:textColor="#999999" />
         </LinearLayout>
 
 

@@ -20,11 +20,12 @@
 
         <TextView
             android:id="@+id/tab_text1"
-            style="@style/tab_menu_text_color_select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:text="@string/home_page" />
+            android:text="@string/home_page"
+            android:textSize="12sp"
+            android:textColor="@color/colorPrimary" />
     </LinearLayout>
 
     <LinearLayout
@@ -41,11 +42,12 @@
 
         <TextView
             android:id="@+id/tab_text2"
-            style="@style/tab_menu_text_color_normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:text="@string/select_subject" />
+            android:text="@string/select_subject"
+            android:textSize="12sp"
+            android:textColor="#ff666666" />
     </LinearLayout>
 
     <LinearLayout
@@ -62,11 +64,12 @@
 
         <TextView
             android:id="@+id/tab_text3"
-            style="@style/tab_menu_text_color_normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:text="@string/time_table" />
+            android:text="@string/time_table"
+            android:textSize="12sp"
+            android:textColor="#ff666666" />
     </LinearLayout>
 
     <LinearLayout
@@ -99,11 +102,12 @@
 
         <TextView
             android:id="@+id/tab_text4"
-            style="@style/tab_menu_text_color_normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:text="@string/message" />
+            android:text="@string/message"
+            android:textSize="12sp"
+            android:textColor="#ff666666" />
     </LinearLayout>
 
 
@@ -121,11 +125,12 @@
 
         <TextView
             android:id="@+id/tab_text5"
-            style="@style/tab_menu_text_color_normal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:text="@string/individual" />
+            android:text="@string/individual"
+            android:textSize="12sp"
+            android:textColor="#ff666666" />
     </LinearLayout>
 
 </LinearLayout>

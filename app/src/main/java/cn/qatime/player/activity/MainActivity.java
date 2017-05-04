@@ -48,7 +48,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.bean.BusEvent;
-import cn.qatime.player.bean.CashAccountBean;
+import libraryextra.bean.CashAccountBean;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.fragment.FragmentHomeClassTable;

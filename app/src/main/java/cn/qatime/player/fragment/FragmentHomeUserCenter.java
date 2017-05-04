@@ -30,7 +30,7 @@ import cn.qatime.player.activity.SystemSettingActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.BusEvent;
-import cn.qatime.player.bean.CashAccountBean;
+import libraryextra.bean.CashAccountBean;
 import cn.qatime.player.utils.Constant;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.StringUtils;
