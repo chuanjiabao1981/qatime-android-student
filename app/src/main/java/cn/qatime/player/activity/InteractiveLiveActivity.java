@@ -542,7 +542,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         }
 
         if (roomId != null) {
-            NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
             clearChatRoom();
         }
         hd.removeCallbacks(hideBackLayout);

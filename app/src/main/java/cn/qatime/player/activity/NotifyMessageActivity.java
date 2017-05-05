@@ -13,7 +13,7 @@ import com.umeng.analytics.MobclickAgent;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
-import libraryextra.utils.SPUtils;
+import cn.qatime.player.utils.SPUtils;
 
 /**
  * Created by lenovo on 2016/8/22.
