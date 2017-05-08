@@ -97,7 +97,7 @@ public class FragmentInteractDetailTeachersInfo extends BaseFragment {
                         }
                     }
 
-                    SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getCacheDir() + "/school.txt").toString(), SchoolBean.class);
+                    SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getFilesDir() + "/school.txt").toString(), SchoolBean.class);
                     if (schoolBean != null && schoolBean.getData() != null) {
                         for (int i = 0; i < schoolBean.getData().size(); i++) {
                             if (item.getSchool() == schoolBean.getData().get(i).getId()) {

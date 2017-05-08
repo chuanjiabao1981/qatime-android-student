@@ -25,6 +25,7 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.CityBean;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.ProvincesBean;
+import libraryextra.bean.SchoolBean;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
@@ -38,7 +39,7 @@ public class PersonalInformationActivity extends BaseActivity {
     TextView sex;
     TextView birthday;
     TextView grade;
-    //    TextView school;
+    TextView school;
     TextView describe;
 
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
@@ -143,6 +144,8 @@ public class PersonalInformationActivity extends BaseActivity {
         ProvincesBean provincesBean = JsonUtils.objectFromJson(json, ProvincesBean.class);
         String json1 = FileUtil.readFile(getFilesDir() + "/cities.txt").toString();
         CityBean cityBean = JsonUtils.objectFromJson(json1, CityBean.class);
+        String json2 = FileUtil.readFile(getFilesDir() + "/school.txt").toString();
+        SchoolBean schoolBean = JsonUtils.objectFromJson(json2, SchoolBean.class);
 
         if (provincesBean != null && provincesBean.getData() != null) {
             for (int i = 0; i < provincesBean.getData().size(); i++) {
@@ -161,6 +164,14 @@ public class PersonalInformationActivity extends BaseActivity {
             }
         }
         region.setText(regionStr);
+        if (schoolBean != null && schoolBean.getData() != null) {
+            for (int i = 0; i < schoolBean.getData().size(); i++) {
+                if (schoolBean.getData().get(i).getId() == bean.getData().getSchool()) {
+                    school.setText(schoolBean.getData().get(i).getName());
+                    break;
+                }
+            }
+        }
         if (!StringUtils.isNullOrBlanK(bean.getData().getDesc())) {
             describe.setText(bean.getData().getDesc());
         } else {
@@ -175,7 +186,7 @@ public class PersonalInformationActivity extends BaseActivity {
         birthday = (TextView) findViewById(R.id.birthday);
         grade = (TextView) findViewById(R.id.grade);
         region = (TextView) findViewById(R.id.region);
-//        school = (TextView) findViewById(R.id.school);
+        school = (TextView) findViewById(R.id.school);
         describe = (TextView) findViewById(R.id.describe);
     }
 
