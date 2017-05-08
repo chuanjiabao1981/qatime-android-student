@@ -605,7 +605,6 @@ public class MainActivity extends BaseFragmentActivity {
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null,
                 new VolleyListener(MainActivity.this) {
 
-
                     @Override
                     protected void onSuccess(JSONObject response) {
                         PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);

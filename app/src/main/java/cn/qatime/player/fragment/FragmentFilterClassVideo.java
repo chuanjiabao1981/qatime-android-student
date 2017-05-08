@@ -225,6 +225,7 @@ public class FragmentFilterClassVideo extends BaseFragment {
         listview.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
         listview.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         listview.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
+        listview.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
         adapter = new CommonAdapter<FilterVideoCourseBean.DataBean>(getActivity(), datas, R.layout.item_filter_course) {
             @Override
             public void convert(ViewHolder holder, FilterVideoCourseBean.DataBean item, int position) {
