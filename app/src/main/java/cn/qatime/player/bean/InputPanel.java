@@ -36,6 +36,7 @@ import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.team.model.Team;
+import com.orhanobut.logger.Logger;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -650,12 +651,12 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
 
     @Override
     public void onRecordReady() {
-
+        Logger.e("onRecordReady");
     }
 
     @Override
     public void onRecordStart(File file, RecordType recordType) {
-
+        Logger.e("onRecordStart");
     }
 
     @Override
@@ -667,7 +668,7 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
 
     @Override
     public void onRecordFail() {
-
+        Logger.e("onRecordFail");
     }
 
     @Override
