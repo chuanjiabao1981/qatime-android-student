@@ -43,6 +43,7 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.CitySelectActivity;
+import cn.qatime.player.activity.InteractCourseDetailActivity;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.PayPSWForgetActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
@@ -51,7 +52,6 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.BannerRecommendBean;
 import cn.qatime.player.bean.BusEvent;
-import libraryextra.bean.CashAccountBean;
 import cn.qatime.player.bean.EssenceContentBean;
 import cn.qatime.player.bean.LiveTodayBean;
 import cn.qatime.player.bean.RecentPublishedBean;
@@ -63,6 +63,7 @@ import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
+import libraryextra.bean.CashAccountBean;
 import libraryextra.bean.CityBean;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.DensityUtils;
@@ -259,10 +260,18 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         essenceContentAdapter = new CommonAdapter<EssenceContentBean.DataBean>(getContext(), listEssenceContent, R.layout.item_essence_content) {
             @Override
             public void convert(ViewHolder holder, EssenceContentBean.DataBean item, int position) {
-                holder.setImageByUrl(R.id.image, item.getLogo_url(), R.mipmap.photo)
-                        .setText(R.id.course_title, item.getLive_studio_course().getName())
-                        .setText(R.id.grade_subject, item.getLive_studio_course().getGrade() + item.getLive_studio_course().getSubject())
-                        .setText(R.id.teacher, item.getLive_studio_course().getTeacher_name());
+                if ("LiveStudio::Course".equals(item.getTarget_type())) {
+                    holder.setImageByUrl(R.id.image, item.getLogo_url(), R.mipmap.photo)
+                            .setText(R.id.course_title, item.getLive_studio_course().getName())
+                            .setText(R.id.grade_subject, item.getLive_studio_course().getGrade() + item.getLive_studio_course().getSubject())
+                            .setText(R.id.teacher, item.getLive_studio_course().getTeacher_name());
+                } else if ("LiveStudio::InteractiveCourse".equals(item.getTarget_type())) {
+                    holder.setImageByUrl(R.id.image, item.getLogo_url(), R.mipmap.photo)
+                            .setText(R.id.course_title, item.getLive_studio_interactive_course().getName())
+                            .setText(R.id.grade_subject, item.getLive_studio_interactive_course().getGrade() + item.getLive_studio_interactive_course().getSubject())
+                            .setText(R.id.teacher, item.getLive_studio_interactive_course().getTeachers().get(0).getName());
+                }
+
                 holder.getView(R.id.reason1).setVisibility(StringUtils.isNullOrBlanK(item.getTag_one()) ? View.GONE : View.VISIBLE);
                 holder.setText(R.id.reason1, getTags(item.getTag_one()));
                 holder.getView(R.id.reason2).setVisibility(StringUtils.isNullOrBlanK(item.getTag_two()) ? View.GONE : View.VISIBLE);
@@ -278,8 +287,15 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         listViewEssenceContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int courseId = listEssenceContent.get(position).getLive_studio_course().getId();
-                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                int courseId = 0;
+                Intent intent = null;
+                if ("LiveStudio::Course".equals(listEssenceContent.get(position).getTarget_type())) {
+                    courseId = listEssenceContent.get(position).getLive_studio_course().getId();
+                    intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                } else if ("LiveStudio::InteractiveCourse".equals(listEssenceContent.get(position).getTarget_type())) {
+                    courseId = listEssenceContent.get(position).getLive_studio_interactive_course().getId();
+                    intent = new Intent(getActivity(), InteractCourseDetailActivity.class);
+                }
                 intent.putExtra("id", courseId);
                 startActivity(intent);
             }
