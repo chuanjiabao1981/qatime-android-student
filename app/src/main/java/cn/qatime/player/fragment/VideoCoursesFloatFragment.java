@@ -83,7 +83,10 @@ public class VideoCoursesFloatFragment extends Fragment implements View.OnClickL
         long position = callback.getCurrentPosition();
         long duration = callback.getDuration();
         if (seekBar != null) {
-            seekBar.setProgress(Integer.parseInt(String.valueOf(position)));
+            try {
+                seekBar.setProgress(Integer.parseInt(String.valueOf(position)));
+            } catch (Exception e) {
+            }
         }
         if (time != null && duration > 0)
             time.setText(stringForTime(duration));

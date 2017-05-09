@@ -100,6 +100,7 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
                         data = JsonUtils.objectFromJson(response.toString(), VideoCoursesDetailsBean.class);
 
                         if (data != null && data.getData() != null) {
+                            playingData = data.getData().getVideo_lessons().get(0);
                             ((FragmentVideoCoursesList) fragBaseFragments.get(0)).setData(data.getData().getVideo_lessons());
                             floatFragment.setData(data.getData().getVideo_lessons());
                             ((FragmentVideoCoursesDetail) fragBaseFragments.get(1)).setData(data);
@@ -147,12 +148,9 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
 
             @Override
             public void play() {
-                if (playingData != null) {
-                    if (mMediaPlayer != null) {
-                        mMediaPlayer.start();
-                    }
+                if (mMediaPlayer != null) {
+                    mMediaPlayer.start();
                 } else {
-                    playingData = data.getData().getVideo_lessons().get(0);
                     playCourses(playingData);
                 }
             }

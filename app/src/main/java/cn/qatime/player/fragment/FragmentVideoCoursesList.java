@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,20 +55,24 @@ public class FragmentVideoCoursesList extends BaseFragment {
             @Override
             public void convert(ViewHolder holder, VideoLessonsBean item, int position) {
                 holder.setText(R.id.number, getPosition(position))
-                        .setText(R.id.name, item.getName())
                         .setText(R.id.time_length, "时长 " + item.getVideo().getFormat_tmp_duration())
                         .setText(R.id.status, "");
+
+                TextView name = holder.getView(R.id.name);
+                name.setText(item.getName());
+                name.setTextColor(context.playingData.getId() == item.getId() ? getResources().getColor(R.color.colorPrimary) : 0xff999999);
             }
         };
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (context.playingData != null && context.playingData.getVideo().getId() == list.get(position).getVideo().getId()) {
-                    return;
-                }
+//                if (context.playingData != null && context.playingData.getVideo().getId() == list.get(position).getVideo().getId()) {
+//                    return;
+//                }
                 context.playingData = list.get(position);
                 context.playCourses(context.playingData);
+                adapter.notifyDataSetChanged();
             }
         });
     }
