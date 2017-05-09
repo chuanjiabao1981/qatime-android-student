@@ -46,8 +46,8 @@ public class RegionSelectActivity1 extends BaseActivity {
     private CommonAdapter<ProvincesBean.DataBean> adapter;
     private ProvincesBean.DataBean selectProvince;
     private TextView location;
-    private ProvincesBean.DataBean currentProvince;
-    private CityBean.Data currentCity;
+//    private ProvincesBean.DataBean currentProvince;
+//    private CityBean.Data currentCity;
     private List<CityBean.Data> cityList;
     private CityBean.Data locationCity;
     private ProvincesBean.DataBean locationProvince;
@@ -55,10 +55,10 @@ public class RegionSelectActivity1 extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_region_select);
+        setContentView(R.layout.activity_school_select);
         setTitles("选择地区");
-        currentProvince = (ProvincesBean.DataBean) getIntent().getSerializableExtra("region_province");
-        currentCity = (CityBean.Data) getIntent().getSerializableExtra("region_city");
+//        currentProvince = (ProvincesBean.DataBean) getIntent().getSerializableExtra("region_province");
+//        currentCity = (CityBean.Data) getIntent().getSerializableExtra("region_city");
         CityBean cityBean = JsonUtils.objectFromJson(FileUtil.readFile(getFilesDir() + "/cities.txt").toString(), CityBean.class);
         if (cityBean != null) {
             cityList = cityBean.getData();
@@ -145,10 +145,10 @@ public class RegionSelectActivity1 extends BaseActivity {
     private void initView() {
         list = (ListView) findViewById(R.id.list);
         location = (TextView) findViewById(R.id.location);
-        TextView currentRegion = (TextView) findViewById(R.id.current_region);
-        if (currentCity != null && currentProvince != null) {
-            currentRegion.setText(currentProvince.getName() + currentCity.getName());
-        }
+//        TextView currentRegion = (TextView) findViewById(R.id.current_region);
+//        if (currentCity != null && currentProvince != null) {
+//            currentRegion.setText(currentProvince.getName() + currentCity.getName());
+//        }
         regionList = new ArrayList<>();
         adapter = new CommonAdapter<ProvincesBean.DataBean>(RegionSelectActivity1.this, regionList, R.layout.item_region) {
 

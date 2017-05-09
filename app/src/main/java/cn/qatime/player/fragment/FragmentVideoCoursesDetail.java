@@ -3,7 +3,6 @@ package cn.qatime.player.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-
-import java.text.ParseException;
-import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.TeacherDataActivity;
@@ -25,8 +21,6 @@ import libraryextra.utils.DateUtils;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
-
-import static android.view.View.GONE;
 
 /**
  * @author lungtify
@@ -108,7 +102,7 @@ public class FragmentVideoCoursesDetail extends BaseFragment {
         body = body.replace("\r\n", "<br>");
         String css = "<style>* {color:#666666;margin:0;padding:0;}</style>";//默认color
         teacherDescribe.loadDataWithBaseURL(null, css + body, "text/html", "UTF-8", null);
-        SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getCacheDir() + "/school.txt"), SchoolBean.class);
+        SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getFilesDir() + "/school.txt"), SchoolBean.class);
         if (schoolBean != null && schoolBean.getData() != null) {
             for (int i = 0; i < schoolBean.getData().size(); i++) {
                 if (data.getData().getTeacher().getSchool() == schoolBean.getData().get(i).getId()) {

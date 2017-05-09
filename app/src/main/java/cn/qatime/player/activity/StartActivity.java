@@ -322,7 +322,7 @@ public class StartActivity extends BaseActivity implements View.OnClickListener 
 
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        boolean value = FileUtil.writeFile(new ByteArrayInputStream(response.toString().getBytes()), getCacheDir().getAbsolutePath() + "/school.txt", true);
+                        boolean value = FileUtil.writeFile(new ByteArrayInputStream(response.toString().getBytes()), getFilesDir().getAbsolutePath() + "/school.txt", true);
                         SPUtils.put(StartActivity.this, "school", value);
                     }
 

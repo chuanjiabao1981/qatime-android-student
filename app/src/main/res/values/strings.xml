@@ -640,4 +640,5 @@
     <string name="all_class_has_over">全部课程已完成</string>
     <string name="my_taste">我的试听</string>
     <string name="hint_choose_region">请选择您所在的区域</string>
+    <string name="hint_choose_school">请选择您所在的学校</string>
 </resources>

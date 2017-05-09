@@ -45,6 +45,7 @@ import libraryextra.bean.ImageItem;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
 import libraryextra.bean.ProvincesBean;
+import libraryextra.bean.SchoolBean;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.DialogUtils;
 import libraryextra.utils.FileUtil;
@@ -77,10 +78,14 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     private AlertDialog alertDialog;
     private String gender = "";
     private List<String> grades;
-    private ProvincesBean.DataBean province;
-    private CityBean.Data city;
     private ProvincesBean.DataBean regionProvince;
     private CityBean.Data regionCity;
+    private ProvincesBean provincesBean;
+    private CityBean cityBean;
+    private SchoolBean schoolBean;
+    private TextView school;
+    private View schoolView;
+    private SchoolBean.Data schoolData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,11 +93,9 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         setContentView(R.layout.activity_personal_information_change);
         setTitles(getResources().getString(R.string.change_information));
         initView();
-        //获取基本数据信息,对应id与学校 年级
-//        String school = FileUtil.readFile(getCacheDir() + "/school.txt");
-//        if (!StringUtils.isNullOrBlanK(school)) {
-//            schoolBean = JsonUtils.objectFromJson(school, SchoolBean.class);
-//        }
+        provincesBean = JsonUtils.objectFromJson(FileUtil.readFile(getFilesDir() + "/provinces.txt").toString(), ProvincesBean.class);
+        cityBean = JsonUtils.objectFromJson(FileUtil.readFile(getFilesDir() + "/cities.txt").toString(), CityBean.class);
+        schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getFilesDir() + "/school.txt").toString(), SchoolBean.class);
         String gradeString = FileUtil.readFile(getFilesDir() + "/grade.txt");
 //        LogUtils.e("班级基础信息" + gradeString);
         grades = new ArrayList<>();
@@ -114,6 +117,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         complete.setOnClickListener(this);
         gradeView.setOnClickListener(this);
         regionView.setOnClickListener(this);
+        schoolView.setOnClickListener(this);
     }
 
     private void initData(PersonalInformationBean data) {
@@ -151,9 +155,6 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 }
             }
         }
-        ProvincesBean provincesBean = JsonUtils.objectFromJson(FileUtil.readFile(getFilesDir() + "/provinces.txt").toString(), ProvincesBean.class);
-        CityBean cityBean = JsonUtils.objectFromJson(FileUtil.readFile(getFilesDir() + "/cities.txt").toString(), CityBean.class);
-
         if (provincesBean != null && provincesBean.getData() != null) {
             for (int i = 0; i < provincesBean.getData().size(); i++) {
                 if (provincesBean.getData().get(i).getId().equals(data.getData().getProvince())) {
@@ -173,6 +174,16 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         if (regionCity != null && regionProvince != null) {
             region.setText(regionProvince.getName() + regionCity.getName());
         }
+
+        if (schoolBean != null && schoolBean.getData() != null) {
+            for (int i = 0; i < schoolBean.getData().size(); i++) {
+                if (schoolBean.getData().get(i).getId() == data.getData().getSchool()) {
+                    schoolData = schoolBean.getData().get(i);
+                    school.setText(schoolBean.getData().get(i).getName());
+                    break;
+                }
+            }
+        }
         describe.setText(data.getData().getDesc());
     }
 
@@ -182,11 +193,15 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         switch (v.getId()) {
             case R.id.region_view:
                 Intent regionIntent = new Intent(this, RegionSelectActivity1.class);
-                if (regionProvince != null && regionCity != null) {
-                    regionIntent.putExtra("region_province", regionProvince);
-                    regionIntent.putExtra("region_city", regionCity);
-                }
+//                if (regionProvince != null && regionCity != null) {
+//                    regionIntent.putExtra("region_province", regionProvince);
+//                    regionIntent.putExtra("region_city", regionCity);
+//                }
                 startActivityForResult(regionIntent, Constant.REQUEST_REGION_SELECT);
+                break;
+            case R.id.school_view:
+                Intent schoolIntent = new Intent(this, SchoolSelectActivity.class);
+                startActivityForResult(schoolIntent, Constant.REQUEST_SCHOOL_SELECT);
                 break;
             case R.id.men:
                 men.setSelected(true);
@@ -287,7 +302,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                     Toast.makeText(this, getResources().getString(R.string.grade_can_not_be_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (province == null || city == null) {
+                if (regionCity == null || regionProvince == null) {
                     Toast.makeText(this, "请选择城市", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -300,8 +315,11 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 map.put("avatar", imageUrl);
                 map.put("gender", gender);
                 map.put("birthday", birthday);
-                map.put("province_id", province.getId());
-                map.put("city_id", city.getId());
+                map.put("province_id", regionProvince.getId());
+                map.put("city_id", regionCity.getId());
+                if(schoolData!=null){
+                    map.put("school_id", schoolData.getId() + "");
+                }
                 map.put("desc", desc);
                 Logger.e("--" + sName + "--" + grade + "--" + imageUrl + "--" + gender + "--" + birthday + "--" + desc + "--");
                 util.execute(map);
@@ -354,16 +372,16 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         women = (TextView) findViewById(R.id.women);
         textGrade = (TextView) findViewById(R.id.text_grade);
         describe = (EditText) findViewById(R.id.describe);
-//        school = (EditText) findViewById(R.id.school);
         describe.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
         name.setFilters(new InputFilter[]{new InputFilter.LengthFilter(7)});
-//        school.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
         birthday = (TextView) findViewById(R.id.birthday);
         birthdayView = findViewById(R.id.birthday_view);
         gradeView = findViewById(R.id.grade_view);
         complete = (TextView) findViewById(R.id.complete);
         region = (TextView) findViewById(R.id.region);
         regionView = findViewById(R.id.region_view);
+        school = (TextView) findViewById(R.id.school);
+        schoolView = findViewById(R.id.school_view);
     }
 
     @Override
@@ -406,10 +424,15 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 }
             }
         } else if (requestCode == Constant.REQUEST_REGION_SELECT && resultCode == Constant.RESPONSE_REGION_SELECT) {
-            city = (CityBean.Data) data.getSerializableExtra("region_city");
-            province = (ProvincesBean.DataBean) data.getSerializableExtra("region_province");
-            if (city != null && province != null) {
-                region.setText(province.getName() + city.getName());
+            regionCity = (CityBean.Data) data.getSerializableExtra("region_city");
+            regionProvince = (ProvincesBean.DataBean) data.getSerializableExtra("region_province");
+            if (regionCity != null && regionProvince != null) {
+                region.setText(regionProvince.getName() + regionCity.getName());
+            }
+        } else if (requestCode == Constant.REQUEST_SCHOOL_SELECT && resultCode == Constant.RESPONSE_SCHOOL_SELECT) {
+            schoolData = (SchoolBean.Data) data.getSerializableExtra("school");
+            if (schoolData != null) {
+                school.setText(schoolData.getName());
             }
         }
     }
