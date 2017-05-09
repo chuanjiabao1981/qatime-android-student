@@ -154,6 +154,13 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
                 paytype.setText(getResourceString(R.string.account_payment));
             }
         }
+
+        if (data.getStatus().equals("refunded")) {//已退款
+            status.setImageResource(R.mipmap.refunded);
+        } else {
+            status.setImageResource(R.mipmap.close_pay);
+        }
+
         payprice.setText("￥" + data.getAmount());
     }
 

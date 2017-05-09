@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="144dp"
         android:scaleType="fitXY"
-        android:src="@mipmap/waiting_pay" />
+        android:src="@mipmap/close_pay" />
 
     <LinearLayout
         android:id="@+id/list_item"
@@ -144,6 +144,25 @@
         </LinearLayout>
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/time_payment"
+                android:textColor="#333" />
+
+            <TextView
+                android:id="@+id/pay_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="未支付"
+                android:layout_marginLeft="28dp"
+                android:textColor="#666" />
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
