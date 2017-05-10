@@ -1,6 +1,7 @@
 package cn.qatime.player.activity;
 
 import android.Manifest;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -16,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
-import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.avchat.AVChatCallback;
@@ -32,9 +32,7 @@ import com.netease.nimlib.sdk.avchat.model.AVChatOptionalConfig;
 import com.netease.nimlib.sdk.avchat.model.AVChatParameters;
 import com.netease.nimlib.sdk.avchat.model.AVChatVideoFrame;
 import com.netease.nimlib.sdk.avchat.model.AVChatVideoRender;
-import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
-import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.rts.RTSCallback;
@@ -52,6 +50,7 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -68,17 +67,20 @@ import cn.qatime.player.im.cache.ChatRoomMemberCache;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.doodle.Transaction;
 import cn.qatime.player.im.doodle.TransactionCenter;
-import cn.qatime.player.im.view.DialogMaker;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.MPermission;
 import cn.qatime.player.utils.MPermissionUtil;
+import cn.qatime.player.utils.ScreenSwitchUtils;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.annotation.OnMPermissionDenied;
 import cn.qatime.player.utils.annotation.OnMPermissionGranted;
 import cn.qatime.player.utils.annotation.OnMPermissionNeverAskAgain;
+import cn.qatime.player.view.VideoFrameLayout;
 import cn.qatime.player.view.VideoLayout;
+import libraryextra.bean.Announcements;
 import libraryextra.bean.InteractCourseDetailBean;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -91,7 +93,6 @@ import libraryextra.view.FragmentLayoutWithLine;
  */
 
 public class InteractiveLiveActivity extends BaseActivity implements View.OnClickListener, AVChatStateObserver, InputPanel.InputPanelListener {
-    private FragmentLayoutWithLine fragmentlayout;
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3, R.id.tab_text4, R.id.tab_text5};
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
     private final int LIVE_PERMISSION_REQUEST_CODE = 100;
@@ -100,18 +101,18 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
     private RelativeLayout viewLayout;
     private FrameLayout masterVideoLayout;
+    private VideoFrameLayout videoLayout;
     private ImageView fullScreenImage;
     private RelativeLayout backLayout;
-    private TextView roomIdText;
 
+    private TextView roomIdText;
     private ImageView videoPermission;
     private ImageView audioPermission;
     //    private TextView onlineStatus;
     private FrameLayout fullScreenLayout;
     private FrameLayout fullScreenView;
-    private ImageView cancelFullScreenImage;
 
-    private VideoLayout videoLayout;
+    private ImageView cancelFullScreenImage;
     /**
      * 聊天室基本信息
      */
@@ -131,7 +132,8 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     private InputPanel inputPanel;
     private int id;
     private FragmentInteractiveMessage messageFragment;
-    private String sessionName;
+    private ScreenSwitchUtils screenSwitchUtils;
+    private View bottomLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,16 +143,14 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         sessionId = getIntent().getStringExtra("teamId");
         sessionId = "";
+        screenSwitchUtils = ScreenSwitchUtils.init(this.getApplicationContext());
         initView();
 
 
-        // 注册监听
-        registerObservers(true);
-
         requestLivePermission();
         id = getIntent().getIntExtra("id", 0);
-        id = 2;
-//        initData();
+        id = 1;
+        initData();
         hd.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -160,9 +160,43 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         }, 5000);
     }
 
+
     private void initData() {
         if (id != 0) {
-            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlInteractCourses + id, null,
+            DaYiJsonObjectRequest announcementsRequest = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass + "/" + id + "/realtime", null,
+                    new VolleyListener(InteractiveLiveActivity.this) {
+                        @Override
+                        protected void onSuccess(JSONObject response) {
+                            Announcements data = JsonUtils.objectFromJson(response.toString(), Announcements.class);
+                            if (data != null) {
+                                if (data.getData() != null) {
+                                    ((FragmentInteractiveMembers) fragBaseFragments.get(4)).setData(data.getData());
+//                                    ((FragmentInteractiveMessage) fragBaseFragments.get(2)).setOwner(data.getData().getOwner());
+                                    if (data.getData().getAnnouncements() != null) {
+                                        ((FragmentInteractiveAnnouncements) fragBaseFragments.get(0)).setData(data.getData().getAnnouncements());
+                                    }
+                                }
+                            }
+                        }
+
+                        @Override
+                        protected void onError(JSONObject response) {
+                        }
+
+                        @Override
+                        protected void onTokenOut() {
+                            tokenOut();
+                        }
+                    }, new VolleyErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    super.onErrorResponse(volleyError);
+                }
+            });
+            addToRequestQueue(announcementsRequest);
+            Map<String, String> map = new HashMap<>();
+            map.put("t", String.valueOf(System.currentTimeMillis()));
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlInteractCourses + id, map), null,
                     new VolleyListener(InteractiveLiveActivity.this) {
                         @Override
                         protected void onSuccess(JSONObject response) {
@@ -193,6 +227,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
     private void initView() {
         viewLayout = (RelativeLayout) findViewById(R.id.view_layout);
+        bottomLayout = findViewById(R.id.bottom_layout);
         masterVideoLayout = (FrameLayout) findViewById(R.id.master_video_layout);
         fullScreenImage = (ImageView) findViewById(R.id.full_screen_image);
         backLayout = (RelativeLayout) findViewById(R.id.back_layout);
@@ -203,7 +238,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         fullScreenLayout = (FrameLayout) findViewById(R.id.full_screen_layout);
         fullScreenView = (FrameLayout) findViewById(R.id.full_screen_view);
         cancelFullScreenImage = (ImageView) findViewById(R.id.cancel_full_screen_image);
-        videoLayout = (VideoLayout) findViewById(R.id.video_layout);
+        videoLayout = (VideoFrameLayout) findViewById(R.id.video_layout);
         if (!StringUtils.isNullOrBlanK(sessionId)) {
             TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
             if (team != null) {
@@ -220,7 +255,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         fragBaseFragments.add(new FragmentInteractiveDetails());
         fragBaseFragments.add(new FragmentInteractiveMembers());
 
-        fragmentlayout = (FragmentLayoutWithLine) findViewById(R.id.fragmentlayout);
+        FragmentLayoutWithLine fragmentlayout = (FragmentLayoutWithLine) findViewById(R.id.fragmentlayout);
 
         fragmentlayout.setScorllToNext(false);
         fragmentlayout.setScorll(true);
@@ -290,6 +325,18 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 messageFragment.scrollToBottom();
             }
         });
+        inputPanel.setOnAudioRecordListener(new InputPanel.AudioRecordListener() {
+            @Override
+            public void audioRecordStart() {
+                screenSwitchUtils.stop();
+            }
+
+            @Override
+            public void audioRecordStop() {
+                screenSwitchUtils.start(InteractiveLiveActivity.this);
+            }
+        });
+
     }
 
     private void enterRoom() {
@@ -316,10 +363,11 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 //                if (roomInfo.getExtension() != null) {
 //                    shareUrl = (String) roomInfo.getExtension().get(KEY_SHARE_URL);
 //                }
+        registerObservers(true);
+        registerRTSObservers(roomId, true);
         initLiveVideo();
         rtsFragment.initRTSView(roomId);
         joinRTSSession();
-        registerRTSObservers(roomId, true);
 //            }
 //
 //            @Override
@@ -351,8 +399,8 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             public void onSuccess(RTSData rtsData) {
                 Logger.e("rts extra:" + rtsData.getExtra());
                 // 主播的白板默认为开启状态
-                ChatRoomMemberCache.getInstance().setRTSOpen(true);
-                updateRTSFragment();
+//                ChatRoomMemberCache.getInstance().setRTSOpen(true);
+//                updateRTSFragment();
             }
 
             @Override
@@ -393,6 +441,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 AVChatParameters avChatParameters = new AVChatParameters();
                 avChatParameters.setBoolean(NRtcParameters.KEY_AUDIO_REPORT_SPEAKER, true);
                 AVChatManager.getInstance().setParameters(avChatParameters);
+                chooseSpeechType();
             }
 
             @Override
@@ -406,7 +455,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
             }
         });
-        chooseSpeechType();
     }
 
     private void updateVideoAudioUI() {
@@ -418,7 +466,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         videoPermission.setVisibility(View.VISIBLE);
         audioPermission.setVisibility(View.VISIBLE);
     }
-
 
     private void registerObservers(boolean register) {
         AVChatManager.getInstance().observeAVChatState(this, register);
@@ -437,7 +484,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             AVChatVideoRender render = new AVChatVideoRender(InteractiveLiveActivity.this);
             boolean isSetup = false;
             try {
-                isSetup = AVChatManager.getInstance().setupRemoteVideoRender(a, render, false, AVChatVideoScalingType.SCALE_ASPECT_BALANCED);
+                isSetup = AVChatManager.getInstance().setupLocalVideoRender(render, false, AVChatVideoScalingType.SCALE_ASPECT_BALANCED);
 //                    Logger.e("setup render, creator account:" + roomInfo.getCreator() + ", render account:" + a + ", isSetup:" + isSetup);
             } catch (Exception e) {
                 Logger.e("set up video render error:" + e.getMessage());
@@ -536,10 +583,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     @Override
     public void onDestroy() {
         super.onDestroy();
-        registerObservers(false);
-        if (!TextUtils.isEmpty(sessionName)) {
-            registerRTSObservers(sessionName, false);
-        }
 
         if (roomId != null) {
             clearChatRoom();
@@ -548,9 +591,12 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     }
 
     private void clearChatRoom() {
+        registerObservers(false);
+        registerRTSObservers(roomId, false);
         AVChatManager.getInstance().leaveRoom(null);
         RTSManager2.getInstance().leaveSession(roomId, null);
         ChatRoomMemberCache.getInstance().clearRoomCache(roomId);
+        roomId = "";
     }
 
     @Override
@@ -688,7 +734,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void onLeaveChannel() {
-//        userJoinedList.remove(BaseApplication.getAccount());
+        userJoinedList.remove(BaseApplication.getAccount());
     }
 
     @Override
@@ -704,10 +750,15 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     public void onUserLeave(String s, int i) {
         // 用户离开频道，如果是有权限用户，移除下画布
         masterVideoLayout.removeAllViews();
+        videoLayout.removeAllViews();
+        userJoinedList.clear();
+        clearChatRoom();
+        updateRTSFragment();
 //        ChatRoomMemberCache.getInstance().removePermissionMem(roomId, s);
 //        videoListener.onUserLeave(s);
-        userJoinedList.remove(s);
+
     }
+
 
     @Override
     public void onProtocolIncompatible(int i) {
@@ -845,7 +896,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     }
 
     private void registerRTSObservers(String sessionName, boolean register) {
-        this.sessionName = sessionName;
         RTSManager2.getInstance().observeChannelState(sessionName, channelStateObserver, register);
         RTSManager2.getInstance().observeReceiveData(sessionName, receiveDataObserver, register);
     }
@@ -857,19 +907,19 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
         @Override
         public void onConnectResult(String localSessionId, RTSTunnelType tunType, long channelId, int code, String recordFile) {
-            Toast.makeText(InteractiveLiveActivity.this, "onConnectResult, tunType=" + tunType.toString() +
-                    ", channelId=" + channelId + ", code=" + code, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(InteractiveLiveActivity.this, "onConnectResult, tunType=" + tunType.toString() +
+//                    ", channelId=" + channelId + ", code=" + code, Toast.LENGTH_SHORT).show();
             if (code != 200) {
-                RTSManager2.getInstance().leaveSession(sessionId, null);
+                RTSManager2.getInstance().leaveSession(roomId, null);
                 return;
             }
 
             List<Transaction> cache = new ArrayList<>(1);
             // 非主播进入房间，发送同步请求，请求主播向他同步之前的白板笔记
             Toast.makeText(InteractiveLiveActivity.this, "send sync request", Toast.LENGTH_SHORT).show();
-            TransactionCenter.getInstance().onNetWorkChange(sessionId, false);
+            TransactionCenter.getInstance().onNetWorkChange(roomId, false);
             cache.add(new Transaction().makeSyncRequestTransaction());
-            TransactionCenter.getInstance().sendToRemote(sessionId, null, cache);
+            TransactionCenter.getInstance().sendToRemote(roomId, null, cache);
         }
 
         @Override
@@ -922,7 +972,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     private Observer<RTSTunData> receiveDataObserver = new Observer<RTSTunData>() {
         @Override
         public void onEvent(RTSTunData rtsTunData) {
-            Logger.e("receive data");
+//            Logger.e("receive data");
             String data = "[parse bytes error]";
             try {
                 data = new String(rtsTunData.getData(), 0, rtsTunData.getLength(), "UTF-8");
@@ -933,4 +983,62 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             TransactionCenter.getInstance().onReceive(roomId, rtsTunData.getAccount(), data);
         }
     };
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                screenSwitchUtils.start(InteractiveLiveActivity.this);
+            }
+        }, 1000);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        screenSwitchUtils.stop();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (screenSwitchUtils.isPortrait()) {
+            WindowManager.LayoutParams attrs = getWindow().getAttributes();
+            attrs.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            getWindow().setAttributes(attrs);
+            // 取消全屏设置
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+
+            bottomLayout.setVisibility(View.GONE);
+            ViewGroup.LayoutParams params = viewLayout.getLayoutParams();
+            params.height = ScreenUtils.getScreenWidth(InteractiveLiveActivity.this) * 3 / 5;
+            viewLayout.setLayoutParams(params);
+
+        } else {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            bottomLayout.setVisibility(View.VISIBLE);
+            ViewGroup.LayoutParams params = viewLayout.getLayoutParams();
+            params.height = -1;
+            viewLayout.setLayoutParams(params);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!screenSwitchUtils.isPortrait()) {
+            Logger.e("orta 返回竖屏");
+            screenSwitchUtils.toggleScreen();
+//            if (floatFragment != null) {
+//                floatFragment.setPortrait(true);
+//            }
+            return;
+        }
+        if (inputPanel.isEmojiShow()) {
+            inputPanel.closeEmojiAndInput();
+            return;
+        }
+        super.onBackPressed();
+    }
 }

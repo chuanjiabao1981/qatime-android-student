@@ -191,7 +191,6 @@ public class FragmentInteractiveBoard extends BaseFragment implements View.OnCli
     @Override
     public boolean onNetWorkChange(boolean isCreator) {
         initView();
-        doodleView.clearAll();
         return true;
     }
 
@@ -210,6 +209,7 @@ public class FragmentInteractiveBoard extends BaseFragment implements View.OnCli
             chooseColor.setBackgroundResource(R.mipmap.choose_color_disable);
             chooseColor.setEnabled(false);
             playBack.setEnabled(false);
+            doodleView.clearAll();
             doodleView.setEnableView(false);
             joinTipText.setVisibility(View.VISIBLE);
         }

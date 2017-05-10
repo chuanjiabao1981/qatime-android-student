@@ -23,6 +23,7 @@ import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.InteractCourseDetailBean;
 import libraryextra.bean.TeacherBean;
+import libraryextra.transformation.GlideRoundTransform;
 import libraryextra.utils.StringUtils;
 import libraryextra.view.ListViewForScrollView;
 
@@ -148,7 +149,7 @@ public class FragmentInteractiveDetails extends BaseFragment {
         teacherAdapter = new CommonAdapter<TeacherBean>(getActivity(), teacherList, R.layout.item_interactive_details) {
             @Override
             public void convert(ViewHolder holder, TeacherBean item, int position) {
-                Glide.with(getActivity()).load(item.getAvatar_url()).placeholder(R.mipmap.error_header).crossFade().into((ImageView) holder.getView(R.id.image));
+                Glide.with(getActivity()).load(item.getAvatar_url()).placeholder(R.mipmap.error_header).crossFade().transform(new GlideRoundTransform(getActivity())).into((ImageView) holder.getView(R.id.image));
 
                 holder.setText(R.id.name, item.getName())
                         .setText(R.id.sex, getSex(item.getGender()))

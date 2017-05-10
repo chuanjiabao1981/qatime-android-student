@@ -26,8 +26,7 @@ import libraryextra.bean.Announcements;
  * @Describe
  */
 
-public class FragmentInteractiveAnnouncements extends BaseFragment{
-    private PullToRefreshListView listView;
+public class FragmentInteractiveAnnouncements extends BaseFragment {
     private CommonAdapter<Announcements.DataBean.AnnouncementsBean> adapter;
     private List<Announcements.DataBean.AnnouncementsBean> items = new ArrayList<>();
     private boolean hasLoad = false;
@@ -47,10 +46,11 @@ public class FragmentInteractiveAnnouncements extends BaseFragment{
             }
         }
     };
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return View.inflate(getActivity(), R.layout.fragment_interactive_announcements,null);
+        return View.inflate(getActivity(), R.layout.fragment_interactive_announcements, null);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class FragmentInteractiveAnnouncements extends BaseFragment{
     }
 
     private void initview() {
-        listView = (PullToRefreshListView) findViewById(R.id.list);
+        PullToRefreshListView listView = (PullToRefreshListView) findViewById(R.id.list);
         View empty = View.inflate(getActivity(), R.layout.empty_view, null);
         TextView textEmpty = (TextView) empty.findViewById(R.id.text_empty);
         textEmpty.setText(R.string.no_course_announcements);
@@ -96,4 +96,9 @@ public class FragmentInteractiveAnnouncements extends BaseFragment{
         listView.setAdapter(adapter);
     }
 
+    public void setData(List<Announcements.DataBean.AnnouncementsBean> announcements) {
+        items.clear();
+        items.addAll(announcements);
+        hd.postDelayed(runnable, 200);
+    }
 }

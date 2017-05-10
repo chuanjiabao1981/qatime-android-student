@@ -41,6 +41,7 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/bottom_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/view_layout"
@@ -80,7 +81,7 @@
             android:visibility="gone" />
     </FrameLayout>
 
-    <cn.qatime.player.view.VideoLayout
+    <cn.qatime.player.view.VideoFrameLayout
         android:id="@+id/video_layout"
         android:layout_width="160dp"
         android:layout_height="90dp"
@@ -124,6 +125,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:padding="10dp"
+                android:scaleType="center"
                 android:src="@mipmap/video_on"
                 android:visibility="gone" />
 
@@ -132,6 +134,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:padding="10dp"
+                android:scaleType="center"
                 android:src="@mipmap/audio_on"
                 android:visibility="gone" />
         </LinearLayout>

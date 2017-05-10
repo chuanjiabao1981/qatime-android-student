@@ -597,7 +597,7 @@
     <string name="no_course_name">暂无辅导班数据</string>
     <string name="lastest">最新</string>
     <string name="hottest">最热</string>
-    <string name="no_course_announcements">暂无辅导班公告</string>
+    <string name="no_course_announcements">暂无公告</string>
     <string name="get_order_info_error">订单信息获取失败</string>
     <string name="start_time">开始时间</string>
     <string name="end_time">结束时间</string>
