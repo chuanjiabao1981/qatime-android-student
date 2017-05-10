@@ -175,10 +175,11 @@ public class MainActivity extends BaseFragmentActivity {
                     PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
                     Logger.e(bean.toString());
                     String name = bean.getData().getName();
+                    String url = bean.getData().getAvatar_url();
                     String grade = bean.getData().getGrade();
                     String province = bean.getData().getProvince();
                     String city = bean.getData().getCity();
-                    if (StringUtils.isNullOrBlanK(name) || StringUtils.isNullOrBlanK(grade) || StringUtils.isNullOrBlanK(province) || StringUtils.isNullOrBlanK(city)) {
+                    if (StringUtils.isNullOrBlanK(url) ||StringUtils.isNullOrBlanK(name) || StringUtils.isNullOrBlanK(grade) || StringUtils.isNullOrBlanK(province) || StringUtils.isNullOrBlanK(city)) {
                         Toast.makeText(MainActivity.this, getResourceString(R.string.please_set_information), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(MainActivity.this, RegisterPerfectActivity.class);
                         startActivity(intent);

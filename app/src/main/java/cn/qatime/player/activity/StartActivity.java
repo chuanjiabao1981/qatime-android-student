@@ -256,7 +256,7 @@ public class StartActivity extends BaseActivity implements View.OnClickListener 
         addToRequestQueue(request);
     }
 
-    //年级列表
+    //省份列表
     public void getProviceslist() {
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/provinces", null,
@@ -285,7 +285,7 @@ public class StartActivity extends BaseActivity implements View.OnClickListener 
         addToRequestQueue(request);
     }
 
-    //年级列表
+    //城市列表
     public void getCitylist() {
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,

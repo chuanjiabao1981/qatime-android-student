@@ -55,7 +55,7 @@ public class RegionSelectActivity1 extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_school_select);
+        setContentView(R.layout.activity_region_select);
         setTitles("选择地区");
 //        currentProvince = (ProvincesBean.DataBean) getIntent().getSerializableExtra("region_province");
 //        currentCity = (CityBean.Data) getIntent().getSerializableExtra("region_city");
