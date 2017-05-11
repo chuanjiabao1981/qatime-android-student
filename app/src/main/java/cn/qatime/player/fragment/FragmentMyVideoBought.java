@@ -74,7 +74,6 @@ public class FragmentMyVideoBought extends BaseFragment {
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         Intent intent = new Intent(getActivity(),VideoCoursesPlayActivity.class);
                             intent.putExtra("id", item.getId());
                             startActivity(intent);

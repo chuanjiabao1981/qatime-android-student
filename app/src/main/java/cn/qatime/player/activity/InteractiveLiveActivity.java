@@ -102,17 +102,12 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     private RelativeLayout viewLayout;
     private FrameLayout masterVideoLayout;
     private VideoFrameLayout videoLayout;
-    private ImageView fullScreenImage;
     private RelativeLayout backLayout;
 
-    private TextView roomIdText;
+    //    private TextView roomIdText;
     private ImageView videoPermission;
     private ImageView audioPermission;
     //    private TextView onlineStatus;
-    private FrameLayout fullScreenLayout;
-    private FrameLayout fullScreenView;
-
-    private ImageView cancelFullScreenImage;
     /**
      * 聊天室基本信息
      */
@@ -133,7 +128,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     private int id;
     private FragmentInteractiveMessage messageFragment;
     private ScreenSwitchUtils screenSwitchUtils;
-    private View bottomLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -227,17 +221,13 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
     private void initView() {
         viewLayout = (RelativeLayout) findViewById(R.id.view_layout);
-        bottomLayout = findViewById(R.id.bottom_layout);
+        ViewGroup.LayoutParams params = viewLayout.getLayoutParams();
+        params.height = ScreenUtils.getScreenWidth(this) * 3 / 5;
+        viewLayout.setLayoutParams(params);
         masterVideoLayout = (FrameLayout) findViewById(R.id.master_video_layout);
-        fullScreenImage = (ImageView) findViewById(R.id.full_screen_image);
         backLayout = (RelativeLayout) findViewById(R.id.back_layout);
-        roomIdText = (TextView) findViewById(R.id.room_id);
         videoPermission = (ImageView) findViewById(R.id.video_permission);
         audioPermission = (ImageView) findViewById(R.id.audio_permission);
-//        onlineStatus = (TextView) findViewById(R.id.online_status);
-        fullScreenLayout = (FrameLayout) findViewById(R.id.full_screen_layout);
-        fullScreenView = (FrameLayout) findViewById(R.id.full_screen_view);
-        cancelFullScreenImage = (ImageView) findViewById(R.id.cancel_full_screen_image);
         videoLayout = (VideoFrameLayout) findViewById(R.id.video_layout);
         if (!StringUtils.isNullOrBlanK(sessionId)) {
             TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
@@ -1011,16 +1001,16 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             // 取消全屏设置
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
-            bottomLayout.setVisibility(View.GONE);
             ViewGroup.LayoutParams params = viewLayout.getLayoutParams();
             params.height = ScreenUtils.getScreenWidth(InteractiveLiveActivity.this) * 3 / 5;
+            params.width = ScreenUtils.getScreenWidth(InteractiveLiveActivity.this);
             viewLayout.setLayoutParams(params);
 
         } else {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            bottomLayout.setVisibility(View.VISIBLE);
             ViewGroup.LayoutParams params = viewLayout.getLayoutParams();
             params.height = -1;
+            params.width = -1;
             viewLayout.setLayoutParams(params);
         }
     }
