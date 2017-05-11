@@ -151,7 +151,6 @@ public class PayPSWChangeActivity extends BaseActivity implements View.OnClickLi
                             protected void onSuccess(JSONObject response) {
                                 Toast.makeText(PayPSWChangeActivity.this, R.string.change_pay_password_success, Toast.LENGTH_SHORT).show();
                                 BaseApplication.getCashAccount().getData().setPassword_set_at(System.currentTimeMillis()/1000);
-                                EventBus.getDefault().post(BusEvent.PAY_PASSWORD_CHANGE);
                                 EventBus.getDefault().post(BusEvent.REFRESH_CASH_ACCOUNT);
                                 finish();
                             }

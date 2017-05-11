@@ -196,8 +196,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 close.setOnClickListener(this);
                 flag = true;
             }
-        } else {
-            EventBus.getDefault().post(BusEvent.REFRESH_CASH_ACCOUNT);
         }
     }
 

@@ -94,8 +94,6 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
                 price1 = "0" + price1;
             }
             consumption.setText(price1);
-        } else {
-            EventBus.getDefault().post(BusEvent.REFRESH_CASH_ACCOUNT);
         }
     }
 

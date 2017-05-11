@@ -83,8 +83,6 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
                 price = "0" + price;
             }
             balance.setText(price);
-        } else {
-            EventBus.getDefault().post(BusEvent.REFRESH_CASH_ACCOUNT);
         }
     }
 

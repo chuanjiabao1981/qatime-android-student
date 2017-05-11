@@ -136,7 +136,7 @@ public class FragmentMyVideoBought extends BaseFragment {
         map.put("per_page", "10");
         map.put("sell_type", "charge");
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/video_courses", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/video_courses/list", map), null,
                 new VolleyListener(getActivity()) {
 
 
