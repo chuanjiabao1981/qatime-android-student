@@ -77,23 +77,11 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
         initView();
 
         screenSwitchUtils = ScreenSwitchUtils.init(this.getApplicationContext());
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    if (isCreated) {
-//                        createMedia("http://192.168.1.136:8080/media/28.mp4");
-//                    }
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }, 5000);
         initData();
     }
 
     private void initData() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlVideoCourses + id, null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlVideoCourses + id + "/detail", null,
                 new VolleyListener(VideoCoursesPlayActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {

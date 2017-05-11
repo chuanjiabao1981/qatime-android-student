@@ -69,31 +69,26 @@ public class FragmentMyVideoBought extends BaseFragment {
         adapter = new CommonAdapter<MyVideoClassBean.DataBean>(getActivity(), list, R.layout.item_fragment_my_video_bought) {
             @Override
             public void convert(ViewHolder helper, final MyVideoClassBean.DataBean item, int position) {
-
-
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         Intent intent = new Intent(getActivity(), VideoCoursesPlayActivity.class);
-                        intent.putExtra("id", item.getId());
+                        intent.putExtra("id", item.getVideo_course().getId());
                         intent.putExtra("tasting", false);
                         startActivity(intent);
                     }
                 });
-                Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
-                helper.setText(R.id.name, item.getName());
-                helper.setText(R.id.subject, item.getSubject());
-                helper.setText(R.id.teacher, "/" + item.getTeacher().getName());
+                Glide.with(getActivity()).load(item.getVideo_course().getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
+                helper.setText(R.id.name, item.getVideo_course().getName());
+                helper.setText(R.id.subject, item.getVideo_course().getSubject());
+                helper.setText(R.id.teacher, "/" + item.getVideo_course().getTeacher_name());
                 if (item.getStatus().equals(Constant.CourseStatus.completed) || item.getStatus().equals(Constant.CourseStatus.finished)) {
                     helper.setText(R.id.progress, getString(R.string.all_class_has_over));
                 } else {
-                    helper.setText(R.id.progress, getString(R.string.progress, item.getClosed_lessons_count(), item.getPreset_lesson_count()));
+                    helper.setText(R.id.progress, getString(R.string.progress, item.getUsed_count(), item.getBuy_count()));
                 }
-                helper.setText(R.id.grade, item.getGrade());
+                helper.setText(R.id.grade, item.getVideo_course().getGrade());
             }
-
-
         };
         listView.setAdapter(adapter);
 
@@ -115,7 +110,7 @@ public class FragmentMyVideoBought extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), VideoCoursesActivity.class);
-                intent.putExtra("id", list.get(position - 1).getId());
+                intent.putExtra("id", list.get(position - 1).getVideo_course().getId());
                 startActivity(intent);
             }
         });

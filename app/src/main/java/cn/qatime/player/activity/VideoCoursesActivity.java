@@ -66,7 +66,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
     private ViewPager mViewPager;
     private int id;
     private VideoCoursesDetailsBean data;
-    DecimalFormat df = new DecimalFormat("#.00");
+    private DecimalFormat df = new DecimalFormat("#.00");
     private TextView name;
     private TextView price;
     private TextView transferPrice;
@@ -74,7 +74,6 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
     private RelativeLayout handleLayout;
     private Button auditionStart;
     private LinearLayout startStudyView;
-    private Button startStudy;
     private AlertDialog alertDialog;
     private TextView freeTaste;
     private TextView joinCheap;
@@ -90,7 +89,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
     }
 
     private void initData() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlVideoCourses + id, null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlVideoCourses + id+"/detail", null,
                 new VolleyListener(VideoCoursesActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -182,7 +181,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
         auditionStart = (Button) findViewById(R.id.audition_start);
         Button pay = (Button) findViewById(R.id.pay);
         startStudyView = (LinearLayout) findViewById(R.id.start_study_view);
-        startStudy = (Button) findViewById(R.id.start_study);
+        Button startStudy = (Button) findViewById(R.id.start_study);
 
         auditionStart.setOnClickListener(this);
         pay.setOnClickListener(this);

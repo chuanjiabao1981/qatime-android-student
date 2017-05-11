@@ -65,12 +65,10 @@ public class FragmentMyTasteVideo extends BaseFragment {
         adapter = new CommonAdapter<MyVideoClassBean.DataBean>(getActivity(), list, R.layout.item_fragment_my_taste_video) {
             @Override
             public void convert(ViewHolder helper, final MyVideoClassBean.DataBean item, int position) {
-
-
-                helper.setText(R.id.name, item.getName());
-                helper.setText(R.id.subject, item.getSubject());
-                helper.setText(R.id.teacher, "/" + item.getTeacher_name());
-                helper.setText(R.id.grade, item.getGrade());
+                helper.setText(R.id.name, item.getVideo_course().getName());
+                helper.setText(R.id.subject, item.getVideo_course().getSubject());
+                helper.setText(R.id.teacher, "/" + item.getVideo_course().getTeacher_name());
+                helper.setText(R.id.grade, item.getVideo_course().getGrade());
             }
         };
         listView.setAdapter(adapter);
@@ -92,7 +90,7 @@ public class FragmentMyTasteVideo extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), VideoCoursesActivity.class);
-                intent.putExtra("id", list.get(position - 1).getId());
+                intent.putExtra("id", list.get(position - 1).getVideo_course().getId());
                 startActivity(intent);
             }
         });
@@ -125,7 +123,7 @@ public class FragmentMyTasteVideo extends BaseFragment {
         map.put("per_page", "10");
         map.put("cate", "taste");
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/video_courses/tasting", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/video_courses/tasting_list", map), null,
                 new VolleyListener(getActivity()) {
 
                     @Override
