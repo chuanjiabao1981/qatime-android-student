@@ -74,38 +74,38 @@ public class FragmentVideoCoursesDetail extends BaseFragment {
 
 
     public void setData(final VideoCoursesDetailsBean data) {
-        className.setText(data.getData().getName());
-        subject.setText((data.getData().getSubject() == null ? "" : data.getData().getSubject()));
-        grade.setText((data.getData().getGrade() == null ? "" : data.getData().getGrade()));
-        totalClass.setText(getString(R.string.lesson_count, data.getData().getPreset_lesson_count()));
-        if (!StringUtils.isNullOrBlanK(data.getData().getObjective())) {
-            target.setText(data.getData().getObjective());
+        className.setText(data.getData().getVideo_course().getName());
+        subject.setText((data.getData().getVideo_course().getSubject() == null ? "" : data.getData().getVideo_course().getSubject()));
+        grade.setText((data.getData().getVideo_course().getGrade() == null ? "" : data.getData().getVideo_course().getGrade()));
+        totalClass.setText(getString(R.string.lesson_count, data.getData().getVideo_course().getVideo_lessons_count()));
+        if (!StringUtils.isNullOrBlanK(data.getData().getVideo_course().getObjective())) {
+            target.setText(data.getData().getVideo_course().getObjective());
         }
-        if (!StringUtils.isNullOrBlanK(data.getData().getSuit_crowd())) {
-            suitable.setText(data.getData().getSuit_crowd());
+        if (!StringUtils.isNullOrBlanK(data.getData().getVideo_course().getSuit_crowd())) {
+            suitable.setText(data.getData().getVideo_course().getSuit_crowd());
         }
-        totalTime.setText("总时长" + DateUtils.stringForTime(data.getData().getTotal_duration()));
-        sex.setImageResource("male".equals(data.getData().getTeacher().getGender()) ? R.mipmap.male : R.mipmap.female);
-        name.setText(data.getData().getTeacher().getName());
-        if (!StringUtils.isNullOrBlanK(data.getData().getTeacher().getTeaching_years())) {
-            if (data.getData().getTeacher().getTeaching_years().equals("within_three_years")) {
+        totalTime.setText("总时长" + DateUtils.stringForTime(data.getData().getVideo_course().getTotal_duration()));
+        sex.setImageResource("male".equals(data.getData().getVideo_course().getTeacher().getGender()) ? R.mipmap.male : R.mipmap.female);
+        name.setText(data.getData().getVideo_course().getTeacher().getName());
+        if (!StringUtils.isNullOrBlanK(data.getData().getVideo_course().getTeacher().getTeaching_years())) {
+            if (data.getData().getVideo_course().getTeacher().getTeaching_years().equals("within_three_years")) {
                 teachingYears.setText(getResourceString(R.string.within_three_years));
-            } else if (data.getData().getTeacher().getTeaching_years().equals("within_ten_years")) {
+            } else if (data.getData().getVideo_course().getTeacher().getTeaching_years().equals("within_ten_years")) {
                 teachingYears.setText(getResourceString(R.string.within_ten_years));
-            } else if (data.getData().getTeacher().getTeaching_years().equals("within_twenty_years")) {
+            } else if (data.getData().getVideo_course().getTeacher().getTeaching_years().equals("within_twenty_years")) {
                 teachingYears.setText(getResourceString(R.string.within_twenty_years));
             } else {
                 teachingYears.setText(getResourceString(R.string.more_than_ten_years));
             }
         }
-        String body = StringUtils.isNullOrBlanK(data.getData().getTeacher().getDesc()) ? getString(R.string.no_desc) : data.getData().getTeacher().getDesc();
+        String body = StringUtils.isNullOrBlanK(data.getData().getVideo_course().getTeacher().getDesc()) ? getString(R.string.no_desc) : data.getData().getVideo_course().getTeacher().getDesc();
         body = body.replace("\r\n", "<br>");
         String css = "<style>* {color:#666666;margin:0;padding:0;}</style>";//默认color
         teacherDescribe.loadDataWithBaseURL(null, css + body, "text/html", "UTF-8", null);
         SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getFilesDir() + "/school.txt"), SchoolBean.class);
         if (schoolBean != null && schoolBean.getData() != null) {
             for (int i = 0; i < schoolBean.getData().size(); i++) {
-                if (data.getData().getTeacher().getSchool() == schoolBean.getData().get(i).getId()) {
+                if (data.getData().getVideo_course().getTeacher().getSchool() == schoolBean.getData().get(i).getId()) {
                     school.setText(schoolBean.getData().get(i).getName());
                     break;
                 }
@@ -114,12 +114,12 @@ public class FragmentVideoCoursesDetail extends BaseFragment {
             school.setText(getString(R.string.not_available));
         }
 
-        Glide.with(getActivity()).load(data.getData().getTeacher().getAvatar_url()).placeholder(R.mipmap.error_header).crossFade().into(image);
+        Glide.with(getActivity()).load(data.getData().getVideo_course().getTeacher().getAvatar_url()).placeholder(R.mipmap.error_header).crossFade().into(image);
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), TeacherDataActivity.class);
-                intent.putExtra("teacherId", data.getData().getTeacher().getId());
+                intent.putExtra("teacherId", data.getData().getVideo_course().getTeacher().getId());
                 startActivity(intent);
             }
         });

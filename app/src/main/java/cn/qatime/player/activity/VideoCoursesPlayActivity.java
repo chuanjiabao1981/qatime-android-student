@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.bean.VideoCoursesDetailsBean;
+import cn.qatime.player.bean.VideoPlayBean;
 import cn.qatime.player.fragment.FragmentVideoCoursesDetail;
 import cn.qatime.player.fragment.FragmentVideoCoursesList;
 import cn.qatime.player.fragment.VideoCoursesFloatFragment;
@@ -88,9 +89,9 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
                         data = JsonUtils.objectFromJson(response.toString(), VideoCoursesDetailsBean.class);
 
                         if (data != null && data.getData() != null) {
-                            playingData = data.getData().getVideo_lessons().get(0);
-                            ((FragmentVideoCoursesList) fragBaseFragments.get(0)).setData(data.getData().getVideo_lessons());
-                            floatFragment.setData(data.getData().getVideo_lessons());
+                            playingData = data.getData().getVideo_course().getVideo_lessons().get(0);
+                            ((FragmentVideoCoursesList) fragBaseFragments.get(0)).setData(data.getData().getVideo_course().getVideo_lessons());
+                            floatFragment.setData(data.getData().getVideo_course().getVideo_lessons());
                             ((FragmentVideoCoursesDetail) fragBaseFragments.get(1)).setData(data);
                         }
                     }
@@ -328,13 +329,44 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
 //        }
         if (playingData != null) {
             this.playingData = playingData;
-            releaseMediaPlayer();
-            if (isCreated) {
-                try {
-                    createMedia(playingData.getVideo().getName_url());
-                } catch (IOException e) {
-                    e.printStackTrace();
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlVideoLessons + playingData.getId() + "/play", null,
+                    new VolleyListener(VideoCoursesPlayActivity.this) {
+                        @Override
+                        protected void onSuccess(JSONObject response) {
+                            VideoPlayBean videoPlayBean = JsonUtils.objectFromJson(response.toString(), VideoPlayBean.class);
+                            if (videoPlayBean != null && videoPlayBean.getData().getVideo_lesson() != null && videoPlayBean.getData().getVideo_lesson().getVideo() != null) {
+                                play(videoPlayBean.getData().getVideo_lesson().getVideo().getName_url());
+                            }else{
+                                Toast.makeText(VideoCoursesPlayActivity.this, "状态错误", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        protected void onError(JSONObject response) {
+                        }
+
+                        @Override
+                        protected void onTokenOut() {
+                            tokenOut();
+                        }
+                    }, new VolleyErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    super.onErrorResponse(volleyError);
                 }
+            });
+            addToRequestQueue(request);
+        }
+    }
+
+    private void play(String nameUrl) {
+
+        releaseMediaPlayer();
+        if (isCreated) {
+            try {
+                createMedia(nameUrl);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

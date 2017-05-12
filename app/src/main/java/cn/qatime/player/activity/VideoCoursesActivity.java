@@ -89,60 +89,55 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
     }
 
     private void initData() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlVideoCourses + id+"/detail", null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlVideoCourses + id + "/detail", null,
                 new VolleyListener(VideoCoursesActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
                         data = JsonUtils.objectFromJson(response.toString(), VideoCoursesDetailsBean.class);
 
-                        if (data != null && data.getData() != null) {
+                        if (data != null && data.getData() != null && data.getData().getVideo_course() != null) {
                             handleLayout.setVisibility(View.VISIBLE);
-                            name.setText(data.getData().getName());
-                            setTitles(data.getData().getName());
-                            studentNumber.setText("学习人数" + data.getData().getBuy_tickets_count());
+                            name.setText(data.getData().getVideo_course().getName());
+                            setTitles(data.getData().getVideo_course().getName());
+                            studentNumber.setText("学习人数" + data.getData().getVideo_course().getBuy_tickets_count());
 
-                            if (data.getData().getSell_type().equals("charge")) {
-                                String price;
-                                if (Constant.CourseStatus.finished.equals(data.getData().getStatus()) || Constant.CourseStatus.completed.equals(data.getData().getStatus())) {
-                                    price = df.format(data.getData().getPrice());
-                                } else {
-                                    price = df.format(data.getData().getCurrent_price());
-                                }
+                            if (data.getData().getVideo_course().getSell_type().equals("charge")) {
+                                String price = df.format(Float.valueOf(data.getData().getVideo_course().getPrice()));
                                 if (price.startsWith(".")) {
                                     price = "0" + price;
                                 }
                                 VideoCoursesActivity.this.price.setText("￥" + price);
-                                if (Constant.CourseStatus.teaching.equals(data.getData().getStatus())) {
+                                if (Constant.CourseStatus.teaching.equals(data.getData().getVideo_course().getStatus())) {
                                     transferPrice.setVisibility(View.VISIBLE);
                                 } else {
                                     transferPrice.setVisibility(View.GONE);
                                 }
-                                if (data.getData().getTaste_count() > 0) {//显示进入试听按钮
+                                if (data.getData().getVideo_course().getTaste_count() > 0) {//显示进入试听按钮
                                     auditionStart.setVisibility(View.VISIBLE);
                                 } else {
                                     auditionStart.setVisibility(View.GONE);
                                 }
 
-                                if (data.getData().getIs_bought()) {
+                                if (data.getData().getTicket().getStatus().equals("active")) {
                                     startStudyView.setVisibility(View.VISIBLE);
                                 }
 
-                                if (Constant.CourseStatus.finished.equals(data.getData().getStatus()) || Constant.CourseStatus.completed.equals(data.getData().getStatus())) {
+                                if (Constant.CourseStatus.finished.equals(data.getData().getVideo_course().getStatus()) || Constant.CourseStatus.completed.equals(data.getData().getVideo_course().getStatus())) {
                                     handleLayout.setVisibility(View.GONE);//已结束的课程隐藏操作按钮
                                 }
 
-                            } else if (data.getData().getSell_type().equals("free")) {
+                            } else if (data.getData().getVideo_course().getSell_type().equals("free")) {
                                 transferPrice.setText("免费");
                                 transferPrice.setVisibility(View.VISIBLE);
                                 price.setVisibility(View.GONE);
                                 startStudyView.setVisibility(View.VISIBLE);
                             }
 
-                            if (data.getData().getIcons() != null) {
-                                if (!data.getData().getIcons().isFree_taste()) {
+                            if (data.getData().getVideo_course().getIcons() != null) {
+                                if (!data.getData().getVideo_course().getIcons().isFree_taste()) {
                                     freeTaste.setVisibility(View.GONE);
                                 }
-                                if (!data.getData().getIcons().isJoin_cheap()) {
+                                if (!data.getData().getVideo_course().getIcons().isJoin_cheap()) {
                                     joinCheap.setVisibility(View.GONE);
                                 }
                             }
@@ -235,18 +230,18 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
 
     @Override
     public void onClick(View v) {
-        if (data == null || data.getData() == null) {
+        if (data == null || data.getData().getVideo_course() == null) {
             return;
         }
         Intent intent;
         switch (v.getId()) {
             case R.id.audition_start:
                 if (BaseApplication.isLogined()) {
-                    if (!(data.getData().getIs_tasting() || data.getData().isTasted())) { //不在试听状态则加入试听
+                    if (data.getData().getTicket() == null) {//未加入试听
                         joinAudition();
                     } else {
                         intent = new Intent(VideoCoursesActivity.this, VideoCoursesPlayActivity.class);
-                        intent.putExtra("id", data.getData().getId());
+                        intent.putExtra("id", data.getData().getVideo_course().getId());
                         intent.putExtra("tasting", true);
                         startActivity(intent);
                     }
@@ -258,13 +253,18 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                 break;
             case R.id.start_study:
                 if (BaseApplication.isLogined()) {
-                    if (!data.getData().getIs_bought()) {
-                        if (data.getData().getSell_type().equals("free")) {
+                    if (data.getData().getVideo_course().getSell_type().equals("free")) {
+                        if (data.getData().getTicket() == null) {//免费课程未购买则购买
                             joinMyFreeVideo();//获取免费课程票号
+                        }else{//已购买进入播放页
+                            intent = new Intent(VideoCoursesActivity.this, VideoCoursesPlayActivity.class);
+                            intent.putExtra("id", data.getData().getVideo_course().getId());
+                            intent.putExtra("tasting", false);
+                            startActivity(intent);
                         }
                     } else {
                         intent = new Intent(VideoCoursesActivity.this, VideoCoursesPlayActivity.class);
-                        intent.putExtra("id", data.getData().getId());
+                        intent.putExtra("id", data.getData().getVideo_course().getId());
                         intent.putExtra("tasting", false);
                         startActivity(intent);
                     }
@@ -276,7 +276,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                 break;
             case R.id.pay:
                 if (BaseApplication.isLogined()) {
-                    if ("teaching".equals(data.getData().getStatus())) {
+                    if ("teaching".equals(data.getData().getVideo_course().getStatus())) {
                         if (alertDialog == null) {
                             View view = View.inflate(VideoCoursesActivity.this, R.layout.dialog_cancel_or_confirm, null);
                             Button cancel = (Button) view.findViewById(R.id.cancel);
@@ -322,12 +322,12 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
         intent.putExtra("id", id);
         intent.putExtra("coupon", getIntent().getStringExtra("coupon"));
         OrderPayBean bean = new OrderPayBean();
-        bean.name = data.getData().getName();
-        bean.subject = data.getData().getSubject();
-        bean.grade = data.getData().getGrade();
-        bean.classnumber = data.getData().getPreset_lesson_count();
-        bean.teacher = data.getData().getTeacher().getName();
-        bean.current_price = data.getData().getCurrent_price();
+        bean.name = data.getData().getVideo_course().getName();
+        bean.subject = data.getData().getVideo_course().getSubject();
+        bean.grade = data.getData().getVideo_course().getGrade();
+        bean.classnumber = data.getData().getVideo_course().getVideo_lessons_count();
+        bean.teacher = data.getData().getVideo_course().getTeacher().getName();
+        bean.current_price = Float.valueOf(data.getData().getVideo_course().getPrice());
 
         intent.putExtra("data", bean);
         startActivity(intent);
@@ -348,9 +348,10 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
 
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        data.getData().setIs_bought(true);
+                        data.getData().setTicket(new VideoCoursesDetailsBean.DataBean.TicketBean());
+                        data.getData().getTicket().setStatus("active");
                         Intent intent = new Intent(VideoCoursesActivity.this, VideoCoursesPlayActivity.class);
-                        intent.putExtra("id", data.getData().getId());
+                        intent.putExtra("id", data.getData().getVideo_course().getId());
                         intent.putExtra("tasting", false);
                         startActivity(intent);
                         if (StringUtils.isNullOrBlanK(BaseApplication.getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getAccountToken())) {
@@ -451,10 +452,10 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
 
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        //已加入试听
-                        data.getData().setIs_tasting(true);
+                        data.getData().setTicket(new VideoCoursesDetailsBean.DataBean.TicketBean());
+                        data.getData().getTicket().setStatus("inactive");
                         Intent intent = new Intent(VideoCoursesActivity.this, VideoCoursesPlayActivity.class);
-                        intent.putExtra("id", data.getData().getId());
+                        intent.putExtra("id", data.getData().getVideo_course().getId());
                         intent.putExtra("tasting", true);
                         startActivity(intent);
                         if (StringUtils.isNullOrBlanK(BaseApplication.getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getAccountToken())) {

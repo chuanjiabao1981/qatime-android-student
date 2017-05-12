@@ -56,14 +56,14 @@ public class FragmentVideoCoursesClassList extends BaseFragment {
             public void convert(ViewHolder holder, VideoLessonsBean item, int position) {
                 holder.setText(R.id.name, item.getName());
                 holder.setText(R.id.time, "时长" + item.getVideo().getFormat_tmp_duration());
-                holder.getView(R.id.taste).setVisibility((!data.getData().getIs_bought() && item.isTastable()) ? View.VISIBLE : View.GONE);
+                holder.getView(R.id.taste).setVisibility((!data.getData().getTicket().getStatus().equals("active") && item.isTastable()) ? View.VISIBLE : View.GONE);
             }
         };
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (data.getData().getIs_bought()) {
+                if (data.getData().getTicket().getStatus().equals("active")) {
                     Intent intent = new Intent(getActivity(), VideoCoursesPlayActivity.class);
                     intent.putExtra("id", list.get(position).getVideo_course_id());
                     intent.putExtra("tasting", false);
@@ -84,7 +84,7 @@ public class FragmentVideoCoursesClassList extends BaseFragment {
     public void setData(VideoCoursesDetailsBean data) {
         this.data = data;
         list.clear();
-        list.addAll(data.getData().getVideo_lessons());
+        list.addAll(data.getData().getVideo_course().getVideo_lessons());
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }

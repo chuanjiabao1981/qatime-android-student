@@ -138,8 +138,6 @@ public class PersonalInformationActivity extends BaseActivity {
             grade.setText("");
         }
         String regionStr = "";
-        String province = bean.getData().getProvince();
-        String city = bean.getData().getCity();
         String json = FileUtil.readFile(getFilesDir() + "/provinces.txt").toString();
         ProvincesBean provincesBean = JsonUtils.objectFromJson(json, ProvincesBean.class);
         String json1 = FileUtil.readFile(getFilesDir() + "/cities.txt").toString();
