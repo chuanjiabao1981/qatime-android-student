@@ -344,7 +344,8 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                             couponPriceLayout.setVisibility(View.VISIBLE);
                             couponPrice.setText(data.getData().getPrice());
                             double couponprice = priceNumber - Double.valueOf(data.getData().getPrice());
-                            payprice.setText(" " + couponprice + " ");
+
+                            payprice.setText(" " + df.format(couponprice) + " ");
                         }
 
                     }

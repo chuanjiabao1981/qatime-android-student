@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e9ecf0">
+
+    <com.zhy.android.percent.support.PercentLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:gravity="center_horizontal"-->
+        <!--android:text="正在进行白板演示"-->
+        <!--android:textColor="#333"-->
+        <!--android:textSize="16sp" />-->
+
+        <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="2dp"-->
+        <!--android:gravity="center_horizontal"-->
+        <!--android:text="(请在老师指示下使用白板功能)"-->
+        <!--android:textColor="#ccc"-->
+        <!--android:textSize="14sp" />-->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <cn.qatime.player.im.doodle.DoodleView
+                android:id="@+id/doodleView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp" />
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:background="#fff"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/choose_color"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/choose_black_circle_shape" />
+
+            <ImageView
+                android:id="@+id/play_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:background="@mipmap/rts_back" />
+
+            <TextView
+                android:id="@+id/join_tip_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="@string/join_tip"
+                android:textColor="@color/color_black_999999"
+                android:textSize="13sp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+    </com.zhy.android.percent.support.PercentLinearLayout>
+
+    <LinearLayout
+        android:id="@+id/palette_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:orientation="vertical"
+        android:paddingBottom="56dp"
+        android:paddingLeft="20dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/black_color_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/black_circle_shape" />
+
+        <ImageView
+            android:id="@+id/red_color_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:background="@drawable/red_circle_shape" />
+
+        <ImageView
+            android:id="@+id/yellow_color_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:background="@drawable/yellow_circle_shape" />
+
+        <ImageView
+            android:id="@+id/green_color_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:background="@drawable/green_circle_shape" />
+
+        <ImageView
+            android:id="@+id/blue_color_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:background="@drawable/blue_circle_shape" />
+
+        <ImageView
+            android:id="@+id/purple_color_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:background="@drawable/purple_circle_shape" />
+    </LinearLayout>
+</RelativeLayout>

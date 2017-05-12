@@ -32,5 +32,13 @@
     <!-- Android standard ICS color -->
     <color name="viewfinder_mask">#60000000</color>
     <color name="possible_result_points">#c0ffbd21</color>
+    <color name="black">#000</color>
+    <color name="color_red_d1021c">#d1021c</color>
+    <color name="color_yellow_fddc01">#fddc01</color>
+    <color name="color_green_7dd21f">#7dd21f</color>
+    <color name="color_blue_228bf7">#228bf7</color>
+    <color name="color_purple_9b0df5">#9b0df5</color>
+    <color name="color_black_999999">#999</color>
+    <color name="color_red_ccfa3c55">#ccfa3c55</color>
 
 </resources>

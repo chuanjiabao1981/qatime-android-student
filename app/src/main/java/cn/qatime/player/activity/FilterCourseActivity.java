@@ -1,5 +1,6 @@
 package cn.qatime.player.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -16,6 +17,7 @@ import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.fragment.FragmentFilterClassInteract;
 import cn.qatime.player.fragment.FragmentFilterClassLive;
 import cn.qatime.player.fragment.FragmentFilterClassVideo;
+import cn.qatime.player.utils.Constant;
 
 /**
  * @author Tianhaoranly
@@ -119,6 +121,16 @@ public class FilterCourseActivity extends BaseFragmentActivity implements View.O
             case R.id.tab_text3:
                 pager.setCurrentItem(2);
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
+            //购买完成，刷新列表数据
+            ((FragmentFilterClassInteract) fragBaseFragments.get(1)).getData(0);
+
         }
     }
 }

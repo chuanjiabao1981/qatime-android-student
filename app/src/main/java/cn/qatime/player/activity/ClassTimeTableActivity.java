@@ -133,16 +133,16 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
-        listView.setEmptyView(View.inflate  (ClassTimeTableActivity.this, R.layout.empty_view, null));
+        listView.setEmptyView(View.inflate(ClassTimeTableActivity.this, R.layout.empty_view, null));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if("LiveStudio::Lesson".equals(itemList.get(position-1).getModal_type())){
+                if ("LiveStudio::Lesson".equals(itemList.get(position - 1).getModal_type())) {
                     Intent intent = new Intent(ClassTimeTableActivity.this, RemedialClassDetailActivity.class);
                     intent.putExtra("id", Integer.valueOf(itemList.get(position - 1).getProduct_id()));
                     intent.putExtra("pager", 2);
                     startActivity(intent);
-                }else if("LiveStudio::InteractiveLesson".equals(itemList.get(position-1).getModal_type())){
+                } else if ("LiveStudio::InteractiveLesson".equals(itemList.get(position - 1).getModal_type())) {
                     Intent intent = new Intent(ClassTimeTableActivity.this, InteractCourseDetailActivity.class);
                     intent.putExtra("id", Integer.valueOf(itemList.get(position - 1).getProduct_id()));
                     intent.putExtra("pager", 2);
@@ -168,12 +168,12 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                 helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
-                if("LiveStudio::Lesson".equals(itemList.get(position).getModal_type())){
+                if ("LiveStudio::Lesson".equals(itemList.get(position).getModal_type())) {
                     helper.getView(R.id.modal_type).setBackgroundColor(0xffff4856);
-                    helper.setText(R.id.modal_type,"直播课");
-                }else if("LiveStudio::InteractiveLesson".equals(itemList.get(position).getModal_type())){
+                    helper.setText(R.id.modal_type, "直播课");
+                } else if ("LiveStudio::InteractiveLesson".equals(itemList.get(position).getModal_type())) {
                     helper.getView(R.id.modal_type).setBackgroundColor(0xff4856ff);
-                    helper.setText(R.id.modal_type,"一对一");
+                    helper.setText(R.id.modal_type, "一对一");
                 }
 
 
@@ -184,13 +184,15 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if("LiveStudio::Lesson".equals(itemList.get(position).getModal_type())){
+                        if ("LiveStudio::Lesson".equals(itemList.get(position).getModal_type())) {
                             Intent intent = new Intent(ClassTimeTableActivity.this, NEVideoPlayerActivity.class);
                             intent.putExtra("id", Integer.valueOf(item.getProduct_id()));
                             intent.putExtra("sessionId", item.getChat_team_id());
                             startActivity(intent);
-                        }else if("LiveStudio::InteractiveLesson".equals(itemList.get(position).getModal_type())){
-
+                        } else if ("LiveStudio::InteractiveLesson".equals(itemList.get(position).getModal_type())) {
+                            Intent intent = new Intent(ClassTimeTableActivity.this, InteractiveLiveActivity.class);
+                            intent.putExtra("id", Integer.valueOf(item.getProduct_id()));
+                            intent.putExtra("teamId", item.getChat_team_id());
                         }
 
                     }
@@ -239,12 +241,14 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         }
         return String.valueOf(month);
     }
+
     private String getDay(int day) {
         if (day < 10) {
             return "0" + day;
         }
         return String.valueOf(day);
     }
+
     private void getDate() {
         date = monthDateView.getmSelYear() + "-" + (monthDateView.getmSelMonth() + 1 < 10 ? "0" + (monthDateView.getmSelMonth() + 1) : monthDateView.getmSelMonth() + 1) + "-" +
                 (monthDateView.getmSelDay() < 10 ? "0" + monthDateView.getmSelDay() : monthDateView.getmSelDay());

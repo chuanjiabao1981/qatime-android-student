@@ -67,8 +67,6 @@ import libraryextra.utils.VolleyListener;
  */
 public class FragmentMessageChatNews extends BaseFragment {
 
-    public static final long RECENT_TAG_STICKY = 1; // 联系人置顶tag
-
     private ArrayList<MessageListBean> items;
     private CommonAdapter<MessageListBean> adapter;
     private PullToRefreshListView listView;
