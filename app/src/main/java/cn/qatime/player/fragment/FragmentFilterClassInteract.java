@@ -30,6 +30,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.activity.InteractCourseDetailActivity;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.FilterInteractCourseBean;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
@@ -85,7 +86,7 @@ public class FragmentFilterClassInteract extends BaseFragment {
     /**
      * @param type 0下拉1上啦
      */
-    private void getData(final int type) {
+    public void getData(final int type) {
         Map<String, String> map = new HashMap<>();
         map.put("per_page", "20");
         map.put("page", String.valueOf(page));
@@ -199,7 +200,7 @@ public class FragmentFilterClassInteract extends BaseFragment {
             public void convert(ViewHolder holder, FilterInteractCourseBean.DataBean item, int position) {
                 Glide.with(getActivity()).load(item.getPublicize_url()).crossFade().placeholder(R.mipmap.photo).into((ImageView) holder.getView(R.id.image));
                 List<TeacherBean> teachers = item.getTeachers();
-                StringBuffer teacherNames = new StringBuffer();
+                StringBuilder teacherNames = new StringBuilder();
                 for (int i = 0; i < teachers.size(); i++) {
                     teacherNames.append(teachers.get(0).getName());
                     if (i != teachers.size() - 1) {
@@ -217,7 +218,7 @@ public class FragmentFilterClassInteract extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), InteractCourseDetailActivity.class);
                 intent.putExtra("id", datas.get(position - 1).getId());
-                startActivity(intent);
+                getActivity().startActivityForResult(intent, Constant.REQUEST);
             }
         });
         listview.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {

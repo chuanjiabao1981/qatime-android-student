@@ -41,7 +41,6 @@ public class PersonalMyInteractActivity extends BaseFragmentActivity {
         initView();
     }
 
-
     private void initView() {
         findViewById(R.id.right).setVisibility(View.GONE);
 

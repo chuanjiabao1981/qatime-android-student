@@ -43,7 +43,6 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.CitySelectActivity;
-import cn.qatime.player.activity.InteractiveLiveActivity;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.PayPSWForgetActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
@@ -722,10 +721,8 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 mainActivity.setCurrentPosition(1, 0);
                 break;
             case R.id.scan:
-//                intent = new Intent(getActivity(), CaptureActivity.class);
-//                mainActivity.startActivityForResult(intent, Constant.REQUEST);
-                intent = new Intent(getActivity(), InteractiveLiveActivity.class);
-                startActivity(intent);
+                intent = new Intent(getActivity(), CaptureActivity.class);
+                mainActivity.startActivityForResult(intent, Constant.REQUEST);
                 break;
             case R.id.city_select:
                 intent = new Intent(getActivity(), CitySelectActivity.class);

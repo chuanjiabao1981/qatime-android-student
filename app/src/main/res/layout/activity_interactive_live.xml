@@ -7,6 +7,7 @@
         android:id="@+id/view_layout"
         android:layout_width="match_parent"
         android:layout_height="220dp">
+
         <FrameLayout
             android:id="@+id/master_video_layout"
             android:layout_width="match_parent"
@@ -51,17 +52,17 @@
             android:padding="10dp"
             android:src="@mipmap/back_arrow" />
 
-        <!--<TextView-->
-            <!--android:id="@+id/room_id"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_toRightOf="@id/back_arrow"-->
-            <!--android:gravity="center"-->
-            <!--android:paddingLeft="5dp"-->
-            <!--android:paddingRight="5dp"-->
-            <!--android:singleLine="true"-->
-            <!--android:textColor="@color/white"-->
-            <!--android:textSize="13sp" />-->
+        <TextView
+            android:id="@+id/room_id"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/back_arrow"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="13sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"

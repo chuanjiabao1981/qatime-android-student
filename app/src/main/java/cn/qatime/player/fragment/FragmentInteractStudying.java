@@ -26,6 +26,7 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.InteractCourseDetailActivity;
+import cn.qatime.player.activity.InteractiveLiveActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
@@ -67,18 +68,13 @@ public class FragmentInteractStudying extends BaseFragment {
         adapter = new CommonAdapter<MyInteractClassBean.DataBean>(getActivity(), list, R.layout.item_fragment_my_interact_teaching) {
             @Override
             public void convert(ViewHolder helper, final MyInteractClassBean.DataBean item, int position) {
-
-
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // TODO: 2017/4/1 跳转互动页面
-//                        Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
-//                        intent.putExtra("camera", item.getCamera());
-//                        intent.putExtra("board", item.getBoard());
-//                        intent.putExtra("id", item.getId());
-//                        intent.putExtra("sessionId", item.getChat_team_id());
-//                        startActivity(intent);
+                        Intent intent = new Intent(getActivity(), InteractiveLiveActivity.class);
+                        intent.putExtra("id", item.getId());
+                        intent.putExtra("teamId", item.getChat_team_id());
+                        startActivity(intent);
                     }
                 });
                 Glide.with(getActivity()).load(item.getPublicize_url()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
@@ -88,8 +84,6 @@ public class FragmentInteractStudying extends BaseFragment {
                 helper.setText(R.id.progress, getString(R.string.progress, item.getClosed_lessons_count(), item.getLessons_count()));
                 helper.setText(R.id.grade, item.getGrade());
             }
-
-
         };
         listView.setAdapter(adapter);
 

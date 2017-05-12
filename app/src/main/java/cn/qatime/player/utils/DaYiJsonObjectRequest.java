@@ -26,7 +26,7 @@ public class DaYiJsonObjectRequest extends JsonObjectRequest {
 
     public DaYiJsonObjectRequest(String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         super(url, jsonRequest, listener, errorListener);
-        Logger.e(url);
+//        Logger.e(url);
     }
 
     @Override

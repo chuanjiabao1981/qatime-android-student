@@ -58,6 +58,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.InputPanel;
+import cn.qatime.player.bean.InteractiveLiveStatusBean;
 import cn.qatime.player.fragment.FragmentInteractiveAnnouncements;
 import cn.qatime.player.fragment.FragmentInteractiveBoard;
 import cn.qatime.player.fragment.FragmentInteractiveDetails;
@@ -104,7 +105,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     private VideoFrameLayout videoLayout;
     private RelativeLayout backLayout;
 
-    //    private TextView roomIdText;
+    private TextView roomIdText;
     private ImageView videoPermission;
     private ImageView audioPermission;
     //    private TextView onlineStatus;
@@ -128,6 +129,53 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     private int id;
     private FragmentInteractiveMessage messageFragment;
     private ScreenSwitchUtils screenSwitchUtils;
+    private Runnable loopStatus = new Runnable() {
+        @Override
+        public void run() {
+            loopStatus();
+        }
+    };
+    private long loopDelay = 10000;
+
+    private void loopStatus() {
+        if (id != 0) {
+            Map<String, String> map = new HashMap<>();
+            map.put("t", String.valueOf(System.currentTimeMillis()));
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlInteractCourses + id + "/live_status", map), null,
+                    new VolleyListener(InteractiveLiveActivity.this) {
+                        @Override
+                        protected void onSuccess(JSONObject response) {
+                            InteractiveLiveStatusBean data = JsonUtils.objectFromJson(response.toString(), InteractiveLiveStatusBean.class);
+                            if (data != null && data.getData() != null && data.getData().getLive_info() != null && !StringUtils.isNullOrBlanK(data.getData().getLive_info().getRoom_id())) {
+                                roomId = data.getData().getLive_info().getRoom_id();
+                                enterRoom();
+                                if (!StringUtils.isNullOrBlanK(data.getData().getLive_info().getName())) {
+                                    roomIdText.setText(data.getData().getLive_info().getName());
+                                }
+                            } else {
+                                hd.postDelayed(loopStatus, loopDelay);
+                            }
+                        }
+
+                        @Override
+                        protected void onError(JSONObject response) {
+
+                        }
+
+                        @Override
+                        protected void onTokenOut() {
+                            tokenOut();
+                        }
+                    }, new VolleyErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    super.onErrorResponse(volleyError);
+                }
+            });
+            addToRequestQueue(request);
+        }
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,23 +183,15 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         rootView = View.inflate(this, R.layout.activity_interactive_live, null);
         setContentView(rootView);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        sessionId = getIntent().getStringExtra("teamId");
-        sessionId = "";
-        screenSwitchUtils = ScreenSwitchUtils.init(this.getApplicationContext());
-        initView();
 
+        screenSwitchUtils = ScreenSwitchUtils.init(this.getApplicationContext());
+        sessionId = getIntent().getStringExtra("teamId");
+        initView();
 
         requestLivePermission();
         id = getIntent().getIntExtra("id", 0);
-        id = 1;
         initData();
-        hd.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                roomId = "36309070";
-                enterRoom();
-            }
-        }, 5000);
+        hd.postDelayed(loopStatus, 3000);
     }
 
 
@@ -165,9 +205,8 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                             if (data != null) {
                                 if (data.getData() != null) {
                                     ((FragmentInteractiveMembers) fragBaseFragments.get(4)).setData(data.getData());
-//                                    ((FragmentInteractiveMessage) fragBaseFragments.get(2)).setOwner(data.getData().getOwner());
                                     if (data.getData().getAnnouncements() != null) {
-                                        ((FragmentInteractiveAnnouncements) fragBaseFragments.get(0)).setData(data.getData().getAnnouncements());
+                                        ((FragmentInteractiveAnnouncements) fragBaseFragments.get(2)).setData(data.getData().getAnnouncements());
                                     }
                                 }
                             }
@@ -188,9 +227,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 }
             });
             addToRequestQueue(announcementsRequest);
-            Map<String, String> map = new HashMap<>();
-            map.put("t", String.valueOf(System.currentTimeMillis()));
-            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlInteractCourses + id, map), null,
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlInteractCourses + id, null,
                     new VolleyListener(InteractiveLiveActivity.this) {
                         @Override
                         protected void onSuccess(JSONObject response) {
@@ -224,6 +261,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         ViewGroup.LayoutParams params = viewLayout.getLayoutParams();
         params.height = ScreenUtils.getScreenWidth(this) * 3 / 5;
         viewLayout.setLayoutParams(params);
+        roomIdText = (TextView) findViewById(R.id.room_id);
         masterVideoLayout = (FrameLayout) findViewById(R.id.master_video_layout);
         backLayout = (RelativeLayout) findViewById(R.id.back_layout);
         videoPermission = (ImageView) findViewById(R.id.video_permission);
@@ -330,56 +368,11 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     }
 
     private void enterRoom() {
-//        DialogMaker.showProgressDialog(this, null, "", true, new DialogInterface.OnCancelListener() {
-//            @Override
-//            public void onCancel(DialogInterface dialog) {
-//                if (enterRequest != null) {
-//                    enterRequest.abort();
-//                    onLoginDone();
-//                    finish();
-//                }
-//            }
-//        }).setCanceledOnTouchOutside(false);
-//        EnterChatRoomData data = new EnterChatRoomData(roomId);
-//        enterRequest = NIMClient.getService(ChatRoomService.class).enterChatRoom(data);
-//        enterRequest.setCallback(new RequestCallback<EnterChatRoomResultData>() {
-//            @Override
-//            public void onSuccess(EnterChatRoomResultData result) {
-//                onLoginDone();
-//                roomInfo = result.getRoomInfo();
-//                ChatRoomMember member = result.getMember();
-//                member.setRoomId(roomInfo.getRoomId());
-//                ChatRoomMemberCache.getInstance().saveMyMember(member);
-//                if (roomInfo.getExtension() != null) {
-//                    shareUrl = (String) roomInfo.getExtension().get(KEY_SHARE_URL);
-//                }
         registerObservers(true);
         registerRTSObservers(roomId, true);
         initLiveVideo();
         rtsFragment.initRTSView(roomId);
         joinRTSSession();
-//            }
-//
-//            @Override
-//            public void onFailed(int code) {
-//                onLoginDone();
-//                if (code == ResponseCode.RES_CHATROOM_BLACKLIST) {
-//                    Toast.makeText(InteractiveLiveActivity.this, "你已被拉入黑名单，不能再进入", Toast.LENGTH_SHORT).show();
-//                } else if (code == ResponseCode.RES_ENONEXIST) {
-//                    Toast.makeText(InteractiveLiveActivity.this, "该聊天室不存在", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    Toast.makeText(InteractiveLiveActivity.this, "enter chat room failed, code=" + code, Toast.LENGTH_SHORT).show();
-//                }
-//                finish();
-//            }
-//
-//            @Override
-//            public void onException(Throwable exception) {
-//                onLoginDone();
-//                Toast.makeText(InteractiveLiveActivity.this, "enter chat room exception, e=" + exception.getMessage(), Toast.LENGTH_SHORT).show();
-//                finish();
-//            }
-//        });
     }
 
     // 加入多人白板session
@@ -388,9 +381,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             @Override
             public void onSuccess(RTSData rtsData) {
                 Logger.e("rts extra:" + rtsData.getExtra());
-                // 主播的白板默认为开启状态
-//                ChatRoomMemberCache.getInstance().setRTSOpen(true);
-//                updateRTSFragment();
             }
 
             @Override
@@ -513,10 +503,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         updateVideoAudioUI();
     }
 
-    private boolean checkRoom(String roomID) {
-        return TextUtils.isEmpty(roomId) || !roomId.equals(roomID);
-    }
-
     ChatRoomMemberCache.RoomMemberChangedObserver roomMemberChangedObserver = new ChatRoomMemberCache.RoomMemberChangedObserver() {
         @Override
         public void onRoomMemberIn(ChatRoomMember member) {
@@ -559,25 +545,14 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         }
     };
 
-//    ChatRoomMemberCache.RoomInfoChangedObserver roomInfoChangedObserver = new ChatRoomMemberCache.RoomInfoChangedObserver() {
-//        @Override
-//        public void onRoomInfoUpdate(IMMessage message) {
-//            ChatRoomNotificationAttachment attachment = (ChatRoomNotificationAttachment) message.getAttachment();
-//            if (attachment != null && attachment.getExtension() != null) {
-//                Map<String, Object> ext = attachment.getExtension();
-//                switchFullScreen(ext);
-//            }
-//        }
-//    };
-
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         if (roomId != null) {
             clearChatRoom();
         }
         hd.removeCallbacks(hideBackLayout);
+        hd.removeCallbacks(loopStatus);
     }
 
     private void clearChatRoom() {
@@ -717,9 +692,9 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     @Override
     public void onJoinedChannel(int i, String s, String s1) {
         Logger.e("onJoinedChannel, res:" + i);
-        if (i != AVChatResCode.JoinChannelCode.OK) {
-            Toast.makeText(InteractiveLiveActivity.this, "joined channel:" + i, Toast.LENGTH_SHORT).show();
-        }
+//        if (i != AVChatResCode.JoinChannelCode.OK) {
+//            Toast.makeText(InteractiveLiveActivity.this, "joined channel:" + i, Toast.LENGTH_SHORT).show();
+//        }
     }
 
     @Override
@@ -731,9 +706,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     public void onUserJoined(String s) {
         userJoinedList.add(s);
         onMasterJoin(s);
-//        if (ChatRoomMemberCache.getInstance().hasPermission(roomId, s) && !s.equals(roomInfo.getCreator())) {
         onVideoOn(s);
-//        }
     }
 
     @Override
@@ -744,6 +717,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         userJoinedList.clear();
         clearChatRoom();
         updateRTSFragment();
+        hd.postDelayed(loopStatus, loopDelay);
 //        ChatRoomMemberCache.getInstance().removePermissionMem(roomId, s);
 //        videoListener.onUserLeave(s);
 
