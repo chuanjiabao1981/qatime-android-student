@@ -10,13 +10,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.MessageActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
@@ -45,8 +46,7 @@ public class FragmentTutorshipPreview extends BaseFragment {
     private java.util.List<MyTutorialClassBean.Data> list = new ArrayList<>();
     private CommonAdapter<MyTutorialClassBean.Data> adapter;
     private int page = 1;
-    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
+    SimpleDateFormat parseISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
 
     @Nullable
     @Override
@@ -73,17 +73,26 @@ public class FragmentTutorshipPreview extends BaseFragment {
             @Override
             public void convert(ViewHolder helper, final MyTutorialClassBean.Data item, int position) {
                 boolean isBought = item.isIs_bought();//已经购买
-                //试听状态
-                TextView taste = helper.getView(R.id.taste);
 
-                taste.setVisibility(isBought ? View.GONE : View.VISIBLE);//已购买不显示
-
+helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+        Intent intent = new Intent(getActivity(), MessageActivity.class);
+        intent.putExtra("sessionId", item.getChat_team_id());
+        intent.putExtra("sessionType", SessionTypeEnum.Team);
+        intent.putExtra("courseId", item.getId());
+        intent.putExtra("name", item.getName());
+        intent.putExtra("type","custom");
+        intent.putExtra("owner", item.getChat_team_owner());
+        startActivity(intent);
+    }
+});
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
                 try {
-                    long time = parse.parse(item.getPreview_time()).getTime()-System.currentTimeMillis();
+                    long time = parseISO.parse(item.getPreview_time()).getTime()-System.currentTimeMillis();
                     int value = 0;
                     if (time > 0) {
                         value = (int) (time / (1000 * 3600 * 24));
@@ -91,7 +100,7 @@ public class FragmentTutorshipPreview extends BaseFragment {
                     if(value!=0){
                         helper.setText(R.id.teaching_time, getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day));
                     }else{
-                        helper.setText(R.id.teaching_time,getString(R.string.ready_to_start));
+                        helper.setText(R.id.teaching_time,"即将开课");
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();

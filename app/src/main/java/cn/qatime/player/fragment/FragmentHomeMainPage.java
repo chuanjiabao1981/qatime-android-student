@@ -43,15 +43,16 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.CitySelectActivity;
+import cn.qatime.player.activity.InteractCourseDetailActivity;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.PayPSWForgetActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
+import cn.qatime.player.activity.VideoCoursesActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.BannerRecommendBean;
 import cn.qatime.player.bean.BusEvent;
-import cn.qatime.player.bean.CashAccountBean;
 import cn.qatime.player.bean.EssenceContentBean;
 import cn.qatime.player.bean.LiveTodayBean;
 import cn.qatime.player.bean.RecentPublishedBean;
@@ -63,6 +64,7 @@ import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
+import libraryextra.bean.CashAccountBean;
 import libraryextra.bean.CityBean;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.DensityUtils;
@@ -109,6 +111,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        EventBus.getDefault().register(this);
         View view = inflater.inflate(R.layout.fragment_home_main_page, container, false);
         assignViews(view);
         return view;
@@ -193,8 +196,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 close.setOnClickListener(this);
                 flag = true;
             }
-        } else {
-            EventBus.getDefault().post(BusEvent.REFRESH_CASH_ACCOUNT);
         }
     }
 
@@ -258,10 +259,23 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         essenceContentAdapter = new CommonAdapter<EssenceContentBean.DataBean>(getContext(), listEssenceContent, R.layout.item_essence_content) {
             @Override
             public void convert(ViewHolder holder, EssenceContentBean.DataBean item, int position) {
-                holder.setImageByUrl(R.id.image, item.getLogo_url(), R.mipmap.photo)
-                        .setText(R.id.course_title, item.getLive_studio_course().getName())
-                        .setText(R.id.grade_subject, item.getLive_studio_course().getGrade() + item.getLive_studio_course().getSubject())
-                        .setText(R.id.teacher, item.getLive_studio_course().getTeacher_name());
+                if ("LiveStudio::Course".equals(item.getTarget_type())) {
+                    holder.setImageByUrl(R.id.image, item.getLogo_url(), R.mipmap.photo)
+                            .setText(R.id.course_title, item.getLive_studio_course().getName())
+                            .setText(R.id.grade_subject, item.getLive_studio_course().getGrade() + item.getLive_studio_course().getSubject())
+                            .setText(R.id.teacher, item.getLive_studio_course().getTeacher_name());
+                } else if ("LiveStudio::InteractiveCourse".equals(item.getTarget_type())) {
+                    holder.setImageByUrl(R.id.image, item.getLogo_url(), R.mipmap.photo)
+                            .setText(R.id.course_title, item.getLive_studio_interactive_course().getName())
+                            .setText(R.id.grade_subject, item.getLive_studio_interactive_course().getGrade() + item.getLive_studio_interactive_course().getSubject())
+                            .setText(R.id.teacher, item.getLive_studio_interactive_course().getTeachers().get(0).getName());
+                }else if ("LiveStudio::VideoCourse".equals(item.getTarget_type())) {
+                    holder.setImageByUrl(R.id.image, item.getLogo_url(), R.mipmap.photo)
+                            .setText(R.id.course_title, item.getLive_studio_video_course().getName())
+                            .setText(R.id.grade_subject, item.getLive_studio_video_course().getGrade() + item.getLive_studio_video_course().getSubject())
+                            .setText(R.id.teacher, item.getLive_studio_video_course().getTeacher_name());
+                }
+
                 holder.getView(R.id.reason1).setVisibility(StringUtils.isNullOrBlanK(item.getTag_one()) ? View.GONE : View.VISIBLE);
                 holder.setText(R.id.reason1, getTags(item.getTag_one()));
                 holder.getView(R.id.reason2).setVisibility(StringUtils.isNullOrBlanK(item.getTag_two()) ? View.GONE : View.VISIBLE);
@@ -277,8 +291,18 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         listViewEssenceContent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int courseId = listEssenceContent.get(position).getLive_studio_course().getId();
-                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                int courseId = 0;
+                Intent intent = null;
+                if ("LiveStudio::Course".equals(listEssenceContent.get(position).getTarget_type())) {
+                    courseId = listEssenceContent.get(position).getLive_studio_course().getId();
+                    intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                } else if ("LiveStudio::InteractiveCourse".equals(listEssenceContent.get(position).getTarget_type())) {
+                    courseId = listEssenceContent.get(position).getLive_studio_interactive_course().getId();
+                    intent = new Intent(getActivity(), InteractCourseDetailActivity.class);
+                }else if ("LiveStudio::VideoCourse".equals(listEssenceContent.get(position).getTarget_type())) {
+                    courseId = listEssenceContent.get(position).getLive_studio_video_course().getId();
+                    intent = new Intent(getActivity(), VideoCoursesActivity.class);
+                }
                 intent.putExtra("id", courseId);
                 startActivity(intent);
             }
@@ -707,6 +731,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
     @Override
     public void onDestroy() {
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 
@@ -745,7 +770,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         }
     }
 
-
     private void initLocationData() {
         JsonObjectRequest request = new JsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,
                 new VolleyListener(getActivity()) {
@@ -760,7 +784,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                                 public void onLocationBack(String[] result) {
                                     if (result != null && result.length > 1) {
                                         for (CityBean.Data item : listCity) {
-                                            if (result[1].equals(item.getName()) || result[0].equals(item.getName())) {//需先对比区,区不对应往上对比市,不可颠倒
+                                            if (result[2].equals(item.getName()) || result[1].equals(item.getName())) {//需先对比区,区不对应往上对比市,不可颠倒
                                                 locationCity = item;
                                             }
                                         }
@@ -773,9 +797,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                                         if (!currentCity.equals(locationCity)) {
                                             if (locationCity.getWorkstations_count() != 0) {
                                                 dialogCity();
-//                                            } else {
-//                                                BaseApplication.setCurrentCity(locationCity);
-//                                                setCity();
                                             }
                                         }
                                     } else {

@@ -21,6 +21,7 @@ import cn.qatime.player.activity.AboutUsActivity;
 import cn.qatime.player.activity.PersonalInformationActivity;
 import cn.qatime.player.activity.PersonalMyInteractActivity;
 import cn.qatime.player.activity.PersonalMyOrderActivity;
+import cn.qatime.player.activity.PersonalMyTasteActivity;
 import cn.qatime.player.activity.PersonalMyTutorshipActivity;
 import cn.qatime.player.activity.PersonalMyVideoActivity;
 import cn.qatime.player.activity.PersonalMyWalletActivity;
@@ -29,7 +30,7 @@ import cn.qatime.player.activity.SystemSettingActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.BusEvent;
-import cn.qatime.player.bean.CashAccountBean;
+import libraryextra.bean.CashAccountBean;
 import cn.qatime.player.utils.Constant;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.StringUtils;
@@ -42,6 +43,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
     private LinearLayout course;
     private LinearLayout myInteract;
     private LinearLayout myVideo;
+    private LinearLayout myTaste;
     private LinearLayout security;
     private LinearLayout setting;
     private TextView newVersion;
@@ -65,6 +67,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
         course.setOnClickListener(this);
         myInteract.setOnClickListener(this);
         myVideo.setOnClickListener(this);
+        myTaste.setOnClickListener(this);
         information.setOnClickListener(this);
         about.setOnClickListener(this);
         security.setOnClickListener(this);
@@ -80,8 +83,6 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
                 price = "0" + price;
             }
             balance.setText(price);
-        } else {
-            EventBus.getDefault().post(BusEvent.REFRESH_CASH_ACCOUNT);
         }
     }
 
@@ -114,6 +115,10 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
                 break;
             case R.id.my_video:
                 intent = new Intent(getActivity(), PersonalMyVideoActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.my_taste:
+                intent = new Intent(getActivity(), PersonalMyTasteActivity.class);
                 startActivity(intent);
                 break;
             case R.id.security:// 安全管理
@@ -156,6 +161,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
         course = (LinearLayout) view.findViewById(R.id.my_course);
         myInteract = (LinearLayout) view.findViewById(R.id.my_interact);
         myVideo = (LinearLayout) view.findViewById(R.id.my_video);
+        myTaste = (LinearLayout) view.findViewById(R.id.my_taste);
         security = (LinearLayout) view.findViewById(R.id.security);
         setting = (LinearLayout) view.findViewById(R.id.setting);
         newVersion = (TextView) view.findViewById(R.id.new_version);

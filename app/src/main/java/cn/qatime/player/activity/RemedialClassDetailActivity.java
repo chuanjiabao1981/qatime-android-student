@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,8 +29,6 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
@@ -85,6 +84,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     private TextView status;
     private TextView timeToStart;
     private View layoutView;
+    private RelativeLayout auditionLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +122,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
         audition = (Button) findViewById(R.id.audition);
         auditionStart = (Button) findViewById(R.id.audition_start);
+        auditionLayout = (RelativeLayout) findViewById(R.id.audition_layout);
         Button pay = (Button) findViewById(R.id.pay);
         startStudy = (Button) findViewById(R.id.start_study);
         startStudyView = findViewById(R.id.start_study_view);
@@ -238,13 +239,13 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                                     progress.setVisibility(View.VISIBLE);
                                     timeToStart.setVisibility(View.GONE);
                                     layoutView.setBackgroundColor(0xff00a0e9);
-                                    progress.setText(getString(R.string.progress, data.getData().getClosed_lessons_count(), data.getData().getPreset_lesson_count()));
+                                    progress.setText(getString(R.string.progress_live, data.getData().getClosed_lessons_count(), data.getData().getPreset_lesson_count()));
                                 } else if (Constant.CourseStatus.finished.equals(data.getData().getStatus()) || Constant.CourseStatus.completed.equals(data.getData().getStatus())) {
                                     handleLayout.setVisibility(View.GONE);//已结束的课程隐藏操作按钮
                                     progress.setVisibility(View.VISIBLE);
                                     timeToStart.setVisibility(View.GONE);
                                     layoutView.setBackgroundColor(0xff999999);
-                                    progress.setText(getString(R.string.progress, data.getData().getClosed_lessons_count(), data.getData().getPreset_lesson_count()));
+                                    progress.setText(getString(R.string.progress_live, data.getData().getClosed_lessons_count(), data.getData().getPreset_lesson_count()));
                                 } else {
                                     layoutView.setVisibility(View.GONE);
                                 }
@@ -264,11 +265,12 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                                     auditionStart.setEnabled(false);
                                 }
                             } else {//显示加入试听按钮
-                                audition.setText(getResources().getString(R.string.Join_the_audition));
+//                                audition.setText(getResources().getString(R.string.Join_the_audition));
+                                if (data.getData().getTaste_count() == 0) {//试听数目为0则该课不支持试听
+                                    auditionLayout.setVisibility(View.GONE);
+                                    return;
+                                }
                                 auditionStart.setVisibility(View.GONE);
-//                                if(data.getData().getTaste_count() == 0){//试听数目为0则该课不支持试听
-//                                    audition.setEnabled(false);
-//                                }
                             }
 
                             if (data.getData().getIs_bought()) {
@@ -413,9 +415,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     }
 
     private void joinAudition() {
-        Map<String, String> map = new HashMap<>();
-        map.put("id", String.valueOf(id));
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRemedialClass + "/" + id + "/taste", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass + "/" + id + "/taste", null,
                 new VolleyListener(RemedialClassDetailActivity.this) {
 
                     @Override

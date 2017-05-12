@@ -4,7 +4,40 @@
     android:layout_height="match_parent"
     android:background="#f7f7f7"
     android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="144dp"
+        android:background="@color/colorPrimary">
 
+        <ImageView
+            android:id="@+id/banner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:id="@+id/information"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/head_sculpture"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:src="@mipmap/error_header" />
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:text="姓名"
+                android:textColor="#fff" />
+        </LinearLayout>
+
+    </RelativeLayout>
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -14,40 +47,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="144dp"
-                android:background="@color/colorPrimary">
 
-                <ImageView
-                    android:id="@+id/banner"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <LinearLayout
-                    android:id="@+id/information"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/head_sculpture"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        android:src="@mipmap/error_header" />
-
-                    <TextView
-                        android:id="@+id/name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="10dp"
-                        android:text="姓名"
-                        android:textColor="#fff" />
-                </LinearLayout>
-
-            </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -149,7 +149,7 @@
                     android:layout_height="18dp" />
                 <TextView
                     style="@style/setting_text_style"
-                    android:text="@string/my_course" />
+                    android:text="我的直播课" />
 
                 <View
                     android:layout_width="0dp"
@@ -215,6 +215,36 @@
                 <TextView
                     style="@style/setting_text_style"
                     android:text="@string/my_video" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    style="@style/setting_icon_margin_right"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@mipmap/personal_enter" />
+            </LinearLayout>  <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#dfdddd" />
+            <LinearLayout
+                android:id="@+id/my_taste"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="18dp"
+                    android:src="@mipmap/center_my_tasted"
+                    android:layout_marginLeft="10dp"
+                    android:layout_height="18dp" />
+                <TextView
+                    style="@style/setting_text_style"
+                    android:text="@string/my_taste" />
 
                 <View
                     android:layout_width="0dp"

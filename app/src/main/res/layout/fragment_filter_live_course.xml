@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="35dp"
@@ -45,33 +46,64 @@
             android:layout_height="1dp"
             android:layout_weight="1" />
 
-        <TextView
-            android:id="@+id/label"
+        <LinearLayout
+            android:id="@+id/label_layout"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:text="不限" />
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="3dp"
+                android:src="@mipmap/label" />
+
+            <TextView
+                android:id="@+id/label"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingRight="8dp"
+                android:text="不限"
+                android:textColor="#666" />
+        </LinearLayout>
 
         <View
             android:layout_width="1px"
             android:layout_height="match_parent"
             android:background="#dfdddd" />
 
-        <TextView
+        <LinearLayout
             android:id="@+id/screen"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:text="筛选" />
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="3dp"
+                android:src="@mipmap/screen_funnel" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingRight="8dp"
+                android:text="筛选"
+                android:textColor="#666" />
+        </LinearLayout>
     </LinearLayout>
-<View
-    android:layout_width="match_parent"
-    android:layout_height="1px"
-    android:background="#dfdddd"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dfdddd" />
+
     <com.handmark.pulltorefresh.library.PullToRefreshListView
         android:id="@+id/listview"
         android:layout_width="match_parent"

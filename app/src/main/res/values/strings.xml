@@ -188,7 +188,9 @@
     <string name="class_name">课程名称：</string>
     <string name="subject_type">科目类型：</string>
     <string name="teacher">授课教师：</string>
-    <string name="progress">[进度%1$d/%2$d]</string>
+    <string name="progress">进度%1$d/%2$d</string>
+    <string name="progress_live">[进度%1$d/%2$d]</string>
+    <string name="progress_taste">已试听%1$d/%2$d</string>
     <string name="teach_way">授课方式：</string>
     <string name="remain_class">剩余课时：</string>
     <string name="total_class_hours">课时总数：</string>
@@ -304,7 +306,7 @@
     <string name="learning_process">学习流程</string>
     <string name="feedback">意见反馈</string>
     <string name="current_version">V</string>
-    <string name="notify_message">系统通知</string>
+    <string name="notify_message">通知提醒</string>
     <string name="notify_classes">课程提醒</string>
     <string name="voice">声音</string>
     <string name="shake">震动</string>
@@ -472,7 +474,7 @@
     <string name="update_desc">更新内容</string>
     <string name="refund_record">退款记录</string>
     <string name="notify_mode">通知方式</string>
-    <string name="course_message_notify">辅导班消息通知</string>
+    <string name="course_message_notify">接收聊天消息通知</string>
     <string name="teacher_recommendation">名师推荐</string>
     <string name="cancel">取消</string>
     <string name="other_method_of_login">其他登录方式</string>
@@ -639,4 +641,7 @@
     <string name="live_courses">直播课</string>
     <string name="my_video">我的视频课</string>
     <string name="all_class_has_over">全部课程已完成</string>
+    <string name="my_taste">我的试听</string>
+    <string name="hint_choose_region">请选择您所在的区域</string>
+    <string name="hint_choose_school">请选择您所在的学校</string>
 </resources>

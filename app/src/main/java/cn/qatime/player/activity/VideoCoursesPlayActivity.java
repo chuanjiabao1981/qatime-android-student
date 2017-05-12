@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.bean.VideoCoursesDetailsBean;
+import cn.qatime.player.bean.VideoPlayBean;
 import cn.qatime.player.fragment.FragmentVideoCoursesDetail;
 import cn.qatime.player.fragment.FragmentVideoCoursesList;
 import cn.qatime.player.fragment.VideoCoursesFloatFragment;
@@ -34,9 +35,9 @@ import cn.qatime.player.utils.ScreenSwitchUtils;
 import cn.qatime.player.utils.UrlUtils;
 import io.vov.vitamio.MediaPlayer;
 import io.vov.vitamio.Vitamio;
+import libraryextra.bean.VideoLessonsBean;
 import libraryextra.utils.DensityUtils;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.FragmentLayoutWithLine;
@@ -60,7 +61,8 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
     private int id;
     private VideoCoursesDetailsBean data;
     private SurfaceHolder holder;
-    private String url;
+    private boolean tasting;//是否试听
+    public VideoLessonsBean playingData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,34 +73,25 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
             return;
         }
         id = getIntent().getIntExtra("id", 0);
+        tasting = getIntent().getBooleanExtra("tasting", true);
 //        id=3;
         initView();
 
         screenSwitchUtils = ScreenSwitchUtils.init(this.getApplicationContext());
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    if (isCreated) {
-//                        createMedia("http://192.168.1.136:8080/media/28.mp4");
-//                    }
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }, 5000);
         initData();
     }
 
     private void initData() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlVideoCourses + "/" + id, null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlVideoCourses + id + "/detail", null,
                 new VolleyListener(VideoCoursesPlayActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
                         data = JsonUtils.objectFromJson(response.toString(), VideoCoursesDetailsBean.class);
 
                         if (data != null && data.getData() != null) {
-                            ((FragmentVideoCoursesList) fragBaseFragments.get(0)).setData(data.getData().getVideo_lessons());
+                            playingData = data.getData().getVideo_course().getVideo_lessons().get(0);
+                            ((FragmentVideoCoursesList) fragBaseFragments.get(0)).setData(data.getData().getVideo_course().getVideo_lessons());
+                            floatFragment.setData(data.getData().getVideo_course().getVideo_lessons());
                             ((FragmentVideoCoursesDetail) fragBaseFragments.get(1)).setData(data);
                         }
                     }
@@ -137,22 +130,17 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
 
             @Override
             public void pause() {
-                mMediaPlayer.pause();
+                if (mMediaPlayer != null) {
+                    mMediaPlayer.pause();
+                }
             }
 
             @Override
             public void play() {
-                if(!StringUtils.isNullOrBlanK(url)){
+                if (mMediaPlayer != null) {
                     mMediaPlayer.start();
-                }else{
-//                    播放到进度
-                    String url = "";
-                    if (data.getData().getClosed_lessons_count()==data.getData().getPreset_lesson_count()) {//全部看完,放第一集
-                        url = data.getData().getVideo_lessons().get(0).getVideo().getName_url();
-                    }else{
-                        url = data.getData().getVideo_lessons().get(data.getData().getClosed_lessons_count()).getVideo().getName_url();
-                    }
-                    playCourses(url);
+                } else {
+                    playCourses(playingData);
                 }
             }
 
@@ -161,10 +149,10 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
                 return mMediaPlayer != null && mMediaPlayer.isPlaying();
             }
 
-            @Override
-            public boolean isPortrait() {
-                return screenSwitchUtils.isPortrait();
-            }
+//            @Override
+//            public boolean isPortrait() {
+//                return screenSwitchUtils.isPortrait();
+//            }
 
             @Override
             public long getCurrentPosition() {
@@ -201,7 +189,9 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
         fragmentLayout.setScorll(true);
         fragmentLayout.setWhereTab(1);
         fragmentLayout.setTabHeight(4, 0xffff5842);
-        fragmentLayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
+        fragmentLayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener()
+
+        {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff999999);
@@ -330,17 +320,58 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
         screenSwitchUtils.stop();
     }
 
-    public void playCourses(String url) {
-        if (!StringUtils.isNullOrBlanK(url)) {
-            this.url=url;
-            releaseMediaPlayer();
-            if (isCreated) {
-                try {
-                    createMedia(url);
-                } catch (IOException e) {
-                    e.printStackTrace();
+    public void playCourses(VideoLessonsBean playingData) {
+//        if (tasting) {
+//            if (!playingData.getVideo().isTastable()) {
+//                Toast.makeText(this, "该课程需要购买", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//        }
+        if (playingData != null) {
+            this.playingData = playingData;
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlVideoLessons + playingData.getId() + "/play", null,
+                    new VolleyListener(VideoCoursesPlayActivity.this) {
+                        @Override
+                        protected void onSuccess(JSONObject response) {
+                            VideoPlayBean videoPlayBean = JsonUtils.objectFromJson(response.toString(), VideoPlayBean.class);
+                            if (videoPlayBean != null && videoPlayBean.getData().getVideo_lesson() != null && videoPlayBean.getData().getVideo_lesson().getVideo() != null) {
+                                play(videoPlayBean.getData().getVideo_lesson().getVideo().getName_url());
+                            }else{
+                                Toast.makeText(VideoCoursesPlayActivity.this, "状态错误", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        protected void onError(JSONObject response) {
+                        }
+
+                        @Override
+                        protected void onTokenOut() {
+                            tokenOut();
+                        }
+                    }, new VolleyErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    super.onErrorResponse(volleyError);
                 }
+            });
+            addToRequestQueue(request);
+        }
+    }
+
+    private void play(String nameUrl) {
+
+        releaseMediaPlayer();
+        if (isCreated) {
+            try {
+                createMedia(nameUrl);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
+    }
+
+    public boolean isTasting() {
+        return tasting;
     }
 }

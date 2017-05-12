@@ -77,7 +77,8 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
     }
 
     private void initData() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,
+
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities?scope=has_default_workstation", null,
                 new VolleyListener(this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -139,7 +140,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
                 locationView.setEnabled(true);
                 if (result != null && result.length > 1) {
                     for (CityBean.Data item : list) {
-                        if (result[1].equals(item.getName()) || result[0].equals(item.getName())) {//需先对比区,区不对应往上对比市,不可颠倒
+                        if (result[2].equals(item.getName()) || result[1].equals(item.getName())) {//需先对比区,区不对应往上对比市,不可颠倒
                             locationCity = item;
                         }
                     }
@@ -147,7 +148,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
                     Toast.makeText(CitySelectActivity.this, R.string.position_locate_error, Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (locationCity == null) {//如果没有被赋值，则默认全国
+                if (locationCity == null) {
                     Toast.makeText(CitySelectActivity.this,  R.string.position_locate_error, Toast.LENGTH_SHORT).show();
                 } else {
                     if (!BaseApplication.getCurrentCity().equals(locationCity)) {

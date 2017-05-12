@@ -23,12 +23,13 @@
             <!-- android:id="@+id/tab_text" -->
             <TextView
                 android:id="@+id/tab_text1"
-                style="@style/tab_text_color_select"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"
-                android:text="@string/remedial_class_message" />
+                android:text="聊天消息"
+                android:textSize="14.0sp"
+                android:textColor="#333333" />
 
             <ImageView
                 android:id="@+id/flag1"
@@ -48,12 +49,13 @@
 
             <TextView
                 android:id="@+id/tab_text2"
-                style="@style/tab_text_color_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"
-                android:text="@string/system_message" />
+                android:text="@string/system_message"
+                android:textSize="14.0sp"
+                android:textColor="#999999" />
 
             <ImageView
                 android:id="@+id/flag2"

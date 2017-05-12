@@ -20,7 +20,6 @@ import libraryextra.view.TagViewPager;
  */
 public class GuideActivity extends BaseActivity {
 
-    private TagViewPager viewPager;
     private int width;
     private int height;
     private int imageIds[] = {R.mipmap.index1, R.mipmap.index2, R.mipmap.index3};
@@ -34,9 +33,8 @@ public class GuideActivity extends BaseActivity {
         width = dm.widthPixels;//宽度
         height = dm.heightPixels;//高度
 
-
         setContentView(R.layout.activity_guide);
-        viewPager = (TagViewPager) findViewById(R.id.tagViewPager);
+        TagViewPager viewPager = (TagViewPager) findViewById(R.id.tagViewPager);
         viewPager.init(R.drawable.shape_photo_tag_select, R.drawable.shape_photo_tag_nomal, 16, 8, 2, 40);
         viewPager.setAutoNext(false, 0);
 //        viewPager.setId(1252);
@@ -57,7 +55,7 @@ public class GuideActivity extends BaseActivity {
                         public void onClick(View v) {
                             Intent intent = new Intent(GuideActivity.this, LoginActivity.class);
                             GuideActivity.this.startActivity(intent);
-                            getSharedPreferences("first", MODE_PRIVATE).edit().putBoolean("firstlogin", false).commit();
+                            getSharedPreferences("first", MODE_PRIVATE).edit().putBoolean("firstlogin", false).apply();
                             GuideActivity.this.finish();
                         }
                     });

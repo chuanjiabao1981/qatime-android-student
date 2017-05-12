@@ -137,16 +137,6 @@
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="tab_text_color_select">//二级导航选中
-        <item name="android:textColor">#333333</item>
-        <item name="android:textSize">14.0sp</item>
-    </style>
-
-    <style name="tab_text_color_normal">//二级导航未选中
-        <item name="android:textColor">#999999</item>
-        <item name="android:textSize">14.0sp</item>
-    </style>
-
     <style name="tab_menu_height">//菜单栏高度
         <item name="android:layout_height">48dp</item>
     </style>
@@ -155,16 +145,6 @@
         <item name="android:layout_width">24dp</item>
         <item name="android:layout_height">24dp</item>
         <item name="android:scaleType">fitCenter</item>
-    </style>
-
-    <style name="tab_menu_text_color_select">//菜单栏文字选中
-        <item name="android:textColor">@color/colorPrimary</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="tab_menu_text_color_normal">//菜单栏文字未选中
-        <item name="android:textColor">#ff666666</item>
-        <item name="android:textSize">12sp</item>
     </style>
 
 

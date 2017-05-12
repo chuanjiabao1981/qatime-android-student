@@ -31,13 +31,6 @@ public class PersonalMyVideoActivity extends BaseFragmentActivity {
         setContentView(R.layout.activity_personal_my_video);
         setTitles(getResources().getString(R.string.my_video));
 
-//        setRightImage(R.mipmap.audition_records, new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(PersonalMyTutorshipActivity.this, AuditionRecordsActivity.class);
-//                startActivity(intent);
-//            }
-//        });
         initView();
     }
 

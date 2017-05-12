@@ -21,8 +21,7 @@
 
                 <TextView
                 android:id="@+id/tab_text1"
-                style="@style/tab_text_color_select"
-                android:layout_width="wrap_content"
+                    android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textColor="#ff5842"
@@ -38,7 +37,6 @@
 
             <TextView
                 android:id="@+id/tab_text2"
-                style="@style/tab_text_color_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
@@ -55,7 +53,6 @@
 
             <TextView
                 android:id="@+id/tab_text3"
-                style="@style/tab_text_color_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
@@ -72,7 +69,6 @@
 
             <TextView
                 android:id="@+id/tab_text4"
-                style="@style/tab_text_color_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"

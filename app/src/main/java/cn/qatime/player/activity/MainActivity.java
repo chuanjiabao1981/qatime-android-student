@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,7 +16,6 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.NimIntent;
@@ -38,7 +36,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -51,7 +48,6 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.bean.BusEvent;
-import cn.qatime.player.bean.CashAccountBean;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.fragment.FragmentHomeClassTable;
@@ -68,10 +64,10 @@ import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.SPUtils;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.bean.CashAccountBean;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
 import libraryextra.bean.SystemNotifyBean;
-import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -119,8 +115,10 @@ public class MainActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        checkUserInfo();
+
         linear_bar = findViewById(R.id.ll_bar);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
                     | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -129,16 +127,16 @@ public class MainActivity extends BaseFragmentActivity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             //透明状态栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            //透明导航栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            linear_bar.setVisibility(View.VISIBLE);
-            //获取到状态栏的高度
-            int statusHeight = getStatusBarHeight();
-            //动态的设置隐藏布局的高度
-            ViewGroup.LayoutParams params = linear_bar.getLayoutParams();
-            params.height = statusHeight;
-            linear_bar.setLayoutParams(params);
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            //透明导航栏
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+////            linear_bar.setVisibility(View.VISIBLE);
+//            //获取到状态栏的高度
+//            int statusHeight = getStatusBarHeight();
+//            //动态的设置隐藏布局的高度
+//            ViewGroup.LayoutParams params = linear_bar.getLayoutParams();
+//            params.height = statusHeight;
+//            linear_bar.setLayoutParams(params);
         }
         initView();
         EventBus.getDefault().register(this);
@@ -157,11 +155,52 @@ public class MainActivity extends BaseFragmentActivity {
             }
         }
         parseIntent();
-        //        GetGradeslist();
-//        GetProvinceslist();
-//        GetCitieslist();
-        GetSchoolslist();
         NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, true);
+    }
+
+
+    /**
+     * 检查用户信息是否完整
+     */
+    private void checkUserInfo() {
+        if (BaseApplication.isLogined()) {
+
+            DaYiJsonObjectRequest request1 = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null, new VolleyListener(MainActivity.this) {
+                @Override
+                protected void onTokenOut() {
+                    tokenOut();
+                }
+
+                @Override
+                protected void onSuccess(JSONObject response) {
+                    PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
+                    Logger.e(bean.toString());
+                    String name = bean.getData().getName();
+                    String url = bean.getData().getAvatar_url();
+                    String grade = bean.getData().getGrade();
+                    String province = bean.getData().getProvince();
+                    String city = bean.getData().getCity();
+                    if (StringUtils.isNullOrBlanK(url) ||StringUtils.isNullOrBlanK(name) || StringUtils.isNullOrBlanK(grade) || StringUtils.isNullOrBlanK(province) || StringUtils.isNullOrBlanK(city)) {
+                        Toast.makeText(MainActivity.this, getResourceString(R.string.please_set_information), Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MainActivity.this, RegisterPerfectActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+
+                @Override
+                protected void onError(JSONObject response) {
+                    Toast.makeText(MainActivity.this, getResourceString(R.string.login_failed), Toast.LENGTH_SHORT).show();
+                    BaseApplication.clearToken();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    BaseApplication.clearToken();
+                }
+            });
+            addToRequestQueue(request1);
+        }
     }
 
     /**
@@ -219,23 +258,18 @@ public class MainActivity extends BaseFragmentActivity {
                 }
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-                }
-
-                //Android4.4及以上版本才能设置此效果
-
-                //Android5.0版本
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
                     if (position == 4) {
-                        //设置状态栏颜色
                         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
-                        linear_bar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                     } else {
                         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
-                        linear_bar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
                     }
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//
+//                    if (position == 4) {
+//                        linear_bar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+//                    } else {
+//                        linear_bar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+//                    }
                 }
             }
         });
@@ -335,11 +369,13 @@ public class MainActivity extends BaseFragmentActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
+        checkUserInfo();
         if (!StringUtils.isNullOrBlanK(intent.getStringExtra("out")) || (!StringUtils.isNullOrBlanK(intent.getStringExtra("sign")))) {
             Intent start = new Intent(this, LoginActivity.class);
             if (!StringUtils.isNullOrBlanK(intent.getStringExtra("sign"))) {
                 start.putExtra("sign", intent.getStringExtra("sign"));
             }
+            BaseApplication.clearToken();
             startActivity(start);
             finish();
         } else if (!StringUtils.isNullOrBlanK(intent.getStringExtra("activity_action"))) {
@@ -493,36 +529,6 @@ public class MainActivity extends BaseFragmentActivity {
 ////        addToRequestQueue(request);
 //    }
 
-    //学校列表
-    public void GetSchoolslist() {
-
-        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.urlAppconstantInformation + "/schools", null,
-                new VolleyListener(MainActivity.this) {
-
-                    @Override
-                    protected void onSuccess(JSONObject response) {
-                        boolean value = FileUtil.writeFile(new ByteArrayInputStream(response.toString().getBytes()), getCacheDir().getAbsolutePath() + "/school.txt", true);
-                        SPUtils.put(MainActivity.this, "school", value);
-                    }
-
-                    @Override
-                    protected void onError(JSONObject response) {
-
-                    }
-
-                    @Override
-                    protected void onTokenOut() {
-                        tokenOut();
-                    }
-
-                }, new VolleyErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
-            }
-        });
-        addToRequestQueue(request);
-    }
 
     @Override
     protected void onResume() {
@@ -600,7 +606,6 @@ public class MainActivity extends BaseFragmentActivity {
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null,
                 new VolleyListener(MainActivity.this) {
-
 
                     @Override
                     protected void onSuccess(JSONObject response) {

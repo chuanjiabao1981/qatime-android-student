@@ -6,8 +6,10 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import cn.qatime.player.R;
@@ -59,7 +61,11 @@ public class FragmentVideoCoursesClassInfo extends BaseFragment {
         });
         webView.setBackgroundColor(0); // 设置背景色
         webView.getBackground().setAlpha(0); // 设置填充透明度 范围：0-255
-        webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY); //取消滚动条白边效果
+        webView.setFocusable(false);//防止加载之后webview滚动
+        webView.setVerticalScrollBarEnabled(false);
+        webView.setHorizontalScrollBarEnabled(false);
+        webView.setWebChromeClient(new WebChromeClient());
+        webView.setWebViewClient(new WebViewClient());
         WebSettings settings = webView.getSettings();
         settings.setDefaultTextEncodingName("UTF-8");
         settings.setBlockNetworkImage(false);
@@ -71,17 +77,17 @@ public class FragmentVideoCoursesClassInfo extends BaseFragment {
     }
 
     public void setData(VideoCoursesDetailsBean bean) {
-        subject.setText((StringUtils.isNullOrBlanK(bean.getData().getSubject()) ? "" : bean.getData().getSubject()));
-        grade.setText((bean.getData().getGrade() == null ? "" : bean.getData().getGrade()));
-        totalClass.setText(getString(R.string.lesson_count, bean.getData().getPreset_lesson_count()));
-        if (!StringUtils.isNullOrBlanK(bean.getData().getObjective())) {
-            target.setText(bean.getData().getObjective());
+        subject.setText((StringUtils.isNullOrBlanK(bean.getData().getVideo_course().getSubject()) ? "" : bean.getData().getVideo_course().getSubject()));
+        grade.setText((bean.getData().getVideo_course().getGrade() == null ? "" : bean.getData().getVideo_course().getGrade()));
+        totalClass.setText(getString(R.string.lesson_count, bean.getData().getVideo_course().getVideo_lessons_count()));
+        if (!StringUtils.isNullOrBlanK(bean.getData().getVideo_course().getObjective())) {
+            target.setText(bean.getData().getVideo_course().getObjective());
         }
-        if (!StringUtils.isNullOrBlanK(bean.getData().getSuit_crowd())) {
-            suitable.setText(bean.getData().getSuit_crowd());
+        if (!StringUtils.isNullOrBlanK(bean.getData().getVideo_course().getSuit_crowd())) {
+            suitable.setText(bean.getData().getVideo_course().getSuit_crowd());
         }
         String header = "<style>* {color:#666666;margin:0;padding:0;}p {margin-bottom:3}</style>";//默认color段落间距
-        String body = StringUtils.isNullOrBlanK(bean.getData().getDescription()) ? getString(R.string.no_desc) : bean.getData().getDescription();
+        String body = StringUtils.isNullOrBlanK(bean.getData().getVideo_course().getDescription()) ? getString(R.string.no_desc) : bean.getData().getVideo_course().getDescription();
         body = body.replace("\r\n", "<br>");
         String footer = "<p style='margin-top:20'><font style='font-size:15;color:#333333'>学习须知</font></p> \n" +
                 "<p style='margin-top:5;'><font style='font-size:15;color:#333333'>购买</font></p> \n" +

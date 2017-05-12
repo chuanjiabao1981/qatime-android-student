@@ -86,7 +86,7 @@ public class FragmentRemedialClassUpToDate extends BaseFragment {
                     if(value!=0){
                         helper.setText(R.id.teaching_time, getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day));
                     }else{
-                        helper.setText(R.id.teaching_time,getString(R.string.ready_to_start));
+                        helper.setText(R.id.teaching_time,"即将开课");
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();

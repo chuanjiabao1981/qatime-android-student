@@ -67,6 +67,7 @@ public class FragmentFilterClassLive extends BaseFragment {
     private String startTime = null;
     private List<LabelBean.DataBean> labelData;
     private CommonAdapter<LabelBean.DataBean> labelAdapter;
+    private TextView label;
 
     public BaseFragment setArguments(String grade, String subject) {
         this.grade = grade;
@@ -243,7 +244,8 @@ public class FragmentFilterClassLive extends BaseFragment {
                 getData(0);
             }
         });
-        final TextView label = (TextView) view.findViewById(R.id.label);
+        label = (TextView) view.findViewById(R.id.label);
+        View labelLayout = view.findViewById(R.id.label_layout);
         View screen = view.findViewById(R.id.screen);
 
         listview = (PullToRefreshListView) view.findViewById(R.id.listview);
@@ -254,6 +256,7 @@ public class FragmentFilterClassLive extends BaseFragment {
         listview.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
         listview.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         listview.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
+        listview.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
         adapter = new CommonAdapter<FilterLiveCourseBean.DataBean>(getActivity(), datas, R.layout.item_filter_course) {
             @Override
             public void convert(ViewHolder holder, FilterLiveCourseBean.DataBean item, int position) {
@@ -300,7 +303,7 @@ public class FragmentFilterClassLive extends BaseFragment {
                 }
             }
         };
-        label.setOnClickListener(new View.OnClickListener() {
+        labelLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //标签

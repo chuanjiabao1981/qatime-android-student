@@ -23,11 +23,12 @@
             <!-- android:id="@+id/tab_text" -->
             <TextView
                 android:id="@+id/tab_text1"
-                style="@style/tab_text_color_select"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="@string/recharge_record" />
+                android:text="@string/recharge_record"
+                android:textSize="14.0sp"
+                android:textColor="#333333" />
         </LinearLayout>
 
         <LinearLayout
@@ -40,11 +41,12 @@
             <!-- android:id="@+id/tab_text" -->
             <TextView
                 android:id="@+id/tab_text2"
-                style="@style/tab_text_color_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="@string/withdraw_cash_record" />
+                android:text="@string/withdraw_cash_record"
+                android:textSize="14.0sp"
+                android:textColor="#999999" />
         </LinearLayout>
 
         <LinearLayout
@@ -55,11 +57,12 @@
 
             <TextView
                 android:id="@+id/tab_text3"
-                style="@style/tab_text_color_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="@string/consumption_record" />
+                android:text="@string/consumption_record"
+                android:textSize="14.0sp"
+                android:textColor="#999999" />
         </LinearLayout>
 
         <LinearLayout
@@ -70,11 +73,12 @@
 
             <TextView
                 android:id="@+id/tab_text4"
-                style="@style/tab_text_color_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="@string/refund_record" />
+                android:text="@string/refund_record"
+                android:textSize="14.0sp"
+                android:textColor="#999999" />
         </LinearLayout>
     </LinearLayout>
 

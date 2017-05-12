@@ -32,8 +32,8 @@ import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
-import cn.qatime.player.view.CustomKeyboard;
-import cn.qatime.player.view.PayEditText;
+import libraryextra.view.CustomKeyboard;
+import libraryextra.view.PayEditText;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
@@ -142,7 +142,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
                 int diff = 24 - (int) ((System.currentTimeMillis() / 1000 - changeAt) / 3600);
                 if (diff <= 24 && diff > 0) {
                     payPswText.setText(getString(R.string.new_pay_password_invalid, diff));
-                    payPswText.setTextColor(0xff999999);
+                    payPswText.setTextColor(0xff666666);
                 } else {
                     payPswText.setText("");
                 }
@@ -246,7 +246,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
 
     @Subscribe
     public void onEvent(BusEvent event) {
-        if (event == BusEvent.PAY_PASSWORD_CHANGE) {
+        if (event == BusEvent.ON_REFRESH_CASH_ACCOUNT) {
             long changeAt = BaseApplication.getCashAccount().getData().getPassword_set_at();
 
             int diff = 24 - (int) ((System.currentTimeMillis() / 1000 - changeAt) / 3600);

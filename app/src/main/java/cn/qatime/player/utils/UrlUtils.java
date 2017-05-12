@@ -39,6 +39,8 @@ public class UrlUtils {
     public static String urlInteractCourses = baseUrl + "api/v1/live_studio/interactive_courses/";
     //视频课
     public static String urlVideoCourses = baseUrl + "api/v1/live_studio/video_courses/";
+    //视频课
+    public static String urlVideoLessons = baseUrl + "api/v1/live_studio/video_lessons/";
     //直播课搜索
     public static String urlSearch = baseUrl + "api/v1/live_studio/courses/search";
     //辅导班排行

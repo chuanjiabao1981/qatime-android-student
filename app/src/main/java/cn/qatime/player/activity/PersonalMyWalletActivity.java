@@ -20,7 +20,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.BusEvent;
-import cn.qatime.player.bean.CashAccountBean;
+import libraryextra.bean.CashAccountBean;
 import cn.qatime.player.utils.Constant;
 
 /**
@@ -94,8 +94,6 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
                 price1 = "0" + price1;
             }
             consumption.setText(price1);
-        } else {
-            EventBus.getDefault().post(BusEvent.REFRESH_CASH_ACCOUNT);
         }
     }
 

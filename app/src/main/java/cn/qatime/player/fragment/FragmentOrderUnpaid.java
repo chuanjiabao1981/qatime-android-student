@@ -75,7 +75,6 @@ public class FragmentOrderUnpaid extends BaseFragment {
         listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResourceString(R.string.loading));
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
-
         adapter = new CommonAdapter<MyOrderBean.DataBean>(getActivity(), list, R.layout.item_fragment_personal_my_order1) {
             @Override
             public void convert(ViewHolder helper, final MyOrderBean.DataBean item, final int position) {

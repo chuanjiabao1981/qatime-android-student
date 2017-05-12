@@ -206,7 +206,32 @@
         android:id="@+id/button_refund"
         style="@style/button_full_width_style"
         android:layout_marginTop="10dp"
+        android:visibility="visible"
         android:text="申请退款" />
+
+
+    <LinearLayout
+        android:id="@+id/tip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@mipmap/warning_gray" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:textSize="12sp"
+            android:text="此订单类型暂不支持退款！"
+            android:textColor="#999999" />
+    </LinearLayout>
 </LinearLayout>
 
 

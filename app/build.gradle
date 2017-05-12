@@ -5,6 +5,14 @@ properties.load(project.rootProject.file('local.properties').newDataInputStream(
 
 android {
     signingConfigs {
+        debug {
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+        release {
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
         config {
             keyAlias 'qatime'
             keyPassword '32147896'

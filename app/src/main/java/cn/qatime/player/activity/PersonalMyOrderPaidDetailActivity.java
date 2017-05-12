@@ -35,7 +35,7 @@ import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
 
-public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
+public class   PersonalMyOrderPaidDetailActivity extends BaseActivity {
 
     private TextView subject;
     private TextView progress;
@@ -144,6 +144,8 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
                 teacher.setText(data.getProduct_video_course().getTeacher().getName());
             }
             progress.setText(String.format(getString(R.string.lesson_count), data.getProduct_video_course().getPreset_lesson_count()));
+            refund.setVisibility(View.GONE);
+            findViewById(R.id.tip).setVisibility(View.VISIBLE);
         }
 
         ordernumber.setText(data.getId());

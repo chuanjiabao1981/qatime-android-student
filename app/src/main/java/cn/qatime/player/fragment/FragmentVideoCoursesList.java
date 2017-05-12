@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,6 @@ public class FragmentVideoCoursesList extends BaseFragment {
     private List<VideoLessonsBean> list = new ArrayList<>();
     private CommonAdapter<VideoLessonsBean> adapter;
     private VideoCoursesPlayActivity context;
-    private VideoLessonsBean playingData;
 
     @Nullable
     @Override
@@ -55,20 +55,24 @@ public class FragmentVideoCoursesList extends BaseFragment {
             @Override
             public void convert(ViewHolder holder, VideoLessonsBean item, int position) {
                 holder.setText(R.id.number, getPosition(position))
-                        .setText(R.id.name, item.getName())
                         .setText(R.id.time_length, "时长 " + item.getVideo().getFormat_tmp_duration())
                         .setText(R.id.status, "");
+
+                TextView name = holder.getView(R.id.name);
+                name.setText(item.getName());
+                name.setTextColor(context.playingData.getId() == item.getId() ? getResources().getColor(R.color.colorPrimary) : 0xff999999);
             }
         };
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (playingData != null && playingData.getVideo().getId() == list.get(position).getVideo().getId()) {
-                    return;
-                }
-                playingData = list.get(position);
-                context.playCourses(playingData.getVideo().getName_url());
+//                if (context.playingData != null && context.playingData.getVideo().getId() == list.get(position).getVideo().getId()) {
+//                    return;
+//                }
+                context.playingData = list.get(position);
+                context.playCourses(context.playingData);
+                adapter.notifyDataSetChanged();
             }
         });
     }
@@ -81,7 +85,17 @@ public class FragmentVideoCoursesList extends BaseFragment {
 
 
     public void setData(List<VideoLessonsBean> video_lessons) {
-        list.addAll(video_lessons);
+//        video_lessons.get(0)
+        list.clear();
+        if (context.isTasting()) {
+            for (VideoLessonsBean videoLessonsBean : video_lessons) {
+                if (videoLessonsBean.isTastable()) {//只显示可试听的课
+                    list.add(videoLessonsBean);
+                }
+            }
+        } else {
+            list.addAll(video_lessons);
+        }
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }

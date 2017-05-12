@@ -28,7 +28,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
-import cn.qatime.player.bean.CashAccountBean;
+import libraryextra.bean.CashAccountBean;
 import cn.qatime.player.bean.CouponVerifyBean;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.Constant;

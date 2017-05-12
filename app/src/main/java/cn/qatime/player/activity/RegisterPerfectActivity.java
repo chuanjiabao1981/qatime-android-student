@@ -32,10 +32,12 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.UpLoadUtil;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.bean.CityBean;
 import libraryextra.bean.GradeBean;
 import libraryextra.bean.ImageItem;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
+import libraryextra.bean.ProvincesBean;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.DialogUtils;
 import libraryextra.utils.FileUtil;
@@ -56,15 +58,19 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
     private ImageView headSculpture;
     private EditText name;
     private TextView editGrade;
+    private TextView editRegion;
     private TextView editMore;
     private TextView complete;
     private List<String> grades;
+    private CityBean.Data city;
+    private ProvincesBean.DataBean province;
 
     private void assignViews() {
         information = (LinearLayout) findViewById(R.id.information);
         headSculpture = (ImageView) findViewById(R.id.head_sculpture);
         name = (EditText) findViewById(R.id.name);
         editGrade = (TextView) findViewById(R.id.grade);
+        editRegion = (TextView) findViewById(R.id.region);
         editMore = (TextView) findViewById(R.id.edit_more);
         complete = (TextView) findViewById(R.id.complete);
 
@@ -94,6 +100,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
         complete.setOnClickListener(this);
         editMore.setOnClickListener(this);
         editGrade.setOnClickListener(this);
+        editRegion.setOnClickListener(this);
     }
 
 
@@ -109,6 +116,10 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                 break;
             case R.id.grade:
                 showGradePickerDialog();
+                break;
+            case R.id.region:
+                Intent regionIntent = new Intent(this, RegionSelectActivity1.class);
+                startActivityForResult(regionIntent, Constant.REQUEST_REGION_SELECT);
                 break;
             case R.id.information://去选择图片
                 intent = new Intent(RegisterPerfectActivity.this, PictureSelectActivity.class);
@@ -178,10 +189,17 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                     Toast.makeText(this, getResources().getString(R.string.grade_can_not_be_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+                if (province == null || city == null) {
+                    Toast.makeText(this, "请选择城市", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Map<String, String> map = new HashMap<>();
                 map.put("name", sName);
                 map.put("grade", grade);
                 map.put("avatar", imageUrl);
+                map.put("province_id", province.getId());
+                map.put("city_id", city.getId());
                 util.execute(map);
                 break;
         }
@@ -255,15 +273,27 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                     Glide.with(this).load(Uri.fromFile(new File(imageUrl))).transform(new GlideCircleTransform(this)).crossFade().into(headSculpture);
                 }
             }
-        } else if (requestCode == Constant.REGIST_1 && resultCode == Constant.RESPONSE) {
+        } else if (requestCode == Constant.REQUEST_REGION_SELECT && resultCode == Constant.RESPONSE_REGION_SELECT) {
+            city = (CityBean.Data) data.getSerializableExtra("region_city");
+            province = (ProvincesBean.DataBean) data.getSerializableExtra("region_province");
+            if (city != null && province != null) {
+                editRegion.setText(province.getName() + city.getName());
+            }
+        } else if (requestCode == Constant.REGIST_1 && resultCode == Constant.RESPONSE) {//只有信息修改成功以后才会走到这
             Intent intent = new Intent(RegisterPerfectActivity.this, MainActivity.class);
             startActivity(intent);
             setResult(resultCode);
             finish();
-        } else if (requestCode == Constant.REGIST_2 && resultCode == Constant.RESPONSE) {
+        } else if (requestCode == Constant.REGIST_2 && resultCode == Constant.RESPONSE) {//只有信息修改成功以后才会走到这
             setResult(resultCode);
             finish();
         }
+    }
+
+    @Override
+    public void onBackPressed() {//此页面返回清理token（未修改信息，清理登陆状态)
+        BaseApplication.clearToken();
+        finish();
     }
 
     @Override

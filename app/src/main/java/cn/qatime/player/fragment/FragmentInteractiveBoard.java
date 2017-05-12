@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomInfo;
 import com.orhanobut.logger.Logger;
 
 import java.util.HashMap;

@@ -36,19 +36,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/taste"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="2dp"
-                        android:background="#f96"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:paddingLeft="3dp"
-                        android:paddingRight="3dp"
-                        android:text="试听中"
-                        android:textColor="#fff"
-                        android:textSize="12sp" />
+
 
                     <TextView
                         android:id="@+id/name"

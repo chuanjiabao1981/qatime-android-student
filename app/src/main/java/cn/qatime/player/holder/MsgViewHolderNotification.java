@@ -1,7 +1,6 @@
 package cn.qatime.player.holder;
 
 import android.text.method.LinkMovementMethod;
-import android.text.style.ImageSpan;
 import android.widget.TextView;
 
 import cn.qatime.player.R;
