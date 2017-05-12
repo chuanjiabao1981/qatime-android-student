@@ -22,7 +22,6 @@ import com.netease.nimlib.sdk.avchat.AVChatCallback;
 import com.netease.nimlib.sdk.avchat.AVChatManager;
 import com.netease.nimlib.sdk.avchat.AVChatStateObserver;
 import com.netease.nimlib.sdk.avchat.constant.AVChatAudioEffectMode;
-import com.netease.nimlib.sdk.avchat.constant.AVChatResCode;
 import com.netease.nimlib.sdk.avchat.constant.AVChatType;
 import com.netease.nimlib.sdk.avchat.constant.AVChatVideoScalingType;
 import com.netease.nimlib.sdk.avchat.model.AVChatAudioFrame;
@@ -192,7 +191,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
     private void initData() {
         if (id != 0) {
-            DaYiJsonObjectRequest announcementsRequest = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass + "/" + id + "/realtime", null,
+            DaYiJsonObjectRequest announcementsRequest = new DaYiJsonObjectRequest(UrlUtils.urlInteractCourses + "/" + id + "/realtime", null,
                     new VolleyListener(InteractiveLiveActivity.this) {
                         @Override
                         protected void onSuccess(JSONObject response) {
@@ -422,7 +421,8 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             @Override
             public void onFailed(int i) {
                 Logger.e("join channel failed, code:" + i);
-                Toast.makeText(InteractiveLiveActivity.this, "join channel failed, code:" + i, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(InteractiveLiveActivity.this, "join channel failed, code:" + i, Toast.LENGTH_SHORT).show();
+                hd.post(loopStatus);
             }
 
             @Override
@@ -713,6 +713,8 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         clearChatRoom();
         updateRTSFragment();
         hd.postDelayed(loopStatus, loopDelay);
+        videoPermission.setVisibility(View.GONE);
+        audioPermission.setVisibility(View.GONE);
 //        ChatRoomMemberCache.getInstance().removePermissionMem(roomId, s);
 //        videoListener.onUserLeave(s);
 
@@ -883,7 +885,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
         @Override
         public void onChannelEstablished(String sessionId, RTSTunnelType tunType) {
-            Toast.makeText(InteractiveLiveActivity.this, "onCallEstablished,tunType=" + tunType.toString(), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(InteractiveLiveActivity.this, "onCallEstablished,tunType=" + tunType.toString(), Toast.LENGTH_SHORT).show();
 
             if (tunType == RTSTunnelType.AUDIO) {
                 RTSManager2.getInstance().setSpeaker(sessionId, true); // 默认开启扬声器
