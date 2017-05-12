@@ -5,7 +5,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,7 +76,6 @@ import cn.qatime.player.utils.annotation.OnMPermissionDenied;
 import cn.qatime.player.utils.annotation.OnMPermissionGranted;
 import cn.qatime.player.utils.annotation.OnMPermissionNeverAskAgain;
 import cn.qatime.player.view.VideoFrameLayout;
-import cn.qatime.player.view.VideoLayout;
 import libraryextra.bean.Announcements;
 import libraryextra.bean.InteractCourseDetailBean;
 import libraryextra.utils.JsonUtils;
@@ -108,13 +106,11 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     private TextView roomIdText;
     private ImageView videoPermission;
     private ImageView audioPermission;
-    //    private TextView onlineStatus;
     /**
      * 聊天室基本信息
      */
     private String roomId;
     private String sessionId;
-    //    private ChatRoomInfo roomInfo;
     private FragmentInteractiveBoard rtsFragment;
     private Handler hd = new Handler();
     private Runnable hideBackLayout = new Runnable() {
@@ -191,9 +187,8 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         requestLivePermission();
         id = getIntent().getIntExtra("id", 0);
         initData();
-        hd.postDelayed(loopStatus, 3000);
+        hd.post(loopStatus);
     }
-
 
     private void initData() {
         if (id != 0) {
