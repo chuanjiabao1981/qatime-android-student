@@ -203,10 +203,13 @@ public class FragmentFilterClassInteract extends BaseFragment {
                 List<TeacherBean> teachers = item.getTeachers();
                 StringBuilder teacherNames = new StringBuilder();
                 for (int i = 0; i < teachers.size(); i++) {
-                    teacherNames.append(teachers.get(0).getName());
+                    teacherNames.append(teachers.get(i).getName());
                     if (i != teachers.size() - 1) {
                         teacherNames.append("/");
                     }
+                }
+                if (teachers.size() > 1) {
+                    teacherNames.append("...");
                 }
                 holder.setText(R.id.name, item.getName())
                         .setText(R.id.price, "￥" + item.getPrice())

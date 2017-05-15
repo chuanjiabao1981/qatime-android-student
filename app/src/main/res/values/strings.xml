@@ -306,7 +306,7 @@
     <string name="learning_process">学习流程</string>
     <string name="feedback">意见反馈</string>
     <string name="current_version">V</string>
-    <string name="notify_message">通知提醒</string>
+    <string name="notify_message">通知设置</string>
     <string name="notify_classes">课程提醒</string>
     <string name="voice">声音</string>
     <string name="shake">震动</string>
