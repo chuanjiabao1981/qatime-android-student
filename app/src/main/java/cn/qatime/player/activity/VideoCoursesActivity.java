@@ -15,12 +15,6 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
-import com.netease.nimlib.sdk.AbortableFuture;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.RequestCallback;
-import com.netease.nimlib.sdk.auth.AuthService;
-import com.netease.nimlib.sdk.auth.LoginInfo;
-import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -34,21 +28,14 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.bean.VideoCoursesDetailsBean;
-import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.fragment.FragmentVideoCoursesClassInfo;
 import cn.qatime.player.fragment.FragmentVideoCoursesClassList;
 import cn.qatime.player.fragment.FragmentVideoCoursesTeacherInfo;
-import cn.qatime.player.im.cache.TeamDataCache;
-import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
-import cn.qatime.player.utils.SPUtils;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.OrderPayBean;
-import libraryextra.bean.PersonalInformationBean;
-import libraryextra.bean.Profile;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.SimpleViewPagerIndicator;
@@ -118,7 +105,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                                     auditionStart.setVisibility(View.GONE);
                                 }
 
-                                if (data.getData().getTicket().getStatus().equals("active")) {
+                                if (data.getData().getTicket() != null && data.getData().getTicket().getStatus().equals("active")) {
                                     startStudyView.setVisibility(View.VISIBLE);
                                 }
 
@@ -256,7 +243,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                     if (data.getData().getVideo_course().getSell_type().equals("free")) {
                         if (data.getData().getTicket() == null) {//免费课程未购买则购买
                             joinMyFreeVideo();//获取免费课程票号
-                        }else{//已购买进入播放页
+                        } else {//已购买进入播放页
                             intent = new Intent(VideoCoursesActivity.this, VideoCoursesPlayActivity.class);
                             intent.putExtra("id", data.getData().getVideo_course().getId());
                             intent.putExtra("tasting", false);
@@ -354,76 +341,76 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                         intent.putExtra("id", data.getData().getVideo_course().getId());
                         intent.putExtra("tasting", false);
                         startActivity(intent);
-                        if (StringUtils.isNullOrBlanK(BaseApplication.getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getAccountToken())) {
-                            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null,
-                                    new VolleyListener(VideoCoursesActivity.this) {
-                                        @Override
-                                        protected void onSuccess(JSONObject response) {
-                                            PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
-                                            if (bean != null && bean.getData() != null && bean.getData().getChat_account() != null) {
-                                                Profile profile = BaseApplication.getProfile();
-                                                profile.getData().getUser().setChat_account(bean.getData().getChat_account());
-                                                BaseApplication.setProfile(profile);
-
-                                                String account = BaseApplication.getAccount();
-                                                String token = BaseApplication.getAccountToken();
-
-                                                if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
-                                                    AbortableFuture<LoginInfo> loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, token));
-                                                    loginRequest.setCallback(new RequestCallback<LoginInfo>() {
-                                                        @Override
-                                                        public void onSuccess(LoginInfo o) {
-                                                            Logger.e("云信登录成功" + o.getAccount());
-                                                            // 初始化消息提醒
-                                                            NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
-
-                                                            NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
-                                                            //缓存
-                                                            UserInfoCache.getInstance().clear();
-                                                            TeamDataCache.getInstance().clear();
-
-                                                            UserInfoCache.getInstance().buildCache();
-                                                            TeamDataCache.getInstance().buildCache();
-
-                                                            UserInfoCache.getInstance().registerObservers(true);
-                                                            TeamDataCache.getInstance().registerObservers(true);
-                                                        }
-
-                                                        @Override
-                                                        public void onFailed(int code) {
+//                        if (StringUtils.isNullOrBlanK(BaseApplication.getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getAccountToken())) {
+//                            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null,
+//                                    new VolleyListener(VideoCoursesActivity.this) {
+//                                        @Override
+//                                        protected void onSuccess(JSONObject response) {
+//                                            PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
+//                                            if (bean != null && bean.getData() != null && bean.getData().getChat_account() != null) {
+//                                                Profile profile = BaseApplication.getProfile();
+//                                                profile.getData().getUser().setChat_account(bean.getData().getChat_account());
+//                                                BaseApplication.setProfile(profile);
+//
+//                                                String account = BaseApplication.getAccount();
+//                                                String token = BaseApplication.getAccountToken();
+//
+//                                                if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
+//                                                    AbortableFuture<LoginInfo> loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, token));
+//                                                    loginRequest.setCallback(new RequestCallback<LoginInfo>() {
+//                                                        @Override
+//                                                        public void onSuccess(LoginInfo o) {
+//                                                            Logger.e("云信登录成功" + o.getAccount());
+//                                                            // 初始化消息提醒
+//                                                            NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
+//
+//                                                            NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
+//                                                            //缓存
+//                                                            UserInfoCache.getInstance().clear();
+//                                                            TeamDataCache.getInstance().clear();
+//
+//                                                            UserInfoCache.getInstance().buildCache();
+//                                                            TeamDataCache.getInstance().buildCache();
+//
+//                                                            UserInfoCache.getInstance().registerObservers(true);
+//                                                            TeamDataCache.getInstance().registerObservers(true);
+//                                                        }
+//
+//                                                        @Override
+//                                                        public void onFailed(int code) {
+////                                                            BaseApplication.clearToken();
+//                                                            Profile profile = BaseApplication.getProfile();
+//                                                            profile.getData().setRemember_token("");
+//                                                            SPUtils.putObject(VideoCoursesActivity.this, "profile", profile);
+//                                                        }
+//
+//                                                        @Override
+//                                                        public void onException(Throwable throwable) {
+//                                                            Logger.e(throwable.getMessage());
 //                                                            BaseApplication.clearToken();
-                                                            Profile profile = BaseApplication.getProfile();
-                                                            profile.getData().setRemember_token("");
-                                                            SPUtils.putObject(VideoCoursesActivity.this, "profile", profile);
-                                                        }
-
-                                                        @Override
-                                                        public void onException(Throwable throwable) {
-                                                            Logger.e(throwable.getMessage());
-                                                            BaseApplication.clearToken();
-                                                        }
-                                                    });
-                                                }
-                                            }
-                                        }
-
-                                        @Override
-                                        protected void onError(JSONObject response) {
-
-                                        }
-
-                                        @Override
-                                        protected void onTokenOut() {
-                                            tokenOut();
-                                        }
-                                    }, new VolleyErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError volleyError) {
-                                    super.onErrorResponse(volleyError);
-                                }
-                            });
-                            addToRequestQueue(request);
-                        }
+//                                                        }
+//                                                    });
+//                                                }
+//                                            }
+//                                        }
+//
+//                                        @Override
+//                                        protected void onError(JSONObject response) {
+//
+//                                        }
+//
+//                                        @Override
+//                                        protected void onTokenOut() {
+//                                            tokenOut();
+//                                        }
+//                                    }, new VolleyErrorListener() {
+//                                @Override
+//                                public void onErrorResponse(VolleyError volleyError) {
+//                                    super.onErrorResponse(volleyError);
+//                                }
+//                            });
+//                            addToRequestQueue(request);
+//                        }
                     }
 
                     @Override
@@ -458,76 +445,76 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                         intent.putExtra("id", data.getData().getVideo_course().getId());
                         intent.putExtra("tasting", true);
                         startActivity(intent);
-                        if (StringUtils.isNullOrBlanK(BaseApplication.getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getAccountToken())) {
-                            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null,
-                                    new VolleyListener(VideoCoursesActivity.this) {
-                                        @Override
-                                        protected void onSuccess(JSONObject response) {
-                                            PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
-                                            if (bean != null && bean.getData() != null && bean.getData().getChat_account() != null) {
-                                                Profile profile = BaseApplication.getProfile();
-                                                profile.getData().getUser().setChat_account(bean.getData().getChat_account());
-                                                BaseApplication.setProfile(profile);
-
-                                                String account = BaseApplication.getAccount();
-                                                String token = BaseApplication.getAccountToken();
-
-                                                if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
-                                                    AbortableFuture<LoginInfo> loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, token));
-                                                    loginRequest.setCallback(new RequestCallback<LoginInfo>() {
-                                                        @Override
-                                                        public void onSuccess(LoginInfo o) {
-                                                            Logger.e("云信登录成功" + o.getAccount());
-                                                            // 初始化消息提醒
-                                                            NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
-
-                                                            NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
-                                                            //缓存
-                                                            UserInfoCache.getInstance().clear();
-                                                            TeamDataCache.getInstance().clear();
-
-                                                            UserInfoCache.getInstance().buildCache();
-                                                            TeamDataCache.getInstance().buildCache();
-
-                                                            UserInfoCache.getInstance().registerObservers(true);
-                                                            TeamDataCache.getInstance().registerObservers(true);
-                                                        }
-
-                                                        @Override
-                                                        public void onFailed(int code) {
+//                        if (StringUtils.isNullOrBlanK(BaseApplication.getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getAccountToken())) {
+//                            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null,
+//                                    new VolleyListener(VideoCoursesActivity.this) {
+//                                        @Override
+//                                        protected void onSuccess(JSONObject response) {
+//                                            PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
+//                                            if (bean != null && bean.getData() != null && bean.getData().getChat_account() != null) {
+//                                                Profile profile = BaseApplication.getProfile();
+//                                                profile.getData().getUser().setChat_account(bean.getData().getChat_account());
+//                                                BaseApplication.setProfile(profile);
+//
+//                                                String account = BaseApplication.getAccount();
+//                                                String token = BaseApplication.getAccountToken();
+//
+//                                                if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
+//                                                    AbortableFuture<LoginInfo> loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, token));
+//                                                    loginRequest.setCallback(new RequestCallback<LoginInfo>() {
+//                                                        @Override
+//                                                        public void onSuccess(LoginInfo o) {
+//                                                            Logger.e("云信登录成功" + o.getAccount());
+//                                                            // 初始化消息提醒
+//                                                            NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
+//
+//                                                            NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
+//                                                            //缓存
+//                                                            UserInfoCache.getInstance().clear();
+//                                                            TeamDataCache.getInstance().clear();
+//
+//                                                            UserInfoCache.getInstance().buildCache();
+//                                                            TeamDataCache.getInstance().buildCache();
+//
+//                                                            UserInfoCache.getInstance().registerObservers(true);
+//                                                            TeamDataCache.getInstance().registerObservers(true);
+//                                                        }
+//
+//                                                        @Override
+//                                                        public void onFailed(int code) {
+////                                                            BaseApplication.clearToken();
+//                                                            Profile profile = BaseApplication.getProfile();
+//                                                            profile.getData().setRemember_token("");
+//                                                            SPUtils.putObject(VideoCoursesActivity.this, "profile", profile);
+//                                                        }
+//
+//                                                        @Override
+//                                                        public void onException(Throwable throwable) {
+//                                                            Logger.e(throwable.getMessage());
 //                                                            BaseApplication.clearToken();
-                                                            Profile profile = BaseApplication.getProfile();
-                                                            profile.getData().setRemember_token("");
-                                                            SPUtils.putObject(VideoCoursesActivity.this, "profile", profile);
-                                                        }
-
-                                                        @Override
-                                                        public void onException(Throwable throwable) {
-                                                            Logger.e(throwable.getMessage());
-                                                            BaseApplication.clearToken();
-                                                        }
-                                                    });
-                                                }
-                                            }
-                                        }
-
-                                        @Override
-                                        protected void onError(JSONObject response) {
-
-                                        }
-
-                                        @Override
-                                        protected void onTokenOut() {
-                                            tokenOut();
-                                        }
-                                    }, new VolleyErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError volleyError) {
-                                    super.onErrorResponse(volleyError);
-                                }
-                            });
-                            addToRequestQueue(request);
-                        }
+//                                                        }
+//                                                    });
+//                                                }
+//                                            }
+//                                        }
+//
+//                                        @Override
+//                                        protected void onError(JSONObject response) {
+//
+//                                        }
+//
+//                                        @Override
+//                                        protected void onTokenOut() {
+//                                            tokenOut();
+//                                        }
+//                                    }, new VolleyErrorListener() {
+//                                @Override
+//                                public void onErrorResponse(VolleyError volleyError) {
+//                                    super.onErrorResponse(volleyError);
+//                                }
+//                            });
+//                            addToRequestQueue(request);
+//                        }
                     }
 
                     @Override
