@@ -143,10 +143,7 @@ public class FragmentMyTasteVideo extends BaseFragment {
                                 list.addAll(data.getData());
                             }
                             adapter.notifyDataSetChanged();
-                        } catch (
-                                JsonSyntaxException e)
-
-                        {
+                        } catch (JsonSyntaxException e) {
                             e.printStackTrace();
                         }
                     }

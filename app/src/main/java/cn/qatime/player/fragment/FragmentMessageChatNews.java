@@ -207,7 +207,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                 ((ImageView) holder.getView(R.id.notify)).setVisibility(item.isMute() ? View.VISIBLE : View.GONE);
                 holder.getView(R.id.count).setVisibility(item.getUnreadCount() == 0 ? View.GONE : View.VISIBLE);
                 holder.setText(R.id.count, String.valueOf(item.getUnreadCount()));
-                String timeString = DateUtils.getTimeShowString(item.getTime(), false);
+                String timeString = DateUtils.getMMddHHmmss(item.getTime());
                 holder.setText(R.id.time, timeString);
             }
         };
@@ -506,7 +506,7 @@ public class FragmentMessageChatNews extends BaseFragment {
         }
     };
 
-        Observer<IMMessage> statusObserver = new Observer<IMMessage>() {
+    Observer<IMMessage> statusObserver = new Observer<IMMessage>() {
         @Override
         public void onEvent(IMMessage message) {
             int index = getItemIndex(message.getUuid());

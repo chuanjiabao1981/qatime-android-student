@@ -268,7 +268,6 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 //                                audition.setText(getResources().getString(R.string.Join_the_audition));
                                 if (data.getData().getTaste_count() == 0) {//试听数目为0则该课不支持试听
                                     auditionLayout.setVisibility(View.GONE);
-                                    return;
                                 }
                                 auditionStart.setVisibility(View.GONE);
                             }

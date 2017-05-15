@@ -1,5 +1,6 @@
 package cn.qatime.player.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -7,11 +8,11 @@ import java.util.List;
  * @date 2017/5/12 17:56
  * @Description:
  */
-public class VideoPlayBean {
+public class VideoPlayBean implements Serializable {
 
     /**
      * status : 1
-     * data : {"video_lesson":{"id":42,"name":"体验第二周","duration":null,"video":{"id":7816,"token":"1493284212518","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/b2fa3b8a4e5011fe4c07539a5580020d.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/46e2483d5621337ace0be3014ee1d24a.mp4"}},"ticket":{"id":667,"used_count":1,"buy_count":3,"lesson_price":"0.0","progress":[{"video_lesson":{"id":43,"name":"体验终章","duration":null,"video":{"id":7817,"token":"1493284223769","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/393d4890f5c6c0b84ee1b2853361a6a1.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/acd6a82b7e533e7282cfc410c42403d0.mp4"}},"status":"unused"},{"video_lesson":{"id":42,"name":"体验第二周","duration":null,"video":{"id":7816,"token":"1493284212518","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/b2fa3b8a4e5011fe4c07539a5580020d.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/46e2483d5621337ace0be3014ee1d24a.mp4"}},"status":"used"},{"video_lesson":{"id":41,"name":"体验第一周","duration":null,"video":{"id":7815,"token":"1493284188624","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/c9f5e22bfd97e0330b1be40ea0cb8dfd.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/8fdd927ad57e5a39f567a377edd7b318.mp4"}},"status":"used"}],"video_course":{"id":18,"name":"空手道免费体验课","subject":"数学","grade":"高一","teacher_name":"刘刚老师","publicize":"/assets/video_courses/app_info_default-061a95d589b702b146739a0de859454a.png"},"status":"active"}}
+     * data : {"video_lesson":{"id":5,"name":"第二学时","duration":null,"video":{"id":7768,"token":"1492157167944","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/b574edcbab5c0c9ce60035847b1d11f7.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/24e4490546fc753cd51eb9da30d2bb92.mp4"}},"ticket":{"id":662,"used_count":1,"buy_count":2,"lesson_price":"300.0","progress":[{"video_lesson":{"id":5,"name":"第二学时","duration":null,"video":{"id":7768,"token":"1492157167944","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/b574edcbab5c0c9ce60035847b1d11f7.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/24e4490546fc753cd51eb9da30d2bb92.mp4"}},"status":"used"},{"video_lesson":{"id":4,"name":"第一学时","duration":null,"video":{"id":7767,"token":"1492157139451","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/96fcf0349390a9ddccd8871c868d070a.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/5f89cfbf304841a1ea8c15b2451e306a.mp4"}},"status":"unused"}],"video_course":{"id":3,"name":"初中考试1","subject":"化学","grade":"初一","teacher_name":"王志成","publicize":"/assets/video_courses/app_info_default-061a95d589b702b146739a0de859454a.png"},"status":"active"}}
      */
 
     private int status;
@@ -35,8 +36,8 @@ public class VideoPlayBean {
 
     public static class DataBean {
         /**
-         * video_lesson : {"id":42,"name":"体验第二周","duration":null,"video":{"id":7816,"token":"1493284212518","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/b2fa3b8a4e5011fe4c07539a5580020d.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/46e2483d5621337ace0be3014ee1d24a.mp4"}}
-         * ticket : {"id":667,"used_count":1,"buy_count":3,"lesson_price":"0.0","progress":[{"video_lesson":{"id":43,"name":"体验终章","duration":null,"video":{"id":7817,"token":"1493284223769","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/393d4890f5c6c0b84ee1b2853361a6a1.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/acd6a82b7e533e7282cfc410c42403d0.mp4"}},"status":"unused"},{"video_lesson":{"id":42,"name":"体验第二周","duration":null,"video":{"id":7816,"token":"1493284212518","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/b2fa3b8a4e5011fe4c07539a5580020d.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/46e2483d5621337ace0be3014ee1d24a.mp4"}},"status":"used"},{"video_lesson":{"id":41,"name":"体验第一周","duration":null,"video":{"id":7815,"token":"1493284188624","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/c9f5e22bfd97e0330b1be40ea0cb8dfd.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/8fdd927ad57e5a39f567a377edd7b318.mp4"}},"status":"used"}],"video_course":{"id":18,"name":"空手道免费体验课","subject":"数学","grade":"高一","teacher_name":"刘刚老师","publicize":"/assets/video_courses/app_info_default-061a95d589b702b146739a0de859454a.png"},"status":"active"}
+         * video_lesson : {"id":5,"name":"第二学时","duration":null,"video":{"id":7768,"token":"1492157167944","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/b574edcbab5c0c9ce60035847b1d11f7.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/24e4490546fc753cd51eb9da30d2bb92.mp4"}}
+         * ticket : {"id":662,"used_count":1,"buy_count":2,"lesson_price":"300.0","progress":[{"video_lesson":{"id":5,"name":"第二学时","duration":null,"video":{"id":7768,"token":"1492157167944","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/b574edcbab5c0c9ce60035847b1d11f7.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/24e4490546fc753cd51eb9da30d2bb92.mp4"}},"status":"used"},{"video_lesson":{"id":4,"name":"第一学时","duration":null,"video":{"id":7767,"token":"1492157139451","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/96fcf0349390a9ddccd8871c868d070a.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/5f89cfbf304841a1ea8c15b2451e306a.mp4"}},"status":"unused"}],"video_course":{"id":3,"name":"初中考试1","subject":"化学","grade":"初一","teacher_name":"王志成","publicize":"/assets/video_courses/app_info_default-061a95d589b702b146739a0de859454a.png"},"status":"active"}
          */
 
         private VideoLessonBean video_lesson;
@@ -60,15 +61,15 @@ public class VideoPlayBean {
 
         public static class VideoLessonBean {
             /**
-             * id : 42
-             * name : 体验第二周
+             * id : 5
+             * name : 第二学时
              * duration : null
-             * video : {"id":7816,"token":"1493284212518","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/b2fa3b8a4e5011fe4c07539a5580020d.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/46e2483d5621337ace0be3014ee1d24a.mp4"}
+             * video : {"id":7768,"token":"1492157167944","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/b574edcbab5c0c9ce60035847b1d11f7.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/24e4490546fc753cd51eb9da30d2bb92.mp4"}
              */
 
             private int id;
             private String name;
-            private int duration;
+            private Object duration;
             private VideoBean video;
 
             public int getId() {
@@ -87,11 +88,11 @@ public class VideoPlayBean {
                 this.name = name;
             }
 
-            public int getDuration() {
+            public Object getDuration() {
                 return duration;
             }
 
-            public void setDuration(int duration) {
+            public void setDuration(Object duration) {
                 this.duration = duration;
             }
 
@@ -105,14 +106,14 @@ public class VideoPlayBean {
 
             public static class VideoBean {
                 /**
-                 * id : 7816
-                 * token : 1493284212518
+                 * id : 7768
+                 * token : 1492157167944
                  * video_type : mp4
                  * duration : 2
                  * tmp_duration : 2
                  * format_tmp_duration : 00:00:02
-                 * capture : http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/b2fa3b8a4e5011fe4c07539a5580020d.jpg
-                 * name_url : http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/46e2483d5621337ace0be3014ee1d24a.mp4
+                 * capture : http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/b574edcbab5c0c9ce60035847b1d11f7.jpg
+                 * name_url : http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/24e4490546fc753cd51eb9da30d2bb92.mp4
                  */
 
                 private int id;
@@ -192,12 +193,12 @@ public class VideoPlayBean {
 
         public static class TicketBean {
             /**
-             * id : 667
+             * id : 662
              * used_count : 1
-             * buy_count : 3
-             * lesson_price : 0.0
-             * progress : [{"video_lesson":{"id":43,"name":"体验终章","duration":null,"video":{"id":7817,"token":"1493284223769","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/393d4890f5c6c0b84ee1b2853361a6a1.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/acd6a82b7e533e7282cfc410c42403d0.mp4"}},"status":"unused"},{"video_lesson":{"id":42,"name":"体验第二周","duration":null,"video":{"id":7816,"token":"1493284212518","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/b2fa3b8a4e5011fe4c07539a5580020d.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/46e2483d5621337ace0be3014ee1d24a.mp4"}},"status":"used"},{"video_lesson":{"id":41,"name":"体验第一周","duration":null,"video":{"id":7815,"token":"1493284188624","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/c9f5e22bfd97e0330b1be40ea0cb8dfd.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/8fdd927ad57e5a39f567a377edd7b318.mp4"}},"status":"used"}]
-             * video_course : {"id":18,"name":"空手道免费体验课","subject":"数学","grade":"高一","teacher_name":"刘刚老师","publicize":"/assets/video_courses/app_info_default-061a95d589b702b146739a0de859454a.png"}
+             * buy_count : 2
+             * lesson_price : 300.0
+             * progress : [{"video_lesson":{"id":5,"name":"第二学时","duration":null,"video":{"id":7768,"token":"1492157167944","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/b574edcbab5c0c9ce60035847b1d11f7.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/24e4490546fc753cd51eb9da30d2bb92.mp4"}},"status":"used"},{"video_lesson":{"id":4,"name":"第一学时","duration":null,"video":{"id":7767,"token":"1492157139451","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/96fcf0349390a9ddccd8871c868d070a.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/5f89cfbf304841a1ea8c15b2451e306a.mp4"}},"status":"unused"}]
+             * video_course : {"id":3,"name":"初中考试1","subject":"化学","grade":"初一","teacher_name":"王志成","publicize":"/assets/video_courses/app_info_default-061a95d589b702b146739a0de859454a.png"}
              * status : active
              */
 
@@ -267,11 +268,11 @@ public class VideoPlayBean {
 
             public static class VideoCourseBean {
                 /**
-                 * id : 18
-                 * name : 空手道免费体验课
-                 * subject : 数学
-                 * grade : 高一
-                 * teacher_name : 刘刚老师
+                 * id : 3
+                 * name : 初中考试1
+                 * subject : 化学
+                 * grade : 初一
+                 * teacher_name : 王志成
                  * publicize : /assets/video_courses/app_info_default-061a95d589b702b146739a0de859454a.png
                  */
 
@@ -333,8 +334,8 @@ public class VideoPlayBean {
 
             public static class ProgressBean {
                 /**
-                 * video_lesson : {"id":43,"name":"体验终章","duration":null,"video":{"id":7817,"token":"1493284223769","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/393d4890f5c6c0b84ee1b2853361a6a1.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/acd6a82b7e533e7282cfc410c42403d0.mp4"}}
-                 * status : unused
+                 * video_lesson : {"id":5,"name":"第二学时","duration":null,"video":{"id":7768,"token":"1492157167944","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/b574edcbab5c0c9ce60035847b1d11f7.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/24e4490546fc753cd51eb9da30d2bb92.mp4"}}
+                 * status : used
                  */
 
                 private VideoLessonBeanX video_lesson;
@@ -358,15 +359,15 @@ public class VideoPlayBean {
 
                 public static class VideoLessonBeanX {
                     /**
-                     * id : 43
-                     * name : 体验终章
+                     * id : 5
+                     * name : 第二学时
                      * duration : null
-                     * video : {"id":7817,"token":"1493284223769","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/393d4890f5c6c0b84ee1b2853361a6a1.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/acd6a82b7e533e7282cfc410c42403d0.mp4"}
+                     * video : {"id":7768,"token":"1492157167944","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/b574edcbab5c0c9ce60035847b1d11f7.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/24e4490546fc753cd51eb9da30d2bb92.mp4"}
                      */
 
                     private int id;
                     private String name;
-                    private int duration;
+                    private Object duration;
                     private VideoBeanX video;
 
                     public int getId() {
@@ -385,11 +386,11 @@ public class VideoPlayBean {
                         this.name = name;
                     }
 
-                    public int getDuration() {
+                    public Object getDuration() {
                         return duration;
                     }
 
-                    public void setDuration(int duration) {
+                    public void setDuration(Object duration) {
                         this.duration = duration;
                     }
 
@@ -403,14 +404,14 @@ public class VideoPlayBean {
 
                     public static class VideoBeanX {
                         /**
-                         * id : 7817
-                         * token : 1493284223769
+                         * id : 7768
+                         * token : 1492157167944
                          * video_type : mp4
                          * duration : 2
                          * tmp_duration : 2
                          * format_tmp_duration : 00:00:02
-                         * capture : http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/393d4890f5c6c0b84ee1b2853361a6a1.jpg
-                         * name_url : http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/acd6a82b7e533e7282cfc410c42403d0.mp4
+                         * capture : http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/b574edcbab5c0c9ce60035847b1d11f7.jpg
+                         * name_url : http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/24e4490546fc753cd51eb9da30d2bb92.mp4
                          */
 
                         private int id;

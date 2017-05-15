@@ -28,6 +28,7 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.InteractCourseDetailActivity;
+import cn.qatime.player.activity.InteractiveLiveActivity;
 import cn.qatime.player.activity.NEVideoPlayerActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.base.BaseApplication;
@@ -110,7 +111,10 @@ public class FragmentClassTableClosed extends BaseFragment {
                             intent.putExtra("sessionId", item.getChat_team_id());
                             startActivity(intent);
                         } else if ("LiveStudio::InteractiveLesson".equals(itemList.get(position).getModal_type())) {
-
+                            Intent intent = new Intent(getActivity(), InteractiveLiveActivity.class);
+                            intent.putExtra("id", Integer.valueOf(item.getProduct_id()));
+                            intent.putExtra("teamId", item.getChat_team_id());
+                            startActivity(intent);
                         }
                     }
                 });

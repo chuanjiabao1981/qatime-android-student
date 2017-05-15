@@ -28,6 +28,7 @@ import java.util.Locale;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.VideoCoursesPlayActivity;
+import cn.qatime.player.bean.VideoPlayBean;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.VideoLessonsBean;
@@ -146,6 +147,7 @@ public class VideoCoursesFloatFragment extends Fragment implements View.OnClickL
                 }
                 act.playingData = datas.get(position);
                 act.playCourses(act.playingData);
+                adapter.notifyDataSetChanged();
             }
         });
         startVanishTimer();
@@ -362,7 +364,7 @@ public class VideoCoursesFloatFragment extends Fragment implements View.OnClickL
         this.callback = callback;
     }
 
-    public void setNameAndCount(String name, int size) {
+    public void setVideoName(String name) {
         videoName.setText(name);
     }
 

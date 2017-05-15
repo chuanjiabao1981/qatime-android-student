@@ -338,8 +338,8 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 //                floatFragment.setTeam(team);
             }
         });
-//        messageFragment.setSessionId(sessionId);
-//        messageFragment.requestTeamInfo();
+        messageFragment.setSessionId(sessionId);
+        messageFragment.requestTeamInfo();
 
         inputPanel.setOnInputShowListener(new InputPanel.OnInputShowListener() {
             @Override

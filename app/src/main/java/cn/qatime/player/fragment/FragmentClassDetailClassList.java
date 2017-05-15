@@ -72,14 +72,14 @@ public class FragmentClassDetailClassList extends BaseFragment {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                holder.setText(R.id.view_playback, getString(R.string.playback_count,item.getLeft_replay_times()));
+                holder.setText(R.id.view_playback, getString(R.string.playback_count, item.getLeft_replay_times()));
                 if (isFinished(item)) {
                     ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.live_time)).setTextColor(0xff999999);
                     ((TextView) holder.getView(status)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.class_date)).setTextColor(0xff999999);
-                    holder.getView(R.id.view_playback).setVisibility(data.getIs_bought()&&item.isReplayable() ? View.VISIBLE : View.GONE);
+                    holder.getView(R.id.view_playback).setVisibility(data.getIs_bought() && item.isReplayable() ? View.VISIBLE : View.GONE);
                 } else {
                     ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff00a0e9);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xff666666);
@@ -98,17 +98,17 @@ public class FragmentClassDetailClassList extends BaseFragment {
                 Lessons item = list.get(position);
                 if (isFinished(item)) {
                     if (data.getIs_bought()) {
-                    if (!item.isReplayable()) {
+                        if (!item.isReplayable()) {
 //                        Toast.makeText(getActivity(), getResourceString(R.string.no_playback_video), Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    if (item.getLeft_replay_times() <= 0) {
-                        Toast.makeText(getActivity(), getResourceString(R.string.have_no_left_playback_count), Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    Intent intent = new Intent(getActivity(), NEVideoPlaybackActivity.class);
-                    intent.putExtra("id", item.getId());
-                    startActivity(intent);
+                            return;
+                        }
+                        if (item.getLeft_replay_times() <= 0) {
+                            Toast.makeText(getActivity(), getResourceString(R.string.have_no_left_playback_count), Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        Intent intent = new Intent(getActivity(), NEVideoPlaybackActivity.class);
+                        intent.putExtra("id", item.getId());
+                        startActivity(intent);
                     }
                 }
             }

@@ -41,9 +41,6 @@ public class FragmentVideoCoursesClassList extends BaseFragment {
     private CommonAdapter<VideoLessonsBean> adapter;
     private VideoCoursesDetailsBean data;
 
-//    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
-//    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -65,10 +62,10 @@ public class FragmentVideoCoursesClassList extends BaseFragment {
             public void convert(ViewHolder holder, VideoLessonsBean item, int position) {
                 holder.setText(R.id.name, item.getName());
                 holder.setText(R.id.time, "时长" + item.getVideo().getFormat_tmp_duration());
-                if(data.getData().getTicket()==null){
-                    holder.getView(R.id.taste).setVisibility(View.VISIBLE);
-                }else{
-                    holder.getView(R.id.taste).setVisibility((!data.getData().getTicket().getStatus().equals("active") && item.isTastable()) ? View.VISIBLE : View.GONE);
+                if (data.getData().getTicket() != null && data.getData().getTicket().getStatus().equals("active")) {
+                    holder.getView(R.id.taste).setVisibility(View.GONE);
+                } else {
+                    holder.getView(R.id.taste).setVisibility(item.isTastable() ? View.VISIBLE : View.GONE);
                 }
             }
         };
@@ -90,12 +87,13 @@ public class FragmentVideoCoursesClassList extends BaseFragment {
                         intent.putExtra("tasting", true);
                         startActivity(intent);
                     }
-                }else{
+                } else {
                     Toast.makeText(getActivity(), "该课程需要购买", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
+
     private void joinAudition() {
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.urlVideoCourses + data.getData().getVideo_course().getId() + "/taste", null,
                 new VolleyListener(getActivity()) {
@@ -108,81 +106,10 @@ public class FragmentVideoCoursesClassList extends BaseFragment {
                         intent.putExtra("id", data.getData().getVideo_course().getId());
                         intent.putExtra("tasting", true);
                         startActivity(intent);
-//                        if (StringUtils.isNullOrBlanK(BaseApplication.getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getAccountToken())) {
-//                            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null,
-//                                    new VolleyListener(getActivity()) {
-//                                        @Override
-//                                        protected void onSuccess(JSONObject response) {
-//                                            PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
-//                                            if (bean != null && bean.getData() != null && bean.getData().getChat_account() != null) {
-//                                                Profile profile = BaseApplication.getProfile();
-//                                                profile.getData().getUser().setChat_account(bean.getData().getChat_account());
-//                                                BaseApplication.setProfile(profile);
-//
-//                                                String account = BaseApplication.getAccount();
-//                                                String token = BaseApplication.getAccountToken();
-//
-//                                                if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
-//                                                    AbortableFuture<LoginInfo> loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, token));
-//                                                    loginRequest.setCallback(new RequestCallback<LoginInfo>() {
-//                                                        @Override
-//                                                        public void onSuccess(LoginInfo o) {
-//                                                            Logger.e("云信登录成功" + o.getAccount());
-//                                                            // 初始化消息提醒
-//                                                            NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
-//
-//                                                            NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
-//                                                            //缓存
-//                                                            UserInfoCache.getInstance().clear();
-//                                                            TeamDataCache.getInstance().clear();
-//
-//                                                            UserInfoCache.getInstance().buildCache();
-//                                                            TeamDataCache.getInstance().buildCache();
-//
-//                                                            UserInfoCache.getInstance().registerObservers(true);
-//                                                            TeamDataCache.getInstance().registerObservers(true);
-//                                                        }
-//
-//                                                        @Override
-//                                                        public void onFailed(int code) {
-////                                                            BaseApplication.clearToken();
-//                                                            Profile profile = BaseApplication.getProfile();
-//                                                            profile.getData().setRemember_token("");
-//                                                            SPUtils.putObject(getActivity(), "profile", profile);
-//                                                        }
-//
-//                                                        @Override
-//                                                        public void onException(Throwable throwable) {
-//                                                            Logger.e(throwable.getMessage());
-//                                                            BaseApplication.clearToken();
-//                                                        }
-//                                                    });
-//                                                }
-//                                            }
-//                                        }
-//
-//                                        @Override
-//                                        protected void onError(JSONObject response) {
-//
-//                                        }
-//
-//                                        @Override
-//                                        protected void onTokenOut() {
-//                                            tokenOut();
-//                                        }
-//                                    }, new VolleyErrorListener() {
-//                                @Override
-//                                public void onErrorResponse(VolleyError volleyError) {
-//                                    super.onErrorResponse(volleyError);
-//                                }
-//                            });
-//                            addToRequestQueue(request);
-//                        }
                     }
 
                     @Override
                     protected void onError(JSONObject response) {
-//                            if(response.getJSONObject("error").getInt("code")==3004){//CourseTasteLimit
                         Toast.makeText(getActivity(), R.string.the_course_not_support_audition, Toast.LENGTH_SHORT).show();
 //                                            }
                     }

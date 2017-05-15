@@ -74,7 +74,6 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
         }
         id = getIntent().getIntExtra("id", 0);
         tasting = getIntent().getBooleanExtra("tasting", true);
-//        id=3;
         initView();
 
         screenSwitchUtils = ScreenSwitchUtils.init(this.getApplicationContext());
@@ -90,6 +89,7 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
 
                         if (data != null && data.getData() != null) {
                             playingData = data.getData().getVideo_course().getVideo_lessons().get(0);
+                            playCourses(playingData);
                             ((FragmentVideoCoursesList) fragBaseFragments.get(0)).setData(data.getData().getVideo_course().getVideo_lessons());
                             floatFragment.setData(data.getData().getVideo_course().getVideo_lessons());
                             ((FragmentVideoCoursesDetail) fragBaseFragments.get(1)).setData(data);
@@ -335,8 +335,10 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
                         protected void onSuccess(JSONObject response) {
                             VideoPlayBean videoPlayBean = JsonUtils.objectFromJson(response.toString(), VideoPlayBean.class);
                             if (videoPlayBean != null && videoPlayBean.getData().getVideo_lesson() != null && videoPlayBean.getData().getVideo_lesson().getVideo() != null) {
+                                floatFragment.setVideoName(videoPlayBean.getData().getVideo_lesson().getName());
+                                ((FragmentVideoCoursesList) fragBaseFragments.get(0)).setProgress(videoPlayBean.getData().getTicket().getProgress());
                                 play(videoPlayBean.getData().getVideo_lesson().getVideo().getName_url());
-                            }else{
+                            } else {
                                 Toast.makeText(VideoCoursesPlayActivity.this, "状态错误", Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -360,7 +362,6 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
     }
 
     private void play(String nameUrl) {
-
         releaseMediaPlayer();
         if (isCreated) {
             try {
