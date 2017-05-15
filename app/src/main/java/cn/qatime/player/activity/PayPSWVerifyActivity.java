@@ -110,7 +110,7 @@ public class PayPSWVerifyActivity extends BaseActivity implements View.OnClickLi
                                     } else if (errorCode == 2006) {
                                         Toast.makeText(PayPSWVerifyActivity.this, R.string.pay_password_not_set, Toast.LENGTH_SHORT).show();
                                     } else if (errorCode == 2008) {
-                                        Toast.makeText(PayPSWVerifyActivity.this, R.string.pay_password_not_enough_24, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(PayPSWVerifyActivity.this, R.string.pay_password_not_enough_time, Toast.LENGTH_SHORT).show();
                                     }else if (errorCode == 2009) {
                                         Toast.makeText(PayPSWVerifyActivity.this, R.string.pay_password_too_many_mistake, Toast.LENGTH_SHORT).show();
                                     }  else {

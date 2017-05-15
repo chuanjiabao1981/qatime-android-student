@@ -197,7 +197,7 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
                 } else if (errorCode == 2006) {
                     Toast.makeText(WithdrawCashActivity.this,  R.string.pay_password_not_set, Toast.LENGTH_SHORT).show();
                 } else if (errorCode == 2008) {
-                    dialogServerError(getString(R.string.pay_password_not_enough_24));//未满24小时
+                    dialogServerError(getString(R.string.pay_password_not_enough_time));//未满24小时
                 }else if (errorCode == 2009) {
                     dialogServerError(getString(R.string.pay_password_too_many_mistake));//错误太多
                 } else if (errorCode == 0) {
@@ -353,9 +353,9 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
                 if(BaseApplication.getCashAccount().getData().isHas_password()){
                     long changeAt = BaseApplication.getCashAccount().getData().getPassword_set_at();
 
-                    int diff = 24 - (int) ((System.currentTimeMillis()/1000  - changeAt) / 3600);
-                    if (diff <= 24&&diff > 0) {
-                        dialogServerError(getString(R.string.pay_password_not_enough_24));//未满24小时
+                    int diff = 2 - (int) ((System.currentTimeMillis()/1000  - changeAt) / 3600);
+                    if (diff <= 2&&diff > 0) {
+                        dialogServerError(getString(R.string.pay_password_not_enough_time));//未满24小时
                     } else {
                         showPSWPop();
                     }
