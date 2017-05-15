@@ -532,7 +532,7 @@
     <string name="teaching">开课中</string>
     <string name="completed">已结束</string>
     <string name="bind_error">绑定失败</string>
-    <string name="change_pay_password_notify">新设置或修改后将在24小时内不能使用支付密码，是否继续</string>
+    <string name="change_pay_password_notify">新设置或修改后将在2小时内不能使用支付密码，是否继续</string>
     <string name="continue_anyway">继续</string>
     <string name="cancel_bind_weixin_notify">取消绑定后将不能使用提现到微信功能，是否继续</string>
     <string name="clean_cache_success">成功清理缓存</string>
@@ -571,7 +571,7 @@
     <string name="study">学习</string>
     <string name="teach_type">授课方式：在线直播</string>
     <string name="pay_password_not_set">暂未设置过支付密码</string>
-    <string name="pay_password_not_enough_24">新支付密码未满24小时，暂不能使用</string>
+    <string name="pay_password_not_enough_time">新支付密码未满2小时，暂不能使用</string>
     <string name="pay_password_too_many_mistake">密码错误次数过多，暂不能使用</string>
     <string name="pay_server_error">支付系统繁忙，请稍后再试</string>
     <string name="pay_password_error">支付密码输入不正确</string>

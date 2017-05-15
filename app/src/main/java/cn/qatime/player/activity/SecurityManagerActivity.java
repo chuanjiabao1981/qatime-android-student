@@ -139,8 +139,8 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
             if (BaseApplication.getCashAccount().getData().isHas_password()) {
                 long changeAt = BaseApplication.getCashAccount().getData().getPassword_set_at();
 
-                int diff = 24 - (int) ((System.currentTimeMillis() / 1000 - changeAt) / 3600);
-                if (diff <= 24 && diff > 0) {
+                int diff = 2 - (int) ((System.currentTimeMillis() / 1000 - changeAt) / 3600);
+                if (diff <= 2 && diff > 0) {
                     payPswText.setText(getString(R.string.new_pay_password_invalid, diff));
                     payPswText.setTextColor(0xff666666);
                 } else {
@@ -249,8 +249,8 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
         if (event == BusEvent.ON_REFRESH_CASH_ACCOUNT) {
             long changeAt = BaseApplication.getCashAccount().getData().getPassword_set_at();
 
-            int diff = 24 - (int) ((System.currentTimeMillis() / 1000 - changeAt) / 3600);
-            if (diff <= 24 && diff > 0) {
+            int diff = 2 - (int) ((System.currentTimeMillis() / 1000 - changeAt) / 3600);
+            if (diff <= 2 && diff > 0) {
                 payPswText.setText(getString(R.string.new_pay_password_invalid, diff));
                 payPswText.setTextColor(0xff666666);
             } else {
