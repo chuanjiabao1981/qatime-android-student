@@ -115,8 +115,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
 //                finish();
                 break;
             case R.id.notify_setting:
-
-                intent = new Intent(SystemSettingActivity.this, NotifySettingActivity.class);
+                intent = new Intent(SystemSettingActivity.this, NotifyMessageActivity.class);
                 startActivity(intent);
                 break;
             case R.id.check_update:
