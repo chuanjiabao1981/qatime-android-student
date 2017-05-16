@@ -59,14 +59,14 @@ public class FragmentOrderUnpaid extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_order_unpaid, container, false);
         EventBus.getDefault().register(this);
         initview(view);
-        initOver=true;
+        initOver = true;
         return view;
 
     }
 
     private void initview(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
-        View empty = View.inflate(getActivity(),R.layout.empty_view,null);
+        View empty = View.inflate(getActivity(), R.layout.empty_view, null);
         listView.setEmptyView(empty);
         listView.setMode(PullToRefreshBase.Mode.BOTH);
         listView.getLoadingLayoutProxy(true, false).setPullLabel(getResourceString(R.string.pull_to_refresh));
@@ -79,7 +79,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
             @Override
             public void convert(ViewHolder helper, final MyOrderBean.DataBean item, final int position) {
                 StringBuilder sp = new StringBuilder();
-                if("LiveStudio::Course".equals(item.getProduct_type())){
+                if ("LiveStudio::Course".equals(item.getProduct_type())) {
                     sp.append("直播课/");
                     sp.append(item.getProduct().getGrade())
                             .append(item.getProduct().getSubject())
@@ -87,18 +87,18 @@ public class FragmentOrderUnpaid extends BaseFragment {
                             .append("/").append(item.getProduct().getTeacher_name());
                     helper.setText(R.id.classname, item.getProduct().getName())
                             .setText(R.id.describe, sp.toString());
-                }else if("LiveStudio::InteractiveCourse".equals(item.getProduct_type())){
+                } else if ("LiveStudio::InteractiveCourse".equals(item.getProduct_type())) {
                     sp.append("一对一/");
                     sp.append(item.getProduct_interactive_course().getGrade())
                             .append(item.getProduct_interactive_course().getSubject())
                             .append("/共").append(item.getProduct_interactive_course().getLessons_count()).append("课")
                             .append("/").append(item.getProduct_interactive_course().getTeachers().get(0).getName());
-                    if(item.getProduct_interactive_course().getTeachers().size()>1){
+                    if (item.getProduct_interactive_course().getTeachers().size() > 1) {
                         sp.append("...");
                     }
                     helper.setText(R.id.classname, item.getProduct_interactive_course().getName())
                             .setText(R.id.describe, sp.toString());
-                }else if("LiveStudio::VideoCourse".equals(item.getProduct_type())){
+                } else if ("LiveStudio::VideoCourse".equals(item.getProduct_type())) {
                     sp.append("视频课/");
                     sp.append(item.getProduct_video_course().getGrade())
                             .append(item.getProduct_video_course().getSubject())
@@ -107,7 +107,6 @@ public class FragmentOrderUnpaid extends BaseFragment {
                     helper.setText(R.id.classname, item.getProduct_video_course().getName())
                             .setText(R.id.describe, sp.toString());
                 }
-
 
 
                 if (item.getStatus().equals("unpaid")) {//待付款
@@ -127,6 +126,24 @@ public class FragmentOrderUnpaid extends BaseFragment {
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                // TODO: 2017/5/16 课程是否下架
+                                if ("LiveStudio::Course".equals(item.getProduct_type())) {
+                                    if (Constant.CourseStatus.completed.equals(item.getProduct().getStatus())) {
+                                        Toast.makeText(mContext, "该课程已结束", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
+                                } else if ("LiveStudio::InteractiveCourse".equals(item.getProduct_type())) {
+                                    if (Constant.CourseStatus.completed.equals(item.getProduct_interactive_course().getStatus())) {
+                                        Toast.makeText(mContext, "该课程已结束", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
+                                    if (Constant.CourseStatus.teaching.equals(item.getProduct_interactive_course().getStatus())) {
+                                        Toast.makeText(mContext, "该课程已开课", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
+                                } else if ("LiveStudio::VideoCourse".equals(item.getProduct_type())) {
+                                }
+
                                 if (item.getPay_type().equals("weixin")) {
                                     IWXAPI api = WXAPIFactory.createWXAPI(getActivity(), null);
                                     if (!api.isWXAppInstalled()) {
@@ -149,7 +166,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
                                 }
                                 intent.putExtra("id", item.getId());
                                 intent.putExtra("time", item.getCreated_at());
-                                intent.putExtra("price",item.getAmount());
+                                intent.putExtra("price", item.getAmount());
                                 intent.putExtra("type", item.getPay_type());
                                 startActivity(intent);
                             }
@@ -205,7 +222,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
         if (!isLoad) {
             if (initOver) {
                 initData(1);
-            }else{
+            } else {
                 super.onShow();
             }
         }
@@ -308,7 +325,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-                       initData(1);
+                        initData(1);
                     }
 
                     @Override
@@ -332,7 +349,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
 
     @Subscribe
     public void onEvent(PayResultState code) {
-            initData(1);
+        initData(1);
     }
 
 

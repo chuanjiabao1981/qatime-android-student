@@ -82,7 +82,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
                 name.setText(data.getProduct().getName());
             }
             if (StringUtils.isNullOrBlanK(data.getProduct().getGrade())) {
-                grade.setText("直播课/" +getResourceString(R.string.grade));
+                grade.setText("直播课/" + getResourceString(R.string.grade));
             } else {
                 grade.setText("直播课/" + data.getProduct().getGrade());
             }
@@ -106,7 +106,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
                 name.setText(data.getProduct_interactive_course().getName());
             }
             if (StringUtils.isNullOrBlanK(data.getProduct_interactive_course().getGrade())) {
-                grade.setText("一对一/" +getResourceString(R.string.grade));
+                grade.setText("一对一/" + getResourceString(R.string.grade));
             } else {
                 grade.setText("一对一/" + data.getProduct_interactive_course().getGrade());
             }
@@ -126,7 +126,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
                 teacher.setText(data.getProduct_interactive_course().getTeachers().get(0).getName());
             }
             progress.setText(String.format(getResourceString(R.string.lesson_count), data.getProduct_interactive_course().getLessons_count()));
-        }else if ("LiveStudio::VideoCourse".equals(data.getProduct_type())) {
+        } else if ("LiveStudio::VideoCourse".equals(data.getProduct_type())) {
             classid = data.getProduct_video_course().getId();
             if (StringUtils.isNullOrBlanK(data.getProduct_video_course().getName())) {
                 name.setText(getResourceString(R.string.cancel_order_name));
@@ -134,7 +134,7 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
                 name.setText(data.getProduct_video_course().getName());
             }
             if (StringUtils.isNullOrBlanK(data.getProduct_video_course().getGrade())) {
-                grade.setText("视频课/" +getResourceString(R.string.grade));
+                grade.setText("视频课/" + getResourceString(R.string.grade));
             } else {
                 grade.setText("视频课/" + data.getProduct_video_course().getGrade());
             }
@@ -202,7 +202,23 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: 2016/9/1 付款
+                // TODO: 2017/5/16 课程是否下架
+                if ("LiveStudio::Course".equals(data.getProduct_type())) {
+                    if (Constant.CourseStatus.completed.equals(data.getProduct().getStatus())) {
+                        Toast.makeText(PersonalMyOrderUnpaidDetailActivity.this, "该课程已结束", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                } else if ("LiveStudio::InteractiveCourse".equals(data.getProduct_type())) {
+                    if (Constant.CourseStatus.completed.equals(data.getProduct_interactive_course().getStatus())) {
+                        Toast.makeText(PersonalMyOrderUnpaidDetailActivity.this, "该课程已结束", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (Constant.CourseStatus.teaching.equals(data.getProduct_interactive_course().getStatus())) {
+                        Toast.makeText(PersonalMyOrderUnpaidDetailActivity.this, "该课程已开课", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                } else if ("LiveStudio::VideoCourse".equals(data.getProduct_type())) {
+                }
                 if (data.getPay_type().equals("weixin")) {
                     IWXAPI api = WXAPIFactory.createWXAPI(PersonalMyOrderUnpaidDetailActivity.this, null);
                     if (!api.isWXAppInstalled()) {
