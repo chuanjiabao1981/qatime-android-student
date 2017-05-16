@@ -447,4 +447,8 @@ public class BaseApplication extends Application {
     public static UserInfoProvider getUserInfoProvide() {
         return userInfoProvider;
     }
+
+    public static String getUserName() {
+        return profile != null && profile.getData() != null && profile.getData().getUser() != null ? profile.getData().getUser().getName() : "";
+    }
 }

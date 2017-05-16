@@ -81,6 +81,10 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                 return event.getKeyCode() == KeyEvent.KEYCODE_ENTER;
             }
         });
+        String nameValue = getIntent().getStringExtra("name");
+        if (!StringUtils.isNullOrBlanK(nameValue)) {
+            name.setText(nameValue);
+        }
     }
 
 
@@ -94,7 +98,9 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
         String gradeString = FileUtil.readFile(getFilesDir() + "/grade.txt");
         if (!StringUtils.isNullOrBlanK(gradeString)) {
             GradeBean gradeBean = JsonUtils.objectFromJson(gradeString, GradeBean.class);
-            grades = gradeBean.getData().getGrades();
+            if (gradeBean != null) {
+                grades = gradeBean.getData().getGrades();
+            }
         }
         information.setOnClickListener(this);
         complete.setOnClickListener(this);

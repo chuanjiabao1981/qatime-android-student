@@ -1,6 +1,7 @@
 package cn.qatime.player.activity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
@@ -502,41 +503,11 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         @Override
         public void onRoomMemberIn(ChatRoomMember member) {
             onMasterJoin(member.getAccount());
-
-//            if (BaseApplication.getAccount().equals(roomInfo.getCreator())
-//                    && !member.getAccount().equals(BaseApplication.getAccount())) {
-//                // 主持人点对点通知有权限的成员列表
-//                // 主持人自己进来，不需要通知自己
-//                MsgHelper.getInstance().sendP2PCustomNotification(roomId, MeetingOptCommand.ALL_STATUS.getValue(),
-//                        member.getAccount(), ChatRoomMemberCache.getInstance().getPermissionMems(roomId));
-//            }
-//
-//            if (member.getAccount().equals(roomInfo.getCreator())) {
-//                // 主持人重新进来,观众要取消自己的举手状态
-//                ChatRoomMemberCache.getInstance().saveMyHandsUpDown(roomId, false);
-//            }
-//
-//            if (member.getAccount().equals(roomInfo.getCreator()) && BaseApplication.getAccount().equals(roomInfo.getCreator())) {
-//                // 主持人自己重新进来，清空观众的举手状态
-//                ChatRoomMemberCache.getInstance().clearAllHandsUp(roomId);
-//                // 重新向所有成员请求权限
-////                requestPermissionMembers();
-//            }
         }
 
         @Override
         public void onRoomMemberExit(ChatRoomMember member) {
-            // 主持人要清空离开成员的举手
-//            if (BaseApplication.getAccount().equals(roomInfo.getCreator())) {
-//                ChatRoomMemberCache.getInstance().removeHandsUpMem(roomId, member.getAccount());
-//            }
-//
-//            // 用户离开频道，如果是有权限用户，移除下画布
-//            if (member.getAccount().equals(roomInfo.getCreator())) {
             masterVideoLayout.removeAllViews();
-//            } else if (ChatRoomMemberCache.getInstance().hasPermission(roomId, member.getAccount())) {
-////                removeMemberPermission(member.getAccount());
-//            }
         }
     };
 
@@ -617,7 +588,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
     @OnMPermissionGranted(LIVE_PERMISSION_REQUEST_CODE)
     public void onLivePermissionGranted() {
-        Toast.makeText(InteractiveLiveActivity.this, "授权成功", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(InteractiveLiveActivity.this, "授权成功", Toast.LENGTH_SHORT).show();
     }
 
     @OnMPermissionDenied(LIVE_PERMISSION_REQUEST_CODE)
@@ -715,25 +686,20 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         hd.postDelayed(loopStatus, loopDelay);
         videoPermission.setVisibility(View.GONE);
         audioPermission.setVisibility(View.GONE);
-//        ChatRoomMemberCache.getInstance().removePermissionMem(roomId, s);
-//        videoListener.onUserLeave(s);
 
     }
 
 
     @Override
     public void onProtocolIncompatible(int i) {
-
     }
 
     @Override
     public void onDisconnectServer() {
-
     }
 
     @Override
     public void onNetworkQuality(String account, int i) {
-
     }
 
     @Override
@@ -1001,5 +967,11 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             return;
         }
         super.onBackPressed();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        inputPanel.onActivityResult(requestCode, resultCode, data);
     }
 }

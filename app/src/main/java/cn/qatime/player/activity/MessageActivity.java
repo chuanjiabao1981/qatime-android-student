@@ -77,7 +77,10 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
                     intent.putExtra("sessionId", sessionId);
                     startActivityForResult(intent, Constant.REQUEST);
                 } else if ("interactive".equals(type)) {
-
+                    Intent intent = new Intent(MessageActivity.this, InteractiveLiveActivity.class);
+                    intent.putExtra("id", courseId);
+                    intent.putExtra("teamId", sessionId);
+                    startActivity(intent);
                 }
             }
         });
