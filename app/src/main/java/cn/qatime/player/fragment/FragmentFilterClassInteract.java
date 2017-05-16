@@ -196,7 +196,7 @@ public class FragmentFilterClassInteract extends BaseFragment {
         listview.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         listview.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
         listview.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
-        adapter = new CommonAdapter<FilterInteractCourseBean.DataBean>(getActivity(), datas, R.layout.item_filter_course) {
+        adapter = new CommonAdapter<FilterInteractCourseBean.DataBean>(getActivity(), datas, R.layout.item_filter_course_interact) {
             @Override
             public void convert(ViewHolder holder, FilterInteractCourseBean.DataBean item, int position) {
                 Glide.with(getActivity()).load(item.getPublicize_url()).crossFade().placeholder(R.mipmap.photo).into((ImageView) holder.getView(R.id.image));
