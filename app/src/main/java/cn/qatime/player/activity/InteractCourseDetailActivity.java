@@ -167,7 +167,15 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
 
                             if (data.getData().isIs_bought()) {
                                 startStudyView.setVisibility(View.VISIBLE);
-                                if (data.getData().getStatus().equals("completed") || data.getData().getStatus().equals("finished")) {
+                                startStudy.setText("已结束");
+                                startStudy.setEnabled(false);
+                                if (Constant.CourseStatus.completed.equals(data.getData().getStatus())) {
+                                    handleLayout.setVisibility(View.GONE);//已结束的课程隐藏操作按钮
+                                }
+                            }else{
+                                if (Constant.CourseStatus.completed.equals(data.getData().getStatus())) {
+                                    startStudyView.setVisibility(View.VISIBLE);
+                                    startStudy.setText("已下架");
                                     startStudy.setEnabled(false);
                                 }
                             }
