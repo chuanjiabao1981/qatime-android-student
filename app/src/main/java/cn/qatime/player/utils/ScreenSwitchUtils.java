@@ -39,25 +39,25 @@ public class ScreenSwitchUtils {
             switch (msg.what) {
                 case 888:
                     int orientation = msg.arg1;
-                    if (orientation > 45 && orientation < 135) {
+                    if (orientation >= 45 && orientation < 135) {
                         if (isPortrait) {
                             Logger.e("orta util 横屏");
                             isPortrait = false;
                             mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
                         }
-                    } else if (orientation > 135 && orientation < 225) {
+                    } else if (orientation >= 135 && orientation < 225) {
                         if (!isPortrait) {
                             Logger.e("orta util 树屏");
                             isPortrait = true;
                             mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
                         }
-                    } else if (orientation > 225 && orientation < 315) {
+                    } else if (orientation >= 225 && orientation < 315) {
                         if (isPortrait) {
                             Logger.e("orta util 横屏");
                             isPortrait = false;
                             mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                         }
-                    } else if ((orientation > 315 && orientation < 360) || (orientation > 0 && orientation < 45)) {
+                    } else if ((orientation >= 315 && orientation < 360) || (orientation >= 0 && orientation < 45)) {
                         if (!isPortrait) {
                             Logger.e("orta util 树屏");
                             isPortrait = true;

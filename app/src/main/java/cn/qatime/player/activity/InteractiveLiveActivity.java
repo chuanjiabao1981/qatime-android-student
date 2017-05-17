@@ -302,6 +302,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff333333);
                 if (position == 1) {
                     inputPanel.visibilityInput();
+                    messageFragment.scrollToBottom();
                 } else {
                     inputPanel.goneInput();
                 }
@@ -926,6 +927,16 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         }
     };
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                screenSwitchUtils.start(InteractiveLiveActivity.this);
+            }
+        }, 1000);
+    }
 
     @Override
     protected void onStop() {
@@ -1004,13 +1015,10 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     @Override
     public void onSwitch(boolean isOpen) {
         this.isOpen = isOpen;
-        if (isOpen) {
-            screenSwitchUtils.start(this);
-        } else {
+        if (!isOpen) {
             if (!screenSwitchUtils.isPortrait()) {
                 screenSwitchUtils.toggleScreen();
             }
-            screenSwitchUtils.stop();
         }
     }
 }
