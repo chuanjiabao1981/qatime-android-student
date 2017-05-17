@@ -173,10 +173,10 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
                             }
                             if (data.getData().getIcons() != null) {
                                 if (!data.getData().getIcons().isRefund_any_time()) {
-                                    refundAnyTime.setVisibility(View.GONE);
+                                    refundAnyTime.setVisibility(View.INVISIBLE);
                                 }
                                 if (!data.getData().getIcons().isJoin_cheap()) {
-                                    joinCheap.setVisibility(View.GONE);
+                                    joinCheap.setVisibility(View.INVISIBLE);
                                 }
                             }
                         }

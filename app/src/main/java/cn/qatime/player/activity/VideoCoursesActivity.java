@@ -122,10 +122,10 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
 
                             if (data.getData().getVideo_course().getIcons() != null) {
                                 if (!data.getData().getVideo_course().getIcons().isFree_taste()) {
-                                    freeTaste.setVisibility(View.GONE);
+                                    freeTaste.setVisibility(View.INVISIBLE);
                                 }
                                 if (!data.getData().getVideo_course().getIcons().isJoin_cheap()) {
-                                    joinCheap.setVisibility(View.GONE);
+                                    joinCheap.setVisibility(View.INVISIBLE);
                                 }
                             }
                             ((FragmentVideoCoursesClassInfo) fragBaseFragments.get(0)).setData(data);
