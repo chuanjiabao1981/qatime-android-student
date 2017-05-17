@@ -46,7 +46,6 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
     private void initView() {
         findViewById(R.id.right).setVisibility(View.GONE);
 
-//        fragBaseFragments.add(new FragmentTutorshipToday());
         fragBaseFragments.add(new FragmentTutorshipPreview());
         fragBaseFragments.add(new FragmentTutorshipTeaching());
         fragBaseFragments.add(new FragmentTutorshipOver());

@@ -69,7 +69,6 @@ public class FragmentTutorshipTeaching extends BaseFragment {
             @Override
             public void convert(ViewHolder helper, final MyTutorialClassBean.Data item, int position) {
 
-
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -81,7 +80,6 @@ public class FragmentTutorshipTeaching extends BaseFragment {
                         startActivity(intent);
                     }
                 });
-
 
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());

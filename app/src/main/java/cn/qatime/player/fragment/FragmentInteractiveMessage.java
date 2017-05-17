@@ -30,6 +30,7 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.bean.Container;
 import cn.qatime.player.bean.MessageListPanel;
 import cn.qatime.player.bean.ModuleProxy;
@@ -137,7 +138,7 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
                             UpdateTeamAttachment a = (UpdateTeamAttachment) message.getAttachment();
                             for (Map.Entry<TeamFieldEnum, Object> field : a.getUpdatedFields().entrySet()) {
                                 if (field.getKey() == TeamFieldEnum.Announcement) {
-                                    EventBus.getDefault().post("announcement");
+                                    EventBus.getDefault().post(BusEvent.ANNOUNCEMENT);
                                 }
                             }
                         }

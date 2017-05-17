@@ -12,8 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.orhanobut.logger.Logger;
-
 import java.util.HashMap;
 
 import cn.qatime.player.R;
@@ -23,7 +21,6 @@ import cn.qatime.player.im.doodle.ActionTypeEnum;
 import cn.qatime.player.im.doodle.DoodleView;
 import cn.qatime.player.im.doodle.OnlineStatusObserver;
 import cn.qatime.player.im.doodle.SupportActionType;
-import cn.qatime.player.im.doodle.Transaction;
 import cn.qatime.player.im.doodle.TransactionCenter;
 import cn.qatime.player.im.doodle.action.MyPath;
 import libraryextra.utils.DensityUtils;
@@ -35,7 +32,7 @@ import static android.os.Looper.getMainLooper;
  * @Time 2017/3/28 11:17
  * @Describe 白板
  */
-public class FragmentInteractiveBoard extends BaseFragment implements View.OnClickListener, OnlineStatusObserver, DoodleView.FlipListener {
+public class FragmentInteractiveBoard extends BaseFragment implements View.OnClickListener, OnlineStatusObserver, DoodleView.SwitchListener {
     private DoodleView doodleView;
     private TextView chooseColor;
     private ImageView playBack;
@@ -53,7 +50,11 @@ public class FragmentInteractiveBoard extends BaseFragment implements View.OnCli
     private int choosedColor;
 
     private String sessionId; // 白板sessionId
+    private SwitchListener switchListener;
 
+    public interface SwitchListener {
+        void onSwitch(boolean isOpen);
+    }
 
     private void assignViews() {
         doodleView = findViewById(R.id.doodleView);
@@ -80,13 +81,14 @@ public class FragmentInteractiveBoard extends BaseFragment implements View.OnCli
         super.onActivityCreated(savedInstanceState);
         initData();
         assignViews();
-        initView();
+        initView(true);
         setListeners();
     }
 
-    public void initRTSView(String roomId) {
+    public void initRTSView(String roomId, SwitchListener switchListener) {
         this.sessionId = roomId;
-        initView();
+        this.switchListener = switchListener;
+        initView(true);
         initDoodleView(null);
         registerObservers(true);
     }
@@ -112,7 +114,7 @@ public class FragmentInteractiveBoard extends BaseFragment implements View.OnCli
                 float offsetY = statusBarHeight + marginTop + DensityUtils.dip2px(getActivity(), 220 + 45);
 
                 doodleView.setPaintOffset((float) marginLeft, offsetY);
-                Logger.e("Doodle", "client1 offsetX = " + (float) marginLeft + ", offsetY = " + offsetY);
+//                Logger.e("Doodle", "client1 offsetX = " + (float) marginLeft + ", offsetY = " + offsetY);
             }
         }, 50);
     }
@@ -189,12 +191,16 @@ public class FragmentInteractiveBoard extends BaseFragment implements View.OnCli
 
     @Override
     public boolean onNetWorkChange(boolean isCreator) {
-        initView();
+        initView(true);
         return true;
     }
 
-    // 初始化是否开启白板
-    public void initView() {
+    /**
+     * 初始化是否开启白板
+     *
+     * @param isClearDoodle true 清除白板数据
+     */
+    public void initView(boolean isClearDoodle) {
         if (ChatRoomMemberCache.getInstance().isRTSOpen()) {
             playBack.setBackgroundResource(R.mipmap.rts_back);
             playBack.setEnabled(true);
@@ -202,20 +208,38 @@ public class FragmentInteractiveBoard extends BaseFragment implements View.OnCli
             this.choosedColor = R.drawable.choose_blue_circle_shape;
             chooseColor.setBackgroundResource(R.drawable.choose_blue_circle_shape);
             chooseColor.setEnabled(true);
-            joinTipText.setVisibility(View.GONE);
+            joinTipText.setText("正在进行白板互动");
         } else {
             playBack.setBackgroundResource(R.mipmap.play_back_disable);
             chooseColor.setBackgroundResource(R.mipmap.choose_color_disable);
             chooseColor.setEnabled(false);
             playBack.setEnabled(false);
-            doodleView.clearAll();
+            if (isClearDoodle) {
+                doodleView.clearAll();
+                joinTipText.setText(getString(R.string.join_tip));
+            }
             doodleView.setEnableView(false);
-            joinTipText.setVisibility(View.VISIBLE);
         }
     }
 
+    /**
+     * @param isOpen 开启桌面共享
+     */
     @Override
-    public void onFlipPage(Transaction transaction) {
-
+    public void onSwitch(final boolean isOpen) {
+        new Handler(getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                if (isOpen) {
+                    ChatRoomMemberCache.getInstance().setRTSOpen(false);
+                    joinTipText.setText("正在进行屏幕共享");
+                } else {
+                    ChatRoomMemberCache.getInstance().setRTSOpen(true);
+//                    joinTipText.setText("正在进行白板互动");
+                }
+                switchListener.onSwitch(isOpen);
+                initView(false);
+            }
+        });
     }
 }
