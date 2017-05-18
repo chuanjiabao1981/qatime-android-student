@@ -16,7 +16,6 @@ import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -33,6 +32,14 @@ import cn.qatime.player.im.doodle.action.MyPath;
 public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, TransactionObserver {
 
     private SwitchListener switchListener;
+
+    public void refreshView() {
+        Canvas canvas = surfaceHolder.lockCanvas();
+        drawHistoryActions(canvas);
+        if (canvas!=null) {
+            surfaceHolder.unlockCanvasAndPost(canvas);
+        }
+    }
 
     public interface FlipListener {
         void onFlipPage(Transaction transaction);

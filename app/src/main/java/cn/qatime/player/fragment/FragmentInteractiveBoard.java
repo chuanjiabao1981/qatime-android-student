@@ -52,6 +52,10 @@ public class FragmentInteractiveBoard extends BaseFragment implements View.OnCli
     private String sessionId; // 白板sessionId
     private SwitchListener switchListener;
 
+    public void refreshView() {
+//        doodleView.refreshView();
+    }
+
     public interface SwitchListener {
         void onSwitch(boolean isOpen);
     }

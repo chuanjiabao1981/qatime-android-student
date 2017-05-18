@@ -136,6 +136,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     };
     private long loopDelay = 10000;
     private boolean isOpen = false;//屏幕恭喜是否开启
+    private boolean isShowTime = false;
 
     private void loopStatus() {
         if (id != 0) {
@@ -304,6 +305,9 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                     inputPanel.visibilityInput();
                     messageFragment.scrollToBottom();
                 } else {
+                    if (position==0){
+                        rtsFragment.refreshView();
+                    }
                     inputPanel.goneInput();
                 }
             }
@@ -378,6 +382,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     }
 
     private void enterRoom() {
+        isShowTime = true;
         registerObservers(true);
         registerRTSObservers(roomId, true);
         initLiveVideo();
@@ -538,6 +543,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     }
 
     private void clearChatRoom() {
+        isShowTime = false;
         registerObservers(false);
         registerRTSObservers(roomId, false);
         AVChatManager.getInstance().leaveRoom(null);
@@ -781,6 +787,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         if (userJoinedList != null && userJoinedList.contains(s) && !s.equals(BaseApplication.getAccount())) {
             if (masterRender == null) {
                 masterRender = new AVChatVideoRender(InteractiveLiveActivity.this);
+                masterRender.setKeepScreenOn(true);
             }
             boolean isSetup = setupMasterRender(s, AVChatVideoScalingType.SCALE_ASPECT_BALANCED);
             if (isSetup && masterRender != null) {
@@ -836,6 +843,11 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         // 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
         NIMClient.getService(MsgService.class).sendMessage(message, true);
         messageFragment.onMsgSend(message);
+    }
+
+    @Override
+    public boolean isShowTime() {
+        return isShowTime;
     }
 
     private void registerRTSObservers(String sessionName, boolean register) {

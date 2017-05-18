@@ -98,7 +98,6 @@ public class MainActivity extends BaseFragmentActivity {
                     }
                 }
             };
-    private View linear_bar;
 
     /**
      * 刷新未读
@@ -117,7 +116,6 @@ public class MainActivity extends BaseFragmentActivity {
         setContentView(R.layout.activity_main);
         checkUserInfo();
 
-        linear_bar = findViewById(R.id.ll_bar);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
                     | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
@@ -125,8 +123,9 @@ public class MainActivity extends BaseFragmentActivity {
                     | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                     | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            //透明状态栏
+        }
+//        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        //透明状态栏
 //            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 //            //透明导航栏
 //            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
@@ -137,7 +136,7 @@ public class MainActivity extends BaseFragmentActivity {
 //            ViewGroup.LayoutParams params = linear_bar.getLayoutParams();
 //            params.height = statusHeight;
 //            linear_bar.setLayoutParams(params);
-        }
+//        }
         initView();
         EventBus.getDefault().register(this);
         //  注册/注销观察者

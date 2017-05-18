@@ -28,11 +28,8 @@ public class FragmentInteractDetailClassInfo extends BaseFragment {
     TextView totalTime;
     TextView classType;
     RemedialClassDetailBean data;
-    private SimpleDateFormat parse1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    private SimpleDateFormat parse2 = new SimpleDateFormat("yyyy-MM-dd");
     private TextView suitable;
     private TextView target;
-    private TextView averageTime;
     private TextView totalCount;
     private WebView learningTips;
 
@@ -52,7 +49,6 @@ public class FragmentInteractDetailClassInfo extends BaseFragment {
         grade = (TextView) view.findViewById(R.id.grade);
         totalTime = (TextView) view.findViewById(R.id.total_time);
         classType = (TextView) view.findViewById(R.id.class_type);
-        averageTime = (TextView) view.findViewById(R.id.average_time);
         totalCount = (TextView) view.findViewById(R.id.total_count);
         suitable = (TextView) view.findViewById(R.id.suitable);
         target = (TextView) view.findViewById(R.id.target);
