@@ -54,7 +54,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:textColor="#666"
                 android:text="老师名字"
                 android:textColor="#999"
                 android:textSize="12sp" />

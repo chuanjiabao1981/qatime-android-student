@@ -257,13 +257,14 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                             ((FragmentClassDetailClassList) fragBaseFragments.get(2)).setData(data);
                             if (data.getData().getIs_bought()) {
                                 startStudyView.setVisibility(View.VISIBLE);
-                                startStudy.setText("已结束");
-                                startStudy.setEnabled(false);
                                 if (Constant.CourseStatus.completed.equals(data.getStatus())) {
+                                    startStudy.setText("已结束");
+                                    startStudy.setEnabled(false);
                                     handleLayout.setVisibility(View.GONE);//已结束的课程隐藏操作按钮
                                 }
+
                             }else{
-                                if (Constant.CourseStatus.completed.equals(data.getStatus())) {//未购买&&已结束：显示已下架
+                                if (data.getData().isOff_shelve()) {//未购买&&已结束：显示已下架
                                     startStudyView.setVisibility(View.VISIBLE);
                                     startStudy.setText("已下架");
                                     startStudy.setEnabled(false);

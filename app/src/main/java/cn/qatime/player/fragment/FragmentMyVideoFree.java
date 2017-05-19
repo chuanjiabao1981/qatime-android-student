@@ -83,7 +83,7 @@ public class FragmentMyVideoFree extends BaseFragment {
                 helper.setText(R.id.name, item.getVideo_course().getName());
                 helper.setText(R.id.subject, item.getVideo_course().getSubject());
                 helper.setText(R.id.teacher, "/" + item.getVideo_course().getTeacher_name());
-                if (item.getStatus().equals(Constant.CourseStatus.completed) || item.getStatus().equals(Constant.CourseStatus.finished)) {
+                if (item.getStatus().equals(Constant.CourseStatus.completed)) {
                     helper.setText(R.id.progress, getString(R.string.all_class_has_over));
                 } else {
                     helper.setText(R.id.progress, getString(R.string.progress, item.getUsed_count(), item.getBuy_count()));
