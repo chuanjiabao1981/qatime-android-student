@@ -121,6 +121,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     private String camera;
     private String board;
     private ScreenSwitchUtils screenSwitchUtils;
+    private boolean isShowTime = false;
 
 
     private void assignViews() {
@@ -675,6 +676,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             queryVideoState();
         } else if (videoState == VideoState.UNPLAY) {//未直播状态下 开始轮询
             this.videoState = videoState;
+            isShowTime = false;
             playingReQuery = 0;//异常退出重新查询用
             hd.removeCallbacks(runnable);
             hd.postDelayed(runnable, 30000);
@@ -699,6 +701,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             }
         } else if (videoState == VideoState.PLAYING) {//直播状态下 停止轮询等待完成
             this.videoState = videoState;
+            isShowTime = true;
             if (playingReQuery < 1) {
 //                Logger.e("重新查询");
                 hd.postDelayed(runnable, 15000);
@@ -743,6 +746,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
         } else if (videoState == VideoState.CLOSED) {//关闭状态   摄像头关闭
             this.videoState = videoState;
+            isShowTime = true;
             hd.removeCallbacks(runnable);
             hd.postDelayed(runnable, 30000);
             refreshState();
@@ -805,7 +809,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     @Subscribe
     public void onEvent(BusEvent event) {
-        if (event==BusEvent.ANNOUNCEMENT) {
+        if (event == BusEvent.ANNOUNCEMENT) {
             getAnnouncementsData();
         }
     }
@@ -1109,5 +1113,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     @Override
     public void ChatMessage(IMMessage message) {
         sendMessages(message, message.getMsgType() == MsgTypeEnum.text && isSubBig);
+    }
+
+    @Override
+    public boolean isShowTime() {
+        return isShowTime;
     }
 }

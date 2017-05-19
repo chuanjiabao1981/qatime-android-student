@@ -16,7 +16,6 @@ import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -32,8 +31,22 @@ import cn.qatime.player.im.doodle.action.MyPath;
  */
 public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, TransactionObserver {
 
+    private SwitchListener switchListener;
+
+    public void refreshView() {
+        Canvas canvas = surfaceHolder.lockCanvas();
+        drawHistoryActions(canvas);
+        if (canvas!=null) {
+            surfaceHolder.unlockCanvasAndPost(canvas);
+        }
+    }
+
     public interface FlipListener {
         void onFlipPage(Transaction transaction);
+    }
+
+    public interface SwitchListener {
+        void onSwitch(boolean isOpen);
     }
 
     public enum Mode {
@@ -78,7 +91,7 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
     // <account, transactions>
     private Map<String, List<Transaction>> userDataMap = new HashMap<>();
 
-    private FlipListener flipListener;
+//    private FlipListener flipListener;
 
     public DoodleView(Context context) {
         super(context);
@@ -107,10 +120,10 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
      * @param mode    设置板书模式
      * @param bgColor 设置板书的背景颜色
      */
-    public void init(String sessionId, String toAccount, Mode mode, int bgColor, int paintColor, Context context, FlipListener flipListener) {
+    public void init(String sessionId, String toAccount, Mode mode, int bgColor, int paintColor, Context context, SwitchListener switchListener) {
         TransactionCenter.getInstance().setDoodleViewInited(true);
         this.sessionId = sessionId;
-        this.flipListener = flipListener;
+        this.switchListener = switchListener;
         this.transactionManager = new TransactionManager(sessionId, toAccount, context);
 
         if (mode == Mode.PAINT || mode == Mode.BOTH) {
@@ -438,7 +451,13 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
                 } else if (t.isFlip()) {
                     // 收到翻页消息。先清空白板，然后做翻页操作。
                     Logger.e(TAG, "receive flip msg");
-                    flipListener.onFlipPage(t);
+//                    flipListener.onFlipPage(t);
+                } else if (t.isSwitch()) {//开启桌面共享  x:   1开启  0关闭
+                    if (t.getX() == 1) {
+                        switchListener.onSwitch(true);
+                    } else if (t.getX() == 0) {
+                        switchListener.onSwitch(false);
+                    }
                 }
             }
         }
@@ -685,14 +704,11 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
 
         Map<String, DoodleChannel> tempMap = new HashMap<>();
         tempMap.putAll(playbackChannelMap);
-        Iterator<Map.Entry<String, DoodleChannel>> entries = tempMap.entrySet().iterator();
-        while (entries.hasNext()) {
-            Map.Entry<String, DoodleChannel> entry = entries.next();
+        for (Map.Entry<String, DoodleChannel> entry : tempMap.entrySet()) {
             DoodleChannel playbackChannel = entry.getValue();
             if (playbackChannel != null && playbackChannel.actions != null) {
                 CopyOnWriteArrayList<Action> tempActions = playbackChannel.actions;
-                for (Iterator<Action> it = tempActions.iterator(); it.hasNext(); ) {
-                    Action a = it.next();
+                for (Action a : tempActions) {
                     a.onDraw(canvas);
                 }
 

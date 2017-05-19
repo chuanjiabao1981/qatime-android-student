@@ -23,6 +23,7 @@ public class Transaction implements Serializable {
         byte LASER_PEN = 12;
         byte LASER_PEN_END = 13;
         byte Flip = 14;
+        byte Switch = 15;
     }
 
     private byte step = ActionStep.START;
@@ -95,7 +96,7 @@ public class Transaction implements Serializable {
             }
 
             if (step == ActionStep.START || step == ActionStep.MOVE || step == ActionStep.END
-                    || step == ActionStep.LASER_PEN) {
+                    || step == ActionStep.LASER_PEN || step == ActionStep.Switch) {
                 // 画笔 起始点，移动点，结束点
                 int sp2 = data.indexOf(",");
                 if (sp2 <= 2) {
@@ -301,7 +302,7 @@ public class Transaction implements Serializable {
     public boolean isPaint() {
         return !isRevoke() && !isClearSelf() && !isClearAck()
                 && !isSyncRequest() && !isSyncPrepare() && !isSyncPrepareAck()
-                && !isFlip();
+                && !isFlip() && !isSwitch();
     }
 
     public boolean isRevoke() {
@@ -342,5 +343,9 @@ public class Transaction implements Serializable {
 
     public boolean isFlip() {
         return step == ActionStep.Flip;
+    }
+
+    public boolean isSwitch() {
+        return step == ActionStep.Switch;
     }
 }

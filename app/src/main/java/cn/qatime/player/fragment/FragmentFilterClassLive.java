@@ -257,13 +257,14 @@ public class FragmentFilterClassLive extends BaseFragment {
         listview.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         listview.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
         listview.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
-        adapter = new CommonAdapter<FilterLiveCourseBean.DataBean>(getActivity(), datas, R.layout.item_filter_course) {
+        adapter = new CommonAdapter<FilterLiveCourseBean.DataBean>(getActivity(), datas, R.layout.item_filter_course_live) {
             @Override
             public void convert(ViewHolder holder, FilterLiveCourseBean.DataBean item, int position) {
                 Glide.with(getActivity()).load(item.getPublicize()).crossFade().placeholder(R.mipmap.photo).into((ImageView) holder.getView(R.id.image));
                 holder.setText(R.id.name, item.getName())
                         .setText(R.id.price, "￥" + item.getPrice())
-                        .setText(R.id.teacher, item.getTeacher_name());
+                        .setText(R.id.teacher, item.getTeacher_name())
+                        .setText(R.id.buy_count,item.getBuy_tickets_count()+"");
             }
         };
         listview.setAdapter(adapter);

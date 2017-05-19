@@ -132,6 +132,11 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         sendMessage(message);
     }
 
+    @Override
+    public boolean isShowTime() {
+        return false;
+    }
+
     private void sendMessage(IMMessage message) {
         // 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
         NIMClient.getService(MsgService.class).sendMessage(message, true);

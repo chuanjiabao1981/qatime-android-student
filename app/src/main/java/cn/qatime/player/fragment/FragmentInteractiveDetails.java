@@ -124,28 +124,6 @@ public class FragmentInteractiveDetails extends BaseFragment {
         };
         list.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-//        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                InteractCourseDetailBean.InteractiveLessonsBean item = classList.get(position);
-//                if (isFinished(item)) {
-//                    if (data.getIs_bought()) {
-//                        if (!item.isReplayable()) {
-////                            Toast.makeText(getActivity(), getResourceString(R.string.no_playback_video), Toast.LENGTH_SHORT).show();
-//                            return;
-//                        }
-//                        if (item.getLeft_replay_times() <= 0) {
-//                            Toast.makeText(getActivity(), getResourceString(R.string.have_no_left_playback_count), Toast.LENGTH_SHORT).show();
-//                            return;
-//                        }
-//                        Intent intent = new Intent(getActivity(), NEVideoPlaybackActivity.class);
-//                        intent.putExtra("id", item.getId());
-//                        intent.putExtra("name", item.getName());
-//                        startActivity(intent);
-//                    }
-//                }
-//            }
-//        });
         teacherAdapter = new CommonAdapter<TeacherBean>(getActivity(), teacherList, R.layout.item_interactive_details) {
             @Override
             public void convert(ViewHolder holder, TeacherBean item, int position) {
