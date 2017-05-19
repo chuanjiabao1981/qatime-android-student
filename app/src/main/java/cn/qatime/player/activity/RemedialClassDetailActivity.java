@@ -208,16 +208,16 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                             }
                             if (data.getData().getIcons() != null) {
                                 if (!data.getData().getIcons().isCoupon_free()) {
-                                    couponFree.setVisibility(View.INVISIBLE);
+                                    couponFree.setVisibility(View.GONE);
                                 }
                                 if (!data.getData().getIcons().isRefund_any_time()) {
-                                    refundAnyTime.setVisibility(View.INVISIBLE);
+                                    refundAnyTime.setVisibility(View.GONE);
                                 }
                                 if (!data.getData().getIcons().isFree_taste()) {
-                                    freeTaste.setVisibility(View.INVISIBLE);
+                                    freeTaste.setVisibility(View.GONE);
                                 }
                                 if (!data.getData().getIcons().isJoin_cheap()) {
-                                    joinCheap.setVisibility(View.INVISIBLE);
+                                    joinCheap.setVisibility(View.GONE);
                                 }
                             }
                             try {
