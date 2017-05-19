@@ -167,16 +167,25 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
 
                             if (data.getData().isIs_bought()) {
                                 startStudyView.setVisibility(View.VISIBLE);
-                                if (data.getData().getStatus().equals("completed") || data.getData().getStatus().equals("finished")) {
+                                if (Constant.CourseStatus.completed.equals(data.getData().getStatus())) {
+                                    startStudy.setText("已结束");
+                                    startStudy.setEnabled(false);
+                                    handleLayout.setVisibility(View.GONE);//已结束的课程隐藏操作按钮
+                                }
+                            }else{
+                                if (data.getData().isOff_shelve()) {
+                                    startStudyView.setVisibility(View.VISIBLE);
+                                    startStudy.setText("已下架");
                                     startStudy.setEnabled(false);
                                 }
                             }
+
                             if (data.getData().getIcons() != null) {
                                 if (!data.getData().getIcons().isRefund_any_time()) {
-                                    refundAnyTime.setVisibility(View.GONE);
+                                    refundAnyTime.setVisibility(View.INVISIBLE);
                                 }
                                 if (!data.getData().getIcons().isJoin_cheap()) {
-                                    joinCheap.setVisibility(View.GONE);
+                                    joinCheap.setVisibility(View.INVISIBLE);
                                 }
                             }
                         }

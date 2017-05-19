@@ -105,6 +105,8 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
 
     public interface InputPanelListener {
         void ChatMessage(IMMessage message);
+
+        boolean isShowTime();//是否是正在直播，是就禁用语音聊天
     }
 
     public interface AudioRecordListener {
@@ -449,7 +451,10 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
+                if (listener.isShowTime()) {
+                    Toast.makeText(context, "正在直播中，禁用语音聊天", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     touched = true;
                     if (audioRecordListener != null) {

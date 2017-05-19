@@ -388,7 +388,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
             return getString(R.string.recruiting);
         } else if (status.equals("teaching")) {
             return getString(R.string.teaching);
-        } else if (status.equals(Constant.CourseStatus.completed) || status.equals(Constant.CourseStatus.finished)) {//未开始
+        } else if (status.equals(Constant.CourseStatus.completed)) {//未开始
             return getString(R.string.completed);
         }
         return getString(R.string.recruiting);

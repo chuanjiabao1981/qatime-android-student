@@ -48,6 +48,16 @@ public class Product implements Serializable {
 
     private IconsBean icons;
 
+    private boolean off_shelve;
+
+    public boolean isOff_shelve() {
+        return off_shelve;
+    }
+
+    public void setOff_shelve(boolean off_shelve) {
+        this.off_shelve = off_shelve;
+    }
+
     public IconsBean getIcons() {
         return icons;
     }

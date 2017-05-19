@@ -53,6 +53,10 @@ public class FragmentVideoCoursesClassInfo extends BaseFragment {
         timeLength = (TextView) findViewById(R.id.time_length);
         webView = (WebView) findViewById(R.id.describe);
 
+        initWebView(webView);
+    }
+
+    private void initWebView(WebView webView) {
         webView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {

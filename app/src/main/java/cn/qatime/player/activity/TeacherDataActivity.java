@@ -161,9 +161,10 @@ public class TeacherDataActivity extends BaseActivity {
         interactiveGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Intent intent = new Intent(TeacherDataActivity.this, inter.class);
-//                intent.putExtra("id", interactiveList.get(position).getId());
-//                startActivityForResult(intent, Constant.REQUEST);
+                Intent intent = new Intent(TeacherDataActivity.this, InteractiveLiveActivity.class);
+                intent.putExtra("id", interactiveList.get(position).getId());
+                // TODO: 2017/5/18 缺少群id
+                startActivityForResult(intent, Constant.REQUEST);
             }
         });
         interactiveGrid.setAdapter(interactiveAdapter);

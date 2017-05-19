@@ -45,6 +45,8 @@ import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.netease.nrtc.sdk.NRtcParameters;
 import com.orhanobut.logger.Logger;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -56,6 +58,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.bean.InputPanel;
 import cn.qatime.player.bean.InteractiveLiveStatusBean;
 import cn.qatime.player.fragment.FragmentInteractiveAnnouncements;
@@ -91,7 +94,7 @@ import libraryextra.view.FragmentLayoutWithLine;
  * @Describe 互动直播
  */
 
-public class InteractiveLiveActivity extends BaseActivity implements View.OnClickListener, AVChatStateObserver, InputPanel.InputPanelListener {
+public class InteractiveLiveActivity extends BaseActivity implements View.OnClickListener, AVChatStateObserver, InputPanel.InputPanelListener, FragmentInteractiveBoard.SwitchListener {
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3, R.id.tab_text4, R.id.tab_text5};
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
     private final int LIVE_PERMISSION_REQUEST_CODE = 100;
@@ -132,6 +135,8 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         }
     };
     private long loopDelay = 10000;
+    private boolean isOpen = false;//屏幕恭喜是否开启
+    private boolean isShowTime = false;
 
     private void loopStatus() {
         if (id != 0) {
@@ -187,10 +192,12 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         requestLivePermission();
         id = getIntent().getIntExtra("id", 0);
         initData();
-        hd.post(loopStatus);
+        getAnnouncementsData();
+        hd.postDelayed(loopStatus, 500);
+        EventBus.getDefault().register(this);
     }
 
-    private void initData() {
+    private void getAnnouncementsData() {
         if (id != 0) {
             DaYiJsonObjectRequest announcementsRequest = new DaYiJsonObjectRequest(UrlUtils.urlInteractCourses + "/" + id + "/realtime", null,
                     new VolleyListener(InteractiveLiveActivity.this) {
@@ -222,6 +229,11 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 }
             });
             addToRequestQueue(announcementsRequest);
+        }
+    }
+
+    private void initData() {
+        if (id != 0) {
             DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlInteractCourses + id, null,
                     new VolleyListener(InteractiveLiveActivity.this) {
                         @Override
@@ -291,7 +303,11 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff333333);
                 if (position == 1) {
                     inputPanel.visibilityInput();
+                    messageFragment.scrollToBottom();
                 } else {
+                    if (position==0){
+                        rtsFragment.refreshView();
+                    }
                     inputPanel.goneInput();
                 }
             }
@@ -351,22 +367,26 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         inputPanel.setOnAudioRecordListener(new InputPanel.AudioRecordListener() {
             @Override
             public void audioRecordStart() {
-                screenSwitchUtils.stop();
+                if (isOpen)
+                    screenSwitchUtils.stop();
             }
 
             @Override
             public void audioRecordStop() {
-                screenSwitchUtils.start(InteractiveLiveActivity.this);
+                if (isOpen) {
+                    screenSwitchUtils.start(InteractiveLiveActivity.this);
+                }
             }
         });
 
     }
 
     private void enterRoom() {
+        isShowTime = true;
         registerObservers(true);
         registerRTSObservers(roomId, true);
         initLiveVideo();
-        rtsFragment.initRTSView(roomId);
+        rtsFragment.initRTSView(roomId, this);
         joinRTSSession();
     }
 
@@ -392,7 +412,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
     private void updateRTSFragment() {
         if (rtsFragment != null) {
-            rtsFragment.initView();
+            rtsFragment.initView(true);
         } else {
             hd.postDelayed(new Runnable() {
                 @Override
@@ -519,9 +539,11 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         }
         hd.removeCallbacks(hideBackLayout);
         hd.removeCallbacks(loopStatus);
+        EventBus.getDefault().unregister(this);
     }
 
     private void clearChatRoom() {
+        isShowTime = false;
         registerObservers(false);
         registerRTSObservers(roomId, false);
         AVChatManager.getInstance().leaveRoom(null);
@@ -765,6 +787,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         if (userJoinedList != null && userJoinedList.contains(s) && !s.equals(BaseApplication.getAccount())) {
             if (masterRender == null) {
                 masterRender = new AVChatVideoRender(InteractiveLiveActivity.this);
+                masterRender.setKeepScreenOn(true);
             }
             boolean isSetup = setupMasterRender(s, AVChatVideoScalingType.SCALE_ASPECT_BALANCED);
             if (isSetup && masterRender != null) {
@@ -793,7 +816,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         return isSetup;
     }
 
-    private void updateDeskShareUI() {
+//    private void updateDeskShareUI() {
 //        Map<String, Object> ext = roomInfo.getExtension();
 //        if (ext != null && ext.containsKey(MeetingConstant.FULL_SCREEN_TYPE)) {
 //            int fullScreenType = (int) ext.get(MeetingConstant.FULL_SCREEN_TYPE);
@@ -803,7 +826,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 //                fullScreenImage.setVisibility(View.VISIBLE);
 //            }
 //        }
-    }
+//    }
 
     @Override
     public void ChatMessage(IMMessage message) {
@@ -820,6 +843,11 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         // 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
         NIMClient.getService(MsgService.class).sendMessage(message, true);
         messageFragment.onMsgSend(message);
+    }
+
+    @Override
+    public boolean isShowTime() {
+        return isShowTime;
     }
 
     private void registerRTSObservers(String sessionName, boolean register) {
@@ -931,6 +959,8 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        int screenWidth = ScreenUtils.getScreenWidth(InteractiveLiveActivity.this);
+        int screenHeight = ScreenUtils.getScreenHeight(InteractiveLiveActivity.this);
         if (screenSwitchUtils.isPortrait()) {
             WindowManager.LayoutParams attrs = getWindow().getAttributes();
             attrs.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -950,6 +980,21 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             params.width = -1;
             viewLayout.setLayoutParams(params);
         }
+        float resultX = videoLayout.getX();
+        float resultY = videoLayout.getY();
+        if (resultX < 0) {
+            resultX = 0;
+        } else if (resultX >= screenWidth - videoLayout.getWidth()) {
+            resultX = screenWidth - videoLayout.getWidth();
+        }
+
+        if (resultY < 0) {
+            resultY = 0;
+        } else if (resultY >= screenHeight - videoLayout.getHeight()) {
+            resultY = screenHeight - videoLayout.getHeight();
+        }
+        videoLayout.setX(resultX);
+        videoLayout.setY(resultY);
     }
 
     @Override
@@ -957,9 +1002,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         if (!screenSwitchUtils.isPortrait()) {
             Logger.e("orta 返回竖屏");
             screenSwitchUtils.toggleScreen();
-//            if (floatFragment != null) {
-//                floatFragment.setPortrait(true);
-//            }
             return;
         }
         if (inputPanel.isEmojiShow()) {
@@ -973,5 +1015,22 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         inputPanel.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Subscribe
+    public void onEvent(BusEvent event) {
+        if (event == BusEvent.ANNOUNCEMENT) {
+            getAnnouncementsData();
+        }
+    }
+
+    @Override
+    public void onSwitch(boolean isOpen) {
+        this.isOpen = isOpen;
+        if (!isOpen) {
+            if (!screenSwitchUtils.isPortrait()) {
+                screenSwitchUtils.toggleScreen();
+            }
+        }
     }
 }
