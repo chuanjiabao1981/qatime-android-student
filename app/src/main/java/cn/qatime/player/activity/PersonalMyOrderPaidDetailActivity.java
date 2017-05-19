@@ -230,7 +230,14 @@ public class   PersonalMyOrderPaidDetailActivity extends BaseActivity {
         listitem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PersonalMyOrderPaidDetailActivity.this, RemedialClassDetailActivity.class);
+                Intent intent = new Intent();
+                if ("LiveStudio::Course".equals(data.getProduct_type())) {
+                    intent.setClass(PersonalMyOrderPaidDetailActivity.this, RemedialClassDetailActivity.class);
+                } else if ("LiveStudio::InteractiveCourse".equals(data.getProduct_type())) {
+                    intent.setClass(PersonalMyOrderPaidDetailActivity.this, InteractCourseDetailActivity.class);
+                } else if ("LiveStudio::VideoCourse".equals(data.getProduct_type())) {
+                    intent.setClass(PersonalMyOrderPaidDetailActivity.this, VideoCoursesActivity.class);
+                }
                 intent.putExtra("id", classid);
                 intent.putExtra("page", 0);
                 startActivity(intent);

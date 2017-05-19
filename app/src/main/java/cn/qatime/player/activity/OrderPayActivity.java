@@ -167,22 +167,22 @@ public class OrderPayActivity extends BaseActivity {
 //                    } else if (!api.isWXAppSupportAPI()) {
 //                        Toast.makeText(OrderPayActivity.this, R.string.wechat_not_support, Toast.LENGTH_SHORT).show();
 //                    } else {
-                        PayReq request = new PayReq();
-                        request.appId = weixinData.getAppid();
+                    PayReq request = new PayReq();
+                    request.appId = weixinData.getAppid();
 
 
-                        request.partnerId = weixinData.getPartnerid();
+                    request.partnerId = weixinData.getPartnerid();
 
-                        request.prepayId = weixinData.getPrepayid();
+                    request.prepayId = weixinData.getPrepayid();
 
-                        request.packageValue = weixinData.getPackage();
+                    request.packageValue = weixinData.getPackage();
 
-                        request.nonceStr = weixinData.getNoncestr();
+                    request.nonceStr = weixinData.getNoncestr();
 
-                        request.timeStamp = weixinData.getTimestamp();
+                    request.timeStamp = weixinData.getTimestamp();
 
-                        request.sign = weixinData.getSign();
-                        api.sendReq(request);
+                    request.sign = weixinData.getSign();
+                    api.sendReq(request);
 //                    }
 
                 } else if (payType.equals("alipay")) {
@@ -204,16 +204,16 @@ public class OrderPayActivity extends BaseActivity {
                     payThread.start();
                 } else if (payType.equals("account")) {
                     Logger.e("钱包支付");
-                    if(BaseApplication.getCashAccount().getData().isHas_password()){
+                    if (BaseApplication.getCashAccount().getData().isHas_password()) {
                         long changeAt = BaseApplication.getCashAccount().getData().getPassword_set_at();
 
-                        int diff = 2 - (int) ((System.currentTimeMillis()/1000  - changeAt) / 3600);
-                        if (diff <= 2&&diff > 0) {
+                        int diff = 2 - (int) ((System.currentTimeMillis() / 1000 - changeAt) / 3600);
+                        if (diff <= 2 && diff > 0) {
                             dialogServerError(getString(R.string.pay_password_not_enough_time));//未满24小时
                         } else {
                             showPSWPop();
                         }
-                    }else{
+                    } else {
                         Toast.makeText(OrderPayActivity.this, R.string.pay_password_not_set, Toast.LENGTH_SHORT).show();
                     }
 //                    Intent intent = new Intent(OrderPayActivity.this,OrderPayResultActivity.class);
@@ -275,6 +275,8 @@ public class OrderPayActivity extends BaseActivity {
                         try {
                             if (response.getJSONObject("error").getInt("code") == 2007) {
                                 Toast.makeText(OrderPayActivity.this, R.string.token_error, Toast.LENGTH_SHORT).show();
+                            } else if (response.getJSONObject("error").getInt("code") == 9999) {
+                                Toast.makeText(OrderPayActivity.this, response.getJSONObject("error").getString("msg"), Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(OrderPayActivity.this, R.string.server_error, Toast.LENGTH_SHORT).show();
                             }
