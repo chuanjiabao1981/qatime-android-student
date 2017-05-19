@@ -305,10 +305,15 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                     inputPanel.visibilityInput();
                     messageFragment.scrollToBottom();
                 } else {
-                    if (position==0){
-                        rtsFragment.refreshView();
-                    }
                     inputPanel.goneInput();
+                    if (position == 0) {
+                        hd.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                rtsFragment.refreshView();
+                            }
+                        }, 300);
+                    }
                 }
             }
         });

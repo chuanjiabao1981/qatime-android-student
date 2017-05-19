@@ -53,7 +53,7 @@ public class FragmentInteractiveBoard extends BaseFragment implements View.OnCli
     private SwitchListener switchListener;
 
     public void refreshView() {
-//        doodleView.refreshView();
+        doodleView.refreshView();
     }
 
     public interface SwitchListener {
