@@ -16,10 +16,6 @@ import libraryextra.bean.VideoLessonsBean;
 
 public class VideoCoursesDetailsBean implements Serializable {
 
-    /**
-     * status : 1
-     * data : {"video_course":{"id":18,"name":"空手道免费体验课","subject":"数学","grade":"高一","teacher_name":"刘刚老师","publicize":"/assets/video_courses/app_info_default-061a95d589b702b146739a0de859454a.png","teacher":{"id":3056,"name":"刘刚老师","nick_name":"昵称刘刚","avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/f9c2b225a5fd296a010c03666b543e38.jpg","ex_big_avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/ex_big_f9c2b225a5fd296a010c03666b543e38.jpg","login_mobile":"13212345678","email":null,"teaching_years":"within_three_years","category":"高中","subject":"数学","grade_range":[],"gender":"male","birthday":"2017-03-02","province":25,"city":606,"school":140,"school_id":140,"desc":"啊撒旦发送的发啊说是道非"},"price":0,"buy_tickets_count":3,"status":"published","description":"<p>空手锻炼从现在开始<\/p>","tag_list":[],"video_lessons_count":3,"taste_count":0,"objective":"人人都能空手套白狼","suit_crowd":"小学生","video_lessons":[{"id":41,"name":"体验第一周","status":"init","video_course_id":18,"real_time":2,"pos":1,"tastable":false,"video":{"id":7815,"token":"1493284188624","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/c9f5e22bfd97e0330b1be40ea0cb8dfd.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/8fdd927ad57e5a39f567a377edd7b318.mp4"}},{"id":42,"name":"体验第二周","status":"init","video_course_id":18,"real_time":2,"pos":2,"tastable":false,"video":{"id":7816,"token":"1493284212518","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/b2fa3b8a4e5011fe4c07539a5580020d.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/46e2483d5621337ace0be3014ee1d24a.mp4"}},{"id":43,"name":"体验终章","status":"init","video_course_id":18,"real_time":2,"pos":3,"tastable":false,"video":{"id":7817,"token":"1493284223769","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/393d4890f5c6c0b84ee1b2853361a6a1.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/acd6a82b7e533e7282cfc410c42403d0.mp4"}}],"sell_type":"free","total_duration":6,"icons":{"free_taste":false,"coupon_free":true,"cheap_moment":false}},"ticket":{"id":667,"used_count":0,"buy_count":3,"lesson_price":"0.0","progress":[{"video_lesson":{"id":43,"name":"体验终章","duration":null,"video":{"id":7817,"token":"1493284223769","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/393d4890f5c6c0b84ee1b2853361a6a1.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/acd6a82b7e533e7282cfc410c42403d0.mp4"}},"status":"unused"},{"video_lesson":{"id":42,"name":"体验第二周","duration":null,"video":{"id":7816,"token":"1493284212518","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/b2fa3b8a4e5011fe4c07539a5580020d.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/46e2483d5621337ace0be3014ee1d24a.mp4"}},"status":"unused"},{"video_lesson":{"id":41,"name":"体验第一周","duration":null,"video":{"id":7815,"token":"1493284188624","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/c9f5e22bfd97e0330b1be40ea0cb8dfd.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/8fdd927ad57e5a39f567a377edd7b318.mp4"}},"status":"unused"}],"video_course":{"id":18,"name":"空手道免费体验课","subject":"数学","grade":"高一","teacher_name":"刘刚老师","publicize":"/assets/video_courses/app_info_default-061a95d589b702b146739a0de859454a.png"},"status":"active"}}
-     */
 
     private int status;
     private DataBean data;
@@ -41,10 +37,6 @@ public class VideoCoursesDetailsBean implements Serializable {
     }
 
     public static class DataBean {
-        /**
-         * video_course : {"id":18,"name":"空手道免费体验课","subject":"数学","grade":"高一","teacher_name":"刘刚老师","publicize":"/assets/video_courses/app_info_default-061a95d589b702b146739a0de859454a.png","teacher":{"id":3056,"name":"刘刚老师","nick_name":"昵称刘刚","avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/f9c2b225a5fd296a010c03666b543e38.jpg","ex_big_avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/ex_big_f9c2b225a5fd296a010c03666b543e38.jpg","login_mobile":"13212345678","email":null,"teaching_years":"within_three_years","category":"高中","subject":"数学","grade_range":[],"gender":"male","birthday":"2017-03-02","province":25,"city":606,"school":140,"school_id":140,"desc":"啊撒旦发送的发啊说是道非"},"price":0,"buy_tickets_count":3,"status":"published","description":"<p>空手锻炼从现在开始<\/p>","tag_list":[],"video_lessons_count":3,"taste_count":0,"objective":"人人都能空手套白狼","suit_crowd":"小学生","video_lessons":[{"id":41,"name":"体验第一周","status":"init","video_course_id":18,"real_time":2,"pos":1,"tastable":false,"video":{"id":7815,"token":"1493284188624","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/c9f5e22bfd97e0330b1be40ea0cb8dfd.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/8fdd927ad57e5a39f567a377edd7b318.mp4"}},{"id":42,"name":"体验第二周","status":"init","video_course_id":18,"real_time":2,"pos":2,"tastable":false,"video":{"id":7816,"token":"1493284212518","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/b2fa3b8a4e5011fe4c07539a5580020d.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/46e2483d5621337ace0be3014ee1d24a.mp4"}},{"id":43,"name":"体验终章","status":"init","video_course_id":18,"real_time":2,"pos":3,"tastable":false,"video":{"id":7817,"token":"1493284223769","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/393d4890f5c6c0b84ee1b2853361a6a1.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/acd6a82b7e533e7282cfc410c42403d0.mp4"}}],"sell_type":"free","total_duration":6,"icons":{"free_taste":false,"coupon_free":true,"cheap_moment":false}}
-         * ticket : {"id":667,"used_count":0,"buy_count":3,"lesson_price":"0.0","progress":[{"video_lesson":{"id":43,"name":"体验终章","duration":null,"video":{"id":7817,"token":"1493284223769","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/393d4890f5c6c0b84ee1b2853361a6a1.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/acd6a82b7e533e7282cfc410c42403d0.mp4"}},"status":"unused"},{"video_lesson":{"id":42,"name":"体验第二周","duration":null,"video":{"id":7816,"token":"1493284212518","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/b2fa3b8a4e5011fe4c07539a5580020d.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/46e2483d5621337ace0be3014ee1d24a.mp4"}},"status":"unused"},{"video_lesson":{"id":41,"name":"体验第一周","duration":null,"video":{"id":7815,"token":"1493284188624","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/c9f5e22bfd97e0330b1be40ea0cb8dfd.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/8fdd927ad57e5a39f567a377edd7b318.mp4"}},"status":"unused"}],"video_course":{"id":18,"name":"空手道免费体验课","subject":"数学","grade":"高一","teacher_name":"刘刚老师","publicize":"/assets/video_courses/app_info_default-061a95d589b702b146739a0de859454a.png"},"status":"active"}
-         */
 
         private VideoCourseBean video_course;
         private TicketBean ticket;
@@ -66,28 +58,6 @@ public class VideoCoursesDetailsBean implements Serializable {
         }
 
         public static class VideoCourseBean {
-            /**
-             * id : 18
-             * name : 空手道免费体验课
-             * subject : 数学
-             * grade : 高一
-             * teacher_name : 刘刚老师
-             * publicize : /assets/video_courses/app_info_default-061a95d589b702b146739a0de859454a.png
-             * teacher : {"id":3056,"name":"刘刚老师","nick_name":"昵称刘刚","avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/f9c2b225a5fd296a010c03666b543e38.jpg","ex_big_avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/ex_big_f9c2b225a5fd296a010c03666b543e38.jpg","login_mobile":"13212345678","email":null,"teaching_years":"within_three_years","category":"高中","subject":"数学","grade_range":[],"gender":"male","birthday":"2017-03-02","province":25,"city":606,"school":140,"school_id":140,"desc":"啊撒旦发送的发啊说是道非"}
-             * price : 0
-             * buy_tickets_count : 3
-             * status : published
-             * description : <p>空手锻炼从现在开始</p>
-             * tag_list : []
-             * video_lessons_count : 3
-             * taste_count : 0
-             * objective : 人人都能空手套白狼
-             * suit_crowd : 小学生
-             * video_lessons : [{"id":41,"name":"体验第一周","status":"init","video_course_id":18,"real_time":2,"pos":1,"tastable":false,"video":{"id":7815,"token":"1493284188624","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/c9f5e22bfd97e0330b1be40ea0cb8dfd.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/8fdd927ad57e5a39f567a377edd7b318.mp4"}},{"id":42,"name":"体验第二周","status":"init","video_course_id":18,"real_time":2,"pos":2,"tastable":false,"video":{"id":7816,"token":"1493284212518","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/b2fa3b8a4e5011fe4c07539a5580020d.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/46e2483d5621337ace0be3014ee1d24a.mp4"}},{"id":43,"name":"体验终章","status":"init","video_course_id":18,"real_time":2,"pos":3,"tastable":false,"video":{"id":7817,"token":"1493284223769","video_type":"mp4","duration":2,"tmp_duration":2,"format_tmp_duration":"00:00:02","capture":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/capture/393d4890f5c6c0b84ee1b2853361a6a1.jpg","name_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/videos/acd6a82b7e533e7282cfc410c42403d0.mp4"}}]
-             * sell_type : free
-             * total_duration : 6
-             * icons : {"free_taste":false,"coupon_free":true,"cheap_moment":false}
-             */
 
             private int id;
             private String name;
@@ -109,6 +79,15 @@ public class VideoCoursesDetailsBean implements Serializable {
             private IconsBean icons;
             private List<String> tag_list;
             private List<VideoLessonsBean> video_lessons;
+            private boolean off_shelve;
+
+            public boolean isOff_shelve() {
+                return off_shelve;
+            }
+
+            public void setOff_shelve(boolean off_shelve) {
+                this.off_shelve = off_shelve;
+            }
 
             public int getId() {
                 return id;

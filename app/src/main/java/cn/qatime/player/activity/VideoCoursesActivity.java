@@ -64,6 +64,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
     private AlertDialog alertDialog;
     private TextView freeTaste;
     private TextView joinCheap;
+    private Button startStudy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,11 +95,6 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                                     price = "0" + price;
                                 }
                                 VideoCoursesActivity.this.price.setText("￥" + price);
-                                if (Constant.CourseStatus.teaching.equals(data.getData().getVideo_course().getStatus())) {
-                                    transferPrice.setVisibility(View.VISIBLE);
-                                } else {
-                                    transferPrice.setVisibility(View.GONE);
-                                }
                                 if (data.getData().getVideo_course().getTaste_count() > 0) {//显示进入试听按钮
                                     auditionStart.setVisibility(View.VISIBLE);
                                 } else {
@@ -107,17 +103,22 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
 
                                 if (data.getData().getTicket() != null && data.getData().getTicket().getStatus().equals("active")) {
                                     startStudyView.setVisibility(View.VISIBLE);
+                                }else{
+                                    if (data.getData().getVideo_course().isOff_shelve()) {
+                                        startStudyView.setVisibility(View.VISIBLE);
+                                        startStudy.setText("已下架");
+                                        startStudy.setEnabled(false);
+                                    }
                                 }
-
-                                if (Constant.CourseStatus.finished.equals(data.getData().getVideo_course().getStatus()) || Constant.CourseStatus.completed.equals(data.getData().getVideo_course().getStatus())) {
-                                    handleLayout.setVisibility(View.GONE);//已结束的课程隐藏操作按钮
-                                }
-
                             } else if (data.getData().getVideo_course().getSell_type().equals("free")) {
                                 transferPrice.setText("免费");
                                 transferPrice.setVisibility(View.VISIBLE);
                                 price.setVisibility(View.GONE);
                                 startStudyView.setVisibility(View.VISIBLE);
+                                if (data.getData().getVideo_course().isOff_shelve()) {
+                                    startStudy.setText("已下架");
+                                    startStudy.setEnabled(false);
+                                }
                             }
 
                             if (data.getData().getVideo_course().getIcons() != null) {
@@ -163,7 +164,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
         auditionStart = (Button) findViewById(R.id.audition_start);
         Button pay = (Button) findViewById(R.id.pay);
         startStudyView = (LinearLayout) findViewById(R.id.start_study_view);
-        Button startStudy = (Button) findViewById(R.id.start_study);
+        startStudy = (Button) findViewById(R.id.start_study);
 
         auditionStart.setOnClickListener(this);
         pay.setOnClickListener(this);

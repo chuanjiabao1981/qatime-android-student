@@ -12,33 +12,6 @@ import libraryextra.bean.TeacherBean;
  */
 public class ProductVideoCourseBean implements Serializable{
 
-    /**
-     * id : 3
-     * name : 初中考试1
-     * subject : 化学
-     * grade : 初一
-     * teacher_name : 王志成
-     * teacher : {"id":2489,"name":"王志成","nick_name":"luke测试","avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/8dba956b321d278c40f6b4eb84f05543.jpg","ex_big_avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/ex_big_8dba956b321d278c40f6b4eb84f05543.jpg","login_mobile":"13121249326","email":"wchtest001@163.com","teaching_years":"more_than_twenty_years","category":"小学","subject":"化学","grade_range":["二年级","三年级","四年级","五年级","六年级",""],"gender":"male","birthday":"1991-06-11","province":1,"city":1,"school":3,"desc":"请注意 ，这是开发人员的测试账号！"}
-     * price : 300
-     * current_price : 300
-     * chat_team_id : 31975075
-     * chat_team_owner : 07b7c43a854ed44d36c2941f1fc5ad00
-     * buy_tickets_count : 2
-     * status : published
-     * lesson_count : 2
-     * video_lessons_count : 2
-     * preset_lesson_count : 2
-     * completed_lesson_count : 0
-     * taste_count : 0
-     * completed_lessons_count : 0
-     * closed_lessons_count : 0
-     * objective : null
-     * suit_crowd : null
-     * publicize : /assets/video_courses/list_default-d30bb0d64e2d9ea1d59d5214f7b4613a.png
-     * sell_type : charge
-     * total_duration : 0
-     * icons : {"free_taste":false,"coupon_free":true,"cheap_moment":false}
-     */
 
     private int id;
     private String name;
@@ -65,6 +38,15 @@ public class ProductVideoCourseBean implements Serializable{
     private String sell_type;
     private int total_duration;
     private IconsBean icons;
+    private boolean off_shelve;
+
+    public boolean isOff_shelve() {
+        return off_shelve;
+    }
+
+    public void setOff_shelve(boolean off_shelve) {
+        this.off_shelve = off_shelve;
+    }
 
     public int getId() {
         return id;
