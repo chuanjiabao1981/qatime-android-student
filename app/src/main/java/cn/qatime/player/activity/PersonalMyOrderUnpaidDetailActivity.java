@@ -193,7 +193,14 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         listitem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PersonalMyOrderUnpaidDetailActivity.this, RemedialClassDetailActivity.class);
+                Intent intent = new Intent();
+                if ("LiveStudio::Course".equals(data.getProduct_type())) {
+                    intent.setClass(PersonalMyOrderUnpaidDetailActivity.this, RemedialClassDetailActivity.class);
+                } else if ("LiveStudio::InteractiveCourse".equals(data.getProduct_type())) {
+                    intent.setClass(PersonalMyOrderUnpaidDetailActivity.this, InteractCourseDetailActivity.class);
+                } else if ("LiveStudio::VideoCourse".equals(data.getProduct_type())) {
+                    intent.setClass(PersonalMyOrderUnpaidDetailActivity.this, VideoCoursesActivity.class);
+                }
                 intent.putExtra("id", classid);
                 intent.putExtra("page", 0);
                 startActivity(intent);
@@ -202,22 +209,21 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 2017/5/16 课程是否下架
                 if ("LiveStudio::Course".equals(data.getProduct_type())) {
-                    if (Constant.CourseStatus.completed.equals(data.getProduct().getStatus())) {
-                        Toast.makeText(PersonalMyOrderUnpaidDetailActivity.this, "该课程已结束", Toast.LENGTH_SHORT).show();
+                    if (Constant.CourseStatus.completed.equals(data.getProduct().getStatus())||data.getProduct().isOff_shelve()) {
+                        Toast.makeText(PersonalMyOrderUnpaidDetailActivity.this, "该课程已失效或已下架", Toast.LENGTH_SHORT).show();
                         return;
                     }
                 } else if ("LiveStudio::InteractiveCourse".equals(data.getProduct_type())) {
-                    if (Constant.CourseStatus.completed.equals(data.getProduct_interactive_course().getStatus())) {
-                        Toast.makeText(PersonalMyOrderUnpaidDetailActivity.this, "该课程已结束", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    if (Constant.CourseStatus.teaching.equals(data.getProduct_interactive_course().getStatus())) {
-                        Toast.makeText(PersonalMyOrderUnpaidDetailActivity.this, "该课程已开课", Toast.LENGTH_SHORT).show();
+                    if (Constant.CourseStatus.teaching.equals(data.getProduct_interactive_course().getStatus())||Constant.CourseStatus.completed.equals(data.getProduct_interactive_course().getStatus())||data.getProduct_interactive_course().isOff_shelve()) {
+                        Toast.makeText(PersonalMyOrderUnpaidDetailActivity.this, "该课程已失效或已下架", Toast.LENGTH_SHORT).show();
                         return;
                     }
                 } else if ("LiveStudio::VideoCourse".equals(data.getProduct_type())) {
+                    if(data.getProduct_video_course().isOff_shelve()){
+                        Toast.makeText(PersonalMyOrderUnpaidDetailActivity.this, "该课程已失效或已下架", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                 }
                 if (data.getPay_type().equals("weixin")) {
                     IWXAPI api = WXAPIFactory.createWXAPI(PersonalMyOrderUnpaidDetailActivity.this, null);

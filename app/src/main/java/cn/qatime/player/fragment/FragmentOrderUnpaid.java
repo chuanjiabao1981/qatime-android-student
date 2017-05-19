@@ -126,22 +126,21 @@ public class FragmentOrderUnpaid extends BaseFragment {
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                // TODO: 2017/5/16 课程是否下架
                                 if ("LiveStudio::Course".equals(item.getProduct_type())) {
-                                    if (Constant.CourseStatus.completed.equals(item.getProduct().getStatus())) {
-                                        Toast.makeText(mContext, "该课程已结束", Toast.LENGTH_SHORT).show();
+                                    if (Constant.CourseStatus.completed.equals(item.getProduct().getStatus())||item.getProduct().isOff_shelve()) {
+                                        Toast.makeText(mContext, "该课程已失效或已下架", Toast.LENGTH_SHORT).show();
                                         return;
                                     }
                                 } else if ("LiveStudio::InteractiveCourse".equals(item.getProduct_type())) {
-                                    if (Constant.CourseStatus.completed.equals(item.getProduct_interactive_course().getStatus())) {
-                                        Toast.makeText(mContext, "该课程已结束", Toast.LENGTH_SHORT).show();
-                                        return;
-                                    }
-                                    if (Constant.CourseStatus.teaching.equals(item.getProduct_interactive_course().getStatus())) {
-                                        Toast.makeText(mContext, "该课程已开课", Toast.LENGTH_SHORT).show();
+                                    if (Constant.CourseStatus.teaching.equals(item.getProduct_interactive_course().getStatus())||Constant.CourseStatus.completed.equals(item.getProduct_interactive_course().getStatus())||item.getProduct_interactive_course().isOff_shelve()) {
+                                        Toast.makeText(mContext, "该课程已失效或已下架", Toast.LENGTH_SHORT).show();
                                         return;
                                     }
                                 } else if ("LiveStudio::VideoCourse".equals(item.getProduct_type())) {
+                                    if(item.getProduct_video_course().isOff_shelve()){
+                                        Toast.makeText(mContext, "该课程已失效或已下架", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
                                 }
 
                                 if (item.getPay_type().equals("weixin")) {
