@@ -266,12 +266,12 @@ public class   PersonalMyOrderPaidDetailActivity extends BaseActivity {
 
                         if ("LiveStudio::Course".equals(data.getProduct_type())) {
                             intent.putExtra("name", data.getProduct().getName());
-                            intent.putExtra("preset_lesson_count", data.getProduct().getPreset_lesson_count());
-                            intent.putExtra("closed_lessons_count", data.getProduct().getClosed_lessons_count());
+                            intent.putExtra("preset_lesson_count", data.getProduct().getLesson_count());
+                            intent.putExtra("closed_lessons_count", data.getProduct().getStarted_lessons_count());
                         } else if ("LiveStudio::InteractiveCourse".equals(data.getProduct_type())) {
                             intent.putExtra("name", data.getProduct_interactive_course().getName());
                             intent.putExtra("preset_lesson_count", data.getProduct_interactive_course().getLessons_count());
-                            intent.putExtra("closed_lessons_count", data.getProduct_interactive_course().getClosed_lessons_count());
+                            intent.putExtra("closed_lessons_count", data.getProduct_interactive_course().getStarted_lessons_count());
                         } else if ("LiveStudio::VideoCourse".equals(data.getProduct_type())) {
 //                            intent.putExtra("name", data.getProduct_video_course().getName());
 //                            intent.putExtra("preset_lesson_count", data.getProduct_video_course().getPreset_lesson_count());

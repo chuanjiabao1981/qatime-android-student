@@ -10,7 +10,8 @@ import libraryextra.bean.TeacherBean;
 public class ProductInteractiveCourseBean implements Serializable {
 
     private String chat_team_id;
-    private int closed_lessons_count;
+    //    private int closed_lessons_count;
+    private int started_lessons_count;
     private int created_at;
     private String description;
     private String grade;
@@ -40,6 +41,14 @@ public class ProductInteractiveCourseBean implements Serializable {
         this.off_shelve = off_shelve;
     }
 
+    public int getStarted_lessons_count() {
+        return started_lessons_count;
+    }
+
+    public void setStarted_lessons_count(int started_lessons_count) {
+        this.started_lessons_count = started_lessons_count;
+    }
+
     public String getChat_team_id() {
         return chat_team_id;
     }
@@ -48,13 +57,13 @@ public class ProductInteractiveCourseBean implements Serializable {
         this.chat_team_id = chat_team_id;
     }
 
-    public int getClosed_lessons_count() {
-        return closed_lessons_count;
-    }
-
-    public void setClosed_lessons_count(int closed_lessons_count) {
-        this.closed_lessons_count = closed_lessons_count;
-    }
+//    public int getClosed_lessons_count() {
+//        return closed_lessons_count;
+//    }
+//
+//    public void setClosed_lessons_count(int closed_lessons_count) {
+//        this.closed_lessons_count = closed_lessons_count;
+//    }
 
     public int getCreated_at() {
         return created_at;
@@ -199,6 +208,7 @@ public class ProductInteractiveCourseBean implements Serializable {
     public void setTeachers(List<TeacherBean> teachers) {
         this.teachers = teachers;
     }
+
     public IconsBean getIcons() {
         return icons;
     }
