@@ -108,11 +108,6 @@
                 <!--已报人数-->
 
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#ccc" />
         </LinearLayout>
 
         <libraryextra.view.SimpleViewPagerIndicator

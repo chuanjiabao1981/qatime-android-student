@@ -246,7 +246,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                                     layoutView.setBackgroundColor(0xff999999);
                                     progress.setText(getString(R.string.progress_live, data.getData().getClosed_lessons_count(), data.getData().getPreset_lesson_count()));
                                 } else {
-                                    layoutView.setVisibility(View.GONE);
+                                    layoutView.setVisibility(View.INVISIBLE);
                                 }
                             } catch (ParseException e) {
                                 e.printStackTrace();
