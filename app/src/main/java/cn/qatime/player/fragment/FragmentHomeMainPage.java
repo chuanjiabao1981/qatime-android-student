@@ -107,7 +107,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private List<RecentPublishedBean.DataBean.PublishedRankBean> listPublishedRank = new ArrayList<>();
     private View cashAccountSafe;
     private View close;
-    private boolean flag = false;//是否提示过未设置支付密码
+    private boolean closed = false;//是否手动关闭未设置支付密码提示
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -183,7 +183,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
     @Subscribe
     public void onEvent(BusEvent event) {
-        if (BusEvent.ON_REFRESH_CASH_ACCOUNT == event && !flag)
+        if (BusEvent.ON_REFRESH_CASH_ACCOUNT == event && !closed)
             initCashAccountSafe();
     }
 
@@ -194,7 +194,8 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 cashAccountSafe.setVisibility(View.VISIBLE);
                 cashAccountSafe.setOnClickListener(this);
                 close.setOnClickListener(this);
-                flag = true;
+            }else{
+                cashAccountSafe.setVisibility(View.GONE);
             }
         }
     }
@@ -758,6 +759,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 startActivity(intent);
                 break;
             case R.id.close:
+                closed = true;
                 cashAccountSafe.setVisibility(View.GONE);
                 break;
         }
