@@ -86,6 +86,13 @@
                 android:scaleType="center"
                 android:src="@mipmap/audio_on"
                 android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/zoom"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:scaleType="center"
+                android:src="@mipmap/enlarge" />
         </LinearLayout>
         <!--<include layout="@layout/permission_control_layout" />-->
 

@@ -2,6 +2,7 @@ package cn.qatime.player.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
@@ -127,7 +128,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     private InputPanel inputPanel;
     private int id;
     private FragmentInteractiveMessage messageFragment;
-    private ScreenSwitchUtils screenSwitchUtils;
     private Runnable loopStatus = new Runnable() {
         @Override
         public void run() {
@@ -135,8 +135,8 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         }
     };
     private long loopDelay = 10000;
-    private boolean isOpen = false;//屏幕恭喜是否开启
     private boolean isShowTime = false;
+    private ImageView zoom;
 
     private void loopStatus() {
         if (id != 0) {
@@ -185,7 +185,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         setContentView(rootView);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        screenSwitchUtils = ScreenSwitchUtils.init(this.getApplicationContext());
         sessionId = getIntent().getStringExtra("teamId");
         initView();
 
@@ -273,12 +272,12 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         backLayout = (RelativeLayout) findViewById(R.id.back_layout);
         videoPermission = (ImageView) findViewById(R.id.video_permission);
         audioPermission = (ImageView) findViewById(R.id.audio_permission);
+        zoom = (ImageView) findViewById(R.id.zoom);
         videoLayout = (VideoFrameLayout) findViewById(R.id.video_layout);
         if (!StringUtils.isNullOrBlanK(sessionId)) {
             TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
             if (team != null) {
                 isMute = team.isMute();
-//                floatFragment.setMute(isMute);
             }
         }
         inputPanel = new InputPanel(this, this, rootView, false, sessionId);
@@ -338,6 +337,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
         videoPermission.setOnClickListener(this);
         audioPermission.setOnClickListener(this);
+        zoom.setOnClickListener(this);
 
         messageFragment.setChatCallBack(new FragmentInteractiveMessage.Callback() {
             @Override
@@ -357,7 +357,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             @Override
             public void updateTeam(Team team) {
                 inputPanel.setTeam(team);
-//                floatFragment.setTeam(team);
             }
         });
         messageFragment.setSessionId(sessionId);
@@ -367,20 +366,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             @Override
             public void OnInputShow() {
                 messageFragment.scrollToBottom();
-            }
-        });
-        inputPanel.setOnAudioRecordListener(new InputPanel.AudioRecordListener() {
-            @Override
-            public void audioRecordStart() {
-                if (isOpen)
-                    screenSwitchUtils.stop();
-            }
-
-            @Override
-            public void audioRecordStop() {
-                if (isOpen) {
-                    screenSwitchUtils.start(InteractiveLiveActivity.this);
-                }
             }
         });
 
@@ -447,7 +432,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             @Override
             public void onFailed(int i) {
                 Logger.e("join channel failed, code:" + i);
-//                Toast.makeText(InteractiveLiveActivity.this, "join channel failed, code:" + i, Toast.LENGTH_SHORT).show();
                 hd.post(loopStatus);
             }
 
@@ -519,7 +503,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
         ChatRoomMemberCache.getInstance().setRTSOpen(true);
 
-//      videoListener.onAcceptConfirm();
         updateControlUI();
         updateVideoAudioUI();
     }
@@ -566,6 +549,19 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             case R.id.audio_permission:
                 setAudioState();
                 break;
+            case R.id.zoom:
+                zoom();
+                break;
+        }
+    }
+
+    private void zoom() {
+        if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            zoom.setImageResource(R.mipmap.narrow);
+        } else {
+            zoom.setImageResource(R.mipmap.enlarge);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
     }
 
@@ -685,9 +681,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     @Override
     public void onJoinedChannel(int i, String s, String s1) {
         Logger.e("onJoinedChannel, res:" + i);
-//        if (i != AVChatResCode.JoinChannelCode.OK) {
-//            Toast.makeText(InteractiveLiveActivity.this, "joined channel:" + i, Toast.LENGTH_SHORT).show();
-//        }
     }
 
     @Override
@@ -821,17 +814,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         return isSetup;
     }
 
-//    private void updateDeskShareUI() {
-//        Map<String, Object> ext = roomInfo.getExtension();
-//        if (ext != null && ext.containsKey(MeetingConstant.FULL_SCREEN_TYPE)) {
-//            int fullScreenType = (int) ext.get(MeetingConstant.FULL_SCREEN_TYPE);
-//            if (fullScreenType == FullScreenType.CLOSE.getValue()) {
-//                fullScreenImage.setVisibility(View.GONE);
-//            } else if (fullScreenType == FullScreenType.OPEN.getValue()) {
-//                fullScreenImage.setVisibility(View.VISIBLE);
-//            }
-//        }
-//    }
 
     @Override
     public void ChatMessage(IMMessage message) {
@@ -945,28 +927,11 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     };
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                screenSwitchUtils.start(InteractiveLiveActivity.this);
-            }
-        }, 1000);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        screenSwitchUtils.stop();
-    }
-
-    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         int screenWidth = ScreenUtils.getScreenWidth(InteractiveLiveActivity.this);
         int screenHeight = ScreenUtils.getScreenHeight(InteractiveLiveActivity.this);
-        if (screenSwitchUtils.isPortrait()) {
+        if (newConfig.orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             WindowManager.LayoutParams attrs = getWindow().getAttributes();
             attrs.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
             getWindow().setAttributes(attrs);
@@ -1004,9 +969,9 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void onBackPressed() {
-        if (!screenSwitchUtils.isPortrait()) {
+        if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
             Logger.e("orta 返回竖屏");
-            screenSwitchUtils.toggleScreen();
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             return;
         }
         if (inputPanel.isEmojiShow()) {
@@ -1031,10 +996,10 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void onSwitch(boolean isOpen) {
-        this.isOpen = isOpen;
         if (!isOpen) {
-            if (!screenSwitchUtils.isPortrait()) {
-                screenSwitchUtils.toggleScreen();
+            if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                zoom.setImageResource(R.mipmap.enlarge);
             }
         }
     }
