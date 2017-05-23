@@ -252,6 +252,8 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
                 return getString(R.string.bank_card);
             case "alipay":
                 return getString(R.string.alipay);
+            case "weixin":
+                return "微信";
         }
         return getString(R.string.bank_card);
     }

@@ -27,6 +27,7 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.PersonalMyOrderActivity;
+import cn.qatime.player.activity.PersonalMyWalletActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.SystemSettingActivity;
 import cn.qatime.player.base.BaseApplication;
@@ -120,14 +121,14 @@ public class FragmentMessageNotifyNews extends BaseFragment {
 //                TextView details = helper.getView(R.id.details);
 //                details.setText(span);
 //                details.setTextColor(item.isRead() ? 0xff999999 : 0xff666666);
-                helper.setText(R.id.date_time, item.getCreated_at()).setText(R.id.details,item.getNotice_content(), item.isRead() ? 0xff999999 : 0xff666666);
+                helper.setText(R.id.date_time, item.getCreated_at()).setText(R.id.details, item.getNotice_content(), item.isRead() ? 0xff999999 : 0xff666666);
             }
         };
         listView.setAdapter(adapter);
 
         listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {  
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page = 1;
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -211,7 +212,11 @@ public class FragmentMessageNotifyNews extends BaseFragment {
                         intent = new Intent(getActivity(), PersonalMyOrderActivity.class);
                         startActivity(intent);
                         break;
-                    case "action_record ":
+                    case "payment/recharge":
+                        intent = new Intent(getActivity(), PersonalMyWalletActivity.class);
+                        startActivity(intent);
+                        break;
+                    case "action_record":
                         Toast.makeText(getActivity(), "暂无跳转内容", Toast.LENGTH_SHORT).show();
                         break;
                     default:

@@ -78,12 +78,11 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_security_manager);
-
+        api = WXAPIFactory.createWXAPI(this, null);
+        api.registerApp(Constant.APP_ID);
         EventBus.getDefault().register(this);
         initView();
         initData();
-        api = WXAPIFactory.createWXAPI(this, null);
-        api.registerApp(Constant.APP_ID);
     }
 
     private void initData() {
