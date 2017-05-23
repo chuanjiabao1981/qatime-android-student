@@ -74,7 +74,6 @@ import cn.qatime.player.im.doodle.TransactionCenter;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.MPermission;
 import cn.qatime.player.utils.MPermissionUtil;
-import cn.qatime.player.utils.ScreenSwitchUtils;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.annotation.OnMPermissionDenied;
 import cn.qatime.player.utils.annotation.OnMPermissionGranted;
@@ -273,6 +272,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         videoPermission = (ImageView) findViewById(R.id.video_permission);
         audioPermission = (ImageView) findViewById(R.id.audio_permission);
         zoom = (ImageView) findViewById(R.id.zoom);
+        ImageView switchCamera = (ImageView) findViewById(R.id.switch_camera);
         videoLayout = (VideoFrameLayout) findViewById(R.id.video_layout);
         if (!StringUtils.isNullOrBlanK(sessionId)) {
             TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
@@ -338,6 +338,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         videoPermission.setOnClickListener(this);
         audioPermission.setOnClickListener(this);
         zoom.setOnClickListener(this);
+        switchCamera.setOnClickListener(this);
 
         messageFragment.setChatCallBack(new FragmentInteractiveMessage.Callback() {
             @Override
@@ -368,7 +369,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 messageFragment.scrollToBottom();
             }
         });
-
     }
 
     private void enterRoom() {
@@ -552,6 +552,17 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             case R.id.zoom:
                 zoom();
                 break;
+            case R.id.switch_camera:
+                switchCamera();
+                break;
+        }
+    }
+
+    private void switchCamera() {
+        if (isShowTime) {
+            AVChatManager.getInstance().switchCamera();
+        } else {
+            Toast.makeText(this, "请开始互动后切换", Toast.LENGTH_SHORT).show();
         }
     }
 
