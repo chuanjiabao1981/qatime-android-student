@@ -38,7 +38,7 @@ public class WithdrawResultActivity extends BaseActivity implements View.OnClick
         mode = (TextView) findViewById(R.id.mode);
         amount = (TextView) findViewById(R.id.amount);
 //        commission = (TextView) findViewById(R.id.commission);
-        amount.setText(getIntent().getStringExtra("amount"));
+        amount.setText("￥" + getIntent().getStringExtra("amount"));
         mode.setText(getPayType(getIntent().getStringExtra("pay_type")));
         id.setText(getIntent().getStringExtra("id"));
         SimpleDateFormat parseISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
@@ -70,7 +70,7 @@ public class WithdrawResultActivity extends BaseActivity implements View.OnClick
                 if (alertDialogPhone == null) {
                     View view = View.inflate(WithdrawResultActivity.this, R.layout.dialog_cancel_or_confirm, null);
                     TextView text = (TextView) view.findViewById(R.id.text);
-                    text.setText(getResourceString(R.string.call_customer_service_phone) +  Constant.phoneNumber);
+                    text.setText(getResourceString(R.string.call_customer_service_phone) + Constant.phoneNumber);
                     Button cancel = (Button) view.findViewById(R.id.cancel);
                     Button confirm = (Button) view.findViewById(R.id.confirm);
                     cancel.setOnClickListener(new View.OnClickListener() {
@@ -83,7 +83,7 @@ public class WithdrawResultActivity extends BaseActivity implements View.OnClick
                         @Override
                         public void onClick(View v) {
                             alertDialogPhone.dismiss();
-                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" +  Constant.phoneNumber));
+                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.phoneNumber));
                             startActivity(intent);
                         }
                     });
@@ -107,8 +107,10 @@ public class WithdrawResultActivity extends BaseActivity implements View.OnClick
                 return getString(R.string.bank_card);
             case "alipay":
                 return getString(R.string.alipay);
+            case "weixin":
+                return "微信";
         }
-        return getString(R.string.bank_card);
+        return "微信";
     }
 
     @Override

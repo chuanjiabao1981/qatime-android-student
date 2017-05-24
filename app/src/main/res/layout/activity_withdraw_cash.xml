@@ -96,9 +96,9 @@
             android:paddingBottom="10dp"
             android:paddingLeft="32dp"
             android:paddingRight="32dp"
+            android:text="1.目前仅支持提现到微信钱包；\n2.申请提现需要进行微信授权；\n3.请仔细核对提现信息，仅限账号本人操作。"
             android:textColor="#ccc"
-            android:textSize="12sp"
-            android:text="1.目前仅支持提现到微信钱包；\n2.申请提现需要进行微信授权；\n3.请仔细核对提现信息，仅限账号本人操作。" />
+            android:textSize="12sp" />
 
     </LinearLayout>
 
