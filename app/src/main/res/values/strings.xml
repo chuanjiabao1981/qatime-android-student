@@ -494,7 +494,7 @@
     <string name="refund_to_weixin">退至微信</string>
     <string name="refund_to_alipay">退至支付宝</string>
     <string name="refund_to_account">退至余额</string>
-    <string name="please_enter_refund_reason">请输入退款原因</string>
+    <string name="please_enter_refund_reason">请选择退款原因</string>
     <string name="refund_application_successful">退款申请成功</string>
     <string name="not_enough_amount_of_refund">此订单无可退金额</string>
     <string name="switch_city">切换城市</string>
