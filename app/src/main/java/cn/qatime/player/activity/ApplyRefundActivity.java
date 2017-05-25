@@ -1,8 +1,9 @@
 package cn.qatime.player.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +45,7 @@ public class ApplyRefundActivity extends BaseActivity {
     private TextView refundType;
     private TextView refundAmount;
     private TextView confirm;
-    private EditText reason;
+    private TextView reason;
 
 
     private void assignViews() {
@@ -55,8 +56,75 @@ public class ApplyRefundActivity extends BaseActivity {
         usedAmount = (TextView) findViewById(R.id.used_amount);
         refundType = (TextView) findViewById(R.id.refund_type);
         refundAmount = (TextView) findViewById(R.id.refund_amount);
-        reason = (EditText) findViewById(R.id.reason);
+        reason = (TextView) findViewById(R.id.reason);
         confirm = (TextView) findViewById(R.id.confirm);
+        reason.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showReasonDialog();
+            }
+        });
+    }
+
+    private void showReasonDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("请选择退款原因");
+        final String[] str = {"买错了，不想买了", "对课程内容不满意", "对授课老师不满意", "没有时间学习", "其他"};
+        builder.setSingleChoiceItems(str, -1, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        reason.setText(str[which]);
+                        dialog.dismiss();
+                    }
+                }
+        );
+        builder.show();
+
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//        final AlertDialog alertDialog = builder.create();
+//        View v = View.inflate(getActivity(), R.layout.dialog_team_notify_alert, null);
+//        v.findViewById(R.id.root).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                alertDialog.dismiss();
+//            }
+//        });
+//        ((TextView) v.findViewById(R.id.text)).setText(items.get(position - 1).isMute() ? getResourceString(R.string.resume_alert) : getResourceString(R.string.nolongger_alert));
+//        v.findViewById(R.id.text).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                alertDialog.dismiss();
+//
+//                NIMClient.getService(TeamService.class).muteTeam(items.get(position - 1).getContactId(), !items.get(position - 1).isMute()).setCallback(new RequestCallback<Void>() {
+//                    @Override
+//                    public void onSuccess(Void param) {
+//                        Team team = TeamDataCache.getInstance().getTeamById(items.get(position - 1).getContactId());
+//                        items.get(position - 1).setMute(team.mute());
+////                                notificationConfigText.setText(team.mute() ? getString(R.string.close) : getString(R.string.open));
+//                        adapter.notifyDataSetChanged();
+//                    }
+//
+//                    @Override
+//                    public void onFailed(int code) {
+//                        Logger.e("muteTeam failed code:" + code);
+//                    }
+//
+//                    @Override
+//                    public void onException(Throwable exception) {
+//
+//                    }
+//                });
+//            }
+//        });
+//        v.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                alertDialog.dismiss();
+//            }
+//        });
+//        alertDialog.setCanceledOnTouchOutside(true);
+//        alertDialog.show();
+//        alertDialog.setContentView(v);
     }
 
     @Override
