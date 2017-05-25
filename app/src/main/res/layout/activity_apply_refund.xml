@@ -192,7 +192,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="说明：退款过程中您将不能进行此课程的学习"
+            android:text="退款说明：\n1.退款过程中您将不能进行此课程的学习;\n2.请仔细核对退款信息后提交。"
             android:textColor="#999999"
             android:textSize="12sp" />
     </LinearLayout>
