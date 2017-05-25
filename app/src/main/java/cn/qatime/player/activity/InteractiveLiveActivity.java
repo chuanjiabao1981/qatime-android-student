@@ -418,6 +418,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         avChatOptionalParam.setLivePIPMode(2);
         avChatOptionalParam.setAudioEffectNSMode(AVChatAudioEffectMode.PLATFORM_BUILTIN);
         avChatOptionalParam.enableAudienceRole(true);
+        avChatOptionalParam.enableVideoRotate(false);
         AVChatManager.getInstance().joinRoom(roomId, AVChatType.VIDEO, avChatOptionalParam, new AVChatCallback<AVChatData>() {
             @Override
             public void onSuccess(AVChatData avChatData) {
