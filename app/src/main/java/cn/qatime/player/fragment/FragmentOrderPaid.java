@@ -246,7 +246,7 @@ public class FragmentOrderPaid extends BaseFragment {
                         intent.putExtra("order_id", item.getId());
                         if ("LiveStudio::Course".equals(item.getProduct_type())) {
                             intent.putExtra("name", item.getProduct().getName());
-                            intent.putExtra("preset_lesson_count", item.getProduct().getLesson_count());
+                            intent.putExtra("preset_lesson_count", item.getProduct().getPreset_lesson_count());
                             intent.putExtra("closed_lessons_count", item.getProduct().getStarted_lessons_count());
                         } else if ("LiveStudio::InteractiveCourse".equals(item.getProduct_type())) {
                             intent.putExtra("name", item.getProduct_interactive_course().getName());
