@@ -62,20 +62,21 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fund_record_withdraw_cash, container, false);
         initview(view);
-        initOver=true;
+        initOver = true;
         return view;
     }
 
     @Override
     public void onShow() {
         if (!isLoad) {
-            if(initOver){
+            if (initOver) {
                 initData(1);
-            }else{
+            } else {
                 super.onShow();
             }
         }
     }
+
     private void initData(final int loadType) {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(page));
@@ -132,7 +133,7 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
         listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResourceString(R.string.loading));
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
-        View empty = View.inflate(getActivity(),R.layout.empty_view,null);
+        View empty = View.inflate(getActivity(), R.layout.empty_view, null);
         listView.setEmptyView(empty);
 
         adapter = new CommonAdapter<WithdrawCashRecordBean.DataBean>(getActivity(), data, R.layout.item_fragment_fund_record2) {
@@ -148,7 +149,7 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
 //                helper.setText(R.id.time, item.getCreated_at());
                 helper.setText(R.id.mode, getPayType(item.getPay_type()));
                 helper.setText(R.id.status, getStatus(item.getStatus()));
-                helper.setText(R.id.id,item.getTransaction_no());
+                helper.setText(R.id.id, item.getTransaction_no());
                 try {
                     helper.setText(R.id.time, parse.format(parseISO.parse(item.getCreated_at())));
                 } catch (ParseException e) {
@@ -194,7 +195,7 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
                     confirm.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                         CancelWithDraw(dataBean.getTransaction_no());
+                            CancelWithDraw(dataBean.getTransaction_no());
                             alertDialog.dismiss();
                         }
                     });
@@ -217,7 +218,7 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
     }
 
     private void CancelWithDraw(String transaction_no) {
-        addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.PUT,UrlUtils.urlpayment + BaseApplication.getUserId() + "/withdraws/" + transaction_no + "/cancel", null, new VolleyListener(getActivity()) {
+        addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.urlpayment + BaseApplication.getUserId() + "/withdraws/" + transaction_no + "/cancel", null, new VolleyListener(getActivity()) {
             @Override
             protected void onTokenOut() {
                 tokenOut();
@@ -238,7 +239,7 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
             protected void onError(JSONObject response) {
 
             }
-        }, new VolleyErrorListener(){
+        }, new VolleyErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
@@ -266,9 +267,12 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
                 return getString(R.string.review_success);
             case "refused":
                 return getString(R.string.review_failed);
-            case "cancel  ":
-            default:
+            case "paid":
+                return getString(R.string.withdraw_paid);
+            case "canceled":
                 return getString(R.string.cancelled);
+            default:
+                return "";
         }
     }
 

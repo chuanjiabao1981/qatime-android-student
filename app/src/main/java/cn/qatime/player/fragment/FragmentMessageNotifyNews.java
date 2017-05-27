@@ -29,7 +29,6 @@ import cn.qatime.player.R;
 import cn.qatime.player.activity.PersonalMyOrderActivity;
 import cn.qatime.player.activity.PersonalMyWalletActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
-import cn.qatime.player.activity.SystemSettingActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.BusEvent;
@@ -195,8 +194,7 @@ public class FragmentMessageNotifyNews extends BaseFragment {
                     case "live_studio/lesson":
                         if ("start_for_student".equals(item.getAction_name())) {
                             intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                            intent.putExtra("id", Integer.valueOf(courseId));
-                            startActivity(intent);
+                              startActivity(intent);
                         } else if ("change_time".equals(item.getAction_name())) {
                             intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
                             intent.putExtra("id", Integer.valueOf(courseId));
@@ -213,15 +211,14 @@ public class FragmentMessageNotifyNews extends BaseFragment {
                         startActivity(intent);
                         break;
                     case "payment/recharge":
+                    case "payment/withdraw":
                         intent = new Intent(getActivity(), PersonalMyWalletActivity.class);
                         startActivity(intent);
                         break;
                     case "action_record":
+                    default:
                         Toast.makeText(getActivity(), "暂无跳转内容", Toast.LENGTH_SHORT).show();
                         break;
-                    default:
-                        intent = new Intent(getActivity(), SystemSettingActivity.class);
-                        startActivity(intent);
                 }
             }
         });
