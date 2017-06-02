@@ -1,9 +1,12 @@
 package cn.qatime.player.activity;
 
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -36,7 +39,7 @@ import libraryextra.utils.VolleyListener;
  * @date 2017/1/3 16:20
  * @Description:
  */
-public class ApplyRefundActivity extends BaseActivity {
+public class ApplyRefundActivity extends BaseActivity implements View.OnClickListener {
 
     private OrderRefundBean orderRefundBean;
     private TextView orderId;
@@ -49,6 +52,8 @@ public class ApplyRefundActivity extends BaseActivity {
     private TextView confirm;
     private TextView reason;
     private AlertDialog alertDialog;
+    private TextView phone;
+    private AlertDialog alertDialogPhone;
 
 
     private void assignViews() {
@@ -135,12 +140,12 @@ public class ApplyRefundActivity extends BaseActivity {
         }
         refundAmount.setText("￥" + orderRefundBean.getData().getRefund_amount());
 
-        confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                confirmRefund();
-            }
-        });
+        confirm.setOnClickListener(this);
+
+
+        phone = (TextView) findViewById(R.id.phone);
+        phone.setText(Constant.phoneNumber);
+        phone.setOnClickListener(this);
     }
 
     /**
@@ -189,5 +194,43 @@ public class ApplyRefundActivity extends BaseActivity {
         });
         addToRequestQueue(request);
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.phone:
+                if (alertDialogPhone == null) {
+                    View view = View.inflate(ApplyRefundActivity.this, R.layout.dialog_cancel_or_confirm, null);
+                    TextView text = (TextView) view.findViewById(R.id.text);
+                    text.setText(getResourceString(R.string.call_customer_service_phone) + phone.getText());
+                    Button cancel = (Button) view.findViewById(R.id.cancel);
+                    Button confirm = (Button) view.findViewById(R.id.confirm);
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialogPhone.dismiss();
+                        }
+                    });
+                    confirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialogPhone.dismiss();
+                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
+                            startActivity(intent);
+                        }
+                    });
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ApplyRefundActivity.this);
+                    alertDialogPhone = builder.create();
+                    alertDialogPhone.show();
+                    alertDialogPhone.setContentView(view);
+                } else {
+                    alertDialogPhone.show();
+                }
+                break;
+            case R.id.confirm:
+                confirmRefund();
+                break;
+        }
     }
 }
