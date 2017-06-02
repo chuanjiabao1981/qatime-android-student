@@ -66,12 +66,7 @@ public class ApplyRefundActivity extends BaseActivity implements View.OnClickLis
         refundAmount = (TextView) findViewById(R.id.refund_amount);
         reason = (TextView) findViewById(R.id.reason);
         confirm = (TextView) findViewById(R.id.confirm);
-        reason.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showReasonDialog();
-            }
-        });
+        reason.setOnClickListener(this);
     }
 
     private void showReasonDialog() {
@@ -230,6 +225,9 @@ public class ApplyRefundActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.confirm:
                 confirmRefund();
+                break;
+            case R.id.reason:
+                showReasonDialog();
                 break;
         }
     }
