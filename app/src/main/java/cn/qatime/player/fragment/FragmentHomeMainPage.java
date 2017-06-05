@@ -279,8 +279,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
                 holder.getView(R.id.reason1).setVisibility(StringUtils.isNullOrBlanK(item.getTag_one()) ? View.GONE : View.VISIBLE);
                 holder.setText(R.id.reason1, getTags(item.getTag_one()));
-                holder.getView(R.id.reason2).setVisibility(StringUtils.isNullOrBlanK(item.getTag_two()) ? View.GONE : View.VISIBLE);
-                holder.setText(R.id.reason2, getTags(item.getTag_two()));
             }
         };
         listViewEssenceContent.setAdapter(essenceContentAdapter);
@@ -324,7 +322,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 result = "试听";
                 break;
             case "join_cheap":
-                result = "试听";
+                result = "优惠";
                 break;
         }
         return result;

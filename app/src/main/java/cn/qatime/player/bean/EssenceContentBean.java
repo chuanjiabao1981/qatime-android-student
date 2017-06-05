@@ -41,7 +41,6 @@ public class EssenceContentBean implements Serializable {
         private LiveStudioCourseBean live_studio_course;
         private String logo_url;
         private String tag_one;
-        private String tag_two;
         private int target_id;
         private String target_type;
         private String title;
@@ -87,14 +86,6 @@ public class EssenceContentBean implements Serializable {
 
         public void setTag_one(String tag_one) {
             this.tag_one = tag_one;
-        }
-
-        public String getTag_two() {
-            return tag_two;
-        }
-
-        public void setTag_two(String tag_two) {
-            this.tag_two = tag_two;
         }
 
         public int getTarget_id() {

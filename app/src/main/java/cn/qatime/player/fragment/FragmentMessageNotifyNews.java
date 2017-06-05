@@ -250,14 +250,13 @@ public class FragmentMessageNotifyNews extends BaseFragment {
                         if (data != null && data.getData() != null) {
                             list.addAll(data.getData());
                             adapter.notifyDataSetChanged();
-
-                            StringBuffer unRead = new StringBuffer();
+                            StringBuilder unRead = new StringBuilder();
                             for (SystemNotifyBean.DataBean bean : data.getData()) {
-                                if (!bean.isRead()) {//将集合中的
-                                    unRead.append(bean.getId() + "-");
+                                if (!bean.isRead()) {
+                                    unRead.append(bean.getId()).append(" ");
                                 }
                             }
-                            markNotifiesRead(unRead.toString());
+                               markNotifiesRead(unRead.toString());
                         }
                     }
 
@@ -275,6 +274,7 @@ public class FragmentMessageNotifyNews extends BaseFragment {
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
             }
+
         });
         addToRequestQueue(request);
     }
@@ -285,7 +285,7 @@ public class FragmentMessageNotifyNews extends BaseFragment {
             map.put("ids", unRead);
             JSONObject jsonObject = new JSONObject(map);
             DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.urlUser + BaseApplication.getUserId() + "/notifications/batch_read", jsonObject,
-                    new VolleyListener(getActivity()) {
+                    new VolleyListener(getActivity(  )) {
                         @Override
                         protected void onSuccess(JSONObject response) {
                         }
@@ -308,31 +308,4 @@ public class FragmentMessageNotifyNews extends BaseFragment {
             addToRequestQueue(request);
         }
     }
-
-    private void markNotifyRead(String id) {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.urlNotifications + id + "/read", null,
-                new VolleyListener(getActivity()) {
-                    @Override
-                    protected void onSuccess(JSONObject response) {
-                    }
-
-                    @Override
-                    protected void onError(JSONObject response) {
-                    }
-
-                    @Override
-                    protected void onTokenOut() {
-                        tokenOut();
-                    }
-
-                }, new VolleyErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
-            }
-        });
-        addToRequestQueue(request);
-    }
-
-
 }
