@@ -31,11 +31,17 @@ import cn.qatime.player.fragment.FragmentInteractDetailClassList;
 import cn.qatime.player.fragment.FragmentInteractDetailTeachersInfo;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.MPermission;
+import cn.qatime.player.utils.MPermissionUtil;
 import cn.qatime.player.utils.UrlUtils;
+import cn.qatime.player.utils.annotation.OnMPermissionDenied;
+import cn.qatime.player.utils.annotation.OnMPermissionGranted;
+import cn.qatime.player.utils.annotation.OnMPermissionNeverAskAgain;
 import libraryextra.bean.InteractCourseDetailBean;
 import libraryextra.bean.OrderPayBean;
 import libraryextra.bean.TeacherBean;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.NetUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.SimpleViewPagerIndicator;
@@ -223,14 +229,11 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
                     if ("init".equals(data.getData().getStatus()) || "published".equals(data.getData().getStatus())) {
                         Toast.makeText(this, getString(R.string.published_course_unable_enter) + getString(R.string.study), Toast.LENGTH_SHORT).show();
                     } else {
-                        intent = new Intent(InteractCourseDetailActivity.this, InteractiveLiveActivity.class);
-//                    intent.putExtra("camera", data.getData().getCamera());
-//                    intent.putExtra("board", data.getData().getBoard());
-                        intent.putExtra("id", data.getData().getId());
-                        if (data.getData().getChat_team() != null) {
-                            intent.putExtra("teamId", data.getData().getChat_team().getTeam_id());
+                        if (NetUtils.checkPermission(InteractCourseDetailActivity.this).size() > 0) {
+                            requestLivePermission();
+                        } else {
+                            toNext();
                         }
-                        startActivity(intent);
                     }
                 } else {
                     intent = new Intent(InteractCourseDetailActivity.this, LoginActivity2.class);
@@ -278,6 +281,50 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
                 }
                 break;
         }
+    }
+
+    private void toNext() {
+        Intent intent = new Intent(InteractCourseDetailActivity.this, InteractiveLiveActivity.class);
+        intent.putExtra("id", data.getData().getId());
+        if (data.getData().getChat_team() != null) {
+            intent.putExtra("teamId", data.getData().getChat_team().getTeam_id());
+        }
+        startActivity(intent);
+    }
+
+    private void requestLivePermission() {
+        MPermission.with(this)
+                .addRequestCode(100)
+                .permissions(NetUtils.checkPermission(InteractCourseDetailActivity.this).toArray(new String[NetUtils.checkPermission(InteractCourseDetailActivity.this).size()]))
+                .request();
+    }
+
+    @OnMPermissionGranted(100)
+    public void onLivePermissionGranted() {
+//        Toast.makeText(InteractiveLiveActivity.this, "授权成功", Toast.LENGTH_SHORT).show();
+        toNext();
+    }
+
+    @OnMPermissionDenied(100)
+    public void onLivePermissionDenied() {
+        List<String> deniedPermissions = MPermission.getDeniedPermissions(this, NetUtils.checkPermission(InteractCourseDetailActivity.this).toArray(new String[NetUtils.checkPermission(InteractCourseDetailActivity.this).size()]));
+        String tip = "您拒绝了权限" + MPermissionUtil.toString(deniedPermissions) + "，无法开启直播";
+        Toast.makeText(InteractCourseDetailActivity.this, tip, Toast.LENGTH_SHORT).show();
+    }
+
+    @OnMPermissionNeverAskAgain(100)
+    public void onLivePermissionDeniedAsNeverAskAgain() {
+        List<String> deniedPermissions = MPermission.getDeniedPermissionsWithoutNeverAskAgain(this, NetUtils.checkPermission(InteractCourseDetailActivity.this).toArray(new String[NetUtils.checkPermission(InteractCourseDetailActivity.this).size()]));
+        List<String> neverAskAgainPermission = MPermission.getNeverAskAgainPermissions(this, NetUtils.checkPermission(InteractCourseDetailActivity.this).toArray(new String[NetUtils.checkPermission(InteractCourseDetailActivity.this).size()]));
+        StringBuilder sb = new StringBuilder();
+        sb.append("无法开启直播，请到系统设置页面开启权限");
+        sb.append(MPermissionUtil.toString(neverAskAgainPermission));
+        if (deniedPermissions != null && !deniedPermissions.isEmpty()) {
+            sb.append(",下次询问请授予权限");
+            sb.append(MPermissionUtil.toString(deniedPermissions));
+        }
+
+        Toast.makeText(InteractCourseDetailActivity.this, sb.toString(), Toast.LENGTH_LONG).show();
     }
 
     private void payRemedial() {

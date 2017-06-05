@@ -32,8 +32,6 @@ import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
-import libraryextra.view.CustomKeyboard;
-import libraryextra.view.PayEditText;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
@@ -54,8 +52,6 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
     private TextView weChat;
     private IWXAPI api;
     private String openid;
-    private PayEditText payEditText;
-    private CustomKeyboard customKeyboard;
     private AlertDialog alertDialog;
     private TextView payPswText;
 

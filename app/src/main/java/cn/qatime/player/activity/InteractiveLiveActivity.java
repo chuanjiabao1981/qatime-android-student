@@ -82,6 +82,7 @@ import cn.qatime.player.view.VideoFrameLayout;
 import libraryextra.bean.Announcements;
 import libraryextra.bean.InteractCourseDetailBean;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.NetUtils;
 import libraryextra.utils.ScreenUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -187,12 +188,15 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         sessionId = getIntent().getStringExtra("teamId");
         initView();
 
-        requestLivePermission();
-        id = getIntent().getIntExtra("id", 0);
-        initData();
-        getAnnouncementsData();
-        hd.postDelayed(loopStatus, 500);
-        EventBus.getDefault().register(this);
+        if (NetUtils.checkPermission(this).size() > 0) {
+            requestLivePermission();
+        } else {
+            id = getIntent().getIntExtra("id", 0);
+            initData();
+            getAnnouncementsData();
+            hd.postDelayed(loopStatus, 500);
+            EventBus.getDefault().register(this);
+        }
     }
 
     private void getAnnouncementsData() {
@@ -489,7 +493,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         }
         if (surfaceView.getParent() != null)
             ((ViewGroup) surfaceView.getParent()).removeView(surfaceView);
-        viewLayout.addView(surfaceView);
+        viewLayout.addView(surfaceView, 0);
         surfaceView.setZOrderMediaOverlay(true);
     }
 
@@ -615,11 +619,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 .request();
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        MPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
 
     @OnMPermissionGranted(LIVE_PERMISSION_REQUEST_CODE)
     public void onLivePermissionGranted() {
@@ -662,7 +661,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void onConnectionTypeChanged(int i) {
-
+        Logger.e("");
     }
 
     @Override
@@ -711,7 +710,9 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     public void onUserLeave(String s, int i) {
         // 用户离开频道，如果是有权限用户，移除下画布
         masterVideoLayout.removeAllViews();
-        videoLayout.removeAllViews();
+        if (videoLayout.getChildCount() == 2) {
+            videoLayout.removeViewAt(0);
+        }
         userJoinedList.clear();
         clearChatRoom();
         updateRTSFragment();
@@ -941,8 +942,8 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        int screenWidth = ScreenUtils.getScreenWidth(InteractiveLiveActivity.this);
-        int screenHeight = ScreenUtils.getScreenHeight(InteractiveLiveActivity.this);
+//        int screenWidth = ScreenUtils.getScreenWidth(InteractiveLiveActivity.this);
+//        int screenHeight = ScreenUtils.getScreenHeight(InteractiveLiveActivity.this);
         if (newConfig.orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             WindowManager.LayoutParams attrs = getWindow().getAttributes();
             attrs.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -954,29 +955,37 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             params.height = ScreenUtils.getScreenWidth(InteractiveLiveActivity.this) * 3 / 5;
             params.width = ScreenUtils.getScreenWidth(InteractiveLiveActivity.this);
             viewLayout.setLayoutParams(params);
-
+            videoLayout.setVisibility(View.VISIBLE);
+            if (videoLayout.getChildCount() == 1) {
+                videoLayout.getChildAt(0).setVisibility(View.VISIBLE);
+            }
         } else {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
             ViewGroup.LayoutParams params = viewLayout.getLayoutParams();
             params.height = -1;
             params.width = -1;
             viewLayout.setLayoutParams(params);
-        }
-        float resultX = videoLayout.getX();
-        float resultY = videoLayout.getY();
-        if (resultX < 0) {
-            resultX = 0;
-        } else if (resultX >= screenWidth - videoLayout.getWidth()) {
-            resultX = screenWidth - videoLayout.getWidth();
-        }
 
-        if (resultY < 0) {
-            resultY = 0;
-        } else if (resultY >= screenHeight - videoLayout.getHeight()) {
-            resultY = screenHeight - videoLayout.getHeight();
+            if (videoLayout.getChildCount() == 1) {
+                videoLayout.getChildAt(0).setVisibility(View.GONE);
+            }
+            videoLayout.setVisibility(View.GONE);
         }
-        videoLayout.setX(resultX);
-        videoLayout.setY(resultY);
+//        float resultX = videoLayout.getX();
+//        float resultY = videoLayout.getY();
+//        if (resultX < 0) {
+//            resultX = 0;
+//        } else if (resultX >= screenWidth - videoLayout.getWidth()) {
+//            resultX = screenWidth - videoLayout.getWidth();
+//        }
+//
+//        if (resultY < 0) {
+//            resultY = 0;
+//        } else if (resultY >= screenHeight - videoLayout.getHeight()) {
+//            resultY = screenHeight - videoLayout.getHeight();
+//        }
+//        videoLayout.setX(resultX);
+//        videoLayout.setY(resultY);
     }
 
     @Override

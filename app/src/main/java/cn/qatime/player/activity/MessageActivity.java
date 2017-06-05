@@ -29,6 +29,12 @@ import cn.qatime.player.bean.ModuleProxy;
 import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.MPermission;
+import cn.qatime.player.utils.MPermissionUtil;
+import cn.qatime.player.utils.annotation.OnMPermissionDenied;
+import cn.qatime.player.utils.annotation.OnMPermissionGranted;
+import cn.qatime.player.utils.annotation.OnMPermissionNeverAskAgain;
+import libraryextra.utils.NetUtils;
 import libraryextra.utils.StringUtils;
 
 /**
@@ -77,16 +83,58 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
                     intent.putExtra("sessionId", sessionId);
                     startActivityForResult(intent, Constant.REQUEST);
                 } else if ("interactive".equals(type)) {
-                    Intent intent = new Intent(MessageActivity.this, InteractiveLiveActivity.class);
-                    intent.putExtra("id", courseId);
-                    intent.putExtra("teamId", sessionId);
-                    startActivity(intent);
+                    if (NetUtils.checkPermission(MessageActivity.this).size() > 0) {
+                        requestLivePermission();
+                    } else {
+                        toNext();
+                    }
                 }
             }
         });
         registerObservers(true);
         registerTeamUpdateObserver(true);
         initView();
+    }
+
+    private void toNext() {
+        Intent intent = new Intent(MessageActivity.this, InteractiveLiveActivity.class);
+        intent.putExtra("id", courseId);
+        intent.putExtra("teamId", sessionId);
+        startActivity(intent);
+    }
+    private void requestLivePermission() {
+        MPermission.with(this)
+                .addRequestCode(100)
+                .permissions(NetUtils.checkPermission(MessageActivity.this).toArray(new String[NetUtils.checkPermission(MessageActivity.this).size()]))
+                .request();
+    }
+
+    @OnMPermissionGranted(100)
+    public void onLivePermissionGranted() {
+//        Toast.makeText(InteractiveLiveActivity.this, "授权成功", Toast.LENGTH_SHORT).show();
+        toNext();
+    }
+
+    @OnMPermissionDenied(100)
+    public void onLivePermissionDenied() {
+        List<String> deniedPermissions = MPermission.getDeniedPermissions(this, NetUtils.checkPermission(MessageActivity.this).toArray(new String[NetUtils.checkPermission(MessageActivity.this).size()]));
+        String tip = "您拒绝了权限" + MPermissionUtil.toString(deniedPermissions) + "，无法开启直播";
+        Toast.makeText(MessageActivity.this, tip, Toast.LENGTH_SHORT).show();
+    }
+
+    @OnMPermissionNeverAskAgain(100)
+    public void onLivePermissionDeniedAsNeverAskAgain() {
+        List<String> deniedPermissions = MPermission.getDeniedPermissionsWithoutNeverAskAgain(this, NetUtils.checkPermission(MessageActivity.this).toArray(new String[NetUtils.checkPermission(MessageActivity.this).size()]));
+        List<String> neverAskAgainPermission = MPermission.getNeverAskAgainPermissions(this, NetUtils.checkPermission(MessageActivity.this).toArray(new String[NetUtils.checkPermission(MessageActivity.this).size()]));
+        StringBuilder sb = new StringBuilder();
+        sb.append("无法开启直播，请到系统设置页面开启权限");
+        sb.append(MPermissionUtil.toString(neverAskAgainPermission));
+        if (deniedPermissions != null && !deniedPermissions.isEmpty()) {
+            sb.append(",下次询问请授予权限");
+            sb.append(MPermissionUtil.toString(deniedPermissions));
+        }
+
+        Toast.makeText(MessageActivity.this, sb.toString(), Toast.LENGTH_LONG).show();
     }
 
     private void initView() {

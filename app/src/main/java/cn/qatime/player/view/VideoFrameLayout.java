@@ -6,8 +6,8 @@ import android.content.Context;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 
 import libraryextra.utils.ScreenUtils;
 
@@ -94,17 +94,6 @@ public class VideoFrameLayout extends FrameLayout {
                 break;
         }
         return true;
-    }
-
-
-    public interface OnDoubleClickListener {
-        void onDoubleClick();
-    }
-
-    private OnDoubleClickListener mOnDoubleClickListener;
-
-    public void setOnDoubleClickListener(OnDoubleClickListener l) {
-        mOnDoubleClickListener = l;
     }
 
 }

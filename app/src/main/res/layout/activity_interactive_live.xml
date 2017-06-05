@@ -93,6 +93,7 @@
                 android:layout_height="40dp"
                 android:scaleType="center"
                 android:src="@mipmap/switch_camera" />
+
             <ImageView
                 android:id="@+id/zoom"
                 android:layout_width="40dp"

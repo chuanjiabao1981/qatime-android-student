@@ -1,17 +1,13 @@
 package cn.qatime.player.activity;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
@@ -57,28 +53,49 @@ public class StartActivity extends BaseActivity implements View.OnClickListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-            }
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//
+//            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+//            }
+//        }
         ((TextView) findViewById(R.id.version)).setText("V " + AppUtils.getVersionName(this));
-        boolean grade = !(boolean) SPUtils.get(this, "grade", false);
-        boolean school = !(boolean) SPUtils.get(this, "school", false);
-        boolean provinces = !(boolean) SPUtils.get(this, "provinces", false);
-        boolean cities = !(boolean) SPUtils.get(this, "cities", false);
         if (!NetUtils.isConnected(StartActivity.this)) {
             Toast.makeText(this, "网络不可用", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
-        GetGradeslist();//加载年纪列表
-        GetSchoolslist();
-        getProviceslist();
-        getCitylist();
+        if (NetUtils.checkExternalStoragePermission(this)) {
+            GetGradeslist();//加载年纪列表
+            GetSchoolslist();
+            getProviceslist();
+            getCitylist();
 
-        checkUpdate();
+            checkUpdate();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 1);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (NetUtils.checkExternalStoragePermission(this)) {
+                    GetGradeslist();//加载年纪列表
+                    GetSchoolslist();
+                    getProviceslist();
+                    getCitylist();
+
+                    checkUpdate();
+                } else {
+                    Toast.makeText(this, "未取得权限", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
     }
 
     /**
@@ -171,7 +188,6 @@ public class StartActivity extends BaseActivity implements View.OnClickListener 
                 startApp();
             }
         }));
-
     }
 
     @Override
