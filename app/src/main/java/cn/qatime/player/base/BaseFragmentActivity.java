@@ -16,13 +16,14 @@ import com.umeng.message.PushAgent;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
+import cn.qatime.player.utils.MPermission;
 import libraryextra.utils.StringUtils;
 
 /**
  * 基础fragment类
  */
 public class BaseFragmentActivity extends FragmentActivity {
-    private RequestQueue Queue= BaseApplication.getRequestQueue();
+    private RequestQueue Queue = BaseApplication.getRequestQueue();
     private AlertDialog alertDialog;
 
     @Override
@@ -110,6 +111,7 @@ public class BaseFragmentActivity extends FragmentActivity {
         cancelAll(this);
         super.onDestroy();
     }
+
     public void cancelAll(final Object tag) {
         Queue.cancelAll(tag);
     }
@@ -120,5 +122,11 @@ public class BaseFragmentActivity extends FragmentActivity {
 
     protected String getResourceString(int id) {
         return getResources().getString(id);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        MPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

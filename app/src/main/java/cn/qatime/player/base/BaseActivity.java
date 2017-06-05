@@ -16,6 +16,7 @@ import com.umeng.message.PushAgent;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
+import cn.qatime.player.utils.MPermission;
 import libraryextra.utils.StringUtils;
 
 /**
@@ -125,5 +126,9 @@ public class BaseActivity extends AppCompatActivity {
         return getResources().getString(id);
     }
 
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        MPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
 }

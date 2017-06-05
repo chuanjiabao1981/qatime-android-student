@@ -16,6 +16,7 @@ import com.android.volley.RequestQueue;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
+import cn.qatime.player.utils.MPermission;
 
 public class BaseFragment extends Fragment {
     private RequestQueue Queue = BaseApplication.getRequestQueue();
@@ -50,7 +51,7 @@ public class BaseFragment extends Fragment {
      */
     public void tokenOut() {
         BaseApplication.clearToken();
-        if (alertDialog == null) {
+        if (alertDialog == null && getActivity() != null) {
             View view = View.inflate(getActivity(), R.layout.dialog_confirm, null);
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             alertDialog = builder.create();
@@ -109,5 +110,11 @@ public class BaseFragment extends Fragment {
 
     protected <T extends View> T findViewById(int resId) {
         return (T) (getView().findViewById(resId));
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        MPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }
