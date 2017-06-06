@@ -21,15 +21,13 @@ android {
         }
     }
     compileSdkVersion 25
-    buildToolsVersion '25.0.1'
-//    defaultConfig {
-//        applicationId "cn.qatime.player.debug"
-//        minSdkVersion 14
-//        targetSdkVersion 22
-//        manifestPlaceholders = [package_name : "cn.qatime.player.debug", // 测试微信需使用正式包名
-//                                yunxin_appkey: properties.getProperty("YunXinDebugAppKey"),
-//                                amap_apikey  : properties.getProperty("amapDebugKey")]
-//    }
+    buildToolsVersion '25.0.2'
+    defaultConfig {
+        applicationId "cn.qatime.player"
+        minSdkVersion 14
+        targetSdkVersion 25
+        multiDexEnabled true
+    }
 
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES.txt'
@@ -71,28 +69,24 @@ android {
 
     productFlavors {
         flavors_debug {
-            applicationId "cn.qatime.player.debug"
-            manifestPlaceholders = [package_name : "cn.qatime.player.debug",
-                                    yunxin_appkey: properties.getProperty("YunXinDebugAppKey"),
-                                    amap_apikey  : properties.getProperty("amapDebugKey")]
+            manifestPlaceholders = [yunxin_appkey: properties.getProperty("YunXinDebugAppKey"),
+                                    amap_apikey  : properties.getProperty("amapKey")]
         }
         flavors_release {
-            applicationId "cn.qatime.player"
-            manifestPlaceholders = [package_name : "cn.qatime.player",
-                                    yunxin_appkey: properties.getProperty("YunXinReleaseAppKey"),
-                                    amap_apikey  : properties.getProperty("amapReleaseKey")]
+            manifestPlaceholders = [yunxin_appkey: properties.getProperty("YunXinReleaseAppKey"),
+                                    amap_apikey  : properties.getProperty("amapKey")]
         }
     }
 
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
-            def appName = 'qatime_android'
+            def appName = 'qatime_student'
             def buildName
 
             variant.productFlavors.each { product ->
-                buildName = product.name
+                buildName = product.name.replace("flavors_", "")
             }
-            output.outputFile = new File(output.outputFile.parent, appName + "_" + getVersionNameFromManifest() + "_" + buildName + ".apk");
+            output.outputFile = new File(output.outputFile.parent, appName + "_" + buildName + "_" + getVersionNameFromManifest() + ".apk");
         }
 
     }
@@ -106,6 +100,7 @@ def getVersionNameFromManifest() {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
+    compile 'com.android.support:multidex:1.0.1'
     compile project(':library_pulltorefresh')
     compile project(':common')
     compile project(':pushSDK')
