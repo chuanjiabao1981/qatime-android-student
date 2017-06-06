@@ -1,6 +1,7 @@
 package cn.qatime.player.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -83,8 +84,12 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
                     intent.putExtra("sessionId", sessionId);
                     startActivityForResult(intent, Constant.REQUEST);
                 } else if ("interactive".equals(type)) {
-                    if (NetUtils.checkPermission(MessageActivity.this).size() > 0) {
-                        requestLivePermission();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (NetUtils.checkPermission(MessageActivity.this).size() > 0) {
+                            requestLivePermission();
+                        } else {
+                            toNext();
+                        }
                     } else {
                         toNext();
                     }

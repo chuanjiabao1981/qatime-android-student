@@ -2,6 +2,7 @@ package cn.qatime.player.activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -229,8 +230,12 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
                     if ("init".equals(data.getData().getStatus()) || "published".equals(data.getData().getStatus())) {
                         Toast.makeText(this, getString(R.string.published_course_unable_enter) + getString(R.string.study), Toast.LENGTH_SHORT).show();
                     } else {
-                        if (NetUtils.checkPermission(InteractCourseDetailActivity.this).size() > 0) {
-                            requestLivePermission();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            if (NetUtils.checkPermission(InteractCourseDetailActivity.this).size() > 0) {
+                                requestLivePermission();
+                            } else {
+                                toNext();
+                            }
                         } else {
                             toNext();
                         }

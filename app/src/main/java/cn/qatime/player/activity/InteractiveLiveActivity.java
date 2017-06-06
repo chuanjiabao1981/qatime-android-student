@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -188,8 +189,16 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         sessionId = getIntent().getStringExtra("teamId");
         initView();
 
-        if (NetUtils.checkPermission(this).size() > 0) {
-            requestLivePermission();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (NetUtils.checkPermission(this).size() > 0) {
+                requestLivePermission();
+            } else {
+                id = getIntent().getIntExtra("id", 0);
+                initData();
+                getAnnouncementsData();
+                hd.postDelayed(loopStatus, 500);
+                EventBus.getDefault().register(this);
+            }
         } else {
             id = getIntent().getIntExtra("id", 0);
             initData();

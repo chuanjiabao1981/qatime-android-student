@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -65,15 +66,25 @@ public class StartActivity extends BaseActivity implements View.OnClickListener 
             finish();
             return;
         }
-        if (NetUtils.checkExternalStoragePermission(this)) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (NetUtils.checkExternalStoragePermission(this)) {
+                GetGradeslist();//加载年纪列表
+                GetSchoolslist();
+                getProviceslist();
+                getCitylist();
+
+                checkUpdate();
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 1);
+
+            }
+        } else {
             GetGradeslist();//加载年纪列表
             GetSchoolslist();
             getProviceslist();
             getCitylist();
 
             checkUpdate();
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 1);
         }
     }
 

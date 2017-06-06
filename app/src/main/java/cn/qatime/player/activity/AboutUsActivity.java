@@ -1,9 +1,12 @@
 package cn.qatime.player.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -44,7 +47,7 @@ public class AboutUsActivity extends BaseActivity {
 
                 View view = View.inflate(AboutUsActivity.this, R.layout.dialog_cancel_or_confirm, null);
                 TextView text = (TextView) view.findViewById(R.id.text);
-                text.setText(getResourceString(R.string.call_customer_service_phone) +   Constant.phoneNumber);
+                text.setText(getResourceString(R.string.call_customer_service_phone) + Constant.phoneNumber);
                 Button cancel = (Button) view.findViewById(R.id.cancel);
                 Button confirm = (Button) view.findViewById(R.id.confirm);
                 cancel.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +61,9 @@ public class AboutUsActivity extends BaseActivity {
                     public void onClick(View v) {
                         alertDialog.dismiss();
                         Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.phoneNumber));
+                        if (ActivityCompat.checkSelfPermission(AboutUsActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                            return;
+                        }
                         startActivity(intent);
                     }
                 });

@@ -1,6 +1,7 @@
 package cn.qatime.player.fragment;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
@@ -82,8 +83,12 @@ public class FragmentInteractStudying extends BaseFragment {
                     @Override
                     public void onClick(View v) {
                         FragmentInteractStudying.this.item = item;
-                        if (NetUtils.checkPermission(getActivity()).size() > 0) {
-                            requestLivePermission();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            if (NetUtils.checkPermission(getActivity()).size() > 0) {
+                                requestLivePermission();
+                            } else {
+                                toNext();
+                            }
                         } else {
                             toNext();
                         }

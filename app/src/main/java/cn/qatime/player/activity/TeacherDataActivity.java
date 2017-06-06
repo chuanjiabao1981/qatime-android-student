@@ -2,6 +2,7 @@ package cn.qatime.player.activity;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -170,8 +171,12 @@ public class TeacherDataActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TeacherDataActivity.this.item = interactiveList.get(position);
-                if (NetUtils.checkPermission(TeacherDataActivity.this).size() > 0) {
-                    requestLivePermission();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (NetUtils.checkPermission(TeacherDataActivity.this).size() > 0) {
+                        requestLivePermission();
+                    } else {
+                        toNext();
+                    }
                 } else {
                     toNext();
                 }

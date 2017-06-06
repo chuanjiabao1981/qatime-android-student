@@ -1,6 +1,7 @@
 package cn.qatime.player.fragment;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
@@ -120,8 +121,12 @@ public class FragmentClassTableClosed extends BaseFragment {
                             startActivity(intent);
                         } else if ("LiveStudio::InteractiveLesson".equals(itemList.get(position).getModal_type())) {
                             FragmentClassTableClosed.this.item = item;
-                            if (NetUtils.checkPermission(getActivity()).size() > 0) {
-                                requestLivePermission();
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                if (NetUtils.checkPermission(getActivity()).size() > 0) {
+                                    requestLivePermission();
+                                } else {
+                                    toNext();
+                                }
                             } else {
                                 toNext();
                             }

@@ -1,6 +1,7 @@
 package cn.qatime.player.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.view.View;
@@ -199,8 +200,12 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                             startActivity(intent);
                         } else if ("LiveStudio::InteractiveLesson".equals(itemList.get(position).getModal_type())) {
                             ClassTimeTableActivity.this.item = item;
-                            if (NetUtils.checkPermission(ClassTimeTableActivity.this).size() > 0) {
-                                requestLivePermission();
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                if (NetUtils.checkPermission(ClassTimeTableActivity.this).size() > 0) {
+                                    requestLivePermission();
+                                } else {
+                                    toNext();
+                                }
                             } else {
                                 toNext();
                             }
