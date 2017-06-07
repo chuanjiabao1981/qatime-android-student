@@ -13,9 +13,11 @@
             android:id="@+id/toolbar"
             style="@style/top_style" />
 
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp">
+            android:layout_height="48dp"
+            android:background="@color/colorPrimary">
 
             <LinearLayout
                 android:id="@+id/city_select"
@@ -46,27 +48,34 @@
 
             </LinearLayout>
 
-            <View
+            <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@mipmap/home_logo" />
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_bg_search"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/screen_down" />
+
+                <TextView
+                    android:id="@+id/imageView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="搜索课程/老师"
+                    android:textColor="#999" />
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/scan"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:padding="6dp"
+                android:padding="10dp"
                 android:src="@mipmap/qr_scan" />
 
 
@@ -134,7 +143,6 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="9dp" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -157,7 +165,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
             </LinearLayout>
-
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_today"
                 android:layout_width="match_parent"
