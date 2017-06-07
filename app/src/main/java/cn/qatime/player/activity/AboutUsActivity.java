@@ -44,7 +44,6 @@ public class AboutUsActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-
                 View view = View.inflate(AboutUsActivity.this, R.layout.dialog_cancel_or_confirm, null);
                 TextView text = (TextView) view.findViewById(R.id.text);
                 text.setText(getResourceString(R.string.call_customer_service_phone) + Constant.phoneNumber);

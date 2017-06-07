@@ -24,7 +24,7 @@ android {
     buildToolsVersion '25.0.2'
     defaultConfig {
         applicationId "cn.qatime.player"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 25
         multiDexEnabled true
     }
@@ -65,6 +65,7 @@ android {
     dexOptions {
         javaMaxHeapSize "4g"
         jumboMode = true
+        preDexLibraries = false
     }
 
     productFlavors {

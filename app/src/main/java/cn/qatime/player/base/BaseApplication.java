@@ -1,6 +1,5 @@
 package cn.qatime.player.base;
 
-import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
 
 import com.android.volley.RequestQueue;
@@ -54,7 +54,7 @@ import libraryextra.bean.Profile;
 import libraryextra.utils.AppUtils;
 import libraryextra.utils.StringUtils;
 
-public class BaseApplication extends Application {
+public class BaseApplication extends MultiDexApplication {
     private static Profile profile;
     public static UserInfoProvider userInfoProvider;
     private static BaseApplication context;

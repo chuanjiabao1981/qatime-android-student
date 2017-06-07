@@ -194,7 +194,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 cashAccountSafe.setVisibility(View.VISIBLE);
                 cashAccountSafe.setOnClickListener(this);
                 close.setOnClickListener(this);
-            }else{
+            } else {
                 cashAccountSafe.setVisibility(View.GONE);
             }
         }
@@ -270,7 +270,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                             .setText(R.id.course_title, item.getLive_studio_interactive_course().getName())
                             .setText(R.id.grade_subject, item.getLive_studio_interactive_course().getGrade() + item.getLive_studio_interactive_course().getSubject())
                             .setText(R.id.teacher, item.getLive_studio_interactive_course().getTeachers().get(0).getName());
-                }else if ("LiveStudio::VideoCourse".equals(item.getTarget_type())) {
+                } else if ("LiveStudio::VideoCourse".equals(item.getTarget_type())) {
                     holder.setImageByUrl(R.id.image, item.getLogo_url(), R.mipmap.photo)
                             .setText(R.id.course_title, item.getLive_studio_video_course().getName())
                             .setText(R.id.grade_subject, item.getLive_studio_video_course().getGrade() + item.getLive_studio_video_course().getSubject())
@@ -298,7 +298,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 } else if ("LiveStudio::InteractiveCourse".equals(listEssenceContent.get(position).getTarget_type())) {
                     courseId = listEssenceContent.get(position).getLive_studio_interactive_course().getId();
                     intent = new Intent(getActivity(), InteractCourseDetailActivity.class);
-                }else if ("LiveStudio::VideoCourse".equals(listEssenceContent.get(position).getTarget_type())) {
+                } else if ("LiveStudio::VideoCourse".equals(listEssenceContent.get(position).getTarget_type())) {
                     courseId = listEssenceContent.get(position).getLive_studio_video_course().getId();
                     intent = new Intent(getActivity(), VideoCoursesActivity.class);
                 }
