@@ -80,7 +80,7 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
     private void initData(final int loadType) {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(page));
-        addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/withdraws", map), null, new VolleyListener(getActivity()) {
+        addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getInstance().getUserId() + "/withdraws", map), null, new VolleyListener(getActivity()) {
 
             @Override
             protected void onTokenOut() {
@@ -218,7 +218,7 @@ public class FragmentFundRecordWithdrawCash extends BaseFragment {
     }
 
     private void CancelWithDraw(String transaction_no) {
-        addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.urlpayment + BaseApplication.getUserId() + "/withdraws/" + transaction_no + "/cancel", null, new VolleyListener(getActivity()) {
+        addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.urlpayment + BaseApplication.getInstance().getUserId() + "/withdraws/" + transaction_no + "/cancel", null, new VolleyListener(getActivity()) {
             @Override
             protected void onTokenOut() {
                 tokenOut();

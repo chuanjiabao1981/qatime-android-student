@@ -224,7 +224,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
         Intent intent;
         switch (v.getId()) {
             case R.id.audition_start:
-                if (BaseApplication.isLogined()) {
+                if (BaseApplication.getInstance().isLogined()) {
                     if (data.getData().getTicket() == null) {//未加入试听
                         joinAudition();
                     } else {
@@ -240,7 +240,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                 }
                 break;
             case R.id.start_study:
-                if (BaseApplication.isLogined()) {
+                if (BaseApplication.getInstance().isLogined()) {
                     if (data.getData().getVideo_course().getSell_type().equals("free")) {
                         if (data.getData().getTicket() == null) {//免费课程未购买则购买
                             joinMyFreeVideo();//获取免费课程票号
@@ -263,7 +263,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                 }
                 break;
             case R.id.pay:
-                if (BaseApplication.isLogined()) {
+                if (BaseApplication.getInstance().isLogined()) {
                     if ("teaching".equals(data.getData().getVideo_course().getStatus())) {
                         if (alertDialog == null) {
                             View view = View.inflate(VideoCoursesActivity.this, R.layout.dialog_cancel_or_confirm, null);

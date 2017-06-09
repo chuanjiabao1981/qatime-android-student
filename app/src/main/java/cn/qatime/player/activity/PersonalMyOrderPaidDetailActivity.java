@@ -256,7 +256,7 @@ public class   PersonalMyOrderPaidDetailActivity extends BaseActivity {
 
         Map<String, String> map = new HashMap<>();
         map.put("order_id", ordernumber.getText().toString());
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/refunds/info", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getInstance().getUserId() + "/refunds/info", map), null,
                 new VolleyListener(PersonalMyOrderPaidDetailActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -339,7 +339,7 @@ public class   PersonalMyOrderPaidDetailActivity extends BaseActivity {
     }
 
     private void cancelRefund() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.urlpayment + BaseApplication.getUserId() + "/refunds/" + ordernumber.getText().toString() + "/cancel", null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.urlpayment + BaseApplication.getInstance().getUserId() + "/refunds/" + ordernumber.getText().toString() + "/cancel", null,
                 new VolleyListener(PersonalMyOrderPaidDetailActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {

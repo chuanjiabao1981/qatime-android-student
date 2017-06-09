@@ -336,7 +336,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     private void initView() {
         if (!StringUtils.isNullOrBlanK(sessionId)) {
-            TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
+            TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getInstance().getAccount());
             if (team != null) {
                 isMute = team.isMute();
                 floatFragment.setMute(isMute);
@@ -381,7 +381,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         fragment2.setChatCallBack(new FragmentPlayerMessage.Callback() {
             @Override
             public void back(List<IMMessage> result) {
-                TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
+                TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getInstance().getAccount());
                 if (team != null) {
                     isMute = team.isMute();
                     floatFragment.setMute(isMute);
@@ -621,7 +621,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         inputPanel.onPause();
         super.onPause();
         MobclickAgent.onPause(this);
-        NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.isChatMessageNotifyStatus() ? MsgService.MSG_CHATTING_ACCOUNT_NONE : MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
+        NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.getInstance().isChatMessageNotifyStatus() ? MsgService.MSG_CHATTING_ACCOUNT_NONE : MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
     }
 
 

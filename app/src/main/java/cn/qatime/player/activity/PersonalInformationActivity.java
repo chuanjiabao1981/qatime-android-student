@@ -81,7 +81,7 @@ public class PersonalInformationActivity extends BaseActivity {
 
     private void initData() {
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getInstance().getUserId() + "/info", null,
                 new VolleyListener(PersonalInformationActivity.this) {
 
 

@@ -83,7 +83,7 @@ public class FragmentFundRecordRefund extends BaseFragment {
     private void initData(final int loadType) {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(page));
-        addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/refunds", map), null, new VolleyListener(getActivity()) {
+        addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getInstance().getUserId() + "/refunds", map), null, new VolleyListener(getActivity()) {
 
             @Override
             protected void onTokenOut() {
@@ -216,7 +216,7 @@ public class FragmentFundRecordRefund extends BaseFragment {
     }
 
     private void cancelRefund(RefundRecordBean.DataBean item) {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.urlpayment + BaseApplication.getUserId() + "/refunds/" + item.getTransaction_no() + "/cancel", null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.urlpayment + BaseApplication.getInstance().getUserId() + "/refunds/" + item.getTransaction_no() + "/cancel", null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {

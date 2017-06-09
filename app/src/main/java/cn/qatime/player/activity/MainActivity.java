@@ -1,5 +1,7 @@
 package cn.qatime.player.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -10,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,7 +27,9 @@ import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.AuthServiceObserver;
+import com.netease.nimlib.sdk.auth.ClientType;
 import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.netease.nimlib.sdk.auth.OnlineClient;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
@@ -103,7 +108,7 @@ public class MainActivity extends BaseFragmentActivity {
      * 刷新未读
      */
     private void refreshUnreadNum() {
-        if (BaseApplication.isLogined()) {
+        if (BaseApplication.getInstance().isLogined()) {
             int unreadNum = NIMClient.getService(MsgService.class).getTotalUnreadCount();
             Logger.e("unreadNum" + unreadNum);
             message_x.setVisibility(unreadNum == 0 ? View.GONE : View.VISIBLE);
@@ -124,19 +129,6 @@ public class MainActivity extends BaseFragmentActivity {
                     | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         }
-//        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-        //透明状态栏
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//            //透明导航栏
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-////            linear_bar.setVisibility(View.VISIBLE);
-//            //获取到状态栏的高度
-//            int statusHeight = getStatusBarHeight();
-//            //动态的设置隐藏布局的高度
-//            ViewGroup.LayoutParams params = linear_bar.getLayoutParams();
-//            params.height = statusHeight;
-//            linear_bar.setLayoutParams(params);
-//        }
         initView();
         EventBus.getDefault().register(this);
         //  注册/注销观察者
@@ -155,6 +147,7 @@ public class MainActivity extends BaseFragmentActivity {
         }
         parseIntent();
         NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, true);
+//        NIMClient.getService(AuthServiceObserver.class).observeOtherClients(clientsObserver, true);
     }
 
 
@@ -162,8 +155,8 @@ public class MainActivity extends BaseFragmentActivity {
      * 检查用户信息是否完整
      */
     private void checkUserInfo() {
-        if (BaseApplication.isLogined()) {
-            String name = BaseApplication.getUserName();
+        if (BaseApplication.getInstance().isLogined()) {
+            String name = BaseApplication.getInstance().getUserName();
             if (StringUtils.isNullOrBlanK(name)) {
                 Toast.makeText(MainActivity.this, getResourceString(R.string.please_set_information), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, RegisterPerfectActivity.class);
@@ -189,7 +182,7 @@ public class MainActivity extends BaseFragmentActivity {
 //        fragBaseFragments.add(new FragmentRemedialClassAll());
         fragBaseFragments.add(new FragmentHomeSelectSubject());
 
-        if (BaseApplication.isLogined()) {
+        if (BaseApplication.getInstance().isLogined()) {
             fragBaseFragments.add(new FragmentHomeClassTable());
             fragBaseFragments.add(new FragmentHomeMessage());
             fragBaseFragments.add(new FragmentHomeUserCenter());
@@ -225,7 +218,7 @@ public class MainActivity extends BaseFragmentActivity {
                     message_x.setVisibility(View.GONE);
                     NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
                 } else {
-                    NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.isChatMessageNotifyStatus() ? MsgService.MSG_CHATTING_ACCOUNT_NONE : MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
+                    NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.getInstance().isChatMessageNotifyStatus() ? MsgService.MSG_CHATTING_ACCOUNT_NONE : MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
                 }
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -234,13 +227,6 @@ public class MainActivity extends BaseFragmentActivity {
                     } else {
                         getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
                     }
-                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//
-//                    if (position == 4) {
-//                        linear_bar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-//                    } else {
-//                        linear_bar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-//                    }
                 }
             }
         });
@@ -251,28 +237,11 @@ public class MainActivity extends BaseFragmentActivity {
 
     }
 
-    /**
-     * 通过反射的方式获取状态栏高度
-     *
-     * @return
-     */
-    private int getStatusBarHeight() {
-        try {
-            Class<?> c = Class.forName("com.android.internal.R$dimen");
-            Object obj = c.newInstance();
-            Field field = c.getField("status_bar_height");
-            int x = Integer.parseInt(field.get(obj).toString());
-            return getResources().getDimensionPixelSize(x);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
 
     private void initMessage() {
         Map<String, String> map = new HashMap<>();
-        map.put("user_id", String.valueOf(BaseApplication.getUserId()));
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getUserId() + "/notifications", map), null,
+        map.put("user_id", String.valueOf(BaseApplication.getInstance().getUserId()));
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getInstance().getUserId() + "/notifications", map), null,
                 new VolleyListener(MainActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -346,7 +315,7 @@ public class MainActivity extends BaseFragmentActivity {
             if (!StringUtils.isNullOrBlanK(intent.getStringExtra("sign"))) {
                 start.putExtra("sign", intent.getStringExtra("sign"));
             }
-            BaseApplication.clearToken();
+            BaseApplication.getInstance().clearToken();
             startActivity(start);
             finish();
         } else if (!StringUtils.isNullOrBlanK(intent.getStringExtra("activity_action"))) {
@@ -370,6 +339,35 @@ public class MainActivity extends BaseFragmentActivity {
                     }
                 }
             }
+        } else if (!StringUtils.isNullOrBlanK(getIntent().getStringExtra("kickOut"))) {
+            BaseApplication.getInstance().clearToken();
+            View view = View.inflate(this, R.layout.dialog_confirm, null);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            alertDialog = builder.create();
+            TextView text = (TextView) view.findViewById(R.id.text);
+            text.setText(getResourceString(R.string.login_has_expired));
+            Button confirm = (Button) view.findViewById(R.id.confirm);
+            confirm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    alertDialog.dismiss();
+                    Intent start = new Intent(MainActivity.this, LoginActivity.class);
+                    BaseApplication.getInstance().clearToken();
+                    startActivity(start);
+                    finish();
+                }
+            });
+            alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    Intent start = new Intent(MainActivity.this, LoginActivity.class);
+                    BaseApplication.getInstance().clearToken();
+                    startActivity(start);
+                    finish();
+                }
+            });
+            alertDialog.show();
+            alertDialog.setContentView(view);
         } else {
             //云信通知消息
             setIntent(intent);
@@ -387,9 +385,6 @@ public class MainActivity extends BaseFragmentActivity {
                 if (fragBaseFragments != null && fragBaseFragments.size() > 0 && fragBaseFragments.get(3) instanceof FragmentHomeMessage) {
                     ((FragmentHomeMessage) fragBaseFragments.get(3)).setMessage(data);
                 }
-//                Intent intent = new Intent(this, MessageFragmentActivity.class);
-//                intent.putExtra("intent", data);
-//                startActivity(intent);
             }
         }
     }
@@ -411,95 +406,6 @@ public class MainActivity extends BaseFragmentActivity {
 
     }
 
-//    /**
-//     * GET /api/v1/app_constant 获取基础信息
-//     */
-//    public void getBaseInformation() {
-//
-//        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation, null,
-//                new VolleyListener(MainActivity.this) {
-//                    @Override
-//                    protected void onSuccess(JSONObject response) {
-//
-//                    }
-//
-//                    @Override
-//                    protected void onError(JSONObject response) {
-//
-//                    }
-//                }, new VolleyErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError volleyError) {
-//                super.onErrorResponse(volleyError);
-//            }
-//        });
-//        addToRequestQueue(request);
-//    }
-
-
-//    //省份列表
-//    public void GetProvinceslist() {
-//
-//        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/provinces", null,
-//                new VolleyListener(MainActivity.this) {
-//                    @Override
-//
-//
-//                    protected void onSuccess(JSONObject response) {
-//
-//                    }
-//
-//                    @Override
-//                    protected void onError(JSONObject response) {
-//
-//                    }
-//
-//                    @Override
-//                    protected void onTokenOut() {
-//                        tokenOut();
-//                    }
-//                }, new VolleyErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError volleyError) {
-//                super.onErrorResponse(volleyError);
-//            }
-//        });
-//        //TODO
-////        addToRequestQueue(request);
-//    }
-
-    //城市列表
-//    public void GetCitieslist() {
-//
-//        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,
-//                new VolleyListener(MainActivity.this) {
-//
-//                    @Override
-//                    protected void onSuccess(JSONObject response) {
-//                        boolean value = FileUtil.writeFile(new ByteArrayInputStream(response.toString().getBytes()), getCacheDir().getAbsolutePath() + "/city.txt", true);
-//                        SPUtils.put(MainActivity.this, "city", value);
-//                    }
-//
-//                    @Override
-//                    protected void onError(JSONObject response) {
-//
-//                    }
-//
-//                    @Override
-//                    protected void onTokenOut() {
-//                        tokenOut();
-//                    }
-//
-//                }, new VolleyErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError volleyError) {
-//                super.onErrorResponse(volleyError);
-//            }
-//        });
-//        //TODO
-////        addToRequestQueue(request);
-//    }
-
 
     @Override
     protected void onResume() {
@@ -511,7 +417,7 @@ public class MainActivity extends BaseFragmentActivity {
          *                    {@link #MSG_CHATTING_ACCOUNT_ALL} 目前没有与任何人对话，但能看到消息提醒（比如在消息列表界面），不需要在状态栏做消息通知
          *                    {@link #MSG_CHATTING_ACCOUNT_NONE} 目前没有与任何人对话，需要状态栏消息通知
          */
-        NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.isChatMessageNotifyStatus() ? MsgService.MSG_CHATTING_ACCOUNT_NONE : MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
+        NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.getInstance().isChatMessageNotifyStatus() ? MsgService.MSG_CHATTING_ACCOUNT_NONE : MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
         MobclickAgent.onResume(this);
     }
 
@@ -526,6 +432,7 @@ public class MainActivity extends BaseFragmentActivity {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
         NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, false);
+//        NIMClient.getService(AuthServiceObserver.class).observeOtherClients(clientsObserver, false);
     }
 
     /**
@@ -535,7 +442,10 @@ public class MainActivity extends BaseFragmentActivity {
         @Override
         public void onEvent(StatusCode code) {
             if (code.wontAutoLogin()) {
-//                kickOut(code);
+                Intent intent = new Intent(BaseApplication.getInstance().getTopActivity(), MainActivity.class);
+                intent.putExtra("kickOut", "kickOut");
+                startActivity(intent);
+//                Toast.makeText(MainActivity.this, "userStatus未登录成功", Toast.LENGTH_SHORT).show();
                 Logger.e("userStatus未登录成功");
             } else {
                 if (code == StatusCode.NET_BROKEN) {
@@ -553,11 +463,31 @@ public class MainActivity extends BaseFragmentActivity {
             }
         }
     };
+//    Observer<List<OnlineClient>> clientsObserver = new Observer<List<OnlineClient>>() {
+//        @Override
+//        public void onEvent(List<OnlineClient> onlineClients) {
+//            if (onlineClients != null && onlineClients.size() > 0) {
+//                OnlineClient client = onlineClients.get(0);
+//                switch (client.getClientType()) {
+//                    case ClientType.Windows:
+//                        break;
+//                    case ClientType.Web:
+//                        break;
+//                    case ClientType.iOS:
+//                    case ClientType.Android:
+////                        NIMClient.getService(AuthService.class).kickOtherClient(client);
+//                        break;
+//                    default:
+//                        break;
+//                }
+//            }
+//        }
+//    };
 
     @Subscribe
     public void onEvent(BusEvent event) {
         if (event == BusEvent.PAY_SUCCESS) {
-            if (StringUtils.isNullOrBlanK(BaseApplication.getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getAccountToken())) {
+            if (StringUtils.isNullOrBlanK(BaseApplication.getInstance().getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getInstance().getAccountToken())) {
                 getAccount();
             }
         } else if (event == BusEvent.HANDLE_U_PUSH_MESSAGE) {
@@ -575,19 +505,19 @@ public class MainActivity extends BaseFragmentActivity {
      */
     private void getAccount() {
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getInstance().getUserId() + "/info", null,
                 new VolleyListener(MainActivity.this) {
 
                     @Override
                     protected void onSuccess(JSONObject response) {
                         PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
                         if (bean != null && bean.getData() != null && bean.getData().getChat_account() != null) {
-                            Profile profile = BaseApplication.getProfile();
+                            Profile profile = BaseApplication.getInstance().getProfile();
                             profile.getData().getUser().setChat_account(bean.getData().getChat_account());
-                            BaseApplication.setProfile(profile);
+                            BaseApplication.getInstance().setProfile(profile);
 
-                            String account = BaseApplication.getAccount();
-                            String token = BaseApplication.getAccountToken();
+                            String account = BaseApplication.getInstance().getAccount();
+                            String token = BaseApplication.getInstance().getAccountToken();
 
                             if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
                                 AbortableFuture<LoginInfo> loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, token));
@@ -612,13 +542,13 @@ public class MainActivity extends BaseFragmentActivity {
 
                                     @Override
                                     public void onFailed(int code) {
-                                        BaseApplication.clearToken();
+                                        BaseApplication.getInstance().clearToken();
                                     }
 
                                     @Override
                                     public void onException(Throwable throwable) {
                                         Logger.e(throwable.getMessage());
-                                        BaseApplication.clearToken();
+                                        BaseApplication.getInstance().clearToken();
                                     }
                                 });
                             }
@@ -656,8 +586,8 @@ public class MainActivity extends BaseFragmentActivity {
     }
 
     private void refreshCashAccount() {
-        if (BaseApplication.isLogined()) {
-            addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.urlpayment + BaseApplication.getUserId() + "/cash", null, new VolleyListener(MainActivity.this) {
+        if (BaseApplication.getInstance().isLogined()) {
+            addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.urlpayment + BaseApplication.getInstance().getUserId() + "/cash", null, new VolleyListener(MainActivity.this) {
 
                 @Override
                 protected void onTokenOut() {
@@ -667,7 +597,7 @@ public class MainActivity extends BaseFragmentActivity {
                 @Override
                 protected void onSuccess(JSONObject response) {
                     CashAccountBean cashAccount = JsonUtils.objectFromJson(response.toString(), CashAccountBean.class);
-                    BaseApplication.setCashAccount(cashAccount);
+                    BaseApplication.getInstance().setCashAccount(cashAccount);
                     EventBus.getDefault().post(BusEvent.ON_REFRESH_CASH_ACCOUNT);
                 }
 

@@ -89,7 +89,7 @@ public class FragmentMessageChatNews extends BaseFragment {
     }
 
     private void getCourses() {
-        DaYiJsonObjectRequest request1 = new DaYiJsonObjectRequest(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/courses", null,
+        DaYiJsonObjectRequest request1 = new DaYiJsonObjectRequest(UrlUtils.urlMyRemedialClass + BaseApplication.getInstance().getUserId() + "/courses", null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -132,7 +132,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                 super.onErrorResponse(volleyError);
             }
         });
-        DaYiJsonObjectRequest request2 = new DaYiJsonObjectRequest(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/interactive_courses", null,
+        DaYiJsonObjectRequest request2 = new DaYiJsonObjectRequest(UrlUtils.urlMyRemedialClass + BaseApplication.getInstance().getUserId() + "/interactive_courses", null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {

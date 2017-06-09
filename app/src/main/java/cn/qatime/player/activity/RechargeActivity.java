@@ -239,7 +239,7 @@ public class RechargeActivity extends BaseActivity {
                 Map<String, String> map = new HashMap<>();
                 map.put("amount", amount);
                 map.put("pay_type", payType);
-                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/recharges", map), null, new VolleyListener(RechargeActivity.this) {
+                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getInstance().getUserId() + "/recharges", map), null, new VolleyListener(RechargeActivity.this) {
 
                     @Override
                     protected void onTokenOut() {

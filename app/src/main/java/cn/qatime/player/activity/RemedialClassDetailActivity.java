@@ -316,7 +316,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         Intent intent;
         switch (v.getId()) {
             case R.id.audition_start:
-                if (BaseApplication.isLogined()) {
+                if (BaseApplication.getInstance().isLogined()) {
                     if (Constant.CourseStatus.published.equals(data.getData().getStatus())) {
                         Toast.makeText(this, getString(R.string.published_course_unable_enter) + getString(R.string.audition), Toast.LENGTH_SHORT).show();
                     } else {
@@ -334,7 +334,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 }
                 break;
             case R.id.audition:
-                if (BaseApplication.isLogined()) {
+                if (BaseApplication.getInstance().isLogined()) {
                     joinAudition();
                 } else {
                     intent = new Intent(RemedialClassDetailActivity.this, LoginActivity2.class);
@@ -343,7 +343,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 }
                 break;
             case R.id.start_study:
-                if (BaseApplication.isLogined()) {
+                if (BaseApplication.getInstance().isLogined()) {
                     if (Constant.CourseStatus.published.equals(data.getData().getStatus())) {
                         Toast.makeText(this, getString(R.string.published_course_unable_enter) + getString(R.string.study), Toast.LENGTH_SHORT).show();
                     } else {
@@ -361,7 +361,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 }
                 break;
             case R.id.pay:
-                if (BaseApplication.isLogined()) {
+                if (BaseApplication.getInstance().isLogined()) {
                     if (Constant.CourseStatus.teaching.equals(data.getData().getStatus())) {
                         if (alertDialog == null) {
                             View view = View.inflate(RemedialClassDetailActivity.this, R.layout.dialog_cancel_or_confirm, null);
@@ -428,19 +428,19 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                         //已加入试听
                         data.getData().setIs_tasting(true);
                         auditionStart.setVisibility(View.VISIBLE);
-                        if (StringUtils.isNullOrBlanK(BaseApplication.getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getAccountToken())) {
-                            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null,
+                        if (StringUtils.isNullOrBlanK(BaseApplication.getInstance().getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getInstance().getAccountToken())) {
+                            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getInstance().getUserId() + "/info", null,
                                     new VolleyListener(RemedialClassDetailActivity.this) {
                                         @Override
                                         protected void onSuccess(JSONObject response) {
                                             PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
                                             if (bean != null && bean.getData() != null && bean.getData().getChat_account() != null) {
-                                                Profile profile = BaseApplication.getProfile();
+                                                Profile profile = BaseApplication.getInstance().getProfile();
                                                 profile.getData().getUser().setChat_account(bean.getData().getChat_account());
-                                                BaseApplication.setProfile(profile);
+                                                BaseApplication.getInstance().setProfile(profile);
 
-                                                String account = BaseApplication.getAccount();
-                                                String token = BaseApplication.getAccountToken();
+                                                String account = BaseApplication.getInstance().getAccount();
+                                                String token = BaseApplication.getInstance().getAccountToken();
 
                                                 if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
                                                     AbortableFuture<LoginInfo> loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, token));
@@ -466,7 +466,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                                                         @Override
                                                         public void onFailed(int code) {
 //                                                            BaseApplication.clearToken();
-                                                            Profile profile = BaseApplication.getProfile();
+                                                            Profile profile = BaseApplication.getInstance().getProfile();
                                                             profile.getData().setRemember_token("");
                                                             SPUtils.putObject(RemedialClassDetailActivity.this, "profile", profile);
                                                         }
@@ -474,7 +474,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                                                         @Override
                                                         public void onException(Throwable throwable) {
                                                             Logger.e(throwable.getMessage());
-                                                            BaseApplication.clearToken();
+                                                            BaseApplication.getInstance().clearToken();
                                                         }
                                                     });
                                                 }
