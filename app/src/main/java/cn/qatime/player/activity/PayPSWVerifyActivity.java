@@ -87,7 +87,7 @@ public class PayPSWVerifyActivity extends BaseActivity implements View.OnClickLi
             public void onInputFinished(String password) {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("current_pament_password", password);
-                DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.cashAccounts + BaseApplication.getUserId() + "/password/ticket_token", map), null,
+                DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.cashAccounts + BaseApplication.getInstance().getUserId() + "/password/ticket_token", map), null,
                         new VolleyListener(PayPSWVerifyActivity.this) {
                             @Override
                             protected void onSuccess(JSONObject response) {

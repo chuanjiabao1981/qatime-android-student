@@ -236,9 +236,9 @@ public class FragmentMessageNotifyNews extends BaseFragment {
 
     private void initData(final int type) {
         Map<String, String> map = new HashMap<>();
-        map.put("user_id", String.valueOf(BaseApplication.getUserId()));
+        map.put("user_id", String.valueOf(BaseApplication.getInstance().getUserId()));
         map.put("page", String.valueOf(page));
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getUserId() + "/notifications", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getInstance().getUserId() + "/notifications", map), null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -284,7 +284,7 @@ public class FragmentMessageNotifyNews extends BaseFragment {
             Map<String, String> map = new HashMap<>();
             map.put("ids", unRead);
             JSONObject jsonObject = new JSONObject(map);
-            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.urlUser + BaseApplication.getUserId() + "/notifications/batch_read", jsonObject,
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.urlUser + BaseApplication.getInstance().getUserId() + "/notifications/batch_read", jsonObject,
                     new VolleyListener(getActivity(  )) {
                         @Override
                         protected void onSuccess(JSONObject response) {

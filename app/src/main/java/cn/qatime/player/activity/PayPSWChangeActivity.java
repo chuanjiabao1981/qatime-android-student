@@ -145,12 +145,12 @@ public class PayPSWChangeActivity extends BaseActivity implements View.OnClickLi
                 Map<String, String> map = new HashMap<>();
                 map.put("pament_password", tempPassword);
                 map.put("ticket_token", getIntent().getStringExtra("ticket_token"));
-                DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.cashAccounts + BaseApplication.getUserId() + "/password", map), null,
+                DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.cashAccounts + BaseApplication.getInstance().getUserId() + "/password", map), null,
                         new VolleyListener(PayPSWChangeActivity.this) {
                             @Override
                             protected void onSuccess(JSONObject response) {
                                 Toast.makeText(PayPSWChangeActivity.this, R.string.change_pay_password_success, Toast.LENGTH_SHORT).show();
-                                BaseApplication.getCashAccount().getData().setPassword_set_at(System.currentTimeMillis()/1000);
+                                BaseApplication.getInstance().getCashAccount().getData().setPassword_set_at(System.currentTimeMillis()/1000);
                                 EventBus.getDefault().post(BusEvent.REFRESH_CASH_ACCOUNT);
                                 finish();
                             }

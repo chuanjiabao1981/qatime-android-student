@@ -90,12 +90,12 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
                     return;
                 }
                 Map<String, String> map = new HashMap<>();
-                map.put("id", "" + BaseApplication.getUserId());
+                map.put("id", "" + BaseApplication.getInstance().getUserId());
                 map.put("current_password", password1);
                 map.put("password", password2);
                 map.put("password_confirmation", password3);
 
-                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getUserId() + "/password", map), null, new VolleyListener(this) {
+                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getInstance().getUserId() + "/password", map), null, new VolleyListener(this) {
                     @Override
                     protected void onTokenOut() {
                         tokenOut();
@@ -103,7 +103,7 @@ public class ChangePasswordActivity extends BaseActivity implements View.OnClick
 
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        BaseApplication.clearToken();
+                        BaseApplication.getInstance().clearToken();
                         Toast.makeText(ChangePasswordActivity.this, getResourceString(R.string.change_password_success), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(ChangePasswordActivity.this, MainActivity.class);
                         intent.putExtra("sign", "exit_login");

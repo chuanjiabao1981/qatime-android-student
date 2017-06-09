@@ -250,7 +250,7 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
             show.setVisibility(View.GONE);
         } else {
             show.setVisibility(View.VISIBLE);
-            UserInfoProvider.UserInfo userinfo = BaseApplication.getUserInfoProvide().getUserInfo(message.getFromAccount());
+            UserInfoProvider.UserInfo userinfo = BaseApplication.getInstance().getUserInfoProvide().getUserInfo(message.getFromAccount());
             if (userinfo != null)
                 Glide.with(context).load(userinfo.getAvatar()).placeholder(R.mipmap.head_default).crossFade().dontAnimate().into(show);
         }

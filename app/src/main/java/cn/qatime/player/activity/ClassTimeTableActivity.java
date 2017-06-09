@@ -79,7 +79,7 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         if (!StringUtils.isNullOrBlanK(date)) {
             map.put("month", date);
         }
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/schedule", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getInstance().getUserId() + "/schedule", map), null,
                 new VolleyListener(ClassTimeTableActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {

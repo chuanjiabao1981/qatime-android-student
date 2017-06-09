@@ -82,7 +82,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
     }
 
     private void initData() {
-        CashAccountBean cashAccount = BaseApplication.getCashAccount();
+        CashAccountBean cashAccount = BaseApplication.getInstance().getCashAccount();
         if (cashAccount != null && cashAccount.getData() != null) {
             String price = cashAccount.getData().getBalance();
             if (price.startsWith(".")) {

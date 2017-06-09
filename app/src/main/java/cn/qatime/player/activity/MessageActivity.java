@@ -143,7 +143,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
     }
 
     private void initView() {
-        TeamMember teamMember = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
+        TeamMember teamMember = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getInstance().getAccount());
         if (teamMember != null) {
             isMute = teamMember.isMute();
         }

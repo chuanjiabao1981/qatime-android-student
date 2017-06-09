@@ -72,7 +72,7 @@ public class  PayPSWForgetActivity extends BaseActivity implements View.OnClickL
         switch (v.getId()) {
             case R.id.text_getcode:
                 Map<String, String> map1 = new HashMap<>();
-                map1.put("send_to", BaseApplication.getProfile().getData().getUser().getLogin_mobile() + "");
+                map1.put("send_to", BaseApplication.getInstance().getProfile().getData().getUser().getLogin_mobile() + "");
                 map1.put("key", "update_payment_pwd");
 
                 addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlGetCode, map1), null, new VolleyListener(this) {
@@ -118,7 +118,7 @@ public class  PayPSWForgetActivity extends BaseActivity implements View.OnClickL
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("password", password.getText().toString());
                 map.put("captcha_confirmation", code.getText().toString());
-                DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.cashAccounts + BaseApplication.getUserId() + "/password/ticket_token", map), null,
+                DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.cashAccounts + BaseApplication.getInstance().getUserId() + "/password/ticket_token", map), null,
                         new VolleyListener(PayPSWForgetActivity.this) {
                             @Override
                             protected void onSuccess(JSONObject response) {

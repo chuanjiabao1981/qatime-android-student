@@ -171,6 +171,6 @@ public class UserPreferences {
     }
 
     static SharedPreferences getSharedPreferences() {
-        return SPUtils.getSharedPreferences(BaseApplication.getAccount());
+        return SPUtils.getSharedPreferences(BaseApplication.getInstance().getAccount());
     }
 }

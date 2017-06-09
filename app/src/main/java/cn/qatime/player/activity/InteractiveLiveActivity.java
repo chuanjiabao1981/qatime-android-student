@@ -188,6 +188,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
         sessionId = getIntent().getStringExtra("teamId");
         initView();
+        EventBus.getDefault().register(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (NetUtils.checkPermission(this).size() > 0) {
@@ -197,14 +198,13 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 initData();
                 getAnnouncementsData();
                 hd.postDelayed(loopStatus, 500);
-                EventBus.getDefault().register(this);
             }
         } else {
             id = getIntent().getIntExtra("id", 0);
             initData();
             getAnnouncementsData();
             hd.postDelayed(loopStatus, 500);
-            EventBus.getDefault().register(this);
+
         }
     }
 
@@ -288,7 +288,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         ImageView switchCamera = (ImageView) findViewById(R.id.switch_camera);
         videoLayout = (VideoFrameLayout) findViewById(R.id.video_layout);
         if (!StringUtils.isNullOrBlanK(sessionId)) {
-            TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
+            TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getInstance().getAccount());
             if (team != null) {
                 isMute = team.isMute();
             }
@@ -356,7 +356,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         messageFragment.setChatCallBack(new FragmentInteractiveMessage.Callback() {
             @Override
             public void back(List<IMMessage> result) {
-                TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
+                TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getInstance().getAccount());
                 if (team != null) {
                     isMute = team.isMute();
                     inputPanel.setMute(isMute);
@@ -479,7 +479,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
     // 显示成员图像
     private void showView(String a) {
-        if (userJoinedList != null && userJoinedList.contains(a) && a.equals(BaseApplication.getAccount())) {
+        if (userJoinedList != null && userJoinedList.contains(a) && a.equals(BaseApplication.getInstance().getAccount())) {
             AVChatVideoRender render = new AVChatVideoRender(InteractiveLiveActivity.this);
             boolean isSetup = false;
             try {
@@ -705,7 +705,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void onLeaveChannel() {
-        userJoinedList.remove(BaseApplication.getAccount());
+        userJoinedList.remove(BaseApplication.getInstance().getAccount());
     }
 
     @Override
@@ -719,7 +719,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     public void onUserLeave(String s, int i) {
         // 用户离开频道，如果是有权限用户，移除下画布
         masterVideoLayout.removeAllViews();
-        if (videoLayout.getChildCount() == 2) {
+        if (videoLayout.getChildCount() == 1) {
             videoLayout.removeViewAt(0);
         }
         userJoinedList.clear();
@@ -746,8 +746,8 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void onCallEstablished() {
-        userJoinedList.add(BaseApplication.getAccount());
-        onVideoOn(BaseApplication.getAccount());
+        userJoinedList.add(BaseApplication.getInstance().getAccount());
+        onVideoOn(BaseApplication.getInstance().getAccount());
     }
 
     @Override
@@ -804,7 +804,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
      ****************************/
     // 主持人进入频道
     private void onMasterJoin(String s) {
-        if (userJoinedList != null && userJoinedList.contains(s) && !s.equals(BaseApplication.getAccount())) {
+        if (userJoinedList != null && userJoinedList.contains(s) && !s.equals(BaseApplication.getInstance().getAccount())) {
             if (masterRender == null) {
                 masterRender = new AVChatVideoRender(InteractiveLiveActivity.this);
                 masterRender.setKeepScreenOn(true);
@@ -880,7 +880,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
             List<Transaction> cache = new ArrayList<>(1);
             // 非主播进入房间，发送同步请求，请求主播向他同步之前的白板笔记
-            Toast.makeText(InteractiveLiveActivity.this, "send sync request", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(InteractiveLiveActivity.this, "send sync request", Toast.LENGTH_SHORT).show();
             TransactionCenter.getInstance().onNetWorkChange(roomId, false);
             cache.add(new Transaction().makeSyncRequestTransaction());
             TransactionCenter.getInstance().sendToRemote(roomId, null, cache);

@@ -132,7 +132,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                 startActivityForResult(intent, Constant.REQUEST_PICTURE_SELECT);
                 break;
             case R.id.complete://完成
-                int userId = BaseApplication.getUserId();
+                int userId = BaseApplication.getInstance().getUserId();
                 String url = UrlUtils.urlPersonalInformation + userId + "/profile";
                 UpLoadUtil util = new UpLoadUtil(url) {
                     @Override
@@ -147,8 +147,8 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                         //由于已经登陆，所以为profile赋值
                         PersonalInformationBean sData = JsonUtils.objectFromJson(result, PersonalInformationBean.class);
                         if (sData != null && sData.getData() != null) {
-                            BaseApplication.getProfile().getData().getUser().setAvatar_url(sData.getData().getAvatar_url());
-                            Profile profile = BaseApplication.getProfile();
+                            BaseApplication.getInstance().getProfile().getData().getUser().setAvatar_url(sData.getData().getAvatar_url());
+                            Profile profile = BaseApplication.getInstance().getProfile();
                             Profile.User user = profile.getData().getUser();
                             user.setId(sData.getData().getId());
                             user.setName(sData.getData().getName());
@@ -159,7 +159,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                             user.setLogin_mobile(sData.getData().getLogin_mobile());
                             user.setChat_account(sData.getData().getChat_account());
                             profile.getData().setUser(user);
-                            BaseApplication.setProfile(profile);
+                            BaseApplication.getInstance().setProfile(profile);
                         }
                         DialogUtils.dismissDialog(progress);
                         if (getIntent().getIntExtra("register_action", Constant.REGIST_1) == Constant.REGIST_1) {
@@ -181,7 +181,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                     Toast.makeText(this, getResourceString(R.string.please_set_head), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (StringUtils.isNullOrBlanK(BaseApplication.getUserId())) {
+                if (StringUtils.isNullOrBlanK(BaseApplication.getInstance().getUserId())) {
                     Toast.makeText(RegisterPerfectActivity.this, getResources().getString(R.string.id_is_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -298,7 +298,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void onBackPressed() {//此页面返回清理token（未修改信息，清理登陆状态)
-        BaseApplication.clearToken();
+        BaseApplication.getInstance().clearToken();
         finish();
     }
 

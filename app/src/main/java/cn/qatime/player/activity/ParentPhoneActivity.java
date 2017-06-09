@@ -157,12 +157,12 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
                 }
 
                 map = new HashMap<>();
-                map.put("id", "" + BaseApplication.getUserId());
+                map.put("id", "" + BaseApplication.getInstance().getUserId());
                 map.put("ticket_token", getIntent().getStringExtra("ticket_token"));
                 map.put("parent_phone", phone);
                 map.put("captcha_confirmation", code.getText().toString().trim());
 
-                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.getUrl(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/parent_phone_ticket_token", map), null, new VolleyListener(this) {
+                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.getUrl(UrlUtils.urlPersonalInformation + BaseApplication.getInstance().getUserId() + "/parent_phone_ticket_token", map), null, new VolleyListener(this) {
                     @Override
                     protected void onTokenOut() {
                         tokenOut();

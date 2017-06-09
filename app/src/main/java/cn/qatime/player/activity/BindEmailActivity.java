@@ -141,11 +141,11 @@ public class BindEmailActivity extends BaseActivity implements View.OnClickListe
                 String code = this.code.getText().toString().trim();
 
                 map = new HashMap<>();
-                map.put("id", "" + BaseApplication.getUserId());
+                map.put("id", "" + BaseApplication.getInstance().getUserId());
                 map.put("email", email);
                 map.put("captcha_confirmation", code);
 
-                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getUserId() + "/email", map), null, new VolleyListener(this) {
+                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getInstance().getUserId() + "/email", map), null, new VolleyListener(this) {
                     @Override
                     protected void onTokenOut() {
                         tokenOut();

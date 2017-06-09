@@ -66,7 +66,7 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
     private void assignViews() {
         rechargeNum = (EditText) findViewById(R.id.recharge_num);
         rechargeNow = (Button) findViewById(R.id.recharge_now);
-        CashAccountBean cashAccount = BaseApplication.getCashAccount();
+        CashAccountBean cashAccount = BaseApplication.getInstance().getCashAccount();
         String price = "0";
         if (cashAccount != null && cashAccount.getData() != null) {
             price = cashAccount.getData().getBalance();
@@ -184,7 +184,7 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
             Toast.makeText(WithdrawCashActivity.this, R.string.amount_not_allow, Toast.LENGTH_SHORT).show();
             return;
         }
-        if (Double.valueOf(amount) > Double.valueOf(BaseApplication.getCashAccount().getData().getBalance())) {
+        if (Double.valueOf(amount) > Double.valueOf(BaseApplication.getInstance().getCashAccount().getData().getBalance())) {
             Toast.makeText(WithdrawCashActivity.this, getResourceString(R.string.amount_not_enough), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -234,13 +234,13 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
     @Subscribe
     public void onEvent(String code) {
         HashMap<String, String> map = new HashMap<>();
-        map.put("send_to", BaseApplication.getProfile().getData().getUser().getLogin_mobile());
+        map.put("send_to", BaseApplication.getInstance().getProfile().getData().getUser().getLogin_mobile());
         map.put("amount", amount);
         map.put("pay_type", payType);
         map.put("ticket_token", ticket_tocken);
         map.put("app_type", "student_app");
         map.put("access_code", code);
-        addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/withdraws", map), null, new VolleyListener(this) {
+        addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getInstance().getUserId() + "/withdraws", map), null, new VolleyListener(this) {
             @Override
             protected void onTokenOut() {
                 tokenOut();
@@ -437,8 +437,8 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
                 }
                 break;
             case R.id.recharge_now:
-                if (BaseApplication.getCashAccount().getData().isHas_password()) {
-                    long changeAt = BaseApplication.getCashAccount().getData().getPassword_set_at();
+                if (BaseApplication.getInstance().getCashAccount().getData().isHas_password()) {
+                    long changeAt = BaseApplication.getInstance().getCashAccount().getData().getPassword_set_at();
 
                     int diff = 2 - (int) ((System.currentTimeMillis() / 1000 - changeAt) / 3600);
                     if (diff <= 2 && diff > 0) {

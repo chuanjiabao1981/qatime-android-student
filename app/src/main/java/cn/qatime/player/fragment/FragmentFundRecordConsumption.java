@@ -75,7 +75,7 @@ public class FragmentFundRecordConsumption extends BaseFragment {
         map.put("start_date", "0");
         map.put("end_date", new Date().getTime() + "");
         map.put("page", "1");
-        addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/consumption_records", map), null, new VolleyListener(getActivity()) {
+        addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getInstance().getUserId() + "/consumption_records", map), null, new VolleyListener(getActivity()) {
 
             @Override
             protected void onTokenOut() {

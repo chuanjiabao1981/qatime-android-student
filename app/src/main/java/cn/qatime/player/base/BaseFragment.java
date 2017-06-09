@@ -19,7 +19,7 @@ import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.utils.MPermission;
 
 public class BaseFragment extends Fragment {
-    private RequestQueue Queue = BaseApplication.getRequestQueue();
+    private RequestQueue Queue = BaseApplication.getInstance().getRequestQueue();
     protected boolean isLoad = false;
     protected boolean initOver = false;
     private AlertDialog alertDialog;
@@ -50,7 +50,7 @@ public class BaseFragment extends Fragment {
      * 设备已在其他地方登陆
      */
     public void tokenOut() {
-        BaseApplication.clearToken();
+        BaseApplication.getInstance().clearToken();
         if (alertDialog == null && getActivity() != null) {
             View view = View.inflate(getActivity(), R.layout.dialog_confirm, null);
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

@@ -94,7 +94,7 @@ public class PayPopView {
      */
     public PayPopView(String title, String price, BaseActivity activity) {
         method = Request.Method.GET;
-        url = UrlUtils.urlpayment + BaseApplication.getUserId() + "/withdraws/ticket_token";
+        url = UrlUtils.urlpayment + BaseApplication.getInstance().getUserId() + "/withdraws/ticket_token";
         this.title = title;
         this.price = price;
         this.activity = activity;
@@ -120,8 +120,8 @@ public class PayPopView {
             }
         });
 
-        if (BaseApplication.getProfile().getData() != null && BaseApplication.getProfile().getData().getUser() != null) {
-            Glide.with(activity).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).placeholder(R.mipmap.personal_information_head).crossFade().transform(new GlideCircleTransform(activity)).into(header);
+        if (BaseApplication.getInstance().getProfile().getData() != null && BaseApplication.getInstance().getProfile().getData().getUser() != null) {
+            Glide.with(activity).load(BaseApplication.getInstance().getProfile().getData().getUser().getEx_big_avatar_url()).placeholder(R.mipmap.personal_information_head).crossFade().transform(new GlideCircleTransform(activity)).into(header);
         }
 
         //设置键盘

@@ -123,7 +123,7 @@ public class FragmentMyTasteVideo extends BaseFragment {
         map.put("per_page", "10");
         map.put("cate", "taste");
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/video_courses/tasting_list", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getInstance().getUserId() + "/video_courses/tasting_list", map), null,
                 new VolleyListener(getActivity()) {
 
                     @Override
