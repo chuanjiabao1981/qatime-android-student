@@ -6,8 +6,8 @@
     android:versionName="1.2.32">
 
     <!--<uses-sdk-->
-        <!--android:minSdkVersion="17"-->
-        <!--android:targetSdkVersion="25" />-->
+    <!--android:minSdkVersion="17"-->
+    <!--android:targetSdkVersion="25" />-->
 
     <!-- 权限声明 -->
     <!--用于进行网络定位-->
@@ -444,5 +444,15 @@
             android:name=".activity.SchoolSelectActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SearchActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysVisible" />
+        <activity
+            android:name=".activity.SearchResultActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
     </application>
 </manifest>

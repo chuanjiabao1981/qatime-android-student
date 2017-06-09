@@ -125,7 +125,7 @@ public class RecentPublishedBean implements Serializable {
                 private int id;
                 private String name;
                 private String subject;
-                @SerializedName(value = "publicize_url", alternate = "publicize_url")
+                @SerializedName(value = "publicize", alternate = "publicize_url")
                 private String publicize;
                 private String grade;
                 private String teacher_name;

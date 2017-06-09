@@ -6,14 +6,10 @@ import java.util.List;
 
 /**
  * @author Tianhaoranly
- * @date 2017/6/8 18:08
+ * @date 2017/6/9 15:48
  * @Description:
  */
-public class FreeCourseBean {
-    /**
-     * status : 1
-     * data : [{"product_type":"LiveStudio::VideoCourse","product":{"id":18,"name":"空手道免费体验课","subject":"数学","grade":"高一","teacher_name":"刘刚老师","teacher":{"id":3056,"name":"刘刚老师","nick_name":"昵称刘刚","avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/f9c2b225a5fd296a010c03666b543e38.jpg","ex_big_avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/ex_big_f9c2b225a5fd296a010c03666b543e38.jpg","login_mobile":"13212345678","email":null,"is_guest":false,"teaching_years":"within_three_years","category":"高中","subject":"数学","grade_range":[],"gender":"male","birthday":"2017-03-02","province":25,"city":606,"school":140,"school_id":140,"desc":"啊撒旦发送的发啊说是道非"},"price":0,"current_price":0,"chat_team_id":null,"chat_team_owner":null,"buy_tickets_count":3,"status":"published","lesson_count":3,"video_lessons_count":3,"preset_lesson_count":3,"completed_lesson_count":0,"taste_count":0,"completed_lessons_count":0,"closed_lessons_count":0,"objective":"人人都能空手套白狼","suit_crowd":"小学生","teacher_percentage":0,"publicize":"http://testing.qatime.cn/assets/video_courses/list_default-79f13f78089740c6be5bbba12768f1ae.png","chat_team":{},"sell_type":"free","total_duration":6,"icons":{"free_taste":false,"coupon_free":true,"cheap_moment":false},"off_shelve":false}},{"product_type":"LiveStudio::VideoCourse","product":{"id":12,"name":"测试测试测试","subject":"数学","grade":"一年级","teacher_name":"HZH11","teacher":{"id":2479,"name":"HZH11","nick_name":"答疑时间_客服","avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/fbb9b57027c5731b7670a85bd93a9fa6.jpg","ex_big_avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/ex_big_fbb9b57027c5731b7670a85bd93a9fa6.jpg","login_mobile":"18535307198","email":"kuangyizhonggaoyi@163.com","is_guest":false,"teaching_years":"within_three_years","category":"高中","subject":"数学","grade_range":[],"gender":null,"birthday":null,"province":1,"city":1,"school":4,"school_id":4,"desc":""},"price":0,"current_price":0,"chat_team_id":null,"chat_team_owner":null,"buy_tickets_count":2,"status":"published","lesson_count":5,"video_lessons_count":5,"preset_lesson_count":5,"completed_lesson_count":0,"taste_count":0,"completed_lessons_count":0,"closed_lessons_count":0,"objective":"赶紧换感觉很怪高科技更健康韩国开个，好个， ","suit_crowd":"交话费vhjjhkh 孤鸿寡鹄","teacher_percentage":0,"publicize":"http://testing.qatime.cn/assets/video_courses/list_default-79f13f78089740c6be5bbba12768f1ae.png","chat_team":{},"sell_type":"free","total_duration":12771,"icons":{"free_taste":false,"coupon_free":true,"cheap_moment":false},"off_shelve":false}}]
-     */
+public class SearchResultCourseBean {
 
     private int status;
     private List<DataBean> data;
@@ -35,10 +31,6 @@ public class FreeCourseBean {
     }
 
     public static class DataBean {
-        /**
-         * product_type : LiveStudio::VideoCourse
-         * product : {"id":18,"name":"空手道免费体验课","subject":"数学","grade":"高一","teacher_name":"刘刚老师","teacher":{"id":3056,"name":"刘刚老师","nick_name":"昵称刘刚","avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/f9c2b225a5fd296a010c03666b543e38.jpg","ex_big_avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/ex_big_f9c2b225a5fd296a010c03666b543e38.jpg","login_mobile":"13212345678","email":null,"is_guest":false,"teaching_years":"within_three_years","category":"高中","subject":"数学","grade_range":[],"gender":"male","birthday":"2017-03-02","province":25,"city":606,"school":140,"school_id":140,"desc":"啊撒旦发送的发啊说是道非"},"price":0,"current_price":0,"chat_team_id":null,"chat_team_owner":null,"buy_tickets_count":3,"status":"published","lesson_count":3,"video_lessons_count":3,"preset_lesson_count":3,"completed_lesson_count":0,"taste_count":0,"completed_lessons_count":0,"closed_lessons_count":0,"objective":"人人都能空手套白狼","suit_crowd":"小学生","teacher_percentage":0,"publicize":"http://testing.qatime.cn/assets/video_courses/list_default-79f13f78089740c6be5bbba12768f1ae.png","chat_team":{},"sell_type":"free","total_duration":6,"icons":{"free_taste":false,"coupon_free":true,"cheap_moment":false},"off_shelve":false}
-         */
 
         private String product_type;
         private ProductBean product;
@@ -58,7 +50,6 @@ public class FreeCourseBean {
         public void setProduct(ProductBean product) {
             this.product = product;
         }
-
         public static class ProductBean {
             /**
              * id : 131

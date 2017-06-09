@@ -47,6 +47,7 @@ import cn.qatime.player.activity.InteractCourseDetailActivity;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.PayPSWForgetActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
+import cn.qatime.player.activity.SearchActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.activity.VideoCoursesActivity;
 import cn.qatime.player.base.BaseApplication;
@@ -164,6 +165,9 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         view.findViewById(R.id.more1).setOnClickListener(this);
         view.findViewById(R.id.more2).setOnClickListener(this);
         view.findViewById(R.id.more3).setOnClickListener(this);
+        view.findViewById(R.id.to_search).setOnClickListener(this);
+        view.findViewById(R.id.to_all_teacher).setOnClickListener(this);
+        view.findViewById(R.id.to_live_replay).setOnClickListener(this);
 
         initBanner();
         initGrade();
@@ -686,7 +690,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 if (listRecommendTeacher.get(position) != null) {
                     Intent intent = new Intent(getActivity(), TeacherDataActivity.class);
                     intent.putExtra("teacherId", listRecommendTeacher.get(position).getTeacher().getId());
-                    startActivityForResult(intent, Constant.REQUEST);
+                    startActivity(intent);
                 }
 
             }
@@ -801,6 +805,19 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 break;
             case R.id.cash_account_safe:
                 intent = new Intent(getActivity(), PayPSWForgetActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.to_live_replay:
+//                intent = new Intent(getActivity(), PayPSWForgetActivity.class);
+//                startActivity(intent);
+                break;
+            case R.id.to_all_teacher:
+//                intent = new Intent(getActivity(), PayPSWForgetActivity.class);
+//                startActivity(intent);
+                break;
+
+            case R.id.to_search:
+                intent = new Intent(getActivity(), SearchActivity.class);
                 startActivity(intent);
                 break;
             case R.id.close:
