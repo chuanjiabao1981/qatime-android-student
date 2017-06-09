@@ -87,7 +87,7 @@ public class FragmentSearchCourse extends BaseFragment {
                 SearchResultCourseBean data = JsonUtils.objectFromJson(response.toString(), SearchResultCourseBean.class);
                 assert data != null;
                 SearchResultActivity activity = (SearchResultActivity) getActivity();
-                activity.setCourseCount(data.getData().size());
+                activity.setTeacherCount(data.getData().get(0).getProduct().getTotal_entries());
                 datas.addAll(data.getData());
                 adapter.notifyDataSetChanged();
             }
