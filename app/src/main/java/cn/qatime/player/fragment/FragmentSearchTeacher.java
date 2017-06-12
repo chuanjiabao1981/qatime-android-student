@@ -88,10 +88,13 @@ public class FragmentSearchTeacher extends BaseFragment {
                 listview.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
                 listview.onRefreshComplete();
                 SearchResultTeacherBean data = JsonUtils.objectFromJson(response.toString(), SearchResultTeacherBean.class);
-                assert data != null;
                 SearchResultActivity activity = (SearchResultActivity) getActivity();
-                activity.setTeacherCount(data.getData().get(0).getTotal_entries());
-                datas.addAll(data.getData());
+                if(data.getData()!=null&&data.getData().size()>0) {
+                    activity.setTeacherCount(data.getData().get(0).getTotal_entries());
+                    datas.addAll(data.getData());
+                }else{
+                    activity.setTeacherCount(0);
+                }
                 adapter.notifyDataSetChanged();
             }
 

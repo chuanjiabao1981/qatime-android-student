@@ -6,8 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,13 +56,29 @@ public class FragmentInteractDetailClassList extends BaseFragment {
                 } else {//closed finished billing completed
                     holder.setText(R.id.status, getResourceString(R.string.class_over));//已结束
                 }
-
+                if (isFinished(item)) {
+                    ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff999999);
+                    ((TextView) holder.getView(R.id.name)).setTextColor(0xff999999);
+                    ((TextView) holder.getView(R.id.live_time)).setTextColor(0xff999999);
+                    ((TextView) holder.getView(R.id.status)).setTextColor(0xff999999);
+                    ((TextView) holder.getView(R.id.teacher_name)).setTextColor(0xff999999);
+                    ((TextView) holder.getView(R.id.class_date)).setTextColor(0xff999999);
+                } else {
+                    ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff00a0e9);
+                    ((TextView) holder.getView(R.id.name)).setTextColor(0xff666666);
+                    ((TextView) holder.getView(R.id.live_time)).setTextColor(0xff666666);
+                    ((TextView) holder.getView(R.id.status)).setTextColor(0xff666666);
+                    ((TextView) holder.getView(R.id.teacher_name)).setTextColor(0xff666666);
+                    ((TextView) holder.getView(R.id.class_date)).setTextColor(0xff666666);
+                }
 
             }
         };
         listView.setAdapter(adapter);
     }
-
+    private boolean isFinished(InteractCourseDetailBean.DataBean.InteractiveLessonsBean item) {
+        return item.getStatus().equals("closed") || item.getStatus().equals("finished") || item.getStatus().equals("billing") || item.getStatus().equals("completed");
+    }
     public void setData(InteractCourseDetailBean data) {
         if (data != null && data.getData() != null) {
             list.clear();

@@ -34,6 +34,15 @@ public class SearchResultCourseBean {
 
         private String product_type;
         private ProductBean product;
+        private int total_entries;
+
+        public int getTotal_entries() {
+            return total_entries;
+        }
+
+        public void setTotal_entries(int total_entries) {
+            this.total_entries = total_entries;
+        }
 
         public String getProduct_type() {
             return product_type;
@@ -86,15 +95,6 @@ public class SearchResultCourseBean {
             private String publicize;
             private String grade;
             private String teacher_name;
-            private int total_entries;
-
-            public int getTotal_entries() {
-                return total_entries;
-            }
-
-            public void setTotal_entries(int total_entries) {
-                this.total_entries = total_entries;
-            }
 
 //                private String price;
 //                private String current_price;
