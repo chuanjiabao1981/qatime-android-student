@@ -51,30 +51,34 @@ public class BaseFragment extends Fragment {
      */
     public void tokenOut() {
         BaseApplication.getInstance().clearToken();
-        if (alertDialog == null && getActivity() != null) {
-            View view = View.inflate(getActivity(), R.layout.dialog_confirm, null);
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            alertDialog = builder.create();
-            TextView text = (TextView) view.findViewById(R.id.text);
-            text.setText(getResourceString(R.string.login_has_expired));
-            Button confirm = (Button) view.findViewById(R.id.confirm);
-            confirm.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    alertDialog.dismiss();
-                    out();
+        if (getActivity() != null) {
+            if (alertDialog == null) {
+                View view = View.inflate(getActivity(), R.layout.dialog_confirm, null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                alertDialog = builder.create();
+                TextView text = (TextView) view.findViewById(R.id.text);
+                text.setText(getResourceString(R.string.login_has_expired));
+                Button confirm = (Button) view.findViewById(R.id.confirm);
+                confirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                        out();
+                    }
+                });
+                alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        out();
+                    }
+                });
+                alertDialog.show();
+                alertDialog.setContentView(view);
+            } else {
+                if (!alertDialog.isShowing()) {
+                    alertDialog.show();
                 }
-            });
-            alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    out();
-                }
-            });
-            alertDialog.show();
-            alertDialog.setContentView(view);
-        } else {
-            alertDialog.show();
+            }
         }
     }
 
