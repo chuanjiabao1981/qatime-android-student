@@ -539,7 +539,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private void initRecentPublished() {
         Map<String, String> map = new HashMap<>();
         map.put("count", "2");
-        map.put("city_id", BaseApplication.getCurrentCity().getId());
+        map.put("city_id", BaseApplication.getInstance().getCurrentCity().getId());
         JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecentPublishedAll, map), null,
                 new VolleyListener(getActivity()) {
                     @Override
@@ -813,8 +813,8 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 //                startActivity(intent);
                 break;
             case R.id.to_all_teacher:
-//                intent = new Intent(getActivity(), PayPSWForgetActivity.class);
-//                startActivity(intent);
+                intent = new Intent(getActivity(), TeacherSearchActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.to_search:
