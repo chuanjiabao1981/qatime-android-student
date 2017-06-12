@@ -1,5 +1,7 @@
 package cn.qatime.player.bean;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -13,7 +15,7 @@ public class RecentPublishedBean implements Serializable {
 
     /**
      * status : 1
-     * data : {"published_rank":[{"id":25,"name":"初中数学","subject":"数学","grade":"初一","teacher_name":"马燕兆","price":50,"current_price":50,"chat_team_id":"25184275","chat_team_owner":"8b8dac47fc743ebc7d163bd360caaafb","buy_tickets_count":4,"status":"teaching","preset_lesson_count":2,"completed_lesson_count":0,"taste_count":0,"completed_lessons_count":0,"live_start_time":"2016-09-25 10:00","live_end_time":"2016-09-25 22:00","publicize":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/courses/publicize/list_2d71a0cb8c07f529009ce51bb8cd3dbf.jpg"},{"id":32,"name":"思想品德","subject":"政治","grade":"初一","teacher_name":"石锋","price":50,"current_price":50,"chat_team_id":"25195017","chat_team_owner":"e194a95b2cd0bd0452233bf64cfa91c1","buy_tickets_count":8,"status":"teaching","preset_lesson_count":1,"completed_lesson_count":0,"taste_count":0,"completed_lessons_count":0,"live_start_time":"2016-08-19 8:00","live_end_time":"2016-08-19 8:30","publicize":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/courses/publicize/list_d3f2f4cea543e30e41a60606887835e6.png"},{"id":24,"name":"高中化学离子方程式的书写","subject":"化学","grade":"高二","teacher_name":"乔保国","price":50,"current_price":50,"chat_team_id":"25184274","chat_team_owner":"2d10b094407fcc0982080f61f75b7b57","buy_tickets_count":5,"status":"teaching","preset_lesson_count":2,"completed_lesson_count":0,"taste_count":0,"completed_lessons_count":0,"live_start_time":"2016-08-14 20:00","live_end_time":"2016-08-18 10:30","publicize":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/courses/publicize/list_f356c4fb710b204de341009c8471e165.jpg"},{"id":13,"name":"初中数学辅导班","subject":"数学","grade":"初二","teacher_name":"张震","price":50,"current_price":50,"chat_team_id":"25190624","chat_team_owner":"5f265cb6d4fb411de8ebd8f42bc6271f","buy_tickets_count":2,"status":"teaching","preset_lesson_count":3,"completed_lesson_count":0,"taste_count":0,"completed_lessons_count":0,"live_start_time":"2016-08-12 10:30","live_end_time":"2016-08-13 15:00","publicize":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/courses/publicize/list_2668ca981533e5d6a3d7a083e54bb1d3.jpg"},{"id":8,"name":"初中物理","subject":"物理","grade":"初二","teacher_name":"张贤","price":50,"current_price":50,"chat_team_id":"25196239","chat_team_owner":"2926fcf2dd5f864615cbe6ea2d531a1c","buy_tickets_count":2,"status":"teaching","preset_lesson_count":1,"completed_lesson_count":0,"taste_count":0,"completed_lessons_count":0,"live_start_time":"2016-08-19 20:00","live_end_time":"2016-08-19 21:00","publicize":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/courses/publicize/list_ebb085653b5d094635b2a78be1330a9b.jpg"}],"start_rank":[{"id":96,"name":"测试默认图片","subject":"化学","grade":"二年级","teacher_name":"王志成","price":100,"current_price":100,"chat_team_id":"","chat_team_owner":"07b7c43a854ed44d36c2941f1fc5ad00","buy_tickets_count":0,"status":"published","preset_lesson_count":1,"completed_lesson_count":0,"taste_count":0,"completed_lessons_count":0,"live_start_time":"2017-03-21 20:00","live_end_time":"2017-03-21 21:00","publicize":"http://testing.qatime.cn/imgs/course_default.png"},{"id":61,"name":"再来一个辅导班","subject":"化学","grade":"高二","teacher_name":"王志成","price":10,"current_price":10,"chat_team_id":"25194018","chat_team_owner":"07b7c43a854ed44d36c2941f1fc5ad00","buy_tickets_count":4,"status":"published","preset_lesson_count":1,"completed_lesson_count":0,"taste_count":0,"completed_lessons_count":0,"live_start_time":"2016-11-22 09:00","live_end_time":"2016-11-22 10:00","publicize":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/courses/publicize/list_b876ab65a61aaa1ae47597ef144b9f45.png"}]}
+     * data : {"all_published_rank":[{"id":131,"name":"试听课测试","product_type":"LiveStudio::Course","product":{"id":131,"name":"试听课测试","subject":"物理","grade":"高三","teacher_name":"王志成","price":100,"current_price":100,"chat_team_id":"50481553","chat_team_owner":"07b7c43a854ed44d36c2941f1fc5ad00","buy_tickets_count":0,"status":"teaching","preset_lesson_count":4,"completed_lesson_count":0,"taste_count":3,"completed_lessons_count":0,"closed_lessons_count":0,"started_lessons_count":0,"live_start_time":"2017-06-06 16:00","live_end_time":"2017-06-09 08:30","objective":"试听课测试","suit_crowd":"试听课测试","teacher_percentage":5,"publicize":"http://testing.qatime.cn/assets/courses/list_default-3b713cd7dd73e98c68de8d36bb011fc0.png","icons":{"refund_any_time":true,"coupon_free":true,"cheap_moment":false,"join_cheap":false,"free_taste":true},"off_shelve":false}},{"id":130,"name":"测试个","product_type":"LiveStudio::Course","product":{"id":130,"name":"测试个","subject":"政治","grade":"四年级","teacher_name":"关倩倩","price":32269,"current_price":32269,"chat_team_id":"45551081","chat_team_owner":"4ab9c55ffcc2412de0d0b5f8e5afd09f","buy_tickets_count":0,"status":"teaching","preset_lesson_count":7,"completed_lesson_count":0,"taste_count":6,"completed_lessons_count":0,"closed_lessons_count":0,"started_lessons_count":0,"live_start_time":"2017-05-24 10:50","live_end_time":"2017-06-03 14:00","objective":"阿尔高VB物色个","suit_crowd":" 是v的士速递的","teacher_percentage":50,"publicize":"http://testing.qatime.cn/assets/courses/list_default-3b713cd7dd73e98c68de8d36bb011fc0.png","icons":{"refund_any_time":true,"coupon_free":true,"cheap_moment":false,"join_cheap":false,"free_taste":true},"off_shelve":false}},{"id":129,"name":"测试个","product_type":"LiveStudio::Course","product":{"id":129,"name":"测试个","subject":"政治","grade":"四年级","teacher_name":"关倩倩","price":32269,"current_price":32269,"chat_team_id":"45548585","chat_team_owner":"4ab9c55ffcc2412de0d0b5f8e5afd09f","buy_tickets_count":0,"status":"teaching","preset_lesson_count":7,"completed_lesson_count":0,"taste_count":6,"completed_lessons_count":0,"closed_lessons_count":0,"started_lessons_count":0,"live_start_time":"2017-05-22 13:50","live_end_time":"2017-05-26 11:35","objective":"阿尔高VB物色个","suit_crowd":" 是v的士速递的","teacher_percentage":50,"publicize":"http://testing.qatime.cn/assets/courses/list_default-3b713cd7dd73e98c68de8d36bb011fc0.png","icons":{"refund_any_time":true,"coupon_free":true,"cheap_moment":false,"join_cheap":false,"free_taste":true},"off_shelve":false}},{"id":128,"name":"测试个","product_type":"LiveStudio::Course","product":{"id":128,"name":"测试个","subject":"政治","grade":"四年级","teacher_name":"关倩倩","price":32269,"current_price":32269,"chat_team_id":"45545265","chat_team_owner":"4ab9c55ffcc2412de0d0b5f8e5afd09f","buy_tickets_count":1,"status":"teaching","preset_lesson_count":7,"completed_lesson_count":0,"taste_count":6,"completed_lessons_count":0,"closed_lessons_count":0,"started_lessons_count":0,"live_start_time":"2017-05-22 13:50","live_end_time":"2017-05-26 11:35","objective":"阿尔高VB物色个","suit_crowd":" 是v的士速递的","teacher_percentage":50,"publicize":"http://testing.qatime.cn/assets/courses/list_default-3b713cd7dd73e98c68de8d36bb011fc0.png","icons":{"refund_any_time":true,"coupon_free":true,"cheap_moment":false,"join_cheap":false,"free_taste":true},"off_shelve":false}}]}
      */
 
     private int status;
@@ -36,63 +38,28 @@ public class RecentPublishedBean implements Serializable {
     }
 
     public static class DataBean {
-        private List<PublishedRankBean> published_rank;
-        private List<StartRankBean> start_rank;
+        private List<AllPublishedRankBean> all_published_rank;
 
-        public List<PublishedRankBean> getPublished_rank() {
-            return published_rank;
+        public List<AllPublishedRankBean> getAll_published_rank() {
+            return all_published_rank;
         }
 
-        public void setPublished_rank(List<PublishedRankBean> published_rank) {
-            this.published_rank = published_rank;
+        public void setAll_published_rank(List<AllPublishedRankBean> all_published_rank) {
+            this.all_published_rank = all_published_rank;
         }
 
-        public List<StartRankBean> getStart_rank() {
-            return start_rank;
-        }
-
-        public void setStart_rank(List<StartRankBean> start_rank) {
-            this.start_rank = start_rank;
-        }
-
-        public static class PublishedRankBean {
+        public static class AllPublishedRankBean {
             /**
-             * id : 25
-             * name : 初中数学
-             * subject : 数学
-             * grade : 初一
-             * teacher_name : 马燕兆
-             * price : 50
-             * current_price : 50
-             * chat_team_id : 25184275
-             * chat_team_owner : 8b8dac47fc743ebc7d163bd360caaafb
-             * buy_tickets_count : 4
-             * status : teaching
-             * preset_lesson_count : 2
-             * completed_lesson_count : 0
-             * taste_count : 0
-             * completed_lessons_count : 0
-             * live_start_time : 2016-09-25 10:00
-             * live_end_time : 2016-09-25 22:00
-             * publicize : http://qatime-testing.oss-cn-beijing.aliyuncs.com/courses/publicize/list_2d71a0cb8c07f529009ce51bb8cd3dbf.jpg
+             * id : 131
+             * name : 试听课测试
+             * product_type : LiveStudio::Course
+             * product : {"id":131,"name":"试听课测试","subject":"物理","grade":"高三","teacher_name":"王志成","price":100,"current_price":100,"chat_team_id":"50481553","chat_team_owner":"07b7c43a854ed44d36c2941f1fc5ad00","buy_tickets_count":0,"status":"teaching","preset_lesson_count":4,"completed_lesson_count":0,"taste_count":3,"completed_lessons_count":0,"closed_lessons_count":0,"started_lessons_count":0,"live_start_time":"2017-06-06 16:00","live_end_time":"2017-06-09 08:30","objective":"试听课测试","suit_crowd":"试听课测试","teacher_percentage":5,"publicize":"http://testing.qatime.cn/assets/courses/list_default-3b713cd7dd73e98c68de8d36bb011fc0.png","icons":{"refund_any_time":true,"coupon_free":true,"cheap_moment":false,"join_cheap":false,"free_taste":true},"off_shelve":false}
              */
 
             private int id;
             private String name;
-            private String subject;
-            private String grade;
-            private String teacher_name;
-            private float price;
-            private float current_price;
-            private String chat_team_id;
-            private String chat_team_owner;
-            private int buy_tickets_count;
-            private String status;
-            private int preset_lesson_count;
-            private int taste_count;
-            private String live_start_time;
-            private String live_end_time;
-            private String publicize;
+            private String product_type;
+            private ProductBean product;
 
             public int getId() {
                 return id;
@@ -110,289 +77,126 @@ public class RecentPublishedBean implements Serializable {
                 this.name = name;
             }
 
-            public String getSubject() {
-                return subject;
+            public String getProduct_type() {
+                return product_type;
             }
 
-            public void setSubject(String subject) {
-                this.subject = subject;
+            public void setProduct_type(String product_type) {
+                this.product_type = product_type;
             }
 
-            public String getGrade() {
-                return grade;
+            public ProductBean getProduct() {
+                return product;
             }
 
-            public void setGrade(String grade) {
-                this.grade = grade;
+            public void setProduct(ProductBean product) {
+                this.product = product;
             }
 
-            public String getTeacher_name() {
-                return teacher_name;
-            }
+            public static class ProductBean {
+                /**
+                 * id : 131
+                 * name : 试听课测试
+                 * subject : 物理
+                 * grade : 高三
+                 * teacher_name : 王志成
+                 * price : 100
+                 * current_price : 100
+                 * chat_team_id : 50481553
+                 * chat_team_owner : 07b7c43a854ed44d36c2941f1fc5ad00
+                 * buy_tickets_count : 0
+                 * status : teaching
+                 * preset_lesson_count : 4
+                 * completed_lesson_count : 0
+                 * taste_count : 3
+                 * completed_lessons_count : 0
+                 * closed_lessons_count : 0
+                 * started_lessons_count : 0
+                 * live_start_time : 2017-06-06 16:00
+                 * live_end_time : 2017-06-09 08:30
+                 * objective : 试听课测试
+                 * suit_crowd : 试听课测试
+                 * teacher_percentage : 5
+                 * publicize : http://testing.qatime.cn/assets/courses/list_default-3b713cd7dd73e98c68de8d36bb011fc0.png
+                 * icons : {"refund_any_time":true,"coupon_free":true,"cheap_moment":false,"join_cheap":false,"free_taste":true}
+                 * off_shelve : false
+                 */
 
-            public void setTeacher_name(String teacher_name) {
-                this.teacher_name = teacher_name;
-            }
-
-            public float getPrice() {
-                return price;
-            }
-
-            public void setPrice(float price) {
-                this.price = price;
-            }
-
-            public float getCurrent_price() {
-                return current_price;
-            }
-
-            public void setCurrent_price(float current_price) {
-                this.current_price = current_price;
-            }
-
-            public String getChat_team_id() {
-                return chat_team_id;
-            }
-
-            public void setChat_team_id(String chat_team_id) {
-                this.chat_team_id = chat_team_id;
-            }
-
-            public String getChat_team_owner() {
-                return chat_team_owner;
-            }
-
-            public void setChat_team_owner(String chat_team_owner) {
-                this.chat_team_owner = chat_team_owner;
-            }
-
-            public int getBuy_tickets_count() {
-                return buy_tickets_count;
-            }
-
-            public void setBuy_tickets_count(int buy_tickets_count) {
-                this.buy_tickets_count = buy_tickets_count;
-            }
-
-            public String getStatus() {
-                return status;
-            }
-
-            public void setStatus(String status) {
-                this.status = status;
-            }
-
-            public int getPreset_lesson_count() {
-                return preset_lesson_count;
-            }
-
-            public void setPreset_lesson_count(int preset_lesson_count) {
-                this.preset_lesson_count = preset_lesson_count;
-            }
+                private int id;
+                private String name;
+                private String subject;
+                @SerializedName(value = "publicize", alternate = "publicize_url")
+                private String publicize;
+                private String grade;
+                private String teacher_name;
+//                private String price;
+//                private String current_price;
+//                private String chat_team_id;
+//                private String chat_team_owner;
+//                private int buy_tickets_count;
+//                private String status;
+//                private int preset_lesson_count;
+//                private int completed_lesson_count;
+//                private int taste_count;
+//                private int completed_lessons_count;
+//                private int closed_lessons_count;
+//                private int started_lessons_count;
+//                private String live_start_time;
+//                private String live_end_time;
+//                private String objective;
+//                private String suit_crowd;
+//                private int teacher_percentage;
+//                private IconsBean icons;
+//                private boolean off_shelve;
 
 
+                public int getId() {
+                    return id;
+                }
 
-            public int getTaste_count() {
-                return taste_count;
-            }
+                public void setId(int id) {
+                    this.id = id;
+                }
 
-            public void setTaste_count(int taste_count) {
-                this.taste_count = taste_count;
-            }
+                public String getName() {
+                    return name;
+                }
 
+                public void setName(String name) {
+                    this.name = name;
+                }
 
-            public String getLive_start_time() {
-                return live_start_time;
-            }
+                public String getSubject() {
+                    return subject;
+                }
 
-            public void setLive_start_time(String live_start_time) {
-                this.live_start_time = live_start_time;
-            }
+                public void setSubject(String subject) {
+                    this.subject = subject;
+                }
 
-            public String getLive_end_time() {
-                return live_end_time;
-            }
+                public String getGrade() {
+                    return grade;
+                }
 
-            public void setLive_end_time(String live_end_time) {
-                this.live_end_time = live_end_time;
-            }
+                public void setGrade(String grade) {
+                    this.grade = grade;
+                }
 
-            public String getPublicize() {
-                return publicize;
-            }
+                public String getTeacher_name() {
+                    return teacher_name;
+                }
 
-            public void setPublicize(String publicize) {
-                this.publicize = publicize;
-            }
-        }
+                public void setTeacher_name(String teacher_name) {
+                    this.teacher_name = teacher_name;
+                }
 
-        public static class StartRankBean {
-            /**
-             * id : 96
-             * name : 测试默认图片
-             * subject : 化学
-             * grade : 二年级
-             * teacher_name : 王志成
-             * price : 100
-             * current_price : 100
-             * chat_team_id :
-             * chat_team_owner : 07b7c43a854ed44d36c2941f1fc5ad00
-             * buy_tickets_count : 0
-             * status : published
-             * preset_lesson_count : 1
-             * completed_lesson_count : 0
-             * taste_count : 0
-             * completed_lessons_count : 0
-             * live_start_time : 2017-03-21 20:00
-             * live_end_time : 2017-03-21 21:00
-             * publicize : http://testing.qatime.cn/imgs/course_default.png
-             */
+                public String getPublicize() {
+                    return publicize;
+                }
 
-            private int id;
-            private String name;
-            private String subject;
-            private String grade;
-            private String teacher_name;
-            private float price;
-            private float current_price;
-            private String chat_team_id;
-            private String chat_team_owner;
-            private int buy_tickets_count;
-            private String status;
-            private int preset_lesson_count;
-            private int taste_count;
-            private String live_start_time;
-            private String live_end_time;
-            private String publicize;
-
-            public int getId() {
-                return id;
-            }
-
-            public void setId(int id) {
-                this.id = id;
-            }
-
-            public String getName() {
-                return name;
-            }
-
-            public void setName(String name) {
-                this.name = name;
-            }
-
-            public String getSubject() {
-                return subject;
-            }
-
-            public void setSubject(String subject) {
-                this.subject = subject;
-            }
-
-            public String getGrade() {
-                return grade;
-            }
-
-            public void setGrade(String grade) {
-                this.grade = grade;
-            }
-
-            public String getTeacher_name() {
-                return teacher_name;
-            }
-
-            public void setTeacher_name(String teacher_name) {
-                this.teacher_name = teacher_name;
-            }
-
-            public float getPrice() {
-                return price;
-            }
-
-            public void setPrice(float price) {
-                this.price = price;
-            }
-
-            public float getCurrent_price() {
-                return current_price;
-            }
-
-            public void setCurrent_price(float current_price) {
-                this.current_price = current_price;
-            }
-
-            public String getChat_team_id() {
-                return chat_team_id;
-            }
-
-            public void setChat_team_id(String chat_team_id) {
-                this.chat_team_id = chat_team_id;
-            }
-
-            public String getChat_team_owner() {
-                return chat_team_owner;
-            }
-
-            public void setChat_team_owner(String chat_team_owner) {
-                this.chat_team_owner = chat_team_owner;
-            }
-
-            public int getBuy_tickets_count() {
-                return buy_tickets_count;
-            }
-
-            public void setBuy_tickets_count(int buy_tickets_count) {
-                this.buy_tickets_count = buy_tickets_count;
-            }
-
-            public String getStatus() {
-                return status;
-            }
-
-            public void setStatus(String status) {
-                this.status = status;
-            }
-
-            public int getPreset_lesson_count() {
-                return preset_lesson_count;
-            }
-
-            public void setPreset_lesson_count(int preset_lesson_count) {
-                this.preset_lesson_count = preset_lesson_count;
-            }
-
-
-            public int getTaste_count() {
-                return taste_count;
-            }
-
-            public void setTaste_count(int taste_count) {
-                this.taste_count = taste_count;
-            }
-
-
-            public String getLive_start_time() {
-                return live_start_time;
-            }
-
-            public void setLive_start_time(String live_start_time) {
-                this.live_start_time = live_start_time;
-            }
-
-            public String getLive_end_time() {
-                return live_end_time;
-            }
-
-            public void setLive_end_time(String live_end_time) {
-                this.live_end_time = live_end_time;
-            }
-
-            public String getPublicize() {
-                return publicize;
-            }
-
-            public void setPublicize(String publicize) {
-                this.publicize = publicize;
+                public void setPublicize(String publicize) {
+                    this.publicize = publicize;
+                }
             }
         }
     }
