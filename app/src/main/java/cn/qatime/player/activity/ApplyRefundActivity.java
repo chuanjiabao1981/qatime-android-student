@@ -155,7 +155,7 @@ public class ApplyRefundActivity extends BaseActivity implements View.OnClickLis
         Map<String, String> map = new HashMap<>();
         map.put("order_id", getIntent().getStringExtra("order_id"));
         map.put("reason", reason.getText().toString());
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/refunds", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getInstance().getUserId() + "/refunds", map), null,
                 new VolleyListener(ApplyRefundActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {

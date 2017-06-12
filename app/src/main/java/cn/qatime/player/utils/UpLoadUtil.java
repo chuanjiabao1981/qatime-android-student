@@ -107,7 +107,7 @@ public abstract class UpLoadUtil extends AsyncTask<Map<String, String>, String, 
      * @return
      */
     public String getHttpTokenHeader() {
-        return BaseApplication.getProfile().getToken();
+        return BaseApplication.getInstance().getProfile().getToken();
     }
 
     @Override

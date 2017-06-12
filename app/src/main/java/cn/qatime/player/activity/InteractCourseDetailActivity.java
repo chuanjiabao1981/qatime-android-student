@@ -226,7 +226,7 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
         Intent intent;
         switch (v.getId()) {
             case R.id.start_study:
-                if (BaseApplication.isLogined()) {
+                if (BaseApplication.getInstance().isLogined()) {
                     if ("init".equals(data.getData().getStatus()) || "published".equals(data.getData().getStatus())) {
                         Toast.makeText(this, getString(R.string.published_course_unable_enter) + getString(R.string.study), Toast.LENGTH_SHORT).show();
                     } else {
@@ -247,7 +247,7 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
                 }
                 break;
             case R.id.pay:
-                if (BaseApplication.isLogined()) {
+                if (BaseApplication.getInstance().isLogined()) {
                     if ("teaching".equals(data.getData().getStatus())) {
                         if (alertDialog == null) {
                             View view = View.inflate(InteractCourseDetailActivity.this, R.layout.dialog_cancel_or_confirm, null);

@@ -204,8 +204,8 @@ public class OrderPayActivity extends BaseActivity {
                     payThread.start();
                 } else if (payType.equals("account")) {
                     Logger.e("钱包支付");
-                    if (BaseApplication.getCashAccount().getData().isHas_password()) {
-                        long changeAt = BaseApplication.getCashAccount().getData().getPassword_set_at();
+                    if (BaseApplication.getInstance().getCashAccount().getData().isHas_password()) {
+                        long changeAt = BaseApplication.getInstance().getCashAccount().getData().getPassword_set_at();
 
                         int diff = 2 - (int) ((System.currentTimeMillis() / 1000 - changeAt) / 3600);
                         if (diff <= 2 && diff > 0) {

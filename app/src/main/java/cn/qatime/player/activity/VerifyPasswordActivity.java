@@ -65,7 +65,7 @@ public class VerifyPasswordActivity extends BaseActivity implements View.OnClick
                 }
                 Map<String,String> map = new HashMap<>();
                 map.put("current_password", password.getText().toString());
-                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlPersonalInformation+ BaseApplication.getUserId() + "/verify_current_password", map), null, new VolleyListener(this) {
+                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlPersonalInformation+ BaseApplication.getInstance().getUserId() + "/verify_current_password", map), null, new VolleyListener(this) {
                     @Override
                     protected void onTokenOut() {
                         tokenOut();

@@ -292,7 +292,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                                         }
                                         if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
 
-                                            BaseApplication.setProfile(profile);
+                                            BaseApplication.getInstance().setProfile(profile);
                                             //登陆云信
                                             loginAccount();
                                         } else {
@@ -435,8 +435,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void loginAccount() {
-        String account = BaseApplication.getAccount();
-        String token = BaseApplication.getAccountToken();
+        String account = BaseApplication.getInstance().getAccount();
+        String token = BaseApplication.getInstance().getAccountToken();
 
         if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
             NIMClient.getService(AuthService.class).login(new LoginInfo(account, token)).setCallback(new RequestCallback<LoginInfo>() {

@@ -49,6 +49,7 @@ import cn.qatime.player.activity.PayPSWForgetActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.SearchActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
+import cn.qatime.player.activity.TeacherSearchActivity;
 import cn.qatime.player.activity.VideoCoursesActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
@@ -192,7 +193,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     }
 
     private void initCashAccountSafe() {
-        CashAccountBean cashAccount = BaseApplication.getCashAccount();
+        CashAccountBean cashAccount = BaseApplication.getInstance().getCashAccount();
         if (cashAccount != null && cashAccount.getData() != null) {
             if (!cashAccount.getData().isHas_password()) {
                 cashAccountSafe.setVisibility(View.VISIBLE);
@@ -450,7 +451,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
 
     private void setCity() {
-        cityName.setText(BaseApplication.getCurrentCity().getName());
+        cityName.setText(BaseApplication.getInstance().getCurrentCity().getName());
 
         initBannerData();
         initEssenceData();//精选内容
@@ -463,7 +464,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private void initEssenceData() {
         Map<String, String> map = new HashMap<>();
         try {
-            map.put("city_name", URLEncoder.encode(BaseApplication.getCurrentCity().getName(), "UTF-8"));
+            map.put("city_name", URLEncoder.encode(BaseApplication.getInstance().getCurrentCity().getName(), "UTF-8"));
             map.put("per_page", "4");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -632,7 +633,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private void initBannerData() {
         Map<String, String> map = new HashMap<>();
         try {
-            map.put("city_name", URLEncoder.encode(BaseApplication.getCurrentCity().getName(), "UTF-8"));
+            map.put("city_name", URLEncoder.encode(BaseApplication.getInstance().getCurrentCity().getName(), "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -717,7 +718,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private void initTeacherData() {
         Map<String, String> map = new HashMap<>();
         try {
-            map.put("city_name", URLEncoder.encode(BaseApplication.getCurrentCity().getName(), "UTF-8"));
+            map.put("city_name", URLEncoder.encode(BaseApplication.getInstance().getCurrentCity().getName(), "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -856,7 +857,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                                         Toast.makeText(getActivity(), R.string.position_locate_error, Toast.LENGTH_SHORT).show();
                                         return;
                                     }
-                                    CityBean.Data currentCity = BaseApplication.getCurrentCity();
+                                    CityBean.Data currentCity = BaseApplication.getInstance().getCurrentCity();
                                     if (locationCity != null) {
                                         if (!currentCity.equals(locationCity)) {
                                             if (locationCity.getWorkstations_count() != 0) {
@@ -908,7 +909,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
-                BaseApplication.setCurrentCity(locationCity);
+                BaseApplication.getInstance().setCurrentCity(locationCity);
                 setCity();
             }
         });

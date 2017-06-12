@@ -132,9 +132,9 @@ public class StartActivity extends BaseActivity implements View.OnClickListener 
             protected void onSuccess(JSONObject response) {
                 if (response.isNull("data")) {
                     startApp();
-                    BaseApplication.newVersion = false;
+                    BaseApplication.getInstance().newVersion = false;
                 } else {
-                    BaseApplication.newVersion = true;
+                    BaseApplication.getInstance().newVersion = true;
                     Logger.e(response.toString());
                     AlertDialog.Builder builder = new AlertDialog.Builder(StartActivity.this);
                     final View view = View.inflate(StartActivity.this, R.layout.dialog_check_update, null);
@@ -232,8 +232,8 @@ public class StartActivity extends BaseActivity implements View.OnClickListener 
                     StartActivity.this.finish();
                 } else {
                     Logger.e("no第一次登陆");
-                    if (!StringUtils.isNullOrBlanK(BaseApplication.getProfile().getToken())) {//token不空  直接自动登录到mianactivity
-                        Logger.e("token----" + BaseApplication.getProfile().getToken());
+                    if (!StringUtils.isNullOrBlanK(BaseApplication.getInstance().getProfile().getToken())) {//token不空  直接自动登录到mianactivity
+                        Logger.e("token----" + BaseApplication.getInstance().getProfile().getToken());
                         Intent intent = new Intent(StartActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();

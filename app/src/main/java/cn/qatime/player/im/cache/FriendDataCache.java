@@ -70,7 +70,7 @@ public class FriendDataCache {
         accounts.removeAll(blacks);
 
         // 排除掉自己
-        accounts.remove(BaseApplication.getAccount());
+        accounts.remove(BaseApplication.getInstance().getAccount());
 
         // 确定缓存
         friendAccountSet.addAll(accounts);

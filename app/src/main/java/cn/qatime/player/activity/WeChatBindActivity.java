@@ -339,7 +339,7 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
                 if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
                     Logger.e("登录", response.toString());
                     //登录成功且有个人信息  设置profile
-                    BaseApplication.setProfile(profile);
+                    BaseApplication.getInstance().setProfile(profile);
                     loginAccount();//登陆云信
                 } else {
                     finish();
@@ -438,8 +438,8 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
      */
     private void loginAccount() {
         progress = DialogUtils.startProgressDialog(progress, this, "登录中...");
-        String account = BaseApplication.getAccount();
-        String token = BaseApplication.getAccountToken();
+        String account = BaseApplication.getInstance().getAccount();
+        String token = BaseApplication.getInstance().getAccountToken();
 
         if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
             NIMClient.getService(AuthService.class).login(new LoginInfo(account, token)).setCallback(new RequestCallback<LoginInfo>() {

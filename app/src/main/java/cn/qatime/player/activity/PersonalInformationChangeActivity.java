@@ -241,7 +241,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 }
                 break;
             case R.id.complete://完成
-                String url = UrlUtils.urlPersonalInformation + BaseApplication.getUserId();
+                String url = UrlUtils.urlPersonalInformation + BaseApplication.getInstance().getUserId();
                 UpLoadUtil util = new UpLoadUtil(url) {
                     @Override
                     public void httpStart() {
@@ -255,8 +255,8 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                         DialogUtils.dismissDialog(progress);
                         PersonalInformationBean sData = JsonUtils.objectFromJson(result, PersonalInformationBean.class);
 
-                        BaseApplication.getProfile().getData().getUser().setAvatar_url(sData.getData().getAvatar_url());
-                        Profile profile = BaseApplication.getProfile();
+                        BaseApplication.getInstance().getProfile().getData().getUser().setAvatar_url(sData.getData().getAvatar_url());
+                        Profile profile = BaseApplication.getInstance().getProfile();
                         Profile.User user = profile.getData().getUser();
                         user.setId(sData.getData().getId());
                         user.setName(sData.getData().getName());
@@ -268,7 +268,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                         user.setChat_account(sData.getData().getChat_account());
 
                         profile.getData().setUser(user);
-                        BaseApplication.setProfile(profile);
+                        BaseApplication.getInstance().setProfile(profile);
 
                         Intent data = new Intent();
                         data.putExtra("data", result);
@@ -284,7 +284,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                     }
                 };
 
-                if (StringUtils.isNullOrBlanK(BaseApplication.getUserId())) {
+                if (StringUtils.isNullOrBlanK(BaseApplication.getInstance().getUserId())) {
                     Toast.makeText(PersonalInformationChangeActivity.this, getResources().getString(R.string.id_is_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }

@@ -165,7 +165,7 @@ public class VoiceTrans {
             }
         });
 
-        BaseApplication.getRequestQueue().add(request);
+        BaseApplication.getInstance().getRequestQueue().add(request);
 //        callFuture = NIMClient.getService(MsgService.class).transVoiceToText(voiceUrl, path, attachment.getDuration());
 //        callFuture.setCallback(new RequestCallback<String>() {
 //            @Override

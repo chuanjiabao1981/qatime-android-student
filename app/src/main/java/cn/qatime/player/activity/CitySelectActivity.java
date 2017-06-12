@@ -151,7 +151,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
                 if (locationCity == null) {
                     Toast.makeText(CitySelectActivity.this,  R.string.position_locate_error, Toast.LENGTH_SHORT).show();
                 } else {
-                    if (!BaseApplication.getCurrentCity().equals(locationCity)) {
+                    if (!BaseApplication.getInstance().getCurrentCity().equals(locationCity)) {
                         dialogCity();
 //                        Logger.e("location", result);
                         Logger.e("locationCity", locationCity.getName());
@@ -199,7 +199,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
         } else {
             listLately = lately;
         }
-        refreshLately(BaseApplication.getCurrentCity());
+        refreshLately(BaseApplication.getInstance().getCurrentCity());
         adapter = new CitySelectAdapter(this, letterMap, listLately, list, R.layout.item_city_lately, R.layout.item_city_all, R.layout.item_city_list) {
             @Override
             public void setCityName(CityBean.Data data) {
@@ -244,7 +244,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
     private void setCityAndHistory(CityBean.Data data) {
         refreshLately(data);
 //                adapter.notifyDataSetChanged();
-        BaseApplication.setCurrentCity(data);
+        BaseApplication.getInstance().setCurrentCity(data);
         Intent intent = new Intent();
         setResult(Constant.RESPONSE_CITY_SELECT, intent);
         finish();

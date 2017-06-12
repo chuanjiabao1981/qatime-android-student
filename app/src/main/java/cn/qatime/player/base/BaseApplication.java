@@ -1,5 +1,6 @@
 package cn.qatime.player.base;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
 
@@ -38,6 +40,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.bean.BusEvent;
@@ -55,50 +60,51 @@ import libraryextra.utils.AppUtils;
 import libraryextra.utils.StringUtils;
 
 public class BaseApplication extends MultiDexApplication {
-    private static Profile profile;
-    public static UserInfoProvider userInfoProvider;
+    private Profile profile;
+    private UserInfoProvider userInfoProvider;
     private static BaseApplication context;
-    private static RequestQueue Queue;
-    public static boolean newVersion;
-    private static CityBean.Data currentCity;
+    private RequestQueue Queue;
+    public boolean newVersion;
+    private CityBean.Data currentCity;
     private PushAgent mPushAgent;
     private boolean voiceStatus;
     private boolean shakeStatus;
-    private static CashAccountBean cashAccount;
+    private CashAccountBean cashAccount;
     /**
      * 是否进行聊天消息通知栏提醒
      */
-    public static boolean chatMessageNotifyStatus;
+    public boolean chatMessageNotifyStatus;
+    public List<Activity> topActivity = new ArrayList<>();
 
-    public static boolean isChatMessageNotifyStatus() {
+    public boolean isChatMessageNotifyStatus() {
         return chatMessageNotifyStatus;
     }
 
-    public static void setChatMessageNotifyStatus(boolean chatMessageNotifyStatus) {
-        BaseApplication.chatMessageNotifyStatus = chatMessageNotifyStatus;
+    public void setChatMessageNotifyStatus(boolean chatMessageNotifyStatus) {
+        this.chatMessageNotifyStatus = chatMessageNotifyStatus;
     }
 
-    public static RequestQueue getRequestQueue() {
+    public RequestQueue getRequestQueue() {
         if (Queue == null) {
             Queue = Volley.newRequestQueue(context);
         }
         return Queue;
     }
 
-    public static CityBean.Data getCurrentCity() {
+    public CityBean.Data getCurrentCity() {
         return currentCity == null ? new CityBean.Data("全国") : currentCity;
     }
 
-    public static void setCurrentCity(CityBean.Data currentCity) {
-        BaseApplication.currentCity = currentCity;
+    public void setCurrentCity(CityBean.Data currentCity) {
+        this.currentCity = currentCity;
         SPUtils.putObject(context, "current_city", currentCity);
     }
 
-    public static void setCashAccount(CashAccountBean cashAccount) {
-        BaseApplication.cashAccount = cashAccount;
+    public void setCashAccount(CashAccountBean cashAccount) {
+        this.cashAccount = cashAccount;
     }
 
-    public static CashAccountBean getCashAccount() {
+    public CashAccountBean getCashAccount() {
         return cashAccount;
     }
 
@@ -122,6 +128,7 @@ public class BaseApplication extends MultiDexApplication {
         initYunxin();
 
         StorageUtil.init(context, null);
+        initGlobeActivity();
     }
 
     private void initUmengPush() {
@@ -344,20 +351,20 @@ public class BaseApplication extends MultiDexApplication {
         }
     }
 
-    public static Profile getProfile() {
+    public Profile getProfile() {
         return profile == null ? new Profile() : profile;
     }
 
-    public static int getUserId() {
+    public int getUserId() {
         return profile != null && profile.getData() != null && profile.getData().getUser() != null ? profile.getData().getUser().getId() : 0;
     }
 
-    public static void setProfile(Profile profile) {
-        BaseApplication.profile = profile;
+    public void setProfile(Profile profile) {
+        this.profile = profile;
         SPUtils.putObject(context, "profile", profile);
     }
 
-    public static void clearToken() {
+    public void clearToken() {
 //        Throwable ex = new Throwable();
 //
 //        StackTraceElement[] stackElements = ex.getStackTrace();
@@ -421,7 +428,7 @@ public class BaseApplication extends MultiDexApplication {
     /**
      * 登录云信的账号
      */
-    public static String getAccount() {
+    public String getAccount() {
         if (getProfile().getData() != null && getProfile().getData().getUser() != null && getProfile().getData().getUser().getChat_account() != null) {
             return getProfile().getData().getUser().getChat_account().getAccid();
         } else {
@@ -429,14 +436,14 @@ public class BaseApplication extends MultiDexApplication {
         }
     }
 
-    public static boolean isLogined() {
+    public boolean isLogined() {
         return !StringUtils.isNullOrBlanK(getProfile().getToken());
     }
 
     /**
      * 登录云信的token
      */
-    public static String getAccountToken() {
+    public String getAccountToken() {
         if (getProfile().getData() != null && getProfile().getData().getUser() != null && getProfile().getData().getUser().getChat_account() != null) {
             return getProfile().getData().getUser().getChat_account().getToken();
         } else {
@@ -444,11 +451,62 @@ public class BaseApplication extends MultiDexApplication {
         }
     }
 
-    public static UserInfoProvider getUserInfoProvide() {
+    public UserInfoProvider getUserInfoProvide() {
         return userInfoProvider;
     }
 
-    public static String getUserName() {
+    public String getUserName() {
         return profile != null && profile.getData() != null && profile.getData().getUser() != null ? profile.getData().getUser().getName() : "";
+    }
+
+    private void initGlobeActivity() {
+        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+                if (!topActivity.contains(activity)) {
+                    topActivity.add(0, activity);
+//                    Logger.e("top" + topActivity.get(0).getLocalClassName());
+                }
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+                if (topActivity.contains(activity)) {
+                    topActivity.remove(activity);
+//                    if (topActivity.size() > 0) {
+//                        Logger.e("top" + topActivity.get(0).getLocalClassName());
+//                    }
+                }
+            }
+
+            /** Unused implementation **/
+            @Override
+            public void onActivityStarted(Activity activity) {
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+            }
+        });
+    }
+
+    public Activity getTopActivity() {
+        return topActivity.get(0);
+    }
+
+    public static BaseApplication getInstance() {
+        return context;
     }
 }

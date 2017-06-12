@@ -120,7 +120,7 @@ public class FragmentTutorshipOver extends BaseFragment {
         map.put("per_page", "10");
         map.put("status", "completed");
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/courses", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getInstance().getUserId() + "/courses", map), null,
                 new VolleyListener(getActivity()) {
 
 

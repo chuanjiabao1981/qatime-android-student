@@ -152,7 +152,7 @@ public class FragmentOrderUnpaid extends BaseFragment {
                                 } else if (item.getPay_type().equals("alipay")) {
                                     return;
                                 } else if (item.getPay_type().equals("account")) {
-                                    if (Double.valueOf(item.getAmount()) > Double.valueOf(BaseApplication.getCashAccount().getData().getBalance())) {
+                                    if (Double.valueOf(item.getAmount()) > Double.valueOf(BaseApplication.getInstance().getCashAccount().getData().getBalance())) {
                                         Toast.makeText(getActivity(), R.string.amount_not_enough, Toast.LENGTH_SHORT).show();
                                         return;
                                     }

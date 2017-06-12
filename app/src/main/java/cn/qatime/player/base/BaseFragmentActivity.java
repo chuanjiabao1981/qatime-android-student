@@ -23,8 +23,8 @@ import libraryextra.utils.StringUtils;
  * 基础fragment类
  */
 public class BaseFragmentActivity extends FragmentActivity {
-    private RequestQueue Queue = BaseApplication.getRequestQueue();
-    private AlertDialog alertDialog;
+    private RequestQueue Queue = BaseApplication.getInstance().getRequestQueue();
+    protected AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +68,6 @@ public class BaseFragmentActivity extends FragmentActivity {
      * 设备已在其他地方登陆
      */
     public void tokenOut() {
-        BaseApplication.clearToken();
         View view = View.inflate(this, R.layout.dialog_confirm, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         alertDialog = builder.create();

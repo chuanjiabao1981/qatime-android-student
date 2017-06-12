@@ -108,7 +108,7 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.exit:// 退出登录
-                BaseApplication.clearToken();
+                BaseApplication.getInstance().clearToken();
                 Intent intent = new Intent(SystemSettingActivity.this, MainActivity.class);
                 intent.putExtra("sign", "exit_login");
                 startActivity(intent);
