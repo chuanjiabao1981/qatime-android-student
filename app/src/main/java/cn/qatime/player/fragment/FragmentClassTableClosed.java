@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -78,6 +79,8 @@ public class FragmentClassTableClosed extends BaseFragment {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
         View emptyView = View.inflate(getActivity(), R.layout.empty_view, null);
+        TextView textEmpty = (TextView) emptyView.findViewById(R.id.text_empty);
+        textEmpty.setText("本周暂无数据");
         listView.setEmptyView(emptyView);
 
         adapter = new CommonAdapter<ClassTimeTableBean.DataBean.LessonsBean>(getActivity(), itemList, R.layout.item_fragment_remedial_class_time_table2) {
@@ -86,6 +89,10 @@ public class FragmentClassTableClosed extends BaseFragment {
                 Glide.with(getActivity()).load(item.getCourse_publicize()).placeholder(R.mipmap.error_header_rect).centerCrop().crossFade().dontAnimate().into((ImageView) helper.getView(R.id.image));
 ////                helper.setText(R.id.course, item.getCourse_name());
                 helper.setText(R.id.classname, item.getName());
+                //试听状态
+                TextView taste = helper.getView(R.id.taste);
+
+//                taste.setVisibility(item.isIs_tasting() ? View.VISIBLE : View.GONE);//已购买不显示
                 try {
                     Date date = parse.parse(item.getClass_date());
                     helper.setText(R.id.class_date, getMonth(date.getMonth()) + "-" + getDay(date.getDate()) + "  ");

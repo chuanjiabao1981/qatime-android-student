@@ -142,7 +142,10 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
-        listView.setEmptyView(View.inflate(ClassTimeTableActivity.this, R.layout.empty_view, null));
+        View emptyView = View.inflate(this, R.layout.empty_view, null);
+        TextView textEmpty = (TextView) emptyView.findViewById(R.id.text_empty);
+        textEmpty.setText("本周暂无数据");
+        listView.setEmptyView(emptyView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -165,6 +168,10 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                 Glide.with(ClassTimeTableActivity.this).load(item.getCourse_publicize()).placeholder(R.mipmap.error_header_rect).centerCrop().crossFade().dontAnimate().into((ImageView) helper.getView(R.id.image));
 //                helper.setText(R.id.course, item.getCourse_name());
                 helper.setText(R.id.classname, item.getName());
+                //试听状态
+                TextView taste = helper.getView(R.id.taste);
+
+//                taste.setVisibility(item.isIs_tasting() ? View.VISIBLE : View.GONE);//已购买不显示
                 try {
                     Date date = parse.parse(item.getClass_date());
                     helper.setText(R.id.class_date, getMonth(date.getMonth()) + "-" + getDay(date.getDate()) + "  ");
