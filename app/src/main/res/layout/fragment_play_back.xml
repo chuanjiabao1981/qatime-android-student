@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_control"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#00000000">
+
+    <RelativeLayout
+        android:id="@+id/play_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/shape_video_toolbar">
+
+        <ImageView
+            android:id="@+id/player_exit"
+            android:layout_width="45dp"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:padding="13dp"
+            android:src="@mipmap/ic_play_exit" />
+
+        <!--<TextView-->
+        <!--android:id="@+id/video_name"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_toRightOf="@id/player_exit"-->
+        <!--android:ellipsize="marquee"-->
+        <!--android:focusable="true"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:singleLine="true"-->
+        <!--android:textColor="#fff"-->
+        <!--android:textSize="16sp" />-->
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:background="#b3000000"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/play"
+            android:layout_width="45dp"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:padding="13dp"
+            android:src="@mipmap/nemediacontroller_pause" />
+
+        <SeekBar
+            android:id="@+id/seekBar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:progressDrawable="@drawable/playback_controller_progressbar"
+            android:thumb="@mipmap/playback_thumb" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="00:00"
+            android:textColor="#fff" />
+
+        <!--<TextView-->
+            <!--android:id="@+id/definition"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:padding="3dp"-->
+            <!--android:text="高清"-->
+            <!--android:textColor="#fff"-->
+            <!--android:visibility="gone" />-->
+
+        <ImageView
+            android:id="@+id/zoom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@mipmap/enlarge" />
+    </LinearLayout>
+
+</RelativeLayout>

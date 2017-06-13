@@ -46,6 +46,7 @@ import cn.qatime.player.activity.CitySelectActivity;
 import cn.qatime.player.activity.InteractCourseDetailActivity;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.PayPSWForgetActivity;
+import cn.qatime.player.activity.PlayBackActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.activity.TeacherSearchActivity;
