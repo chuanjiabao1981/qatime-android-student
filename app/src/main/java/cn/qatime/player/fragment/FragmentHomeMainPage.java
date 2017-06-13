@@ -48,6 +48,7 @@ import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.PayPSWForgetActivity;
 import cn.qatime.player.activity.PlayBackActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
+import cn.qatime.player.activity.SearchActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.activity.TeacherSearchActivity;
 import cn.qatime.player.activity.VideoCoursesActivity;
@@ -56,6 +57,7 @@ import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.BannerRecommendBean;
 import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.bean.EssenceContentBean;
+import cn.qatime.player.bean.FreeCourseBean;
 import cn.qatime.player.bean.LiveTodayBean;
 import cn.qatime.player.bean.RecentPublishedBean;
 import cn.qatime.player.bean.TeacherRecommendBean;
@@ -85,8 +87,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private ListViewForScrollView listViewEssenceContent;
     private List<EssenceContentBean.DataBean> listEssenceContent = new ArrayList<>();
     private CommonAdapter<EssenceContentBean.DataBean> essenceContentAdapter;
-    private CommonAdapter<RecentPublishedBean.DataBean.StartRankBean> startRankAdapter;
-    private CommonAdapter<RecentPublishedBean.DataBean.PublishedRankBean> publisheRankAdapter;
+    private CommonAdapter<RecentPublishedBean.DataBean.AllPublishedRankBean> publisheRankAdapter;
     private ArrayList<TeacherRecommendBean.DataBean> listRecommendTeacher = new ArrayList<>();
     private CommonAdapter<TeacherRecommendBean.DataBean> teacherAdapter;
     private TextView cityName;
@@ -94,7 +95,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private CityBean.Data locationCity;
     private AMapLocationUtils utils;
     private List<BannerRecommendBean.DataBean> listBanner = new ArrayList<>();
-
     private BannerRecommendBean.DataBean noBanner;
     private PullToRefreshScrollView scrollView;
     private RecyclerView recyclerGrade;
@@ -103,13 +103,14 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private RecyclerView recyclerToday;
     private RecyclerView.Adapter todayAdapter;
     private List<LiveTodayBean.DataBean> todayList;
-    private ListViewForScrollView listViewStartRank;//近期开课
+    private ListViewForScrollView listViewFree;//近期开课
     private ListViewForScrollView listViewPublishedRank;//最新发布
-    private List<RecentPublishedBean.DataBean.StartRankBean> listStartRank = new ArrayList<>();
-    private List<RecentPublishedBean.DataBean.PublishedRankBean> listPublishedRank = new ArrayList<>();
+    private List<RecentPublishedBean.DataBean.AllPublishedRankBean> listPublishedRank = new ArrayList<>();
     private View cashAccountSafe;
     private View close;
     private boolean closed = false;//是否手动关闭未设置支付密码提示
+    private CommonAdapter<FreeCourseBean.DataBean> freeCourrseAdapter;
+    private ArrayList<FreeCourseBean.DataBean> listFree = new ArrayList();
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -156,7 +157,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         cityName = (TextView) view.findViewById(R.id.city_name);
         View citySelect = view.findViewById(R.id.city_select);
         listViewEssenceContent = (ListViewForScrollView) view.findViewById(R.id.listview_class);
-        listViewStartRank = (ListViewForScrollView) view.findViewById(R.id.listview_class1);
+        listViewFree = (ListViewForScrollView) view.findViewById(R.id.listview_class1);
         listViewPublishedRank = (ListViewForScrollView) view.findViewById(R.id.listview_class2);
         View scan = view.findViewById(R.id.scan);
         cashAccountSafe = view.findViewById(R.id.cash_account_safe);
@@ -166,6 +167,9 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         view.findViewById(R.id.more1).setOnClickListener(this);
         view.findViewById(R.id.more2).setOnClickListener(this);
         view.findViewById(R.id.more3).setOnClickListener(this);
+        view.findViewById(R.id.to_search).setOnClickListener(this);
+        view.findViewById(R.id.to_all_teacher).setOnClickListener(this);
+        view.findViewById(R.id.to_live_replay).setOnClickListener(this);
 
         initBanner();
         initGrade();
@@ -173,7 +177,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         initEssence();
 
         initTeacher();
-        initStartRank();
+        initFreeCourse();
         initPublishedRank();
 
         setCity();
@@ -204,13 +208,13 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
     private void initPublishedRank() {
         //最新发布
-        publisheRankAdapter = new CommonAdapter<RecentPublishedBean.DataBean.PublishedRankBean>(getContext(), listPublishedRank, R.layout.item_course_rank) {
+        publisheRankAdapter = new CommonAdapter<RecentPublishedBean.DataBean.AllPublishedRankBean>(getContext(), listPublishedRank, R.layout.item_course_rank) {
             @Override
-            public void convert(ViewHolder holder, RecentPublishedBean.DataBean.PublishedRankBean item, int position) {
-                holder.setImageByUrl(R.id.image, item.getPublicize(), R.mipmap.photo)
-                        .setText(R.id.title, item.getName())
-                        .setText(R.id.teacher, item.getTeacher_name())
-                        .setText(R.id.grade_subject, item.getGrade() + item.getSubject());
+            public void convert(ViewHolder holder, RecentPublishedBean.DataBean.AllPublishedRankBean item, int position) {
+                    holder.setImageByUrl(R.id.image, item.getProduct().getPublicize(), R.mipmap.photo)
+                            .setText(R.id.title, item.getProduct().getName())
+                            .setText(R.id.teacher, item.getProduct().getTeacher_name())
+                            .setText(R.id.grade_subject, item.getProduct().getGrade() + item.getProduct().getSubject());
             }
         };
         listViewPublishedRank.setAdapter(publisheRankAdapter);
@@ -222,36 +226,50 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         listViewPublishedRank.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int courseId = listPublishedRank.get(position).getId();
-                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                int courseId = listPublishedRank.get(position).getProduct().getId();
+                Intent intent = null;
+                if ("LiveStudio::Course".equals(listPublishedRank.get(position).getProduct_type())) {
+                    intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                } else if ("LiveStudio::InteractiveCourse".equals(listPublishedRank.get(position).getProduct_type())) {
+                    intent = new Intent(getActivity(), InteractCourseDetailActivity.class);
+                } else if ("LiveStudio::VideoCourse".equals(listPublishedRank.get(position).getProduct_type())) {
+                    intent = new Intent(getActivity(), VideoCoursesActivity.class);
+                }
                 intent.putExtra("id", courseId);
                 startActivity(intent);
             }
         });
     }
 
-    private void initStartRank() {
+    private void initFreeCourse() {
         //近期开课
-        startRankAdapter = new CommonAdapter<RecentPublishedBean.DataBean.StartRankBean>(getContext(), listStartRank, R.layout.item_course_rank) {
+        freeCourrseAdapter = new CommonAdapter<FreeCourseBean.DataBean>(getContext(), listFree, R.layout.item_course_rank) {
             @Override
-            public void convert(ViewHolder holder, RecentPublishedBean.DataBean.StartRankBean item, int position) {
-                holder.setImageByUrl(R.id.image, item.getPublicize(), R.mipmap.photo)
-                        .setText(R.id.title, item.getName())
-                        .setText(R.id.teacher, item.getTeacher_name())
-                        .setText(R.id.grade_subject, item.getGrade() + item.getSubject());
+            public void convert(ViewHolder holder, FreeCourseBean.DataBean item, int position) {
+                holder.setImageByUrl(R.id.image, item.getProduct().getPublicize(), R.mipmap.photo)
+                        .setText(R.id.title, item.getProduct().getName())
+                        .setText(R.id.teacher, item.getProduct().getTeacher_name())
+                        .setText(R.id.grade_subject, item.getProduct().getGrade() + item.getProduct().getSubject());
             }
         };
-        listViewStartRank.setAdapter(startRankAdapter);
-        ViewGroup parent = (ViewGroup) listViewStartRank.getParent();
+        listViewFree.setAdapter(freeCourrseAdapter);
+        ViewGroup parent = (ViewGroup) listViewFree.getParent();
         View inflate = View.inflate(getActivity(), R.layout.empty_view, null);
-        parent.addView(inflate, parent.indexOfChild(listViewStartRank) + 1);
+        parent.addView(inflate, parent.indexOfChild(listViewFree) + 1);
         inflate.setBackgroundColor(0xffffffff);
-        listViewStartRank.setEmptyView(inflate);
-        listViewStartRank.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listViewFree.setEmptyView(inflate);
+        listViewFree.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int courseId = listStartRank.get(position).getId();
-                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                int courseId = listFree.get(position).getProduct().getId();
+                Intent intent = null;
+                if ("LiveStudio::Course".equals(listFree.get(position).getProduct_type())) {
+                    intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+                } else if ("LiveStudio::InteractiveCourse".equals(listFree.get(position).getProduct_type())) {
+                    intent = new Intent(getActivity(), InteractCourseDetailActivity.class);
+                } else if ("LiveStudio::VideoCourse".equals(listFree.get(position).getProduct_type())) {
+                    intent = new Intent(getActivity(), VideoCoursesActivity.class);
+                }
                 intent.putExtra("id", courseId);
                 startActivity(intent);
             }
@@ -441,6 +459,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         initToadyData();//今日直播
         initTeacherData();
         initRecentPublished();//最新发布,近期开课
+        initFreeCourseData();
     }
 
     private void initEssenceData() {
@@ -521,17 +540,15 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private void initRecentPublished() {
         Map<String, String> map = new HashMap<>();
         map.put("count", "2");
-        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecentPublished, map), null,
+        map.put("city_id", BaseApplication.getInstance().getCurrentCity().getId());
+        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlRecentPublishedAll, map), null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
                         RecentPublishedBean data = JsonUtils.objectFromJson(response.toString(), RecentPublishedBean.class);
-                        listStartRank.clear();
                         listPublishedRank.clear();
                         if (data != null && data.getData() != null) {
-                            listStartRank.addAll(data.getData().getStart_rank());
-                            listPublishedRank.addAll(data.getData().getPublished_rank());
-                            startRankAdapter.notifyDataSetChanged();
+                            listPublishedRank.addAll(data.getData().getAll_published_rank());
                             publisheRankAdapter.notifyDataSetChanged();
                         }
                     }
@@ -553,7 +570,41 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         });
         addToRequestQueue(request);
     }
+    /**
+     * 最新发布,近期开课
+     */
+    private void initFreeCourseData() {
+        Map<String, String> map = new HashMap<>();
+        map.put("count", "2");
+        JsonObjectRequest request = new JsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlLiveStudioFree, map), null,
+                new VolleyListener(getActivity()) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        FreeCourseBean data = JsonUtils.objectFromJson(response.toString(), FreeCourseBean.class);
+                        listFree.clear();
+                        if (data != null && data.getData() != null) {
+                            listFree.addAll(data.getData());
+                            freeCourrseAdapter.notifyDataSetChanged();
+                        }
+                    }
 
+                    @Override
+                    protected void onError(JSONObject response) {
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
+    }
 
     private void initBanner() {
         ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()), ScreenUtils.getScreenWidth(getActivity()) / 3);
@@ -641,7 +692,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 if (listRecommendTeacher.get(position) != null) {
                     Intent intent = new Intent(getActivity(), TeacherDataActivity.class);
                     intent.putExtra("teacherId", listRecommendTeacher.get(position).getTeacher().getId());
-                    startActivityForResult(intent, Constant.REQUEST);
+                    startActivity(intent);
                 }
 
             }
@@ -756,6 +807,19 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 break;
             case R.id.cash_account_safe:
                 intent = new Intent(getActivity(), PayPSWForgetActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.to_live_replay:
+//                intent = new Intent(getActivity(), PayPSWForgetActivity.class);
+//                startActivity(intent);
+                break;
+            case R.id.to_all_teacher:
+                intent = new Intent(getActivity(), TeacherSearchActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.to_search:
+                intent = new Intent(getActivity(), SearchActivity.class);
                 startActivity(intent);
                 break;
             case R.id.close:

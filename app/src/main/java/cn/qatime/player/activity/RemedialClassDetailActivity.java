@@ -263,15 +263,15 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                                     handleLayout.setVisibility(View.GONE);//已结束的课程隐藏操作按钮
                                 }
 
-                            }else{
+                            } else {
                                 if (data.getData().isOff_shelve()) {//未购买&&已结束：显示已下架
                                     startStudyView.setVisibility(View.VISIBLE);
                                     startStudy.setText("已下架");
                                     startStudy.setEnabled(false);
-                                }else{
+                                } else {
                                     if (data.getData().getTaste_count() == 0) {//试听数目为0则该课不支持试听
                                         auditionLayout.setVisibility(View.GONE);
-                                    }else{
+                                    } else {
                                         if (data.getData().getIs_tasting() || data.getData().isTasted()) {//显示进入试听按钮
                                             auditionStart.setVisibility(View.VISIBLE);
                                             audition.setVisibility(View.GONE);
@@ -335,7 +335,11 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 break;
             case R.id.audition:
                 if (BaseApplication.getInstance().isLogined()) {
-                    joinAudition();
+                    if (data.getData().isTaste_overflow()) {
+                        Toast.makeText(this, "该试听已失效,请直接购买", Toast.LENGTH_SHORT).show();
+                    } else {
+                        joinAudition();
+                    }
                 } else {
                     intent = new Intent(RemedialClassDetailActivity.this, LoginActivity2.class);
                     intent.putExtra("activity_action", Constant.LoginAction.toRemedialClassDetail);
@@ -502,9 +506,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
                     @Override
                     protected void onError(JSONObject response) {
-//                            if(response.getJSONObject("error").getInt("code")==3004){//CourseTasteLimit
-                        Toast.makeText(RemedialClassDetailActivity.this, R.string.the_course_not_support_audition, Toast.LENGTH_SHORT).show();
-//                                            }
+                        Toast.makeText(RemedialClassDetailActivity.this, "该试听已失效,请直接购买", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override

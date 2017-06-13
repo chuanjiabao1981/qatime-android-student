@@ -19,6 +19,8 @@ public class UrlUtils {
 //    public static String appKey = isDebug ? "2a24ca70e580cab2bef58b1e62478f9f" : "4fe3a3fba0a40a00daf011049a29d995";
     //登录
     public static String urlLogin = baseUrl + "api/v1/sessions";
+    //搜索
+    public static String urlHomeSearch = baseUrl + "api/v1/home/search";
     //辅导班
     public static String urlRemedialClass = baseUrl + "api/v1/live_studio/courses";
     //我的辅导班列表
@@ -45,6 +47,10 @@ public class UrlUtils {
     public static String urlSearch = baseUrl + "api/v1/live_studio/courses/search";
     //辅导班排行
     public static String urlRecentPublished = baseUrl + "/api/v1/live_studio/courses/rank/published_rank,start_rank";
+    //辅导班排行all
+    public static String urlRecentPublishedAll = baseUrl + "/api/v1/live_studio/courses/rank_all/all_published_rank";
+    //辅导班排行all
+    public static String urlLiveStudioFree= baseUrl +"/api/v1/live_studio/free_courses";;
     //獲取支付结果
     public static String urlPayResult = baseUrl + "api/v1/payment/orders/";
     //订单列表
