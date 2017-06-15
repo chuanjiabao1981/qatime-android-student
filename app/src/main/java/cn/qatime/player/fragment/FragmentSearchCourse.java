@@ -73,7 +73,6 @@ public class FragmentSearchCourse extends BaseFragment {
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlHomeSearch, map), null, new VolleyListener(getActivity()) {
             @Override
             protected void onTokenOut() {
-
             }
 
             @Override
@@ -93,11 +92,12 @@ public class FragmentSearchCourse extends BaseFragment {
                     activity.setCourseCount(0);
                 }
                 adapter.notifyDataSetChanged();
+                listview.onRefreshComplete();
             }
 
             @Override
             protected void onError(JSONObject response) {
-
+                listview.onRefreshComplete();
             }
         }, new VolleyErrorListener());
         addToRequestQueue(request);
@@ -128,11 +128,11 @@ public class FragmentSearchCourse extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int courseId = datas.get(position - 1).getProduct().getId();
                 Intent intent = null;
-                if ("LiveStudio::Course".equals(datas.get(position).getProduct_type())) {
+                if ("LiveStudio::Course".equals(datas.get(position-1).getProduct_type())) {
                     intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                } else if ("LiveStudio::InteractiveCourse".equals(datas.get(position).getProduct_type())) {
+                } else if ("LiveStudio::InteractiveCourse".equals(datas.get(position-1).getProduct_type())) {
                     intent = new Intent(getActivity(), InteractCourseDetailActivity.class);
-                } else if ("LiveStudio::VideoCourse".equals(datas.get(position).getProduct_type())) {
+                } else if ("LiveStudio::VideoCourse".equals(datas.get(position-1).getProduct_type())) {
                     intent = new Intent(getActivity(), VideoCoursesActivity.class);
                 }
                 intent.putExtra("id", courseId);
