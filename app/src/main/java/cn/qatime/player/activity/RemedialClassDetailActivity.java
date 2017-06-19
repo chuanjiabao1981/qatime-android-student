@@ -222,17 +222,14 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                             }
                             try {
                                 if (Constant.CourseStatus.published.equals(data.getData().getStatus())) {
-                                    long time = parse.parse(data.getData().getLive_start_time()).getTime() - System.currentTimeMillis();
-                                    int value = 0;
-                                    if (time > 0) {
-                                        value = (int) (time / (1000 * 3600 * 24));
-                                    }
-                                    timeToStart.setVisibility(View.VISIBLE);
+                                    int value = libraryextra.utils.DateUtils.daysBetween(data.getData().getLive_start_time(), System.currentTimeMillis());
                                     progress.setVisibility(View.GONE);
-                                    if (value != 0) {
+                                    if (value > 0) {
+                                        timeToStart.setVisibility(View.VISIBLE);
                                         timeToStart.setText("[" + getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day) + "]");
                                     } else {
-                                        timeToStart.setText(R.string.ready_to_start);
+                                        timeToStart.setVisibility(View.GONE);
+//                                        timeToStart.setText(R.string.ready_to_start);
                                     }
                                     layoutView.setBackgroundColor(0xff00d564);
                                 } else if (Constant.CourseStatus.teaching.equals(data.getData().getStatus())) {
