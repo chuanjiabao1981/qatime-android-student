@@ -2,19 +2,28 @@ package cn.qatime.player.activity;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 
 /**
  * @author lungtify
@@ -60,6 +69,34 @@ public class PlayBackListActivity extends BaseActivity implements View.OnClickLi
         setContentView(R.layout.activity_play_back_list);
         setTitles("全部精彩回放");
         assignViews();
+        initData();
+    }
+
+    private void initData() {
+        Map<String, String> map = new HashMap<>();
+        map.put("search_cate", "course");
+        map.put("per_page", "20");
+
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlHomeSearch, map), null, new VolleyListener(PlayBackListActivity.this) {
+            @Override
+            protected void onTokenOut() {
+
+            }
+
+            @Override
+            protected void onSuccess(JSONObject response) {
+                datas.clear();
+                String label = DateUtils.formatDateTime(PlayBackListActivity.this, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+                listView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
+                listView.onRefreshComplete();
+            }
+
+            @Override
+            protected void onError(JSONObject response) {
+
+            }
+        }, new VolleyErrorListener());
+        addToRequestQueue(request);
     }
 
     private void refreshState(TextView view, int result) {//-1未选 0上 1下
