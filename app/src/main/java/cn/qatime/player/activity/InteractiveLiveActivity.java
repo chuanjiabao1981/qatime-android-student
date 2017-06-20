@@ -413,11 +413,16 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             @Override
             public void onSuccess(RTSData rtsData) {
                 Logger.e("rts extra:" + rtsData.getExtra());
+                ChatRoomMemberCache.getInstance().setRTSOpen(true);
+                updateRTSFragment();
             }
 
             @Override
             public void onFailed(int i) {
                 Logger.e("join rts session failed, code:" + i);
+                ChatRoomMemberCache.getInstance().setRTSOpen(true);
+                updateRTSFragment();
+                Toast.makeText(InteractiveLiveActivity.this, "白板加入失败", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -528,8 +533,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         AVChatManager.getInstance().muteLocalAudio(false);
 
         AVChatManager.getInstance().muteLocalVideo(false);
-
-        ChatRoomMemberCache.getInstance().setRTSOpen(true);
 
         updateControlUI();
         updateVideoAudioUI();
@@ -738,6 +741,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         }
         userJoinedList.clear();
         clearChatRoom();
+        ChatRoomMemberCache.getInstance().setRTSOpen(false);
         updateRTSFragment();
         hd.postDelayed(loopStatus, loopDelay);
         videoPermission.setVisibility(View.GONE);

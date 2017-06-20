@@ -85,14 +85,15 @@ public class FragmentSearchCourse extends BaseFragment {
                 listview.onRefreshComplete();
                 SearchResultCourseBean data = JsonUtils.objectFromJson(response.toString(), SearchResultCourseBean.class);
                 SearchResultActivity activity = (SearchResultActivity) getActivity();
-                if(data.getData()!=null&&data.getData().size()>0){
-                    activity.setCourseCount(data.getData().get(0).getTotal_entries());
-                    datas.addAll(data.getData());
-                }else{
-                    activity.setCourseCount(0);
+                if (data != null) {
+                    if (data.getData() != null && data.getData().size() > 0) {
+                        activity.setCourseCount(data.getData().get(0).getTotal_entries());
+                        datas.addAll(data.getData());
+                    } else {
+                        activity.setCourseCount(0);
+                    }
+                    adapter.notifyDataSetChanged();
                 }
-                adapter.notifyDataSetChanged();
-                listview.onRefreshComplete();
             }
 
             @Override

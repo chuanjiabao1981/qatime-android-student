@@ -51,6 +51,8 @@ import cn.qatime.player.activity.CitySelectActivity;
 import cn.qatime.player.activity.InteractCourseDetailActivity;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.PayPSWForgetActivity;
+import cn.qatime.player.activity.PlayBackActivity;
+import cn.qatime.player.activity.PlayBackListActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.SearchActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
@@ -215,10 +217,10 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         publisheRankAdapter = new CommonAdapter<RecentPublishedBean.DataBean.AllPublishedRankBean>(getContext(), listPublishedRank, R.layout.item_course_rank) {
             @Override
             public void convert(ViewHolder holder, RecentPublishedBean.DataBean.AllPublishedRankBean item, int position) {
-                    holder.setImageByUrl(R.id.image, item.getProduct().getPublicize(), R.mipmap.photo)
-                            .setText(R.id.title, item.getProduct().getName())
-                            .setText(R.id.teacher, item.getProduct().getTeacher_name())
-                            .setText(R.id.grade_subject, item.getProduct().getGrade() + item.getProduct().getSubject());
+                holder.setImageByUrl(R.id.image, item.getProduct().getPublicize(), R.mipmap.photo)
+                        .setText(R.id.title, item.getProduct().getName())
+                        .setText(R.id.teacher, item.getProduct().getTeacher_name())
+                        .setText(R.id.grade_subject, item.getProduct().getGrade() + item.getProduct().getSubject());
             }
         };
         listViewPublishedRank.setAdapter(publisheRankAdapter);
@@ -575,6 +577,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         });
         addToRequestQueue(request);
     }
+
     /**
      * 最新发布,近期开课
      */
@@ -825,8 +828,8 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 startActivity(intent);
                 break;
             case R.id.to_live_replay:
-//                intent = new Intent(getActivity(), PayPSWForgetActivity.class);
-//                startActivity(intent);
+                intent = new Intent(getActivity(), PlayBackListActivity.class);
+                startActivity(intent);
                 break;
             case R.id.to_all_teacher:
                 intent = new Intent(getActivity(), TeacherSearchActivity.class);
