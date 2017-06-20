@@ -171,7 +171,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 next();
                 break;
             case R.id.agreement:
-                //// TODO: 2016/8/24 点击协议查看
+                Intent intent= new Intent(this,AgreementActivity.class);
+                startActivity(intent);
                 break;
         }
     }
