@@ -24,6 +24,7 @@ import java.util.Locale;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.PlayBackActivity;
 import cn.qatime.player.base.BaseFragment;
+import libraryextra.utils.DateUtils;
 
 /**
  * @author lungtify
@@ -81,10 +82,12 @@ public class FragmentPlayBack extends BaseFragment implements View.OnClickListen
             } catch (Exception e) {
             }
         }
-        if (time != null && duration > 0)
-            time.setText(stringForTime(duration));
-        else
-            time.setText("--:--:--");
+        if (time != null) {
+            if (duration > 0)
+                time.setText(DateUtils.stringForTime(duration));
+            else
+                time.setText("--:--:--");
+        }
 
     }
 
@@ -214,6 +217,13 @@ public class FragmentPlayBack extends BaseFragment implements View.OnClickListen
         }
     }
 
+    public void setBuffering(int percent, long duration) {
+        seekBar.setMax(Integer.parseInt(String.valueOf(duration)));
+//        Logger.e(duration + "****buffering" + Integer.parseInt(String.valueOf(duration)) + "**percent" + Integer.parseInt(String.valueOf(percent * duration / 100)));
+        seekBar.setSecondaryProgress(Integer.parseInt(String.valueOf(percent * duration / 100)));
+        time.setText(DateUtils.stringForTime(duration));
+    }
+
     public interface CallBack {
         void exit();
 
@@ -302,15 +312,6 @@ public class FragmentPlayBack extends BaseFragment implements View.OnClickListen
         }
         hd.removeMessages(HIDE);
         hd.sendEmptyMessageDelayed(HIDE, sDefaultVanishTime);
-    }
-
-    private static String stringForTime(long position) {
-        int totalSeconds = (int) ((position / 1000.0) + 0.5);
-
-        int seconds = totalSeconds % 60;
-        int minutes = (totalSeconds / 60) % 60;
-        int hours = totalSeconds / 3600;
-        return String.format(Locale.CHINESE, "%02d:%02d:%02d", hours, minutes, seconds);
     }
 
     /**

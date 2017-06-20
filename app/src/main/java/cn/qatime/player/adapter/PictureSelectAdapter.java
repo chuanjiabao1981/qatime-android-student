@@ -102,7 +102,7 @@ public class PictureSelectAdapter extends BaseAdapter {
 
     public class ViewHolder {
         public final ImageView image;
-        public final View root;
+        final View root;
 
         public ViewHolder(View root) {
             image = (ImageView) root.findViewById(R.id.image);
