@@ -96,8 +96,10 @@ public class FragmentFundRecordRecharge extends BaseFragment {
                 if (loadType == 1) {
                     data.clear();
                 }
-                data.addAll(bean.getData());
-                adapter.notifyDataSetChanged();
+                if (bean != null) {
+                    data.addAll(bean.getData());
+                    adapter.notifyDataSetChanged();
+                }
                 String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
                 listView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
                 listView.onRefreshComplete();

@@ -363,24 +363,6 @@ public class TeacherDataActivity extends BaseActivity {
         addToRequestQueue(request);
     }
 
-    private int getSexColor(String gender) {
-        if ("male".equals(gender)) {
-            return 0xff00ccff;
-        } else if ("female".equals(gender)) {
-            return 0xffff9966;
-        }
-        return 0xffff9966;
-    }
-
-    private String getSex(String gender) {
-        if ("male".equals(gender)) {
-            return "♂";
-        } else if ("female".equals(gender)) {
-            return "♀";
-        }
-        return "";
-    }
-
     private String getTeachingYear(String teaching_years) {
         switch (teaching_years) {
             case "within_three_years":
