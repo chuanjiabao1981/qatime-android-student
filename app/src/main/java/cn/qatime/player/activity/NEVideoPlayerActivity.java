@@ -230,10 +230,16 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         screenSwitchUtils = ScreenSwitchUtils.init(this.getApplicationContext());
 
         id = getIntent().getIntExtra("id", 0);//从前一页进来的id 获取详情用
+        sessionId = getIntent().getStringExtra("sessionId");
         if (id == 0) {
             Toast.makeText(this, getResourceString(R.string.no_course_information), Toast.LENGTH_SHORT).show();
+            finish();
+
         }
-        sessionId = getIntent().getStringExtra("sessionId");
+        if(StringUtils.isNullOrBlanK(sessionId)){
+            Toast.makeText(this, getResourceString(R.string.failed_to_obtain_group_information), Toast.LENGTH_SHORT).show();
+            finish();
+        }
 
         EventBus.getDefault().register(this);
         assignViews();
@@ -355,7 +361,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         fragmentLayout.setScorllToNext(true);
         fragmentLayout.setScorll(true);
         fragmentLayout.setWhereTab(1);
-        fragmentLayout.setTabHeight(4, 0xffff5842);
+        fragmentLayout.setTabHeight(4, getResources().getColor(R.color.colorPrimary));
         fragmentLayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
@@ -404,8 +410,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 floatFragment.setTeam(team);
             }
         });
-        fragment2.setSessionId(sessionId);
-        fragment2.requestTeamInfo();
+
+            fragment2.setSessionId(sessionId);
+            fragment2.requestTeamInfo();
+
 
         inputPanel.setOnInputShowListener(new InputPanel.OnInputShowListener() {
             @Override

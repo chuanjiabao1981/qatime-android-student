@@ -109,7 +109,7 @@ public class BaseFragment extends Fragment {
     }
 
     protected String getResourceString(int id) {
-        return getResources().getString(id);
+        return BaseApplication.getInstance().getString(id);
     }
 
     protected <T extends View> T findViewById(int resId) {

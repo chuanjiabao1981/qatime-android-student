@@ -359,7 +359,7 @@
     <string name="alert">提示</string>
     <string name="call_customer_service_phone">是否拨打客服电话</string>
     <string name="call_right_now">立即拨打</string>
-    <string name="failed_to_obtain_group_information">获取群组信息失败!</string>
+    <string name="failed_to_obtain_group_information">获取聊天信息失败!</string>
     <string name="download_picture_fail">图片下载失败</string>
     <string name="save_to_device">保存到手机</string>
     <string name="picture_save_fail">图片保存失败</string>

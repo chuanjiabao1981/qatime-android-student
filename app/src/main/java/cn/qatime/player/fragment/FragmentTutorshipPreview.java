@@ -90,15 +90,12 @@ public class FragmentTutorshipPreview extends BaseFragment {
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
                 try {
-                    long time = parseISO.parse(item.getPreview_time()).getTime() - System.currentTimeMillis();
-                    int value = 0;
-                    if (time > 0) {
-                        value = (int) (time / (1000 * 3600 * 24));
-                    }
-                    if (value != 0) {
-                        helper.setText(R.id.teaching_time, getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day));
+                    int day = libraryextra.utils.DateUtils.daysBetween(item.getLive_start_time(), System.currentTimeMillis());
+                    if (day > 0) {
+                        helper.getView(R.id.teaching_time).setVisibility(View.VISIBLE);
+                        helper.setText(R.id.teaching_time, "距开课" + day + "天");
                     } else {
-                        helper.setText(R.id.teaching_time, "即将开课");
+                        helper.getView(R.id.teaching_time).setVisibility(View.INVISIBLE);
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();

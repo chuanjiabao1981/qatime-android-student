@@ -217,6 +217,8 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
                 if (errorCode == 2005) {
                     dialogPSWError();
                 } else if (errorCode == 2006) {
+
+
                     Toast.makeText(WithdrawCashActivity.this, R.string.pay_password_not_set, Toast.LENGTH_SHORT).show();
                 } else if (errorCode == 2008) {
                     dialogServerError(getString(R.string.pay_password_not_enough_time));//未满24小时
@@ -353,7 +355,7 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
         alertDialog.setContentView(view);
     }
 
-    private void dialogPSWError() {
+    private void  dialogPSWError() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         alertDialog = builder.create();
         alertDialog.setCanceledOnTouchOutside(false);
@@ -437,17 +439,13 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
                 }
                 break;
             case R.id.recharge_now:
-                if (BaseApplication.getInstance().getCashAccount().getData().isHas_password()) {
-                    long changeAt = BaseApplication.getInstance().getCashAccount().getData().getPassword_set_at();
+                long changeAt = BaseApplication.getInstance().getCashAccount().getData().getPassword_set_at();
 
-                    int diff = 2 - (int) ((System.currentTimeMillis() / 1000 - changeAt) / 3600);
-                    if (diff <= 2 && diff > 0) {
-                        dialogServerError(getString(R.string.pay_password_not_enough_time));//未满24小时
-                    } else {
-                        showPSWPop();
-                    }
+                int diff = 2 - (int) ((System.currentTimeMillis() / 1000 - changeAt) / 3600);
+                if (diff <= 2 && diff > 0) {
+                    dialogServerError(getString(R.string.pay_password_not_enough_time));//未满24小时
                 } else {
-                    Toast.makeText(WithdrawCashActivity.this, R.string.pay_password_not_set, Toast.LENGTH_SHORT).show();
+                    showPSWPop();
                 }
                 break;
         }

@@ -21,6 +21,7 @@ import libraryextra.utils.StringUtils;
  */
 public class SearchActivity extends BaseActivity {
     private FlowLayout flow;
+    private EditText edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,10 +31,12 @@ public class SearchActivity extends BaseActivity {
     }
 
     private void initView() {
+        edit = ((EditText) findViewById(R.id.edit_search));
+        edit.requestFocus();
         findViewById(R.id.right_text).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String s = ((EditText) findViewById(R.id.edit_search)).getText().toString();
+                String s = edit.getText().toString();
                 if (!StringUtils.isNullOrBlanK(s)) {
                     search(s);
                 }

@@ -46,7 +46,8 @@ public class SearchResultActivity extends BaseActivity {
         findViewById(R.id.right_text).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String s = ((EditText) findViewById(R.id.edit_search)).getText().toString();
+                edit.clearFocus();
+                String s = edit.getText().toString();
                 if (!StringUtils.isNullOrBlanK(s)) {
                     search(s);
                 }
@@ -63,7 +64,7 @@ public class SearchResultActivity extends BaseActivity {
         fragmentlayout.setScorllToNext(true);
         fragmentlayout.setScorll(true);
         fragmentlayout.setWhereTab(1);
-        fragmentlayout.setTabHeight(4, 0xffff5842);
+        fragmentlayout.setTabHeight(4, getResources().getColor(R.color.colorPrimary));
         fragmentlayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
