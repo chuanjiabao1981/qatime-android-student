@@ -145,7 +145,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             case 1:
                 if (NetUtils.checkRecordAudioPermission(this)) {
                 } else {
-                    Toast.makeText(this, "未取得权限", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "未取得录音权限", Toast.LENGTH_SHORT).show();
                 }
                 break;
             default:

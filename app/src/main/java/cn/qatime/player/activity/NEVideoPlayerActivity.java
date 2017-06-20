@@ -129,13 +129,14 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             case 1:
                 if (NetUtils.checkRecordAudioPermission(this)) {
                 } else {
-                    Toast.makeText(this, "未取得权限", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "未取得录音权限", Toast.LENGTH_SHORT).show();
                 }
                 break;
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
+
     private void assignViews() {
         int screenW = ScreenUtils.getScreenWidth(NEVideoPlayerActivity.this);
 
@@ -248,7 +249,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             finish();
 
         }
-        if(StringUtils.isNullOrBlanK(sessionId)){
+        if (StringUtils.isNullOrBlanK(sessionId)) {
             Toast.makeText(this, getResourceString(R.string.failed_to_obtain_group_information), Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -423,8 +424,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             }
         });
 
-            fragment2.setSessionId(sessionId);
-            fragment2.requestTeamInfo();
+        fragment2.setSessionId(sessionId);
+        fragment2.requestTeamInfo();
 
 
         inputPanel.setOnInputShowListener(new InputPanel.OnInputShowListener() {
