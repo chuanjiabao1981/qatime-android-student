@@ -174,8 +174,10 @@ public class PictureSelectActivity extends BaseActivity {
         capturePath = out_file_path + "/" + System.currentTimeMillis() + ".jpg";
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
-            imageUri = FileProvider.getUriForFile(this, Constant.CACHEPATH, new File(capturePath));//通过FileProvider创建一个content类型的Uri，进行封装
-        } else { //7.0以下，如果直接拿到相机返回的intent值，拿到的则是拍照的原图大小，很容易发生OOM，所以我们同样将返回的地址，保存到指定路径，返回到Activity时，去指定路径获取，压缩图片
+            imageUri = FileProvider.getUriForFile(this, "com.qatime.player.fileprovider", new File(capturePath));//通过FileProvider创建一个content类型的Uri，进行封装
+            getImageByCamera.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            getImageByCamera.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        } else {
             imageUri = Uri.fromFile(new File(capturePath));
         }
         getImageByCamera.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
@@ -225,6 +227,7 @@ public class PictureSelectActivity extends BaseActivity {
                 if (remove != -1) {
                     imagesBucketList.remove(remove);
                 }
+                if (imagesBucketList.size() <= 0) return;
                 ImageBucket firstBucket = new ImageBucket();
                 firstBucket.imageList = new ArrayList<>();
                 for (int i = 0; i < imagesBucketList.size(); i++) {
