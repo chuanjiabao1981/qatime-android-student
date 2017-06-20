@@ -1,14 +1,17 @@
 package cn.qatime.player.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -62,6 +65,7 @@ import cn.qatime.player.fragment.FragmentUnLoginHomeMessage;
 import cn.qatime.player.fragment.FragmentUnLoginHomeUserCenter;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
+import cn.qatime.player.qrcore.core.CaptureActivity;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -109,6 +113,21 @@ public class MainActivity extends BaseFragmentActivity {
             Logger.e("unreadNum" + unreadNum);
             message_x.setVisibility(unreadNum == 0 ? View.GONE : View.VISIBLE);
         }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1) {
+        } else if (requestCode == 2) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "未取得相机权限", Toast.LENGTH_SHORT).show();
+            }else{
+                Intent intent = new Intent(this, CaptureActivity.class);
+                startActivityForResult(intent, Constant.REQUEST);
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override

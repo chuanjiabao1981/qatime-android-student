@@ -1,12 +1,17 @@
 package cn.qatime.player.bean;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -456,6 +461,13 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
                     return true;
                 }
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(context,new String[]{
+                                    android.Manifest.permission.RECORD_AUDIO},1);
+                            return true;
+                        }
+                    }
                     touched = true;
                     if (audioRecordListener != null) {
                         audioRecordListener.audioRecordStart();

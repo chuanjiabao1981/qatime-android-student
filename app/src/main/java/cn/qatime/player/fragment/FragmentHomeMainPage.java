@@ -1,11 +1,16 @@
 package cn.qatime.player.fragment;
 
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -46,7 +51,6 @@ import cn.qatime.player.activity.CitySelectActivity;
 import cn.qatime.player.activity.InteractCourseDetailActivity;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.PayPSWForgetActivity;
-import cn.qatime.player.activity.PlayBackActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.SearchActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
@@ -504,6 +508,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
      * 今日直播数据
      */
     private void initToadyData() {
+
         JsonObjectRequest request = new JsonObjectRequest(UrlUtils.lessons + "today", null,
                 new VolleyListener(getActivity()) {
                     @Override
@@ -798,8 +803,18 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 mainActivity.setCurrentPosition(1, 0);
                 break;
             case R.id.scan:
-                intent = new Intent(getActivity(), CaptureActivity.class);
-                mainActivity.startActivityForResult(intent, Constant.REQUEST);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(getActivity(),new String[]{
+                                android.Manifest.permission.CAMERA},2);
+                    }else{
+                        intent = new Intent(getActivity(), CaptureActivity.class);
+                        mainActivity.startActivityForResult(intent, Constant.REQUEST);
+                    }
+                }else{
+                    intent = new Intent(getActivity(), CaptureActivity.class);
+                    mainActivity.startActivityForResult(intent, Constant.REQUEST);
+                }
                 break;
             case R.id.city_select:
                 intent = new Intent(getActivity(), CitySelectActivity.class);
@@ -837,6 +852,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     }
 
     private void initLocationData() {
+
         JsonObjectRequest request = new JsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,
                 new VolleyListener(getActivity()) {
                     @Override

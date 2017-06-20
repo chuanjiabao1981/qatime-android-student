@@ -1,11 +1,15 @@
 package cn.qatime.player.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 
@@ -113,7 +117,7 @@ public class RegionSelectActivity1 extends BaseActivity {
         addToRequestQueue(request);
 
 
-        AMapLocationUtils utils = new AMapLocationUtils(getApplicationContext(), new AMapLocationUtils.LocationListener() {
+        AMapLocationUtils utils = new AMapLocationUtils(this, new AMapLocationUtils.LocationListener() {
             @Override
             public void onLocationBack(String[] result) {
                 for (CityBean.Data item : cityList) {
@@ -168,7 +172,15 @@ public class RegionSelectActivity1 extends BaseActivity {
             }
         });
     }
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "未取得定位权限", Toast.LENGTH_SHORT).show();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constant.REQUEST_REGION_SELECT && resultCode == Constant.RESPONSE_REGION_SELECT) {

@@ -123,7 +123,19 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     private ScreenSwitchUtils screenSwitchUtils;
     private boolean isShowTime = false;
 
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (NetUtils.checkRecordAudioPermission(this)) {
+                } else {
+                    Toast.makeText(this, "未取得权限", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
     private void assignViews() {
         int screenW = ScreenUtils.getScreenWidth(NEVideoPlayerActivity.this);
 

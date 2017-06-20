@@ -1,7 +1,10 @@
 package cn.qatime.player.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.AbsListView;
@@ -130,11 +133,21 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
         addToRequestQueue(request);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "未取得定位权限", Toast.LENGTH_SHORT).show();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
     private void initLocation() {
         locationView.setEnabled(false);
         Toast.makeText(CitySelectActivity.this, R.string.loading_location, Toast.LENGTH_SHORT).show();
         //如果没有被赋值，则默认全国
-        utils = new AMapLocationUtils(getApplicationContext(), new AMapLocationUtils.LocationListener() {
+        utils = new AMapLocationUtils(this, new AMapLocationUtils.LocationListener() {
             @Override
             public void onLocationBack(String[] result) {
                 locationView.setEnabled(true);
@@ -149,7 +162,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
                     return;
                 }
                 if (locationCity == null) {
-                    Toast.makeText(CitySelectActivity.this,  R.string.position_locate_error, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CitySelectActivity.this, R.string.position_locate_error, Toast.LENGTH_SHORT).show();
                 } else {
                     if (!BaseApplication.getInstance().getCurrentCity().equals(locationCity)) {
                         dialogCity();
@@ -293,7 +306,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (utils!=null) {
+        if (utils != null) {
             utils.destroyLocation();
         }
     }
