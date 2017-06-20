@@ -31,9 +31,11 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.SPUtils;
 import cn.qatime.player.utils.UrlUtils;
+import io.vov.vitamio.utils.FileUtils;
 import libraryextra.utils.AppUtils;
 import libraryextra.utils.DownFileUtil;
 import libraryextra.utils.FileUtil;
@@ -55,6 +57,8 @@ public class StartActivity extends BaseActivity implements View.OnClickListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         ((TextView) findViewById(R.id.version)).setText("V " + AppUtils.getVersionName(this));
+        File file = new File(Constant.CACHEPATH);
+        FileUtils.deleteDir(file);
         if (!NetUtils.isConnected(StartActivity.this)) {
             Toast.makeText(this, "网络不可用", Toast.LENGTH_SHORT).show();
             finish();

@@ -23,13 +23,13 @@
     <!--下载apk-->
     <external-path
         name="sdcard_files"
-        path="qatime" />
+        path="qatime/images" />
     <!--相机相册裁剪-->
     <external-files-path
         name="camera_has_sdcard"
-        path="qatime" />
+        path="qatime/images" />
     <files-path
         name="camera_no_sdcard"
-        path="qatime" />
+        path="qatime/images" />
 
 </paths>

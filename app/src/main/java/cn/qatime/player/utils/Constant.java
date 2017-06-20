@@ -10,7 +10,7 @@ import android.os.Environment;
 public class Constant {
     public static String phoneNumber = "400-838-8010";
     public static String APP_ID = "wxf2dfbeb5f641ce40";//微信appid
-    public static final String CACHEPATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/qatime";
+    public static final String CACHEPATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/qatime/images";
 
     public static int REQUEST = 0;
 
