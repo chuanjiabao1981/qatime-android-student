@@ -215,7 +215,7 @@ public class  ApplyRefundActivity extends BaseActivity implements View.OnClickLi
                     confirm.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            alertDialog.dismiss();
+                            alertDialogPhone.dismiss();
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                 if (ContextCompat.checkSelfPermission(ApplyRefundActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                                     ActivityCompat.requestPermissions(ApplyRefundActivity.this, new String[]{
