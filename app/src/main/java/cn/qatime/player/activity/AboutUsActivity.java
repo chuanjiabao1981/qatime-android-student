@@ -5,11 +5,14 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -41,6 +44,7 @@ public class AboutUsActivity extends BaseActivity {
         call = findViewById(R.id.call_phone);
         phone = (TextView) findViewById(R.id.phone);
         phone.setText(Constant.phoneNumber);
+        ((TextView) findViewById(R.id.version)).setText("V " + AppUtils.getVersionName(this));
         call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,34 +64,52 @@ public class AboutUsActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         alertDialog.dismiss();
-                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.phoneNumber));
-                        if (ActivityCompat.checkSelfPermission(AboutUsActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                            return;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            if (ContextCompat.checkSelfPermission(AboutUsActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                ActivityCompat.requestPermissions(AboutUsActivity.this, new String[]{
+                                        Manifest.permission.CALL_PHONE}, 1);
+                            } else {
+                                callPhone();
+                            }
+                        } else {
+                            callPhone();
                         }
-                        startActivity(intent);
+
                     }
                 });
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(AboutUsActivity.this);
                 alertDialog = builder.create();
                 alertDialog.show();
                 alertDialog.setContentView(view);
-//                WindowManager.LayoutParams attributes = alertDialog.getWindow().getAttributes();
-//                attributes.width= ScreenUtils.getScreenWidth(getApplicationContext())- DensityUtils.dp2px(getApplicationContext(),20)*2;
-//                alertDialog.getWindow().setAttributes(attributes);
             }
         });
-        ((TextView) findViewById(R.id.version)).setText("V " + AppUtils.getVersionName(this));
+
+    }
+
+    private void callPhone() {
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.phoneNumber));
+        if (ActivityCompat.checkSelfPermission(AboutUsActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        startActivity(intent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "权限被拒绝", Toast.LENGTH_SHORT).show();
+            } else {
+                callPhone();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override

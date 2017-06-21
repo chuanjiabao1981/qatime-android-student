@@ -1,13 +1,19 @@
 package cn.qatime.player.activity;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -20,8 +26,8 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.BusEvent;
-import libraryextra.bean.CashAccountBean;
 import cn.qatime.player.utils.Constant;
+import libraryextra.bean.CashAccountBean;
 
 /**
  * @author Tianhaoranly
@@ -54,6 +60,30 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
         phone.setText(Constant.phoneNumber);
         recharge = (TextView) findViewById(R.id.recharge);
         withdrawCash = (TextView) findViewById(R.id.withdraw_cash);
+    }
+
+    private void callPhone() {
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.phoneNumber));
+        if (ActivityCompat.checkSelfPermission(PersonalMyWalletActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        startActivity(intent);
+        //调用拨号面板
+//        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + Constant.phoneNumber));
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        startActivity(intent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "权限被拒绝", Toast.LENGTH_SHORT).show();
+            } else {
+                callPhone();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
@@ -117,8 +147,16 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
                         @Override
                         public void onClick(View v) {
                             alertDialog.dismiss();
-                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.phoneNumber));
-                            startActivity(intent);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                if (ContextCompat.checkSelfPermission(PersonalMyWalletActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                    ActivityCompat.requestPermissions(PersonalMyWalletActivity.this, new String[]{
+                                            Manifest.permission.CALL_PHONE}, 1);
+                                } else {
+                                    callPhone();
+                                }
+                            } else {
+                                callPhone();
+                            }
                         }
                     });
                     android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(PersonalMyWalletActivity.this);
@@ -162,7 +200,7 @@ public class PersonalMyWalletActivity extends BaseActivity implements View.OnCli
 
     @Subscribe
     public void onEvent(BusEvent event) {
-        if (event==BusEvent.ON_REFRESH_CASH_ACCOUNT)
+        if (event == BusEvent.ON_REFRESH_CASH_ACCOUNT)
             initData();
     }
 
