@@ -87,7 +87,9 @@ public class FragmentPlayerAnnouncements extends BaseFragment {
 
     public void setData(List<Announcements.DataBean.AnnouncementsBean> announcements) {
         items.clear();
-        items.addAll(announcements);
+        if (announcements.size() > 0) {
+            items.add(announcements.get(0));
+        }
         hd.postDelayed(runnable, 200);
     }
 
