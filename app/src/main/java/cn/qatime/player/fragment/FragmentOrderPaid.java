@@ -22,6 +22,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -234,6 +235,12 @@ public class FragmentOrderPaid extends BaseFragment {
         if ("LiveStudio::VideoCourse".equals(item.getProduct_type())) {
             Toast.makeText(getActivity(), "此订单类型暂不支持退款", Toast.LENGTH_SHORT).show();
             return;
+        } else if ("LiveStudio::InteractiveCourse".equals(item.getProduct_type()) && item.getProduct_interactive_course().getStatus().equals(Constant.CourseStatus.completed)) {
+            Toast.makeText(getActivity(), "已结束的课程不能申请退款", Toast.LENGTH_SHORT).show();
+            return;
+        } else if ("LiveStudio::Course".equals(item.getProduct_type()) && item.getProduct().getStatus().equals(Constant.CourseStatus.completed)) {
+            Toast.makeText(getActivity(), "已结束的课程不能申请退款", Toast.LENGTH_SHORT).show();
+            return;
         }
         Map<String, String> map = new HashMap<>();
         map.put("order_id", item.getId());
@@ -241,6 +248,16 @@ public class FragmentOrderPaid extends BaseFragment {
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
+                        try {
+                            if (response.getJSONObject("data").getDouble("refund_amount") == 0) {
+                                Toast.makeText(getActivity(), R.string.not_enough_amount_of_refund, Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
                         Intent intent = new Intent(getActivity(), ApplyRefundActivity.class);
                         intent.putExtra("response", response.toString());
                         intent.putExtra("order_id", item.getId());

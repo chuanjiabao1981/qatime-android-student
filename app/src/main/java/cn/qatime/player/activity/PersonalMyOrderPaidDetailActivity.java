@@ -15,6 +15,7 @@ import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -35,7 +36,7 @@ import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
 
-public class   PersonalMyOrderPaidDetailActivity extends BaseActivity {
+public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
 
     private TextView subject;
     private TextView progress;
@@ -252,6 +253,12 @@ public class   PersonalMyOrderPaidDetailActivity extends BaseActivity {
         if ("LiveStudio::VideoCourse".equals(data.getProduct_type())) {
             Toast.makeText(PersonalMyOrderPaidDetailActivity.this, "此订单类型暂不支持退款", Toast.LENGTH_SHORT).show();
             return;
+        } else if ("LiveStudio::InteractiveCourse".equals(data.getProduct_type()) && data.getProduct_interactive_course().getStatus().equals(Constant.CourseStatus.completed)) {
+            Toast.makeText(this, "已结束的课程不能申请退款", Toast.LENGTH_SHORT).show();
+            return;
+        } else if ("LiveStudio::Course".equals(data.getProduct_type()) && data.getProduct().getStatus().equals(Constant.CourseStatus.completed)) {
+            Toast.makeText(this, "已结束的课程不能申请退款", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         Map<String, String> map = new HashMap<>();
@@ -260,6 +267,16 @@ public class   PersonalMyOrderPaidDetailActivity extends BaseActivity {
                 new VolleyListener(PersonalMyOrderPaidDetailActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
+                        try {
+                            if (response.getJSONObject("data").getDouble("refund_amount") == 0) {
+                                Toast.makeText(PersonalMyOrderPaidDetailActivity.this, R.string.not_enough_amount_of_refund, Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
                         Intent intent = new Intent(PersonalMyOrderPaidDetailActivity.this, ApplyRefundActivity.class);
                         intent.putExtra("response", response.toString());
                         intent.putExtra("order_id", ordernumber.getText().toString());
