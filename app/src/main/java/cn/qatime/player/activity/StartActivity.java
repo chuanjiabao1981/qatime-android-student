@@ -57,8 +57,6 @@ public class StartActivity extends BaseActivity implements View.OnClickListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         ((TextView) findViewById(R.id.version)).setText("V " + AppUtils.getVersionName(this));
-        File file = new File(Constant.CACHEPATH);
-        FileUtils.deleteDir(file);
         if (!NetUtils.isConnected(StartActivity.this)) {
             Toast.makeText(this, "网络不可用", Toast.LENGTH_SHORT).show();
             finish();

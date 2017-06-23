@@ -381,6 +381,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffff5842);
                 if (position == 1) {
                     inputPanel.visibilityInput();
+                    ((FragmentPlayerMessage) fragBaseFragments.get(1)).scrollToBottom();
                 } else {
                     inputPanel.goneInput();
                 }
