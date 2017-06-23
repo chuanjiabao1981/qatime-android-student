@@ -677,8 +677,8 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
         audioRecord.setText(R.string.record_audio_end);
         audioRecord.setBackgroundResource(R.drawable.shape_input_radius);
 
-        updateTimerTip(RecorderState.NORMAL); // 初始化语音动画状态
-        playAudioRecordAnim();
+//        updateTimerTip(RecorderState.NORMAL); // 初始化语音动画状态
+//        playAudioRecordAnim();
         Logger.e("onRecordStart");
     }
 
