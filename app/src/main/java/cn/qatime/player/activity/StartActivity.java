@@ -31,11 +31,9 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
-import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.SPUtils;
 import cn.qatime.player.utils.UrlUtils;
-import io.vov.vitamio.utils.FileUtils;
 import libraryextra.utils.AppUtils;
 import libraryextra.utils.DownFileUtil;
 import libraryextra.utils.FileUtil;
@@ -59,8 +57,10 @@ public class StartActivity extends BaseActivity implements View.OnClickListener 
         ((TextView) findViewById(R.id.version)).setText("V " + AppUtils.getVersionName(this));
         if (!NetUtils.isConnected(StartActivity.this)) {
             Toast.makeText(this, "网络不可用", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
+            if (getSharedPreferences("first", MODE_PRIVATE).getBoolean("firstlogin", true)) {
+                Logger.e("第一次打开");
+                return;
+            }
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (NetUtils.checkExternalStoragePermission(this)) {
@@ -252,7 +252,9 @@ public class StartActivity extends BaseActivity implements View.OnClickListener 
 
     //年级列表
     public void GetGradeslist() {
-
+        if ((boolean)SPUtils.get(this, "grade", false)) {
+            return;
+        }
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/grades", null,
                 new VolleyListener(this) {
                     @Override
@@ -281,7 +283,9 @@ public class StartActivity extends BaseActivity implements View.OnClickListener 
 
     //省份列表
     public void getProviceslist() {
-
+        if ((boolean)SPUtils.get(this, "provinces", false)) {
+            return;
+        }
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/provinces", null,
                 new VolleyListener(this) {
                     @Override
@@ -310,7 +314,9 @@ public class StartActivity extends BaseActivity implements View.OnClickListener 
 
     //城市列表
     public void getCitylist() {
-
+        if ((boolean)SPUtils.get(this, "cities", false)) {
+            return;
+        }
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,
                 new VolleyListener(this) {
                     @Override
@@ -339,7 +345,9 @@ public class StartActivity extends BaseActivity implements View.OnClickListener 
 
     //学校列表
     public void GetSchoolslist() {
-
+        if ((boolean)SPUtils.get(this, "school", false)) {
+            return;
+        }
         JsonObjectRequest request = new JsonObjectRequest(UrlUtils.urlAppconstantInformation + "/schools", null,
                 new VolleyListener(StartActivity.this) {
 
