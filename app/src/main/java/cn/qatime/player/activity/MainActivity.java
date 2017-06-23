@@ -69,10 +69,12 @@ import cn.qatime.player.qrcore.core.CaptureActivity;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
+import io.vov.vitamio.utils.FileUtils;
 import libraryextra.bean.CashAccountBean;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
 import libraryextra.bean.SystemNotifyBean;
+import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -122,7 +124,7 @@ public class MainActivity extends BaseFragmentActivity {
         } else if (requestCode == 2) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "未取得相机权限", Toast.LENGTH_SHORT).show();
-            }else{
+            } else {
                 Intent intent = new Intent(this, CaptureActivity.class);
                 startActivityForResult(intent, Constant.REQUEST);
             }
@@ -153,13 +155,8 @@ public class MainActivity extends BaseFragmentActivity {
         refreshMedia();
 
         File file = new File(Constant.CACHEPATH);
-        if (!file.mkdirs()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        FileUtils.deleteDir(file);
+
         parseIntent();
         NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, true);
 //        NIMClient.getService(AuthServiceObserver.class).observeOtherClients(clientsObserver, true);
