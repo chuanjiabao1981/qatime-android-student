@@ -114,7 +114,7 @@ public class PlayBackListActivity extends BaseActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_back_list);
-        setTitles("全部精彩回放");
+        setTitles("精彩回放");
         assignViews();
         initData(1);
     }

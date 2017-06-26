@@ -251,6 +251,15 @@ public class TeacherDataBean implements Serializable {
             private String status;
             private int lessons_count;
             private boolean is_finished;
+            private boolean off_shelve;
+
+            public boolean isOff_shelve() {
+                return off_shelve;
+            }
+
+            public void setOff_shelve(boolean off_shelve) {
+                this.off_shelve = off_shelve;
+            }
 
             public int getId() {
                 return id;
@@ -365,7 +374,15 @@ public class TeacherDataBean implements Serializable {
             private String publicize;
             private String status;
             private int lessons_count;
+            private boolean off_shelve;
 
+            public boolean isOff_shelve() {
+                return off_shelve;
+            }
+
+            public void setOff_shelve(boolean off_shelve) {
+                this.off_shelve = off_shelve;
+            }
             public int getId() {
                 return id;
             }
@@ -474,7 +491,15 @@ public class TeacherDataBean implements Serializable {
             private String status;
             private int lessons_count;
             private boolean is_finished;
+            private boolean off_shelve;
 
+            public boolean isOff_shelve() {
+                return off_shelve;
+            }
+
+            public void setOff_shelve(boolean off_shelve) {
+                this.off_shelve = off_shelve;
+            }
             public int getId() {
                 return id;
             }

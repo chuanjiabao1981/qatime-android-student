@@ -27,7 +27,6 @@ import cn.qatime.player.activity.SearchResultActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.SearchResultTeacherBean;
-import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
@@ -131,7 +130,7 @@ public class FragmentSearchTeacher extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), TeacherDataActivity.class);
                 intent.putExtra("teacherId", datas.get(position-1).getId());
-                startActivityForResult(intent, Constant.REQUEST);
+                startActivity(intent);
             }
         });
         listview.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
