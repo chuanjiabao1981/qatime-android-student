@@ -11,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.android.volley.VolleyError;
-import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.orhanobut.logger.Logger;
@@ -26,19 +25,19 @@ import cn.qatime.player.R;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.bean.MyTasteLiveBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.MyTutorialClassBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
 public class FragmentMyTasteLive extends BaseFragment {
     private PullToRefreshListView listView;
-    private java.util.List<MyTutorialClassBean.Data> list = new ArrayList<>();
-    private CommonAdapter<MyTutorialClassBean.Data> adapter;
+    private java.util.List<MyTasteLiveBean.DataBean> list = new ArrayList<>();
+    private CommonAdapter<MyTasteLiveBean.DataBean> adapter;
     private int page = 1;
 
     @Nullable
@@ -61,15 +60,16 @@ public class FragmentMyTasteLive extends BaseFragment {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
 
-        adapter = new CommonAdapter<MyTutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_my_taste_live) {
+        adapter = new CommonAdapter<MyTasteLiveBean.DataBean>(getActivity(), list, R.layout.item_fragment_my_taste_live) {
             @Override
-            public void convert(ViewHolder helper, final MyTutorialClassBean.Data item, int position) {
-
-                helper.setText(R.id.name, item.getName());
-                helper.setText(R.id.subject, item.getSubject());
-                helper.setText(R.id.teacher, "/" + item.getTeacher_name());
-                helper.setText(R.id.grade, item.getGrade());
-                helper.setText(R.id.progress, getString(R.string.progress_taste, item.getClosed_lessons_count()>item.getTaste_count()?item.getTaste_count():item.getClosed_lessons_count(), item.getTaste_count()));
+            public void convert(ViewHolder helper, final MyTasteLiveBean.DataBean item, int position) {
+                if (item != null && item.getCourse() != null) {
+                    helper.setText(R.id.name, item.getCourse().getName());
+                    helper.setText(R.id.subject, item.getCourse().getSubject());
+                    helper.setText(R.id.teacher, "/" + item.getCourse().getTeacher_name());
+                    helper.setText(R.id.grade, item.getCourse().getGrade());
+                    helper.setText(R.id.progress, getString(R.string.progress_taste, item.getUsed_count(), item.getBuy_count()));
+                }
             }
         };
         listView.setAdapter(adapter);
@@ -91,15 +91,8 @@ public class FragmentMyTasteLive extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                intent.putExtra("id", list.get(position - 1).getId());
+                intent.putExtra("id", list.get(position - 1).getCourse().getId());
                 startActivity(intent);
-            }
-        });
-        listView.getRefreshableView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                //TODO  长按点击事件
-                return true;
             }
         });
     }
@@ -122,9 +115,8 @@ public class FragmentMyTasteLive extends BaseFragment {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(page));
         map.put("per_page", "10");
-        map.put("cate", "taste");
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/courses", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getInstance().getUserId() + "/courses/tasting_list", map), null,
                 new VolleyListener(getActivity()) {
 
                     @Override
@@ -138,18 +130,10 @@ public class FragmentMyTasteLive extends BaseFragment {
                         listView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
                         listView.onRefreshComplete();
 
-                        try {
-                            MyTutorialClassBean data = JsonUtils.objectFromJson(response.toString(), MyTutorialClassBean.class);
-                            if (data != null) {
-                                for (MyTutorialClassBean.Data item : data.getData()) {
-                                    if (item.isIs_tasting() && !item.isTasted()) {//只显示试听中
-                                        list.add(item);
-                                    }
-                                }
-                            }
+                        MyTasteLiveBean data = JsonUtils.objectFromJson(response.toString(), MyTasteLiveBean.class);
+                        if (data != null) {
+                            list.addAll(data.getData());
                             adapter.notifyDataSetChanged();
-                        } catch (JsonSyntaxException e) {
-                            e.printStackTrace();
                         }
                     }
 

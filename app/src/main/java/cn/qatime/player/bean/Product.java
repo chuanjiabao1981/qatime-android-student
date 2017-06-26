@@ -34,7 +34,9 @@ public class Product implements Serializable {
 
     private int preset_lesson_count;
 
-    private int closed_lessons_count;
+//    private int closed_lessons_count;
+
+    private int started_lessons_count;
 
     private String live_start_time;
 
@@ -48,6 +50,16 @@ public class Product implements Serializable {
 
     private IconsBean icons;
 
+    private boolean off_shelve;
+
+    public boolean isOff_shelve() {
+        return off_shelve;
+    }
+
+    public void setOff_shelve(boolean off_shelve) {
+        this.off_shelve = off_shelve;
+    }
+
     public IconsBean getIcons() {
         return icons;
     }
@@ -56,12 +68,20 @@ public class Product implements Serializable {
         this.icons = icons;
     }
 
-    public int getClosed_lessons_count() {
-        return closed_lessons_count;
+//    public int getClosed_lessons_count() {
+//        return closed_lessons_count;
+//    }
+//
+//    public void setClosed_lessons_count(int closed_lessons_count) {
+//        this.closed_lessons_count = closed_lessons_count;
+//    }
+
+    public int getStarted_lessons_count() {
+        return started_lessons_count;
     }
 
-    public void setClosed_lessons_count(int closed_lessons_count) {
-        this.closed_lessons_count = closed_lessons_count;
+    public void setStarted_lessons_count(int started_lessons_count) {
+        this.started_lessons_count = started_lessons_count;
     }
 
     public void setId(int id) {

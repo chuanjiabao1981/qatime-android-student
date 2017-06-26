@@ -70,29 +70,26 @@ public class FragmentMyVideoFree extends BaseFragment {
             @Override
             public void convert(ViewHolder helper, final MyVideoClassBean.DataBean item, int position) {
 
-
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(),VideoCoursesPlayActivity.class);
-                        intent.putExtra("id", item.getId());
-                        intent.putExtra("tasting",false);
+                        Intent intent = new Intent(getActivity(), VideoCoursesPlayActivity.class);
+                        intent.putExtra("id", item.getVideo_course().getId());
+                        intent.putExtra("tasting", false);
                         startActivity(intent);
                     }
                 });
-                Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
-                helper.setText(R.id.name, item.getName());
-                helper.setText(R.id.subject, item.getSubject());
-                helper.setText(R.id.teacher, "/" + item.getTeacher().getName());
-                if(item.getStatus().equals(Constant.CourseStatus.completed)||item.getStatus().equals(Constant.CourseStatus.finished)){
+                Glide.with(getActivity()).load(item.getVideo_course().getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
+                helper.setText(R.id.name, item.getVideo_course().getName());
+                helper.setText(R.id.subject, item.getVideo_course().getSubject());
+                helper.setText(R.id.teacher, "/" + item.getVideo_course().getTeacher_name());
+                if (item.getStatus().equals(Constant.CourseStatus.completed)) {
                     helper.setText(R.id.progress, getString(R.string.all_class_has_over));
-                }else{
-                    helper.setText(R.id.progress, getString(R.string.progress, item.getClosed_lessons_count(), item.getPreset_lesson_count()));
+                } else {
+                    helper.setText(R.id.progress, getString(R.string.progress, item.getUsed_count(), item.getBuy_count()));
                 }
-                helper.setText(R.id.grade, item.getGrade());
+                helper.setText(R.id.grade, item.getVideo_course().getGrade());
             }
-
-
         };
         listView.setAdapter(adapter);
 
@@ -114,7 +111,7 @@ public class FragmentMyVideoFree extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), VideoCoursesActivity.class);
-                intent.putExtra("id", list.get(position - 1).getId());
+                intent.putExtra("id", list.get(position - 1).getVideo_course().getId());
                 startActivity(intent);
             }
         });
@@ -140,7 +137,7 @@ public class FragmentMyVideoFree extends BaseFragment {
         map.put("per_page", "10");
         map.put("sell_type", "free");
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/video_courses", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getInstance().getUserId() + "/video_courses/list", map), null,
                 new VolleyListener(getActivity()) {
 
 
@@ -157,8 +154,8 @@ public class FragmentMyVideoFree extends BaseFragment {
 
                         try {
                             MyVideoClassBean data = JsonUtils.objectFromJson(response.toString(), MyVideoClassBean.class);
-                            if (data != null&&data.getData()!=null) {
-                                        list.addAll(data.getData());
+                            if (data != null && data.getData() != null) {
+                                list.addAll(data.getData());
                             }
                             adapter.notifyDataSetChanged();
                         } catch (JsonSyntaxException e) {

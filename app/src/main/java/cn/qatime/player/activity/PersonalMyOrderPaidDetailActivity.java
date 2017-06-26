@@ -15,6 +15,7 @@ import com.android.volley.VolleyError;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -144,6 +145,8 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
                 teacher.setText(data.getProduct_video_course().getTeacher().getName());
             }
             progress.setText(String.format(getString(R.string.lesson_count), data.getProduct_video_course().getPreset_lesson_count()));
+            refund.setVisibility(View.GONE);
+            findViewById(R.id.tip).setVisibility(View.VISIBLE);
         }
 
         ordernumber.setText(data.getId());
@@ -228,7 +231,14 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
         listitem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PersonalMyOrderPaidDetailActivity.this, RemedialClassDetailActivity.class);
+                Intent intent = new Intent();
+                if ("LiveStudio::Course".equals(data.getProduct_type())) {
+                    intent.setClass(PersonalMyOrderPaidDetailActivity.this, RemedialClassDetailActivity.class);
+                } else if ("LiveStudio::InteractiveCourse".equals(data.getProduct_type())) {
+                    intent.setClass(PersonalMyOrderPaidDetailActivity.this, InteractCourseDetailActivity.class);
+                } else if ("LiveStudio::VideoCourse".equals(data.getProduct_type())) {
+                    intent.setClass(PersonalMyOrderPaidDetailActivity.this, VideoCoursesActivity.class);
+                }
                 intent.putExtra("id", classid);
                 intent.putExtra("page", 0);
                 startActivity(intent);
@@ -243,14 +253,30 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
         if ("LiveStudio::VideoCourse".equals(data.getProduct_type())) {
             Toast.makeText(PersonalMyOrderPaidDetailActivity.this, "此订单类型暂不支持退款", Toast.LENGTH_SHORT).show();
             return;
+        } else if ("LiveStudio::InteractiveCourse".equals(data.getProduct_type()) && data.getProduct_interactive_course().getStatus().equals(Constant.CourseStatus.completed)) {
+            Toast.makeText(this, "已结束的课程不能申请退款", Toast.LENGTH_SHORT).show();
+            return;
+        } else if ("LiveStudio::Course".equals(data.getProduct_type()) && data.getProduct().getStatus().equals(Constant.CourseStatus.completed)) {
+            Toast.makeText(this, "已结束的课程不能申请退款", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         Map<String, String> map = new HashMap<>();
         map.put("order_id", ordernumber.getText().toString());
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/refunds/info", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getInstance().getUserId() + "/refunds/info", map), null,
                 new VolleyListener(PersonalMyOrderPaidDetailActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
+                        try {
+                            if (response.getJSONObject("data").getDouble("refund_amount") == 0) {
+                                Toast.makeText(PersonalMyOrderPaidDetailActivity.this, R.string.not_enough_amount_of_refund, Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
                         Intent intent = new Intent(PersonalMyOrderPaidDetailActivity.this, ApplyRefundActivity.class);
                         intent.putExtra("response", response.toString());
                         intent.putExtra("order_id", ordernumber.getText().toString());
@@ -258,11 +284,11 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
                         if ("LiveStudio::Course".equals(data.getProduct_type())) {
                             intent.putExtra("name", data.getProduct().getName());
                             intent.putExtra("preset_lesson_count", data.getProduct().getPreset_lesson_count());
-                            intent.putExtra("closed_lessons_count", data.getProduct().getClosed_lessons_count());
+                            intent.putExtra("closed_lessons_count", data.getProduct().getStarted_lessons_count());
                         } else if ("LiveStudio::InteractiveCourse".equals(data.getProduct_type())) {
                             intent.putExtra("name", data.getProduct_interactive_course().getName());
                             intent.putExtra("preset_lesson_count", data.getProduct_interactive_course().getLessons_count());
-                            intent.putExtra("closed_lessons_count", data.getProduct_interactive_course().getClosed_lessons_count());
+                            intent.putExtra("closed_lessons_count", data.getProduct_interactive_course().getStarted_lessons_count());
                         } else if ("LiveStudio::VideoCourse".equals(data.getProduct_type())) {
 //                            intent.putExtra("name", data.getProduct_video_course().getName());
 //                            intent.putExtra("preset_lesson_count", data.getProduct_video_course().getPreset_lesson_count());
@@ -330,7 +356,7 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
     }
 
     private void cancelRefund() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.urlpayment + BaseApplication.getUserId() + "/refunds/" + ordernumber.getText().toString() + "/cancel", null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.urlpayment + BaseApplication.getInstance().getUserId() + "/refunds/" + ordernumber.getText().toString() + "/cancel", null,
                 new VolleyListener(PersonalMyOrderPaidDetailActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {

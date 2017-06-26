@@ -47,14 +47,16 @@ import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.SPUtils;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.bean.CityBean;
 import libraryextra.bean.GradeBean;
 import libraryextra.bean.Profile;
+import libraryextra.bean.ProvincesBean;
 import libraryextra.utils.AppUtils;
 import libraryextra.utils.DialogUtils;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -73,6 +75,7 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
     private Button getCode;
     private EditText password;
     private TextView grade;
+    private TextView region;
     private CheckBox checkBox;
     private TextView agreement;
     private Button next;
@@ -82,6 +85,8 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
     private CustomProgressDialog progress;
     private AlertDialog alertDialog;
     private List<String> grades;
+    private CityBean.Data city;
+    private ProvincesBean.DataBean province;
 
     private void assignViews() {
         phone = (EditText) findViewById(R.id.phone);
@@ -89,6 +94,7 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
         getCode = (Button) findViewById(R.id.get_code);
         password = (EditText) findViewById(R.id.password);
         grade = (TextView) findViewById(R.id.grade);
+        region = (TextView) findViewById(R.id.region);
         checkBox = (CheckBox) findViewById(R.id.checkBox);
         agreement = (TextView) findViewById(R.id.agreement);
         next = (Button) findViewById(R.id.next);
@@ -96,7 +102,8 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
         time = new TimeCount(60000, 1000);
         getCode.setOnClickListener(this);
         grade.setOnClickListener(this);
-        checkBox.setOnCheckedChangeListener(  new CompoundButton.OnCheckedChangeListener() {
+        region.setOnClickListener(this);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 next.setEnabled(isChecked);
@@ -118,12 +125,12 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
             @Override
             public void afterTextChanged(Editable s) {
                 if (StringUtils.isPhone(phone.getText().toString().trim())) {
-                    if(!time.ticking){
+                    if (!time.ticking) {
                         getCode.setEnabled(true);
                     }
                 } else {
                     getCode.setEnabled(false);
-                    if(phone.getText().toString().length()==11){
+                    if (phone.getText().toString().length() == 11) {
                         Toast.makeText(WeChatBindActivity.this, R.string.phone_number_is_incorrect, Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -162,6 +169,10 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
                 break;
             case R.id.grade:
                 showGradePickerDialog();
+                break;
+            case R.id.region:
+                Intent regionIntent = new Intent(this, RegionSelectActivity1.class);
+                startActivityForResult(regionIntent, Constant.REQUEST_REGION_SELECT);
                 break;
             case R.id.agreement:
                 //// TODO: 2016/8/24 点击协议查看
@@ -259,6 +270,8 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
         map.put("accept", "" + (checkBox.isChecked() ? 1 : 0));
         map.put("type", "Student");
         map.put("client_type", "app");
+        map.put("province_id", province.getId());
+        map.put("city_id", city.getId());
         try {
             map.put("grade", URLEncoder.encode(grade.getText().toString(), "UTF-8"));
         } catch (UnsupportedEncodingException e) {
@@ -326,7 +339,7 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
                 if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
                     Logger.e("登录", response.toString());
                     //登录成功且有个人信息  设置profile
-                    BaseApplication.setProfile(profile);
+                    BaseApplication.getInstance().setProfile(profile);
                     loginAccount();//登陆云信
                 } else {
                     finish();
@@ -408,14 +421,25 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
         grade.setText("");
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constant.REQUEST_REGION_SELECT && resultCode == Constant.RESPONSE_REGION_SELECT) {
+            city = (CityBean.Data) data.getSerializableExtra("region_city");
+            province = (ProvincesBean.DataBean) data.getSerializableExtra("region_province");
+            if (city != null && province != null) {
+                region.setText(province.getName() + city.getName());
+            }
+        }
+    }
 
     /**
      * 登陆云信
      */
     private void loginAccount() {
         progress = DialogUtils.startProgressDialog(progress, this, "登录中...");
-        String account = BaseApplication.getAccount();
-        String token = BaseApplication.getAccountToken();
+        String account = BaseApplication.getInstance().getAccount();
+        String token = BaseApplication.getInstance().getAccountToken();
 
         if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
             NIMClient.getService(AuthService.class).login(new LoginInfo(account, token)).setCallback(new RequestCallback<LoginInfo>() {
@@ -457,8 +481,8 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
                 }
             });
         }
-        if(getIntent().getIntExtra("register_action",Constant.REGIST_1) == Constant.REGIST_1){
-            Intent intent = new Intent(this,MainActivity.class);
+        if (getIntent().getIntExtra("register_action", Constant.REGIST_1) == Constant.REGIST_1) {
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
         DialogUtils.dismissDialog(progress);
@@ -470,13 +494,14 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
 
     private class TimeCount extends CountDownTimer {
         public boolean ticking;
+
         TimeCount(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
         }
 
         @Override
         public void onFinish() {// 计时完毕
-            ticking=false;
+            ticking = false;
             getCode.setText(getResources().getString(R.string.get_verification_code));
             getCode.setEnabled(true);
         }

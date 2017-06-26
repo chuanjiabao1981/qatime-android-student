@@ -27,8 +27,8 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.PersonalMyOrderActivity;
+import cn.qatime.player.activity.PersonalMyWalletActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
-import cn.qatime.player.activity.SystemSettingActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.BusEvent;
@@ -120,14 +120,14 @@ public class FragmentMessageNotifyNews extends BaseFragment {
 //                TextView details = helper.getView(R.id.details);
 //                details.setText(span);
 //                details.setTextColor(item.isRead() ? 0xff999999 : 0xff666666);
-                helper.setText(R.id.date_time, item.getCreated_at()).setText(R.id.details,item.getNotice_content(), item.isRead() ? 0xff999999 : 0xff666666);
+                helper.setText(R.id.date_time, item.getCreated_at()).setText(R.id.details, item.getNotice_content(), item.isRead() ? 0xff999999 : 0xff666666);
             }
         };
         listView.setAdapter(adapter);
 
         listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {  
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page = 1;
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -194,8 +194,7 @@ public class FragmentMessageNotifyNews extends BaseFragment {
                     case "live_studio/lesson":
                         if ("start_for_student".equals(item.getAction_name())) {
                             intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                            intent.putExtra("id", Integer.valueOf(courseId));
-                            startActivity(intent);
+                              startActivity(intent);
                         } else if ("change_time".equals(item.getAction_name())) {
                             intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
                             intent.putExtra("id", Integer.valueOf(courseId));
@@ -211,12 +210,15 @@ public class FragmentMessageNotifyNews extends BaseFragment {
                         intent = new Intent(getActivity(), PersonalMyOrderActivity.class);
                         startActivity(intent);
                         break;
-                    case "action_record ":
+                    case "payment/recharge":
+                    case "payment/withdraw":
+                        intent = new Intent(getActivity(), PersonalMyWalletActivity.class);
+                        startActivity(intent);
+                        break;
+                    case "action_record":
+                    default:
                         Toast.makeText(getActivity(), "暂无跳转内容", Toast.LENGTH_SHORT).show();
                         break;
-                    default:
-                        intent = new Intent(getActivity(), SystemSettingActivity.class);
-                        startActivity(intent);
                 }
             }
         });
@@ -234,9 +236,9 @@ public class FragmentMessageNotifyNews extends BaseFragment {
 
     private void initData(final int type) {
         Map<String, String> map = new HashMap<>();
-        map.put("user_id", String.valueOf(BaseApplication.getUserId()));
+        map.put("user_id", String.valueOf(BaseApplication.getInstance().getUserId()));
         map.put("page", String.valueOf(page));
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getUserId() + "/notifications", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getInstance().getUserId() + "/notifications", map), null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -248,14 +250,13 @@ public class FragmentMessageNotifyNews extends BaseFragment {
                         if (data != null && data.getData() != null) {
                             list.addAll(data.getData());
                             adapter.notifyDataSetChanged();
-
-                            StringBuffer unRead = new StringBuffer();
+                            StringBuilder unRead = new StringBuilder();
                             for (SystemNotifyBean.DataBean bean : data.getData()) {
-                                if (!bean.isRead()) {//将集合中的
-                                    unRead.append(bean.getId() + "-");
+                                if (!bean.isRead()) {
+                                    unRead.append(bean.getId()).append(" ");
                                 }
                             }
-                            markNotifiesRead(unRead.toString());
+                               markNotifiesRead(unRead.toString());
                         }
                     }
 
@@ -273,6 +274,7 @@ public class FragmentMessageNotifyNews extends BaseFragment {
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
             }
+
         });
         addToRequestQueue(request);
     }
@@ -282,8 +284,8 @@ public class FragmentMessageNotifyNews extends BaseFragment {
             Map<String, String> map = new HashMap<>();
             map.put("ids", unRead);
             JSONObject jsonObject = new JSONObject(map);
-            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.urlUser + BaseApplication.getUserId() + "/notifications/batch_read", jsonObject,
-                    new VolleyListener(getActivity()) {
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.urlUser + BaseApplication.getInstance().getUserId() + "/notifications/batch_read", jsonObject,
+                    new VolleyListener(getActivity(  )) {
                         @Override
                         protected void onSuccess(JSONObject response) {
                         }
@@ -306,31 +308,4 @@ public class FragmentMessageNotifyNews extends BaseFragment {
             addToRequestQueue(request);
         }
     }
-
-    private void markNotifyRead(String id) {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.urlNotifications + id + "/read", null,
-                new VolleyListener(getActivity()) {
-                    @Override
-                    protected void onSuccess(JSONObject response) {
-                    }
-
-                    @Override
-                    protected void onError(JSONObject response) {
-                    }
-
-                    @Override
-                    protected void onTokenOut() {
-                        tokenOut();
-                    }
-
-                }, new VolleyErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
-            }
-        });
-        addToRequestQueue(request);
-    }
-
-
 }

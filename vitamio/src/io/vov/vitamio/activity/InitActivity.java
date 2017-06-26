@@ -60,7 +60,6 @@ public class InitActivity extends Activity {
 
 	@Override
 	protected Boolean doInBackground(Object... arg0) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

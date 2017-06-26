@@ -117,7 +117,7 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
     }
 
     private void initStatus() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlUser + BaseApplication.getUserId() + "/notifications/settings", null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlUser + BaseApplication.getInstance().getUserId() + "/notifications/settings", null,
                 new VolleyListener(NotifyCourseActivity.this) {
 
                     @Override
@@ -207,7 +207,7 @@ public class NotifyCourseActivity extends BaseActivity implements CompoundButton
             map.put("email", emailStatus);
             map.put("before_hours", textHours.getText().toString().replace(getResourceString(R.string.hour), ""));
             map.put("before_minutes", textMinute.getText().toString().replace(getResourceString(R.string.minute), ""));
-            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getUserId() + "/notifications/settings", map), null,
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getInstance().getUserId() + "/notifications/settings", map), null,
                     new VolleyListener(NotifyCourseActivity.this) {
 
                         @Override

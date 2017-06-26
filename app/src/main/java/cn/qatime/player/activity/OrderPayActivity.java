@@ -1,10 +1,15 @@
 package cn.qatime.player.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
@@ -92,6 +97,7 @@ public class OrderPayActivity extends BaseActivity {
     private PayPopView payPopView;
     private String amount;
     private String orderName;
+    private android.app.AlertDialog alertDialogPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,8 +160,41 @@ public class OrderPayActivity extends BaseActivity {
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.phoneNumber));
-                startActivity(intent);
+                if (alertDialogPhone == null) {
+                    View view = View.inflate(OrderPayActivity.this, R.layout.dialog_cancel_or_confirm, null);
+                    TextView text = (TextView) view.findViewById(R.id.text);
+                    text.setText(getResourceString(R.string.call_customer_service_phone) + Constant.phoneNumber);
+                    Button cancel = (Button) view.findViewById(R.id.cancel);
+                    Button confirm = (Button) view.findViewById(R.id.confirm);
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialogPhone.dismiss();
+                        }
+                    });
+                    confirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialogPhone.dismiss();
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                if (ContextCompat.checkSelfPermission(OrderPayActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                    ActivityCompat.requestPermissions(OrderPayActivity.this, new String[]{
+                                            Manifest.permission.CALL_PHONE}, 1);
+                                } else {
+                                    callPhone();
+                                }
+                            } else {
+                                callPhone();
+                            }
+                        }
+                    });
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(OrderPayActivity.this);
+                    alertDialogPhone = builder.create();
+                    alertDialogPhone.show();
+                    alertDialogPhone.setContentView(view);
+                } else {
+                    alertDialogPhone.show();
+                }
             }
         });
         commit.setOnClickListener(new View.OnClickListener() {
@@ -167,22 +206,22 @@ public class OrderPayActivity extends BaseActivity {
 //                    } else if (!api.isWXAppSupportAPI()) {
 //                        Toast.makeText(OrderPayActivity.this, R.string.wechat_not_support, Toast.LENGTH_SHORT).show();
 //                    } else {
-                        PayReq request = new PayReq();
-                        request.appId = weixinData.getAppid();
+                    PayReq request = new PayReq();
+                    request.appId = weixinData.getAppid();
 
 
-                        request.partnerId = weixinData.getPartnerid();
+                    request.partnerId = weixinData.getPartnerid();
 
-                        request.prepayId = weixinData.getPrepayid();
+                    request.prepayId = weixinData.getPrepayid();
 
-                        request.packageValue = weixinData.getPackage();
+                    request.packageValue = weixinData.getPackage();
 
-                        request.nonceStr = weixinData.getNoncestr();
+                    request.nonceStr = weixinData.getNoncestr();
 
-                        request.timeStamp = weixinData.getTimestamp();
+                    request.timeStamp = weixinData.getTimestamp();
 
-                        request.sign = weixinData.getSign();
-                        api.sendReq(request);
+                    request.sign = weixinData.getSign();
+                    api.sendReq(request);
 //                    }
 
                 } else if (payType.equals("alipay")) {
@@ -204,16 +243,16 @@ public class OrderPayActivity extends BaseActivity {
                     payThread.start();
                 } else if (payType.equals("account")) {
                     Logger.e("钱包支付");
-                    if(BaseApplication.getCashAccount().getData().isHas_password()){
-                        long changeAt = BaseApplication.getCashAccount().getData().getPassword_set_at();
+                    if (BaseApplication.getInstance().getCashAccount().getData().isHas_password()) {
+                        long changeAt = BaseApplication.getInstance().getCashAccount().getData().getPassword_set_at();
 
-                        int diff = 24 - (int) ((System.currentTimeMillis()/1000  - changeAt) / 3600);
-                        if (diff <= 24&&diff > 0) {
-                            dialogServerError(getString(R.string.pay_password_not_enough_24));//未满24小时
+                        int diff = 2 - (int) ((System.currentTimeMillis() / 1000 - changeAt) / 3600);
+                        if (diff <= 2 && diff > 0) {
+                            dialogServerError(getString(R.string.pay_password_not_enough_time));//未满24小时
                         } else {
                             showPSWPop();
                         }
-                    }else{
+                    } else {
                         Toast.makeText(OrderPayActivity.this, R.string.pay_password_not_set, Toast.LENGTH_SHORT).show();
                     }
 //                    Intent intent = new Intent(OrderPayActivity.this,OrderPayResultActivity.class);
@@ -223,6 +262,25 @@ public class OrderPayActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    private void callPhone() {
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.phoneNumber));
+        if (ActivityCompat.checkSelfPermission(OrderPayActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        startActivity(intent);
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "权限被拒绝", Toast.LENGTH_SHORT).show();
+            }else{
+                callPhone();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private void showPSWPop() {
@@ -244,7 +302,7 @@ public class OrderPayActivity extends BaseActivity {
                 } else if (errorCode == 2006) {
                     Toast.makeText(OrderPayActivity.this, R.string.pay_password_not_set, Toast.LENGTH_SHORT).show();
                 } else if (errorCode == 2008) {
-                    dialogServerError(getString(R.string.pay_password_not_enough_24));//未满24小时
+                    dialogServerError(getString(R.string.pay_password_not_enough_time));//未满24小时
                 } else if (errorCode == 2009) {
                     dialogServerError(getString(R.string.pay_password_too_many_mistake));//错误次数太多
                 } else if (errorCode == 0) {
@@ -275,6 +333,8 @@ public class OrderPayActivity extends BaseActivity {
                         try {
                             if (response.getJSONObject("error").getInt("code") == 2007) {
                                 Toast.makeText(OrderPayActivity.this, R.string.token_error, Toast.LENGTH_SHORT).show();
+                            } else if (response.getJSONObject("error").getInt("code") == 9999) {
+                                Toast.makeText(OrderPayActivity.this, response.getJSONObject("error").getString("msg"), Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(OrderPayActivity.this, R.string.server_error, Toast.LENGTH_SHORT).show();
                             }

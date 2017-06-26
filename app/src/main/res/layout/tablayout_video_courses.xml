@@ -21,7 +21,6 @@
 
             <TextView
                 android:id="@+id/tab_text1"
-                style="@style/tab_text_color_select"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -38,7 +37,6 @@
 
             <TextView
                 android:id="@+id/tab_text2"
-                style="@style/tab_text_color_normal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"

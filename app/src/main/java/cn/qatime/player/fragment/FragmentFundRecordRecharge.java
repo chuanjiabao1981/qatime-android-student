@@ -37,11 +37,11 @@ import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.bean.RechargeRecordBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.SPUtils;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.SPUtils;
 import libraryextra.utils.VolleyListener;
 
 /**
@@ -82,7 +82,7 @@ public class FragmentFundRecordRecharge extends BaseFragment {
     private void initData(final int loadType) {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(page));
-        addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/recharges", map), null, new VolleyListener(getActivity()) {
+        addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getInstance().getUserId() + "/recharges", map), null, new VolleyListener(getActivity()) {
 
             @Override
             protected void onTokenOut() {
@@ -96,8 +96,10 @@ public class FragmentFundRecordRecharge extends BaseFragment {
                 if (loadType == 1) {
                     data.clear();
                 }
-                data.addAll(bean.getData());
-                adapter.notifyDataSetChanged();
+                if (bean != null) {
+                    data.addAll(bean.getData());
+                    adapter.notifyDataSetChanged();
+                }
                 String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
                 listView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
                 listView.onRefreshComplete();

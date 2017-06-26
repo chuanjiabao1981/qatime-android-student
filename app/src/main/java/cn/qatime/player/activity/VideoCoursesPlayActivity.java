@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.bean.VideoCoursesDetailsBean;
+import cn.qatime.player.bean.VideoPlayBean;
 import cn.qatime.player.fragment.FragmentVideoCoursesDetail;
 import cn.qatime.player.fragment.FragmentVideoCoursesList;
 import cn.qatime.player.fragment.VideoCoursesFloatFragment;
@@ -73,35 +74,24 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
         }
         id = getIntent().getIntExtra("id", 0);
         tasting = getIntent().getBooleanExtra("tasting", true);
-//        id=3;
         initView();
 
         screenSwitchUtils = ScreenSwitchUtils.init(this.getApplicationContext());
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    if (isCreated) {
-//                        createMedia("http://192.168.1.136:8080/media/28.mp4");
-//                    }
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }, 5000);
         initData();
     }
 
     private void initData() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlVideoCourses + id, null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlVideoCourses + id + "/detail", null,
                 new VolleyListener(VideoCoursesPlayActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
                         data = JsonUtils.objectFromJson(response.toString(), VideoCoursesDetailsBean.class);
 
                         if (data != null && data.getData() != null) {
-                            ((FragmentVideoCoursesList) fragBaseFragments.get(0)).setData(data.getData().getVideo_lessons());
-                            floatFragment.setData(data.getData().getVideo_lessons());
+                            playingData = data.getData().getVideo_course().getVideo_lessons().get(0);
+                            playCourses(playingData);
+                            ((FragmentVideoCoursesList) fragBaseFragments.get(0)).setData(data.getData().getVideo_course().getVideo_lessons());
+                            floatFragment.setData(data.getData().getVideo_course().getVideo_lessons());
                             ((FragmentVideoCoursesDetail) fragBaseFragments.get(1)).setData(data);
                         }
                     }
@@ -147,12 +137,9 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
 
             @Override
             public void play() {
-                if (playingData != null) {
-                    if (mMediaPlayer != null) {
-                        mMediaPlayer.start();
-                    }
+                if (mMediaPlayer != null) {
+                    mMediaPlayer.start();
                 } else {
-                    playingData = data.getData().getVideo_lessons().get(0);
                     playCourses(playingData);
                 }
             }
@@ -201,14 +188,14 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
         fragmentLayout.setScorllToNext(true);
         fragmentLayout.setScorll(true);
         fragmentLayout.setWhereTab(1);
-        fragmentLayout.setTabHeight(4, 0xffff5842);
+        fragmentLayout.setTabHeight(4, getResources().getColor(R.color.colorPrimary));
         fragmentLayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener()
 
         {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
-                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff999999);
-                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffff5842);
+                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff666666);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(getResources().getColor(R.color.colorPrimary));
             }
         });
         fragmentLayout.setAdapter(fragBaseFragments, R.layout.tablayout_video_courses, 0x0120);
@@ -342,13 +329,45 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
 //        }
         if (playingData != null) {
             this.playingData = playingData;
-            releaseMediaPlayer();
-            if (isCreated) {
-                try {
-                    createMedia(playingData.getVideo().getName_url());
-                } catch (IOException e) {
-                    e.printStackTrace();
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlVideoLessons + playingData.getId() + "/play", null,
+                    new VolleyListener(VideoCoursesPlayActivity.this) {
+                        @Override
+                        protected void onSuccess(JSONObject response) {
+                            VideoPlayBean videoPlayBean = JsonUtils.objectFromJson(response.toString(), VideoPlayBean.class);
+                            if (videoPlayBean != null && videoPlayBean.getData().getVideo_lesson() != null && videoPlayBean.getData().getVideo_lesson().getVideo() != null) {
+                                floatFragment.setVideoName(videoPlayBean.getData().getVideo_lesson().getName());
+                                ((FragmentVideoCoursesList) fragBaseFragments.get(0)).setProgress(videoPlayBean.getData().getTicket().getProgress());
+                                play(videoPlayBean.getData().getVideo_lesson().getVideo().getName_url());
+                            } else {
+                                Toast.makeText(VideoCoursesPlayActivity.this, "状态错误", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        protected void onError(JSONObject response) {
+                        }
+
+                        @Override
+                        protected void onTokenOut() {
+                            tokenOut();
+                        }
+                    }, new VolleyErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    super.onErrorResponse(volleyError);
                 }
+            });
+            addToRequestQueue(request);
+        }
+    }
+
+    private void play(String nameUrl) {
+        releaseMediaPlayer();
+        if (isCreated) {
+            try {
+                createMedia(nameUrl);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

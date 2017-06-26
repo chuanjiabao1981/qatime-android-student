@@ -108,15 +108,14 @@ public class SystemSettingActivity extends BaseActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.exit:// 退出登录
-                BaseApplication.clearToken();
+                BaseApplication.getInstance().clearToken();
                 Intent intent = new Intent(SystemSettingActivity.this, MainActivity.class);
                 intent.putExtra("sign", "exit_login");
                 startActivity(intent);
 //                finish();
                 break;
             case R.id.notify_setting:
-
-                intent = new Intent(SystemSettingActivity.this, NotifySettingActivity.class);
+                intent = new Intent(SystemSettingActivity.this, NotifyMessageActivity.class);
                 startActivity(intent);
                 break;
             case R.id.check_update:

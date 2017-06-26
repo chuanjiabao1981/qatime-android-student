@@ -1,9 +1,14 @@
 package cn.qatime.player.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.ActionMode;
@@ -37,9 +42,9 @@ import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.bean.RechargeBean;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.SPUtils;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyListener;
 
@@ -94,7 +99,24 @@ public class RechargeActivity extends BaseActivity {
         });
 
     }
-
+    private void callPhone() {
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.phoneNumber));
+        if (ActivityCompat.checkSelfPermission(RechargeActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        startActivity(intent);
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "权限被拒绝", Toast.LENGTH_SHORT).show();
+            }else{
+                callPhone();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
     private void dialogPhone() {
         if (alertDialogPhone == null) {
             View view = View.inflate(RechargeActivity.this, R.layout.dialog_cancel_or_confirm, null);
@@ -112,8 +134,16 @@ public class RechargeActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     alertDialogPhone.dismiss();
-                    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" +  Constant.phoneNumber));
-                    startActivity(intent);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (ContextCompat.checkSelfPermission(RechargeActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(RechargeActivity.this, new String[]{
+                                    Manifest.permission.CALL_PHONE}, 1);
+                        } else {
+                            callPhone();
+                        }
+                    } else {
+                        callPhone();
+                    }
                 }
             });
             AlertDialog.Builder builder = new AlertDialog.Builder(RechargeActivity.this);
@@ -239,7 +269,7 @@ public class RechargeActivity extends BaseActivity {
                 Map<String, String> map = new HashMap<>();
                 map.put("amount", amount);
                 map.put("pay_type", payType);
-                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/recharges", map), null, new VolleyListener(RechargeActivity.this) {
+                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getInstance().getUserId() + "/recharges", map), null, new VolleyListener(RechargeActivity.this) {
 
                     @Override
                     protected void onTokenOut() {

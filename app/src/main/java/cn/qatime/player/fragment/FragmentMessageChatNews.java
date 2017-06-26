@@ -67,8 +67,6 @@ import libraryextra.utils.VolleyListener;
  */
 public class FragmentMessageChatNews extends BaseFragment {
 
-    public static final long RECENT_TAG_STICKY = 1; // 联系人置顶tag
-
     private ArrayList<MessageListBean> items;
     private CommonAdapter<MessageListBean> adapter;
     private PullToRefreshListView listView;
@@ -91,7 +89,7 @@ public class FragmentMessageChatNews extends BaseFragment {
     }
 
     private void getCourses() {
-        DaYiJsonObjectRequest request1 = new DaYiJsonObjectRequest(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/courses", null,
+        DaYiJsonObjectRequest request1 = new DaYiJsonObjectRequest(UrlUtils.urlMyRemedialClass + BaseApplication.getInstance().getUserId() + "/courses", null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -134,7 +132,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                 super.onErrorResponse(volleyError);
             }
         });
-        DaYiJsonObjectRequest request2 = new DaYiJsonObjectRequest(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/interactive_courses", null,
+        DaYiJsonObjectRequest request2 = new DaYiJsonObjectRequest(UrlUtils.urlMyRemedialClass + BaseApplication.getInstance().getUserId() + "/interactive_courses", null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -209,7 +207,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                 ((ImageView) holder.getView(R.id.notify)).setVisibility(item.isMute() ? View.VISIBLE : View.GONE);
                 holder.getView(R.id.count).setVisibility(item.getUnreadCount() == 0 ? View.GONE : View.VISIBLE);
                 holder.setText(R.id.count, String.valueOf(item.getUnreadCount()));
-                String timeString = DateUtils.getTimeShowString(item.getTime(), false);
+                String timeString = DateUtils.getMMddHHmmss(item.getTime());
                 holder.setText(R.id.time, timeString);
             }
         };

@@ -28,7 +28,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
-import cn.qatime.player.bean.CashAccountBean;
+import libraryextra.bean.CashAccountBean;
 import cn.qatime.player.bean.CouponVerifyBean;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.utils.Constant;
@@ -72,6 +72,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     private TextView textCourseType;
     private String courseType;
     private View tip;
+    private OrderPayBean data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,12 +82,11 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         coupon = getIntent().getStringExtra("coupon");
         courseType = getIntent().getStringExtra("courseType");
 
-
         initView();
 
         EventBus.getDefault().register(this);
 
-        OrderPayBean data = (OrderPayBean) getIntent().getSerializableExtra("data");
+        data = (OrderPayBean) getIntent().getSerializableExtra("data");
         id = getIntent().getIntExtra("id", 0);
         if (data != null) {
             setValue(data);
@@ -127,7 +127,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
             verifyCoupon();
         }
 
-        CashAccountBean cashAccount = BaseApplication.getCashAccount();
+        CashAccountBean cashAccount = BaseApplication.getInstance().getCashAccount();
         if (cashAccount != null && cashAccount.getData() != null) {
             String currentBalance = cashAccount.getData().getBalance();
             if (currentBalance.startsWith(".")) {
@@ -148,7 +148,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         } else if (payType.equals("alipay")) {
             return;
         } else if (payType.equals("account")) {
-            if (priceNumber > Double.valueOf(BaseApplication.getCashAccount().getData().getBalance())) {
+            if (priceNumber > Double.valueOf(BaseApplication.getInstance().getCashAccount().getData().getBalance())) {
                 Toast.makeText(this, R.string.amount_not_enough, Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -335,7 +335,9 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
      */
     private void verifyCoupon() {
 //        "http://192.168.1.107:3000/api/v1/payment/coupons/"
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.urlCoupon + coupon + "/verify", null,
+        Map<String, String> map = new HashMap<>();
+        map.put("amount", String.valueOf(data.current_price));
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlCoupon + coupon + "/verify", map), null,
                 new VolleyListener(OrderConfirmActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -343,8 +345,9 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                         if (data != null && data.getData() != null) {
                             couponPriceLayout.setVisibility(View.VISIBLE);
                             couponPrice.setText(data.getData().getPrice());
-                            double couponprice = priceNumber - Double.valueOf(data.getData().getPrice());
-                            payprice.setText(" " + couponprice + " ");
+                            double couponprice = data.getData().getTotal_amount() - Double.valueOf(data.getData().getPrice());
+
+                            payprice.setText(" " + df.format(couponprice) + " ");
                         }
 
                     }
@@ -387,7 +390,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
             return getString(R.string.recruiting);
         } else if (status.equals("teaching")) {
             return getString(R.string.teaching);
-        } else if (status.equals(Constant.CourseStatus.completed) || status.equals(Constant.CourseStatus.finished)) {//未开始
+        } else if (status.equals(Constant.CourseStatus.completed)) {//未开始
             return getString(R.string.completed);
         }
         return getString(R.string.recruiting);

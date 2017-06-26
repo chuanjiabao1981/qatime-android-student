@@ -22,8 +22,12 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.bean.CityBean;
 import libraryextra.bean.PersonalInformationBean;
+import libraryextra.bean.ProvincesBean;
+import libraryextra.bean.SchoolBean;
 import libraryextra.transformation.GlideCircleTransform;
+import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -35,12 +39,13 @@ public class PersonalInformationActivity extends BaseActivity {
     TextView sex;
     TextView birthday;
     TextView grade;
-//    TextView school;
+    TextView school;
     TextView describe;
 
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
     private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
     private PersonalInformationBean bean;
+    private TextView region;
 //2015-10-08 15:04:25.0 ---> 10月08日 15:04
 //    format.format(parse.parse("2015-10-08 15:04:25.0");
 
@@ -76,7 +81,7 @@ public class PersonalInformationActivity extends BaseActivity {
 
     private void initData() {
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getInstance().getUserId() + "/info", null,
                 new VolleyListener(PersonalInformationActivity.this) {
 
 
@@ -132,24 +137,39 @@ public class PersonalInformationActivity extends BaseActivity {
         } else {
             grade.setText("");
         }
-//        if (!StringUtils.isNullOrBlanK(bean.getData().getProvince()) && !StringUtils.isNullOrBlanK(bean.getData().getCity())) {
-//            region.setText(bean.getData().getProvince() + " " + bean.getData().getCity());
-//        }else {
-//            region.setText("");}
+        String regionStr = "";
+        String json = FileUtil.readFile(getFilesDir() + "/provinces.txt").toString();
+        ProvincesBean provincesBean = JsonUtils.objectFromJson(json, ProvincesBean.class);
+        String json1 = FileUtil.readFile(getFilesDir() + "/cities.txt").toString();
+        CityBean cityBean = JsonUtils.objectFromJson(json1, CityBean.class);
+        String json2 = FileUtil.readFile(getFilesDir() + "/school.txt").toString();
+        SchoolBean schoolBean = JsonUtils.objectFromJson(json2, SchoolBean.class);
 
-
-//        SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getCacheDir() + "/school.txt").toString(), SchoolBean.class);
-
-//        if (schoolBean != null && schoolBean.getData() != null) {
-//            for (int i = 0; i < schoolBean.getData().size(); i++) {
-//                if (bean.getData().getSchool() == schoolBean.getData().get(i).getId()) {
-//                    school.setText(schoolBean.getData().get(i).getName());
-//                    break;
-//                }
-//            }
-//        } else {
-//            school.setText("");
-//        }
+        if (provincesBean != null && provincesBean.getData() != null) {
+            for (int i = 0; i < provincesBean.getData().size(); i++) {
+                if (provincesBean.getData().get(i).getId().equals(bean.getData().getProvince())) {
+                    regionStr += provincesBean.getData().get(i).getName();
+                    break;
+                }
+            }
+        }
+        if (cityBean != null && cityBean.getData() != null) {
+            for (int i = 0; i < cityBean.getData().size(); i++) {
+                if (cityBean.getData().get(i).getId().equals(bean.getData().getCity())) {
+                    regionStr += cityBean.getData().get(i).getName();
+                    break;
+                }
+            }
+        }
+        region.setText(regionStr);
+        if (schoolBean != null && schoolBean.getData() != null) {
+            for (int i = 0; i < schoolBean.getData().size(); i++) {
+                if (schoolBean.getData().get(i).getId() == bean.getData().getSchool()) {
+                    school.setText(schoolBean.getData().get(i).getName());
+                    break;
+                }
+            }
+        }
         if (!StringUtils.isNullOrBlanK(bean.getData().getDesc())) {
             describe.setText(bean.getData().getDesc());
         } else {
@@ -163,7 +183,8 @@ public class PersonalInformationActivity extends BaseActivity {
         sex = (TextView) findViewById(R.id.sex);
         birthday = (TextView) findViewById(R.id.birthday);
         grade = (TextView) findViewById(R.id.grade);
-//        school = (TextView) findViewById(R.id.school);
+        region = (TextView) findViewById(R.id.region);
+        school = (TextView) findViewById(R.id.school);
         describe = (TextView) findViewById(R.id.describe);
     }
 

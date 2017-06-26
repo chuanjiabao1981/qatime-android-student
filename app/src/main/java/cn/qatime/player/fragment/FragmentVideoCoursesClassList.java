@@ -8,7 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +22,13 @@ import cn.qatime.player.R;
 import cn.qatime.player.activity.VideoCoursesPlayActivity;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.VideoCoursesDetailsBean;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.VideoLessonsBean;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 
 /**
  * @author lungtify
@@ -31,9 +40,6 @@ public class FragmentVideoCoursesClassList extends BaseFragment {
     private List<VideoLessonsBean> list = new ArrayList<>();
     private CommonAdapter<VideoLessonsBean> adapter;
     private VideoCoursesDetailsBean data;
-
-//    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
-//    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
     @Nullable
     @Override
@@ -55,60 +61,79 @@ public class FragmentVideoCoursesClassList extends BaseFragment {
             @Override
             public void convert(ViewHolder holder, VideoLessonsBean item, int position) {
                 holder.setText(R.id.name, item.getName());
-//                if (item.getStatus().equals("missed")) {
-//                    holder.setText(status, getResourceString(R.string.class_missed));
-//                } else if (item.getStatus().equals("init")) {//未开始
-//                    holder.setText(status, getResourceString(R.string.class_init));
-//                } else if (item.getStatus().equals("ready")) {//待开课
-//                    holder.setText(status, getResourceString(R.string.class_ready));
-//                } else if (item.getStatus().equals("teaching")) {//直播中
-//                    holder.setText(status, getResourceString(R.string.class_teaching));
-//                } else if (item.getStatus().equals("closed")) {//已直播
-//                    holder.setText(status, getResourceString(R.string.class_closed));
-//                } else if (item.getStatus().equals("paused")) {
-//                    holder.setText(status, getResourceString(R.string.class_teaching));
-//                } else {//closed finished billing completed
-//                    holder.setText(status, getResourceString(R.string.class_over));//已结束
-//                }
                 holder.setText(R.id.time, "时长" + item.getVideo().getFormat_tmp_duration());
-                if (isFinished(item)) {
-                    ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff999999);
-                    ((TextView) holder.getView(R.id.name)).setTextColor(0xff999999);
+                if (data.getData().getTicket() != null && data.getData().getTicket().getStatus().equals("active")) {
+                    holder.getView(R.id.taste).setVisibility(View.GONE);
                 } else {
-                    ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff00a0e9);
-                    ((TextView) holder.getView(R.id.name)).setTextColor(0xff666666);
+                    holder.getView(R.id.taste).setVisibility(item.isTastable() ? View.VISIBLE : View.GONE);
                 }
-
-                holder.getView(R.id.taste).setVisibility((!data.getData().getIs_bought() && item.isTastable()) ? View.VISIBLE : View.GONE);
             }
         };
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (data.getData().getIs_bought()) {
+                if (data.getData().getTicket() != null && data.getData().getTicket().getStatus().equals("active")) {
                     Intent intent = new Intent(getActivity(), VideoCoursesPlayActivity.class);
                     intent.putExtra("id", list.get(position).getVideo_course_id());
                     intent.putExtra("tasting", false);
                     startActivity(intent);
                 } else if (list.get(position).isTastable()) {
-                    Intent intent = new Intent(getActivity(), VideoCoursesPlayActivity.class);
-                    intent.putExtra("id", list.get(position).getVideo_course_id());
-                    intent.putExtra("tasting", true);
-                    startActivity(intent);
+                    if (data.getData().getTicket() == null) {//免费课程未购买则购买
+                        joinAudition();//加入试听
+                    } else {
+                        Intent intent = new Intent(getActivity(), VideoCoursesPlayActivity.class);
+                        intent.putExtra("id", list.get(position).getVideo_course_id());
+                        intent.putExtra("tasting", true);
+                        startActivity(intent);
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "该课程需要购买", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
-    private boolean isFinished(VideoLessonsBean item) {
-        return item.getStatus().equals("closed") || item.getStatus().equals("finished") || item.getStatus().equals("billing") || item.getStatus().equals("completed");
+    private void joinAudition() {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.urlVideoCourses + data.getData().getVideo_course().getId() + "/taste", null,
+                new VolleyListener(getActivity()) {
+
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        data.getData().setTicket(new VideoCoursesDetailsBean.DataBean.TicketBean());
+                        data.getData().getTicket().setStatus("inactive");
+                        Intent intent = new Intent(getActivity(), VideoCoursesPlayActivity.class);
+                        intent.putExtra("id", data.getData().getVideo_course().getId());
+                        intent.putExtra("tasting", true);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                        Toast.makeText(getActivity(), R.string.the_course_not_support_audition, Toast.LENGTH_SHORT).show();
+//                                            }
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+
+                }
+
+                , new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
     }
 
     public void setData(VideoCoursesDetailsBean data) {
         this.data = data;
         list.clear();
-        list.addAll(data.getData().getVideo_lessons());
+        list.addAll(data.getData().getVideo_course().getVideo_lessons());
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }

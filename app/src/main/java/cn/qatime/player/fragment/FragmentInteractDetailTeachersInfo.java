@@ -97,7 +97,7 @@ public class FragmentInteractDetailTeachersInfo extends BaseFragment {
                         }
                     }
 
-                    SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getCacheDir() + "/school.txt").toString(), SchoolBean.class);
+                    SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getFilesDir() + "/school.txt").toString(), SchoolBean.class);
                     if (schoolBean != null && schoolBean.getData() != null) {
                         for (int i = 0; i < schoolBean.getData().size(); i++) {
                             if (item.getSchool() == schoolBean.getData().get(i).getId()) {
@@ -126,8 +126,6 @@ public class FragmentInteractDetailTeachersInfo extends BaseFragment {
             }
         };
         listView.setAdapter(adapter);
-
-
     }
 
     public void setData(InteractCourseDetailBean data) {
@@ -135,27 +133,6 @@ public class FragmentInteractDetailTeachersInfo extends BaseFragment {
             list.addAll(data.getData().getTeachers());
             adapter.notifyDataSetChanged();
         }
-
-
     }
-
-    private int getSexColor(String gender) {
-        if ("male".equals(gender)) {
-            return 0xff00ccff;
-        } else if ("female".equals(gender)) {
-            return 0xffff9966;
-        }
-        return 0xffff9966;
-    }
-
-    private String getSex(String gender) {
-        if ("male".equals(gender)) {
-            return "♂";
-        } else if ("female".equals(gender)) {
-            return "♀";
-        }
-        return "";
-    }
-
 
 }

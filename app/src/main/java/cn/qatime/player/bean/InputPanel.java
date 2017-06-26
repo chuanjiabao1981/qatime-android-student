@@ -1,12 +1,17 @@
 package cn.qatime.player.bean;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -36,6 +41,7 @@ import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.team.model.Team;
+import com.orhanobut.logger.Logger;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -104,6 +110,8 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
 
     public interface InputPanelListener {
         void ChatMessage(IMMessage message);
+
+        boolean isShowTime();//是否是正在直播，是就禁用语音聊天
     }
 
     public interface AudioRecordListener {
@@ -448,8 +456,18 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
+                if (listener.isShowTime()) {
+                    Toast.makeText(context, "正在直播中，禁用语音聊天", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(context,new String[]{
+                                    android.Manifest.permission.RECORD_AUDIO},1);
+                            return true;
+                        }
+                    }
                     touched = true;
                     if (audioRecordListener != null) {
                         audioRecordListener.audioRecordStart();
@@ -523,12 +541,8 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
         context.getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        started = audioMessageHelper.startRecord();
+        audioMessageHelper.startRecord();
         cancelled = false;
-        if (!started) {
-            Toast.makeText(context, R.string.recording_init_failed, Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         if (!touched) {
             return;
@@ -650,12 +664,22 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
 
     @Override
     public void onRecordReady() {
-
+        Logger.e("onRecordReady");
     }
 
     @Override
     public void onRecordStart(File file, RecordType recordType) {
+        started = true;
+        if (!touched) {
+            return;
+        }
 
+        audioRecord.setText(R.string.record_audio_end);
+        audioRecord.setBackgroundResource(R.drawable.shape_input_radius);
+
+//        updateTimerTip(RecorderState.NORMAL); // 初始化语音动画状态
+//        playAudioRecordAnim();
+        Logger.e("onRecordStart");
     }
 
     @Override
@@ -667,7 +691,10 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
 
     @Override
     public void onRecordFail() {
-
+        if (started) {
+            Toast.makeText(context, R.string.recording_error, Toast.LENGTH_SHORT).show();
+        }
+        Logger.e("onRecordFail");
     }
 
     @Override

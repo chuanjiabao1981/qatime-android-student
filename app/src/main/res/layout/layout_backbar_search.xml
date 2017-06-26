@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/top_style">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_top_tab" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorPrimary"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="center_vertical">
+
+        <ImageView
+            style="@style/backbar_icon_style"
+            android:onClick="backClick"
+            android:src="@mipmap/back_arrow" />
+
+        <EditText
+            android:id="@+id/edit_search"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_bg_search"
+            android:drawableLeft="@mipmap/search"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:hint="搜索课程/老师"
+            android:imeOptions="actionDone"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:textColorHint="#999"
+            android:textSize="14sp" />
+
+
+        <TextView
+            android:id="@+id/right_text"
+            style="@style/backbar_text_style"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="10dp"
+            android:paddingRight="15dp"
+            android:text="搜索"
+            android:textSize="14sp" />
+    </LinearLayout>
+</RelativeLayout>

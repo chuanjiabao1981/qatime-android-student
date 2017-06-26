@@ -30,7 +30,7 @@ import cn.qatime.player.activity.SystemSettingActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.BusEvent;
-import cn.qatime.player.bean.CashAccountBean;
+import libraryextra.bean.CashAccountBean;
 import cn.qatime.player.utils.Constant;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.StringUtils;
@@ -57,11 +57,11 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
         View view = inflater.inflate(R.layout.fragment_home_user_center, container, false);
         assignViews(view);
         initData();
-        newVersion.setVisibility(BaseApplication.newVersion ? View.VISIBLE : View.INVISIBLE);
-        if (BaseApplication.getProfile().getData() != null && BaseApplication.getProfile().getData().getUser() != null) {
-            Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).placeholder(R.mipmap.personal_information_head).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
+        newVersion.setVisibility(BaseApplication.getInstance().newVersion ? View.VISIBLE : View.INVISIBLE);
+        if (BaseApplication.getInstance().getProfile().getData() != null && BaseApplication.getInstance().getProfile().getData().getUser() != null) {
+            Glide.with(getActivity()).load(BaseApplication.getInstance().getProfile().getData().getUser().getEx_big_avatar_url()).placeholder(R.mipmap.personal_information_head).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
         }
-        name.setText(StringUtils.isNullOrBlanK(BaseApplication.getProfile().getData().getUser().getName()) ? "null" : BaseApplication.getProfile().getData().getUser().getName());
+        name.setText(StringUtils.isNullOrBlanK(BaseApplication.getInstance().getProfile().getData().getUser().getName()) ? "null" : BaseApplication.getInstance().getProfile().getData().getUser().getName());
         order.setOnClickListener(this);
         wallet.setOnClickListener(this);
         course.setOnClickListener(this);
@@ -76,15 +76,13 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
     }
 
     private void initData() {
-        CashAccountBean cashAccount = BaseApplication.getCashAccount();
+        CashAccountBean cashAccount = BaseApplication.getInstance().getCashAccount();
         if (cashAccount != null && cashAccount.getData() != null) {
             String price = cashAccount.getData().getBalance();
             if (price.startsWith(".")) {
                 price = "0" + price;
             }
             balance.setText(price);
-        } else {
-            EventBus.getDefault().post(BusEvent.REFRESH_CASH_ACCOUNT);
         }
     }
 
@@ -96,7 +94,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
                 startActivityForResult(intent, Constant.REQUEST);
                 break;
             case R.id.my_wallet:
-                if (BaseApplication.getCashAccount() != null && BaseApplication.getCashAccount().getData() != null) {
+                if (BaseApplication.getInstance().getCashAccount() != null && BaseApplication.getInstance().getCashAccount().getData() != null) {
                     intent = new Intent(getActivity(), PersonalMyWalletActivity.class);
                     startActivity(intent);
                 } else {
@@ -142,8 +140,8 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
-            Glide.with(getActivity()).load(BaseApplication.getProfile().getData().getUser().getEx_big_avatar_url()).placeholder(R.mipmap.personal_information_head).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
-            name.setText(StringUtils.isNullOrBlanK(BaseApplication.getProfile().getData().getUser().getName()) ? " " : BaseApplication.getProfile().getData().getUser().getName());
+            Glide.with(getActivity()).load(BaseApplication.getInstance().getProfile().getData().getUser().getEx_big_avatar_url()).placeholder(R.mipmap.personal_information_head).crossFade().transform(new GlideCircleTransform(getActivity())).into(headSculpture);
+            name.setText(StringUtils.isNullOrBlanK(BaseApplication.getInstance().getProfile().getData().getUser().getName()) ? " " : BaseApplication.getInstance().getProfile().getData().getUser().getName());
         }
     }
 

@@ -16,14 +16,15 @@ import com.umeng.message.PushAgent;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
+import cn.qatime.player.utils.MPermission;
 import libraryextra.utils.StringUtils;
 
 /**
  * 基础fragment类
  */
 public class BaseFragmentActivity extends FragmentActivity {
-    private RequestQueue Queue= BaseApplication.getRequestQueue();
-    private AlertDialog alertDialog;
+    private RequestQueue Queue = BaseApplication.getInstance().getRequestQueue();
+    protected AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +68,6 @@ public class BaseFragmentActivity extends FragmentActivity {
      * 设备已在其他地方登陆
      */
     public void tokenOut() {
-        BaseApplication.clearToken();
         View view = View.inflate(this, R.layout.dialog_confirm, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         alertDialog = builder.create();
@@ -110,6 +110,7 @@ public class BaseFragmentActivity extends FragmentActivity {
         cancelAll(this);
         super.onDestroy();
     }
+
     public void cancelAll(final Object tag) {
         Queue.cancelAll(tag);
     }
@@ -120,5 +121,11 @@ public class BaseFragmentActivity extends FragmentActivity {
 
     protected String getResourceString(int id) {
         return getResources().getString(id);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        MPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

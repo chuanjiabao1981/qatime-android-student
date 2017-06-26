@@ -20,8 +20,8 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
-import cn.qatime.player.view.CustomKeyboard;
-import cn.qatime.player.view.PayEditText;
+import libraryextra.view.CustomKeyboard;
+import libraryextra.view.PayEditText;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -87,7 +87,7 @@ public class PayPSWVerifyActivity extends BaseActivity implements View.OnClickLi
             public void onInputFinished(String password) {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("current_pament_password", password);
-                DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.cashAccounts + BaseApplication.getUserId() + "/password/ticket_token", map), null,
+                DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.cashAccounts + BaseApplication.getInstance().getUserId() + "/password/ticket_token", map), null,
                         new VolleyListener(PayPSWVerifyActivity.this) {
                             @Override
                             protected void onSuccess(JSONObject response) {
@@ -110,7 +110,7 @@ public class PayPSWVerifyActivity extends BaseActivity implements View.OnClickLi
                                     } else if (errorCode == 2006) {
                                         Toast.makeText(PayPSWVerifyActivity.this, R.string.pay_password_not_set, Toast.LENGTH_SHORT).show();
                                     } else if (errorCode == 2008) {
-                                        Toast.makeText(PayPSWVerifyActivity.this, R.string.pay_password_not_enough_24, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(PayPSWVerifyActivity.this, R.string.pay_password_not_enough_time, Toast.LENGTH_SHORT).show();
                                     }else if (errorCode == 2009) {
                                         Toast.makeText(PayPSWVerifyActivity.this, R.string.pay_password_too_many_mistake, Toast.LENGTH_SHORT).show();
                                     }  else {

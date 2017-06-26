@@ -32,8 +32,6 @@ import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
-import cn.qatime.player.view.CustomKeyboard;
-import cn.qatime.player.view.PayEditText;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
@@ -54,8 +52,6 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
     private TextView weChat;
     private IWXAPI api;
     private String openid;
-    private PayEditText payEditText;
-    private CustomKeyboard customKeyboard;
     private AlertDialog alertDialog;
     private TextView payPswText;
 
@@ -78,17 +74,16 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_security_manager);
-
+        api = WXAPIFactory.createWXAPI(this, null);
+        api.registerApp(Constant.APP_ID);
         EventBus.getDefault().register(this);
         initView();
         initData();
-        api = WXAPIFactory.createWXAPI(this, null);
-        api.registerApp(Constant.APP_ID);
     }
 
     private void initData() {
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getUserId() + "/info", null, new VolleyListener(this) {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getInstance().getUserId() + "/info", null, new VolleyListener(this) {
             @Override
             protected void onTokenOut() {
                 tokenOut();
@@ -135,14 +130,14 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
             this.email.setText(getResourceString(R.string.not_bind));
             this.email.setTextColor(Color.RED);
         }
-        if (BaseApplication.getCashAccount() != null && BaseApplication.getCashAccount().getData() != null) {
-            if (BaseApplication.getCashAccount().getData().isHas_password()) {
-                long changeAt = BaseApplication.getCashAccount().getData().getPassword_set_at();
+        if (BaseApplication.getInstance().getCashAccount() != null && BaseApplication.getInstance().getCashAccount().getData() != null) {
+            if (BaseApplication.getInstance().getCashAccount().getData().isHas_password()) {
+                long changeAt = BaseApplication.getInstance().getCashAccount().getData().getPassword_set_at();
 
-                int diff = 24 - (int) ((System.currentTimeMillis() / 1000 - changeAt) / 3600);
-                if (diff <= 24 && diff > 0) {
+                int diff = 2 - (int) ((System.currentTimeMillis() / 1000 - changeAt) / 3600);
+                if (diff <= 2 && diff > 0) {
                     payPswText.setText(getString(R.string.new_pay_password_invalid, diff));
-                    payPswText.setTextColor(0xff999999);
+                    payPswText.setTextColor(0xff666666);
                 } else {
                     payPswText.setText("");
                 }
@@ -246,11 +241,11 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
 
     @Subscribe
     public void onEvent(BusEvent event) {
-        if (event == BusEvent.PAY_PASSWORD_CHANGE) {
-            long changeAt = BaseApplication.getCashAccount().getData().getPassword_set_at();
+        if (event == BusEvent.ON_REFRESH_CASH_ACCOUNT) {
+            long changeAt = BaseApplication.getInstance().getCashAccount().getData().getPassword_set_at();
 
-            int diff = 24 - (int) ((System.currentTimeMillis() / 1000 - changeAt) / 3600);
-            if (diff <= 24 && diff > 0) {
+            int diff = 2 - (int) ((System.currentTimeMillis() / 1000 - changeAt) / 3600);
+            if (diff <= 2 && diff > 0) {
                 payPswText.setText(getString(R.string.new_pay_password_invalid, diff));
                 payPswText.setTextColor(0xff666666);
             } else {
@@ -265,7 +260,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
         Map<String, String> map = new HashMap<>();
         map.put("code", code);
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST,
-                UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getUserId() + "/wechat", map), null, new VolleyListener(SecurityManagerActivity.this) {
+                UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getInstance().getUserId() + "/wechat", map), null, new VolleyListener(SecurityManagerActivity.this) {
             @Override
             protected void onTokenOut() {
                 tokenOut();
@@ -317,8 +312,8 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
     private void changePayPSW() {
 //        PayPopView payPopView = new PayPopView("","",getWindow());
 //        payPopView.showPop();
-        if (BaseApplication.getCashAccount() != null && BaseApplication.getCashAccount().getData() != null) {
-            if (BaseApplication.getCashAccount().getData().isHas_password()) {
+        if (BaseApplication.getInstance().getCashAccount() != null && BaseApplication.getInstance().getCashAccount().getData() != null) {
+            if (BaseApplication.getInstance().getCashAccount().getData().isHas_password()) {
                 startActivity(new Intent(this, PayPSWVerifyActivity.class));
             } else {
                 startActivity(new Intent(this, PayPSWForgetActivity.class));
@@ -363,7 +358,7 @@ public class SecurityManagerActivity extends BaseActivity implements View.OnClic
         Map<String, String> map = new HashMap<>();
         map.put("openid", openid);
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.DELETE,
-                UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getUserId() + "/wechat", map), null, new VolleyListener(SecurityManagerActivity.this) {
+                UrlUtils.getUrl(UrlUtils.urlUser + BaseApplication.getInstance().getUserId() + "/wechat", map), null, new VolleyListener(SecurityManagerActivity.this) {
             @Override
             protected void onTokenOut() {
                 tokenOut();

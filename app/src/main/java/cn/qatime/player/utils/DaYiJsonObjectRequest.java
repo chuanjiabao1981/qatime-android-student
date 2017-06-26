@@ -26,14 +26,14 @@ public class DaYiJsonObjectRequest extends JsonObjectRequest {
 
     public DaYiJsonObjectRequest(String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         super(url, jsonRequest, listener, errorListener);
-        Logger.e(url);
+//        Logger.e(url);
     }
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
         Map<String, String> map = new HashMap<>();
-        map.put("Remember-Token", BaseApplication.getProfile().getToken());
-        if (StringUtils.isNullOrBlanK(BaseApplication.getProfile().getToken())){
+        map.put("Remember-Token", BaseApplication.getInstance().getProfile().getToken());
+        if (StringUtils.isNullOrBlanK(BaseApplication.getInstance().getProfile().getToken())){
             Logger.e("token none**************************none");
         }
         return map;

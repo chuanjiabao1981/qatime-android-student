@@ -4,11 +4,10 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Selection;
@@ -39,10 +38,13 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.UpLoadUtil;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.bean.CityBean;
 import libraryextra.bean.GradeBean;
 import libraryextra.bean.ImageItem;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
+import libraryextra.bean.ProvincesBean;
+import libraryextra.bean.SchoolBean;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.DialogUtils;
 import libraryextra.utils.FileUtil;
@@ -62,6 +64,8 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     TextView complete;
     private EditText describe;
     private TextView birthday;
+    private TextView region;
+    private View regionView;
     private View birthdayView;
     private View gradeView;
 
@@ -73,7 +77,14 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     private AlertDialog alertDialog;
     private String gender = "";
     private List<String> grades;
-    //    private EditText school;
+    private ProvincesBean.DataBean regionProvince;
+    private CityBean.Data regionCity;
+    private ProvincesBean provincesBean;
+    private CityBean cityBean;
+    private SchoolBean schoolBean;
+    private TextView school;
+    private View schoolView;
+    private SchoolBean.Data schoolData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,11 +92,9 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         setContentView(R.layout.activity_personal_information_change);
         setTitles(getResources().getString(R.string.change_information));
         initView();
-        //获取基本数据信息,对应id与学校 年级
-//        String school = FileUtil.readFile(getCacheDir() + "/school.txt");
-//        if (!StringUtils.isNullOrBlanK(school)) {
-//            schoolBean = JsonUtils.objectFromJson(school, SchoolBean.class);
-//        }
+        provincesBean = JsonUtils.objectFromJson(FileUtil.readFile(getFilesDir() + "/provinces.txt").toString(), ProvincesBean.class);
+        cityBean = JsonUtils.objectFromJson(FileUtil.readFile(getFilesDir() + "/cities.txt").toString(), CityBean.class);
+        schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getFilesDir() + "/school.txt").toString(), SchoolBean.class);
         String gradeString = FileUtil.readFile(getFilesDir() + "/grade.txt");
 //        LogUtils.e("班级基础信息" + gradeString);
         grades = new ArrayList<>();
@@ -95,16 +104,19 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         }
 
 
+        PersonalInformationBean data = (PersonalInformationBean) getIntent().getSerializableExtra("data");
+        if (data != null && data.getData() != null) {
+            initData(data);
+        }
+
         replace.setOnClickListener(this);
         men.setOnClickListener(this);
         women.setOnClickListener(this);
         birthdayView.setOnClickListener(this);
         complete.setOnClickListener(this);
         gradeView.setOnClickListener(this);
-        PersonalInformationBean data = (PersonalInformationBean) getIntent().getSerializableExtra("data");
-        if (data != null && data.getData() != null) {
-            initData(data);
-        }
+        regionView.setOnClickListener(this);
+        schoolView.setOnClickListener(this);
     }
 
     private void initData(PersonalInformationBean data) {
@@ -142,6 +154,35 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 }
             }
         }
+        if (provincesBean != null && provincesBean.getData() != null) {
+            for (int i = 0; i < provincesBean.getData().size(); i++) {
+                if (provincesBean.getData().get(i).getId().equals(data.getData().getProvince())) {
+                    regionProvince = provincesBean.getData().get(i);
+                    break;
+                }
+            }
+        }
+        if (cityBean != null && cityBean.getData() != null) {
+            for (int i = 0; i < cityBean.getData().size(); i++) {
+                if (cityBean.getData().get(i).getId().equals(data.getData().getCity())) {
+                    regionCity = cityBean.getData().get(i);
+                    break;
+                }
+            }
+        }
+        if (regionCity != null && regionProvince != null) {
+            region.setText(regionProvince.getName() + regionCity.getName());
+        }
+
+        if (schoolBean != null && schoolBean.getData() != null) {
+            for (int i = 0; i < schoolBean.getData().size(); i++) {
+                if (schoolBean.getData().get(i).getId() == data.getData().getSchool()) {
+                    schoolData = schoolBean.getData().get(i);
+                    school.setText(schoolBean.getData().get(i).getName());
+                    break;
+                }
+            }
+        }
         describe.setText(data.getData().getDesc());
     }
 
@@ -149,6 +190,18 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.region_view:
+                Intent regionIntent = new Intent(this, RegionSelectActivity1.class);
+//                if (regionProvince != null && regionCity != null) {
+//                    regionIntent.putExtra("region_province", regionProvince);
+//                    regionIntent.putExtra("region_city", regionCity);
+//                }
+                startActivityForResult(regionIntent, Constant.REQUEST_REGION_SELECT);
+                break;
+            case R.id.school_view:
+                Intent schoolIntent = new Intent(this, SchoolSelectActivity.class);
+                startActivityForResult(schoolIntent, Constant.REQUEST_SCHOOL_SELECT);
+                break;
             case R.id.men:
                 men.setSelected(true);
                 women.setSelected(false);
@@ -187,7 +240,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 }
                 break;
             case R.id.complete://完成
-                String url = UrlUtils.urlPersonalInformation + BaseApplication.getUserId();
+                String url = UrlUtils.urlPersonalInformation + BaseApplication.getInstance().getUserId();
                 UpLoadUtil util = new UpLoadUtil(url) {
                     @Override
                     public void httpStart() {
@@ -201,8 +254,8 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                         DialogUtils.dismissDialog(progress);
                         PersonalInformationBean sData = JsonUtils.objectFromJson(result, PersonalInformationBean.class);
 
-                        BaseApplication.getProfile().getData().getUser().setAvatar_url(sData.getData().getAvatar_url());
-                        Profile profile = BaseApplication.getProfile();
+                        BaseApplication.getInstance().getProfile().getData().getUser().setAvatar_url(sData.getData().getAvatar_url());
+                        Profile profile = BaseApplication.getInstance().getProfile();
                         Profile.User user = profile.getData().getUser();
                         user.setId(sData.getData().getId());
                         user.setName(sData.getData().getName());
@@ -214,7 +267,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                         user.setChat_account(sData.getData().getChat_account());
 
                         profile.getData().setUser(user);
-                        BaseApplication.setProfile(profile);
+                        BaseApplication.getInstance().setProfile(profile);
 
                         Intent data = new Intent();
                         data.putExtra("data", result);
@@ -230,7 +283,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                     }
                 };
 
-                if (StringUtils.isNullOrBlanK(BaseApplication.getUserId())) {
+                if (StringUtils.isNullOrBlanK(BaseApplication.getInstance().getUserId())) {
                     Toast.makeText(PersonalInformationChangeActivity.this, getResources().getString(R.string.id_is_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -248,7 +301,10 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                     Toast.makeText(this, getResources().getString(R.string.grade_can_not_be_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                if (regionCity == null || regionProvince == null) {
+                    Toast.makeText(this, "请选择城市", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 String birthday = select.equals(parse.format(new Date())) ? "" : select;
                 String desc = describe.getText().toString();
                 Map<String, String> map = new HashMap<>();
@@ -258,6 +314,11 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 map.put("avatar", imageUrl);
                 map.put("gender", gender);
                 map.put("birthday", birthday);
+                map.put("province_id", regionProvince.getId());
+                map.put("city_id", regionCity.getId());
+                if(schoolData!=null){
+                    map.put("school_id", schoolData.getId() + "");
+                }
                 map.put("desc", desc);
                 Logger.e("--" + sName + "--" + grade + "--" + imageUrl + "--" + gender + "--" + birthday + "--" + desc + "--");
                 util.execute(map);
@@ -310,14 +371,16 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
         women = (TextView) findViewById(R.id.women);
         textGrade = (TextView) findViewById(R.id.text_grade);
         describe = (EditText) findViewById(R.id.describe);
-//        school = (EditText) findViewById(R.id.school);
         describe.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
         name.setFilters(new InputFilter[]{new InputFilter.LengthFilter(7)});
-//        school.setFilters(new InputFilter[]{new InputFilter.LengthFilter(20)});
         birthday = (TextView) findViewById(R.id.birthday);
         birthdayView = findViewById(R.id.birthday_view);
         gradeView = findViewById(R.id.grade_view);
         complete = (TextView) findViewById(R.id.complete);
+        region = (TextView) findViewById(R.id.region);
+        regionView = findViewById(R.id.region_view);
+        school = (TextView) findViewById(R.id.school);
+        schoolView = findViewById(R.id.school_view);
     }
 
     @Override
@@ -327,15 +390,21 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 if (data != null) {
                     String url = data.getStringExtra("url");
 
-                    if (url != null && !StringUtils.isNullOrBlanK(url)) {
-                        Bitmap bitmap = BitmapFactory.decodeFile(url);
-                        Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
-                        bitmap.recycle();
-                        Intent intent = new Intent(PersonalInformationChangeActivity.this, CropImageActivity.class);
-                        intent.putExtra("id", uri.toString());
-                        startActivityForResult(intent, Constant.PHOTO_CROP);
+                if (url != null && !StringUtils.isNullOrBlanK(url)) {
+                    Uri uri = null;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        uri = FileProvider.getUriForFile(this, "com.qatime.player.fileprovider", new File(url));
+//                            Bitmap bitmap = BitmapFactory.decodeFile(url);
+//                            uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
+//                            bitmap.recycle();
+                    } else {
+                        uri = Uri.fromFile(new File(url));
                     }
+                    Intent intent = new Intent(PersonalInformationChangeActivity.this, CropImageActivity.class);
+                    intent.putExtra("id", uri.toString());
+                    startActivityForResult(intent, Constant.PHOTO_CROP);
                 }
+            }
             } else if (resultCode == Constant.RESPONSE_PICTURE_SELECT) {//选择照片返回的照片
                 if (data != null) {
                     ImageItem image = (ImageItem) data.getSerializableExtra("data");
@@ -358,6 +427,17 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 if (!StringUtils.isNullOrBlanK(imageUrl)) {
                     Glide.with(this).load(Uri.fromFile(new File(imageUrl))).transform(new GlideCircleTransform(this)).crossFade().into(headsculpture);
                 }
+            }
+        } else if (requestCode == Constant.REQUEST_REGION_SELECT && resultCode == Constant.RESPONSE_REGION_SELECT) {
+            regionCity = (CityBean.Data) data.getSerializableExtra("region_city");
+            regionProvince = (ProvincesBean.DataBean) data.getSerializableExtra("region_province");
+            if (regionCity != null && regionProvince != null) {
+                region.setText(regionProvince.getName() + regionCity.getName());
+            }
+        } else if (requestCode == Constant.REQUEST_SCHOOL_SELECT && resultCode == Constant.RESPONSE_SCHOOL_SELECT) {
+            schoolData = (SchoolBean.Data) data.getSerializableExtra("school");
+            if (schoolData != null) {
+                school.setText(schoolData.getName());
             }
         }
     }

@@ -53,7 +53,7 @@ public class FragmentTutorshipPreview extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_tutorship_preview, container, false);
         initview(view);
-        initOver=true;
+        initOver = true;
         return view;
     }
 
@@ -69,38 +69,33 @@ public class FragmentTutorshipPreview extends BaseFragment {
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
         adapter = new CommonAdapter<MyTutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship2) {
 
-
             @Override
             public void convert(ViewHolder helper, final MyTutorialClassBean.Data item, int position) {
-                boolean isBought = item.isIs_bought();//已经购买
 
-helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View view) {
-        Intent intent = new Intent(getActivity(), MessageActivity.class);
-        intent.putExtra("sessionId", item.getChat_team_id());
-        intent.putExtra("sessionType", SessionTypeEnum.Team);
-        intent.putExtra("courseId", item.getId());
-        intent.putExtra("name", item.getName());
-        intent.putExtra("type","custom");
-        intent.putExtra("owner", item.getChat_team_owner());
-        startActivity(intent);
-    }
-});
+                helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getActivity(), MessageActivity.class);
+                        intent.putExtra("sessionId", item.getChat_team_id());
+                        intent.putExtra("sessionType", SessionTypeEnum.Team);
+                        intent.putExtra("courseId", item.getId());
+                        intent.putExtra("name", item.getName());
+                        intent.putExtra("type", "custom");
+                        intent.putExtra("owner", item.getChat_team_owner());
+                        startActivity(intent);
+                    }
+                });
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
                 try {
-                    long time = parseISO.parse(item.getPreview_time()).getTime()-System.currentTimeMillis();
-                    int value = 0;
-                    if (time > 0) {
-                        value = (int) (time / (1000 * 3600 * 24));
-                    }
-                    if(value!=0){
-                        helper.setText(R.id.teaching_time, getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day));
-                    }else{
-                        helper.setText(R.id.teaching_time,"即将开课");
+                    int day = libraryextra.utils.DateUtils.daysBetween(item.getLive_start_time(), System.currentTimeMillis());
+                    if (day > 0) {
+                        helper.getView(R.id.teaching_time).setVisibility(View.VISIBLE);
+                        helper.setText(R.id.teaching_time, "距开课" + day + "天");
+                    } else {
+                        helper.getView(R.id.teaching_time).setVisibility(View.INVISIBLE);
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -137,7 +132,7 @@ helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
         if (!isLoad) {
             if (initOver) {
                 initData(1);
-            }else{
+            } else {
                 super.onShow();
             }
         }
@@ -153,7 +148,7 @@ helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
         map.put("per_page", "10");
         map.put("status", "published");
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/courses", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getInstance().getUserId() + "/courses", map), null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {

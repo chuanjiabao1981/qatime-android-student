@@ -3,11 +3,10 @@ package cn.qatime.player.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -32,10 +31,12 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.UpLoadUtil;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.bean.CityBean;
 import libraryextra.bean.GradeBean;
 import libraryextra.bean.ImageItem;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
+import libraryextra.bean.ProvincesBean;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.DialogUtils;
 import libraryextra.utils.FileUtil;
@@ -56,15 +57,19 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
     private ImageView headSculpture;
     private EditText name;
     private TextView editGrade;
+    private TextView editRegion;
     private TextView editMore;
     private TextView complete;
     private List<String> grades;
+    private CityBean.Data city;
+    private ProvincesBean.DataBean province;
 
     private void assignViews() {
         information = (LinearLayout) findViewById(R.id.information);
         headSculpture = (ImageView) findViewById(R.id.head_sculpture);
         name = (EditText) findViewById(R.id.name);
         editGrade = (TextView) findViewById(R.id.grade);
+        editRegion = (TextView) findViewById(R.id.region);
         editMore = (TextView) findViewById(R.id.edit_more);
         complete = (TextView) findViewById(R.id.complete);
 
@@ -75,6 +80,10 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                 return event.getKeyCode() == KeyEvent.KEYCODE_ENTER;
             }
         });
+        String nameValue = getIntent().getStringExtra("name");
+        if (!StringUtils.isNullOrBlanK(nameValue)) {
+            name.setText(nameValue);
+        }
     }
 
 
@@ -88,12 +97,15 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
         String gradeString = FileUtil.readFile(getFilesDir() + "/grade.txt");
         if (!StringUtils.isNullOrBlanK(gradeString)) {
             GradeBean gradeBean = JsonUtils.objectFromJson(gradeString, GradeBean.class);
-            grades = gradeBean.getData().getGrades();
+            if (gradeBean != null) {
+                grades = gradeBean.getData().getGrades();
+            }
         }
         information.setOnClickListener(this);
         complete.setOnClickListener(this);
         editMore.setOnClickListener(this);
         editGrade.setOnClickListener(this);
+        editRegion.setOnClickListener(this);
     }
 
 
@@ -110,12 +122,16 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
             case R.id.grade:
                 showGradePickerDialog();
                 break;
+            case R.id.region:
+                Intent regionIntent = new Intent(this, RegionSelectActivity1.class);
+                startActivityForResult(regionIntent, Constant.REQUEST_REGION_SELECT);
+                break;
             case R.id.information://去选择图片
                 intent = new Intent(RegisterPerfectActivity.this, PictureSelectActivity.class);
                 startActivityForResult(intent, Constant.REQUEST_PICTURE_SELECT);
                 break;
             case R.id.complete://完成
-                int userId = BaseApplication.getUserId();
+                int userId = BaseApplication.getInstance().getUserId();
                 String url = UrlUtils.urlPersonalInformation + userId + "/profile";
                 UpLoadUtil util = new UpLoadUtil(url) {
                     @Override
@@ -130,8 +146,8 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                         //由于已经登陆，所以为profile赋值
                         PersonalInformationBean sData = JsonUtils.objectFromJson(result, PersonalInformationBean.class);
                         if (sData != null && sData.getData() != null) {
-                            BaseApplication.getProfile().getData().getUser().setAvatar_url(sData.getData().getAvatar_url());
-                            Profile profile = BaseApplication.getProfile();
+                            BaseApplication.getInstance().getProfile().getData().getUser().setAvatar_url(sData.getData().getAvatar_url());
+                            Profile profile = BaseApplication.getInstance().getProfile();
                             Profile.User user = profile.getData().getUser();
                             user.setId(sData.getData().getId());
                             user.setName(sData.getData().getName());
@@ -142,7 +158,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                             user.setLogin_mobile(sData.getData().getLogin_mobile());
                             user.setChat_account(sData.getData().getChat_account());
                             profile.getData().setUser(user);
-                            BaseApplication.setProfile(profile);
+                            BaseApplication.getInstance().setProfile(profile);
                         }
                         DialogUtils.dismissDialog(progress);
                         if (getIntent().getIntExtra("register_action", Constant.REGIST_1) == Constant.REGIST_1) {
@@ -164,7 +180,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                     Toast.makeText(this, getResourceString(R.string.please_set_head), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (StringUtils.isNullOrBlanK(BaseApplication.getUserId())) {
+                if (StringUtils.isNullOrBlanK(BaseApplication.getInstance().getUserId())) {
                     Toast.makeText(RegisterPerfectActivity.this, getResources().getString(R.string.id_is_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -178,10 +194,17 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                     Toast.makeText(this, getResources().getString(R.string.grade_can_not_be_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+                if (province == null || city == null) {
+                    Toast.makeText(this, "请选择城市", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Map<String, String> map = new HashMap<>();
                 map.put("name", sName);
                 map.put("grade", grade);
                 map.put("avatar", imageUrl);
+                map.put("province_id", province.getId());
+                map.put("city_id", city.getId());
                 util.execute(map);
                 break;
         }
@@ -225,9 +248,15 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                     String url = data.getStringExtra("url");
 
                     if (url != null && !StringUtils.isNullOrBlanK(url)) {
-                        Bitmap bitmap = BitmapFactory.decodeFile(url);
-                        Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
-                        bitmap.recycle();
+                        Uri uri = null;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            uri = FileProvider.getUriForFile(this, "com.qatime.player.fileprovider", new File(url));
+//                            Bitmap bitmap = BitmapFactory.decodeFile(url);
+//                            uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
+//                            bitmap.recycle();
+                        } else {
+                            uri = Uri.fromFile(new File(url));
+                        }
                         Intent intent = new Intent(RegisterPerfectActivity.this, CropImageActivity.class);
                         intent.putExtra("id", uri.toString());
                         startActivityForResult(intent, Constant.PHOTO_CROP);
@@ -255,15 +284,27 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                     Glide.with(this).load(Uri.fromFile(new File(imageUrl))).transform(new GlideCircleTransform(this)).crossFade().into(headSculpture);
                 }
             }
-        } else if (requestCode == Constant.REGIST_1 && resultCode == Constant.RESPONSE) {
+        } else if (requestCode == Constant.REQUEST_REGION_SELECT && resultCode == Constant.RESPONSE_REGION_SELECT) {
+            city = (CityBean.Data) data.getSerializableExtra("region_city");
+            province = (ProvincesBean.DataBean) data.getSerializableExtra("region_province");
+            if (city != null && province != null) {
+                editRegion.setText(province.getName() + city.getName());
+            }
+        } else if (requestCode == Constant.REGIST_1 && resultCode == Constant.RESPONSE) {//只有信息修改成功以后才会走到这
             Intent intent = new Intent(RegisterPerfectActivity.this, MainActivity.class);
             startActivity(intent);
             setResult(resultCode);
             finish();
-        } else if (requestCode == Constant.REGIST_2 && resultCode == Constant.RESPONSE) {
+        } else if (requestCode == Constant.REGIST_2 && resultCode == Constant.RESPONSE) {//只有信息修改成功以后才会走到这
             setResult(resultCode);
             finish();
         }
+    }
+
+    @Override
+    public void onBackPressed() {//此页面返回清理token（未修改信息，清理登陆状态)
+        BaseApplication.getInstance().clearToken();
+        finish();
     }
 
     @Override

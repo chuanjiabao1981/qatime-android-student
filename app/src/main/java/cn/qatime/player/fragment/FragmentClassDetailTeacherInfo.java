@@ -87,7 +87,7 @@ public class FragmentClassDetailTeacherInfo extends BaseFragment {
                 }
             }
 
-            SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getCacheDir() + "/school.txt"), SchoolBean.class);
+            SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getFilesDir() + "/school.txt"), SchoolBean.class);
             if (schoolBean != null && schoolBean.getData() != null) {
                 for (int i = 0; i < schoolBean.getData().size(); i++) {
                     if (data.getData().getTeacher().getSchool() == schoolBean.getData().get(i).getId()) {
@@ -115,24 +115,4 @@ public class FragmentClassDetailTeacherInfo extends BaseFragment {
         }
 
     }
-
-    private int getSexColor(String gender) {
-        if ("male".equals(gender)) {
-            return 0xff00ccff;
-        } else if ("female".equals(gender)) {
-            return 0xffff9966;
-        }
-        return 0xffff9966;
-    }
-
-    private String getSex(String gender) {
-        if ("male".equals(gender)) {
-            return "♂";
-        } else if ("female".equals(gender)) {
-            return "♀";
-        }
-        return "";
-    }
-
-
 }

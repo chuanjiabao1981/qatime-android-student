@@ -55,7 +55,7 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
 
     private void setValue(MyOrderBean.DataBean data) {
 //        商品信息
-        if("LiveStudio::Course".equals(data.getProduct_type())){
+        if ("LiveStudio::Course".equals(data.getProduct_type())) {
             classid = data.getProduct().getId();
             if (StringUtils.isNullOrBlanK(data.getProduct().getName())) {
                 name.setText(getResourceString(R.string.cancel_order_name));
@@ -63,9 +63,9 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
                 name.setText(data.getProduct().getName());
             }
             if (StringUtils.isNullOrBlanK(data.getProduct().getGrade())) {
-                grade.setText("直播课/"+getResourceString(R.string.grade));
+                grade.setText("直播课/" + getResourceString(R.string.grade));
             } else {
-                grade.setText("直播课/" +data.getProduct().getGrade());
+                grade.setText("直播课/" + data.getProduct().getGrade());
             }
             if (StringUtils.isNullOrBlanK(data.getProduct().getSubject())) {
                 subject.setText(getResourceString(R.string.subject));
@@ -77,8 +77,8 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
             } else {
                 teacher.setText(data.getProduct().getTeacher_name());
             }
-            progress.setText(String.format(getString(R.string.lesson_count),data.getProduct().getPreset_lesson_count()));
-        }else if("LiveStudio::InteractiveCourse".equals(data.getProduct_type())){
+            progress.setText(String.format(getString(R.string.lesson_count), data.getProduct().getPreset_lesson_count()));
+        } else if ("LiveStudio::InteractiveCourse".equals(data.getProduct_type())) {
             classid = data.getProduct_interactive_course().getId();
             if (StringUtils.isNullOrBlanK(data.getProduct_interactive_course().getName())) {
                 name.setText(getResourceString(R.string.cancel_order_name));
@@ -86,9 +86,9 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
                 name.setText(data.getProduct_interactive_course().getName());
             }
             if (StringUtils.isNullOrBlanK(data.getProduct_interactive_course().getGrade())) {
-                grade.setText("一对一/"+getResourceString(R.string.grade));
+                grade.setText("一对一/" + getResourceString(R.string.grade));
             } else {
-                grade.setText("一对一/"+data.getProduct_interactive_course().getGrade());
+                grade.setText("一对一/" + data.getProduct_interactive_course().getGrade());
             }
             if (StringUtils.isNullOrBlanK(data.getProduct_interactive_course().getSubject())) {
                 subject.setText(getResourceString(R.string.subject));
@@ -100,13 +100,13 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
             } else {
                 StringBuffer sp = new StringBuffer();
                 sp.append(data.getProduct_interactive_course().getTeachers().get(0).getName());
-                if(data.getProduct_interactive_course().getTeachers().size()>1){
+                if (data.getProduct_interactive_course().getTeachers().size() > 1) {
                     sp.append("...");
                 }
                 teacher.setText(data.getProduct_interactive_course().getTeachers().get(0).getName());
             }
-            progress.setText(String.format(getString(R.string.lesson_count),data.getProduct_interactive_course().getLessons_count()));
-        }else if("LiveStudio::VideoCourse".equals(data.getProduct_type())){
+            progress.setText(String.format(getString(R.string.lesson_count), data.getProduct_interactive_course().getLessons_count()));
+        } else if ("LiveStudio::VideoCourse".equals(data.getProduct_type())) {
             classid = data.getProduct_video_course().getId();
             if (StringUtils.isNullOrBlanK(data.getProduct_video_course().getName())) {
                 name.setText(getResourceString(R.string.cancel_order_name));
@@ -114,9 +114,9 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
                 name.setText(data.getProduct_video_course().getName());
             }
             if (StringUtils.isNullOrBlanK(data.getProduct_video_course().getGrade())) {
-                grade.setText("视频课/"+getResourceString(R.string.grade));
+                grade.setText("视频课/" + getResourceString(R.string.grade));
             } else {
-                grade.setText("视频课/"+data.getProduct_video_course().getGrade());
+                grade.setText("视频课/" + data.getProduct_video_course().getGrade());
             }
             if (StringUtils.isNullOrBlanK(data.getProduct_video_course().getSubject())) {
                 subject.setText(getResourceString(R.string.subject));
@@ -128,32 +128,29 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
             } else {
                 teacher.setText(data.getProduct_video_course().getTeacher().getName());
             }
-            progress.setText(String.format(getString(R.string.lesson_count),data.getProduct_video_course().getPreset_lesson_count()));
+            progress.setText(String.format(getString(R.string.lesson_count), data.getProduct_video_course().getPreset_lesson_count()));
         }
-        ordernumber.setText(getIntent().getStringExtra("order_id"));
-        if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("created_at"))) {
-            buildtime.setText("        ");
-        }//创建时间
-        else {
-            try {
-                buildtime.setText(parse.format(parseISO.parse(getIntent().getStringExtra("created_at"))));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+        ordernumber.setText(data.getId());
+        try {
+            buildtime.setText(parse.format(parseISO.parse(data.getCreated_at())));
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-        if (StringUtils.isNullOrBlanK(getIntent().getStringExtra("created_at"))) {
-            paytype.setText("        ");
-
+        String payType = data.getPay_type();//支付方式
+        if (payType.equals("weixin")) {
+            paytype.setText(getResourceString(R.string.wexin_payment));
+        } else if (payType.equals("alipay")) {
+            paytype.setText(getResourceString(R.string.alipay_payment));
         } else {
-            String payType = getIntent().getStringExtra("payType");//支付方式
-            if (payType.equals("weixin")) {
-                paytype.setText(getResourceString(R.string.wexin_payment));
-            } else if (payType.equals("alipay")) {
-                paytype.setText(getResourceString(R.string.alipay_payment));
-            } else {
-                paytype.setText(getResourceString(R.string.account_payment));
-            }
+            paytype.setText(getResourceString(R.string.account_payment));
         }
+
+        if (data.getStatus().equals("refunded")) {//已退款
+            status.setImageResource(R.mipmap.refunded);
+        } else {
+            status.setImageResource(R.mipmap.close_pay);
+        }
+
         payprice.setText("￥" + data.getAmount());
     }
 
@@ -174,11 +171,11 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                if("LiveStudio::Course".equals(data.getProduct_type())){
+                if ("LiveStudio::Course".equals(data.getProduct_type())) {
                     intent.setClass(PersonalMyOrderCanceledDetailActivity.this, RemedialClassDetailActivity.class);
-                }else if("LiveStudio::InteractiveCourse".equals(data.getProduct_type())){
+                } else if ("LiveStudio::InteractiveCourse".equals(data.getProduct_type())) {
                     intent.setClass(PersonalMyOrderCanceledDetailActivity.this, InteractCourseDetailActivity.class);
-                }else if("LiveStudio::VideoCourse".equals(data.getProduct_type())){
+                } else if ("LiveStudio::VideoCourse".equals(data.getProduct_type())) {
                     intent.setClass(PersonalMyOrderCanceledDetailActivity.this, VideoCoursesActivity.class);
                 }
                 intent.putExtra("id", classid);
@@ -189,7 +186,14 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
         reorder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PersonalMyOrderCanceledDetailActivity.this, RemedialClassDetailActivity.class);
+                Intent intent = new Intent();
+                if ("LiveStudio::Course".equals(data.getProduct_type())) {
+                    intent.setClass(PersonalMyOrderCanceledDetailActivity.this, RemedialClassDetailActivity.class);
+                } else if ("LiveStudio::InteractiveCourse".equals(data.getProduct_type())) {
+                    intent.setClass(PersonalMyOrderCanceledDetailActivity.this, InteractCourseDetailActivity.class);
+                } else if ("LiveStudio::VideoCourse".equals(data.getProduct_type())) {
+                    intent.setClass(PersonalMyOrderCanceledDetailActivity.this, VideoCoursesActivity.class);
+                }
                 intent.putExtra("id", classid);
                 intent.putExtra("page", 0);
                 startActivity(intent);

@@ -7,8 +7,8 @@
 
 
     <RelativeLayout
-        android:layout_width="160dp"
-        android:layout_height="100dp">
+        android:layout_width="134dp"
+        android:layout_height="84dp">
 
         <ImageView
             android:id="@+id/image"
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="00:00-00:00"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
         <TextView
             android:id="@+id/status"
             android:layout_width="wrap_content"
@@ -50,7 +50,7 @@
             android:gravity="center"
             android:textColor="#cccccc"
             android:text="暂无直播"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
 
     </LinearLayout>
 </LinearLayout>

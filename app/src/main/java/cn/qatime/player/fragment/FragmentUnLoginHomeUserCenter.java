@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.AboutUsActivity;
@@ -64,30 +63,28 @@ public class FragmentUnLoginHomeUserCenter extends BaseFragment implements View.
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
+          switch (v.getId()) {
+            case R.id.about:
+                Intent intent = new Intent(getActivity(), AboutUsActivity.class);
+                startActivity(intent);
+                break;
             case R.id.information:
             case R.id.name:
-                Intent intent = new Intent(getActivity(), LoginActivity2.class);
-                intent.putExtra("activity_action", Constant.LoginAction.toPage5);
-                startActivity(intent);
-                break;
-            case R.id.about:
-                intent = new Intent(getActivity(), AboutUsActivity.class);
-                startActivity(intent);
-                break;
             case R.id.my_wallet:
             case R.id.my_order:
             case R.id.my_course:
             case R.id.my_interact:
             case R.id.my_video:
+
+
             case R.id.my_taste:
             case R.id.security:
             case R.id.setting:
-                Toast.makeText(getActivity(), getResourceString(R.string.unlogin_alert), Toast.LENGTH_SHORT).show();
+                intent = new Intent(getActivity(), LoginActivity2.class);
+                intent.putExtra("activity_action", Constant.LoginAction.toPage5);
+                startActivity(intent);
                 break;
-            default:
-                Toast.makeText(getActivity(), getResourceString(R.string.unlogin_alert), Toast.LENGTH_SHORT).show();
-                break;
+
         }
     }
 }

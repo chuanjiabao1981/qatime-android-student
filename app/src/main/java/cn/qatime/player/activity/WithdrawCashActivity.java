@@ -1,8 +1,13 @@
 package cn.qatime.player.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,21 +17,38 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.tencent.mm.sdk.modelmsg.SendAuth;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
 import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
-import cn.qatime.player.bean.CashAccountBean;
+import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.view.PayPopView;
+import libraryextra.bean.CashAccountBean;
+import libraryextra.bean.WithdrawCashBean;
+import libraryextra.utils.JsonUtils;
 import libraryextra.utils.KeyBoardUtils;
 import libraryextra.utils.StringUtils;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 
 /**
  * @author Tianhaoranly
@@ -35,25 +57,21 @@ import libraryextra.utils.StringUtils;
  */
 public class WithdrawCashActivity extends BaseActivity implements View.OnClickListener {
     private EditText rechargeNum;
-    private ImageView toBank;
-    private ImageView toAlipay;
     private Button rechargeNow;
-    private String payType = "bank";
+    private String payType = "weixin";
     private static final int DECIMAL_DIGITS = 2;//小数的位数
     private String amount;
     private PayPopView payPopView;
     private AlertDialog alertDialog;
     private TextView phone;
     private android.app.AlertDialog alertDialogPhone;
+    private IWXAPI api;
+    public String ticket_tocken;
 
     private void assignViews() {
         rechargeNum = (EditText) findViewById(R.id.recharge_num);
-        LinearLayout toBankLayout = (LinearLayout) findViewById(R.id.to_bank_layout);
-        toBank = (ImageView) findViewById(R.id.to_bank);
-        LinearLayout toAlipayLayout = (LinearLayout) findViewById(R.id.to_alipay_layout);
-        toAlipay = (ImageView) findViewById(R.id.to_alipay);
         rechargeNow = (Button) findViewById(R.id.recharge_now);
-        CashAccountBean cashAccount = BaseApplication.getCashAccount();
+        CashAccountBean cashAccount = BaseApplication.getInstance().getCashAccount();
         String price = "0";
         if (cashAccount != null && cashAccount.getData() != null) {
             price = cashAccount.getData().getBalance();
@@ -61,20 +79,36 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
                 price = "0" + price;
             }
         }
-        price = "￥" + price;
-        rechargeNum.setHint(getString(R.string.withdraw_num_hint,price));
+        rechargeNum.setHint(getString(R.string.withdraw_num_hint, price));
 
         phone = (TextView) findViewById(R.id.phone);
         phone.setText(Constant.phoneNumber);
         phone.setOnClickListener(this);
-
-        toAlipayLayout.setOnClickListener(this);
-        toBankLayout.setOnClickListener(this);
     }
-
+    private void callPhone() {
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.phoneNumber));
+        if (ActivityCompat.checkSelfPermission(WithdrawCashActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        startActivity(intent);
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "权限被拒绝", Toast.LENGTH_SHORT).show();
+            }else{
+                callPhone();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+        api = WXAPIFactory.createWXAPI(this, null);
+        api.registerApp(Constant.APP_ID);
         setContentView(R.layout.activity_withdraw_cash);
         setTitles(getResourceString(R.string.withdraw_cash));
         assignViews();
@@ -103,6 +137,8 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
 
             }
         });
+        rechargeNum.setClickable(false);
+        rechargeNum.setLongClickable(false);
         rechargeNum.addTextChangedListener(new TextWatcher() {//输入框输入限制
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -157,7 +193,6 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
 
     private void showPSWPop() {
         KeyBoardUtils.closeKeybord(WithdrawCashActivity.this);
-//        if (BaseApplication.getCashAccount().getData().isHas_password()) {
         amount = rechargeNum.getText().toString();
         if (StringUtils.isNullOrBlanK(amount)) {
             Toast.makeText(WithdrawCashActivity.this, R.string.amount_can_not_null, Toast.LENGTH_SHORT).show();
@@ -171,7 +206,7 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
             Toast.makeText(WithdrawCashActivity.this, R.string.amount_not_allow, Toast.LENGTH_SHORT).show();
             return;
         }
-        if (Double.valueOf(amount) > Double.valueOf(BaseApplication.getCashAccount().getData().getBalance())) {
+        if (Double.valueOf(amount) > Double.valueOf(BaseApplication.getInstance().getCashAccount().getData().getBalance())) {
             Toast.makeText(WithdrawCashActivity.this, getResourceString(R.string.amount_not_enough), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -179,14 +214,23 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
         payPopView = new PayPopView(getString(R.string.user_withdraw), "￥" + amount, WithdrawCashActivity.this);
         payPopView.showPop();
         payPopView.setOnPayPSWVerifyListener(new PayPopView.OnPayPSWVerifyListener() {
+
+
             @Override
             public void onSuccess(String ticket_token) {
                 payPopView.dismiss();
-                Intent intent = new Intent(WithdrawCashActivity.this, WithdrawConfirmActivity.class);
-                intent.putExtra("pay_type", payType);
-                intent.putExtra("amount", amount);
-                intent.putExtra("ticket_token",ticket_token);
-                startActivity(intent);
+                WithdrawCashActivity.this.ticket_tocken = ticket_token;
+                //绑定
+                if (!api.isWXAppInstalled()) {
+                    Toast.makeText(WithdrawCashActivity.this, R.string.wechat_not_installed, Toast.LENGTH_SHORT).show();
+                } else if (!api.isWXAppSupportAPI()) {
+                    Toast.makeText(WithdrawCashActivity.this, R.string.wechat_not_support, Toast.LENGTH_SHORT).show();
+                } else {
+                    SendAuth.Req req = new SendAuth.Req();
+                    req.scope = "snsapi_userinfo";
+                    req.state = "wechat_info";
+                    api.sendReq(req);
+                }
             }
 
             @Override
@@ -195,10 +239,12 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
                 if (errorCode == 2005) {
                     dialogPSWError();
                 } else if (errorCode == 2006) {
-                    Toast.makeText(WithdrawCashActivity.this,  R.string.pay_password_not_set, Toast.LENGTH_SHORT).show();
+
+
+                    Toast.makeText(WithdrawCashActivity.this, R.string.pay_password_not_set, Toast.LENGTH_SHORT).show();
                 } else if (errorCode == 2008) {
-                    dialogServerError(getString(R.string.pay_password_not_enough_24));//未满24小时
-                }else if (errorCode == 2009) {
+                    dialogServerError(getString(R.string.pay_password_not_enough_time));//未满24小时
+                } else if (errorCode == 2009) {
                     dialogServerError(getString(R.string.pay_password_too_many_mistake));//错误太多
                 } else if (errorCode == 0) {
                     Toast.makeText(WithdrawCashActivity.this, R.string.server_error, Toast.LENGTH_SHORT).show();
@@ -207,10 +253,83 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
                 }
             }
         });
-//        } else {
-//            dialogNotify();
-//            Toast.makeText(WithdrawCashActivity.this, "请先设置支付密码", Toast.LENGTH_SHORT).show();
-//        }
+    }
+
+    @Subscribe
+    public void onEvent(String code) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("send_to", BaseApplication.getInstance().getProfile().getData().getUser().getLogin_mobile());
+        map.put("amount", amount);
+        map.put("pay_type", payType);
+        map.put("ticket_token", ticket_tocken);
+        map.put("app_type", "student_app");
+        map.put("access_code", code);
+        addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getInstance().getUserId() + "/withdraws", map), null, new VolleyListener(this) {
+            @Override
+            protected void onTokenOut() {
+                tokenOut();
+            }
+
+            @Override
+            protected void onSuccess(JSONObject response) {
+                if (!response.isNull("data")) {
+                    WithdrawCashBean bean = JsonUtils.objectFromJson(response.toString(), WithdrawCashBean.class);
+                    Intent intent = new Intent(WithdrawCashActivity.this, WithdrawResultActivity.class);
+                    intent.putExtra("amount", bean.getData().getAmount());
+                    intent.putExtra("pay_type", bean.getData().getPay_type());
+                    intent.putExtra("id", bean.getData().getTransaction_no());
+                    intent.putExtra("create_at", bean.getData().getCreated_at());
+                    startActivity(intent);
+                    EventBus.getDefault().post(BusEvent.REFRESH_CASH_ACCOUNT);
+                    finish();
+                } else {
+                    onError(response);
+                }
+            }
+
+            @Override
+            protected void onError(JSONObject response) {
+                try {
+                    JSONObject error = response.getJSONObject("error");
+                    int code = error.getInt("code");
+                    if (code == 2007) {
+                        Toast.makeText(WithdrawCashActivity.this, R.string.token_error, Toast.LENGTH_SHORT).show();
+                    } else if (code == 3002) {//  "msg": "验证失败: Value 账户资金不足，无法提取!"
+                        Toast.makeText(WithdrawCashActivity.this, getResources().getString(R.string.amount_not_enough), Toast.LENGTH_SHORT).show();
+                    } else if (code == 3003) {//  "msg": "APIErrors::WithdrawExisted"
+                        Toast.makeText(WithdrawCashActivity.this, getResources().getString(R.string.withdraw_existed), Toast.LENGTH_SHORT).show();
+                    } else {
+                        dialog();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+                dialog();
+                Toast.makeText(getApplicationContext(), getResourceString(R.string.server_error), Toast.LENGTH_LONG).show();
+            }
+        }));
+    }
+
+    protected void dialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        alertDialog = builder.create();
+        View view = View.inflate(this, R.layout.dialog_confirm, null);
+        TextView tv = (TextView) view.findViewById(R.id.text);
+        tv.setText(R.string.apply_withdraw_error);
+        Button confirm = (Button) view.findViewById(R.id.confirm);
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.show();
+        alertDialog.setContentView(view);
     }
 
     private void dialogNotify() {
@@ -258,7 +377,7 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
         alertDialog.setContentView(view);
     }
 
-    private void dialogPSWError() {
+    private void  dialogPSWError() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         alertDialog = builder.create();
         alertDialog.setCanceledOnTouchOutside(false);
@@ -288,11 +407,7 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void changePayPSW() {
-//        if (BaseApplication.getCashAccount().getData().isHas_password()) {
-//            startActivity(new Intent(this, PayPSWVerifyActivity.class));
-//        } else {
-            startActivity(new Intent(this, PayPSWForgetActivity.class));
-//        }
+        startActivity(new Intent(this, PayPSWForgetActivity.class));
     }
 
     @Override
@@ -305,6 +420,12 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
     protected void onPause() {
         super.onPause();
         MobclickAgent.onPause(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 
     @Override
@@ -327,8 +448,16 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
                         @Override
                         public void onClick(View v) {
                             alertDialogPhone.dismiss();
-                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
-                            startActivity(intent);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                if (ContextCompat.checkSelfPermission(WithdrawCashActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                    ActivityCompat.requestPermissions(WithdrawCashActivity.this, new String[]{
+                                            Manifest.permission.CALL_PHONE}, 1);
+                                } else {
+                                    callPhone();
+                                }
+                            } else {
+                                callPhone();
+                            }
                         }
                     });
                     android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(WithdrawCashActivity.this);
@@ -339,28 +468,14 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
                     alertDialogPhone.show();
                 }
                 break;
-            case R.id.to_bank_layout:
-                payType = "bank";
-                toBank.setImageResource(R.drawable.shape_select_circle_select);
-                toAlipay.setImageResource(R.drawable.shape_select_circle_normal);
-                break;
-            case R.id.to_alipay_layout:
-                payType = "alipay";
-                toAlipay.setImageResource(R.drawable.shape_select_circle_select);
-                toBank.setImageResource(R.drawable.shape_select_circle_normal);
-                break;
             case R.id.recharge_now:
-                if(BaseApplication.getCashAccount().getData().isHas_password()){
-                    long changeAt = BaseApplication.getCashAccount().getData().getPassword_set_at();
+                long changeAt = BaseApplication.getInstance().getCashAccount().getData().getPassword_set_at();
 
-                    int diff = 24 - (int) ((System.currentTimeMillis()/1000  - changeAt) / 3600);
-                    if (diff <= 24&&diff > 0) {
-                        dialogServerError(getString(R.string.pay_password_not_enough_24));//未满24小时
-                    } else {
-                        showPSWPop();
-                    }
-                }else{
-                    Toast.makeText(WithdrawCashActivity.this, R.string.pay_password_not_set, Toast.LENGTH_SHORT).show();
+                int diff = 2 - (int) ((System.currentTimeMillis() / 1000 - changeAt) / 3600);
+                if (diff <= 2 && diff > 0) {
+                    dialogServerError(getString(R.string.pay_password_not_enough_time));//未满24小时
+                } else {
+                    showPSWPop();
                 }
                 break;
         }

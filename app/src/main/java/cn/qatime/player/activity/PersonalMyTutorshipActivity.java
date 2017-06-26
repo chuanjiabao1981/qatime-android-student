@@ -46,7 +46,6 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
     private void initView() {
         findViewById(R.id.right).setVisibility(View.GONE);
 
-//        fragBaseFragments.add(new FragmentTutorshipToday());
         fragBaseFragments.add(new FragmentTutorshipPreview());
         fragBaseFragments.add(new FragmentTutorshipTeaching());
         fragBaseFragments.add(new FragmentTutorshipOver());
@@ -56,7 +55,7 @@ public class PersonalMyTutorshipActivity extends BaseFragmentActivity {
         fragmentlayout.setScorllToNext(true);
         fragmentlayout.setScorll(true);
         fragmentlayout.setWhereTab(1);
-        fragmentlayout.setTabHeight(4, 0xffff5842);
+        fragmentlayout.setTabHeight(4, getResources().getColor(R.color.colorPrimary));
         fragmentlayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {

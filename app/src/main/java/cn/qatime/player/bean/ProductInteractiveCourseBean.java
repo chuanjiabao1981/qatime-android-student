@@ -8,32 +8,10 @@ import libraryextra.bean.TeacherBean;
 
 
 public class ProductInteractiveCourseBean implements Serializable {
-    /**
-     * chat_team_id : 28054274
-     * closed_lessons_count : 0
-     * completed_lessons_count : 0
-     * created_at : 1490940558
-     * description : <p>哈哈哈哈哈哈哈&nbsp;</p>
-     * grade : 初二
-     * id : 2
-     * lessons_count : 10
-     * live_end_time : 2017-04-10 18:45
-     * live_start_time : 2017-04-01 18:00
-     * name : 创建10个课程要疯呀
-     * objective : 漫无目的的走在大街上，哪里会有目标
-     * price : 500.0
-     * publicize_app_url : http://testing.qatime.cn/imgs/course_default.png
-     * publicize_info_url : http://testing.qatime.cn/imgs/course_default.png
-     * publicize_list_url : http://testing.qatime.cn/imgs/course_default.png
-     * publicize_url : http://testing.qatime.cn/imgs/course_default.png
-     * status : published
-     * subject : 化学
-     * suit_crowd : 活到老，学到老，学习不分年龄
-     * teachers : [{"avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/ed8858f5ed860b8e94226f37446b89c1.jpg","category":"高中","city":1,"desc":"","email":"qatime@8.cn","ex_big_avatar_url":"http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/ex_big_ed8858f5ed860b8e94226f37446b89c1.jpg","grade_range":[],"id":541,"name":"教师","nick_name":"春意盎然","province":1,"school":1,"subject":"数学","teaching_years":"within_three_years"}]
-     */
 
     private String chat_team_id;
-    private int closed_lessons_count;
+    //    private int closed_lessons_count;
+    private int started_lessons_count;
     private int created_at;
     private String description;
     private String grade;
@@ -53,7 +31,23 @@ public class ProductInteractiveCourseBean implements Serializable {
     private String suit_crowd;
     private List<TeacherBean> teachers;
     private IconsBean icons;
+    private boolean off_shelve;
 
+    public boolean isOff_shelve() {
+        return off_shelve;
+    }
+
+    public void setOff_shelve(boolean off_shelve) {
+        this.off_shelve = off_shelve;
+    }
+
+    public int getStarted_lessons_count() {
+        return started_lessons_count;
+    }
+
+    public void setStarted_lessons_count(int started_lessons_count) {
+        this.started_lessons_count = started_lessons_count;
+    }
 
     public String getChat_team_id() {
         return chat_team_id;
@@ -63,13 +57,13 @@ public class ProductInteractiveCourseBean implements Serializable {
         this.chat_team_id = chat_team_id;
     }
 
-    public int getClosed_lessons_count() {
-        return closed_lessons_count;
-    }
-
-    public void setClosed_lessons_count(int closed_lessons_count) {
-        this.closed_lessons_count = closed_lessons_count;
-    }
+//    public int getClosed_lessons_count() {
+//        return closed_lessons_count;
+//    }
+//
+//    public void setClosed_lessons_count(int closed_lessons_count) {
+//        this.closed_lessons_count = closed_lessons_count;
+//    }
 
     public int getCreated_at() {
         return created_at;
@@ -214,6 +208,7 @@ public class ProductInteractiveCourseBean implements Serializable {
     public void setTeachers(List<TeacherBean> teachers) {
         this.teachers = teachers;
     }
+
     public IconsBean getIcons() {
         return icons;
     }

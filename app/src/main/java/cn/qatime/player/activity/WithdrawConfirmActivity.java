@@ -68,7 +68,7 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
         switch (v.getId()) {
             case R.id.text_getcode:
                 Map<String, String> map = new HashMap<>();
-                map.put("send_to", BaseApplication.getProfile().getData().getUser().getLogin_mobile());
+                map.put("send_to", BaseApplication.getInstance().getProfile().getData().getUser().getLogin_mobile());
                 map.put("key", "withdraw_cash");
 
                 addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlGetCode, map), null, new VolleyListener(this) {
@@ -110,13 +110,13 @@ public class WithdrawConfirmActivity extends BaseActivity implements View.OnClic
                 }
 
                 map = new HashMap<>();
-                map.put("send_to", BaseApplication.getProfile().getData().getUser().getLogin_mobile());
+                map.put("send_to", BaseApplication.getInstance().getProfile().getData().getUser().getLogin_mobile());
                 map.put("amount", amount);
                 map.put("pay_type", payType);
                 map.put("account", account.getText().toString().trim());
                 map.put("name", name.getText().toString().trim());
                 map.put("ticket_token", getIntent().getStringExtra("ticket_token"));
-                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/withdraws", map), null, new VolleyListener(this) {
+                addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getInstance().getUserId() + "/withdraws", map), null, new VolleyListener(this) {
                     @Override
                     protected void onTokenOut() {
                         tokenOut();

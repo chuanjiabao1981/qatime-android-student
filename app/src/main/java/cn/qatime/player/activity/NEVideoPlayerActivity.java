@@ -122,6 +122,19 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     private String board;
     private ScreenSwitchUtils screenSwitchUtils;
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (NetUtils.checkRecordAudioPermission(this)) {
+                } else {
+                    Toast.makeText(this, "未取得录音权限", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
 
     private void assignViews() {
         int screenW = ScreenUtils.getScreenWidth(NEVideoPlayerActivity.this);
@@ -229,10 +242,16 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         screenSwitchUtils = ScreenSwitchUtils.init(this.getApplicationContext());
 
         id = getIntent().getIntExtra("id", 0);//从前一页进来的id 获取详情用
+        sessionId = getIntent().getStringExtra("sessionId");
         if (id == 0) {
             Toast.makeText(this, getResourceString(R.string.no_course_information), Toast.LENGTH_SHORT).show();
+            finish();
+
         }
-        sessionId = getIntent().getStringExtra("sessionId");
+        if (StringUtils.isNullOrBlanK(sessionId)) {
+            Toast.makeText(this, getResourceString(R.string.failed_to_obtain_group_information), Toast.LENGTH_SHORT).show();
+            finish();
+        }
 
         EventBus.getDefault().register(this);
         assignViews();
@@ -335,7 +354,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     private void initView() {
         if (!StringUtils.isNullOrBlanK(sessionId)) {
-            TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
+            TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getInstance().getAccount());
             if (team != null) {
                 isMute = team.isMute();
                 floatFragment.setMute(isMute);
@@ -354,7 +373,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         fragmentLayout.setScorllToNext(true);
         fragmentLayout.setScorll(true);
         fragmentLayout.setWhereTab(1);
-        fragmentLayout.setTabHeight(4, 0xffff5842);
+        fragmentLayout.setTabHeight(4, getResources().getColor(R.color.colorPrimary));
         fragmentLayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
@@ -362,6 +381,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffff5842);
                 if (position == 1) {
                     inputPanel.visibilityInput();
+                    ((FragmentPlayerMessage) fragBaseFragments.get(1)).scrollToBottom();
                 } else {
                     inputPanel.goneInput();
                 }
@@ -380,7 +400,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         fragment2.setChatCallBack(new FragmentPlayerMessage.Callback() {
             @Override
             public void back(List<IMMessage> result) {
-                TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
+                TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getInstance().getAccount());
                 if (team != null) {
                     isMute = team.isMute();
                     floatFragment.setMute(isMute);
@@ -403,8 +423,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 floatFragment.setTeam(team);
             }
         });
+
         fragment2.setSessionId(sessionId);
         fragment2.requestTeamInfo();
+
 
         inputPanel.setOnInputShowListener(new InputPanel.OnInputShowListener() {
             @Override
@@ -620,7 +642,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         inputPanel.onPause();
         super.onPause();
         MobclickAgent.onPause(this);
-        NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.isChatMessageNotifyStatus() ? MsgService.MSG_CHATTING_ACCOUNT_NONE : MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
+        NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.getInstance().isChatMessageNotifyStatus() ? MsgService.MSG_CHATTING_ACCOUNT_NONE : MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
     }
 
 
@@ -805,7 +827,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     @Subscribe
     public void onEvent(BusEvent event) {
-        if (event==BusEvent.ANNOUNCEMENT) {
+        if (event == BusEvent.ANNOUNCEMENT) {
             getAnnouncementsData();
         }
     }
@@ -1109,5 +1131,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     @Override
     public void ChatMessage(IMMessage message) {
         sendMessages(message, message.getMsgType() == MsgTypeEnum.text && isSubBig);
+    }
+
+    @Override
+    public boolean isShowTime() {
+        return false;
     }
 }

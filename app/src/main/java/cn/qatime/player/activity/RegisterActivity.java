@@ -44,11 +44,11 @@ import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.SPUtils;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.Profile;
 import libraryextra.utils.AppUtils;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -171,7 +171,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 next();
                 break;
             case R.id.agreement:
-                //// TODO: 2016/8/24 点击协议查看
+                Intent intent= new Intent(this,AgreementActivity.class);
+                startActivity(intent);
                 break;
         }
     }
@@ -288,52 +289,12 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                                         SPUtils.put(RegisterActivity.this, "username", phone.getText().toString());
                                         Profile profile = JsonUtils.objectFromJson(response.toString(), Profile.class);
                                         if (profile != null && profile.getData() != null && profile.getData().getUser() != null && profile.getData().getUser().getId() != 0) {
-                                            PushAgent.getInstance(RegisterActivity.this).addAlias(String.valueOf(profile.getData().getUser().getId()), "student", new UTrack.ICallBack() {
-                                                @Override
-                                                public void onMessage(boolean b, String s) {
-
-                                                }
-                                            });
-                                            String deviceToken = PushAgent.getInstance(RegisterActivity.this).getRegistrationId();
-                                            if (!StringUtils.isNullOrBlanK(deviceToken)) {
-                                                Map<String, String> m = new HashMap<>();
-                                                m.put("user_id", String.valueOf(profile.getData().getUser().getId()));
-                                                m.put("device_token", deviceToken);
-                                                m.put("device_model", Build.MODEL);
-                                                try {
-                                                    m.put("app_name", URLEncoder.encode(AppUtils.getAppName(RegisterActivity.this), "UTF-8"));
-                                                } catch (UnsupportedEncodingException e) {
-                                                    e.printStackTrace();
-                                                }
-                                                m.put("app_version", AppUtils.getVersionName(RegisterActivity.this));
-                                                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlDeviceInfo, m), null,
-                                                        new VolleyListener(RegisterActivity.this) {
-
-                                                            @Override
-                                                            protected void onSuccess(JSONObject response) {
-                                                            }
-
-                                                            @Override
-                                                            protected void onError(JSONObject response) {
-
-                                                            }
-
-                                                            @Override
-                                                            protected void onTokenOut() {
-                                                                tokenOut();
-                                                            }
-
-                                                        }, new VolleyErrorListener() {
-                                                    @Override
-                                                    public void onErrorResponse(VolleyError volleyError) {
-                                                        super.onErrorResponse(volleyError);
-                                                    }
-                                                });
-                                                addToRequestQueue(request);
-                                            }
+                                            initPushAgent(profile);
                                         }
                                         if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
-                                            BaseApplication.setProfile(profile);
+
+                                            BaseApplication.getInstance().setProfile(profile);
+                                            //登陆云信
                                             loginAccount();
                                         } else {
                                             //没有数据或token
@@ -343,6 +304,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                                     e.printStackTrace();
                                 }
                             }
+
+
 
                             @Override
                             protected void onError(JSONObject response) {
@@ -387,7 +350,51 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
         addToRequestQueue(request);
     }
+    private void initPushAgent(Profile profile) {
+        PushAgent.getInstance(RegisterActivity.this).addAlias(String.valueOf(profile.getData().getUser().getId()), "student", new UTrack.ICallBack() {
+            @Override
+            public void onMessage(boolean b, String s) {
 
+            }
+        });
+        String deviceToken = PushAgent.getInstance(RegisterActivity.this).getRegistrationId();
+        if (!StringUtils.isNullOrBlanK(deviceToken)) {
+            Map<String, String> m = new HashMap<>();
+            m.put("user_id", String.valueOf(profile.getData().getUser().getId()));
+            m.put("device_token", deviceToken);
+            m.put("device_model", Build.MODEL);
+            try {
+                m.put("app_name", URLEncoder.encode(AppUtils.getAppName(RegisterActivity.this), "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            m.put("app_version", AppUtils.getVersionName(RegisterActivity.this));
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlDeviceInfo, m), null,
+                    new VolleyListener(RegisterActivity.this) {
+
+                        @Override
+                        protected void onSuccess(JSONObject response) {
+                        }
+
+                        @Override
+                        protected void onError(JSONObject response) {
+
+                        }
+
+                        @Override
+                        protected void onTokenOut() {
+                            tokenOut();
+                        }
+
+                    }, new VolleyErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    super.onErrorResponse(volleyError);
+                }
+            });
+            addToRequestQueue(request);
+        }
+    }
     /**
      * 手机号已注册提示
      */
@@ -429,8 +436,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void loginAccount() {
-        String account = BaseApplication.getAccount();
-        String token = BaseApplication.getAccountToken();
+        String account = BaseApplication.getInstance().getAccount();
+        String token = BaseApplication.getInstance().getAccountToken();
 
         if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
             NIMClient.getService(AuthService.class).login(new LoginInfo(account, token)).setCallback(new RequestCallback<LoginInfo>() {
@@ -456,16 +463,12 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
                 @Override
                 public void onFailed(int code) {
-                    profile.getData().setRemember_token("");
-                    SPUtils.putObject(RegisterActivity.this, "profile", profile);
                     Logger.e(code + "code");
                 }
 
                 @Override
                 public void onException(Throwable throwable) {
                     Logger.e(throwable.getMessage());
-                    profile.getData().setRemember_token("");
-                    SPUtils.putObject(RegisterActivity.this, "profile", profile);
                 }
             });
         }

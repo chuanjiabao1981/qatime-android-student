@@ -1,14 +1,20 @@
 package cn.qatime.player.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -17,10 +23,10 @@ import java.util.ArrayList;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.base.BaseFragmentActivity;
+import cn.qatime.player.fragment.FragmentFundRecordConsumption;
 import cn.qatime.player.fragment.FragmentFundRecordRecharge;
 import cn.qatime.player.fragment.FragmentFundRecordRefund;
 import cn.qatime.player.fragment.FragmentFundRecordWithdrawCash;
-import cn.qatime.player.fragment.FragmentFundRecordConsumption;
 import cn.qatime.player.utils.Constant;
 import libraryextra.view.FragmentLayoutWithLine;
 
@@ -59,9 +65,17 @@ public class RecordFundActivity extends BaseFragmentActivity{
                     confirm.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+ Constant.phoneNumber));
-                            startActivity(intent);
                             alertDialog.dismiss();
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                if (ContextCompat.checkSelfPermission(RecordFundActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                    ActivityCompat.requestPermissions(RecordFundActivity.this, new String[]{
+                                            Manifest.permission.CALL_PHONE}, 1);
+                                } else {
+                                    callPhone();
+                                }
+                            } else {
+                                callPhone();
+                            }
                         }
                     });
                     android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(RecordFundActivity.this);
@@ -89,7 +103,7 @@ public class RecordFundActivity extends BaseFragmentActivity{
         fragmentlayout.setScorllToNext(true);
         fragmentlayout.setScorll(true);
         fragmentlayout.setWhereTab(1);
-        fragmentlayout.setTabHeight(4,0xffff5842);
+        fragmentlayout.setTabHeight(4, getResources().getColor(R.color.colorPrimary));
         fragmentlayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
@@ -108,6 +122,26 @@ public class RecordFundActivity extends BaseFragmentActivity{
         }, 200);
 
     }
+
+    private void callPhone() {
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.phoneNumber));
+        if (ActivityCompat.checkSelfPermission(RecordFundActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        startActivity(intent);
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "权限被拒绝", Toast.LENGTH_SHORT).show();
+            }else{
+                callPhone();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();

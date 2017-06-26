@@ -27,7 +27,8 @@
                 android:layout_height="18.0dp"
                 android:gravity="center_vertical"
                 android:text="@string/course_to_be_done"
-                style="@style/tab_text_color_select" />
+                android:textSize="14.0sp"
+                android:textColor="#333333" />
         </LinearLayout>
 
         <LinearLayout
@@ -42,7 +43,8 @@
                 android:layout_height="18.0dp"
                 android:gravity="center_vertical"
                 android:text="@string/course_finished"
-                style="@style/tab_text_color_normal" />
+                android:textSize="14.0sp"
+                android:textColor="#999999" />
         </LinearLayout>
 
 

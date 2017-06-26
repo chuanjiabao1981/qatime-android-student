@@ -81,24 +81,24 @@ public class FragmentVideoCoursesTeacherInfo extends BaseFragment {
     public void setData(final VideoCoursesDetailsBean data) {
 //        sex.setText(getSex(data.getData().getTeacher().getGender()));
 //        sex.setTextColor(getSexColor(data.getData().getTeacher().getGender()));
-        sex.setImageResource("male".equals(data.getData().getTeacher().getGender()) ? R.mipmap.male : R.mipmap.female);
-        name.setText(data.getData().getTeacher().getName());
-        if (!StringUtils.isNullOrBlanK(data.getData().getTeacher().getTeaching_years())) {
-            if (data.getData().getTeacher().getTeaching_years().equals("within_three_years")) {
+        sex.setImageResource("male".equals(data.getData().getVideo_course().getTeacher().getGender()) ? R.mipmap.male : R.mipmap.female);
+        name.setText(data.getData().getVideo_course().getTeacher().getName());
+        if (!StringUtils.isNullOrBlanK(data.getData().getVideo_course().getTeacher().getTeaching_years())) {
+            if (data.getData().getVideo_course().getTeacher().getTeaching_years().equals("within_three_years")) {
                 teachingyears.setText(getResourceString(R.string.within_three_years));
-            } else if (data.getData().getTeacher().getTeaching_years().equals("within_ten_years")) {
+            } else if (data.getData().getVideo_course().getTeacher().getTeaching_years().equals("within_ten_years")) {
                 teachingyears.setText(getResourceString(R.string.within_ten_years));
-            } else if (data.getData().getTeacher().getTeaching_years().equals("within_twenty_years")) {
+            } else if (data.getData().getVideo_course().getTeacher().getTeaching_years().equals("within_twenty_years")) {
                 teachingyears.setText(getResourceString(R.string.within_twenty_years));
             } else {
                 teachingyears.setText(getResourceString(R.string.more_than_ten_years));
             }
         }
 
-        SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getCacheDir() + "/school.txt"), SchoolBean.class);
+        SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getFilesDir() + "/school.txt"), SchoolBean.class);
         if (schoolBean != null && schoolBean.getData() != null) {
             for (int i = 0; i < schoolBean.getData().size(); i++) {
-                if (data.getData().getTeacher().getSchool() == schoolBean.getData().get(i).getId()) {
+                if (data.getData().getVideo_course().getTeacher().getSchool() == schoolBean.getData().get(i).getId()) {
                     school.setText(schoolBean.getData().get(i).getName());
                     break;
                 }
@@ -107,36 +107,18 @@ public class FragmentVideoCoursesTeacherInfo extends BaseFragment {
             school.setText(R.string.not_available);
         }
 
-        Glide.with(this).load(data.getData().getTeacher().getAvatar_url()).bitmapTransform(new GlideCircleTransform(getActivity())).placeholder(R.mipmap.error_header).crossFade().into(image);
+        Glide.with(this).load(data.getData().getVideo_course().getTeacher().getAvatar_url()).bitmapTransform(new GlideCircleTransform(getActivity())).placeholder(R.mipmap.error_header).crossFade().into(image);
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), TeacherDataActivity.class);
-                intent.putExtra("teacherId", data.getData().getTeacher().getId());
+                intent.putExtra("teacherId", data.getData().getVideo_course().getTeacher().getId());
                 startActivity(intent);
             }
         });
-        String body = StringUtils.isNullOrBlanK(data.getData().getTeacher().getDesc()) ? getString(R.string.no_desc) : data.getData().getTeacher().getDesc();
+        String body = StringUtils.isNullOrBlanK(data.getData().getVideo_course().getTeacher().getDesc()) ? getString(R.string.no_desc) : data.getData().getVideo_course().getTeacher().getDesc();
         body = body.replace("\r\n", "<br>");
         String css = "<style>* {color:#666666;margin:0;padding:0}</style>";//默认color（android标签下以及所有未设置颜色的标签）
         describe.loadDataWithBaseURL(null, css + body, "text/html", "UTF-8", null);
-    }
-
-    private int getSexColor(String gender) {
-        if ("male".equals(gender)) {
-            return 0xff00ccff;
-        } else if ("female".equals(gender)) {
-            return 0xffff9966;
-        }
-        return 0xffff9966;
-    }
-
-    private String getSex(String gender) {
-        if ("male".equals(gender)) {
-            return "♂";
-        } else if ("female".equals(gender)) {
-            return "♀";
-        }
-        return "";
     }
 }

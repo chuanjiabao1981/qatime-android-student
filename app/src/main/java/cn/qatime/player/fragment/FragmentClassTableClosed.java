@@ -1,6 +1,7 @@
 package cn.qatime.player.fragment;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -28,16 +30,23 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.InteractCourseDetailActivity;
+import cn.qatime.player.activity.InteractiveLiveActivity;
 import cn.qatime.player.activity.NEVideoPlayerActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.ClassTimeTableBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.MPermission;
+import cn.qatime.player.utils.MPermissionUtil;
 import cn.qatime.player.utils.UrlUtils;
+import cn.qatime.player.utils.annotation.OnMPermissionDenied;
+import cn.qatime.player.utils.annotation.OnMPermissionGranted;
+import cn.qatime.player.utils.annotation.OnMPermissionNeverAskAgain;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.NetUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -48,6 +57,7 @@ public class FragmentClassTableClosed extends BaseFragment {
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
     private String date = parse.format(new Date());
     private List<ClassTimeTableBean.DataBean.LessonsBean> itemList = new ArrayList<>();
+    private ClassTimeTableBean.DataBean.LessonsBean item;
 
     @Nullable
     @Override
@@ -110,7 +120,16 @@ public class FragmentClassTableClosed extends BaseFragment {
                             intent.putExtra("sessionId", item.getChat_team_id());
                             startActivity(intent);
                         } else if ("LiveStudio::InteractiveLesson".equals(itemList.get(position).getModal_type())) {
-
+                            FragmentClassTableClosed.this.item = item;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                if (NetUtils.checkPermission(getActivity()).size() > 0) {
+                                    requestLivePermission();
+                                } else {
+                                    toNext();
+                                }
+                            } else {
+                                toNext();
+                            }
                         }
                     }
                 });
@@ -140,6 +159,48 @@ public class FragmentClassTableClosed extends BaseFragment {
                 }
             }
         });
+    }
+
+    private void toNext() {
+        Intent intent = new Intent(getActivity(), InteractiveLiveActivity.class);
+        intent.putExtra("id", Integer.valueOf(item.getProduct_id()));
+        intent.putExtra("teamId", item.getChat_team_id());
+        startActivity(intent);
+    }
+
+    private void requestLivePermission() {
+        MPermission.with(this)
+                .addRequestCode(100)
+                .permissions(NetUtils.checkPermission(getActivity()).toArray(new String[NetUtils.checkPermission(getActivity()).size()]))
+                .request();
+    }
+
+    @OnMPermissionGranted(100)
+    public void onLivePermissionGranted() {
+//        Toast.makeText(InteractiveLiveActivity.this, "授权成功", Toast.LENGTH_SHORT).show();
+        toNext();
+    }
+
+    @OnMPermissionDenied(100)
+    public void onLivePermissionDenied() {
+        List<String> deniedPermissions = MPermission.getDeniedPermissions(this, NetUtils.checkPermission(getActivity()).toArray(new String[NetUtils.checkPermission(getActivity()).size()]));
+        String tip = "您拒绝了权限" + MPermissionUtil.toString(deniedPermissions) + "，无法开启直播";
+        Toast.makeText(getActivity(), tip, Toast.LENGTH_SHORT).show();
+    }
+
+    @OnMPermissionNeverAskAgain(100)
+    public void onLivePermissionDeniedAsNeverAskAgain() {
+        List<String> deniedPermissions = MPermission.getDeniedPermissionsWithoutNeverAskAgain(this, NetUtils.checkPermission(getActivity()).toArray(new String[NetUtils.checkPermission(getActivity()).size()]));
+        List<String> neverAskAgainPermission = MPermission.getNeverAskAgainPermissions(this, NetUtils.checkPermission(getActivity()).toArray(new String[NetUtils.checkPermission(getActivity()).size()]));
+        StringBuilder sb = new StringBuilder();
+        sb.append("无法开启直播，请到系统设置页面开启权限");
+        sb.append(MPermissionUtil.toString(neverAskAgainPermission));
+        if (deniedPermissions != null && !deniedPermissions.isEmpty()) {
+            sb.append(",下次询问请授予权限");
+            sb.append(MPermissionUtil.toString(deniedPermissions));
+        }
+
+        Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG).show();
     }
 
     private String getDay(int day) {
@@ -179,7 +240,7 @@ public class FragmentClassTableClosed extends BaseFragment {
         Map<String, String> map = new HashMap<>();
         map.put("month", date);
         map.put("state", "closed");
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getUserId() + "/schedule", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getInstance().getUserId() + "/schedule", map), null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {

@@ -1,7 +1,11 @@
 package cn.qatime.player.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +33,12 @@ import cn.qatime.player.bean.ModuleProxy;
 import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.MPermission;
+import cn.qatime.player.utils.MPermissionUtil;
+import cn.qatime.player.utils.annotation.OnMPermissionDenied;
+import cn.qatime.player.utils.annotation.OnMPermissionGranted;
+import cn.qatime.player.utils.annotation.OnMPermissionNeverAskAgain;
+import libraryextra.utils.NetUtils;
 import libraryextra.utils.StringUtils;
 
 /**
@@ -77,7 +87,15 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
                     intent.putExtra("sessionId", sessionId);
                     startActivityForResult(intent, Constant.REQUEST);
                 } else if ("interactive".equals(type)) {
-
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (NetUtils.checkPermission(MessageActivity.this).size() > 0) {
+                            requestLivePermission();
+                        } else {
+                            toNext();
+                        }
+                    } else {
+                        toNext();
+                    }
                 }
             }
         });
@@ -86,8 +104,49 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         initView();
     }
 
+    private void toNext() {
+        Intent intent = new Intent(MessageActivity.this, InteractiveLiveActivity.class);
+        intent.putExtra("id", courseId);
+        intent.putExtra("teamId", sessionId);
+        startActivity(intent);
+    }
+    private void requestLivePermission() {
+        MPermission.with(this)
+                .addRequestCode(100)
+                .permissions(NetUtils.checkPermission(MessageActivity.this).toArray(new String[NetUtils.checkPermission(MessageActivity.this).size()]))
+                .request();
+    }
+
+    @OnMPermissionGranted(100)
+    public void onLivePermissionGranted() {
+//        Toast.makeText(InteractiveLiveActivity.this, "授权成功", Toast.LENGTH_SHORT).show();
+        toNext();
+    }
+
+    @OnMPermissionDenied(100)
+    public void onLivePermissionDenied() {
+        List<String> deniedPermissions = MPermission.getDeniedPermissions(this, NetUtils.checkPermission(MessageActivity.this).toArray(new String[NetUtils.checkPermission(MessageActivity.this).size()]));
+        String tip = "您拒绝了权限" + MPermissionUtil.toString(deniedPermissions) + "，无法开启直播";
+        Toast.makeText(MessageActivity.this, tip, Toast.LENGTH_SHORT).show();
+    }
+
+    @OnMPermissionNeverAskAgain(100)
+    public void onLivePermissionDeniedAsNeverAskAgain() {
+        List<String> deniedPermissions = MPermission.getDeniedPermissionsWithoutNeverAskAgain(this, NetUtils.checkPermission(MessageActivity.this).toArray(new String[NetUtils.checkPermission(MessageActivity.this).size()]));
+        List<String> neverAskAgainPermission = MPermission.getNeverAskAgainPermissions(this, NetUtils.checkPermission(MessageActivity.this).toArray(new String[NetUtils.checkPermission(MessageActivity.this).size()]));
+        StringBuilder sb = new StringBuilder();
+        sb.append("无法开启直播，请到系统设置页面开启权限");
+        sb.append(MPermissionUtil.toString(neverAskAgainPermission));
+        if (deniedPermissions != null && !deniedPermissions.isEmpty()) {
+            sb.append(",下次询问请授予权限");
+            sb.append(MPermissionUtil.toString(deniedPermissions));
+        }
+
+        Toast.makeText(MessageActivity.this, sb.toString(), Toast.LENGTH_LONG).show();
+    }
+
     private void initView() {
-        TeamMember teamMember = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getAccount());
+        TeamMember teamMember = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getInstance().getAccount());
         if (teamMember != null) {
             isMute = teamMember.isMute();
         }
@@ -104,7 +163,18 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
             }
         });
     }
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "未取得录音权限", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
     /**
      * 收起输入法等
      */
@@ -127,6 +197,11 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
 //                data // 文本内容
 //        );
         sendMessage(message);
+    }
+
+    @Override
+    public boolean isShowTime() {
+        return false;
     }
 
     private void sendMessage(IMMessage message) {

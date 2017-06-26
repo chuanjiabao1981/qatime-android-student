@@ -27,7 +27,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:text="@string/remedial_detail"
-                style="@style/tab_text_color_select" />
+                android:textSize="14.0sp"
+                android:textColor="#333333" />
         </LinearLayout>
 
         <LinearLayout
@@ -42,7 +43,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:text="@string/teachers_detail"
-                style="@style/tab_text_color_normal" />
+                android:textSize="14.0sp"
+                android:textColor="#999999" />
         </LinearLayout>
 
         <LinearLayout
@@ -57,7 +59,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:text="@string/course_arrangement"
-                style="@style/tab_text_color_normal" />
+                android:textSize="14.0sp"
+                android:textColor="#999999" />
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

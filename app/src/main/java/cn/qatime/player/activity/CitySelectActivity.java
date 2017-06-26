@@ -28,11 +28,11 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.AMapLocationUtils;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.SPUtils;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.CityBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.PinyinUtils;
-import libraryextra.utils.SPUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -77,7 +77,8 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
     }
 
     private void initData() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,
+
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities?scope=has_default_workstation", null,
                 new VolleyListener(this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -133,13 +134,13 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
         locationView.setEnabled(false);
         Toast.makeText(CitySelectActivity.this, R.string.loading_location, Toast.LENGTH_SHORT).show();
         //如果没有被赋值，则默认全国
-        utils = new AMapLocationUtils(getApplicationContext(), new AMapLocationUtils.LocationListener() {
+        utils = new AMapLocationUtils(this, new AMapLocationUtils.LocationListener() {
             @Override
             public void onLocationBack(String[] result) {
                 locationView.setEnabled(true);
                 if (result != null && result.length > 1) {
                     for (CityBean.Data item : list) {
-                        if (result[1].equals(item.getName()) || result[0].equals(item.getName())) {//需先对比区,区不对应往上对比市,不可颠倒
+                        if (result[2].equals(item.getName()) || result[1].equals(item.getName())) {//需先对比区,区不对应往上对比市,不可颠倒
                             locationCity = item;
                         }
                     }
@@ -147,10 +148,10 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
                     Toast.makeText(CitySelectActivity.this, R.string.position_locate_error, Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (locationCity == null) {//如果没有被赋值，则默认全国
-                    Toast.makeText(CitySelectActivity.this,  R.string.position_locate_error, Toast.LENGTH_SHORT).show();
+                if (locationCity == null) {
+                    Toast.makeText(CitySelectActivity.this, R.string.position_locate_error, Toast.LENGTH_SHORT).show();
                 } else {
-                    if (!BaseApplication.getCurrentCity().equals(locationCity)) {
+                    if (!BaseApplication.getInstance().getCurrentCity().equals(locationCity)) {
                         dialogCity();
 //                        Logger.e("location", result);
                         Logger.e("locationCity", locationCity.getName());
@@ -198,7 +199,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
         } else {
             listLately = lately;
         }
-        refreshLately(BaseApplication.getCurrentCity());
+        refreshLately(BaseApplication.getInstance().getCurrentCity());
         adapter = new CitySelectAdapter(this, letterMap, listLately, list, R.layout.item_city_lately, R.layout.item_city_all, R.layout.item_city_list) {
             @Override
             public void setCityName(CityBean.Data data) {
@@ -243,7 +244,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
     private void setCityAndHistory(CityBean.Data data) {
         refreshLately(data);
 //                adapter.notifyDataSetChanged();
-        BaseApplication.setCurrentCity(data);
+        BaseApplication.getInstance().setCurrentCity(data);
         Intent intent = new Intent();
         setResult(Constant.RESPONSE_CITY_SELECT, intent);
         finish();
@@ -292,7 +293,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (utils!=null) {
+        if (utils != null) {
             utils.destroyLocation();
         }
     }

@@ -212,8 +212,9 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
             nameContainer.removeView(nameTextView);
             nameContainer.addView(nameTextView, index);
         }
-        String text = DateUtils.getTimeShowString(message.getTime(), false);
+        String text = DateUtils.getMMddHHmmss(message.getTime());
         timeTextView.setText(text);
+        timeTextView.setVisibility(isMiddleItem() ? View.GONE : View.VISIBLE);
     }
 
     /**
@@ -249,7 +250,7 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
             show.setVisibility(View.GONE);
         } else {
             show.setVisibility(View.VISIBLE);
-            UserInfoProvider.UserInfo userinfo = BaseApplication.getUserInfoProvide().getUserInfo(message.getFromAccount());
+            UserInfoProvider.UserInfo userinfo = BaseApplication.getInstance().getUserInfoProvide().getUserInfo(message.getFromAccount());
             if (userinfo != null)
                 Glide.with(context).load(userinfo.getAvatar()).placeholder(R.mipmap.head_default).crossFade().dontAnimate().into(show);
         }
@@ -276,17 +277,6 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
             }
         });
 
-        // 头像点击事件响应
-//        if (NimUIKit.getSessionListener() != null) {
-//            View.OnClickListener portraitListener = new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    NimUIKit.getSessionListener().onAvatarClicked(context, message);
-//                }
-//            };
-//            avatarLeft.setOnClickListener(portraitListener);
-//            avatarRight.setOnClickListener(portraitListener);
-//        }
     }
 
     /**
@@ -308,19 +298,6 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
         };
         // 消息长按事件响应处理
         contentContainer.setOnLongClickListener(longClickListener);
-
-        // 头像长按事件响应处理
-//        if (NimUIKit.getSessionListener() != null) {
-//            View.OnLongClickListener longClickListener = new View.OnLongClickListener() {
-//                @Override
-//                public boolean onLongClick(View v) {
-//                    NimUIKit.getSessionListener().onAvatarLongClicked(context, message);
-//                    return true;
-//                }
-//            };
-//            avatarLeft.setOnLongClickListener(longClickListener);
-//            avatarRight.setOnLongClickListener(longClickListener);
-//        }
     }
 
     private void setNameTextView() {
@@ -338,6 +315,7 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
             } else {
                 nameTextView.setText(name);
             }
+            nameTextView.setVisibility(isReceivedMessage() ? View.VISIBLE : View.GONE);
         }
     }
 

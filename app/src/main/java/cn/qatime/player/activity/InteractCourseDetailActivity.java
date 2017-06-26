@@ -2,20 +2,17 @@ package cn.qatime.player.activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
-import com.bumptech.glide.Glide;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -35,12 +32,17 @@ import cn.qatime.player.fragment.FragmentInteractDetailClassList;
 import cn.qatime.player.fragment.FragmentInteractDetailTeachersInfo;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.MPermission;
+import cn.qatime.player.utils.MPermissionUtil;
 import cn.qatime.player.utils.UrlUtils;
+import cn.qatime.player.utils.annotation.OnMPermissionDenied;
+import cn.qatime.player.utils.annotation.OnMPermissionGranted;
+import cn.qatime.player.utils.annotation.OnMPermissionNeverAskAgain;
 import libraryextra.bean.InteractCourseDetailBean;
 import libraryextra.bean.OrderPayBean;
 import libraryextra.bean.TeacherBean;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.ScreenUtils;
+import libraryextra.utils.NetUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.SimpleViewPagerIndicator;
@@ -172,10 +174,19 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
 
                             if (data.getData().isIs_bought()) {
                                 startStudyView.setVisibility(View.VISIBLE);
-                                if (data.getData().getStatus().equals("completed") || data.getData().getStatus().equals("finished")) {
+                                if (Constant.CourseStatus.completed.equals(data.getData().getStatus())) {
+                                    startStudy.setText("已结束");
+                                    startStudy.setEnabled(false);
+                                    handleLayout.setVisibility(View.GONE);//已结束的课程隐藏操作按钮
+                                }
+                            }else{
+                                if (data.getData().isOff_shelve()) {
+                                    startStudyView.setVisibility(View.VISIBLE);
+                                    startStudy.setText("已下架");
                                     startStudy.setEnabled(false);
                                 }
                             }
+
                             if (data.getData().getIcons() != null) {
                                 if (!data.getData().getIcons().isRefund_any_time()) {
                                     refundAnyTime.setVisibility(View.GONE);
@@ -215,17 +226,19 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
         Intent intent;
         switch (v.getId()) {
             case R.id.start_study:
-                if (BaseApplication.isLogined()) {
+                if (BaseApplication.getInstance().isLogined()) {
                     if ("init".equals(data.getData().getStatus()) || "published".equals(data.getData().getStatus())) {
                         Toast.makeText(this, getString(R.string.published_course_unable_enter) + getString(R.string.study), Toast.LENGTH_SHORT).show();
                     } else {
-//                        intent = new Intent(InteractCourseDetailActivity.this, NEVideoPlayerActivity.class);
-////                    intent.putExtra("camera", data.getData().getCamera());
-////                    intent.putExtra("board", data.getData().getBoard());
-//                        intent.putExtra("id", data.getData().getId());
-//                        intent.putExtra("sessionId", data.getData().getChat_team_id());
-//                        startActivity(intent);
-                        // TODO: 2017/3/31  跳转播放器
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            if (NetUtils.checkPermission(InteractCourseDetailActivity.this).size() > 0) {
+                                requestLivePermission();
+                            } else {
+                                toNext();
+                            }
+                        } else {
+                            toNext();
+                        }
                     }
                 } else {
                     intent = new Intent(InteractCourseDetailActivity.this, LoginActivity2.class);
@@ -234,7 +247,7 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
                 }
                 break;
             case R.id.pay:
-                if (BaseApplication.isLogined()) {
+                if (BaseApplication.getInstance().isLogined()) {
                     if ("teaching".equals(data.getData().getStatus())) {
                         if (alertDialog == null) {
                             View view = View.inflate(InteractCourseDetailActivity.this, R.layout.dialog_cancel_or_confirm, null);
@@ -275,6 +288,50 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
         }
     }
 
+    private void toNext() {
+        Intent intent = new Intent(InteractCourseDetailActivity.this, InteractiveLiveActivity.class);
+        intent.putExtra("id", data.getData().getId());
+        if (data.getData().getChat_team() != null) {
+            intent.putExtra("teamId", data.getData().getChat_team().getTeam_id());
+        }
+        startActivity(intent);
+    }
+
+    private void requestLivePermission() {
+        MPermission.with(this)
+                .addRequestCode(100)
+                .permissions(NetUtils.checkPermission(InteractCourseDetailActivity.this).toArray(new String[NetUtils.checkPermission(InteractCourseDetailActivity.this).size()]))
+                .request();
+    }
+
+    @OnMPermissionGranted(100)
+    public void onLivePermissionGranted() {
+//        Toast.makeText(InteractiveLiveActivity.this, "授权成功", Toast.LENGTH_SHORT).show();
+        toNext();
+    }
+
+    @OnMPermissionDenied(100)
+    public void onLivePermissionDenied() {
+        List<String> deniedPermissions = MPermission.getDeniedPermissions(this, NetUtils.checkPermission(InteractCourseDetailActivity.this).toArray(new String[NetUtils.checkPermission(InteractCourseDetailActivity.this).size()]));
+        String tip = "您拒绝了权限" + MPermissionUtil.toString(deniedPermissions) + "，无法开启直播";
+        Toast.makeText(InteractCourseDetailActivity.this, tip, Toast.LENGTH_SHORT).show();
+    }
+
+    @OnMPermissionNeverAskAgain(100)
+    public void onLivePermissionDeniedAsNeverAskAgain() {
+        List<String> deniedPermissions = MPermission.getDeniedPermissionsWithoutNeverAskAgain(this, NetUtils.checkPermission(InteractCourseDetailActivity.this).toArray(new String[NetUtils.checkPermission(InteractCourseDetailActivity.this).size()]));
+        List<String> neverAskAgainPermission = MPermission.getNeverAskAgainPermissions(this, NetUtils.checkPermission(InteractCourseDetailActivity.this).toArray(new String[NetUtils.checkPermission(InteractCourseDetailActivity.this).size()]));
+        StringBuilder sb = new StringBuilder();
+        sb.append("无法开启直播，请到系统设置页面开启权限");
+        sb.append(MPermissionUtil.toString(neverAskAgainPermission));
+        if (deniedPermissions != null && !deniedPermissions.isEmpty()) {
+            sb.append(",下次询问请授予权限");
+            sb.append(MPermissionUtil.toString(deniedPermissions));
+        }
+
+        Toast.makeText(InteractCourseDetailActivity.this, sb.toString(), Toast.LENGTH_LONG).show();
+    }
+
     private void payRemedial() {
         Intent intent = new Intent(InteractCourseDetailActivity.this, OrderConfirmActivity.class);
         intent.putExtra("courseType", "interact");
@@ -308,6 +365,7 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
 //
 //            finish();
 //        }
+        setResult(Constant.RESPONSE);
         finish();
     }
 

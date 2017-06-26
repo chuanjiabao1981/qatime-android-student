@@ -1,8 +1,19 @@
 package cn.qatime.player.activity;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,7 +44,7 @@ import libraryextra.utils.VolleyListener;
  * @date 2017/1/3 16:20
  * @Description:
  */
-public class ApplyRefundActivity extends BaseActivity {
+public class  ApplyRefundActivity extends BaseActivity implements View.OnClickListener {
 
     private OrderRefundBean orderRefundBean;
     private TextView orderId;
@@ -44,7 +55,10 @@ public class ApplyRefundActivity extends BaseActivity {
     private TextView refundType;
     private TextView refundAmount;
     private TextView confirm;
-    private EditText reason;
+    private TextView reason;
+    private AlertDialog alertDialog;
+    private TextView phone;
+    private AlertDialog alertDialogPhone;
 
 
     private void assignViews() {
@@ -55,8 +69,45 @@ public class ApplyRefundActivity extends BaseActivity {
         usedAmount = (TextView) findViewById(R.id.used_amount);
         refundType = (TextView) findViewById(R.id.refund_type);
         refundAmount = (TextView) findViewById(R.id.refund_amount);
-        reason = (EditText) findViewById(R.id.reason);
+        reason = (TextView) findViewById(R.id.reason);
         confirm = (TextView) findViewById(R.id.confirm);
+        reason.setOnClickListener(this);
+    }
+
+    private void showReasonDialog() {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle("请选择退款原因");
+//        final String[] str = {"买错了，不想买了", "对课程内容不满意", "对授课老师不满意", "没有时间学习", "其他"};
+//        builder.setSingleChoiceItems(str, -1, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        reason.setText(str[which]);
+//                        dialog.dismiss();
+//                    }
+//                }
+//        );
+//        builder.show();
+
+        if (alertDialog != null) {
+            alertDialog.show();
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            alertDialog = builder.create();
+            final View v = View.inflate(this, R.layout.dialog_refund_reason_alert, null);
+            RadioGroup group = (RadioGroup) v.findViewById(R.id.radioGroup);
+
+            group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
+                    RadioButton check = (RadioButton) v.findViewById(i);
+                    reason.setText(check.getText());
+                    alertDialog.dismiss();
+                }
+            });
+            alertDialog.setCanceledOnTouchOutside(true);
+            alertDialog.show();
+            alertDialog.setContentView(v);
+        }
     }
 
     @Override
@@ -74,7 +125,9 @@ public class ApplyRefundActivity extends BaseActivity {
 
         orderId.setText(getIntent().getStringExtra("order_id"));
         productName.setText(getIntent().getStringExtra("name"));
-        progress.setText(getIntent().getIntExtra("closed_lessons_count", 0) + "/" + getIntent().getIntExtra("preset_lesson_count", 0));
+        int preset_lesson_count = getIntent().getIntExtra("preset_lesson_count", 0);
+        int closed_lessons_count = getIntent().getIntExtra("closed_lessons_count", 0);
+        progress.setText((preset_lesson_count - closed_lessons_count) + "/" + preset_lesson_count);
         price.setText("￥" + orderRefundBean.getData().getAmount());
         usedAmount.setText("￥" + (Double.valueOf(orderRefundBean.getData().getAmount()) - Double.valueOf(orderRefundBean.getData().getRefund_amount())));
         String pay_type = orderRefundBean.getData().getPay_type();
@@ -87,12 +140,12 @@ public class ApplyRefundActivity extends BaseActivity {
         }
         refundAmount.setText("￥" + orderRefundBean.getData().getRefund_amount());
 
-        confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                confirmRefund();
-            }
-        });
+        confirm.setOnClickListener(this);
+
+
+        phone = (TextView) findViewById(R.id.phone);
+        phone.setText(Constant.phoneNumber);
+        phone.setOnClickListener(this);
     }
 
     /**
@@ -107,7 +160,7 @@ public class ApplyRefundActivity extends BaseActivity {
         Map<String, String> map = new HashMap<>();
         map.put("order_id", getIntent().getStringExtra("order_id"));
         map.put("reason", reason.getText().toString());
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getUserId() + "/refunds", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlpayment + BaseApplication.getInstance().getUserId() + "/refunds", map), null,
                 new VolleyListener(ApplyRefundActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -142,4 +195,72 @@ public class ApplyRefundActivity extends BaseActivity {
         addToRequestQueue(request);
 
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.phone:
+                if (alertDialogPhone == null) {
+                    View view = View.inflate(ApplyRefundActivity.this, R.layout.dialog_cancel_or_confirm, null);
+                    TextView text = (TextView) view.findViewById(R.id.text);
+                    text.setText(getResourceString(R.string.call_customer_service_phone) + phone.getText());
+                    Button cancel = (Button) view.findViewById(R.id.cancel);
+                    Button confirm = (Button) view.findViewById(R.id.confirm);
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialogPhone.dismiss();
+                        }
+                    });
+                    confirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialogPhone.dismiss();
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                if (ContextCompat.checkSelfPermission(ApplyRefundActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                    ActivityCompat.requestPermissions(ApplyRefundActivity.this, new String[]{
+                                            Manifest.permission.CALL_PHONE}, 1);
+                                } else {
+                                    callPhone();
+                                }
+                            } else {
+                                callPhone();
+                            }
+                        }
+                    });
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ApplyRefundActivity.this);
+                    alertDialogPhone = builder.create();
+                    alertDialogPhone.show();
+                    alertDialogPhone.setContentView(view);
+                } else {
+                    alertDialogPhone.show();
+                }
+                break;
+            case R.id.confirm:
+                confirmRefund();
+                break;
+            case R.id.reason:
+                showReasonDialog();
+                break;
+        }
+    }
+    private void callPhone() {
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.phoneNumber));
+        if (ActivityCompat.checkSelfPermission(ApplyRefundActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        startActivity(intent);
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "权限被拒绝", Toast.LENGTH_SHORT).show();
+            }else{
+                callPhone();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+    
 }

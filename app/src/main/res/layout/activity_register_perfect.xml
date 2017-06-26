@@ -65,6 +65,20 @@
                 android:maxLength="11"
                 android:textColorHint="#ccc" />
         </LinearLayout>
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/region"
+                style="@style/activity_edit_text_style"
+                android:hint="请选择地区"
+                android:maxLength="11"
+                android:textColorHint="#ccc" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_height="wrap_content"

@@ -23,7 +23,7 @@
 
         <TextView
             style="@style/setting_text_style"
-            android:text="@string/notify_setting" />
+            android:text="@string/notify_message" />
 
         <View
             android:layout_width="0dp"

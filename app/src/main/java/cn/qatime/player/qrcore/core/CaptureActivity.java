@@ -13,22 +13,17 @@ import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.EncodeHintType;
@@ -39,15 +34,12 @@ import com.google.zxing.common.HybridBinarizer;
 import com.orhanobut.logger.Logger;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cn.qatime.player.R;
-import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.qrcore.camera.CameraManager;
 import cn.qatime.player.qrcore.executor.ResultHandler;

@@ -148,26 +148,51 @@
                 android:textColor="#666" />
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/reason"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_margin="5dp"
-            android:background="@drawable/shape_input"
-            android:gravity="start"
-            android:hint="请输入退款原因（20字以内）"
-            android:maxLength="20"
-            android:padding="5dp"
-            android:singleLine="true"
-            android:textColor="#ff333333"
-            android:textColorHint="#cccccc"
-            android:textSize="14sp" />
+            android:layout_height="1px"
+            android:background="#dfdddd" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp"
+                android:text="退款原因"
+                android:textColor="#333" />
+
+            <TextView
+                android:id="@+id/reason"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="28dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:textColor="#666" />
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@mipmap/screen_down" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#dfdddd" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="说明：退款过程中您将不能进行此课程的学习"
+            android:text="退款说明：\n1.退款过程中您将不能进行此课程的学习;\n2.请仔细核对退款信息后提交。"
             android:textColor="#999999"
             android:textSize="12sp" />
     </LinearLayout>
@@ -177,6 +202,37 @@
         style="@style/button_full_width_style"
         android:layout_marginTop="10dp"
         android:text="@string/confirm" />
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/problem_phone"
+            android:textColor="#666666"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:textColor="#00a2ee"
+            android:textSize="16sp" />
+
+    </LinearLayout>
 </LinearLayout>
 
 

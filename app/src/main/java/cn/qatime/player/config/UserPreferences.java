@@ -7,7 +7,7 @@ import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import org.json.JSONObject;
 
 import cn.qatime.player.base.BaseApplication;
-import libraryextra.utils.SPUtils;
+import cn.qatime.player.utils.SPUtils;
 
 /**
  * Created by hzxuwen on 2015/4/13.
@@ -171,6 +171,6 @@ public class UserPreferences {
     }
 
     static SharedPreferences getSharedPreferences() {
-        return SPUtils.getSharedPreferences(BaseApplication.getAccount());
+        return SPUtils.getSharedPreferences(BaseApplication.getInstance().getAccount());
     }
 }

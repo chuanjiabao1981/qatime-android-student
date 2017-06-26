@@ -264,6 +264,7 @@
     <string name="send">发送</string>
     <string name="notice">公告</string>
     <string name="chat">聊天</string>
+    <string name="white_board">白板</string>
     <string name="live_details">详情</string>
     <string name="member_list">成员</string>
     <string name="buffering">缓冲中</string>
@@ -305,7 +306,7 @@
     <string name="learning_process">学习流程</string>
     <string name="feedback">意见反馈</string>
     <string name="current_version">V</string>
-    <string name="notify_message">系统通知</string>
+    <string name="notify_message">通知设置</string>
     <string name="notify_classes">课程提醒</string>
     <string name="voice">声音</string>
     <string name="shake">震动</string>
@@ -358,7 +359,7 @@
     <string name="alert">提示</string>
     <string name="call_customer_service_phone">是否拨打客服电话</string>
     <string name="call_right_now">立即拨打</string>
-    <string name="failed_to_obtain_group_information">获取群组信息失败!</string>
+    <string name="failed_to_obtain_group_information">获取聊天信息失败!</string>
     <string name="download_picture_fail">图片下载失败</string>
     <string name="save_to_device">保存到手机</string>
     <string name="picture_save_fail">图片保存失败</string>
@@ -446,7 +447,7 @@
     <string name="recharge_manner">充值方式</string>
     <string name="transfer_accounts">转账</string>
     <string name="wechat_wallet">微信钱包</string>
-    <string name="withdraw_num_hint">请输入提现金额(%1$s可用)</string>
+    <string name="withdraw_num_hint">请输入提现金额(￥%1$s可用)</string>
     <string name="withdraw_cash_record">提现记录</string>
     <string name="hint_input_alipay_account">请输入完整的支付宝账号</string>
     <string name="hint_input_bank_card_account">请输入完整的银行卡卡号</string>
@@ -473,7 +474,7 @@
     <string name="update_desc">更新内容</string>
     <string name="refund_record">退款记录</string>
     <string name="notify_mode">通知方式</string>
-    <string name="course_message_notify">辅导班消息通知</string>
+    <string name="course_message_notify">接收聊天消息通知</string>
     <string name="teacher_recommendation">名师推荐</string>
     <string name="cancel">取消</string>
     <string name="other_method_of_login">其他登录方式</string>
@@ -493,7 +494,7 @@
     <string name="refund_to_weixin">退至微信</string>
     <string name="refund_to_alipay">退至支付宝</string>
     <string name="refund_to_account">退至余额</string>
-    <string name="please_enter_refund_reason">请输入退款原因</string>
+    <string name="please_enter_refund_reason">请选择退款原因</string>
     <string name="refund_application_successful">退款申请成功</string>
     <string name="not_enough_amount_of_refund">此订单无可退金额</string>
     <string name="switch_city">切换城市</string>
@@ -531,7 +532,7 @@
     <string name="teaching">开课中</string>
     <string name="completed">已结束</string>
     <string name="bind_error">绑定失败</string>
-    <string name="change_pay_password_notify">新设置或修改后将在24小时内不能使用支付密码，是否继续</string>
+    <string name="change_pay_password_notify">新设置或修改后将在2小时内不能使用支付密码，是否继续</string>
     <string name="continue_anyway">继续</string>
     <string name="cancel_bind_weixin_notify">取消绑定后将不能使用提现到微信功能，是否继续</string>
     <string name="clean_cache_success">成功清理缓存</string>
@@ -570,7 +571,7 @@
     <string name="study">学习</string>
     <string name="teach_type">授课方式：在线直播</string>
     <string name="pay_password_not_set">暂未设置过支付密码</string>
-    <string name="pay_password_not_enough_24">新支付密码未满24小时，暂不能使用</string>
+    <string name="pay_password_not_enough_time">新支付密码未满2小时，暂不能使用</string>
     <string name="pay_password_too_many_mistake">密码错误次数过多，暂不能使用</string>
     <string name="pay_server_error">支付系统繁忙，请稍后再试</string>
     <string name="pay_password_error">支付密码输入不正确</string>
@@ -598,7 +599,7 @@
     <string name="no_course_name">暂无辅导班数据</string>
     <string name="lastest">最新</string>
     <string name="hottest">最热</string>
-    <string name="no_course_announcements">暂无辅导班公告</string>
+    <string name="no_course_announcements">暂无公告</string>
     <string name="get_order_info_error">订单信息获取失败</string>
     <string name="start_time">开始时间</string>
     <string name="end_time">结束时间</string>
@@ -632,6 +633,8 @@
     <string name="not_set">未设置</string>
     <string name="new_pay_password_invalid">新密码%1$d小时后可用</string>
     <string name="select_subject">选课</string>
+    <string name="join_tip">加入互动后可在上方涂鸦</string>
+    <string name="server_broken">与服务器连接断开</string>
     <string name="my_interact">我的一对一</string>
     <string name="interact_courses">一对一</string>
     <string name="video_courses">视频课</string>
@@ -639,4 +642,7 @@
     <string name="my_video">我的视频课</string>
     <string name="all_class_has_over">全部课程已完成</string>
     <string name="my_taste">我的试听</string>
+    <string name="hint_choose_region">请选择您所在的区域</string>
+    <string name="hint_choose_school">请选择您所在的学校</string>
+    <string name="withdraw_paid">提现成功</string>
 </resources>

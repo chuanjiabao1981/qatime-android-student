@@ -31,13 +31,6 @@ public class PersonalMyVideoActivity extends BaseFragmentActivity {
         setContentView(R.layout.activity_personal_my_video);
         setTitles(getResources().getString(R.string.my_video));
 
-//        setRightImage(R.mipmap.audition_records, new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(PersonalMyTutorshipActivity.this, AuditionRecordsActivity.class);
-//                startActivity(intent);
-//            }
-//        });
         initView();
     }
 
@@ -52,7 +45,7 @@ public class PersonalMyVideoActivity extends BaseFragmentActivity {
         fragmentlayout.setScorllToNext(true);
         fragmentlayout.setScorll(true);
         fragmentlayout.setWhereTab(1);
-        fragmentlayout.setTabHeight(4, 0xffff5842);
+        fragmentlayout.setTabHeight(4, getResources().getColor(R.color.colorPrimary));
         fragmentlayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {

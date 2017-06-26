@@ -1,12 +1,18 @@
 package cn.qatime.player.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -38,7 +44,7 @@ public class WithdrawResultActivity extends BaseActivity implements View.OnClick
         mode = (TextView) findViewById(R.id.mode);
         amount = (TextView) findViewById(R.id.amount);
 //        commission = (TextView) findViewById(R.id.commission);
-        amount.setText(getIntent().getStringExtra("amount"));
+        amount.setText("￥" + getIntent().getStringExtra("amount"));
         mode.setText(getPayType(getIntent().getStringExtra("pay_type")));
         id.setText(getIntent().getStringExtra("id"));
         SimpleDateFormat parseISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
@@ -70,7 +76,7 @@ public class WithdrawResultActivity extends BaseActivity implements View.OnClick
                 if (alertDialogPhone == null) {
                     View view = View.inflate(WithdrawResultActivity.this, R.layout.dialog_cancel_or_confirm, null);
                     TextView text = (TextView) view.findViewById(R.id.text);
-                    text.setText(getResourceString(R.string.call_customer_service_phone) +  Constant.phoneNumber);
+                    text.setText(getResourceString(R.string.call_customer_service_phone) + Constant.phoneNumber);
                     Button cancel = (Button) view.findViewById(R.id.cancel);
                     Button confirm = (Button) view.findViewById(R.id.confirm);
                     cancel.setOnClickListener(new View.OnClickListener() {
@@ -83,8 +89,16 @@ public class WithdrawResultActivity extends BaseActivity implements View.OnClick
                         @Override
                         public void onClick(View v) {
                             alertDialogPhone.dismiss();
-                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" +  Constant.phoneNumber));
-                            startActivity(intent);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                if (ContextCompat.checkSelfPermission(WithdrawResultActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                    ActivityCompat.requestPermissions(WithdrawResultActivity.this, new String[]{
+                                            Manifest.permission.CALL_PHONE}, 1);
+                                } else {
+                                    callPhone();
+                                }
+                            } else {
+                                callPhone();
+                            }
                         }
                     });
                     android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(WithdrawResultActivity.this);
@@ -107,8 +121,29 @@ public class WithdrawResultActivity extends BaseActivity implements View.OnClick
                 return getString(R.string.bank_card);
             case "alipay":
                 return getString(R.string.alipay);
+            case "weixin":
+                return "微信";
         }
-        return getString(R.string.bank_card);
+        return "微信";
+    }
+
+    private void callPhone() {
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.phoneNumber));
+        if (ActivityCompat.checkSelfPermission(WithdrawResultActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        startActivity(intent);
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "权限被拒绝", Toast.LENGTH_SHORT).show();
+            }else{
+                callPhone();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
