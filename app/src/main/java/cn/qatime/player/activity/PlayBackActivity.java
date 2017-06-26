@@ -21,7 +21,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 import cn.qatime.player.R;
-import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.bean.PlayBackInfoBean;
 import cn.qatime.player.fragment.FragmentPlayBack;
