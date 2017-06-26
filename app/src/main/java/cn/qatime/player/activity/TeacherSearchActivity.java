@@ -1,8 +1,8 @@
 package cn.qatime.player.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateUtils;
-import android.util.ArrayMap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager.LayoutParams;
@@ -158,6 +158,14 @@ public class TeacherSearchActivity extends BaseActivity implements View.OnClickL
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
                 initData();
+            }
+        });
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(TeacherSearchActivity.this, TeacherDataActivity.class);
+                intent.putExtra("teacherId", datas.get(position-1).getId());
+                startActivity(intent);
             }
         });
     }

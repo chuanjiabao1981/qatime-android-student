@@ -51,7 +51,6 @@ import cn.qatime.player.activity.CitySelectActivity;
 import cn.qatime.player.activity.InteractCourseDetailActivity;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.PayPSWForgetActivity;
-import cn.qatime.player.activity.PlayBackActivity;
 import cn.qatime.player.activity.PlayBackListActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.SearchActivity;
@@ -615,12 +614,12 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     }
 
     private void initBanner() {
-        ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()), ScreenUtils.getScreenWidth(getActivity()) / 3);
+        ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()), ScreenUtils.getScreenWidth(getActivity()) * 10 / 37);
         tagViewpagerImg.setLayoutParams(params);
         noBanner = new BannerRecommendBean.DataBean();
         listBanner.add(noBanner);
         tagViewpagerImg.init(R.drawable.shape_photo_tag_select, R.drawable.shape_photo_tag_nomal, 16, 8, 4, 30);
-        tagViewpagerImg.setAutoNext(true, 3000);
+        tagViewpagerImg.setAutoNext( true, 3000);
 //        viewPager.setResourceId(1252);
         tagViewpagerImg.setOnGetView(new TagViewPager.OnGetView() {
             @Override
@@ -808,13 +807,13 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             case R.id.scan:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(getActivity(),new String[]{
-                                android.Manifest.permission.CAMERA},2);
-                    }else{
+                        ActivityCompat.requestPermissions(getActivity(), new String[]{
+                                android.Manifest.permission.CAMERA}, 2);
+                    } else {
                         intent = new Intent(getActivity(), CaptureActivity.class);
                         mainActivity.startActivityForResult(intent, Constant.REQUEST);
                     }
-                }else{
+                } else {
                     intent = new Intent(getActivity(), CaptureActivity.class);
                     mainActivity.startActivityForResult(intent, Constant.REQUEST);
                 }
