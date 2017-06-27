@@ -528,7 +528,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
                     @Override
                     protected void onTokenOut() {
-                        tokenOut();
+                            tokenOut();
                     }
 
                 }, new VolleyErrorListener() {
