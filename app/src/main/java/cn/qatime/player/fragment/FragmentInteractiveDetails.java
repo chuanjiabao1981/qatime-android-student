@@ -131,7 +131,7 @@ public class FragmentInteractiveDetails extends BaseFragment {
 
                 holder.setText(R.id.name, item.getName())
                         .setText(R.id.sex, getSex(item.getGender()))
-                        .setText(R.id.school, item.getSchool() + "")
+                        .setText(R.id.school, item.getSchool_name())
                         .setText(R.id.teaching_years, getTeacheringYears(item.getTeaching_years()));
                 ((TextView) holder.getView(R.id.sex)).setTextColor(getSexColor(item.getGender()));
             }
