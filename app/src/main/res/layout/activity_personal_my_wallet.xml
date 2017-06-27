@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <include layout="@layout/layout_backbar" />
+        <include layout="@layout/layout_backbar_with_text" />
 
         <RelativeLayout
             android:layout_width="match_parent"

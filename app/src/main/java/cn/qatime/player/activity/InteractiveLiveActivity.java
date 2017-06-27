@@ -138,6 +138,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     private long loopDelay = 10000;
     private boolean isShowTime = false;
     private ImageView zoom;
+    private boolean isLocalVideoMuted = false;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -612,9 +613,27 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         if (AVChatManager.getInstance().isLocalVideoMuted()) {
             videoPermission.setBackgroundResource(R.mipmap.video_on);
             AVChatManager.getInstance().muteLocalVideo(false);
+            isLocalVideoMuted = false;
+            if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+                if (videoLayout.getVisibility() == View.GONE) {
+                    videoLayout.setVisibility(View.VISIBLE);
+                    if (videoLayout.getChildCount() == 1) {
+                        videoLayout.getChildAt(0).setVisibility(View.VISIBLE);
+                    }
+                }
+            }
         } else {
             videoPermission.setBackgroundResource(R.mipmap.video_off);
             AVChatManager.getInstance().muteLocalVideo(true);
+            isLocalVideoMuted = true;
+            if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+                if (videoLayout.getVisibility() == View.VISIBLE) {
+                    if (videoLayout.getChildCount() == 1) {
+                        videoLayout.getChildAt(0).setVisibility(View.GONE);
+                    }
+                    videoLayout.setVisibility(View.GONE);
+                }
+            }
         }
     }
 
@@ -982,9 +1001,13 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             params.height = ScreenUtils.getScreenWidth(InteractiveLiveActivity.this) * 3 / 5;
             params.width = ScreenUtils.getScreenWidth(InteractiveLiveActivity.this);
             viewLayout.setLayoutParams(params);
-            videoLayout.setVisibility(View.VISIBLE);
-            if (videoLayout.getChildCount() == 1) {
-                videoLayout.getChildAt(0).setVisibility(View.VISIBLE);
+            if (!isLocalVideoMuted) {
+                if (videoLayout.getVisibility() == View.GONE) {
+                    videoLayout.setVisibility(View.VISIBLE);
+                    if (videoLayout.getChildCount() == 1) {
+                        videoLayout.getChildAt(0).setVisibility(View.VISIBLE);
+                    }
+                }
             }
         } else {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -993,10 +1016,12 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             params.width = -1;
             viewLayout.setLayoutParams(params);
 
-            if (videoLayout.getChildCount() == 1) {
-                videoLayout.getChildAt(0).setVisibility(View.GONE);
+            if (videoLayout.getVisibility() == View.VISIBLE) {
+                if (videoLayout.getChildCount() == 1) {
+                    videoLayout.getChildAt(0).setVisibility(View.GONE);
+                }
+                videoLayout.setVisibility(View.GONE);
             }
-            videoLayout.setVisibility(View.GONE);
         }
 //        float resultX = videoLayout.getX();
 //        float resultY = videoLayout.getY();
