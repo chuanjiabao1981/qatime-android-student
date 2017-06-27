@@ -2,13 +2,11 @@ package cn.qatime.player.activity;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
@@ -29,17 +27,11 @@ import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.bean.TeacherDataBean;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
-import cn.qatime.player.utils.MPermission;
-import cn.qatime.player.utils.MPermissionUtil;
 import cn.qatime.player.utils.UrlUtils;
-import cn.qatime.player.utils.annotation.OnMPermissionDenied;
-import cn.qatime.player.utils.annotation.OnMPermissionGranted;
-import cn.qatime.player.utils.annotation.OnMPermissionNeverAskAgain;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.NetUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -79,7 +71,6 @@ public class TeacherDataActivity extends BaseActivity {
     private TextView courseCanRefund;
     private TextView infoComplete;
     private TextView teachOnline;
-    private TeacherDataBean.DataBean.InteractiveCourses item;
 
 //    private View
 // ;
@@ -131,11 +122,15 @@ public class TeacherDataActivity extends BaseActivity {
                 helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.course_title, item.getName());
-                String price = df.format(item.getCurrent_price());
-                if (price.startsWith(".")) {
-                    price = "0" + price;
+                if(item.isOff_shelve()){
+                    helper.setText(R.id.price, "已下架");
+                }else{
+                    String price = df.format(item.getCurrent_price());
+                    if (price.startsWith(".")) {
+                        price = "0" + price;
+                    }
+                    helper.setText(R.id.price, "￥" + price);
                 }
-                helper.setText(R.id.price, "￥" + price);
             }
         };
         liveGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -160,26 +155,24 @@ public class TeacherDataActivity extends BaseActivity {
                 helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.course_title, item.getName());
-                String price = df.format(item.getCurrent_price());
-                if (price.startsWith(".")) {
-                    price = "0" + price;
+                if(item.isOff_shelve()){
+                    helper.setText(R.id.price, "已下架");
+                }else {
+                    String price = df.format(item.getCurrent_price());
+                    if (price.startsWith(".")) {
+                        price = "0" + price;
+                    }
+                    helper.setText(R.id.price, "￥" + price);
                 }
-                helper.setText(R.id.price, "￥" + price);
+
             }
         };
         interactiveGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TeacherDataActivity.this.item = interactiveList.get(position);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (NetUtils.checkPermission(TeacherDataActivity.this).size() > 0) {
-                        requestLivePermission();
-                    } else {
-                        toNext();
-                    }
-                } else {
-                    toNext();
-                }
+                Intent intent = new Intent(TeacherDataActivity.this, InteractCourseDetailActivity.class);
+                intent.putExtra("id", interactiveList.get(position).getId());
+                startActivityForResult(intent, Constant.REQUEST);
             }
         });
         interactiveGrid.setAdapter(interactiveAdapter);
@@ -195,11 +188,15 @@ public class TeacherDataActivity extends BaseActivity {
                 helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.course_title, item.getName());
-                String price = item.getCurrent_price();
-                if (price.startsWith(".")) {
-                    price = "0" + price;
+                if(item.isOff_shelve()){
+                    helper.setText(R.id.price, "已下架");
+                }else {
+                    String price = item.getCurrent_price();
+                    if (price.startsWith(".")) {
+                        price = "0" + price;
+                    }
+                    helper.setText(R.id.price, "￥" + price);
                 }
-                helper.setText(R.id.price, "￥" + price);
             }
         };
         videoGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -211,48 +208,6 @@ public class TeacherDataActivity extends BaseActivity {
             }
         });
         videoGrid.setAdapter(videoAdapter);
-    }
-
-    private void toNext() {
-        Intent intent = new Intent(TeacherDataActivity.this, InteractiveLiveActivity.class);
-        intent.putExtra("id", item.getId());
-        // TODO: 2017/5/18 缺少群id
-        startActivityForResult(intent, Constant.REQUEST);
-    }
-
-    private void requestLivePermission() {
-        MPermission.with(this)
-                .addRequestCode(100)
-                .permissions(NetUtils.checkPermission(TeacherDataActivity.this).toArray(new String[NetUtils.checkPermission(TeacherDataActivity.this).size()]))
-                .request();
-    }
-
-    @OnMPermissionGranted(100)
-    public void onLivePermissionGranted() {
-//        Toast.makeText(InteractiveLiveActivity.this, "授权成功", Toast.LENGTH_SHORT).show();
-        toNext();
-    }
-
-    @OnMPermissionDenied(100)
-    public void onLivePermissionDenied() {
-        List<String> deniedPermissions = MPermission.getDeniedPermissions(this, NetUtils.checkPermission(TeacherDataActivity.this).toArray(new String[NetUtils.checkPermission(TeacherDataActivity.this).size()]));
-        String tip = "您拒绝了权限" + MPermissionUtil.toString(deniedPermissions) + "，无法开启直播";
-        Toast.makeText(TeacherDataActivity.this, tip, Toast.LENGTH_SHORT).show();
-    }
-
-    @OnMPermissionNeverAskAgain(100)
-    public void onLivePermissionDeniedAsNeverAskAgain() {
-        List<String> deniedPermissions = MPermission.getDeniedPermissionsWithoutNeverAskAgain(this, NetUtils.checkPermission(TeacherDataActivity.this).toArray(new String[NetUtils.checkPermission(TeacherDataActivity.this).size()]));
-        List<String> neverAskAgainPermission = MPermission.getNeverAskAgainPermissions(this, NetUtils.checkPermission(TeacherDataActivity.this).toArray(new String[NetUtils.checkPermission(TeacherDataActivity.this).size()]));
-        StringBuilder sb = new StringBuilder();
-        sb.append("无法开启直播，请到系统设置页面开启权限");
-        sb.append(MPermissionUtil.toString(neverAskAgainPermission));
-        if (deniedPermissions != null && !deniedPermissions.isEmpty()) {
-            sb.append(",下次询问请授予权限");
-            sb.append(MPermissionUtil.toString(deniedPermissions));
-        }
-
-        Toast.makeText(TeacherDataActivity.this, sb.toString(), Toast.LENGTH_LONG).show();
     }
 
     @Override

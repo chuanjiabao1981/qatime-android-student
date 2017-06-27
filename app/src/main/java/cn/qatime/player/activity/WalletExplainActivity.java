@@ -8,18 +8,17 @@ import cn.qatime.player.base.BaseActivity;
 
 /**
  * @author lungtify
- * @Time 2017/6/20 15:48
+ * @Time 2017/6/26 13:38
  * @Describe
  */
 
-public class AgreementActivity extends BaseActivity {
-
+public class WalletExplainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_agreement);
-        setTitles("用户协议");
+        setContentView(R.layout.activity_wallet_explain);
+        setTitles("说明");
         WebView webView = (WebView) findViewById(R.id.webview);
-        webView.loadUrl("file:///android_asset/agreement.html");
+        webView.loadUrl("file:///android_asset/wallet_explain.html");
     }
 }

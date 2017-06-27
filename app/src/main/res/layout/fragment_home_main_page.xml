@@ -124,7 +124,7 @@
             <libraryextra.view.TagViewPager
                 android:id="@+id/tag_viewpager_img"
                 android:layout_width="match_parent"
-                android:layout_height="119dp"
+                android:layout_height="wrap_content"
                 android:background="#fff" />
 
             <android.support.v7.widget.RecyclerView
@@ -169,7 +169,7 @@
                         android:gravity="center"
                         android:paddingBottom="10dp"
                         android:paddingTop="10dp"
-                        android:text="查看全部老师"
+                        android:text="全部老师"
                         android:textColor="@color/colorPrimary" />
                 </LinearLayout>
 
@@ -200,7 +200,7 @@
                         android:gravity="center"
                         android:paddingBottom="10dp"
                         android:paddingTop="10dp"
-                        android:text="直播回放列表"
+                        android:text="直播回放"
                         android:textColor="@color/colorPrimary" />
                 </LinearLayout>
 

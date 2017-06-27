@@ -72,19 +72,19 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/video_permission"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:scaleType="center"
-                android:src="@mipmap/video_on"
-                android:visibility="gone" />
-
-            <ImageView
                 android:id="@+id/audio_permission"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:scaleType="center"
                 android:src="@mipmap/audio_on"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/video_permission"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:scaleType="center"
+                android:src="@mipmap/video_on"
                 android:visibility="gone" />
 
             <ImageView
