@@ -488,8 +488,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
     private void registerObservers(boolean register) {
         AVChatManager.getInstance().observeAVChatState(this, register);
-        ChatRoomMemberCache.getInstance().registerRoomMemberChangedObserver(roomMemberChangedObserver, register);
-//        ChatRoomMemberCache.getInstance().registerRoomInfoChangedObserver(roomInfoChangedObserver, register);
     }
 
     // 将有权限的成员添加到画布
@@ -539,18 +537,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         updateVideoAudioUI();
     }
 
-    ChatRoomMemberCache.RoomMemberChangedObserver roomMemberChangedObserver = new ChatRoomMemberCache.RoomMemberChangedObserver() {
-        @Override
-        public void onRoomMemberIn(ChatRoomMember member) {
-            onMasterJoin(member.getAccount());
-        }
-
-        @Override
-        public void onRoomMemberExit(ChatRoomMember member) {
-            masterVideoLayout.removeAllViews();
-        }
-    };
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -568,7 +554,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         registerRTSObservers(roomId, false);
         AVChatManager.getInstance().leaveRoom(null);
         RTSManager2.getInstance().leaveSession(roomId, null);
-        ChatRoomMemberCache.getInstance().clearRoomCache(roomId);
+        ChatRoomMemberCache.getInstance().setRTSOpen(false);
         roomId = "";
     }
 

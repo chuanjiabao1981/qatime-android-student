@@ -322,11 +322,11 @@ public class BaseApplication extends MultiDexApplication {
         public String getDisplayNameForMessageNotifier(String account, String sessionId, SessionTypeEnum sessionType) {
             String nick = null;
             if (sessionType == SessionTypeEnum.P2P) {
-                nick = UserInfoCache.getInstance().getAlias(account);
+                nick = UserInfoCache.getInstance().getUserName(account);
             } else if (sessionType == SessionTypeEnum.Team) {
                 nick = TeamDataCache.getInstance().getTeamNick(sessionId, account);
                 if (TextUtils.isEmpty(nick)) {
-                    nick = UserInfoCache.getInstance().getAlias(account);
+                    nick = UserInfoCache.getInstance().getUserName(account);
                 }
             }
             // 返回null，交给sdk处理。如果对方有设置nick，sdk会显示nick

@@ -31,8 +31,6 @@ import cn.qatime.player.im.doodle.action.MyPath;
  */
 public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, TransactionObserver {
 
-    private SwitchListener switchListener;
-
     public void refreshView() {
         Canvas canvas = surfaceHolder.lockCanvas();
         drawHistoryActions(canvas);
@@ -43,10 +41,6 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
 
     public interface FlipListener {
         void onFlipPage(Transaction transaction);
-    }
-
-    public interface SwitchListener {
-        void onSwitch(boolean isOpen);
     }
 
     public enum Mode {
@@ -120,10 +114,9 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
      * @param mode    设置板书模式
      * @param bgColor 设置板书的背景颜色
      */
-    public void init(String sessionId, String toAccount, Mode mode, int bgColor, int paintColor, Context context, SwitchListener switchListener) {
+    public void init(String sessionId, String toAccount, Mode mode, int bgColor, int paintColor, Context context) {
         TransactionCenter.getInstance().setDoodleViewInited(true);
         this.sessionId = sessionId;
-        this.switchListener = switchListener;
         this.transactionManager = new TransactionManager(sessionId, toAccount, context);
 
         if (mode == Mode.PAINT || mode == Mode.BOTH) {
@@ -452,12 +445,6 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
                     // 收到翻页消息。先清空白板，然后做翻页操作。
 //                    Logger.e(TAG, "receive flip msg");
 //                    flipListener.onFlipPage(t);
-                } else if (t.isSwitch()) {//开启桌面共享  x:   1开启  0关闭
-                    if (t.getX() == 1) {
-                        switchListener.onSwitch(true);
-                    } else if (t.getX() == 0) {
-                        switchListener.onSwitch(false);
-                    }
                 }
             }
         }

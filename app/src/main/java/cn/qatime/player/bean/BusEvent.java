@@ -11,5 +11,7 @@ public enum BusEvent {
     ON_REFRESH_CASH_ACCOUNT,
     HANDLE_U_PUSH_MESSAGE,
     ANNOUNCEMENT,
-    REFRESH_NOTIFICATIONS
+    REFRESH_NOTIFICATIONS,
+    FullScreenOpen,//屏幕共享开
+    FullScreenClose//屏幕共享关
 }

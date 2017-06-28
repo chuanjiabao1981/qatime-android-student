@@ -35,8 +35,8 @@ import cn.qatime.player.bean.Container;
 import cn.qatime.player.bean.MessageListPanel;
 import cn.qatime.player.bean.ModuleProxy;
 import cn.qatime.player.im.SimpleCallback;
-import cn.qatime.player.im.cache.FriendDataCache;
 import cn.qatime.player.im.cache.TeamDataCache;
+import libraryextra.utils.StringUtils;
 
 /**
  * @author lungtify
@@ -133,14 +133,19 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
                     }
                 }
                 if (messageListPanel.isMyMessage(message) && (message.getMsgType() == MsgTypeEnum.text || message.getMsgType() == MsgTypeEnum.notification || message.getMsgType() == MsgTypeEnum.image)) {
-                    if (message.getAttachment() instanceof NotificationAttachment) {//收到公告更新通知消息,通知公告页面刷新公告
+                    if (message.getMsgType() == MsgTypeEnum.notification) {//收到公告更新通知消息,通知公告页面刷新公告
                         if (((NotificationAttachment) message.getAttachment()).getType() == NotificationType.UpdateTeam) {
                             UpdateTeamAttachment a = (UpdateTeamAttachment) message.getAttachment();
-                            for (Map.Entry<TeamFieldEnum, Object> field : a.getUpdatedFields().entrySet()) {
-                                if (field.getKey() == TeamFieldEnum.Announcement) {
-                                    EventBus.getDefault().post(BusEvent.ANNOUNCEMENT);
-                                }
+                            if (a.getUpdatedFields().containsKey(TeamFieldEnum.Announcement)) {
+                                EventBus.getDefault().post(BusEvent.ANNOUNCEMENT);
                             }
+                        }
+                    } else if (message.getMsgType() == MsgTypeEnum.custom) {
+                        if (!StringUtils.isNullOrBlanK(message.getContent())) {
+                            if (message.getContent().equals("FullScreenOpen"))//FullScreenOpen FullScreenClose
+                                EventBus.getDefault().post(BusEvent.FullScreenOpen);
+                            else
+                                EventBus.getDefault().post(BusEvent.FullScreenClose);
                         }
                     }
                     addedListItems.add(message);
@@ -212,7 +217,6 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
             TeamDataCache.getInstance().unregisterTeamDataChangedObserver(teamDataChangedObserver);
             TeamDataCache.getInstance().unregisterTeamMemberDataChangedObserver(teamMemberDataChangedObserver);
         }
-        FriendDataCache.getInstance().registerFriendDataChangedObserver(friendDataChangedObserver, register);
     }
 
 
@@ -256,28 +260,6 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
 
         @Override
         public void onRemoveTeamMember(TeamMember member) {
-        }
-    };
-
-    FriendDataCache.FriendDataChangedObserver friendDataChangedObserver = new FriendDataCache.FriendDataChangedObserver() {
-        @Override
-        public void onAddedOrUpdatedFriends(List<String> accounts) {
-            messageListPanel.refreshMessageList();
-        }
-
-        @Override
-        public void onDeletedFriends(List<String> accounts) {
-            messageListPanel.refreshMessageList();
-        }
-
-        @Override
-        public void onAddUserToBlackList(List<String> account) {
-            messageListPanel.refreshMessageList();
-        }
-
-        @Override
-        public void onRemoveUserFromBlackList(List<String> account) {
-            messageListPanel.refreshMessageList();
         }
     };
 
