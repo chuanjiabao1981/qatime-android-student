@@ -148,13 +148,6 @@ public class UserInfoCache {
         return accounts;
     }
 
-    public String getAlias(String account) {
-        Friend friend = FriendDataCache.getInstance().getFriendByAccount(account);
-        if (friend != null && !TextUtils.isEmpty(friend.getAlias())) {
-            return friend.getAlias();
-        }
-        return null;
-    }
 
     // 获取用户原本的昵称
     public String getUserName(String account) {

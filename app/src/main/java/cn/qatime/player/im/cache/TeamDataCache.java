@@ -406,11 +406,6 @@ public class TeamDataCache {
             return memberNick;
         }
 
-        String alias = UserInfoCache.getInstance().getAlias(account);
-        if (!TextUtils.isEmpty(alias)) {
-            return alias;
-        }
-
         return UserInfoCache.getInstance().getUserName(account);
     }
 

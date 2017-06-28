@@ -12,10 +12,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.HashMap;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.im.cache.ChatRoomMemberCache;
 import cn.qatime.player.im.doodle.ActionTypeEnum;
 import cn.qatime.player.im.doodle.DoodleView;
@@ -32,7 +36,7 @@ import static android.os.Looper.getMainLooper;
  * @Time 2017/3/28 11:17
  * @Describe 白板
  */
-public class FragmentInteractiveBoard extends BaseFragment implements View.OnClickListener, OnlineStatusObserver, DoodleView.SwitchListener {
+public class FragmentInteractiveBoard extends BaseFragment implements View.OnClickListener, OnlineStatusObserver {
     private DoodleView doodleView;
     private TextView chooseColor;
     private ImageView playBack;
@@ -87,6 +91,7 @@ public class FragmentInteractiveBoard extends BaseFragment implements View.OnCli
         assignViews();
         initView(true);
         setListeners();
+        EventBus.getDefault().register(this);
     }
 
     public void initRTSView(String roomId, SwitchListener switchListener) {
@@ -94,13 +99,13 @@ public class FragmentInteractiveBoard extends BaseFragment implements View.OnCli
         this.switchListener = switchListener;
         initView(true);
         initDoodleView(null);
-        registerObservers(true);
+        registerObservers();
     }
 
     private void initDoodleView(String account) {
         // add support ActionType
         SupportActionType.getInstance().addSupportActionType(ActionTypeEnum.Path.getValue(), MyPath.class);
-        doodleView.init(sessionId, account, DoodleView.Mode.BOTH, Color.WHITE, colorMap.get(R.id.blue_color_image), getContext(), this);
+        doodleView.init(sessionId, account, DoodleView.Mode.BOTH, Color.WHITE, colorMap.get(R.id.blue_color_image), getContext());
         doodleView.setPaintSize(3);
         doodleView.setPaintType(ActionTypeEnum.Path.getValue());
 // adjust paint offset
@@ -185,10 +190,10 @@ public class FragmentInteractiveBoard extends BaseFragment implements View.OnCli
         if (doodleView != null) {
             doodleView.end();
         }
-        registerObservers(false);
+        EventBus.getDefault().unregister(this);
     }
 
-    private void registerObservers(boolean register) {
+    private void registerObservers() {
 //        ChatRoomMemberCache.getInstance().registerMeetingControlObserver(meetingControlObserver, register);
         TransactionCenter.getInstance().registerOnlineStatusObserver(sessionId, this);
     }
@@ -226,10 +231,18 @@ public class FragmentInteractiveBoard extends BaseFragment implements View.OnCli
         }
     }
 
+    @Subscribe
+    public void onEvent(BusEvent event) {
+        if (event == BusEvent.FullScreenOpen) {
+            onSwitch(true);
+        } else if (event == BusEvent.FullScreenClose) {
+            onSwitch(false);
+        }
+    }
+
     /**
      * @param isOpen 开启桌面共享
      */
-    @Override
     public void onSwitch(final boolean isOpen) {
         new Handler(getMainLooper()).post(new Runnable() {
             @Override
