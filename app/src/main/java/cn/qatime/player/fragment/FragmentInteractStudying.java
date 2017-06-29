@@ -194,7 +194,6 @@ public class FragmentInteractStudying extends BaseFragment {
                     @Override
                     protected void onSuccess(JSONObject response) {
                         isLoad = true;
-                        Logger.e(response.toString());
                         if (type == 1) {
                             list.clear();
                         }

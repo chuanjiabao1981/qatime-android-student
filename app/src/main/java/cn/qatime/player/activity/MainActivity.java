@@ -472,7 +472,6 @@ public class MainActivity extends BaseFragmentActivity {
                 } else {
 //                    onRecentContactsLoaded();
                     Logger.e("userStatus。。" + code);
-                    LogCatHelper.getInstance(null).log("tag");
                 }
             }
         }

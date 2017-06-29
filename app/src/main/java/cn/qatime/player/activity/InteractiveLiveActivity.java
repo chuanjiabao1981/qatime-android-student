@@ -33,7 +33,7 @@ import com.netease.nimlib.sdk.avchat.model.AVChatOptionalConfig;
 import com.netease.nimlib.sdk.avchat.model.AVChatParameters;
 import com.netease.nimlib.sdk.avchat.model.AVChatVideoFrame;
 import com.netease.nimlib.sdk.avchat.model.AVChatVideoRender;
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
+import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
@@ -59,6 +59,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.qatime.player.BuildConfig;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
@@ -83,6 +84,7 @@ import cn.qatime.player.utils.annotation.OnMPermissionDenied;
 import cn.qatime.player.utils.annotation.OnMPermissionGranted;
 import cn.qatime.player.utils.annotation.OnMPermissionNeverAskAgain;
 import cn.qatime.player.view.VideoFrameLayout;
+import custom.Configure;
 import libraryextra.bean.Announcements;
 import libraryextra.bean.InteractCourseDetailBean;
 import libraryextra.utils.JsonUtils;
@@ -166,7 +168,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                         @Override
                         protected void onSuccess(JSONObject response) {
                             InteractiveLiveStatusBean data = JsonUtils.objectFromJson(response.toString(), InteractiveLiveStatusBean.class);
-                            if (data != null && data.getData() != null && data.getData().getLive_info() != null && !StringUtils.isNullOrBlanK(data.getData().getLive_info().getRoom_id())) {
+                            if (data != null && data.getData() != null && data.getData().getLive_info() != null && data.getData().getLive_info().getStatus().equals("teaching") && !StringUtils.isNullOrBlanK(data.getData().getLive_info().getRoom_id())) {
                                 roomId = data.getData().getLive_info().getRoom_id();
                                 enterRoom();
                                 if (!StringUtils.isNullOrBlanK(data.getData().getLive_info().getName())) {
@@ -470,7 +472,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             @Override
             public void onFailed(int i) {
                 Logger.e("join channel failed, code:" + i);
-                hd.post(loopStatus);
+                LogCatHelper.getInstance(null).log("join channel failed, code:" + i);
             }
 
             @Override
@@ -907,10 +909,14 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
             List<Transaction> cache = new ArrayList<>(1);
             // 非主播进入房间，发送同步请求，请求主播向他同步之前的白板笔记
-//            Toast.makeText(InteractiveLiveActivity.this, "send sync request", Toast.LENGTH_SHORT).show();
+            if (Configure.isDebug) {
+                Toast.makeText(InteractiveLiveActivity.this, "send sync request了啊啊啊啊啊啊啊啊", Toast.LENGTH_SHORT).show();
+            }
             TransactionCenter.getInstance().onNetWorkChange(roomId, false);
             cache.add(new Transaction().makeSyncRequestTransaction());
             TransactionCenter.getInstance().sendToRemote(roomId, null, cache);
+            LogCatHelper.getInstance(null).log("send sync request");
+            ChatMessage(MessageBuilder.createCustomMessage(sessionId, SessionTypeEnum.Team, "VChatSyncRequest", null));
         }
 
         @Override

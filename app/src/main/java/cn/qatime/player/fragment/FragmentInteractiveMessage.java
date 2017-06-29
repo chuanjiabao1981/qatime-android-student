@@ -148,7 +148,7 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
                         if (!StringUtils.isNullOrBlanK(message.getContent())) {
                             if (message.getContent().equals("FullScreenOpen"))//FullScreenOpen FullScreenClose
                                 EventBus.getDefault().post(BusEvent.FullScreenOpen);
-                            else
+                            else if (message.getContent().equals("FullScreenClose"))
                                 EventBus.getDefault().post(BusEvent.FullScreenClose);
                         }
                     }
