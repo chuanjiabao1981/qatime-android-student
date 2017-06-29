@@ -139,7 +139,7 @@ public class TeacherSearchActivity extends BaseActivity implements View.OnClickL
                 if (!StringUtils.isNullOrBlanK(item.getSubject())) {
                     info.append(item.getSubject());
                 }
-                info.append("\r" + "|" + "\r");
+                info.append(" | ");
                 if (!StringUtils.isNullOrBlanK(item.getProvince())) {
                     info.append(item.getProvince());
                 }

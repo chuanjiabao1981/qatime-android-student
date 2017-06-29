@@ -229,11 +229,11 @@ public class StartActivity extends BaseActivity implements View.OnClickListener 
             @Override
             public void run() {
                 if (getSharedPreferences("first", MODE_PRIVATE).getBoolean("firstlogin", true)) {
-                    Logger.e("第一次登陆");
+                    Logger.e("第一次登录");
                     StartActivity.this.startActivity(new Intent(StartActivity.this, GuideActivity.class));
                     StartActivity.this.finish();
                 } else {
-                    Logger.e("no第一次登陆");
+                    Logger.e("no第一次登录");
                     if (!StringUtils.isNullOrBlanK(BaseApplication.getInstance().getProfile().getToken())) {//token不空  直接自动登录到mianactivity
                         Logger.e("token----" + BaseApplication.getInstance().getProfile().getToken());
                         Intent intent = new Intent(StartActivity.this, MainActivity.class);

@@ -121,7 +121,7 @@ public class FragmentSearchTeacher extends BaseFragment {
                 Glide.with(getActivity()).load(item.getAvatar_url()).bitmapTransform(new GlideCircleTransform(getActivity())).placeholder(R.mipmap.error_header).crossFade().into((ImageView) holder.getView(R.id.image));
                 holder.setText(R.id.name, item.getName())
                         .setText(R.id.teaching_years, getTeachingYear(item.getTeaching_years()))
-                        .setText(R.id.info, item.getCategory() + item.getSubject() + "|" + item.getSchool());
+                        .setText(R.id.info, item.getCategory() + item.getSubject() + " | " + item.getSchool());
             }
         };
         listview.setAdapter(adapter);

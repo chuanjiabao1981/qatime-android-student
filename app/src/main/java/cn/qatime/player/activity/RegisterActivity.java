@@ -294,7 +294,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                                         if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
 
                                             BaseApplication.getInstance().setProfile(profile);
-                                            //登陆云信
+                                            //登录云信
                                             loginAccount();
                                         } else {
                                             //没有数据或token

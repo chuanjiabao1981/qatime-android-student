@@ -47,7 +47,7 @@ public class BaseFragment extends Fragment {
     }
 
     /**
-     * 设备已在其他地方登陆
+     * 设备已在其他地方登录
      */
     public void tokenOut() {
         BaseApplication.getInstance().clearToken();
