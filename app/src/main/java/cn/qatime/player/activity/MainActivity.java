@@ -68,6 +68,7 @@ import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.qrcore.core.CaptureActivity;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.LogCatHelper;
 import cn.qatime.player.utils.UrlUtils;
 import io.vov.vitamio.utils.FileUtils;
 import libraryextra.bean.CashAccountBean;
@@ -471,6 +472,7 @@ public class MainActivity extends BaseFragmentActivity {
                 } else {
 //                    onRecentContactsLoaded();
                     Logger.e("userStatus。。" + code);
+                    LogCatHelper.getInstance(null).log("tag");
                 }
             }
         }
