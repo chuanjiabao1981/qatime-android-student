@@ -122,9 +122,9 @@ public class TeacherDataActivity extends BaseActivity {
                 helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.course_title, item.getName());
-                if(item.isOff_shelve()){
+                if (item.isOff_shelve()) {
                     helper.setText(R.id.price, "已下架");
-                }else{
+                } else {
                     String price = df.format(item.getCurrent_price());
                     if (price.startsWith(".")) {
                         price = "0" + price;
@@ -155,9 +155,9 @@ public class TeacherDataActivity extends BaseActivity {
                 helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.course_title, item.getName());
-                if(item.isOff_shelve()){
+                if (item.isOff_shelve()) {
                     helper.setText(R.id.price, "已下架");
-                }else {
+                } else {
                     String price = df.format(item.getCurrent_price());
                     if (price.startsWith(".")) {
                         price = "0" + price;
@@ -188,14 +188,14 @@ public class TeacherDataActivity extends BaseActivity {
                 helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.course_title, item.getName());
-                if(item.isOff_shelve()){
+                if (item.isOff_shelve()) {
                     helper.setText(R.id.price, "已下架");
-                }else {
+                } else {
                     String price = item.getCurrent_price();
                     if (price.startsWith(".")) {
                         price = "0" + price;
                     }
-                    helper.setText(R.id.price, "￥" + price);
+                    helper.setText(R.id.price,"free".equals(item.getSell_type()) ? "免费" : ("￥" + item.getPrice()));
                 }
             }
         };

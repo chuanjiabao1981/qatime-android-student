@@ -65,7 +65,7 @@ public class BaseFragmentActivity extends FragmentActivity {
     }
 
     /**
-     * 设备已在其他地方登陆
+     * 设备已在其他地方登录
      */
     public void tokenOut() {
         View view = View.inflate(this, R.layout.dialog_confirm, null);

@@ -9,7 +9,7 @@
         android:id="@+id/status_color"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:gravity="center"
+        android:layout_marginTop="10dp"
         android:paddingLeft="10dp"
         android:paddingRight="5dp"
         android:text="◇"

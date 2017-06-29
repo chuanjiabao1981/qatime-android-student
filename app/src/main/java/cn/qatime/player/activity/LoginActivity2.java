@@ -57,7 +57,7 @@ import libraryextra.view.CheckView;
 import libraryextra.view.CustomProgressDialog;
 
 /**
- * 登陆页
+ * 登录页
  */
 public class LoginActivity2 extends BaseActivity implements View.OnClickListener {
     private EditText username;
@@ -114,7 +114,7 @@ public class LoginActivity2 extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         Intent intent;
         switch (v.getId()) {
-            case R.id.login://登陆
+            case R.id.login://登录
                 login.setClickable(false);
                 login();
                 break;
@@ -258,7 +258,7 @@ public class LoginActivity2 extends BaseActivity implements View.OnClickListener
                                     //登录成功且有个人信息  设置profile
                                     BaseApplication.getInstance().setProfile(profile);
                                     SPUtils.put(LoginActivity2.this, "username", username.getText().toString());
-                                    loginAccount();//登陆云信
+                                    loginAccount();//登录云信
                                 } else {
                                     //没有数据或token
                                 }
@@ -297,7 +297,7 @@ public class LoginActivity2 extends BaseActivity implements View.OnClickListener
     }
 
     /**
-     * 登陆云信
+     * 登录云信
      */
     private void loginAccount() {
         String account = BaseApplication.getInstance().getAccount();
@@ -409,7 +409,7 @@ public class LoginActivity2 extends BaseActivity implements View.OnClickListener
                             if (data != null && data.getData() != null && !StringUtils.isNullOrBlanK(data.getData().getRemember_token())) {
                                 BaseApplication.getInstance().setProfile(data);
                                 SPUtils.put(LoginActivity2.this, "username", username.getText().toString());
-                                loginAccount();//登陆云信
+                                loginAccount();//登录云信
                             } else {
                                 //没有数据或没有token
                             }
