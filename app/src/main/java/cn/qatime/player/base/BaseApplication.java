@@ -74,7 +74,7 @@ public class BaseApplication extends MultiDexApplication {
      * 是否进行聊天消息通知栏提醒
      */
     public boolean chatMessageNotifyStatus;
-    public List<Activity> topActivity = new ArrayList<>();
+//    public List<Activity> topActivity = new ArrayList<>();
 
     public boolean isChatMessageNotifyStatus() {
         return chatMessageNotifyStatus;
@@ -128,7 +128,7 @@ public class BaseApplication extends MultiDexApplication {
         initYunxin();
 
         StorageUtil.init(context, null);
-        initGlobeActivity();
+//        initGlobeActivity();
     }
 
     private void initUmengPush() {
@@ -459,52 +459,52 @@ public class BaseApplication extends MultiDexApplication {
         return profile != null && profile.getData() != null && profile.getData().getUser() != null ? profile.getData().getUser().getName() : "";
     }
 
-    private void initGlobeActivity() {
-        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
-            @Override
-            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-                if (!topActivity.contains(activity)) {
-                    topActivity.add(0, activity);
-//                    Logger.e("top" + topActivity.get(0).getLocalClassName());
-                }
-            }
-
-            @Override
-            public void onActivityDestroyed(Activity activity) {
-                if (topActivity.contains(activity)) {
-                    topActivity.remove(activity);
-//                    if (topActivity.size() > 0) {
-//                        Logger.e("top" + topActivity.get(0).getLocalClassName());
-//                    }
-                }
-            }
-
-            /** Unused implementation **/
-            @Override
-            public void onActivityStarted(Activity activity) {
-            }
-
-            @Override
-            public void onActivityResumed(Activity activity) {
-            }
-
-            @Override
-            public void onActivityPaused(Activity activity) {
-            }
-
-            @Override
-            public void onActivityStopped(Activity activity) {
-            }
-
-            @Override
-            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-            }
-        });
-    }
-
-    public Activity getTopActivity() {
-        return topActivity.get(0);
-    }
+//    private void initGlobeActivity() {
+//        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+//            @Override
+//            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+//                if (!topActivity.contains(activity)) {
+//                    topActivity.add(0, activity);
+////                    Logger.e("top" + topActivity.get(0).getLocalClassName());
+//                }
+//            }
+//
+//            @Override
+//            public void onActivityDestroyed(Activity activity) {
+//                if (topActivity.contains(activity)) {
+//                    topActivity.remove(activity);
+////                    if (topActivity.size() > 0) {
+////                        Logger.e("top" + topActivity.get(0).getLocalClassName());
+////                    }
+//                }
+//            }
+//
+//            /** Unused implementation **/
+//            @Override
+//            public void onActivityStarted(Activity activity) {
+//            }
+//
+//            @Override
+//            public void onActivityResumed(Activity activity) {
+//            }
+//
+//            @Override
+//            public void onActivityPaused(Activity activity) {
+//            }
+//
+//            @Override
+//            public void onActivityStopped(Activity activity) {
+//            }
+//
+//            @Override
+//            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+//            }
+//        });
+//    }
+//
+//    public Activity getTopActivity() {
+//        return topActivity.get(0);
+//    }
 
     public static BaseApplication getInstance() {
         return context;
