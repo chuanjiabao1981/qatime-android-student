@@ -122,7 +122,7 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
                         break;
                     }
                 }
-                if (messageListPanel.isMyMessage(message) && (message.getMsgType() == MsgTypeEnum.text || message.getMsgType() == MsgTypeEnum.notification || message.getMsgType() == MsgTypeEnum.image)) {
+                if (messageListPanel.isMyMessage(message)) {
                     if (message.getMsgType() == MsgTypeEnum.notification) {//收到公告更新通知消息,通知公告页面刷新公告
                         if (((NotificationAttachment) message.getAttachment()).getType() == NotificationType.UpdateTeam) {
                             UpdateTeamAttachment a = (UpdateTeamAttachment) message.getAttachment();
@@ -142,7 +142,7 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
                 }
             }
 
-            messageListPanel.onIncomingMessage(messages);
+            messageListPanel.onIncomingMessage(addedListItems);
 
         }
     };
