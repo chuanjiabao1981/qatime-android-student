@@ -35,6 +35,7 @@ import com.netease.nimlib.sdk.avchat.model.AVChatVideoFrame;
 import com.netease.nimlib.sdk.avchat.model.AVChatVideoRender;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.rts.RTSCallback;
 import com.netease.nimlib.sdk.rts.RTSChannelStateObserver;
@@ -46,6 +47,7 @@ import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.netease.nrtc.sdk.NRtcParameters;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -1063,5 +1065,20 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 zoom.setImageResource(R.mipmap.enlarge);
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+        NIMClient.getService(MsgService.class).setChattingAccount(sessionId, SessionTypeEnum.Team);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        inputPanel.onPause();
+        MobclickAgent.onPause(this);
+        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
     }
 }

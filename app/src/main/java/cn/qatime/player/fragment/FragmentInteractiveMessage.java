@@ -13,6 +13,7 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.attachment.NotificationAttachment;
+import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.NotificationType;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
@@ -21,12 +22,12 @@ import com.netease.nimlib.sdk.team.constant.TeamTypeEnum;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.netease.nimlib.sdk.team.model.UpdateTeamAttachment;
+import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
@@ -119,6 +120,7 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
     Observer<List<IMMessage>> receiveMessageObserver = new Observer<List<IMMessage>>() {
         @Override
         public void onEvent(List<IMMessage> messages) {
+            Logger.e("receiveMessageObserver" + "receiveMessage");
             if (messages == null || messages.isEmpty()) {
                 return;
             }
@@ -132,7 +134,7 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
                         break;
                     }
                 }
-                if (messageListPanel.isMyMessage(message) && (message.getMsgType() == MsgTypeEnum.text || message.getMsgType() == MsgTypeEnum.notification || message.getMsgType() == MsgTypeEnum.image)) {
+                if (messageListPanel.isMyMessage(message)) {
                     if (message.getMsgType() == MsgTypeEnum.notification) {//收到公告更新通知消息,通知公告页面刷新公告
                         if (((NotificationAttachment) message.getAttachment()).getType() == NotificationType.UpdateTeam) {
                             UpdateTeamAttachment a = (UpdateTeamAttachment) message.getAttachment();
@@ -141,6 +143,8 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
                             }
                         }
                     } else if (message.getMsgType() == MsgTypeEnum.custom) {
+                        message.setStatus(MsgStatusEnum.read);
+                        Logger.e("收到消息MsgTypeEnum.custom");
                         if (!StringUtils.isNullOrBlanK(message.getContent())) {
                             if (message.getContent().equals("FullScreenOpen"))//FullScreenOpen FullScreenClose
                                 EventBus.getDefault().post(BusEvent.FullScreenOpen);
@@ -159,7 +163,7 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
                 }
             }
 
-            messageListPanel.onIncomingMessage(messages);
+            messageListPanel.onIncomingMessage(addedListItems);
 
         }
     };
