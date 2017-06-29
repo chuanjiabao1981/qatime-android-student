@@ -73,6 +73,7 @@ import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.doodle.Transaction;
 import cn.qatime.player.im.doodle.TransactionCenter;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.LogCatHelper;
 import cn.qatime.player.utils.MPermission;
 import cn.qatime.player.utils.MPermissionUtil;
 import cn.qatime.player.utils.UrlUtils;
@@ -421,7 +422,8 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             @Override
             public void onFailed(int i) {
                 Logger.e("join rts session failed, code:" + i);
-                ChatRoomMemberCache.getInstance().setRTSOpen(true);
+                LogCatHelper.getInstance(null).log("join rts session failed, code:" + i);
+                ChatRoomMemberCache.getInstance().setRTSOpen(false);
                 updateRTSFragment();
                 Toast.makeText(InteractiveLiveActivity.this, "白板加入失败", Toast.LENGTH_SHORT).show();
             }

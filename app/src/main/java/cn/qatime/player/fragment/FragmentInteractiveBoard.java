@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -250,9 +251,11 @@ public class FragmentInteractiveBoard extends BaseFragment implements View.OnCli
                 if (isOpen) {
                     ChatRoomMemberCache.getInstance().setRTSOpen(false);
                     joinTipText.setText("正在进行屏幕共享");
+                    Toast.makeText(getActivity(), "正在进行屏幕共享", Toast.LENGTH_SHORT).show();
                 } else {
                     ChatRoomMemberCache.getInstance().setRTSOpen(true);
 //                    joinTipText.setText("正在进行白板互动");
+                    Toast.makeText(getActivity(), "正在进行白板互动", Toast.LENGTH_SHORT).show();
                 }
                 switchListener.onSwitch(isOpen);
                 initView(false);
