@@ -12,7 +12,7 @@ import cn.qatime.player.base.BaseActivity;
  * @Describe
  */
 
-public class AgreementActivity extends BaseActivity {
+public class  AgreementActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
