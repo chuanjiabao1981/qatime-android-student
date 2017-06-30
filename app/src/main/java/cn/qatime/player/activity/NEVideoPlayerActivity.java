@@ -360,7 +360,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 floatFragment.setMute(isMute);
             }
         }
-        inputPanel = new InputPanel(this, this, rootView, false, sessionId);
+        inputPanel = new InputPanel(this, this, rootView, true, sessionId);
         inputPanel.setMute(isMute);
 
         fragBaseFragments.add(new FragmentPlayerMessage());

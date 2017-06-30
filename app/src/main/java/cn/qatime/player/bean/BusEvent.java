@@ -12,6 +12,7 @@ public enum BusEvent {
     HANDLE_U_PUSH_MESSAGE,
     ANNOUNCEMENT,
     REFRESH_NOTIFICATIONS,
-    FullScreenOpen,//屏幕共享开
-    FullScreenClose//屏幕共享关
+    desktop,//屏幕共享开
+    board,//屏幕共享关
+    request
 }
