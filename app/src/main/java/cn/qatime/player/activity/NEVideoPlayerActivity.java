@@ -326,9 +326,9 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                             if (data != null) {
                                 if (data.getData() != null) {
                                     ((FragmentPlayerMembers) fragBaseFragments.get(3)).setData(data.getData());
-                                    ((FragmentPlayerMessage) fragBaseFragments.get(1)).setOwner(data.getData().getOwner());
+                                    ((FragmentPlayerMessage) fragBaseFragments.get(0)).setOwner(data.getData().getOwner());
                                     if (data.getData().getAnnouncements() != null) {
-                                        ((FragmentPlayerAnnouncements) fragBaseFragments.get(0)).setData(data.getData().getAnnouncements());
+                                        ((FragmentPlayerAnnouncements) fragBaseFragments.get(1)).setData(data.getData().getAnnouncements());
                                     }
                                 }
                             }
@@ -363,8 +363,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         inputPanel = new InputPanel(this, this, rootView, false, sessionId);
         inputPanel.setMute(isMute);
 
-        fragBaseFragments.add(new FragmentPlayerAnnouncements());
         fragBaseFragments.add(new FragmentPlayerMessage());
+        fragBaseFragments.add(new FragmentPlayerAnnouncements());
         fragBaseFragments.add(new FragmentPlayerLiveDetails());
         fragBaseFragments.add(new FragmentPlayerMembers());
 
@@ -379,9 +379,9 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff999999);
                 ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffff5842);
-                if (position == 1) {
+                if (position == 0) {
                     inputPanel.visibilityInput();
-                    ((FragmentPlayerMessage) fragBaseFragments.get(1)).scrollToBottom();
+                    ((FragmentPlayerMessage) fragBaseFragments.get(0)).scrollToBottom();
                 } else {
                     inputPanel.goneInput();
                 }
@@ -395,7 +395,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         });
         fragmentLayout.setAdapter(fragBaseFragments, R.layout.tablayout_nevideo_player, 0x0102);
         fragmentLayout.getViewPager().setOffscreenPageLimit(3);
-        fragment2 = (FragmentPlayerMessage) fragBaseFragments.get(1);
+        fragment2 = (FragmentPlayerMessage) fragBaseFragments.get(0);
 
         fragment2.setChatCallBack(new FragmentPlayerMessage.Callback() {
             @Override
