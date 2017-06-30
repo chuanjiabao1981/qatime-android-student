@@ -122,28 +122,24 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
                         break;
                     }
                 }
-                if (messageListPanel.isMyMessage(message)) {
-                    if (message.getMsgType() == MsgTypeEnum.notification) {//收到公告更新通知消息,通知公告页面刷新公告
-                        if (((NotificationAttachment) message.getAttachment()).getType() == NotificationType.UpdateTeam) {
-                            UpdateTeamAttachment a = (UpdateTeamAttachment) message.getAttachment();
-                            if (a.getUpdatedFields().containsKey(TeamFieldEnum.Announcement)) {
-                                EventBus.getDefault().post(BusEvent.ANNOUNCEMENT);
-                            }
+                if (message.getMsgType() == MsgTypeEnum.notification) {//收到公告更新通知消息,通知公告页面刷新公告
+                    if (((NotificationAttachment) message.getAttachment()).getType() == NotificationType.UpdateTeam) {
+                        UpdateTeamAttachment a = (UpdateTeamAttachment) message.getAttachment();
+                        if (a.getUpdatedFields().containsKey(TeamFieldEnum.Announcement)) {
+                            EventBus.getDefault().post(BusEvent.ANNOUNCEMENT);
                         }
                     }
-                    addedListItems.add(message);
-                    needRefresh = true;
                 }
+                addedListItems.add(message);
+                needRefresh = true;
             }
 
             if (needRefresh) {
                 if (chatCallback != null) {
                     chatCallback.back(addedListItems);
                 }
+                messageListPanel.onIncomingMessage(addedListItems);
             }
-
-            messageListPanel.onIncomingMessage(addedListItems);
-
         }
     };
 

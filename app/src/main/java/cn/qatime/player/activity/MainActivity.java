@@ -455,9 +455,9 @@ public class MainActivity extends BaseFragmentActivity {
         @Override
         public void onEvent(StatusCode code) {
             if (code.wontAutoLogin()) {
-                Intent intent = new Intent(BaseApplication.getInstance().getTopActivity(), MainActivity.class);
-                intent.putExtra("kickOut", "kickOut");
-                startActivity(intent);
+//                Intent intent = new Intent(BaseApplication.getInstance().getTopActivity(), MainActivity.class);
+//                intent.putExtra("kickOut", "kickOut");
+//                startActivity(intent);
 //                Toast.makeText(MainActivity.this, "userStatus未登录成功", Toast.LENGTH_SHORT).show();
                 Logger.e("userStatus未登录成功");
             } else {

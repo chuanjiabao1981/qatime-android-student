@@ -134,36 +134,34 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
                         break;
                     }
                 }
-                if (messageListPanel.isMyMessage(message)) {
-                    if (message.getMsgType() == MsgTypeEnum.notification) {//收到公告更新通知消息,通知公告页面刷新公告
-                        if (((NotificationAttachment) message.getAttachment()).getType() == NotificationType.UpdateTeam) {
-                            UpdateTeamAttachment a = (UpdateTeamAttachment) message.getAttachment();
-                            if (a.getUpdatedFields().containsKey(TeamFieldEnum.Announcement)) {
-                                EventBus.getDefault().post(BusEvent.ANNOUNCEMENT);
-                            }
-                        }
-                    } else if (message.getMsgType() == MsgTypeEnum.custom) {
-                        message.setStatus(MsgStatusEnum.read);
-                        Logger.e("收到消息MsgTypeEnum.custom");
-                        if (!StringUtils.isNullOrBlanK(message.getContent())) {
-                            if (message.getContent().equals("FullScreenOpen"))//FullScreenOpen FullScreenClose
-                                EventBus.getDefault().post(BusEvent.FullScreenOpen);
-                            else if (message.getContent().equals("FullScreenClose"))
-                                EventBus.getDefault().post(BusEvent.FullScreenClose);
+                if (message.getMsgType() == MsgTypeEnum.notification) {//收到公告更新通知消息,通知公告页面刷新公告
+                    if (((NotificationAttachment) message.getAttachment()).getType() == NotificationType.UpdateTeam) {
+                        UpdateTeamAttachment a = (UpdateTeamAttachment) message.getAttachment();
+                        if (a.getUpdatedFields().containsKey(TeamFieldEnum.Announcement)) {
+                            EventBus.getDefault().post(BusEvent.ANNOUNCEMENT);
                         }
                     }
-                    addedListItems.add(message);
-                    needRefresh = true;
+                } else if (message.getMsgType() == MsgTypeEnum.custom) {
+                    message.setStatus(MsgStatusEnum.read);
+                    Logger.e("收到消息MsgTypeEnum.custom");
+                    if (!StringUtils.isNullOrBlanK(message.getContent())) {
+                        if (message.getContent().equals("FullScreenOpen"))//FullScreenOpen FullScreenClose
+                            EventBus.getDefault().post(BusEvent.FullScreenOpen);
+                        else if (message.getContent().equals("FullScreenClose"))
+                            EventBus.getDefault().post(BusEvent.FullScreenClose);
+                    }
                 }
+                addedListItems.add(message);
+                needRefresh = true;
             }
 
             if (needRefresh) {
                 if (chatCallback != null) {
                     chatCallback.back(addedListItems);
                 }
+                messageListPanel.onIncomingMessage(addedListItems);
             }
 
-            messageListPanel.onIncomingMessage(addedListItems);
 
         }
     };
