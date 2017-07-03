@@ -161,8 +161,6 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
                 }
                 messageListPanel.onIncomingMessage(addedListItems);
             }
-
-
         }
     };
 
