@@ -429,6 +429,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.VideoCoursesPlayActivity"
+            android:launchMode="singleTask"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
