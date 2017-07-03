@@ -35,22 +35,13 @@
                     android:src="@mipmap/video_no_data"
                     android:visibility="visible" />
 
-                <com.zhy.android.percent.support.PercentRelativeLayout
+                <ImageView
                     android:id="@+id/buffering1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#666666"
-                    android:gravity="center"
-                    android:visibility="gone">
-
-                    <ImageView
-                        android:id="@+id/buffer_image1"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:background="@drawable/progress_round"
-                        custom:layout_heightPercent="12%w"
-                        custom:layout_widthPercent="12%" />
-                </com.zhy.android.percent.support.PercentRelativeLayout>
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/video_loading"
+                    android:visibility="gone" />
             </RelativeLayout>
         </RelativeLayout>
 
@@ -89,22 +80,13 @@
                 android:src="@mipmap/video_no_data"
                 android:visibility="visible" />
 
-            <com.zhy.android.percent.support.PercentRelativeLayout
+            <ImageView
                 android:id="@+id/buffering2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#666666"
-                android:gravity="center"
-                android:visibility="gone">
-
-                <ImageView
-                    android:id="@+id/buffer_image2"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:background="@drawable/progress_round"
-                    custom:layout_heightPercent="12%w"
-                    custom:layout_widthPercent="12%" />
-            </com.zhy.android.percent.support.PercentRelativeLayout>
+                android:scaleType="fitXY"
+                android:src="@mipmap/video_loading"
+                android:visibility="gone" />
         </RelativeLayout>
     </RelativeLayout>
 
