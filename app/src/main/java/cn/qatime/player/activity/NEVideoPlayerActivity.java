@@ -101,10 +101,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     private RelativeLayout window1;
     private ImageView videoNoData1;
     private ImageView videoNoData2;
-    private AnimationDrawable bufferAnimation1;
-    private AnimationDrawable bufferAnimation2;
-    private PercentRelativeLayout buffering1;
-    private PercentRelativeLayout buffering2;
+    private ImageView buffering1;
+    private ImageView buffering2;
 
     private Handler hd = new Handler();
     private Runnable runnable = new Runnable() {
@@ -142,16 +140,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         window1 = (RelativeLayout) findViewById(R.id.window1);
         window2 = (RelativeLayout) findViewById(R.id.window2);
 
-        buffering1 = (PercentRelativeLayout) findViewById(R.id.buffering1);
-        buffering2 = (PercentRelativeLayout) findViewById(R.id.buffering2);
-
-        ImageView bufferImage1 = (ImageView) findViewById(R.id.buffer_image1);
-        ImageView bufferImage2 = (ImageView) findViewById(R.id.buffer_image2);
-
-        bufferAnimation1 = (AnimationDrawable) bufferImage1.getBackground();
-        bufferAnimation1.start();
-        bufferAnimation2 = (AnimationDrawable) bufferImage2.getBackground();
-        bufferAnimation2.start();
+        buffering1 = (ImageView) findViewById(R.id.buffering1);
+        buffering2 = (ImageView) findViewById(R.id.buffering2);
 
         videoNoData1 = (ImageView) findViewById(R.id.video_no_data1);
         videoNoData2 = (ImageView) findViewById(R.id.video_no_data2);
@@ -167,7 +157,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             public boolean onError(NELivePlayer neLivePlayer, int i, int i1) {
                 setVideoState(VideoState.INIT);
                 buffering1.setVisibility(View.GONE);
-                bufferAnimation1.stop();
                 videoNoData1.setVisibility(View.VISIBLE);
                 return true;
             }
@@ -177,7 +166,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             public boolean onError(NELivePlayer neLivePlayer, int i, int i1) {
                 setVideoState(VideoState.INIT);
                 buffering2.setVisibility(View.GONE);
-                bufferAnimation2.stop();
                 videoNoData2.setImageResource(R.mipmap.video_no_data);
                 videoNoData2.setVisibility(View.VISIBLE);
                 return true;
@@ -293,7 +281,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 videoNoData2.setVisibility(View.VISIBLE);//摄像头关闭
             }
         } else {
-            bufferAnimation2.stop();
             buffering2.setVisibility(View.GONE);
             videoNoData2.setImageResource(R.mipmap.video_no_data);
             videoNoData2.setVisibility(View.VISIBLE);
@@ -309,7 +296,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 video1.start();
             }
         } else {
-            bufferAnimation1.stop();
             buffering1.setVisibility(View.GONE);
             videoNoData1.setVisibility(View.VISIBLE);
         }
@@ -360,7 +346,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 floatFragment.setMute(isMute);
             }
         }
-        inputPanel = new InputPanel(this, this, rootView, false, sessionId);
+        inputPanel = new InputPanel(this, this, rootView, true, sessionId);
         inputPanel.setMute(isMute);
 
         fragBaseFragments.add(new FragmentPlayerMessage());
@@ -702,9 +688,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             hd.postDelayed(runnable, 30000);
             if (videoNoData1.getVisibility() == View.GONE) {
                 videoNoData1.setVisibility(View.VISIBLE);
-                if (bufferAnimation1.isRunning()) {
-                    bufferAnimation1.stop();
-                }
                 if (buffering1.getVisibility() == View.VISIBLE) {
                     buffering1.setVisibility(View.GONE);
                 }
@@ -712,9 +695,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             videoNoData2.setImageResource(R.mipmap.video_no_data);
             if (videoNoData2.getVisibility() == View.GONE) {
                 videoNoData2.setVisibility(View.VISIBLE);
-                if (bufferAnimation2.isRunning()) {
-                    bufferAnimation2.stop();
-                }
                 if (buffering2.getVisibility() == View.VISIBLE) {
                     buffering2.setVisibility(View.GONE);
                 }
@@ -886,35 +866,20 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     @Override
     public void changeSubSmall() {
         isSubBig = false;
-        boolean needReStart = false;
         if (screenSwitchUtils.isPortrait()) {
             danmuView.setVisibility(View.GONE);
         } else {
             danmuView.setVisibility(View.VISIBLE);
         }
         if (ismain) {
-            if (buffering2.getVisibility() == View.VISIBLE && bufferAnimation2.isRunning()) {
-                needReStart = true;
-                bufferAnimation2.stop();
-            }
             subVideo.removeView(window2);
             video2.setZOrderOnTop(true);
             floatingWindow.addView(window2);
             video2.setSelfSize(floatingWindow.getLayoutParams().width, floatingWindow.getLayoutParams().height);
-            if (needReStart) {
-                bufferAnimation2.start();
-            }
         } else {
-            if (buffering1.getVisibility() == View.VISIBLE && bufferAnimation1.isRunning()) {
-                needReStart = true;
-                bufferAnimation1.stop();
-            }
             subVideo.removeView(window1);
             video1.setZOrderOnTop(true);
             floatingWindow.addView(window1);
-            if (needReStart) {
-                bufferAnimation1.start();
-            }
         }
         if (isSubOpen) {
             floatingWindow.setVisibility(View.VISIBLE);
