@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="cn.qatime.player"
     android:versionCode="20"
-    android:versionName="1.2.32">
+    android:versionName="1.2.45">
 
     <!--<uses-sdk-->
     <!--android:minSdkVersion="17"-->
@@ -123,6 +123,18 @@
             android:name="UMENG_CHANNEL"
             android:value="umeng" />
         <!--友盟推送end-->
+
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.qatime.player.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+
 
         <activity
             android:name=".activity.StartActivity"
@@ -322,7 +334,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.RechargeProcessActivity"
+            android:name=".activity.WalletExplainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
@@ -417,6 +429,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.VideoCoursesPlayActivity"
+            android:launchMode="singleTask"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
@@ -453,6 +466,10 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.PlayBackListActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.SearchActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
@@ -462,5 +479,9 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".activity.AgreementActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
     </application>
 </manifest>

@@ -11,6 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@color/colorPrimary"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:gravity="center_vertical">
 
         <ImageView
@@ -27,8 +29,11 @@
             android:drawableLeft="@mipmap/search"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
+            android:singleLine="true"
             android:hint="搜索课程/老师"
+            android:imeOptions="actionDone"
             android:paddingLeft="12dp"
+            android:paddingRight="12dp"
             android:textColorHint="#999"
             android:textSize="14sp" />
 

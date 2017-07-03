@@ -1,5 +1,6 @@
 package cn.qatime.player.activity;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.media.AudioManager;
@@ -77,6 +78,14 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
         initView();
 
         screenSwitchUtils = ScreenSwitchUtils.init(this.getApplicationContext());
+        initData();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        id = getIntent().getIntExtra("id", 0);
+        tasting = getIntent().getBooleanExtra("tasting", true);
         initData();
     }
 
@@ -188,14 +197,14 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
         fragmentLayout.setScorllToNext(true);
         fragmentLayout.setScorll(true);
         fragmentLayout.setWhereTab(1);
-        fragmentLayout.setTabHeight(4, 0xffff5842);
+        fragmentLayout.setTabHeight(4, getResources().getColor(R.color.colorPrimary));
         fragmentLayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener()
 
         {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
-                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff999999);
-                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffff5842);
+                ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff666666);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(getResources().getColor(R.color.colorPrimary));
             }
         });
         fragmentLayout.setAdapter(fragBaseFragments, R.layout.tablayout_video_courses, 0x0120);
@@ -246,7 +255,9 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
     @Override
     protected void onPause() {
         super.onPause();
-
+        if (mMediaPlayer != null) {
+            mMediaPlayer.pause();
+        }
     }
 
     @Override

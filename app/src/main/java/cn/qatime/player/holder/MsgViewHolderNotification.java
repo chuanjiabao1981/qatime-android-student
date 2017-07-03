@@ -7,9 +7,6 @@ import android.widget.TextView;
 import com.netease.nimlib.sdk.msg.attachment.NotificationAttachment;
 import com.netease.nimlib.sdk.team.constant.TeamFieldEnum;
 import com.netease.nimlib.sdk.team.model.UpdateTeamAttachment;
-import com.orhanobut.logger.Logger;
-
-import java.util.Iterator;
 
 import cn.qatime.player.R;
 import cn.qatime.player.adapter.BaseMultiItemFetchLoadAdapter;
@@ -42,14 +39,11 @@ public class MsgViewHolderNotification extends MsgViewHolderBase {
         NotificationAttachment attachment = (NotificationAttachment) message.getAttachment();
         if (attachment instanceof UpdateTeamAttachment) {
             UpdateTeamAttachment updateTeamAttachment = (UpdateTeamAttachment) attachment;
-            for (Object key : updateTeamAttachment.getUpdatedFields().keySet()) {
-                if (key == TeamFieldEnum.Announcement) {
-                    notificationContentTextView.setVisibility(View.VISIBLE);
-                    notificationContentTextView.setText(updateTeamAttachment.getUpdatedFields().get(TeamFieldEnum.Announcement).toString());
-                    break;
-                } else {
-                    notificationContentTextView.setVisibility(View.GONE);
-                }
+            if (updateTeamAttachment.getUpdatedFields().containsKey(TeamFieldEnum.Announcement)) {
+                notificationContentTextView.setVisibility(View.VISIBLE);
+                notificationContentTextView.setText(updateTeamAttachment.getUpdatedFields().get(TeamFieldEnum.Announcement).toString());
+            } else {
+                notificationContentTextView.setVisibility(View.GONE);
             }
         } else {
             notificationContentTextView.setVisibility(View.GONE);

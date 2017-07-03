@@ -1,11 +1,16 @@
 package cn.qatime.player.fragment;
 
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -46,7 +51,7 @@ import cn.qatime.player.activity.CitySelectActivity;
 import cn.qatime.player.activity.InteractCourseDetailActivity;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.PayPSWForgetActivity;
-import cn.qatime.player.activity.PlayBackActivity;
+import cn.qatime.player.activity.PlayBackListActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.SearchActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
@@ -65,7 +70,11 @@ import cn.qatime.player.holder.BaseViewHolder;
 import cn.qatime.player.qrcore.core.CaptureActivity;
 import cn.qatime.player.utils.AMapLocationUtils;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.MPermission;
 import cn.qatime.player.utils.UrlUtils;
+import cn.qatime.player.utils.annotation.OnMPermissionDenied;
+import cn.qatime.player.utils.annotation.OnMPermissionGranted;
+import cn.qatime.player.utils.annotation.OnMPermissionNeverAskAgain;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.CashAccountBean;
@@ -211,10 +220,10 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         publisheRankAdapter = new CommonAdapter<RecentPublishedBean.DataBean.AllPublishedRankBean>(getContext(), listPublishedRank, R.layout.item_course_rank) {
             @Override
             public void convert(ViewHolder holder, RecentPublishedBean.DataBean.AllPublishedRankBean item, int position) {
-                    holder.setImageByUrl(R.id.image, item.getProduct().getPublicize(), R.mipmap.photo)
-                            .setText(R.id.title, item.getProduct().getName())
-                            .setText(R.id.teacher, item.getProduct().getTeacher_name())
-                            .setText(R.id.grade_subject, item.getProduct().getGrade() + item.getProduct().getSubject());
+                holder.setImageByUrl(R.id.image, item.getProduct().getPublicize(), R.mipmap.photo)
+                        .setText(R.id.title, item.getProduct().getName())
+                        .setText(R.id.teacher, item.getProduct().getTeacher_name())
+                        .setText(R.id.grade_subject, item.getProduct().getGrade() + item.getProduct().getSubject());
             }
         };
         listViewPublishedRank.setAdapter(publisheRankAdapter);
@@ -504,6 +513,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
      * 今日直播数据
      */
     private void initToadyData() {
+
         JsonObjectRequest request = new JsonObjectRequest(UrlUtils.lessons + "today", null,
                 new VolleyListener(getActivity()) {
                     @Override
@@ -522,7 +532,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
                     @Override
                     protected void onTokenOut() {
-                        tokenOut();
+                            tokenOut();
                     }
 
                 }, new VolleyErrorListener() {
@@ -570,6 +580,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         });
         addToRequestQueue(request);
     }
+
     /**
      * 最新发布,近期开课
      */
@@ -607,12 +618,12 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     }
 
     private void initBanner() {
-        ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()), ScreenUtils.getScreenWidth(getActivity()) / 3);
+        ViewGroup.LayoutParams params = new LinearLayout.LayoutParams(ScreenUtils.getScreenWidth(getActivity()), ScreenUtils.getScreenWidth(getActivity()) * 10 / 37);
         tagViewpagerImg.setLayoutParams(params);
         noBanner = new BannerRecommendBean.DataBean();
         listBanner.add(noBanner);
         tagViewpagerImg.init(R.drawable.shape_photo_tag_select, R.drawable.shape_photo_tag_nomal, 16, 8, 4, 30);
-        tagViewpagerImg.setAutoNext(true, 3000);
+        tagViewpagerImg.setAutoNext( true, 3000);
 //        viewPager.setResourceId(1252);
         tagViewpagerImg.setOnGetView(new TagViewPager.OnGetView() {
             @Override
@@ -798,8 +809,18 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 mainActivity.setCurrentPosition(1, 0);
                 break;
             case R.id.scan:
-                intent = new Intent(getActivity(), CaptureActivity.class);
-                mainActivity.startActivityForResult(intent, Constant.REQUEST);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(getActivity(), new String[]{
+                                android.Manifest.permission.CAMERA}, 2);
+                    } else {
+                        intent = new Intent(getActivity(), CaptureActivity.class);
+                        mainActivity.startActivityForResult(intent, Constant.REQUEST);
+                    }
+                } else {
+                    intent = new Intent(getActivity(), CaptureActivity.class);
+                    mainActivity.startActivityForResult(intent, Constant.REQUEST);
+                }
                 break;
             case R.id.city_select:
                 intent = new Intent(getActivity(), CitySelectActivity.class);
@@ -810,8 +831,8 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 startActivity(intent);
                 break;
             case R.id.to_live_replay:
-//                intent = new Intent(getActivity(), PayPSWForgetActivity.class);
-//                startActivity(intent);
+                intent = new Intent(getActivity(), PlayBackListActivity.class);
+                startActivity(intent);
                 break;
             case R.id.to_all_teacher:
                 intent = new Intent(getActivity(), TeacherSearchActivity.class);
@@ -837,6 +858,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     }
 
     private void initLocationData() {
+
         JsonObjectRequest request = new JsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,
                 new VolleyListener(getActivity()) {
                     @Override
@@ -845,32 +867,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                         if (cityBean != null && cityBean.getData() != null) {
                             listCity = cityBean.getData();
 //                                    如果没有被赋值，则默认全国
-                            utils = new AMapLocationUtils(getActivity(), new AMapLocationUtils.LocationListener() {
-                                @Override
-                                public void onLocationBack(String[] result) {
-                                    if (result != null && result.length > 1) {
-                                        for (CityBean.Data item : listCity) {
-                                            if (result[2].equals(item.getName()) || result[1].equals(item.getName())) {//需先对比区,区不对应往上对比市,不可颠倒
-                                                locationCity = item;
-                                            }
-                                        }
-                                    } else {
-                                        Toast.makeText(getActivity(), R.string.position_locate_error, Toast.LENGTH_SHORT).show();
-                                        return;
-                                    }
-                                    CityBean.Data currentCity = BaseApplication.getInstance().getCurrentCity();
-                                    if (locationCity != null) {
-                                        if (!currentCity.equals(locationCity)) {
-                                            if (locationCity.getWorkstations_count() != 0) {
-                                                dialogCity();
-                                            }
-                                        }
-                                    } else {
-                                        Toast.makeText(getActivity(), R.string.position_locate_error, Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                            utils.startLocation();
+                            requestPermission();
                         }
                     }
 
@@ -889,6 +886,58 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             }
         });
         addToRequestQueue(request);
+    }
+    public void requestPermission() {
+        MPermission.with(this)
+                .addRequestCode(100)
+                .permissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE})
+                .request();
+    }
+
+    @OnMPermissionGranted(100)
+    public void onPermissionGranted() {
+        Toast.makeText(getActivity(), R.string.loading_location, Toast.LENGTH_SHORT).show();
+        initLocation();
+    }
+
+    @OnMPermissionDenied(100)
+    public void onPermissionDenied() {
+        Toast.makeText(getActivity(), "定位权限被拒绝", Toast.LENGTH_SHORT).show();
+        initLocation();
+    }
+
+    @OnMPermissionNeverAskAgain(100)
+    public void onPermissionDeniedAsNeverAskAgain() {
+        Toast.makeText(getActivity(), "定位权限被拒绝", Toast.LENGTH_SHORT).show();
+        initLocation();
+    }
+    private void initLocation() {
+        utils = new AMapLocationUtils(getActivity(), new AMapLocationUtils.LocationListener() {
+            @Override
+            public void onLocationBack(String[] result) {
+                if (result != null && result.length > 1) {
+                    for (CityBean.Data item : listCity) {
+                        if (result[2].equals(item.getName()) || result[1].equals(item.getName())) {//需先对比区,区不对应往上对比市,不可颠倒
+                            locationCity = item;
+                        }
+                    }
+                } else {
+                    Toast.makeText(getActivity(), R.string.position_locate_error, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                CityBean.Data currentCity = BaseApplication.getInstance().getCurrentCity();
+                if (locationCity != null) {
+                    if (!currentCity.equals(locationCity)) {
+                        if (locationCity.getWorkstations_count() != 0) {
+                            dialogCity();
+                        }
+                    }
+                } else {
+                    Toast.makeText(getActivity(), R.string.position_locate_error, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        utils.startLocation();
     }
 
     private void dialogCity() {

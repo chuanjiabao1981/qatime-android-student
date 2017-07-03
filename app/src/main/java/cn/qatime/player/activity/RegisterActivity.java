@@ -171,7 +171,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 next();
                 break;
             case R.id.agreement:
-                //// TODO: 2016/8/24 点击协议查看
+                Intent intent= new Intent(this,AgreementActivity.class);
+                startActivity(intent);
                 break;
         }
     }
@@ -293,7 +294,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                                         if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
 
                                             BaseApplication.getInstance().setProfile(profile);
-                                            //登陆云信
+                                            //登录云信
                                             loginAccount();
                                         } else {
                                             //没有数据或token

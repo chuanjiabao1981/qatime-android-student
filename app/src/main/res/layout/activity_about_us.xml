@@ -3,20 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f7f7f7"
-
     android:orientation="vertical">
 
     <include layout="@layout/layout_backbar" />
 
     <ScrollView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#fff"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#fff"
             android:orientation="vertical">
 
             <ImageView
@@ -87,10 +87,12 @@
                     android:textColor="#00a2ee"
                     android:textSize="16sp" />
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="#dfdddd" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -122,32 +124,16 @@
                 android:layout_height="1px"
                 android:background="#dfdddd" />
 
-
-            <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_marginLeft="13dp"-->
-            <!--android:text="@string/weixin"-->
-            <!--android:textSize="16sp" />-->
-
-            <!--<ImageView-->
-            <!--android:id="@+id/weichat"-->
-            <!--android:layout_width="130dp"-->
-            <!--android:layout_height="130dp"-->
-            <!--android:layout_above="@+id/text"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:src="@mipmap/wechat_public" />-->
-
-            <!--<TextView-->
-            <!--android:id="@+id/text"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentBottom="true"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:layout_marginBottom="5dp"-->
-            <!--android:text="长按识别二维码关注" />-->
-
         </LinearLayout>
     </ScrollView>
+
+    <TextView
+        android:id="@+id/version"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="30dp"
+        android:gravity="center"
+        android:text="v"
+        android:textSize="16sp" />
 </LinearLayout>

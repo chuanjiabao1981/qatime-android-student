@@ -178,12 +178,6 @@ public class MessageListPanel {
         }
     };
 
-    private boolean isLastMessageVisible() {
-        LinearLayoutManager layoutManager = (LinearLayoutManager) messageListView.getLayoutManager();
-        int lastVisiblePosition = layoutManager.findLastCompletelyVisibleItemPosition();
-        return lastVisiblePosition >= adapter.getBottomDataPosition();
-    }
-
     public void setOwner(String owner) {
         adapter.setOwner(owner);
     }
@@ -208,10 +202,6 @@ public class MessageListPanel {
     }
 
     public void onMsgSend(IMMessage message) {
-        List<IMMessage> addedListItems = new ArrayList<>(1);
-        addedListItems.add(message);
-//        adapter.updateShowTimeItem(addedListItems, false, true);
-
         adapter.appendData(message);
 
         doScrollToBottom();
@@ -382,22 +372,22 @@ public class MessageListPanel {
         messageListView.scrollToPosition(adapter.getBottomDataPosition());
     }
 
-    private void doScrollToRead() {
-        NIMClient.getService(MsgService.class).queryRecentContacts()
-                .setCallback(new RequestCallbackWrapper<List<RecentContact>>() {
-                    @Override
-                    public void onResult(int code, List<RecentContact> recents, Throwable e) {
-                        // recents参数即为最近联系人列表（最近会话列表）
-                        for (RecentContact recent : recents) {
-                            if (container.account.equals(recent.getContactId())) {
-                                messageListView.scrollToPosition(adapter.getBottomDataPosition() - recent.getUnreadCount());
-                                break;
-                            }
-                        }
-                    }
-                });
-
-    }
+//    private void doScrollToRead() {
+//        NIMClient.getService(MsgService.class).queryRecentContacts()
+//                .setCallback(new RequestCallbackWrapper<List<RecentContact>>() {
+//                    @Override
+//                    public void onResult(int code, List<RecentContact> recents, Throwable e) {
+//                        // recents参数即为最近联系人列表（最近会话列表）
+//                        for (RecentContact recent : recents) {
+//                            if (container.account.equals(recent.getContactId())) {
+//                                messageListView.scrollToPosition(adapter.getBottomDataPosition() - recent.getUnreadCount());
+//                                break;
+//                            }
+//                        }
+//                    }
+//                });
+//
+//    }
 
     // 刷新消息列表
     public void refreshMessageList() {

@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -83,6 +84,7 @@ public class PictureSelectActivity extends BaseActivity {
     private boolean mIsFolderViewShow;
     private ListView mFolderListView;
     private CommonAdapter<ImageBucket> folderAdapter;
+    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +113,12 @@ public class PictureSelectActivity extends BaseActivity {
             if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 initImagesData();
             }
+        } else if (requestCode == 2) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "未取得拍照权限", Toast.LENGTH_SHORT).show();
+            } else {
+                openCamera();
+            }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
@@ -133,17 +141,17 @@ public class PictureSelectActivity extends BaseActivity {
                     finish();
                 } else {
                     if (position == 0) {
-                        // ##########拍照##########
-                        Intent getImageByCamera = new Intent("android.media.action.IMAGE_CAPTURE");
-                        String out_file_path = Constant.CACHEPATH;
-                        File dir = new File(out_file_path);
-                        if (!dir.exists()) {
-                            dir.mkdirs();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            if (ContextCompat.checkSelfPermission(PictureSelectActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                                ActivityCompat.requestPermissions(PictureSelectActivity.this, new String[]{
+                                        android.Manifest.permission.CAMERA}, 2);
+                            } else {
+                                openCamera();
+                            }
+                        } else {
+                            openCamera();
                         }
-                        capturePath = out_file_path + "/" + System.currentTimeMillis() + ".jpg";
-                        getImageByCamera.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(capturePath)));
-                        getImageByCamera.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
-                        startActivityForResult(getImageByCamera, Constant.REQUEST_CAMERA);
+
                     } else {
                         Intent data = new Intent();
                         data.putExtra("data", detailList.get(position - 1));
@@ -153,6 +161,29 @@ public class PictureSelectActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    private void openCamera() {
+        // ##########拍照##########
+        Intent getImageByCamera = new Intent("android.media.action.IMAGE_CAPTURE");
+        String out_file_path = Constant.CACHEPATH;
+        File dir = new File(out_file_path);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        capturePath = out_file_path + "/" + System.currentTimeMillis() + ".jpg";
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
+            imageUri = FileProvider.getUriForFile(this, "com.qatime.player.fileprovider", new File(capturePath));//通过FileProvider创建一个content类型的Uri，进行封装
+            getImageByCamera.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            getImageByCamera.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        } else {
+            imageUri = Uri.fromFile(new File(capturePath));
+        }
+        getImageByCamera.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        getImageByCamera.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
+        startActivityForResult(getImageByCamera, Constant.REQUEST_CAMERA);
+
     }
 
     @Override
@@ -196,6 +227,7 @@ public class PictureSelectActivity extends BaseActivity {
                 if (remove != -1) {
                     imagesBucketList.remove(remove);
                 }
+                if (imagesBucketList.size() <= 0) return;
                 ImageBucket firstBucket = new ImageBucket();
                 firstBucket.imageList = new ArrayList<>();
                 for (int i = 0; i < imagesBucketList.size(); i++) {

@@ -1,12 +1,17 @@
 package cn.qatime.player.bean;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -451,11 +456,19 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (listener.isShowTime()) {
-                    Toast.makeText(context, "正在直播中，禁用语音聊天", Toast.LENGTH_SHORT).show();
-                    return true;
-                }
+
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (listener.isShowTime()) {
+                        Toast.makeText(context, "正在直播中，禁用语音聊天", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(context, new String[]{
+                                    android.Manifest.permission.RECORD_AUDIO}, 1);
+                            return true;
+                        }
+                    }
                     touched = true;
                     if (audioRecordListener != null) {
                         audioRecordListener.audioRecordStart();
@@ -464,6 +477,9 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
                     onStartAudioRecord();
                     start = System.currentTimeMillis();
                 } else if (event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP) {
+                    if (listener.isShowTime()) {
+                        return true;
+                    }
                     touched = false;
                     if (audioRecordListener != null) {
                         audioRecordListener.audioRecordStop();
@@ -477,6 +493,9 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
                     start = 0;
                     end = 0;
                 } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    if (listener.isShowTime()) {
+                        return true;
+                    }
                     touched = false;
                     cancelAudioRecord(isCancelled(v, event));
                 }
@@ -665,8 +684,8 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
         audioRecord.setText(R.string.record_audio_end);
         audioRecord.setBackgroundResource(R.drawable.shape_input_radius);
 
-        updateTimerTip(RecorderState.NORMAL); // 初始化语音动画状态
-        playAudioRecordAnim();
+//        updateTimerTip(RecorderState.NORMAL); // 初始化语音动画状态
+//        playAudioRecordAnim();
         Logger.e("onRecordStart");
     }
 

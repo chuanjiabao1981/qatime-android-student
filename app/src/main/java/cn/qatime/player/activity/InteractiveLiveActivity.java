@@ -33,8 +33,9 @@ import com.netease.nimlib.sdk.avchat.model.AVChatOptionalConfig;
 import com.netease.nimlib.sdk.avchat.model.AVChatParameters;
 import com.netease.nimlib.sdk.avchat.model.AVChatVideoFrame;
 import com.netease.nimlib.sdk.avchat.model.AVChatVideoRender;
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
+import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.rts.RTSCallback;
 import com.netease.nimlib.sdk.rts.RTSChannelStateObserver;
@@ -46,6 +47,7 @@ import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.netease.nrtc.sdk.NRtcParameters;
 import com.orhanobut.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -57,6 +59,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.qatime.player.BuildConfig;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
@@ -73,6 +76,7 @@ import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.doodle.Transaction;
 import cn.qatime.player.im.doodle.TransactionCenter;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.LogCatHelper;
 import cn.qatime.player.utils.MPermission;
 import cn.qatime.player.utils.MPermissionUtil;
 import cn.qatime.player.utils.UrlUtils;
@@ -80,6 +84,7 @@ import cn.qatime.player.utils.annotation.OnMPermissionDenied;
 import cn.qatime.player.utils.annotation.OnMPermissionGranted;
 import cn.qatime.player.utils.annotation.OnMPermissionNeverAskAgain;
 import cn.qatime.player.view.VideoFrameLayout;
+import custom.Configure;
 import libraryextra.bean.Announcements;
 import libraryextra.bean.InteractCourseDetailBean;
 import libraryextra.utils.JsonUtils;
@@ -138,6 +143,21 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     private long loopDelay = 10000;
     private boolean isShowTime = false;
     private ImageView zoom;
+    private boolean isLocalVideoMuted = false;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (NetUtils.checkRecordAudioPermission(this)) {
+                } else {
+                    Toast.makeText(this, "未取得录音权限", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
 
     private void loopStatus() {
         if (id != 0) {
@@ -145,10 +165,11 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             map.put("t", String.valueOf(System.currentTimeMillis()));
             DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlInteractCourses + id + "/live_status", map), null,
                     new VolleyListener(InteractiveLiveActivity.this) {
+
                         @Override
                         protected void onSuccess(JSONObject response) {
                             InteractiveLiveStatusBean data = JsonUtils.objectFromJson(response.toString(), InteractiveLiveStatusBean.class);
-                            if (data != null && data.getData() != null && data.getData().getLive_info() != null && !StringUtils.isNullOrBlanK(data.getData().getLive_info().getRoom_id())) {
+                            if (data != null && data.getData() != null && data.getData().getLive_info() != null && data.getData().getLive_info().getStatus().equals("teaching") && !StringUtils.isNullOrBlanK(data.getData().getLive_info().getRoom_id())) {
                                 roomId = data.getData().getLive_info().getRoom_id();
                                 enterRoom();
                                 if (!StringUtils.isNullOrBlanK(data.getData().getLive_info().getName())) {
@@ -307,7 +328,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         fragmentlayout.setScorllToNext(false);
         fragmentlayout.setScorll(true);
         fragmentlayout.setWhereTab(1);
-        fragmentlayout.setTabHeight(4, 0xffff5842);
+        fragmentlayout.setTabHeight(4, getResources().getColor(R.color.colorPrimary));
         fragmentlayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
@@ -390,7 +411,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         registerRTSObservers(roomId, true);
         initLiveVideo();
         rtsFragment.initRTSView(roomId, this);
-        joinRTSSession();
     }
 
     // 加入多人白板session
@@ -399,11 +419,17 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             @Override
             public void onSuccess(RTSData rtsData) {
                 Logger.e("rts extra:" + rtsData.getExtra());
+                ChatRoomMemberCache.getInstance().setRTSOpen(true);
+                updateRTSFragment();
             }
 
             @Override
             public void onFailed(int i) {
                 Logger.e("join rts session failed, code:" + i);
+                LogCatHelper.getInstance(null).log("join rts session failed, code:" + i);
+                ChatRoomMemberCache.getInstance().setRTSOpen(false);
+                updateRTSFragment();
+                Toast.makeText(InteractiveLiveActivity.this, "白板加入失败", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -441,12 +467,15 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 avChatParameters.setBoolean(NRtcParameters.KEY_AUDIO_REPORT_SPEAKER, true);
                 AVChatManager.getInstance().setParameters(avChatParameters);
                 chooseSpeechType();
+                joinRTSSession();
             }
 
             @Override
             public void onFailed(int i) {
                 Logger.e("join channel failed, code:" + i);
-                hd.post(loopStatus);
+                LogCatHelper.getInstance(null).log("join channel failed, code:" + i);
+                hd.removeCallbacks(loopStatus);
+                hd.postDelayed(loopStatus,15000);
             }
 
             @Override
@@ -468,8 +497,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
     private void registerObservers(boolean register) {
         AVChatManager.getInstance().observeAVChatState(this, register);
-        ChatRoomMemberCache.getInstance().registerRoomMemberChangedObserver(roomMemberChangedObserver, register);
-//        ChatRoomMemberCache.getInstance().registerRoomInfoChangedObserver(roomInfoChangedObserver, register);
     }
 
     // 将有权限的成员添加到画布
@@ -515,23 +542,9 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
         AVChatManager.getInstance().muteLocalVideo(false);
 
-        ChatRoomMemberCache.getInstance().setRTSOpen(true);
-
         updateControlUI();
         updateVideoAudioUI();
     }
-
-    ChatRoomMemberCache.RoomMemberChangedObserver roomMemberChangedObserver = new ChatRoomMemberCache.RoomMemberChangedObserver() {
-        @Override
-        public void onRoomMemberIn(ChatRoomMember member) {
-            onMasterJoin(member.getAccount());
-        }
-
-        @Override
-        public void onRoomMemberExit(ChatRoomMember member) {
-            masterVideoLayout.removeAllViews();
-        }
-    };
 
     @Override
     public void onDestroy() {
@@ -550,7 +563,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         registerRTSObservers(roomId, false);
         AVChatManager.getInstance().leaveRoom(null);
         RTSManager2.getInstance().leaveSession(roomId, null);
-        ChatRoomMemberCache.getInstance().clearRoomCache(roomId);
+        ChatRoomMemberCache.getInstance().setRTSOpen(false);
         roomId = "";
     }
 
@@ -595,9 +608,27 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         if (AVChatManager.getInstance().isLocalVideoMuted()) {
             videoPermission.setBackgroundResource(R.mipmap.video_on);
             AVChatManager.getInstance().muteLocalVideo(false);
+            isLocalVideoMuted = false;
+            if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+                if (videoLayout.getVisibility() == View.GONE) {
+                    videoLayout.setVisibility(View.VISIBLE);
+                    if (videoLayout.getChildCount() == 1) {
+                        videoLayout.getChildAt(0).setVisibility(View.VISIBLE);
+                    }
+                }
+            }
         } else {
             videoPermission.setBackgroundResource(R.mipmap.video_off);
             AVChatManager.getInstance().muteLocalVideo(true);
+            isLocalVideoMuted = true;
+            if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+                if (videoLayout.getVisibility() == View.VISIBLE) {
+                    if (videoLayout.getChildCount() == 1) {
+                        videoLayout.getChildAt(0).setVisibility(View.GONE);
+                    }
+                    videoLayout.setVisibility(View.GONE);
+                }
+            }
         }
     }
 
@@ -724,6 +755,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         }
         userJoinedList.clear();
         clearChatRoom();
+        ChatRoomMemberCache.getInstance().setRTSOpen(false);
         updateRTSFragment();
         hd.postDelayed(loopStatus, loopDelay);
         videoPermission.setVisibility(View.GONE);
@@ -880,10 +912,14 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
             List<Transaction> cache = new ArrayList<>(1);
             // 非主播进入房间，发送同步请求，请求主播向他同步之前的白板笔记
-//            Toast.makeText(InteractiveLiveActivity.this, "send sync request", Toast.LENGTH_SHORT).show();
+            if (Configure.isDebug) {
+                Toast.makeText(InteractiveLiveActivity.this, "send sync request了啊啊啊啊啊啊啊啊", Toast.LENGTH_SHORT).show();
+            }
             TransactionCenter.getInstance().onNetWorkChange(roomId, false);
             cache.add(new Transaction().makeSyncRequestTransaction());
             TransactionCenter.getInstance().sendToRemote(roomId, null, cache);
+            LogCatHelper.getInstance(null).log("send sync request");
+            ChatMessage(MessageBuilder.createCustomMessage(sessionId, SessionTypeEnum.Team, "VChatSyncRequest", null));
         }
 
         @Override
@@ -964,9 +1000,13 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             params.height = ScreenUtils.getScreenWidth(InteractiveLiveActivity.this) * 3 / 5;
             params.width = ScreenUtils.getScreenWidth(InteractiveLiveActivity.this);
             viewLayout.setLayoutParams(params);
-            videoLayout.setVisibility(View.VISIBLE);
-            if (videoLayout.getChildCount() == 1) {
-                videoLayout.getChildAt(0).setVisibility(View.VISIBLE);
+            if (!isLocalVideoMuted) {
+                if (videoLayout.getVisibility() == View.GONE) {
+                    videoLayout.setVisibility(View.VISIBLE);
+                    if (videoLayout.getChildCount() == 1) {
+                        videoLayout.getChildAt(0).setVisibility(View.VISIBLE);
+                    }
+                }
             }
         } else {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -975,10 +1015,12 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             params.width = -1;
             viewLayout.setLayoutParams(params);
 
-            if (videoLayout.getChildCount() == 1) {
-                videoLayout.getChildAt(0).setVisibility(View.GONE);
+            if (videoLayout.getVisibility() == View.VISIBLE) {
+                if (videoLayout.getChildCount() == 1) {
+                    videoLayout.getChildAt(0).setVisibility(View.GONE);
+                }
+                videoLayout.setVisibility(View.GONE);
             }
-            videoLayout.setVisibility(View.GONE);
         }
 //        float resultX = videoLayout.getX();
 //        float resultY = videoLayout.getY();
@@ -1032,5 +1074,20 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 zoom.setImageResource(R.mipmap.enlarge);
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+        NIMClient.getService(MsgService.class).setChattingAccount(sessionId, SessionTypeEnum.Team);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        inputPanel.onPause();
+        MobclickAgent.onPause(this);
+        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
     }
 }

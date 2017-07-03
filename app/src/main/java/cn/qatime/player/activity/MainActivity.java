@@ -1,14 +1,17 @@
 package cn.qatime.player.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -27,9 +30,7 @@ import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.AuthServiceObserver;
-import com.netease.nimlib.sdk.auth.ClientType;
 import com.netease.nimlib.sdk.auth.LoginInfo;
-import com.netease.nimlib.sdk.auth.OnlineClient;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
@@ -43,7 +44,6 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,14 +65,17 @@ import cn.qatime.player.fragment.FragmentUnLoginHomeMessage;
 import cn.qatime.player.fragment.FragmentUnLoginHomeUserCenter;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
+import cn.qatime.player.qrcore.core.CaptureActivity;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
-import cn.qatime.player.utils.SPUtils;
+import cn.qatime.player.utils.LogCatHelper;
 import cn.qatime.player.utils.UrlUtils;
+import io.vov.vitamio.utils.FileUtils;
 import libraryextra.bean.CashAccountBean;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
 import libraryextra.bean.SystemNotifyBean;
+import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -115,6 +118,21 @@ public class MainActivity extends BaseFragmentActivity {
         }
     }
 
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1) {
+        } else if (requestCode == 2) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "未取得相机权限", Toast.LENGTH_SHORT).show();
+            } else {
+                Intent intent = new Intent(this, CaptureActivity.class);
+                startActivityForResult(intent, Constant.REQUEST);
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,13 +156,8 @@ public class MainActivity extends BaseFragmentActivity {
         refreshMedia();
 
         File file = new File(Constant.CACHEPATH);
-        if (!file.mkdirs()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        FileUtils.deleteDir(file);
+
         parseIntent();
         NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, true);
 //        NIMClient.getService(AuthServiceObserver.class).observeOtherClients(clientsObserver, true);
@@ -204,7 +217,7 @@ public class MainActivity extends BaseFragmentActivity {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff666666);
-                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffff5842);
+                ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(getResources().getColor(R.color.colorPrimary));
                 ((ImageView) lastTabView.findViewById(tab_img[lastPosition])).setImageResource(image_list[lastPosition][1]);
                 ((ImageView) currentTabView.findViewById(tab_img[position])).setImageResource(image_list[position][0]);
                 if (position == 3) {
@@ -442,9 +455,9 @@ public class MainActivity extends BaseFragmentActivity {
         @Override
         public void onEvent(StatusCode code) {
             if (code.wontAutoLogin()) {
-                Intent intent = new Intent(BaseApplication.getInstance().getTopActivity(), MainActivity.class);
-                intent.putExtra("kickOut", "kickOut");
-                startActivity(intent);
+//                Intent intent = new Intent(BaseApplication.getInstance().getTopActivity(), MainActivity.class);
+//                intent.putExtra("kickOut", "kickOut");
+//                startActivity(intent);
 //                Toast.makeText(MainActivity.this, "userStatus未登录成功", Toast.LENGTH_SHORT).show();
                 Logger.e("userStatus未登录成功");
             } else {

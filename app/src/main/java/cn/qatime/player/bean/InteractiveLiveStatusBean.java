@@ -2,6 +2,8 @@ package cn.qatime.player.bean;
 
 import java.io.Serializable;
 
+import libraryextra.utils.StringUtils;
+
 /**
  * @author lungtify
  * @Time 2017/5/12 15:14
@@ -79,7 +81,7 @@ public class InteractiveLiveStatusBean implements Serializable {
             }
 
             public String getStatus() {
-                return status;
+                return StringUtils.isNullOrBlanK(status) ? "" : status;
             }
 
             public void setStatus(String status) {

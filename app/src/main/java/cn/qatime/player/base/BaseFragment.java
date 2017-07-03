@@ -47,7 +47,7 @@ public class BaseFragment extends Fragment {
     }
 
     /**
-     * 设备已在其他地方登陆
+     * 设备已在其他地方登录
      */
     public void tokenOut() {
         BaseApplication.getInstance().clearToken();
@@ -109,7 +109,7 @@ public class BaseFragment extends Fragment {
     }
 
     protected String getResourceString(int id) {
-        return getResources().getString(id);
+        return BaseApplication.getInstance().getString(id);
     }
 
     protected <T extends View> T findViewById(int resId) {

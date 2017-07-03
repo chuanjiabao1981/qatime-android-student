@@ -2,31 +2,31 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
     android:background="@mipmap/bg_message_tip"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/message_item_notification_label"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="7dip"
         android:layout_marginRight="7dip"
         android:gravity="center"
         android:paddingLeft="7dip"
         android:paddingRight="7dip"
-        android:textColor="#ffffff"
+        android:textColor="#999"
         android:textSize="12sp" />
 
     <TextView
         android:id="@+id/message_item_notification_content"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="7dip"
         android:layout_marginRight="7dip"
-        android:gravity="center"
         android:paddingLeft="7dip"
         android:paddingRight="7dip"
-        android:textColor="#ffffff"
-        android:textSize="12sp" />
+        android:textColor="#666"
+        android:textSize="13sp" />
 
 </LinearLayout>

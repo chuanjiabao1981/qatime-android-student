@@ -29,13 +29,13 @@ import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.bean.Container;
 import cn.qatime.player.bean.MessageListPanel;
 import cn.qatime.player.bean.ModuleProxy;
 import cn.qatime.player.im.SimpleCallback;
-import cn.qatime.player.im.cache.FriendDataCache;
 import cn.qatime.player.im.cache.TeamDataCache;
 
 public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
@@ -122,30 +122,24 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
                         break;
                     }
                 }
-                if (messageListPanel.isMyMessage(message) && (message.getMsgType() == MsgTypeEnum.text || message.getMsgType() == MsgTypeEnum.notification || message.getMsgType() == MsgTypeEnum.image)) {
-                    if (message.getAttachment() instanceof NotificationAttachment) {//收到公告更新通知消息,通知公告页面刷新公告
-                        if (((NotificationAttachment) message.getAttachment()).getType() == NotificationType.UpdateTeam) {
-                            UpdateTeamAttachment a = (UpdateTeamAttachment) message.getAttachment();
-                            for (Map.Entry<TeamFieldEnum, Object> field : a.getUpdatedFields().entrySet()) {
-                                if (field.getKey() == TeamFieldEnum.Announcement) {
-                                    EventBus.getDefault().post(BusEvent.ANNOUNCEMENT);
-                                }
-                            }
+                if (message.getMsgType() == MsgTypeEnum.notification) {//收到公告更新通知消息,通知公告页面刷新公告
+                    if (((NotificationAttachment) message.getAttachment()).getType() == NotificationType.UpdateTeam) {
+                        UpdateTeamAttachment a = (UpdateTeamAttachment) message.getAttachment();
+                        if (a.getUpdatedFields().containsKey(TeamFieldEnum.Announcement)) {
+                            EventBus.getDefault().post(BusEvent.ANNOUNCEMENT);
                         }
                     }
-                    addedListItems.add(message);
-                    needRefresh = true;
                 }
+                addedListItems.add(message);
+                needRefresh = true;
             }
 
             if (needRefresh) {
                 if (chatCallback != null) {
                     chatCallback.back(addedListItems);
                 }
+                messageListPanel.onIncomingMessage(addedListItems);
             }
-
-            messageListPanel.onIncomingMessage(messages);
-
         }
     };
 
@@ -164,8 +158,7 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
                     if (success && result != null) {
                         updateTeamInfo(result);
                     } else {
-                        Toast.makeText(getActivity(), getResourceString(R.string.failed_to_obtain_group_information), Toast.LENGTH_SHORT).show();
-                        getActivity().finish();
+                        Toast.makeText(BaseApplication.getInstance(), getResourceString(R.string.failed_to_obtain_group_information), Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -202,7 +195,6 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
             TeamDataCache.getInstance().unregisterTeamDataChangedObserver(teamDataChangedObserver);
             TeamDataCache.getInstance().unregisterTeamMemberDataChangedObserver(teamMemberDataChangedObserver);
         }
-        FriendDataCache.getInstance().registerFriendDataChangedObserver(friendDataChangedObserver, register);
     }
 
 
@@ -249,27 +241,6 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
         }
     };
 
-    FriendDataCache.FriendDataChangedObserver friendDataChangedObserver = new FriendDataCache.FriendDataChangedObserver() {
-        @Override
-        public void onAddedOrUpdatedFriends(List<String> accounts) {
-            messageListPanel.refreshMessageList();
-        }
-
-        @Override
-        public void onDeletedFriends(List<String> accounts) {
-            messageListPanel.refreshMessageList();
-        }
-
-        @Override
-        public void onAddUserToBlackList(List<String> account) {
-            messageListPanel.refreshMessageList();
-        }
-
-        @Override
-        public void onRemoveUserFromBlackList(List<String> account) {
-            messageListPanel.refreshMessageList();
-        }
-    };
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;

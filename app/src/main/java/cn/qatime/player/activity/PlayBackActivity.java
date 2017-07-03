@@ -3,6 +3,7 @@ package cn.qatime.player.activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -13,13 +14,25 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
+import org.json.JSONObject;
+
+import java.io.IOException;
+
 import cn.qatime.player.R;
-import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseFragmentActivity;
+import cn.qatime.player.bean.PlayBackInfoBean;
 import cn.qatime.player.fragment.FragmentPlayBack;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import io.vov.vitamio.MediaPlayer;
 import io.vov.vitamio.Vitamio;
+import libraryextra.utils.DateUtils;
 import libraryextra.utils.DensityUtils;
+import libraryextra.utils.JsonUtils;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 
 /**
  * @author lungtify
@@ -27,7 +40,7 @@ import libraryextra.utils.DensityUtils;
  * @Describe
  */
 
-public class PlayBackActivity extends BaseFragmentActivity implements SurfaceHolder.Callback {
+public class PlayBackActivity extends BaseFragmentActivity implements SurfaceHolder.Callback, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener {
     private RelativeLayout video;
     private SurfaceHolder holder;
     private MediaPlayer mMediaPlayer;
@@ -40,6 +53,7 @@ public class PlayBackActivity extends BaseFragmentActivity implements SurfaceHol
     private ImageView sex;
     private TextView videoLength;
     private TextView playBackCount;
+    private boolean isCreated = false;
 
 
     @Override
@@ -51,6 +65,40 @@ public class PlayBackActivity extends BaseFragmentActivity implements SurfaceHol
             return;
         }
         initView();
+        int id = getIntent().getIntExtra("id", 0);
+        if (id != 0) {
+            initData(id);
+        }
+    }
+
+    private void initData(int id) {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlHomeReplays + "/" + id + "/replay", null, new VolleyListener(PlayBackActivity.this) {
+            @Override
+            protected void onTokenOut() {
+
+            }
+
+            @Override
+            protected void onSuccess(JSONObject response) {
+                PlayBackInfoBean data = JsonUtils.objectFromJson(response.toString(), PlayBackInfoBean.class);
+                if (data != null) {
+                    name.setText(data.getData().getLive_studio_lesson().getName());
+                    gradeSubject.setText(data.getData().getTeacher().getCategory() + data.getData().getTeacher().getSubject());
+                    Glide.with(PlayBackActivity.this).load(data.getData().getTeacher().getEx_big_avatar_url()).placeholder(R.mipmap.photo).into(image);
+                    teacher.setText(data.getData().getTeacher().getName());
+                    sex.setImageResource("male".equals(data.getData().getTeacher().getGender()) ? R.mipmap.male : R.mipmap.female);
+                    videoLength.setText(DateUtils.stringForTime(data.getData().getVideo_duration(), true));
+                    playBackCount.setText(String.valueOf(data.getData().getReplay_times()));
+                    play(data.getData().getVideo_url());
+                }
+            }
+
+            @Override
+            protected void onError(JSONObject response) {
+
+            }
+        }, new VolleyErrorListener());
+        addToRequestQueue(request);
     }
 
     private void initView() {
@@ -134,7 +182,7 @@ public class PlayBackActivity extends BaseFragmentActivity implements SurfaceHol
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-
+        isCreated = true;
     }
 
     @Override
@@ -144,7 +192,7 @@ public class PlayBackActivity extends BaseFragmentActivity implements SurfaceHol
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-
+        isCreated = false;
     }
 
 
@@ -191,5 +239,46 @@ public class PlayBackActivity extends BaseFragmentActivity implements SurfaceHol
             params.height = -1;
             video.setLayoutParams(params);
         }
+    }
+
+    private void play(String nameUrl) {
+        releaseMediaPlayer();
+        if (isCreated) {
+            try {
+                createMedia(nameUrl);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void createMedia(String path) throws IOException {
+        mMediaPlayer = new MediaPlayer(this);
+        mMediaPlayer.setDataSource(path);
+        mMediaPlayer.setDisplay(holder);
+        mMediaPlayer.prepareAsync();
+        mMediaPlayer.setOnBufferingUpdateListener(this);
+        mMediaPlayer.setOnCompletionListener(this);
+        mMediaPlayer.setOnPreparedListener(this);
+        mMediaPlayer.setScreenOnWhilePlaying(true);
+//        mMediaPlayer.setOnVideoSizeChangedListener(this);
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+    }
+
+    @Override
+    public void onBufferingUpdate(MediaPlayer mp, int percent) {
+        floatFragment.setBuffering(percent, mp.getDuration());
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mp) {
+        isPrepared = true;
+        mMediaPlayer.start();
+        floatFragment.setPlayOrPause(mp.isPlaying());
     }
 }

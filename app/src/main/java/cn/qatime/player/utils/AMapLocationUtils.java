@@ -1,5 +1,6 @@
 package cn.qatime.player.utils;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.amap.api.location.AMapLocation;
@@ -19,7 +20,7 @@ public class AMapLocationUtils {
     private final LocationListener locationListener;
     private AMapLocationClient locationClient;
 
-    public AMapLocationUtils(Context context, LocationListener locationListener) {
+    public AMapLocationUtils(Activity context, LocationListener locationListener) {
         this.locationListener = locationListener;
         initLocation(context);
     }

@@ -123,7 +123,6 @@ public class FragmentClassTableUnclosed extends BaseFragment {
         for (int i = 0; i < totalList.size(); i++) {
             itemList.addAll(totalList.get(i).getLessons());
         }
-        Logger.e(itemList.size() + "");
         adapter.notifyDataSetChanged();
     }
 

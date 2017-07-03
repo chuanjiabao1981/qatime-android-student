@@ -101,10 +101,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     private RelativeLayout window1;
     private ImageView videoNoData1;
     private ImageView videoNoData2;
-    private AnimationDrawable bufferAnimation1;
-    private AnimationDrawable bufferAnimation2;
-    private PercentRelativeLayout buffering1;
-    private PercentRelativeLayout buffering2;
+    private ImageView buffering1;
+    private ImageView buffering2;
 
     private Handler hd = new Handler();
     private Runnable runnable = new Runnable() {
@@ -121,8 +119,20 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     private String camera;
     private String board;
     private ScreenSwitchUtils screenSwitchUtils;
-    private boolean isShowTime = false;
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (NetUtils.checkRecordAudioPermission(this)) {
+                } else {
+                    Toast.makeText(this, "未取得录音权限", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
 
     private void assignViews() {
         int screenW = ScreenUtils.getScreenWidth(NEVideoPlayerActivity.this);
@@ -130,16 +140,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         window1 = (RelativeLayout) findViewById(R.id.window1);
         window2 = (RelativeLayout) findViewById(R.id.window2);
 
-        buffering1 = (PercentRelativeLayout) findViewById(R.id.buffering1);
-        buffering2 = (PercentRelativeLayout) findViewById(R.id.buffering2);
-
-        ImageView bufferImage1 = (ImageView) findViewById(R.id.buffer_image1);
-        ImageView bufferImage2 = (ImageView) findViewById(R.id.buffer_image2);
-
-        bufferAnimation1 = (AnimationDrawable) bufferImage1.getBackground();
-        bufferAnimation1.start();
-        bufferAnimation2 = (AnimationDrawable) bufferImage2.getBackground();
-        bufferAnimation2.start();
+        buffering1 = (ImageView) findViewById(R.id.buffering1);
+        buffering2 = (ImageView) findViewById(R.id.buffering2);
 
         videoNoData1 = (ImageView) findViewById(R.id.video_no_data1);
         videoNoData2 = (ImageView) findViewById(R.id.video_no_data2);
@@ -155,7 +157,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             public boolean onError(NELivePlayer neLivePlayer, int i, int i1) {
                 setVideoState(VideoState.INIT);
                 buffering1.setVisibility(View.GONE);
-                bufferAnimation1.stop();
                 videoNoData1.setVisibility(View.VISIBLE);
                 return true;
             }
@@ -165,7 +166,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             public boolean onError(NELivePlayer neLivePlayer, int i, int i1) {
                 setVideoState(VideoState.INIT);
                 buffering2.setVisibility(View.GONE);
-                bufferAnimation2.stop();
                 videoNoData2.setImageResource(R.mipmap.video_no_data);
                 videoNoData2.setVisibility(View.VISIBLE);
                 return true;
@@ -230,10 +230,16 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         screenSwitchUtils = ScreenSwitchUtils.init(this.getApplicationContext());
 
         id = getIntent().getIntExtra("id", 0);//从前一页进来的id 获取详情用
+        sessionId = getIntent().getStringExtra("sessionId");
         if (id == 0) {
             Toast.makeText(this, getResourceString(R.string.no_course_information), Toast.LENGTH_SHORT).show();
+            finish();
+
         }
-        sessionId = getIntent().getStringExtra("sessionId");
+        if (StringUtils.isNullOrBlanK(sessionId)) {
+            Toast.makeText(this, getResourceString(R.string.failed_to_obtain_group_information), Toast.LENGTH_SHORT).show();
+            finish();
+        }
 
         EventBus.getDefault().register(this);
         assignViews();
@@ -275,7 +281,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 videoNoData2.setVisibility(View.VISIBLE);//摄像头关闭
             }
         } else {
-            bufferAnimation2.stop();
             buffering2.setVisibility(View.GONE);
             videoNoData2.setImageResource(R.mipmap.video_no_data);
             videoNoData2.setVisibility(View.VISIBLE);
@@ -291,7 +296,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 video1.start();
             }
         } else {
-            bufferAnimation1.stop();
             buffering1.setVisibility(View.GONE);
             videoNoData1.setVisibility(View.VISIBLE);
         }
@@ -308,9 +312,9 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                             if (data != null) {
                                 if (data.getData() != null) {
                                     ((FragmentPlayerMembers) fragBaseFragments.get(3)).setData(data.getData());
-                                    ((FragmentPlayerMessage) fragBaseFragments.get(1)).setOwner(data.getData().getOwner());
+                                    ((FragmentPlayerMessage) fragBaseFragments.get(0)).setOwner(data.getData().getOwner());
                                     if (data.getData().getAnnouncements() != null) {
-                                        ((FragmentPlayerAnnouncements) fragBaseFragments.get(0)).setData(data.getData().getAnnouncements());
+                                        ((FragmentPlayerAnnouncements) fragBaseFragments.get(1)).setData(data.getData().getAnnouncements());
                                     }
                                 }
                             }
@@ -342,11 +346,11 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 floatFragment.setMute(isMute);
             }
         }
-        inputPanel = new InputPanel(this, this, rootView, false, sessionId);
+        inputPanel = new InputPanel(this, this, rootView, true, sessionId);
         inputPanel.setMute(isMute);
 
-        fragBaseFragments.add(new FragmentPlayerAnnouncements());
         fragBaseFragments.add(new FragmentPlayerMessage());
+        fragBaseFragments.add(new FragmentPlayerAnnouncements());
         fragBaseFragments.add(new FragmentPlayerLiveDetails());
         fragBaseFragments.add(new FragmentPlayerMembers());
 
@@ -355,14 +359,15 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         fragmentLayout.setScorllToNext(true);
         fragmentLayout.setScorll(true);
         fragmentLayout.setWhereTab(1);
-        fragmentLayout.setTabHeight(4, 0xffff5842);
+        fragmentLayout.setTabHeight(4, getResources().getColor(R.color.colorPrimary));
         fragmentLayout.setOnChangeFragmentListener(new FragmentLayoutWithLine.ChangeFragmentListener() {
             @Override
             public void change(int lastPosition, int position, View lastTabView, View currentTabView) {
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff999999);
                 ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffff5842);
-                if (position == 1) {
+                if (position == 0) {
                     inputPanel.visibilityInput();
+                    ((FragmentPlayerMessage) fragBaseFragments.get(0)).scrollToBottom();
                 } else {
                     inputPanel.goneInput();
                 }
@@ -376,7 +381,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         });
         fragmentLayout.setAdapter(fragBaseFragments, R.layout.tablayout_nevideo_player, 0x0102);
         fragmentLayout.getViewPager().setOffscreenPageLimit(3);
-        fragment2 = (FragmentPlayerMessage) fragBaseFragments.get(1);
+        fragment2 = (FragmentPlayerMessage) fragBaseFragments.get(0);
 
         fragment2.setChatCallBack(new FragmentPlayerMessage.Callback() {
             @Override
@@ -404,8 +409,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 floatFragment.setTeam(team);
             }
         });
+
         fragment2.setSessionId(sessionId);
         fragment2.requestTeamInfo();
+
 
         inputPanel.setOnInputShowListener(new InputPanel.OnInputShowListener() {
             @Override
@@ -676,15 +683,11 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             queryVideoState();
         } else if (videoState == VideoState.UNPLAY) {//未直播状态下 开始轮询
             this.videoState = videoState;
-            isShowTime = false;
             playingReQuery = 0;//异常退出重新查询用
             hd.removeCallbacks(runnable);
             hd.postDelayed(runnable, 30000);
             if (videoNoData1.getVisibility() == View.GONE) {
                 videoNoData1.setVisibility(View.VISIBLE);
-                if (bufferAnimation1.isRunning()) {
-                    bufferAnimation1.stop();
-                }
                 if (buffering1.getVisibility() == View.VISIBLE) {
                     buffering1.setVisibility(View.GONE);
                 }
@@ -692,16 +695,12 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             videoNoData2.setImageResource(R.mipmap.video_no_data);
             if (videoNoData2.getVisibility() == View.GONE) {
                 videoNoData2.setVisibility(View.VISIBLE);
-                if (bufferAnimation2.isRunning()) {
-                    bufferAnimation2.stop();
-                }
                 if (buffering2.getVisibility() == View.VISIBLE) {
                     buffering2.setVisibility(View.GONE);
                 }
             }
         } else if (videoState == VideoState.PLAYING) {//直播状态下 停止轮询等待完成
             this.videoState = videoState;
-            isShowTime = true;
             if (playingReQuery < 1) {
 //                Logger.e("重新查询");
                 hd.postDelayed(runnable, 15000);
@@ -746,7 +745,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
         } else if (videoState == VideoState.CLOSED) {//关闭状态   摄像头关闭
             this.videoState = videoState;
-            isShowTime = true;
             hd.removeCallbacks(runnable);
             hd.postDelayed(runnable, 30000);
             refreshState();
@@ -868,35 +866,20 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     @Override
     public void changeSubSmall() {
         isSubBig = false;
-        boolean needReStart = false;
         if (screenSwitchUtils.isPortrait()) {
             danmuView.setVisibility(View.GONE);
         } else {
             danmuView.setVisibility(View.VISIBLE);
         }
         if (ismain) {
-            if (buffering2.getVisibility() == View.VISIBLE && bufferAnimation2.isRunning()) {
-                needReStart = true;
-                bufferAnimation2.stop();
-            }
             subVideo.removeView(window2);
             video2.setZOrderOnTop(true);
             floatingWindow.addView(window2);
             video2.setSelfSize(floatingWindow.getLayoutParams().width, floatingWindow.getLayoutParams().height);
-            if (needReStart) {
-                bufferAnimation2.start();
-            }
         } else {
-            if (buffering1.getVisibility() == View.VISIBLE && bufferAnimation1.isRunning()) {
-                needReStart = true;
-                bufferAnimation1.stop();
-            }
             subVideo.removeView(window1);
             video1.setZOrderOnTop(true);
             floatingWindow.addView(window1);
-            if (needReStart) {
-                bufferAnimation1.start();
-            }
         }
         if (isSubOpen) {
             floatingWindow.setVisibility(View.VISIBLE);
@@ -1117,6 +1100,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     @Override
     public boolean isShowTime() {
-        return isShowTime;
+        return false;
     }
 }

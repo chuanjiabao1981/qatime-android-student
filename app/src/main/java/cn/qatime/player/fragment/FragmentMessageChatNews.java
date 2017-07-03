@@ -327,7 +327,9 @@ public class FragmentMessageChatNews extends BaseFragment {
             MessageListBean bean = new MessageListBean();
             bean.setContactId(item.getContactId());
             Team team = TeamDataCache.getInstance().getTeamById(item.getContactId());
-            bean.setMute(team.mute());
+            if (team != null) {
+                bean.setMute(team.mute());
+            }
             bean.setSessionType(item.getSessionType());
             bean.setUnreadCount(item.getUnreadCount());
             bean.setTime(item.getTime());
@@ -489,7 +491,9 @@ public class FragmentMessageChatNews extends BaseFragment {
 //                }
                 bean.setContactId(msg.getContactId());
                 Team team = TeamDataCache.getInstance().getTeamById(bean.getContactId());
-                bean.setMute(team.mute());
+                if (team != null) {
+                    bean.setMute(team.mute());
+                }
                 bean.setSessionType(msg.getSessionType());
                 if (StringUtils.isNullOrBlanK(bean.getName())) {
                     bean.setName(TeamDataCache.getInstance().getTeamName(msg.getContactId()).replace("讨论组", ""));

@@ -1,10 +1,15 @@
 package cn.qatime.player.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
@@ -92,6 +97,7 @@ public class OrderPayActivity extends BaseActivity {
     private PayPopView payPopView;
     private String amount;
     private String orderName;
+    private android.app.AlertDialog alertDialogPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,8 +160,41 @@ public class OrderPayActivity extends BaseActivity {
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.phoneNumber));
-                startActivity(intent);
+                if (alertDialogPhone == null) {
+                    View view = View.inflate(OrderPayActivity.this, R.layout.dialog_cancel_or_confirm, null);
+                    TextView text = (TextView) view.findViewById(R.id.text);
+                    text.setText(getResourceString(R.string.call_customer_service_phone) + Constant.phoneNumber);
+                    Button cancel = (Button) view.findViewById(R.id.cancel);
+                    Button confirm = (Button) view.findViewById(R.id.confirm);
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialogPhone.dismiss();
+                        }
+                    });
+                    confirm.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialogPhone.dismiss();
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                if (ContextCompat.checkSelfPermission(OrderPayActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                    ActivityCompat.requestPermissions(OrderPayActivity.this, new String[]{
+                                            Manifest.permission.CALL_PHONE}, 1);
+                                } else {
+                                    callPhone();
+                                }
+                            } else {
+                                callPhone();
+                            }
+                        }
+                    });
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(OrderPayActivity.this);
+                    alertDialogPhone = builder.create();
+                    alertDialogPhone.show();
+                    alertDialogPhone.setContentView(view);
+                } else {
+                    alertDialogPhone.show();
+                }
             }
         });
         commit.setOnClickListener(new View.OnClickListener() {
@@ -223,6 +262,25 @@ public class OrderPayActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    private void callPhone() {
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.phoneNumber));
+        if (ActivityCompat.checkSelfPermission(OrderPayActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        startActivity(intent);
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "权限被拒绝", Toast.LENGTH_SHORT).show();
+            }else{
+                callPhone();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private void showPSWPop() {

@@ -18,7 +18,7 @@ public class MsgViewHolderFactory {
 
     private static HashMap<Class<? extends MsgAttachment>, Class<? extends MsgViewHolderBase>> viewHolders = new HashMap<>();
 
-    private static Class<? extends MsgViewHolderBase> tipMsgViewHolder;
+//    private static Class<? extends MsgViewHolderBase> tipMsgViewHolder;
 
     static {
         // built in
@@ -33,15 +33,17 @@ public class MsgViewHolderFactory {
         viewHolders.put(attach, viewHolder);
     }
 
-    public static void registerTipMsgViewHolder(Class<? extends MsgViewHolderBase> viewHolder) {
-        tipMsgViewHolder = viewHolder;
-    }
+//    public static void registerTipMsgViewHolder(Class<? extends MsgViewHolderBase> viewHolder) {
+//        tipMsgViewHolder = viewHolder;
+//    }
 
     public static Class<? extends MsgViewHolderBase> getViewHolderByType(IMMessage message) {
         if (message.getMsgType() == MsgTypeEnum.text) {
             return MsgViewHolderText.class;
-        } else if (message.getMsgType() == MsgTypeEnum.tip) {
-            return tipMsgViewHolder == null ? MsgViewHolderUnknown.class : tipMsgViewHolder;
+//        } else if (message.getMsgType() == MsgTypeEnum.tip) {
+//            return tipMsgViewHolder == null ? MsgViewHolderUnknown.class : tipMsgViewHolder;
+        } else if (message.getMsgType() == MsgTypeEnum.custom) {
+            return MsgViewHolderCustom.class;
         } else {
             Class<? extends MsgViewHolderBase> viewHolder = null;
             if (message.getAttachment() != null) {
@@ -74,11 +76,12 @@ public class MsgViewHolderFactory {
     public static List<Class<? extends MsgViewHolderBase>> getAllViewHolders() {
         List<Class<? extends MsgViewHolderBase>> list = new ArrayList<>();
         list.addAll(viewHolders.values());
-        if (tipMsgViewHolder != null) {
-            list.add(tipMsgViewHolder);
-        }
+//        if (tipMsgViewHolder != null) {
+//            list.add(tipMsgViewHolder);
+//        }
         list.add(MsgViewHolderUnknown.class);
         list.add(MsgViewHolderText.class);
+        list.add(MsgViewHolderCustom.class);
 
         return list;
     }

@@ -13,6 +13,7 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.attachment.NotificationAttachment;
+import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.NotificationType;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
@@ -21,12 +22,12 @@ import com.netease.nimlib.sdk.team.constant.TeamTypeEnum;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.netease.nimlib.sdk.team.model.UpdateTeamAttachment;
+import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
@@ -35,8 +36,8 @@ import cn.qatime.player.bean.Container;
 import cn.qatime.player.bean.MessageListPanel;
 import cn.qatime.player.bean.ModuleProxy;
 import cn.qatime.player.im.SimpleCallback;
-import cn.qatime.player.im.cache.FriendDataCache;
 import cn.qatime.player.im.cache.TeamDataCache;
+import libraryextra.utils.StringUtils;
 
 /**
  * @author lungtify
@@ -119,6 +120,7 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
     Observer<List<IMMessage>> receiveMessageObserver = new Observer<List<IMMessage>>() {
         @Override
         public void onEvent(List<IMMessage> messages) {
+            Logger.e("receiveMessageObserver" + "receiveMessage");
             if (messages == null || messages.isEmpty()) {
                 return;
             }
@@ -132,30 +134,33 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
                         break;
                     }
                 }
-                if (messageListPanel.isMyMessage(message) && (message.getMsgType() == MsgTypeEnum.text || message.getMsgType() == MsgTypeEnum.notification || message.getMsgType() == MsgTypeEnum.image)) {
-                    if (message.getAttachment() instanceof NotificationAttachment) {//收到公告更新通知消息,通知公告页面刷新公告
-                        if (((NotificationAttachment) message.getAttachment()).getType() == NotificationType.UpdateTeam) {
-                            UpdateTeamAttachment a = (UpdateTeamAttachment) message.getAttachment();
-                            for (Map.Entry<TeamFieldEnum, Object> field : a.getUpdatedFields().entrySet()) {
-                                if (field.getKey() == TeamFieldEnum.Announcement) {
-                                    EventBus.getDefault().post(BusEvent.ANNOUNCEMENT);
-                                }
-                            }
+                if (message.getMsgType() == MsgTypeEnum.notification) {//收到公告更新通知消息,通知公告页面刷新公告
+                    if (((NotificationAttachment) message.getAttachment()).getType() == NotificationType.UpdateTeam) {
+                        UpdateTeamAttachment a = (UpdateTeamAttachment) message.getAttachment();
+                        if (a.getUpdatedFields().containsKey(TeamFieldEnum.Announcement)) {
+                            EventBus.getDefault().post(BusEvent.ANNOUNCEMENT);
                         }
                     }
-                    addedListItems.add(message);
-                    needRefresh = true;
+                } else if (message.getMsgType() == MsgTypeEnum.custom) {
+                    message.setStatus(MsgStatusEnum.read);
+                    Logger.e("收到消息MsgTypeEnum.custom");
+                    if (!StringUtils.isNullOrBlanK(message.getContent())) {
+                        if (message.getContent().equals("FullScreenOpen"))//FullScreenOpen FullScreenClose
+                            EventBus.getDefault().post(BusEvent.FullScreenOpen);
+                        else if (message.getContent().equals("FullScreenClose"))
+                            EventBus.getDefault().post(BusEvent.FullScreenClose);
+                    }
                 }
+                addedListItems.add(message);
+                needRefresh = true;
             }
 
             if (needRefresh) {
                 if (chatCallback != null) {
                     chatCallback.back(addedListItems);
                 }
+                messageListPanel.onIncomingMessage(addedListItems);
             }
-
-            messageListPanel.onIncomingMessage(messages);
-
         }
     };
 
@@ -212,7 +217,6 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
             TeamDataCache.getInstance().unregisterTeamDataChangedObserver(teamDataChangedObserver);
             TeamDataCache.getInstance().unregisterTeamMemberDataChangedObserver(teamMemberDataChangedObserver);
         }
-        FriendDataCache.getInstance().registerFriendDataChangedObserver(friendDataChangedObserver, register);
     }
 
 
@@ -256,28 +260,6 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
 
         @Override
         public void onRemoveTeamMember(TeamMember member) {
-        }
-    };
-
-    FriendDataCache.FriendDataChangedObserver friendDataChangedObserver = new FriendDataCache.FriendDataChangedObserver() {
-        @Override
-        public void onAddedOrUpdatedFriends(List<String> accounts) {
-            messageListPanel.refreshMessageList();
-        }
-
-        @Override
-        public void onDeletedFriends(List<String> accounts) {
-            messageListPanel.refreshMessageList();
-        }
-
-        @Override
-        public void onAddUserToBlackList(List<String> account) {
-            messageListPanel.refreshMessageList();
-        }
-
-        @Override
-        public void onRemoveUserFromBlackList(List<String> account) {
-            messageListPanel.refreshMessageList();
         }
     };
 

@@ -104,7 +104,6 @@
     <string name="female">女</string>
     <string name="change_information_successful">个人资料修改成功！</string>
     <string name="id_is_empty">ID为空</string>
-    <string name="tutor_information">辅导班详情</string>
     <!--//我的订单-->
     <string name="detail_of_order">订单详情</string>
     <string name="waiting_for_payment">等待付款</string>
@@ -141,7 +140,7 @@
     <string name="Joined_the_audition">已加入试听</string>
     <string name="purchase_now">立即报名</string>
     <string name="purchased">人报名</string>
-    <string name="no_tutorial_classes_ID">没有辅导班ID</string>
+    <string name="no_tutorial_classes_ID">没有课程ID</string>
     <!--//登录-->
     <string name="account">请输入账号</string>
     <string name="password">请输入密码</string>
@@ -232,7 +231,6 @@
     <string name="confirm_payment">确认支付</string>
     <string name="payment_results_are_being_queried">正在查询支付结果</string>
     <!--消息-->
-    <string name="remedial_class_message">辅导班消息</string>
     <string name="system_message">系统消息</string>
     <!--//我的辅导-->
     <string name="item_teacher">老师：</string>
@@ -281,7 +279,7 @@
     <string name="bind_email">绑定邮箱</string>
     <string name="bind_rightnow">马上绑定</string>
     <string name="bind_wechat">绑定微信</string>
-    <string name="change_password">修改登陆密码</string>
+    <string name="change_password">修改登录密码</string>
     <string name="current_phone">当前手机号码</string>
     <string name="new_email">输入新的邮箱</string>
     <string name="confirm_email">确认新的邮箱</string>
@@ -290,7 +288,7 @@
     <string name="over">完成</string>
     <string name="input_current_password">输入当前密码</string>
     <string name="input_new_password">请输入新密码</string>
-    <string name="input_login_password">输入登陆密码</string>
+    <string name="input_login_password">输入登录密码</string>
     <string name="confirm_new_password">请确认新密码</string>
     <string name="forget_password_1">忘记密码</string>
     <string name="hint_input_new_phone">输入新手机号码（仅支持大陆地区11位）</string>
@@ -317,13 +315,6 @@
     <string name="learn_3">03 辅导开课</string>
     <string name="learn_4">04 观看直播</string>
     <string name="learn_5">05 辅导结束</string>
-    <string name="start">Start</string>
-    <string name="end">End</string>
-    <string name="learn_desc_1">通过辅导列表进行查找和筛选辅导。</string>
-    <string name="learn_desc_2">对已选择的辅导班进行试听和购买支付，可以在“个人中心-我的辅导”中对已试听和购买支付的辅导进行查看和操作。</string>
-    <string name="learn_desc_3">辅导班直播间开启；“个人中心-今日辅导”了解每天的辅导上课信息。</string>
-    <string name="learn_desc_4">查看“个人中心-我的辅导”可以选择辅导班快速进入直播间，与直播间内的老师、同学进行互动和交流。</string>
-    <string name="learn_desc_5">辅导班关闭直播，系统自动对辅导班进行结算。</string>
     <string name="class_1">第一课</string>
     <string name="class_2">第二课</string>
     <string name="class_n">第N课</string>
@@ -334,8 +325,6 @@
     <string name="getcode">获取校验码</string>
     <string name="alert_mode">提醒方式</string>
     <string name="time_setting">设置时间</string>
-    <string name="Remedial_classes">辅导班课程</string>
-    <string name="Remedial_class">辅导班</string>
     <string name="public_course">公开课课程</string>
     <string name="advance">提前</string>
     <string name="remind_me">提醒我</string>
@@ -359,7 +348,7 @@
     <string name="alert">提示</string>
     <string name="call_customer_service_phone">是否拨打客服电话</string>
     <string name="call_right_now">立即拨打</string>
-    <string name="failed_to_obtain_group_information">获取群组信息失败!</string>
+    <string name="failed_to_obtain_group_information">获取聊天信息失败!</string>
     <string name="download_picture_fail">图片下载失败</string>
     <string name="save_to_device">保存到手机</string>
     <string name="picture_save_fail">图片保存失败</string>
@@ -375,17 +364,17 @@
     <string name="phone_already_bind">绑定失败,手机已经被绑定</string>
     <string name="code_error">验证码错误</string>
     <string name="time_after_acquisition">S</string>
-    <string name="bind_phone_success">绑定手机修改成功,请重新登陆</string>
+    <string name="bind_phone_success">绑定手机修改成功,请重新登录</string>
     <string name="bind_parent_phone_success">家长手机修改成功</string>
     <string name="bind_parent_phone_failed">家长手机已被使用</string>
-    <string name="change_password_success">密码修改成功,请用新密码重新登陆</string>
+    <string name="change_password_success">密码修改成功,请用新密码重新登录</string>
     <string name="password_error">密码错误</string>
     <string name="phone_not_exist">绑定手机不存在</string>
-    <string name="login_failed">登陆失败:&#8195;</string>
+    <string name="login_failed">登录失败:&#8195;</string>
     <string name="after_try_again">请检查您的网络或稍后再试</string>
     <string name="you_have_quit_the_group">您已退出该群组</string>
     <string name="message_can_not_null">消息不能为空</string>
-    <string name="no_course_information">暂无辅导班信息</string>
+    <string name="no_course_information">暂无课程信息</string>
     <string name="hour">小时</string>
     <string name="minute">分钟</string>
     <string name="cancel_order_name">名称</string>
@@ -412,7 +401,7 @@
     <string name="not_bind">未绑定</string>
     <string name="bind_cancel">取消绑定</string>
     <string name="is_newest_version">已经是最新版本</string>
-    <string name="landing">登陆中...</string>
+    <string name="landing">登录中...</string>
     <string name="live_side_open">副直播已开启</string>
     <string name="live_side_close">副直播已关闭</string>
 
@@ -527,7 +516,7 @@
     <string name="this_month_non_lesson">本月暂无课程</string>
     <string name="remedial_detail">课程介绍</string>
     <string name="teacher_info">教师资料</string>
-    <string name="continue_buy_lasses_lesson">该辅导班已开课，是否继续购买</string>
+    <string name="continue_buy_lasses_lesson">该课程已开课，是否继续购买</string>
     <string name="the_course_not_support_audition">该课程不支持试听</string>
     <string name="teaching">开课中</string>
     <string name="completed">已结束</string>
@@ -596,7 +585,6 @@
     <string name="under_review">审核中</string>
     <string name="review_success">审核通过</string>
     <string name="review_failed">审核失败</string>
-    <string name="no_course_name">暂无辅导班数据</string>
     <string name="lastest">最新</string>
     <string name="hottest">最热</string>
     <string name="no_course_announcements">暂无公告</string>

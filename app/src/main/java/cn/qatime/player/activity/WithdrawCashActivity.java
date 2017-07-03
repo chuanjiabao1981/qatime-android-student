@@ -1,8 +1,13 @@
 package cn.qatime.player.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -80,7 +85,24 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
         phone.setText(Constant.phoneNumber);
         phone.setOnClickListener(this);
     }
-
+    private void callPhone() {
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + Constant.phoneNumber));
+        if (ActivityCompat.checkSelfPermission(WithdrawCashActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        startActivity(intent);
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "权限被拒绝", Toast.LENGTH_SHORT).show();
+            }else{
+                callPhone();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -217,6 +239,8 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
                 if (errorCode == 2005) {
                     dialogPSWError();
                 } else if (errorCode == 2006) {
+
+
                     Toast.makeText(WithdrawCashActivity.this, R.string.pay_password_not_set, Toast.LENGTH_SHORT).show();
                 } else if (errorCode == 2008) {
                     dialogServerError(getString(R.string.pay_password_not_enough_time));//未满24小时
@@ -234,7 +258,6 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
     @Subscribe
     public void onEvent(String code) {
         HashMap<String, String> map = new HashMap<>();
-        map.put("send_to", BaseApplication.getInstance().getProfile().getData().getUser().getLogin_mobile());
         map.put("amount", amount);
         map.put("pay_type", payType);
         map.put("ticket_token", ticket_tocken);
@@ -353,7 +376,7 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
         alertDialog.setContentView(view);
     }
 
-    private void dialogPSWError() {
+    private void  dialogPSWError() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         alertDialog = builder.create();
         alertDialog.setCanceledOnTouchOutside(false);
@@ -424,8 +447,16 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
                         @Override
                         public void onClick(View v) {
                             alertDialogPhone.dismiss();
-                            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone.getText()));
-                            startActivity(intent);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                if (ContextCompat.checkSelfPermission(WithdrawCashActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                    ActivityCompat.requestPermissions(WithdrawCashActivity.this, new String[]{
+                                            Manifest.permission.CALL_PHONE}, 1);
+                                } else {
+                                    callPhone();
+                                }
+                            } else {
+                                callPhone();
+                            }
                         }
                     });
                     android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(WithdrawCashActivity.this);
@@ -437,17 +468,13 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
                 }
                 break;
             case R.id.recharge_now:
-                if (BaseApplication.getInstance().getCashAccount().getData().isHas_password()) {
-                    long changeAt = BaseApplication.getInstance().getCashAccount().getData().getPassword_set_at();
+                long changeAt = BaseApplication.getInstance().getCashAccount().getData().getPassword_set_at();
 
-                    int diff = 2 - (int) ((System.currentTimeMillis() / 1000 - changeAt) / 3600);
-                    if (diff <= 2 && diff > 0) {
-                        dialogServerError(getString(R.string.pay_password_not_enough_time));//未满24小时
-                    } else {
-                        showPSWPop();
-                    }
+                int diff = 2 - (int) ((System.currentTimeMillis() / 1000 - changeAt) / 3600);
+                if (diff <= 2 && diff > 0) {
+                    dialogServerError(getString(R.string.pay_password_not_enough_time));//未满24小时
                 } else {
-                    Toast.makeText(WithdrawCashActivity.this, R.string.pay_password_not_set, Toast.LENGTH_SHORT).show();
+                    showPSWPop();
                 }
                 break;
         }

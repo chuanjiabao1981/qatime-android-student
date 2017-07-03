@@ -27,7 +27,6 @@ import cn.qatime.player.activity.SearchResultActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.SearchResultTeacherBean;
-import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
@@ -120,9 +119,9 @@ public class FragmentSearchTeacher extends BaseFragment {
             @Override
             public void convert(ViewHolder holder, SearchResultTeacherBean.DataBean item, int position) {
                 Glide.with(getActivity()).load(item.getAvatar_url()).bitmapTransform(new GlideCircleTransform(getActivity())).placeholder(R.mipmap.error_header).crossFade().into((ImageView) holder.getView(R.id.image));
-                holder.setText(R.id.name, item.getNick_name())
+                holder.setText(R.id.name, item.getName())
                         .setText(R.id.teaching_years, getTeachingYear(item.getTeaching_years()))
-                        .setText(R.id.info, item.getCategory() + item.getSubject() + "|" + item.getSchool());
+                        .setText(R.id.info, item.getCategory() + item.getSubject() + " | " + item.getSchool());
             }
         };
         listview.setAdapter(adapter);
@@ -131,7 +130,7 @@ public class FragmentSearchTeacher extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), TeacherDataActivity.class);
                 intent.putExtra("teacherId", datas.get(position-1).getId());
-                startActivityForResult(intent, Constant.REQUEST);
+                startActivity(intent);
             }
         });
         listview.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
