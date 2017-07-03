@@ -70,7 +70,11 @@ import cn.qatime.player.holder.BaseViewHolder;
 import cn.qatime.player.qrcore.core.CaptureActivity;
 import cn.qatime.player.utils.AMapLocationUtils;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.MPermission;
 import cn.qatime.player.utils.UrlUtils;
+import cn.qatime.player.utils.annotation.OnMPermissionDenied;
+import cn.qatime.player.utils.annotation.OnMPermissionGranted;
+import cn.qatime.player.utils.annotation.OnMPermissionNeverAskAgain;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.CashAccountBean;
@@ -863,32 +867,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                         if (cityBean != null && cityBean.getData() != null) {
                             listCity = cityBean.getData();
 //                                    如果没有被赋值，则默认全国
-                            utils = new AMapLocationUtils(getActivity(), new AMapLocationUtils.LocationListener() {
-                                @Override
-                                public void onLocationBack(String[] result) {
-                                    if (result != null && result.length > 1) {
-                                        for (CityBean.Data item : listCity) {
-                                            if (result[2].equals(item.getName()) || result[1].equals(item.getName())) {//需先对比区,区不对应往上对比市,不可颠倒
-                                                locationCity = item;
-                                            }
-                                        }
-                                    } else {
-                                        Toast.makeText(getActivity(), R.string.position_locate_error, Toast.LENGTH_SHORT).show();
-                                        return;
-                                    }
-                                    CityBean.Data currentCity = BaseApplication.getInstance().getCurrentCity();
-                                    if (locationCity != null) {
-                                        if (!currentCity.equals(locationCity)) {
-                                            if (locationCity.getWorkstations_count() != 0) {
-                                                dialogCity();
-                                            }
-                                        }
-                                    } else {
-                                        Toast.makeText(getActivity(), R.string.position_locate_error, Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                            utils.startLocation();
+                            requestPermission();
                         }
                     }
 
@@ -907,6 +886,58 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
             }
         });
         addToRequestQueue(request);
+    }
+    public void requestPermission() {
+        MPermission.with(this)
+                .addRequestCode(100)
+                .permissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE})
+                .request();
+    }
+
+    @OnMPermissionGranted(100)
+    public void onPermissionGranted() {
+        Toast.makeText(getActivity(), R.string.loading_location, Toast.LENGTH_SHORT).show();
+        initLocation();
+    }
+
+    @OnMPermissionDenied(100)
+    public void onPermissionDenied() {
+        Toast.makeText(getActivity(), "定位权限被拒绝", Toast.LENGTH_SHORT).show();
+        initLocation();
+    }
+
+    @OnMPermissionNeverAskAgain(100)
+    public void onPermissionDeniedAsNeverAskAgain() {
+        Toast.makeText(getActivity(), "定位权限被拒绝", Toast.LENGTH_SHORT).show();
+        initLocation();
+    }
+    private void initLocation() {
+        utils = new AMapLocationUtils(getActivity(), new AMapLocationUtils.LocationListener() {
+            @Override
+            public void onLocationBack(String[] result) {
+                if (result != null && result.length > 1) {
+                    for (CityBean.Data item : listCity) {
+                        if (result[2].equals(item.getName()) || result[1].equals(item.getName())) {//需先对比区,区不对应往上对比市,不可颠倒
+                            locationCity = item;
+                        }
+                    }
+                } else {
+                    Toast.makeText(getActivity(), R.string.position_locate_error, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                CityBean.Data currentCity = BaseApplication.getInstance().getCurrentCity();
+                if (locationCity != null) {
+                    if (!currentCity.equals(locationCity)) {
+                        if (locationCity.getWorkstations_count() != 0) {
+                            dialogCity();
+                        }
+                    }
+                } else {
+                    Toast.makeText(getActivity(), R.string.position_locate_error, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        utils.startLocation();
     }
 
     private void dialogCity() {
