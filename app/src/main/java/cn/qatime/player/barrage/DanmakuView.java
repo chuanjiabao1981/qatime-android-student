@@ -309,8 +309,8 @@ public class DanmakuView extends View implements IDanmakuView, IDanmakuViewContr
             mClearFlag = false;
         } else {
             if (handler != null) {
-                IRenderer.RenderingState rs = handler.draw(canvas);
                 if (mShowFps) {
+                    IRenderer.RenderingState rs = handler.draw(canvas);
                     if (mDrawTimes == null)
                         mDrawTimes = new LinkedList<Long>();
                     String fps = String.format(Locale.getDefault(),

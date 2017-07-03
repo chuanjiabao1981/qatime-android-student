@@ -1,5 +1,6 @@
 package cn.qatime.player.activity;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.media.AudioManager;
@@ -77,6 +78,14 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
         initView();
 
         screenSwitchUtils = ScreenSwitchUtils.init(this.getApplicationContext());
+        initData();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        id = getIntent().getIntExtra("id", 0);
+        tasting = getIntent().getBooleanExtra("tasting", true);
         initData();
     }
 
@@ -246,7 +255,9 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
     @Override
     protected void onPause() {
         super.onPause();
-
+        if (mMediaPlayer != null) {
+            mMediaPlayer.pause();
+        }
     }
 
     @Override
