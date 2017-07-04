@@ -111,7 +111,8 @@ public class TransactionCenter {
             }
         }
 
-        if (step == Transaction.ActionStep.LASER_PEN || step == Transaction.ActionStep.LASER_PEN_END) {
+        if (step == Transaction.ActionStep.LASER_PEN || step == Transaction.ActionStep.LASER_PEN_END
+                || step == Transaction.ActionStep.SwitchStudent || step == Transaction.ActionStep.SwitchTeacher) {
             return;
         }
         saveCacheData(sessionId, account, transactions, step);

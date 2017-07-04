@@ -14,5 +14,5 @@ public enum BusEvent {
     REFRESH_NOTIFICATIONS,
     desktop,//屏幕共享开
     board,//屏幕共享关
-    request
+//    request
 }

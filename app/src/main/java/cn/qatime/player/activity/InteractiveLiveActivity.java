@@ -1069,18 +1069,18 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     public void onEvent(BusEvent event) {
         if (event == BusEvent.ANNOUNCEMENT) {
             getAnnouncementsData();
-        } else if (event == BusEvent.request) {
-            masterVideoLayout.removeAllViews();
-            if (videoLayout.getChildCount() == 1) {
-                videoLayout.removeViewAt(0);
-            }
-            userJoinedList.clear();
-            clearChatRoom();
-            updateRTSFragment();
-            videoPermission.setVisibility(View.GONE);
-            audioPermission.setVisibility(View.GONE);
-
-            checkToken();
+//        } else if (event == BusEvent.request) {
+//            masterVideoLayout.removeAllViews();
+//            if (videoLayout.getChildCount() == 1) {
+//                videoLayout.removeViewAt(0);
+//            }
+//            userJoinedList.clear();
+//            clearChatRoom();
+//            updateRTSFragment();
+//            videoPermission.setVisibility(View.GONE);
+//            audioPermission.setVisibility(View.GONE);
+//
+//            checkToken();
         }
     }
 
