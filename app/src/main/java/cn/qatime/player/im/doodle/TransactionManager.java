@@ -78,11 +78,11 @@ class TransactionManager {
         cache.add(new Transaction().makeSyncPrepareAckTransaction());
     }
 
-    public void sendFlipTransaction(String docId, int currentPageNum, int pageCount, int type) {
-        List<Transaction> flipCache = new ArrayList<>();
-        flipCache.add(new Transaction().makeFlipTranscation(docId, currentPageNum, pageCount, type));
-        TransactionCenter.getInstance().sendToRemote(sessionId, toAccount, flipCache);
-    }
+//    public void sendFlipTransaction(String docId, int currentPageNum, int pageCount, int type) {
+//        List<Transaction> flipCache = new ArrayList<>();
+//        flipCache.add(new Transaction().makeFlipTranscation(docId, currentPageNum, pageCount, type));
+//        TransactionCenter.getInstance().sendToRemote(sessionId, toAccount, flipCache);
+//    }
 
     private Runnable timerTask = new Runnable() {
         @Override

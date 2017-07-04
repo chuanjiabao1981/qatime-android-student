@@ -70,7 +70,8 @@ public class TransactionCenter {
         try {
             RTSTunData channelData = new RTSTunData(sessionId, toAccount, data.getBytes("UTF-8"), data.getBytes().length);
             boolean isSend = RTSManager2.getInstance().sendData(channelData);
-            Logger.e(TAG, "SEND DATA = " + index + ", BYTES = " + data.getBytes().length + ", isSend=" + isSend);
+            Logger.e(TAG, "SEND DATA = " + index + ", BYTES = " + data.getBytes().length + ", isSend=" + isSend
+                    + ",data=" + data);
         } catch (UnsupportedEncodingException e) {
             Logger.e("Transaction", "send to remote, getBytes exception : " + data);
         }
@@ -111,7 +112,8 @@ public class TransactionCenter {
             }
         }
 
-        if (step == Transaction.ActionStep.LASER_PEN || step == Transaction.ActionStep.LASER_PEN_END) {
+        if (step == Transaction.ActionStep.LASER_PEN || step == Transaction.ActionStep.LASER_PEN_END
+                || step == Transaction.ActionStep.SwitchStudent || step == Transaction.ActionStep.SwitchTeacher) {
             return;
         }
         saveCacheData(sessionId, account, transactions, step);
