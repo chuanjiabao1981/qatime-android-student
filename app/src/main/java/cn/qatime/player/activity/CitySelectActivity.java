@@ -1,5 +1,6 @@
 package cn.qatime.player.activity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -28,8 +29,12 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.utils.AMapLocationUtils;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.MPermission;
 import cn.qatime.player.utils.SPUtils;
 import cn.qatime.player.utils.UrlUtils;
+import cn.qatime.player.utils.annotation.OnMPermissionDenied;
+import cn.qatime.player.utils.annotation.OnMPermissionGranted;
+import cn.qatime.player.utils.annotation.OnMPermissionNeverAskAgain;
 import libraryextra.bean.CityBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.PinyinUtils;
@@ -50,7 +55,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
     private SideBar sidebar;
     private ArrayList<CityBean.Data> list;
     private CitySelectAdapter adapter;
-    private ArrayList<String> listLately;
+    private ArrayList<CityBean.Data> listLately;
     private CityBean.Data locationCity;
     private AMapLocationUtils utils;
     private View locationView;
@@ -78,7 +83,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
 
     private void initData() {
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities?scope=has_default_workstation", null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlAppconstantInformation + "/cities", null,
                 new VolleyListener(this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -132,7 +137,6 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
 
     private void initLocation() {
         locationView.setEnabled(false);
-        Toast.makeText(CitySelectActivity.this, R.string.loading_location, Toast.LENGTH_SHORT).show();
         //如果没有被赋值，则默认全国
         utils = new AMapLocationUtils(this, new AMapLocationUtils.LocationListener() {
             @Override
@@ -164,6 +168,31 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
         utils.startLocation();
     }
 
+    public void requestPermission() {
+        MPermission.with(this)
+                .addRequestCode(100)
+                .permissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
+                .request();
+    }
+
+    @OnMPermissionGranted(100)
+    public void onPermissionGranted() {
+        Toast.makeText(CitySelectActivity.this, R.string.loading_location, Toast.LENGTH_SHORT).show();
+        initLocation();
+    }
+
+    @OnMPermissionDenied(100)
+    public void onPermissionDenied() {
+        Toast.makeText(this, "定位权限被拒绝", Toast.LENGTH_SHORT).show();
+        initLocation();
+    }
+
+    @OnMPermissionNeverAskAgain(100)
+    public void onPermissionDeniedAsNeverAskAgain() {
+        Toast.makeText(this, "定位权限被拒绝", Toast.LENGTH_SHORT).show();
+        initLocation();
+    }
+
     private void dialogCity() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final AlertDialog alertDialog = builder.create();
@@ -192,10 +221,12 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
 
     private void initView() {
         list = new ArrayList<>();
-        ArrayList<String> lately = SPUtils.getObject(this, "listLately", ArrayList.class);
+        ArrayList<CityBean.Data> lately = SPUtils.getObject(this, "listLately", ArrayList.class);
         if (lately == null || lately.size() == 0) {
             listLately = new ArrayList<>();
-            listLately.add("全国");//默认选择
+            CityBean.Data _default = new CityBean.Data("全国");
+            _default.setWorkstation_id(-1);
+            listLately.add(_default);//默认选择
         } else {
             listLately = lately;
         }
@@ -242,6 +273,10 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
     }
 
     private void setCityAndHistory(CityBean.Data data) {
+        if(data.getWorkstation_id()==0){
+            Toast.makeText(this, "该城市尚未开通", Toast.LENGTH_SHORT).show();
+            return;
+        }
         refreshLately(data);
 //                adapter.notifyDataSetChanged();
         BaseApplication.getInstance().setCurrentCity(data);
@@ -252,11 +287,11 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
 
     private void refreshLately(CityBean.Data data) {
         currentCity.setText(data.getName());
-        if (listLately.contains(data.getName())) {
-            listLately.remove(data.getName());
-            listLately.add(0, data.getName());
+        if (listLately.contains(data)) {
+            listLately.remove(data);
+            listLately.add(0, data);
         } else {
-            listLately.add(0, data.getName());
+            listLately.add(0, data);
             if (listLately.size() > 8) {
                 listLately.remove(8);
             }
@@ -273,7 +308,7 @@ public class CitySelectActivity extends BaseActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.location:
-                initLocation();
+                requestPermission();
                 break;
         }
     }

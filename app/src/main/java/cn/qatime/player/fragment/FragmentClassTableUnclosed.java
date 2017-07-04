@@ -15,7 +15,6 @@ import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
@@ -62,7 +61,7 @@ public class FragmentClassTableUnclosed extends BaseFragment {
 
     private void initData() {
         Map<String, String> map = new HashMap<>();
-        map.put("month", date);
+        map.put("week", date);
         map.put("state", "unclosed");
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getInstance().getUserId() + "/schedule", map), null,

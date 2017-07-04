@@ -172,6 +172,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             map.put("t", String.valueOf(System.currentTimeMillis()));
             DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlInteractCourses + id + "/live_status", map), null,
                     new VolleyListener(InteractiveLiveActivity.this) {
+
                         @Override
                         protected void onSuccess(JSONObject response) {
                             InteractiveLiveStatusBean data = JsonUtils.objectFromJson(response.toString(), InteractiveLiveStatusBean.class);
@@ -416,7 +417,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         registerRTSObservers(roomId, true);
         initLiveVideo();
         rtsFragment.initRTSView(roomId, this);
-        joinRTSSession();
     }
 
     // 加入多人白板session
@@ -473,12 +473,15 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 avChatParameters.setBoolean(NRtcParameters.KEY_AUDIO_REPORT_SPEAKER, true);
                 AVChatManager.getInstance().setParameters(avChatParameters);
                 chooseSpeechType();
+                joinRTSSession();
             }
 
             @Override
             public void onFailed(int i) {
                 Logger.e("join channel failed, code:" + i);
                 LogCatHelper.getInstance(null).log("join channel failed, code:" + i);
+                hd.removeCallbacks(loopStatus);
+                hd.postDelayed(loopStatus,15000);
             }
 
             @Override

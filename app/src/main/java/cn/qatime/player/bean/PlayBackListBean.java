@@ -57,15 +57,10 @@ public class PlayBackListBean implements Serializable {
         private int id;
         private String logo_url;
         private int replay_times;
-        private int updated_at;
-        private String target_type;
-        private int target_id;
         private LiveStudioLessonBean live_studio_lesson;
         private String grade;
         private String subject;
         private String teacher_name;
-        private int video_duration;
-        private String video_url;
 
         public int getId() {
             return id;
