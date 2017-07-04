@@ -119,7 +119,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private View close;
     private boolean closed = false;//是否手动关闭未设置支付密码提示
     private CommonAdapter<FreeCourseBean.DataBean> freeCourrseAdapter;
-    private ArrayList<FreeCourseBean.DataBean> listFree = new ArrayList();
+    private ArrayList<FreeCourseBean.DataBean> listFree = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -532,7 +532,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
                     @Override
                     protected void onTokenOut() {
-                            tokenOut();
+                        tokenOut();
                     }
 
                 }, new VolleyErrorListener() {
@@ -623,7 +623,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         noBanner = new BannerRecommendBean.DataBean();
         listBanner.add(noBanner);
         tagViewpagerImg.init(R.drawable.shape_photo_tag_select, R.drawable.shape_photo_tag_nomal, 16, 8, 4, 30);
-        tagViewpagerImg.setAutoNext( true, 3000);
+        tagViewpagerImg.setAutoNext(true, 3000);
 //        viewPager.setResourceId(1252);
         tagViewpagerImg.setOnGetView(new TagViewPager.OnGetView() {
             @Override
@@ -887,10 +887,11 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         });
         addToRequestQueue(request);
     }
+
     public void requestPermission() {
         MPermission.with(this)
                 .addRequestCode(100)
-                .permissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE})
+                .permissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
                 .request();
     }
 
@@ -911,6 +912,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         Toast.makeText(getActivity(), "定位权限被拒绝", Toast.LENGTH_SHORT).show();
         initLocation();
     }
+
     private void initLocation() {
         utils = new AMapLocationUtils(getActivity(), new AMapLocationUtils.LocationListener() {
             @Override
