@@ -928,7 +928,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 CityBean.Data currentCity = BaseApplication.getInstance().getCurrentCity();
                 if (locationCity != null) {
                     if (!currentCity.equals(locationCity)) {
-                        if (locationCity.getWorkstations_count() != 0) {
+                        if (locationCity.getWorkstation_id() != 0) {
                             dialogCity();
                         }
                     }

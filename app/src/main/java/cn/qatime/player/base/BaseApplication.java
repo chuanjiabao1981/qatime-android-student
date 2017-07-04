@@ -1,6 +1,5 @@
 package cn.qatime.player.base;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
 
@@ -39,9 +37,6 @@ import com.umeng.message.tag.TagManager;
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
@@ -92,7 +87,9 @@ public class BaseApplication extends MultiDexApplication {
     }
 
     public CityBean.Data getCurrentCity() {
-        return currentCity == null ? new CityBean.Data("全国") : currentCity;
+        CityBean.Data _default = new CityBean.Data("全国");
+        _default.setWorkstation_id(-1);
+        return currentCity == null ? _default : currentCity;
     }
 
     public void setCurrentCity(CityBean.Data currentCity) {
