@@ -921,14 +921,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             cache.add(new Transaction().makeSyncRequestTransaction());
             TransactionCenter.getInstance().sendToRemote(roomId, null, cache);
             LogCatHelper.getInstance(null).log("send sync request");
-            IMMessage customMessage = MessageBuilder.createCustomMessage(sessionId, SessionTypeEnum.Team, InteractiveDeskShareStatus.request, null);
-            CustomMessageConfig customMessageConfig = new CustomMessageConfig();
-            customMessageConfig.enableHistory = false;
-            customMessageConfig.enableRoaming = false;
-            customMessageConfig.enablePush = false;
-            customMessageConfig.enableUnreadCount = false;
-            customMessage.setConfig(customMessageConfig);
-            ChatMessage(customMessage);
         }
 
         @Override
