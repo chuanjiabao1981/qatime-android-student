@@ -182,6 +182,7 @@ public class FragmentMessageChatNews extends BaseFragment {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
                 getCourses();
+                listView.onRefreshComplete();
             }
         });
     }
@@ -464,9 +465,9 @@ public class FragmentMessageChatNews extends BaseFragment {
                         break;
                     }
                 }
-
-                MessageListBean bean = items.get(index);
+                MessageListBean bean = new MessageListBean();
                 if (index >= 0) {
+                    bean = items.get(index);
 //                    boolean haveData = false;
 //                    if (courses != null && courses.getData() != null) {
 //                        for (MyTutorialClassBean.Data data : courses.getData()) {
@@ -480,8 +481,6 @@ public class FragmentMessageChatNews extends BaseFragment {
 //                            getCourses();
 //                        }
 //                    }
-                    items.remove(index);
-                    continue;
                 }
 //                else {
 //                    if (courses != null && courses.getData() != null) {
