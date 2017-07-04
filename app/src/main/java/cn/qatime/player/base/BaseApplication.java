@@ -87,9 +87,11 @@ public class BaseApplication extends MultiDexApplication {
     }
 
     public CityBean.Data getCurrentCity() {
-        CityBean.Data _default = new CityBean.Data("全国");
-        _default.setWorkstation_id(-1);
-        return currentCity == null ? _default : currentCity;
+        if(currentCity==null){
+            currentCity = new CityBean.Data("全国");
+            currentCity.setWorkstation_id(-1);
+        }
+        return currentCity;
     }
 
     public void setCurrentCity(CityBean.Data currentCity) {

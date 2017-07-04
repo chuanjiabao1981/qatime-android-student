@@ -211,7 +211,8 @@ public class FragmentMessageChatNews extends BaseFragment {
                 holder.setText(R.id.time, timeString);
             }
         };
-
+        View inflate = View.inflate(getActivity(), R.layout.empty_view, null);
+        listView.setEmptyView(inflate);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
