@@ -231,7 +231,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             initData();
             getAnnouncementsData();
             hd.postDelayed(loopStatus, 500);
-
         }
     }
 

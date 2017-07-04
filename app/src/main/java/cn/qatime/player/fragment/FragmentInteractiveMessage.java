@@ -143,20 +143,21 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
                                 EventBus.getDefault().post(BusEvent.ANNOUNCEMENT);
                             }
                         }
-                    } else if (message.getMsgType() == MsgTypeEnum.custom) {
-                        message.setStatus(MsgStatusEnum.read);
-                        if (!StringUtils.isNullOrBlanK(message.getContent())) {
-                            if (message.getContent().equals(InteractiveDeskShareStatus.desktop))//desktop board
-                                EventBus.getDefault().post(BusEvent.desktop);
-                            else if (message.getContent().equals(InteractiveDeskShareStatus.board))
-                                EventBus.getDefault().post(BusEvent.board);
-                            else if (message.getContent().equals(InteractiveDeskShareStatus.request)) {
-                                if (message.getFromAccount().equals(BaseApplication.getInstance().getAccount())) {
-                                    EventBus.getDefault().post(BusEvent.request);
-                                }
-                            }
-                        }
                     }
+//                    else if (message.getMsgType() == MsgTypeEnum.custom) {
+//                        message.setStatus(MsgStatusEnum.read);
+//                        if (!StringUtils.isNullOrBlanK(message.getContent())) {
+//                            if (message.getContent().equals(InteractiveDeskShareStatus.desktop))//desktop board
+//                                EventBus.getDefault().post(BusEvent.desktop);
+//                            else if (message.getContent().equals(InteractiveDeskShareStatus.board))
+//                                EventBus.getDefault().post(BusEvent.board);
+//                            else if (message.getContent().equals(InteractiveDeskShareStatus.request)) {
+//                                if (message.getFromAccount().equals(BaseApplication.getInstance().getAccount())) {
+//                                    EventBus.getDefault().post(BusEvent.request);
+//                                }
+//                            }
+//                        }
+//                    }
                 }
                 addedListItems.add(message);
                 needRefresh = true;
