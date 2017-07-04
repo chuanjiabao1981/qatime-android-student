@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -177,6 +178,12 @@ public class FragmentMessageChatNews extends BaseFragment {
     private void initView(View view) {
         listView = (PullToRefreshListView) view.findViewById(R.id.list);
         listView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+        listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                getCourses();
+            }
+        });
     }
 
     @Override
@@ -458,9 +465,8 @@ public class FragmentMessageChatNews extends BaseFragment {
                     }
                 }
 
-                MessageListBean bean = new MessageListBean();
+                MessageListBean bean = items.get(index);
                 if (index >= 0) {
-                    bean = items.get(index);
 //                    boolean haveData = false;
 //                    if (courses != null && courses.getData() != null) {
 //                        for (MyTutorialClassBean.Data data : courses.getData()) {
@@ -475,6 +481,7 @@ public class FragmentMessageChatNews extends BaseFragment {
 //                        }
 //                    }
                     items.remove(index);
+                    continue;
                 }
 //                else {
 //                    if (courses != null && courses.getData() != null) {
