@@ -18,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
@@ -232,6 +231,7 @@ public class PlayBackActivity extends BaseFragmentActivity implements SurfaceHol
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+
         if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             WindowManager.LayoutParams attrs = getWindow().getAttributes();
             attrs.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -243,11 +243,12 @@ public class PlayBackActivity extends BaseFragmentActivity implements SurfaceHol
             params.height = DensityUtils.dp2px(this, 260);
             video.setLayoutParams(params);
         } else {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
             ViewGroup.LayoutParams params = video.getLayoutParams();
-            params.height = -1;
+            params.height = -1  ;
             video.setLayoutParams(params);
         }
+        floatFragment.refreshZoom();
     }
 
     private void play(String nameUrl) {
