@@ -124,4 +124,8 @@ public class UrlUtils {
         }
         return map;
     }
+
+    public static String getBaseUrl() {
+        return baseUrl;
+    }
 }
