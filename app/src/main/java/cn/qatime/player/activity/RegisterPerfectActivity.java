@@ -132,7 +132,7 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                 break;
             case R.id.complete://完成
                 int userId = BaseApplication.getInstance().getUserId();
-                String url = UrlUtils.urlPersonalInformation + userId + "/profile";
+                String url = UrlUtils.urlPersonalInformation + userId;
                 UpLoadUtil util = new UpLoadUtil(url) {
                     @Override
                     public void httpStart() {
@@ -176,10 +176,6 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                     }
                 };
 
-                if (StringUtils.isNullOrBlanK(imageUrl) || (!StringUtils.isNullOrBlanK(imageUrl) && !new File(imageUrl).exists())) {
-                    Toast.makeText(this, getResourceString(R.string.please_set_head), Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 if (StringUtils.isNullOrBlanK(BaseApplication.getInstance().getUserId())) {
                     Toast.makeText(RegisterPerfectActivity.this, getResources().getString(R.string.id_is_empty), Toast.LENGTH_SHORT).show();
                     return;
@@ -198,6 +194,10 @@ public class RegisterPerfectActivity extends BaseActivity implements View.OnClic
                 if (province == null || city == null) {
                     Toast.makeText(this, "请选择城市", Toast.LENGTH_SHORT).show();
                     return;
+                }
+                if (StringUtils.isNullOrBlanK(imageUrl) || (!StringUtils.isNullOrBlanK(imageUrl) && !new File(imageUrl).exists())) {
+                    imageUrl = "http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/e24edc0acfe48710fce2b2224bfee8ab.png";
+                    Logger.e("使用默认头像");
                 }
                 Map<String, String> map = new HashMap<>();
                 map.put("name", sName);

@@ -27,7 +27,7 @@
                 android:id="@+id/head_sculpture"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:src="@mipmap/error_header" />
+                android:src="@mipmap/personal_information_head" />
 
             <TextView
                 android:id="@+id/name"
