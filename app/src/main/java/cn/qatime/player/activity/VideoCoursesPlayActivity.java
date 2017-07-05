@@ -258,10 +258,34 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (mMediaPlayer != null) {
+            resumeMedia();
+        }
+    }
+
+    private void resumeMedia() {
+        if (isCreated) {
+            mMediaPlayer.setDisplay(holder);
+            mMediaPlayer.start();
+            floatFragment.setPlayOrPause(true);
+        } else {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    resumeMedia();
+                }
+            }, 50);
+        }
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         if (mMediaPlayer != null) {
             mMediaPlayer.pause();
+            floatFragment.setPlayOrPause(false);
         }
     }
 
@@ -398,8 +422,10 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
     public boolean onInfo(MediaPlayer mp, int what, int extra) {
         if (mMediaPlayer != null) {
             if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START) {
+                mMediaPlayer.pause();
                 buffering.setVisibility(View.VISIBLE);
             } else if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END) {
+                mMediaPlayer.start();
                 buffering.setVisibility(View.GONE);
             }
         }
