@@ -71,7 +71,7 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
 
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
     private SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
-    private String imageUrl = "";
+    private String imageUrl = "http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/e24edc0acfe48710fce2b2224bfee8ab.png";
     private String select = "2000-01-01";//生日所选日期
     private CustomProgressDialog progress;
     private AlertDialog alertDialog;
@@ -292,10 +292,6 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                     Toast.makeText(this, getResources().getString(R.string.name_can_not_be_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (StringUtils.isNullOrBlanK(imageUrl)) {
-                    Toast.makeText(this, getResources().getString(R.string.hader_can_not_be_empty), Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 String grade = textGrade.getText().toString();
                 if (StringUtils.isNullOrBlanK(grade)) {
                     Toast.makeText(this, getResources().getString(R.string.grade_can_not_be_empty), Toast.LENGTH_SHORT).show();
@@ -304,6 +300,10 @@ public class PersonalInformationChangeActivity extends BaseActivity implements V
                 if (regionCity == null || regionProvince == null) {
                     Toast.makeText(this, "请选择城市", Toast.LENGTH_SHORT).show();
                     return;
+                }
+                if (StringUtils.isNullOrBlanK(imageUrl)) {
+                    imageUrl = "http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/e24edc0acfe48710fce2b2224bfee8ab.png";
+                    Logger.e("使用默认头像");
                 }
                 String birthday = select.equals(parse.format(new Date())) ? "" : select;
                 String desc = describe.getText().toString();
