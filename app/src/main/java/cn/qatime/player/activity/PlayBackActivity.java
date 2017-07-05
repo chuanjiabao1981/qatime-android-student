@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
@@ -195,7 +197,6 @@ public class PlayBackActivity extends BaseFragmentActivity implements SurfaceHol
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
     }
 
     @Override
@@ -283,7 +284,38 @@ public class PlayBackActivity extends BaseFragmentActivity implements SurfaceHol
     public void onCompletion(MediaPlayer mp) {
         buffering.setVisibility(View.GONE);
         noData.setVisibility(View.VISIBLE);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mMediaPlayer != null) {
+            resumeMedia();
+        }
+    }
+
+    private void resumeMedia() {
+        if (isCreated) {
+            mMediaPlayer.setDisplay(holder);
+            mMediaPlayer.start();
+            floatFragment.setPlayOrPause(true);
+        } else {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    resumeMedia();
+                }
+            }, 50);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mMediaPlayer != null) {
+            mMediaPlayer.pause();
+            floatFragment.setPlayOrPause(false);
+        }
     }
 
     @Override
@@ -311,8 +343,12 @@ public class PlayBackActivity extends BaseFragmentActivity implements SurfaceHol
     public boolean onInfo(MediaPlayer mp, int what, int extra) {
         if (mMediaPlayer != null) {
             if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START) {
+                mMediaPlayer.pause();
+                floatFragment.setPlayOrPause(false);
                 buffering.setVisibility(View.VISIBLE);
             } else if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END) {
+                mMediaPlayer.start();
+                floatFragment.setPlayOrPause(true);
                 buffering.setVisibility(View.GONE);
             }
         }
