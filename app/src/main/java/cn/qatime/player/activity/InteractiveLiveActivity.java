@@ -2,7 +2,6 @@ package cn.qatime.player.activity;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -36,10 +35,8 @@ import com.netease.nimlib.sdk.avchat.model.AVChatOptionalConfig;
 import com.netease.nimlib.sdk.avchat.model.AVChatParameters;
 import com.netease.nimlib.sdk.avchat.model.AVChatVideoFrame;
 import com.netease.nimlib.sdk.avchat.model.AVChatVideoRender;
-import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
-import com.netease.nimlib.sdk.msg.model.CustomMessageConfig;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.rts.RTSCallback;
 import com.netease.nimlib.sdk.rts.RTSChannelStateObserver;
@@ -63,13 +60,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cn.qatime.player.BuildConfig;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.bean.InputPanel;
-import cn.qatime.player.bean.InteractiveDeskShareStatus;
 import cn.qatime.player.bean.InteractiveLiveStatusBean;
 import cn.qatime.player.fragment.FragmentInteractiveAnnouncements;
 import cn.qatime.player.fragment.FragmentInteractiveBoard;
@@ -89,7 +84,6 @@ import cn.qatime.player.utils.annotation.OnMPermissionDenied;
 import cn.qatime.player.utils.annotation.OnMPermissionGranted;
 import cn.qatime.player.utils.annotation.OnMPermissionNeverAskAgain;
 import cn.qatime.player.view.VideoFrameLayout;
-import custom.Configure;
 import libraryextra.bean.Announcements;
 import libraryextra.bean.InteractCourseDetailBean;
 import libraryextra.bean.PersonalInformationBean;
@@ -602,9 +596,8 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     private void zoom() {
         if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            zoom.setImageResource(R.mipmap.narrow);
+
         } else {
-            zoom.setImageResource(R.mipmap.enlarge);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
     }
@@ -991,6 +984,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 //        int screenWidth = ScreenUtils.getScreenWidth(InteractiveLiveActivity.this);
 //        int screenHeight = ScreenUtils.getScreenHeight(InteractiveLiveActivity.this);
         if (newConfig.orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+            zoom.setImageResource(R.mipmap.enlarge);
             WindowManager.LayoutParams attrs = getWindow().getAttributes();
             attrs.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
             getWindow().setAttributes(attrs);
@@ -1010,6 +1004,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 }
             }
         } else {
+            zoom.setImageResource(R.mipmap.narrow);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
             ViewGroup.LayoutParams params = viewLayout.getLayoutParams();
             params.height = -1;
