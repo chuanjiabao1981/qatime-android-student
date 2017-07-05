@@ -14,6 +14,22 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+        <ImageView
+            android:id="@+id/video_no_data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@mipmap/video_no_data"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/buffering"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@mipmap/video_loading"
+            android:visibility="gone" />
+
         <RelativeLayout
             android:id="@+id/control"
             android:layout_width="match_parent"
