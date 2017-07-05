@@ -42,7 +42,7 @@ import libraryextra.utils.VolleyListener;
  * @Describe
  */
 
-public class PlayBackActivity extends BaseFragmentActivity implements SurfaceHolder.Callback, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener, View.OnClickListener {
+public class PlayBackActivity extends BaseFragmentActivity implements SurfaceHolder.Callback, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener, View.OnClickListener, MediaPlayer.OnInfoListener {
     private RelativeLayout video;
     private SurfaceHolder holder;
     private MediaPlayer mMediaPlayer;
@@ -57,6 +57,8 @@ public class PlayBackActivity extends BaseFragmentActivity implements SurfaceHol
     private TextView playBackCount;
     private boolean isCreated = false;
     private PlayBackInfoBean data;
+    private View buffering;
+    private View noData;
 
 
     @Override
@@ -107,6 +109,8 @@ public class PlayBackActivity extends BaseFragmentActivity implements SurfaceHol
     private void initView() {
         video = (RelativeLayout) findViewById(R.id.video);
         SurfaceView mPreview = (SurfaceView) findViewById(R.id.surfaceView);
+        buffering = findViewById(R.id.buffering);
+        noData = findViewById(R.id.video_no_data);
         findViewById(R.id.teacher_layout).setOnClickListener(this);
         holder = mPreview.getHolder();
         holder.addCallback(this);
@@ -264,6 +268,7 @@ public class PlayBackActivity extends BaseFragmentActivity implements SurfaceHol
         mMediaPlayer.setOnBufferingUpdateListener(this);
         mMediaPlayer.setOnCompletionListener(this);
         mMediaPlayer.setOnPreparedListener(this);
+        mMediaPlayer.setOnInfoListener(this);
         mMediaPlayer.setScreenOnWhilePlaying(true);
 //        mMediaPlayer.setOnVideoSizeChangedListener(this);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -276,12 +281,15 @@ public class PlayBackActivity extends BaseFragmentActivity implements SurfaceHol
 
     @Override
     public void onCompletion(MediaPlayer mp) {
+        buffering.setVisibility(View.GONE);
+        noData.setVisibility(View.VISIBLE);
 
     }
 
     @Override
     public void onPrepared(MediaPlayer mp) {
         isPrepared = true;
+        noData.setVisibility(View.GONE);
         mMediaPlayer.start();
         floatFragment.setPlayOrPause(mp.isPlaying());
     }
@@ -297,5 +305,17 @@ public class PlayBackActivity extends BaseFragmentActivity implements SurfaceHol
                 }
                 break;
         }
+    }
+
+    @Override
+    public boolean onInfo(MediaPlayer mp, int what, int extra) {
+        if (mMediaPlayer != null) {
+            if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START) {
+                buffering.setVisibility(View.VISIBLE);
+            } else if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END) {
+                buffering.setVisibility(View.GONE);
+            }
+        }
+        return true;
     }
 }

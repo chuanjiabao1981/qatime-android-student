@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -461,7 +462,6 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
                     } else if (t.getStatus().equals("desktop")) {
                         EventBus.getDefault().post(BusEvent.desktop);
                     }
-                    Toast.makeText(getContext(), "收到" + t.getStatus(), Toast.LENGTH_SHORT).show();
                     List<Transaction> response = new ArrayList<>(1);
                     response.add(new Transaction().makeStudentResponseTransaction(t.getId()));
                     TransactionCenter.getInstance().sendToRemote(sessionId, null, response);
