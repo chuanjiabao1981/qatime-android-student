@@ -31,6 +31,7 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import io.vov.vitamio.MediaPlayer;
 import io.vov.vitamio.Vitamio;
+import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.DateUtils;
 import libraryextra.utils.DensityUtils;
 import libraryextra.utils.JsonUtils;
@@ -90,7 +91,7 @@ public class PlayBackActivity extends BaseFragmentActivity implements SurfaceHol
                 if (data != null) {
                     name.setText(data.getData().getLive_studio_lesson().getName());
                     gradeSubject.setText(data.getData().getTeacher().getCategory() + data.getData().getTeacher().getSubject());
-                    Glide.with(PlayBackActivity.this).load(data.getData().getTeacher().getEx_big_avatar_url()).placeholder(R.mipmap.photo).into(image);
+                    Glide.with(PlayBackActivity.this).load(data.getData().getTeacher().getEx_big_avatar_url()).centerCrop().bitmapTransform(new GlideCircleTransform(PlayBackActivity.this)).placeholder(R.mipmap.error_header).crossFade().dontAnimate().into(image);
                     teacher.setText(data.getData().getTeacher().getName());
                     sex.setImageResource("male".equals(data.getData().getTeacher().getGender()) ? R.mipmap.male : R.mipmap.female);
                     videoLength.setText(DateUtils.stringForTime(data.getData().getVideo_duration(), true));
