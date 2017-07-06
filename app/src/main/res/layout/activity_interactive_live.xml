@@ -36,7 +36,7 @@
         android:id="@+id/video_layout"
         android:layout_width="90dp"
         android:layout_height="160dp"
-        android:background="@mipmap/video_no_data" />
+        android:background="@mipmap/video_no_data_portrait" />
 
     <RelativeLayout
         android:id="@+id/back_layout"
