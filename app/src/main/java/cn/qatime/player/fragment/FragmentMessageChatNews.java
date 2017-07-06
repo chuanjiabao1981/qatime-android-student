@@ -64,7 +64,7 @@ import libraryextra.utils.VolleyListener;
 /**
  * @author luntify
  * @date 2016/8/15 20:05
- * @Description 辅导班消息
+ * @Description 直播课消息
  */
 public class FragmentMessageChatNews extends BaseFragment {
 
