@@ -231,7 +231,7 @@ public class ScreeningConditionActivity extends BaseActivity {
         if (courseChecked != 0) {
             courseAdapter.notifyDataSetChanged();
         }
-       typeChecked = getStatusValue(getIntent().getStringExtra("courseType"));
+       typeChecked = getTypesValue(getIntent().getStringExtra("sellType"));
         if (typeChecked != 0) {
             typeAdapter.notifyDataSetChanged();
         }
@@ -294,6 +294,23 @@ public class ScreeningConditionActivity extends BaseActivity {
         return result;
     }
 
+    private int getTypesValue(String sellType) {
+        if (StringUtils.isNullOrBlanK(sellType)) return 0;
+        int result = 0;
+        switch (sellType) {
+            case "all":
+                result = 0;
+                break;
+            case "charge":
+                result = 1;
+                break;
+            case "free":
+                result = 2;
+                break;
+        }
+        return result;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -325,7 +342,7 @@ public class ScreeningConditionActivity extends BaseActivity {
                 Intent intent = new Intent();
                 intent.putExtra("range", getRange());
                 intent.putExtra("courseStatus", getStatus());
-                intent.putExtra("courseType", getTypeStatus());
+                intent.putExtra("sellType", getTypeStatus());
                 intent.putExtra("startTime", startSelect);
                 intent.putExtra("endTime", endSelect);
                 setResult(Constant.RESPONSE, intent);
@@ -379,13 +396,13 @@ public class ScreeningConditionActivity extends BaseActivity {
         String result = null;
         switch (courseType.get(typeChecked)) {
             case "不限":
-                result = "all";
+                result = "";
                 break;
-            case "招生中":
-                result = "published";
+            case "免费课程":
+                result = "free";
                 break;
-            case "开课中":
-                result = "teaching";
+            case "收费课程":
+                result = "charge";
                 break;
         }
         return result;

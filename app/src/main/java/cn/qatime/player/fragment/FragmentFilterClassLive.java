@@ -63,6 +63,7 @@ public class FragmentFilterClassLive extends BaseFragment {
     private String tag = null;//标签
     private String range = null;//查询范围
     private String courseStatus = null;//课程状态
+    private String sellType = null;//课程类型
     private String endTime = null;
     private String startTime = null;
     private List<LabelBean.DataBean> labelData;
@@ -156,7 +157,7 @@ public class FragmentFilterClassLive extends BaseFragment {
             map.put("q[class_date_gteq]", startTime);
             map.put("q[class_date_lt]", endTime);
         }
-
+        map.put("sell_type", sellType);
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlSearch, map), null, new VolleyListener(getActivity()) {
             @Override
             protected void onTokenOut() {
@@ -262,9 +263,9 @@ public class FragmentFilterClassLive extends BaseFragment {
             public void convert(ViewHolder holder, FilterLiveCourseBean.DataBean item, int position) {
                 Glide.with(getActivity()).load(item.getPublicize()).crossFade().placeholder(R.mipmap.photo).into((ImageView) holder.getView(R.id.image));
                 holder.setText(R.id.name, item.getName())
-                        .setText(R.id.price, "￥" + item.getPrice())
+                        .setText(R.id.price, "free".equals(item.getSell_type()) ? "免费" : ("￥" + item.getPrice()))
                         .setText(R.id.teacher, item.getTeacher_name())
-                        .setText(R.id.buy_count,item.getBuy_tickets_count()+"");
+                        .setText(R.id.buy_count, item.getBuy_tickets_count() + "");
             }
         };
         listview.setAdapter(adapter);
@@ -337,6 +338,7 @@ public class FragmentFilterClassLive extends BaseFragment {
                 intent.putExtra("range", range);
                 intent.putExtra("courseStatus", courseStatus);
                 intent.putExtra("startTime", startTime);
+                intent.putExtra("sellType", sellType);
                 intent.putExtra("endTime", endTime);
                 startActivityForResult(intent, Constant.REQUEST);
             }
@@ -395,6 +397,7 @@ public class FragmentFilterClassLive extends BaseFragment {
             if (data != null) {
                 range = data.getStringExtra("range");
                 courseStatus = data.getStringExtra("courseStatus");
+                sellType = data.getStringExtra("sellType");
                 startTime = data.getStringExtra("startTime");
                 endTime = data.getStringExtra("endTime");
                 getData(0);
