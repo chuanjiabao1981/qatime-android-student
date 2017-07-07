@@ -121,7 +121,7 @@ public class ScreeningConditionActivity extends BaseActivity {
             @Override
             public void convert(ViewHolder holder, String item, int position) {
                 holder.setText(R.id.text, item);
-                if (courseChecked == position) {
+                if (typeChecked == position) {
                     ((TextView) holder.getView(R.id.text)).setBackgroundResource(R.drawable.text_background_red);
                     ((TextView) holder.getView(R.id.text)).setTextColor(getResources().getColor(R.color.colorPrimary));
                 } else {
@@ -298,7 +298,7 @@ public class ScreeningConditionActivity extends BaseActivity {
         if (StringUtils.isNullOrBlanK(sellType)) return 0;
         int result = 0;
         switch (sellType) {
-            case "all":
+            case "":
                 result = 0;
                 break;
             case "charge":

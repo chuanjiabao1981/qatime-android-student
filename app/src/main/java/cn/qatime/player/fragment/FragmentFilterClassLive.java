@@ -157,7 +157,7 @@ public class FragmentFilterClassLive extends BaseFragment {
             map.put("q[class_date_gteq]", startTime);
             map.put("q[class_date_lt]", endTime);
         }
-        map.put("sell_type", sellType);
+        map.put("q[sell_type_eq]", sellType);
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlSearch, map), null, new VolleyListener(getActivity()) {
             @Override
             protected void onTokenOut() {
