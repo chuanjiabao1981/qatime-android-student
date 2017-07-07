@@ -129,7 +129,7 @@ public class TeacherDataActivity extends BaseActivity {
                     if (price.startsWith(".")) {
                         price = "0" + price;
                     }
-                    helper.setText(R.id.price, "￥" + price);
+                    helper.setText(R.id.price,"free".equals(item.getSell_type()) ? "免费" : ("￥" + item.getPrice()));
                 }
             }
         };
