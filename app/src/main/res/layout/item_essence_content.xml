@@ -46,7 +46,7 @@
                 android:id="@+id/course_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="暂无辅导班数据"
+                android:text="暂无直播课数据"
                 android:textColor="#333"
                 android:textSize="14sp" />
 

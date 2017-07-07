@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:text="辅导班"
+            android:text="直播课"
             android:textColor="#333"
             android:textSize="16sp" />
 
