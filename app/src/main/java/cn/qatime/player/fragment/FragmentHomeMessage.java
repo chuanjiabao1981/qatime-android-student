@@ -130,7 +130,7 @@ public class FragmentHomeMessage extends BaseFragment {
                             }
                         }
                     }
-                }, 500);
+                }, 300);
             }
         } else if (intent != null && intent.hasExtra("type") && intent.getStringExtra("type").equals("system_message")) {//转到系统消息页面
             if (fragmentlayout != null) {
