@@ -776,9 +776,11 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                         floatFragment.setNameAndCount("",1);
                     } else if (camera == 2 && board == 1) {
                         setVideoState(VideoState.CLOSED);
+                        ((FragmentPlayerMembers)fragBaseFragments.get(3)).setOnlineInfo(data.getData().getOnline_users());
                         floatFragment.setNameAndCount(data.getData().getLive_info().getName(), data.getData().getOnline_users().size());
                     } else if (camera == 1 && board == 1) {
                         setVideoState(VideoState.PLAYING);
+                        ((FragmentPlayerMembers)fragBaseFragments.get(3)).setOnlineInfo(data.getData().getOnline_users());
                         floatFragment.setNameAndCount(data.getData().getLive_info().getName(), data.getData().getOnline_users().size());
                     }
 
