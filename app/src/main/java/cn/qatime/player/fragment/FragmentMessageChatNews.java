@@ -182,7 +182,14 @@ public class FragmentMessageChatNews extends BaseFragment {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> refreshView) {
                 getCourses();
-                listView.onRefreshComplete();
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        String label = android.text.format.DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), android.text.format.DateUtils.FORMAT_SHOW_TIME | android.text.format.DateUtils.FORMAT_SHOW_DATE | android.text.format.DateUtils.FORMAT_ABBREV_ALL);
+                        listView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
+                        listView.onRefreshComplete();
+                    }
+                });
             }
         });
     }
