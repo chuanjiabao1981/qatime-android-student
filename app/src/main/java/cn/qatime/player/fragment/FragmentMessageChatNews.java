@@ -76,9 +76,6 @@ public class FragmentMessageChatNews extends BaseFragment {
     private UserInfoObservable.UserInfoObserver userInfoObserver;
     private UserInfoObservable userInfoObservable;
     private int listSize = 0;
-//    private MyTutorialClassBean courses;
-//    private boolean shouldPost = false;//是否需要向messageactivity发推流地址
-//    private String sessionId;
 
     @Nullable
     @Override
@@ -475,34 +472,7 @@ public class FragmentMessageChatNews extends BaseFragment {
                 MessageListBean bean = new MessageListBean();
                 if (index >= 0) {
                     bean = items.get(index);
-//                    boolean haveData = false;
-//                    if (courses != null && courses.getData() != null) {
-//                        for (MyTutorialClassBean.Data data : courses.getData()) {
-//                            if (data != null && bean != null) {
-//                                if (data.getChat_team_id().equals(bean.getContactId())) {
-//                                    haveData = true;
-//                                }
-//                            }
-//                        }
-//                        if (!haveData) {
-//                            getCourses();
-//                        }
-//                    }
                 }
-//                else {
-//                    if (courses != null && courses.getData() != null) {
-//                        for (MyTutorialClassBean.Data data : courses.getData()) {
-//                            if (data.getChat_team_id().equals(msg.getContactId())) {
-//                                bean.setName(data.getName());
-////                                bean.setCamera(data.getCamera());
-////                                bean.setBoard(data.getBoard());
-//                                bean.setOwner(data.getChat_team_owner());
-//                            }
-//                        }
-//                    } else {
-//                        getCourses();
-//                    }
-//                }
                 bean.setContactId(msg.getContactId());
                 Team team = TeamDataCache.getInstance().getTeamById(bean.getContactId());
                 if (team != null) {
@@ -596,28 +566,32 @@ public class FragmentMessageChatNews extends BaseFragment {
         registerObservers(false);
     }
 
-    public void setMessage(IMMessage message) {
-        int position = -1;
-        Logger.e("item.size" + items.size());
-        if (items != null && items.size() > 0) {
-            for (int i = 0; i < items.size(); i++) {
-                if (items.get(i).getContactId().equals(message.getSessionId())) {
-                    position = i;
-                    break;
+    public void setMessage(final IMMessage message) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                int position = -1;
+                if (items != null && items.size() > 0) {
+                    for (int i = 0; i < items.size(); i++) {
+                        if (items.get(i).getContactId().equals(message.getSessionId())) {
+                            position = i;
+                            break;
+                        }
+                    }
                 }
-            }
-        }
-        if (position > -1) {
-            Intent intent = new Intent(getActivity(), MessageActivity.class);
-            intent.putExtra("sessionId", items.get(position).getContactId());
-            intent.putExtra("sessionType", items.get(position).getSessionType());
-            intent.putExtra("courseId", items.get(position).getCourseId());
+                if (position > -1) {
+                    Intent intent = new Intent(getActivity(), MessageActivity.class);
+                    intent.putExtra("sessionId", items.get(position).getContactId());
+                    intent.putExtra("sessionType", items.get(position).getSessionType());
+                    intent.putExtra("courseId", items.get(position).getCourseId());
 //            intent.putExtra("camera", items.get(position).getCamera());
 //            intent.putExtra("board", items.get(position).getBoard());
-            intent.putExtra("name", items.get(position).getName());
-            intent.putExtra("type", items.get(position).getCourseType());
-            intent.putExtra("owner", items.get(position).getOwner());
-            startActivity(intent);
-        }
+                    intent.putExtra("name", items.get(position).getName());
+                    intent.putExtra("type", items.get(position).getCourseType());
+                    intent.putExtra("owner", items.get(position).getOwner());
+                    startActivity(intent);
+                }
+            }
+        }, 300);
     }
 }
