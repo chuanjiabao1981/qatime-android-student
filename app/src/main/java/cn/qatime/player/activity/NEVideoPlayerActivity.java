@@ -773,13 +773,15 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
                     if (camera == 0 && board == 0) {
                         setVideoState(VideoState.UNPLAY);
+                        floatFragment.setNameAndCount("",1);
                     } else if (camera == 2 && board == 1) {
                         setVideoState(VideoState.CLOSED);
+                        floatFragment.setNameAndCount(data.getData().getLive_info().getName(), data.getData().getOnline_users().size());
                     } else if (camera == 1 && board == 1) {
                         setVideoState(VideoState.PLAYING);
+                        floatFragment.setNameAndCount(data.getData().getLive_info().getName(), data.getData().getOnline_users().size());
                     }
 
-                    floatFragment.setNameAndCount(data.getData().getLive_info().getName(), data.getData().getOnline_users().size());
                 }
             }
 
