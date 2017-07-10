@@ -514,7 +514,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     @Override
     protected void onResume() {
         super.onResume();
-
         video1.start();
         video2.start();
         hd.postDelayed(new Runnable() {
@@ -540,7 +539,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         int screenHeight = ScreenUtils.getScreenHeight(NEVideoPlayerActivity.this);
 
         if (!screenSwitchUtils.isPortrait()) { // 横屏
-            Logger.e("orta activity横屏");
             floatFragment.setPortrait(false);
 
             inputPanel.clearInputValue();
@@ -578,7 +576,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 floatFragment.setDanmuOn(true);
             }
         } else {
-            Logger.e("orta activity树屏");
             floatFragment.setPortrait(true);
             WindowManager.LayoutParams attrs = getWindow().getAttributes();
             attrs.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -1018,7 +1015,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     @Override
     public void sendMessage(IMMessage message) {
-        Logger.e("message" + message);
+//        Logger.e("message" + message);
         sendMessages(message, message.getMsgType() == MsgTypeEnum.text && !screenSwitchUtils.isPortrait() || isSubBig);
     }
 
