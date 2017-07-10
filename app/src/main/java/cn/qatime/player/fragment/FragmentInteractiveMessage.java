@@ -30,9 +30,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.bean.Container;
+import cn.qatime.player.bean.InteractiveDeskShareStatus;
 import cn.qatime.player.bean.MessageListPanel;
 import cn.qatime.player.bean.ModuleProxy;
 import cn.qatime.player.im.SimpleCallback;
@@ -120,7 +122,6 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
     Observer<List<IMMessage>> receiveMessageObserver = new Observer<List<IMMessage>>() {
         @Override
         public void onEvent(List<IMMessage> messages) {
-            Logger.e("receiveMessageObserver" + "receiveMessage");
             if (messages == null || messages.isEmpty()) {
                 return;
             }
@@ -134,22 +135,29 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
                         break;
                     }
                 }
-                if (message.getMsgType() == MsgTypeEnum.notification) {//收到公告更新通知消息,通知公告页面刷新公告
-                    if (((NotificationAttachment) message.getAttachment()).getType() == NotificationType.UpdateTeam) {
-                        UpdateTeamAttachment a = (UpdateTeamAttachment) message.getAttachment();
-                        if (a.getUpdatedFields().containsKey(TeamFieldEnum.Announcement)) {
-                            EventBus.getDefault().post(BusEvent.ANNOUNCEMENT);
+                if (messageListPanel.isMyMessage(message)) {
+                    if (message.getMsgType() == MsgTypeEnum.notification) {//收到公告更新通知消息,通知公告页面刷新公告
+                        if (((NotificationAttachment) message.getAttachment()).getType() == NotificationType.UpdateTeam) {
+                            UpdateTeamAttachment a = (UpdateTeamAttachment) message.getAttachment();
+                            if (a.getUpdatedFields().containsKey(TeamFieldEnum.Announcement)) {
+                                EventBus.getDefault().post(BusEvent.ANNOUNCEMENT);
+                            }
                         }
                     }
-                } else if (message.getMsgType() == MsgTypeEnum.custom) {
-                    message.setStatus(MsgStatusEnum.read);
-                    Logger.e("收到消息MsgTypeEnum.custom");
-                    if (!StringUtils.isNullOrBlanK(message.getContent())) {
-                        if (message.getContent().equals("FullScreenOpen"))//FullScreenOpen FullScreenClose
-                            EventBus.getDefault().post(BusEvent.FullScreenOpen);
-                        else if (message.getContent().equals("FullScreenClose"))
-                            EventBus.getDefault().post(BusEvent.FullScreenClose);
-                    }
+//                    else if (message.getMsgType() == MsgTypeEnum.custom) {
+//                        message.setStatus(MsgStatusEnum.read);
+//                        if (!StringUtils.isNullOrBlanK(message.getContent())) {
+//                            if (message.getContent().equals(InteractiveDeskShareStatus.desktop))//desktop board
+//                                EventBus.getDefault().post(BusEvent.desktop);
+//                            else if (message.getContent().equals(InteractiveDeskShareStatus.board))
+//                                EventBus.getDefault().post(BusEvent.board);
+//                            else if (message.getContent().equals(InteractiveDeskShareStatus.request)) {
+//                                if (message.getFromAccount().equals(BaseApplication.getInstance().getAccount())) {
+//                                    EventBus.getDefault().post(BusEvent.request);
+//                                }
+//                            }
+//                        }
+//                    }
                 }
                 addedListItems.add(message);
                 needRefresh = true;

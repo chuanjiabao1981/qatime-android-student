@@ -119,7 +119,8 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
     private View close;
     private boolean closed = false;//是否手动关闭未设置支付密码提示
     private CommonAdapter<FreeCourseBean.DataBean> freeCourrseAdapter;
-    private ArrayList<FreeCourseBean.DataBean> listFree = new ArrayList();
+    private ArrayList<FreeCourseBean.DataBean> listFree = new ArrayList<>();
+    private View emptyViewToday;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -404,11 +405,46 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 }
             }
 
+            //             > 0 ? todayList.size() : 1;
             @Override
             public int getItemCount() {
-                return todayList.size() > 0 ? todayList.size() : 1;
+                return todayList.size();
             }
         };
+        ViewGroup parent = (ViewGroup) recyclerToday.getParent();
+        emptyViewToday = View.inflate(getActivity(), R.layout.empty_view, null);
+        emptyViewToday.setBackgroundColor(0xffffffff);
+        parent.addView(emptyViewToday, parent.indexOfChild(recyclerToday) + 1);
+        todayAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            private void checkIfEmpty() {
+                if (todayAdapter.getItemCount() == 0) {
+                    emptyViewToday.setVisibility(View.VISIBLE);
+                    recyclerToday.setVisibility(View.GONE);
+                } else {
+                    emptyViewToday.setVisibility(View.GONE);
+                    recyclerToday.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                checkIfEmpty();
+            }
+
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                super.onItemRangeInserted(positionStart, itemCount);
+                checkIfEmpty();
+            }
+
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                super.onItemRangeRemoved(positionStart, itemCount);
+                checkIfEmpty();
+            }
+
+        });
         recyclerToday.setAdapter(todayAdapter);
 
     }
@@ -522,8 +558,8 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                         todayList.clear();
                         if (data != null && data.getData() != null) {
                             todayList.addAll(data.getData());
-                            todayAdapter.notifyDataSetChanged();
                         }
+                        todayAdapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -532,7 +568,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
 
                     @Override
                     protected void onTokenOut() {
-                            tokenOut();
+                        tokenOut();
                     }
 
                 }, new VolleyErrorListener() {
@@ -623,7 +659,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         noBanner = new BannerRecommendBean.DataBean();
         listBanner.add(noBanner);
         tagViewpagerImg.init(R.drawable.shape_photo_tag_select, R.drawable.shape_photo_tag_nomal, 16, 8, 4, 30);
-        tagViewpagerImg.setAutoNext( true, 3000);
+        tagViewpagerImg.setAutoNext(true, 3000);
 //        viewPager.setResourceId(1252);
         tagViewpagerImg.setOnGetView(new TagViewPager.OnGetView() {
             @Override
@@ -690,12 +726,14 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 if (item != null) {
                     Glide.with(getActivity()).load(item.getTeacher().getAvatar_url()).error(R.mipmap.error_header).centerCrop().bitmapTransform(new GlideCircleTransform(getActivity())).crossFade().dontAnimate().into(((ImageView) holder.getView(R.id.teacher_img)));
                     holder.setText(R.id.teacher_text, item.getTeacher().getName());
-                } else {
-                    Glide.with(getActivity()).load(R.mipmap.error_header).centerCrop().bitmapTransform(new GlideCircleTransform(getActivity())).crossFade().dontAnimate().into(((ImageView) holder.getView(R.id.teacher_img)));
-                    holder.setText(R.id.teacher_text, getString(R.string.teacher_name));
                 }
             }
         };
+        ViewGroup parent = (ViewGroup) gridviewTeacher.getParent();
+        View inflate = View.inflate(getActivity(), R.layout.empty_view, null);
+        inflate.setBackgroundColor(0xffffffff);
+        parent.addView(inflate, parent.indexOfChild(gridviewTeacher) + 1);
+        gridviewTeacher.setEmptyView(inflate);
         gridviewTeacher.setAdapter(teacherAdapter);
         gridviewTeacher.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -719,12 +757,18 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         int screenWidth = ScreenUtils.getScreenWidth(getActivity());
         int itemWidth = (int) ((screenWidth - density * 10 * 2) / 5);
         int allWidth = itemWidth * size;
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                allWidth, LinearLayout.LayoutParams.MATCH_PARENT);
-        gridviewTeacher.setLayoutParams(params);// 设置GirdView布局参数
-        gridviewTeacher.setColumnWidth(itemWidth);// 列表项宽
-        gridviewTeacher.setStretchMode(GridView.NO_STRETCH);
-        gridviewTeacher.setNumColumns(size);//总长度
+        if (size > 0) {
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    allWidth, LinearLayout.LayoutParams.MATCH_PARENT);
+            gridviewTeacher.setLayoutParams(params);// 设置GirdView布局参数
+            gridviewTeacher.setColumnWidth(itemWidth);// 列表项宽
+            gridviewTeacher.setStretchMode(GridView.NO_STRETCH);
+            gridviewTeacher.setNumColumns(size);//总长度
+        } else {
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    (int) (screenWidth - density * 10 * 2), LinearLayout.LayoutParams.MATCH_PARENT);
+            gridviewTeacher.getEmptyView().setLayoutParams(params);
+        }
     }
 
     private void initTeacherData() {
@@ -742,11 +786,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                         listRecommendTeacher.clear();
                         if (teacherRecommendBean != null && teacherRecommendBean.getData() != null && teacherRecommendBean.getData().size() > 0) {
                             listRecommendTeacher.addAll(teacherRecommendBean.getData());
-                        }
-                        if (listRecommendTeacher.size() < 5) {
-                            while (listRecommendTeacher.size() < 5) {
-                                listRecommendTeacher.add(null);
-                            }
                         }
                         horizontalLayout();
                         teacherAdapter.notifyDataSetChanged();
@@ -887,10 +926,11 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         });
         addToRequestQueue(request);
     }
+
     public void requestPermission() {
         MPermission.with(this)
                 .addRequestCode(100)
-                .permissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE})
+                .permissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE})
                 .request();
     }
 
@@ -911,6 +951,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
         Toast.makeText(getActivity(), "定位权限被拒绝", Toast.LENGTH_SHORT).show();
         initLocation();
     }
+
     private void initLocation() {
         utils = new AMapLocationUtils(getActivity(), new AMapLocationUtils.LocationListener() {
             @Override
@@ -928,7 +969,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                 CityBean.Data currentCity = BaseApplication.getInstance().getCurrentCity();
                 if (locationCity != null) {
                     if (!currentCity.equals(locationCity)) {
-                        if (locationCity.getWorkstations_count() != 0) {
+                        if (locationCity.getWorkstation_id() != 0) {
                             dialogCity();
                         }
                     }

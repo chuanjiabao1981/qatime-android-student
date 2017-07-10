@@ -17,6 +17,7 @@ import com.android.volley.RequestQueue;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.utils.MPermission;
+import cn.qatime.player.utils.UrlUtils;
 
 public class BaseFragment extends Fragment {
     private RequestQueue Queue = BaseApplication.getInstance().getRequestQueue();
@@ -50,7 +51,14 @@ public class BaseFragment extends Fragment {
      * 设备已在其他地方登录
      */
     public void tokenOut() {
-        BaseApplication.getInstance().clearToken();
+        if (BaseApplication.getInstance().isTokenOut()) return;
+        Queue.cancelAll(new RequestQueue.RequestFilter() {
+            @Override
+            public boolean apply(Request<?> request) {
+                return request.getUrl().contains(UrlUtils.getBaseUrl());
+            }
+        });
+        BaseApplication.getInstance().setTokenOut(true);
         if (getActivity() != null) {
             if (alertDialog == null) {
                 View view = View.inflate(getActivity(), R.layout.dialog_confirm, null);
@@ -83,6 +91,7 @@ public class BaseFragment extends Fragment {
     }
 
     public void out() {
+        BaseApplication.getInstance().setTokenOut(false);
         Intent intent = new Intent(getActivity(), MainActivity.class);
         intent.putExtra("out", "out");
         startActivity(intent);
@@ -90,6 +99,7 @@ public class BaseFragment extends Fragment {
     }
 
     public <T> Request<T> addToRequestQueue(Request<T> request) {
+        if (BaseApplication.getInstance().isTokenOut()) return null;
         request.setTag(this);
         return Queue.add(request);
     }

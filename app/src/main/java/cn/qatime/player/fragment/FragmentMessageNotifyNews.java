@@ -124,7 +124,8 @@ public class FragmentMessageNotifyNews extends BaseFragment {
             }
         };
         listView.setAdapter(adapter);
-
+        View inflate = View.inflate(getActivity(), R.layout.empty_view, null);
+        listView.setEmptyView(inflate);
         listView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {

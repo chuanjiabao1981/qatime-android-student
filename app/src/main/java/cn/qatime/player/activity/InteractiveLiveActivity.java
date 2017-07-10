@@ -1,6 +1,7 @@
 package cn.qatime.player.activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -12,6 +13,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -33,7 +35,6 @@ import com.netease.nimlib.sdk.avchat.model.AVChatOptionalConfig;
 import com.netease.nimlib.sdk.avchat.model.AVChatParameters;
 import com.netease.nimlib.sdk.avchat.model.AVChatVideoFrame;
 import com.netease.nimlib.sdk.avchat.model.AVChatVideoRender;
-import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
@@ -59,7 +60,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cn.qatime.player.BuildConfig;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
@@ -84,9 +84,10 @@ import cn.qatime.player.utils.annotation.OnMPermissionDenied;
 import cn.qatime.player.utils.annotation.OnMPermissionGranted;
 import cn.qatime.player.utils.annotation.OnMPermissionNeverAskAgain;
 import cn.qatime.player.view.VideoFrameLayout;
-import custom.Configure;
 import libraryextra.bean.Announcements;
 import libraryextra.bean.InteractCourseDetailBean;
+import libraryextra.bean.PersonalInformationBean;
+import libraryextra.bean.Profile;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.NetUtils;
 import libraryextra.utils.ScreenUtils;
@@ -225,7 +226,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             initData();
             getAnnouncementsData();
             hd.postDelayed(loopStatus, 500);
-
         }
     }
 
@@ -596,9 +596,8 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     private void zoom() {
         if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            zoom.setImageResource(R.mipmap.narrow);
+
         } else {
-            zoom.setImageResource(R.mipmap.enlarge);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
     }
@@ -755,7 +754,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         }
         userJoinedList.clear();
         clearChatRoom();
-        ChatRoomMemberCache.getInstance().setRTSOpen(false);
         updateRTSFragment();
         hd.postDelayed(loopStatus, loopDelay);
         videoPermission.setVisibility(View.GONE);
@@ -912,14 +910,10 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
             List<Transaction> cache = new ArrayList<>(1);
             // 非主播进入房间，发送同步请求，请求主播向他同步之前的白板笔记
-            if (Configure.isDebug) {
-                Toast.makeText(InteractiveLiveActivity.this, "send sync request了啊啊啊啊啊啊啊啊", Toast.LENGTH_SHORT).show();
-            }
             TransactionCenter.getInstance().onNetWorkChange(roomId, false);
             cache.add(new Transaction().makeSyncRequestTransaction());
             TransactionCenter.getInstance().sendToRemote(roomId, null, cache);
             LogCatHelper.getInstance(null).log("send sync request");
-            ChatMessage(MessageBuilder.createCustomMessage(sessionId, SessionTypeEnum.Team, "VChatSyncRequest", null));
         }
 
         @Override
@@ -990,6 +984,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 //        int screenWidth = ScreenUtils.getScreenWidth(InteractiveLiveActivity.this);
 //        int screenHeight = ScreenUtils.getScreenHeight(InteractiveLiveActivity.this);
         if (newConfig.orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+            zoom.setImageResource(R.mipmap.enlarge);
             WindowManager.LayoutParams attrs = getWindow().getAttributes();
             attrs.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
             getWindow().setAttributes(attrs);
@@ -1009,6 +1004,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 }
             }
         } else {
+            zoom.setImageResource(R.mipmap.narrow);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
             ViewGroup.LayoutParams params = viewLayout.getLayoutParams();
             params.height = -1;
@@ -1063,7 +1059,100 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     public void onEvent(BusEvent event) {
         if (event == BusEvent.ANNOUNCEMENT) {
             getAnnouncementsData();
+//        } else if (event == BusEvent.request) {
+//            masterVideoLayout.removeAllViews();
+//            if (videoLayout.getChildCount() == 1) {
+//                videoLayout.removeViewAt(0);
+//            }
+//            userJoinedList.clear();
+//            clearChatRoom();
+//            updateRTSFragment();
+//            videoPermission.setVisibility(View.GONE);
+//            audioPermission.setVisibility(View.GONE);
+//
+//            checkToken();
         }
+    }
+
+    private void checkToken() {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getInstance().getUserId() + "/info", null,
+                new VolleyListener(InteractiveLiveActivity.this) {
+
+
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
+                        if (bean != null && bean.getData() != null) {
+                            setValue(bean);
+                        }
+                        reConnect();
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
+    }
+
+    /**
+     * 重新连接一对一
+     */
+    private void reConnect() {
+        View view = View.inflate(this, R.layout.dialog_cancel_or_confirm, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        TextView text = (TextView) view.findViewById(R.id.text);
+        text.setText("您的账号正在使用其他客户端学习此课程,当前连接已被迫断开");
+        Button cancel = (Button) view.findViewById(R.id.cancel);
+        cancel.setText("重连");
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                hd.post(loopStatus);
+            }
+        });
+        Button confirm = (Button) view.findViewById(R.id.confirm);
+        confirm.setText("关闭");
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.show();
+        alertDialog.setContentView(view);
+    }
+
+    private void setValue(PersonalInformationBean bean) {
+        Profile profile = BaseApplication.getInstance().getProfile();
+        Profile.Data data = profile.getData();
+        if (data != null) {
+            Profile.User user = data.getUser();
+            if (user != null) {
+                user.setLogin_mobile(bean.getData().getLogin_mobile());
+                user.setEmail(bean.getData().getEmail());
+                user.setAvatar_url(bean.getData().getAvatar_url());
+                user.setOpenid(bean.getData().getOpenid());
+                user.setName(bean.getData().getName());
+                data.setUser(user);
+            }
+            profile.setData(data);
+        }
+        BaseApplication.getInstance().setProfile(profile);
     }
 
     @Override
@@ -1089,5 +1178,10 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         inputPanel.onPause();
         MobclickAgent.onPause(this);
         NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
+    }
+
+    @Override
+    public void backClick(View v) {
+        onBackPressed();
     }
 }

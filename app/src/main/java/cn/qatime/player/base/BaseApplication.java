@@ -1,6 +1,5 @@
 package cn.qatime.player.base;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
 
@@ -39,9 +37,6 @@ import com.umeng.message.tag.TagManager;
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
@@ -74,6 +69,7 @@ public class BaseApplication extends MultiDexApplication {
      * 是否进行聊天消息通知栏提醒
      */
     public boolean chatMessageNotifyStatus;
+    private boolean tokenOut = false;//账号已过期
 //    public List<Activity> topActivity = new ArrayList<>();
 
     public boolean isChatMessageNotifyStatus() {
@@ -92,7 +88,11 @@ public class BaseApplication extends MultiDexApplication {
     }
 
     public CityBean.Data getCurrentCity() {
-        return currentCity == null ? new CityBean.Data("全国") : currentCity;
+        if (currentCity == null) {
+            currentCity = new CityBean.Data("全国");
+            currentCity.setWorkstation_id(-1);
+        }
+        return currentCity;
     }
 
     public void setCurrentCity(CityBean.Data currentCity) {
@@ -365,12 +365,6 @@ public class BaseApplication extends MultiDexApplication {
     }
 
     public void clearToken() {
-//        Throwable ex = new Throwable();
-//
-//        StackTraceElement[] stackElements = ex.getStackTrace();
-//        for (int i = Math.min(4, stackElements.length); i > 0; i--) {
-//            Logger.e("classname:" + stackElements[i].getClassName() + "*********getMethodName:" + stackElements[i].getMethodName() + "*******LineNumber:" + stackElements[i].getLineNumber());
-//        }
         if (profile != null && profile.getData() != null) {
             profile.getData().setRemember_token("");
             if (profile.getData().getUser() != null && profile.getData().getUser().getChat_account() != null) {
@@ -508,5 +502,13 @@ public class BaseApplication extends MultiDexApplication {
 
     public static BaseApplication getInstance() {
         return context;
+    }
+
+    public void setTokenOut(boolean tokenOut) {
+        this.tokenOut = tokenOut;
+    }
+
+    public boolean isTokenOut() {
+        return tokenOut;
     }
 }

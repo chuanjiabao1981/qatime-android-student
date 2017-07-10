@@ -104,7 +104,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                                 if (data.getData().getTicket() != null && data.getData().getTicket().getStatus().equals("active")) {
                                     startStudyView.setVisibility(View.VISIBLE);
                                     startStudy.setText("观看");
-                                }else{
+                                } else {
                                     if (data.getData().getVideo_course().isOff_shelve()) {
                                         startStudyView.setVisibility(View.VISIBLE);
                                         startStudy.setText("已下架");
@@ -118,7 +118,7 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                                 startStudyView.setVisibility(View.VISIBLE);
                                 if (data.getData().getTicket() != null && data.getData().getTicket().getStatus().equals("active")) {
                                     startStudy.setText("观看");
-                                }else{
+                                } else {
                                     startStudy.setText("立即学习");
                                     if (data.getData().getVideo_course().isOff_shelve()) {
                                         startStudy.setText("已下架");

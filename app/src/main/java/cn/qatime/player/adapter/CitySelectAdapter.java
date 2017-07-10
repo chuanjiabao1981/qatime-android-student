@@ -29,7 +29,7 @@ public abstract class CitySelectAdapter extends BaseAdapter {
     private List<CityBean.Data> list;
     private int[] itemLayoutId;
     private Context context;
-    private ArrayList<String> listLately;
+    private ArrayList<CityBean.Data> listLately;
     private Map<String, Integer> letterMap;
 
     /**
@@ -39,7 +39,7 @@ public abstract class CitySelectAdapter extends BaseAdapter {
      * @param list         全部
      * @param itemLayoutId 最近 全国 城市
      */
-    public CitySelectAdapter(Context context, HashMap<String, Integer> letterMap, ArrayList<String> listLately, ArrayList<CityBean.Data> list, int... itemLayoutId) {
+    public CitySelectAdapter(Context context, HashMap<String, Integer> letterMap, ArrayList<CityBean.Data> listLately, ArrayList<CityBean.Data> list, int... itemLayoutId) {
         VIEW_TYPE_COUNT = itemLayoutId.length;
         this.listLately = listLately;
         this.list = list;
@@ -82,16 +82,16 @@ public abstract class CitySelectAdapter extends BaseAdapter {
         if (viewType == 0) {//最近
             viewHolder = ViewHolder.get(context, convertView, parent, itemLayoutId[0], position);
                 GridViewForScrollView grid = viewHolder.getView(R.id.grid_city_lately);
-                grid.setAdapter(new CommonAdapter<String>(context, listLately, R.layout.item_city_single) {
+                grid.setAdapter(new CommonAdapter<CityBean.Data>(context, listLately, R.layout.item_city_single) {
                     @Override
-                    public void convert(ViewHolder holder, String item, int position) {
-                        holder.setText(R.id.city_name, item);
+                    public void convert(ViewHolder holder, CityBean.Data item, int position) {
+                        holder.setText(R.id.city_name, item.getName());
                     }
                 });
                 grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        setCityName(new CityBean.Data(listLately.get(position)));
+                        setCityName(listLately.get(position));
                     }
                 });
         } else if (viewType == 1) {//全国
@@ -99,7 +99,9 @@ public abstract class CitySelectAdapter extends BaseAdapter {
             viewHolder.getView(R.id.city_name).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setCityName(new CityBean.Data("全国"));
+                    CityBean.Data _default = new CityBean.Data("全国");
+                    _default.setWorkstation_id(-1);
+                    setCityName(_default);
                 }
             });
         } else {//城市

@@ -234,9 +234,9 @@ public class FragmentInteractiveBoard extends BaseFragment implements View.OnCli
 
     @Subscribe
     public void onEvent(BusEvent event) {
-        if (event == BusEvent.FullScreenOpen) {
+        if (event == BusEvent.desktop) {
             onSwitch(true);
-        } else if (event == BusEvent.FullScreenClose) {
+        } else if (event == BusEvent.board) {
             onSwitch(false);
         }
     }
