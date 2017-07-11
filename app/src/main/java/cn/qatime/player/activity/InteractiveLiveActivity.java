@@ -208,7 +208,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         setContentView(rootView);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        sessionId = getIntent().getStringExtra("teamId");
         initView();
         EventBus.getDefault().register(this);
 
@@ -273,6 +272,8 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                             InteractCourseDetailBean data = JsonUtils.objectFromJson(response.toString(), InteractCourseDetailBean.class);
                             if (data != null && data.getData() != null) {
                                 ((FragmentInteractiveDetails) fragBaseFragments.get(3)).setData(data.getData());
+                                sessionId = data.getData().getChat_team().getTeam_id();
+                                initSessionId();
                             }
                         }
 
@@ -308,14 +309,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         zoom = (ImageView) findViewById(R.id.zoom);
         ImageView switchCamera = (ImageView) findViewById(R.id.switch_camera);
         videoLayout = (VideoFrameLayout) findViewById(R.id.video_layout);
-        if (!StringUtils.isNullOrBlanK(sessionId)) {
-            TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getInstance().getAccount());
-            if (team != null) {
-                isMute = team.isMute();
-            }
-        }
-        inputPanel = new InputPanel(this, this, rootView, false, sessionId);
-        inputPanel.setMute(isMute);
+
 
         fragBaseFragments.add(new FragmentInteractiveBoard());
         fragBaseFragments.add(new FragmentInteractiveMessage());
@@ -353,8 +347,10 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_interactive_live, 0x0912);
         fragmentlayout.getViewPager().setOffscreenPageLimit(4);
 
-        rtsFragment = (FragmentInteractiveBoard) fragBaseFragments.get(0);
-        messageFragment = (FragmentInteractiveMessage) fragBaseFragments.get(1);
+        videoPermission.setOnClickListener(this);
+        audioPermission.setOnClickListener(this);
+        zoom.setOnClickListener(this);
+        switchCamera.setOnClickListener(this);
         viewLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -369,10 +365,19 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         });
         hd.postDelayed(hideBackLayout, 3000);
 
-        videoPermission.setOnClickListener(this);
-        audioPermission.setOnClickListener(this);
-        zoom.setOnClickListener(this);
-        switchCamera.setOnClickListener(this);
+    }
+
+    private void initSessionId() {
+        if (!StringUtils.isNullOrBlanK(sessionId)) {
+            TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getInstance().getAccount());
+            if (team != null) {
+                isMute = team.isMute();
+            }
+        }
+        inputPanel = new InputPanel(this, this, rootView, false, sessionId);
+        inputPanel.setMute(isMute);
+        rtsFragment = (FragmentInteractiveBoard) fragBaseFragments.get(0);
+        messageFragment = (FragmentInteractiveMessage) fragBaseFragments.get(1);
 
         messageFragment.setChatCallBack(new FragmentInteractiveMessage.Callback() {
             @Override

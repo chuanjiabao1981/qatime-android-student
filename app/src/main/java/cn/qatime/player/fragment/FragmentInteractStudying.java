@@ -129,7 +129,6 @@ public class FragmentInteractStudying extends BaseFragment {
     private void toNext() {
         Intent intent = new Intent(getActivity(), InteractiveLiveActivity.class);
         intent.putExtra("id", item.getId());
-        intent.putExtra("teamId", item.getChat_team_id());
         startActivity(intent);
     }
 
