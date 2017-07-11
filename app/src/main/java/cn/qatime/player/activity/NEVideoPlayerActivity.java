@@ -3,7 +3,6 @@ package cn.qatime.player.activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -28,7 +27,6 @@ import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
-import com.zhy.android.percent.support.PercentRelativeLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -227,15 +225,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         screenSwitchUtils = ScreenSwitchUtils.init(this.getApplicationContext());
 
         id = getIntent().getIntExtra("id", 0);//从前一页进来的id 获取详情用
-        sessionId = getIntent().getStringExtra("sessionId");
         if (id == 0) {
             Toast.makeText(this, getResourceString(R.string.no_course_information), Toast.LENGTH_SHORT).show();
             finish();
 
-        }
-        if (StringUtils.isNullOrBlanK(sessionId)) {
-            Toast.makeText(this, getResourceString(R.string.failed_to_obtain_group_information), Toast.LENGTH_SHORT).show();
-            finish();
         }
 
         EventBus.getDefault().register(this);
@@ -346,15 +339,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     }
 
     private void initView() {
-        if (!StringUtils.isNullOrBlanK(sessionId)) {
-            TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getInstance().getAccount());
-            if (team != null) {
-                isMute = team.isMute();
-                floatFragment.setMute(isMute);
-            }
-        }
-        inputPanel = new InputPanel(this, this, rootView, true, sessionId);
-        inputPanel.setMute(isMute);
 
         fragBaseFragments.add(new FragmentPlayerMessage());
         fragBaseFragments.add(new FragmentPlayerAnnouncements());
@@ -388,6 +372,23 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         });
         fragmentLayout.setAdapter(fragBaseFragments, R.layout.tablayout_nevideo_player, 0x0102);
         fragmentLayout.getViewPager().setOffscreenPageLimit(3);
+
+
+
+    }
+
+    private void initSessionId() {
+        if (!StringUtils.isNullOrBlanK(sessionId)) {
+            TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getInstance().getAccount());
+            if (team != null) {
+                isMute = team.isMute();
+                floatFragment.setMute(isMute);
+            }
+        }
+
+        inputPanel = new InputPanel(this, this, rootView, true, sessionId);
+        inputPanel.setMute(isMute);
+
         fragment2 = (FragmentPlayerMessage) fragBaseFragments.get(0);
 
         fragment2.setChatCallBack(new FragmentPlayerMessage.Callback() {
@@ -489,6 +490,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 //                                    setVideoState(VideoState.INIT);
                                     hd.post(runnable);
                                 }
+                                sessionId = data.getData().getChat_team_id();
+                                initSessionId();
                             }
                         }
 
@@ -773,14 +776,14 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
                     if (camera == 0 && board == 0) {
                         setVideoState(VideoState.UNPLAY);
-                        floatFragment.setNameAndCount("",1);
+                        floatFragment.setNameAndCount("", 1);
                     } else if (camera == 2 && board == 1) {
                         setVideoState(VideoState.CLOSED);
-                        ((FragmentPlayerMembers)fragBaseFragments.get(3)).setOnlineInfo(data.getData().getOnline_users());
+                        ((FragmentPlayerMembers) fragBaseFragments.get(3)).setOnlineInfo(data.getData().getOnline_users());
                         floatFragment.setNameAndCount(data.getData().getLive_info().getName(), data.getData().getOnline_users().size());
                     } else if (camera == 1 && board == 1) {
                         setVideoState(VideoState.PLAYING);
-                        ((FragmentPlayerMembers)fragBaseFragments.get(3)).setOnlineInfo(data.getData().getOnline_users());
+                        ((FragmentPlayerMembers) fragBaseFragments.get(3)).setOnlineInfo(data.getData().getOnline_users());
                         floatFragment.setNameAndCount(data.getData().getLive_info().getName(), data.getData().getOnline_users().size());
                     }
 

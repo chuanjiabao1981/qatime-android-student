@@ -206,6 +206,7 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                         if ("LiveStudio::Lesson".equals(itemList.get(position).getModel_type())) {
                             Intent intent = new Intent(ClassTimeTableActivity.this, NEVideoPlayerActivity.class);
                             intent.putExtra("id", Integer.valueOf(item.getProduct_id()));
+                            startActivity(intent);
                         } else if ("LiveStudio::InteractiveLesson".equals(itemList.get(position).getModel_type())) {
                             ClassTimeTableActivity.this.item = item;
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
