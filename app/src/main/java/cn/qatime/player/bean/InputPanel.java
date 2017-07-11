@@ -99,7 +99,7 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
     private long start = 0;
     private long end = 0;
     private ImageView alertImage;
-    private AudioRecordListener audioRecordListener;
+//    private AudioRecordListener audioRecordListener;
 
     public void onPause() {
         // 停止录音
@@ -114,15 +114,15 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
         boolean isShowTime();//是否是正在直播，是就禁用语音聊天
     }
 
-    public interface AudioRecordListener {
-        void audioRecordStart();
+//    public interface AudioRecordListener {
+//        void audioRecordStart();
+//
+//        void audioRecordStop();
+//    }
 
-        void audioRecordStop();
-    }
-
-    public void setOnAudioRecordListener(AudioRecordListener audioRecordListener) {
-        this.audioRecordListener = audioRecordListener;
-    }
+//    public void setOnAudioRecordListener(AudioRecordListener audioRecordListener) {
+//        this.audioRecordListener = audioRecordListener;
+//    }
 
     public interface OnInputShowListener {
         void OnInputShow();
@@ -470,9 +470,9 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
                         }
                     }
                     touched = true;
-                    if (audioRecordListener != null) {
-                        audioRecordListener.audioRecordStart();
-                    }
+//                    if (audioRecordListener != null) {
+//                        audioRecordListener.audioRecordStart();
+//                    }
                     initAudioRecord();
                     onStartAudioRecord();
                     start = System.currentTimeMillis();
@@ -481,9 +481,9 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
                         return true;
                     }
                     touched = false;
-                    if (audioRecordListener != null) {
-                        audioRecordListener.audioRecordStop();
-                    }
+//                    if (audioRecordListener != null) {
+//                        audioRecordListener.audioRecordStop();
+//                    }
                     end = System.currentTimeMillis();
                     if (end - start < 800) {
                         tooShortAudioRecord();
