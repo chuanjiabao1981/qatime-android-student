@@ -141,7 +141,7 @@ public class FragmentClassTableUnclosed extends BaseFragment {
 
         adapter = new CommonAdapter<ClassTimeTableBean.DataBean.LessonsBean>(getActivity(), itemList, R.layout.item_fragment_remedial_class_time_table1) {
             @Override
-            public void convert(ViewHolder helper, final ClassTimeTableBean.DataBean.LessonsBean item, final int position) {
+            public void convert(ViewHolder helper, final ClassTimeTableBean.DataBean.LessonsBean item, int position) {
                 Glide.with(getActivity()).load(item.getCourse_publicize()).placeholder(R.mipmap.error_header_rect).centerCrop().crossFade().dontAnimate().into((ImageView) helper.getView(R.id.image));
 //                helper.getView(R.id.image).setOnClickListener(
 //                        new View.OnClickListener() {
@@ -171,14 +171,13 @@ public class FragmentClassTableUnclosed extends BaseFragment {
                 helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
-                if("LiveStudio::Lesson".equals(itemList.get(position).getModel_type())){
+                if ("LiveStudio::Lesson".equals(itemList.get(position).getModel_type())) {
                     helper.getView(R.id.modal_type).setBackgroundColor(0xffff4856);
-                    helper.setText(R.id.modal_type,"直播课");
-                }else if("LiveStudio::InteractiveLesson".equals(itemList.get(position).getModel_type())){
+                    helper.setText(R.id.modal_type, "直播课");
+                } else if ("LiveStudio::InteractiveLesson".equals(itemList.get(position).getModel_type())) {
                     helper.getView(R.id.modal_type).setBackgroundColor(0xff4856ff);
-                    helper.setText(R.id.modal_type,"一对一");
+                    helper.setText(R.id.modal_type, "一对一");
                 }
-
 
 
                 String status = item.getStatus();
@@ -189,11 +188,11 @@ public class FragmentClassTableUnclosed extends BaseFragment {
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if("LiveStudio::Lesson".equals(itemList.get(position).getModel_type())){
+                        if ("LiveStudio::Lesson".equals(item.getModel_type())) {
                             Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
                             intent.putExtra("id", Integer.valueOf(item.getProduct_id()));
                             startActivity(intent);
-                        }else if("LiveStudio::InteractiveLesson".equals(itemList.get(position).getModel_type())){
+                        } else if ("LiveStudio::InteractiveLesson".equals(item.getModel_type())) {
                             FragmentClassTableUnclosed.this.item = item;
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                 if (NetUtils.checkPermission(getActivity()).size() > 0) {
@@ -220,12 +219,12 @@ public class FragmentClassTableUnclosed extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if("LiveStudio::Lesson".equals(itemList.get(position-1).getModel_type())){
+                if ("LiveStudio::Lesson".equals(itemList.get(position - 1).getModel_type())) {
                     Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
                     intent.putExtra("id", Integer.valueOf(itemList.get(position - 1).getProduct_id()));
                     intent.putExtra("pager", 2);
                     startActivity(intent);
-                }else if("LiveStudio::InteractiveLesson".equals(itemList.get(position-1).getModel_type())){
+                } else if ("LiveStudio::InteractiveLesson".equals(itemList.get(position - 1).getModel_type())) {
                     Intent intent = new Intent(getActivity(), InteractCourseDetailActivity.class);
                     intent.putExtra("id", Integer.valueOf(itemList.get(position - 1).getProduct_id()));
                     intent.putExtra("pager", 2);
@@ -234,7 +233,6 @@ public class FragmentClassTableUnclosed extends BaseFragment {
             }
         });
     }
-
 
 
     private void toNext() {
@@ -307,7 +305,7 @@ public class FragmentClassTableUnclosed extends BaseFragment {
             return getResourceString(R.string.class_closed);
         } else if (status.equals("paused")) {//直播中   .....
             return getResourceString(R.string.class_teaching);
-        }  else {
+        } else {
             return getResourceString(R.string.class_over);//已结束
         }
     }

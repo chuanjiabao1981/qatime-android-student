@@ -167,7 +167,7 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         });
         adapter = new CommonAdapter<ClassTimeTableBean.DataBean.LessonsBean>(this, itemList, R.layout.item_activity_class_time_table) {
             @Override
-            public void convert(final ViewHolder helper, final ClassTimeTableBean.DataBean.LessonsBean item, final int position) {
+            public void convert(final ViewHolder helper, final ClassTimeTableBean.DataBean.LessonsBean item, int position) {
                 Glide.with(ClassTimeTableActivity.this).load(item.getCourse_publicize()).placeholder(R.mipmap.error_header_rect).centerCrop().crossFade().dontAnimate().into((ImageView) helper.getView(R.id.image));
 //                helper.setText(R.id.course, item.getCourse_name());
                 helper.setText(R.id.classname, item.getName());
@@ -203,11 +203,11 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if ("LiveStudio::Lesson".equals(itemList.get(position).getModel_type())) {
+                        if ("LiveStudio::Lesson".equals(item.getModel_type())) {
                             Intent intent = new Intent(ClassTimeTableActivity.this, NEVideoPlayerActivity.class);
                             intent.putExtra("id", Integer.valueOf(item.getProduct_id()));
                             startActivity(intent);
-                        } else if ("LiveStudio::InteractiveLesson".equals(itemList.get(position).getModel_type())) {
+                        } else if ("LiveStudio::InteractiveLesson".equals(item.getModel_type())) {
                             ClassTimeTableActivity.this.item = item;
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                 if (NetUtils.checkPermission(ClassTimeTableActivity.this).size() > 0) {
