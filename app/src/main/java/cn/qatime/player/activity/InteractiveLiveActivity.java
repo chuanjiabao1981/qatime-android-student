@@ -480,7 +480,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 Logger.e("join channel failed, code:" + i);
                 LogCatHelper.getInstance(null).log("join channel failed, code:" + i);
                 hd.removeCallbacks(loopStatus);
-                hd.postDelayed(loopStatus,15000);
+                hd.postDelayed(loopStatus, 15000);
             }
 
             @Override
@@ -1173,6 +1173,14 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     @Override
     protected void onResume() {
         super.onResume();
+        if (isShowTime) {
+            for (String s : userJoinedList) {
+                if (!s.equals(BaseApplication.getInstance().getAccount())) {
+                    AVChatManager.getInstance().muteRemoteAudio(s, false);
+                    AVChatManager.getInstance().muteRemoteVideo(s, false);
+                }
+            }
+        }
         MobclickAgent.onResume(this);
         NIMClient.getService(MsgService.class).setChattingAccount(sessionId, SessionTypeEnum.Team);
     }
@@ -1180,6 +1188,14 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     @Override
     protected void onPause() {
         super.onPause();
+        if (isShowTime) {
+            for (String s : userJoinedList) {
+                if (!s.equals(BaseApplication.getInstance().getAccount())) {
+                    AVChatManager.getInstance().muteRemoteAudio(s, true);
+                    AVChatManager.getInstance().muteRemoteVideo(s, true);
+                }
+            }
+        }
         inputPanel.onPause();
         MobclickAgent.onPause(this);
         NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
