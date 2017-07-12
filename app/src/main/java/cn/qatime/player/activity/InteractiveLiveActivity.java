@@ -121,7 +121,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
      * 聊天室基本信息
      */
     private String roomId;
-    private String sessionId;
+    private String sessionId = "";
     private FragmentInteractiveBoard rtsFragment;
     private Handler hd = new Handler();
     private Runnable hideBackLayout = new Runnable() {
@@ -216,12 +216,18 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 requestLivePermission();
             } else {
                 id = getIntent().getIntExtra("id", 0);
+                if (id == 0) {
+                    Toast.makeText(this, getResourceString(R.string.no_course_information), Toast.LENGTH_SHORT).show();
+                }
                 initData();
                 getAnnouncementsData();
                 hd.postDelayed(loopStatus, 500);
             }
         } else {
             id = getIntent().getIntExtra("id", 0);
+            if (id == 0) {
+                Toast.makeText(this, getResourceString(R.string.no_course_information), Toast.LENGTH_SHORT).show();
+            }
             initData();
             getAnnouncementsData();
             hd.postDelayed(loopStatus, 500);
@@ -273,26 +279,30 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                             if (data != null && data.getData() != null) {
                                 ((FragmentInteractiveDetails) fragBaseFragments.get(3)).setData(data.getData());
                                 sessionId = data.getData().getChat_team().getTeam_id();
-                                initSessionId();
                             }
+                            initSessionId();
                         }
 
                         @Override
                         protected void onError(JSONObject response) {
-
+                            initSessionId();
                         }
 
                         @Override
                         protected void onTokenOut() {
+                            initSessionId();
                             tokenOut();
                         }
                     }, new VolleyErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
                     super.onErrorResponse(volleyError);
+                    initSessionId();
                 }
             });
             addToRequestQueue(request);
+        }else{
+            initSessionId();
         }
     }
 
@@ -346,7 +356,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_interactive_live, 0x0912);
         fragmentlayout.getViewPager().setOffscreenPageLimit(4);
-
+        rtsFragment = (FragmentInteractiveBoard) fragBaseFragments.get(0);
         videoPermission.setOnClickListener(this);
         audioPermission.setOnClickListener(this);
         zoom.setOnClickListener(this);
@@ -376,7 +386,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         }
         inputPanel = new InputPanel(this, this, rootView, false, sessionId);
         inputPanel.setMute(isMute);
-        rtsFragment = (FragmentInteractiveBoard) fragBaseFragments.get(0);
         messageFragment = (FragmentInteractiveMessage) fragBaseFragments.get(1);
 
         messageFragment.setChatCallBack(new FragmentInteractiveMessage.Callback() {

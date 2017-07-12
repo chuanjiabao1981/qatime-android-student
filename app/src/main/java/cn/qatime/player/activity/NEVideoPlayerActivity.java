@@ -80,7 +80,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     private int id;
     private FragmentPlayerMessage fragment2;
-    private String sessionId;
+    private String sessionId="";
     private SessionTypeEnum sessionType = SessionTypeEnum.Team;
     private boolean isMute = false;//当前用户 是否被禁言
 
@@ -222,10 +222,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         id = getIntent().getIntExtra("id", 0);//从前一页进来的id 获取详情用
         if (id == 0) {
             Toast.makeText(this, getResourceString(R.string.no_course_information), Toast.LENGTH_SHORT).show();
-            finish();
-
         }
-
         EventBus.getDefault().register(this);
         assignViews();
         initView();
@@ -469,26 +466,31 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                                     hd.post(runnable);
                                 }
                                 sessionId = data.getData().getChat_team_id();
-                                initSessionId();
                             }
+                            initSessionId();
                         }
 
                         @Override
                         protected void onError(JSONObject response) {
 
+                            initSessionId();
                         }
 
                         @Override
                         protected void onTokenOut() {
+                            initSessionId();
                             tokenOut();
                         }
                     }, new VolleyErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
                     super.onErrorResponse(volleyError);
+                    initSessionId();
                 }
             });
             addToRequestQueue(request);
+        }else{
+            initSessionId();
         }
     }
 
