@@ -79,8 +79,7 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         if (!StringUtils.isNullOrBlanK(date)) {
             map.put("date", date);
         }
-        map.put("date_type", "week");
-        map.put("state", "closed");
+        map.put("date_type", "month");
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getInstance().getUserId() + "/schedule_data", map), null,
 
                 new VolleyListener(ClassTimeTableActivity.this) {
@@ -147,7 +146,7 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
         View emptyView = View.inflate(this, R.layout.empty_view, null);
         TextView textEmpty = (TextView) emptyView.findViewById(R.id.text_empty);
-        textEmpty.setText("本周暂无数据");
+        textEmpty.setText("暂无数据");
         listView.setEmptyView(emptyView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
