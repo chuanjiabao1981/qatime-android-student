@@ -291,9 +291,6 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
     private void toNext() {
         Intent intent = new Intent(InteractCourseDetailActivity.this, InteractiveLiveActivity.class);
         intent.putExtra("id", data.getData().getId());
-        if (data.getData().getChat_team() != null) {
-            intent.putExtra("teamId", data.getData().getChat_team().getTeam_id());
-        }
         startActivity(intent);
     }
 

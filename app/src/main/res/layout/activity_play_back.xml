@@ -14,6 +14,22 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+        <ImageView
+            android:id="@+id/video_no_data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@mipmap/video_no_data"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/buffering"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@mipmap/video_loading"
+            android:visibility="gone" />
+
         <RelativeLayout
             android:id="@+id/control"
             android:layout_width="match_parent"
@@ -33,10 +49,52 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="#ccc" />
+        android:background="#dfdddd" />
 
+    <LinearLayout
+        android:id="@+id/teacher_layout"
+        android:layout_width="wrap_content"
+        android:padding="10dp"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="5dp"
+            android:src="@mipmap/personal_information_head" />
+
+        <TextView
+            android:id="@+id/teacher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="老师"
+            android:textColor="#666"
+            android:textSize="13sp" />
+
+        <ImageView
+            android:id="@+id/sex"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginLeft="5dp"
+            android:src="@mipmap/male" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            style="@style/setting_icon_margin_right"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:src="@mipmap/personal_enter" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#dfdddd" />
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -59,46 +117,6 @@
             android:text="年级科目"
             android:textColor="#666"
             android:textSize="13sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="授课教师："
-            android:textColor="#666"
-            android:textSize="13sp" />
-
-        <LinearLayout
-            android:id="@+id/teacher_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/image"
-                android:layout_width="14dp"
-                android:layout_height="14dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="10dp"
-                android:src="@mipmap/photo" />
-
-            <TextView
-                android:id="@+id/teacher"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="老师"
-                android:textColor="#666"
-                android:textSize="13sp" />
-
-            <ImageView
-                android:id="@+id/sex"
-                android:layout_width="14dp"
-                android:layout_height="14dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:src="@mipmap/male" />
-        </LinearLayout>
-
 
         <TextView
             android:layout_width="wrap_content"

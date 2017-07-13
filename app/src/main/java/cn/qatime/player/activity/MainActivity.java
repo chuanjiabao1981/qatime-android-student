@@ -1,8 +1,6 @@
 package cn.qatime.player.activity;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -15,7 +13,6 @@ import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,7 +40,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,14 +64,12 @@ import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.qrcore.core.CaptureActivity;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
-import cn.qatime.player.utils.LogCatHelper;
 import cn.qatime.player.utils.UrlUtils;
 import io.vov.vitamio.utils.FileUtils;
 import libraryextra.bean.CashAccountBean;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
 import libraryextra.bean.SystemNotifyBean;
-import libraryextra.utils.FileUtil;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -113,7 +107,7 @@ public class MainActivity extends BaseFragmentActivity {
     private void refreshUnreadNum() {
         if (BaseApplication.getInstance().isLogined()) {
             int unreadNum = NIMClient.getService(MsgService.class).getTotalUnreadCount();
-            Logger.e("unreadNum" + unreadNum);
+//            Logger.e("unreadNum" + unreadNum);
             message_x.setVisibility(unreadNum == 0 ? View.GONE : View.VISIBLE);
         }
     }
@@ -322,7 +316,6 @@ public class MainActivity extends BaseFragmentActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
-        checkUserInfo();
         if (!StringUtils.isNullOrBlanK(intent.getStringExtra("out")) || (!StringUtils.isNullOrBlanK(intent.getStringExtra("sign")))) {
             Intent start = new Intent(this, LoginActivity.class);
             if (!StringUtils.isNullOrBlanK(intent.getStringExtra("sign"))) {
@@ -352,35 +345,35 @@ public class MainActivity extends BaseFragmentActivity {
                     }
                 }
             }
-        } else if (!StringUtils.isNullOrBlanK(getIntent().getStringExtra("kickOut"))) {
-            BaseApplication.getInstance().clearToken();
-            View view = View.inflate(this, R.layout.dialog_confirm, null);
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            alertDialog = builder.create();
-            TextView text = (TextView) view.findViewById(R.id.text);
-            text.setText(getResourceString(R.string.login_has_expired));
-            Button confirm = (Button) view.findViewById(R.id.confirm);
-            confirm.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    alertDialog.dismiss();
-                    Intent start = new Intent(MainActivity.this, LoginActivity.class);
-                    BaseApplication.getInstance().clearToken();
-                    startActivity(start);
-                    finish();
-                }
-            });
-            alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    Intent start = new Intent(MainActivity.this, LoginActivity.class);
-                    BaseApplication.getInstance().clearToken();
-                    startActivity(start);
-                    finish();
-                }
-            });
-            alertDialog.show();
-            alertDialog.setContentView(view);
+//        } else if (!StringUtils.isNullOrBlanK(getIntent().getStringExtra("kickOut"))) {
+//            BaseApplication.getInstance().clearToken();
+//            View view = View.inflate(this, R.layout.dialog_confirm, null);
+//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//            alertDialog = builder.create();
+//            TextView text = (TextView) view.findViewById(R.id.text);
+//            text.setText(getResourceString(R.string.login_has_expired));
+//            Button confirm = (Button) view.findViewById(R.id.confirm);
+//            confirm.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    alertDialog.dismiss();
+//                    Intent start = new Intent(MainActivity.this, LoginActivity.class);
+//                    BaseApplication.getInstance().clearToken();
+//                    startActivity(start);
+//                    finish();
+//                }
+//            });
+//            alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+//                @Override
+//                public void onCancel(DialogInterface dialog) {
+//                    Intent start = new Intent(MainActivity.this, LoginActivity.class);
+//                    BaseApplication.getInstance().clearToken();
+//                    startActivity(start);
+//                    finish();
+//                }
+//            });
+//            alertDialog.show();
+//            alertDialog.setContentView(view);
         } else {
             //云信通知消息
             setIntent(intent);
@@ -396,6 +389,7 @@ public class MainActivity extends BaseFragmentActivity {
                     //转到系统消息页面
                     (data.hasExtra("type") && data.getStringExtra("type").equals("system_message"))) {
                 if (fragBaseFragments != null && fragBaseFragments.size() > 0 && fragBaseFragments.get(3) instanceof FragmentHomeMessage) {
+                    fragmentlayout.setCurrenItem(3);
                     ((FragmentHomeMessage) fragBaseFragments.get(3)).setMessage(data);
                 }
             }
@@ -445,6 +439,7 @@ public class MainActivity extends BaseFragmentActivity {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
         NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, false);
+        NIMClient.getService(MsgServiceObserve.class).observeRecentContact(messageObserver, false);
 //        NIMClient.getService(AuthServiceObserver.class).observeOtherClients(clientsObserver, false);
     }
 

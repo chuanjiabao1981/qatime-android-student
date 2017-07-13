@@ -77,9 +77,12 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
     private void initData() {
         Map<String, String> map = new HashMap<>();
         if (!StringUtils.isNullOrBlanK(date)) {
-            map.put("month", date);
+            map.put("date", date);
         }
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getInstance().getUserId() + "/schedule", map), null,
+        map.put("date_type", "week");
+        map.put("state", "closed");
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getInstance().getUserId() + "/schedule_data", map), null,
+
                 new VolleyListener(ClassTimeTableActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -142,16 +145,19 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
-        listView.setEmptyView(View.inflate(ClassTimeTableActivity.this, R.layout.empty_view, null));
+        View emptyView = View.inflate(this, R.layout.empty_view, null);
+        TextView textEmpty = (TextView) emptyView.findViewById(R.id.text_empty);
+        textEmpty.setText("本周暂无数据");
+        listView.setEmptyView(emptyView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if ("LiveStudio::Lesson".equals(itemList.get(position - 1).getModal_type())) {
+                if ("LiveStudio::Lesson".equals(itemList.get(position - 1).getModel_type())) {
                     Intent intent = new Intent(ClassTimeTableActivity.this, RemedialClassDetailActivity.class);
                     intent.putExtra("id", Integer.valueOf(itemList.get(position - 1).getProduct_id()));
                     intent.putExtra("pager", 2);
                     startActivity(intent);
-                } else if ("LiveStudio::InteractiveLesson".equals(itemList.get(position - 1).getModal_type())) {
+                } else if ("LiveStudio::InteractiveLesson".equals(itemList.get(position - 1).getModel_type())) {
                     Intent intent = new Intent(ClassTimeTableActivity.this, InteractCourseDetailActivity.class);
                     intent.putExtra("id", Integer.valueOf(itemList.get(position - 1).getProduct_id()));
                     intent.putExtra("pager", 2);
@@ -161,10 +167,14 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         });
         adapter = new CommonAdapter<ClassTimeTableBean.DataBean.LessonsBean>(this, itemList, R.layout.item_activity_class_time_table) {
             @Override
-            public void convert(final ViewHolder helper, final ClassTimeTableBean.DataBean.LessonsBean item, final int position) {
+            public void convert(final ViewHolder helper, final ClassTimeTableBean.DataBean.LessonsBean item, int position) {
                 Glide.with(ClassTimeTableActivity.this).load(item.getCourse_publicize()).placeholder(R.mipmap.error_header_rect).centerCrop().crossFade().dontAnimate().into((ImageView) helper.getView(R.id.image));
 //                helper.setText(R.id.course, item.getCourse_name());
                 helper.setText(R.id.classname, item.getName());
+                //试听状态
+                TextView taste = helper.getView(R.id.taste);
+
+                taste.setVisibility(item.isTaste() ? View.VISIBLE : View.GONE);
                 try {
                     Date date = parse.parse(item.getClass_date());
                     helper.setText(R.id.class_date, getMonth(date.getMonth()) + "-" + getDay(date.getDate()) + "  ");
@@ -177,10 +187,10 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                 helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
-                if ("LiveStudio::Lesson".equals(itemList.get(position).getModal_type())) {
+                if ("LiveStudio::Lesson".equals(itemList.get(position).getModel_type())) {
                     helper.getView(R.id.modal_type).setBackgroundColor(0xffff4856);
                     helper.setText(R.id.modal_type, "直播课");
-                } else if ("LiveStudio::InteractiveLesson".equals(itemList.get(position).getModal_type())) {
+                } else if ("LiveStudio::InteractiveLesson".equals(itemList.get(position).getModel_type())) {
                     helper.getView(R.id.modal_type).setBackgroundColor(0xff4856ff);
                     helper.setText(R.id.modal_type, "一对一");
                 }
@@ -193,12 +203,11 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if ("LiveStudio::Lesson".equals(itemList.get(position).getModal_type())) {
+                        if ("LiveStudio::Lesson".equals(item.getModel_type())) {
                             Intent intent = new Intent(ClassTimeTableActivity.this, NEVideoPlayerActivity.class);
                             intent.putExtra("id", Integer.valueOf(item.getProduct_id()));
-                            intent.putExtra("sessionId", item.getChat_team_id());
                             startActivity(intent);
-                        } else if ("LiveStudio::InteractiveLesson".equals(itemList.get(position).getModal_type())) {
+                        } else if ("LiveStudio::InteractiveLesson".equals(item.getModel_type())) {
                             ClassTimeTableActivity.this.item = item;
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                 if (NetUtils.checkPermission(ClassTimeTableActivity.this).size() > 0) {
@@ -253,7 +262,6 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
     private void toNext() {
         Intent intent = new Intent(ClassTimeTableActivity.this, InteractiveLiveActivity.class);
         intent.putExtra("id", Integer.valueOf(item.getProduct_id()));
-        intent.putExtra("teamId", item.getChat_team_id());
         startActivity(intent);
     }
 

@@ -2,7 +2,6 @@ package cn.qatime.player.activity;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -36,10 +35,8 @@ import com.netease.nimlib.sdk.avchat.model.AVChatOptionalConfig;
 import com.netease.nimlib.sdk.avchat.model.AVChatParameters;
 import com.netease.nimlib.sdk.avchat.model.AVChatVideoFrame;
 import com.netease.nimlib.sdk.avchat.model.AVChatVideoRender;
-import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
-import com.netease.nimlib.sdk.msg.model.CustomMessageConfig;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.rts.RTSCallback;
 import com.netease.nimlib.sdk.rts.RTSChannelStateObserver;
@@ -63,13 +60,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cn.qatime.player.BuildConfig;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.bean.InputPanel;
-import cn.qatime.player.bean.InteractiveDeskShareStatus;
 import cn.qatime.player.bean.InteractiveLiveStatusBean;
 import cn.qatime.player.fragment.FragmentInteractiveAnnouncements;
 import cn.qatime.player.fragment.FragmentInteractiveBoard;
@@ -89,7 +84,6 @@ import cn.qatime.player.utils.annotation.OnMPermissionDenied;
 import cn.qatime.player.utils.annotation.OnMPermissionGranted;
 import cn.qatime.player.utils.annotation.OnMPermissionNeverAskAgain;
 import cn.qatime.player.view.VideoFrameLayout;
-import custom.Configure;
 import libraryextra.bean.Announcements;
 import libraryextra.bean.InteractCourseDetailBean;
 import libraryextra.bean.PersonalInformationBean;
@@ -127,7 +121,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
      * 聊天室基本信息
      */
     private String roomId;
-    private String sessionId;
+    private String sessionId = "";
     private FragmentInteractiveBoard rtsFragment;
     private Handler hd = new Handler();
     private Runnable hideBackLayout = new Runnable() {
@@ -214,7 +208,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         setContentView(rootView);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        sessionId = getIntent().getStringExtra("teamId");
         initView();
         EventBus.getDefault().register(this);
 
@@ -223,12 +216,18 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 requestLivePermission();
             } else {
                 id = getIntent().getIntExtra("id", 0);
+                if (id == 0) {
+                    Toast.makeText(this, getResourceString(R.string.no_course_information), Toast.LENGTH_SHORT).show();
+                }
                 initData();
                 getAnnouncementsData();
                 hd.postDelayed(loopStatus, 500);
             }
         } else {
             id = getIntent().getIntExtra("id", 0);
+            if (id == 0) {
+                Toast.makeText(this, getResourceString(R.string.no_course_information), Toast.LENGTH_SHORT).show();
+            }
             initData();
             getAnnouncementsData();
             hd.postDelayed(loopStatus, 500);
@@ -279,25 +278,31 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                             InteractCourseDetailBean data = JsonUtils.objectFromJson(response.toString(), InteractCourseDetailBean.class);
                             if (data != null && data.getData() != null) {
                                 ((FragmentInteractiveDetails) fragBaseFragments.get(3)).setData(data.getData());
+                                sessionId = data.getData().getChat_team().getTeam_id();
                             }
+                            initSessionId();
                         }
 
                         @Override
                         protected void onError(JSONObject response) {
-
+                            initSessionId();
                         }
 
                         @Override
                         protected void onTokenOut() {
+                            initSessionId();
                             tokenOut();
                         }
                     }, new VolleyErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
                     super.onErrorResponse(volleyError);
+                    initSessionId();
                 }
             });
             addToRequestQueue(request);
+        } else {
+            initSessionId();
         }
     }
 
@@ -314,14 +319,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         zoom = (ImageView) findViewById(R.id.zoom);
         ImageView switchCamera = (ImageView) findViewById(R.id.switch_camera);
         videoLayout = (VideoFrameLayout) findViewById(R.id.video_layout);
-        if (!StringUtils.isNullOrBlanK(sessionId)) {
-            TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getInstance().getAccount());
-            if (team != null) {
-                isMute = team.isMute();
-            }
-        }
-        inputPanel = new InputPanel(this, this, rootView, false, sessionId);
-        inputPanel.setMute(isMute);
+
 
         fragBaseFragments.add(new FragmentInteractiveBoard());
         fragBaseFragments.add(new FragmentInteractiveMessage());
@@ -341,10 +339,14 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff999999);
                 ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff333333);
                 if (position == 1) {
-                    inputPanel.visibilityInput();
+                    if (inputPanel != null) {
+                        inputPanel.visibilityInput();
+                    }
                     messageFragment.scrollToBottom();
                 } else {
-                    inputPanel.goneInput();
+                    if (inputPanel != null) {
+                        inputPanel.goneInput();
+                    }
                     if (position == 0) {
                         hd.postDelayed(new Runnable() {
                             @Override
@@ -358,9 +360,11 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_interactive_live, 0x0912);
         fragmentlayout.getViewPager().setOffscreenPageLimit(4);
-
         rtsFragment = (FragmentInteractiveBoard) fragBaseFragments.get(0);
-        messageFragment = (FragmentInteractiveMessage) fragBaseFragments.get(1);
+        videoPermission.setOnClickListener(this);
+        audioPermission.setOnClickListener(this);
+        zoom.setOnClickListener(this);
+        switchCamera.setOnClickListener(this);
         viewLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -375,10 +379,18 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         });
         hd.postDelayed(hideBackLayout, 3000);
 
-        videoPermission.setOnClickListener(this);
-        audioPermission.setOnClickListener(this);
-        zoom.setOnClickListener(this);
-        switchCamera.setOnClickListener(this);
+    }
+
+    private void initSessionId() {
+        if (!StringUtils.isNullOrBlanK(sessionId)) {
+            TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getInstance().getAccount());
+            if (team != null) {
+                isMute = team.isMute();
+            }
+        }
+        inputPanel = new InputPanel(this, this, rootView, false, sessionId);
+        inputPanel.setMute(isMute);
+        messageFragment = (FragmentInteractiveMessage) fragBaseFragments.get(1);
 
         messageFragment.setChatCallBack(new FragmentInteractiveMessage.Callback() {
             @Override
@@ -401,7 +413,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             }
         });
         messageFragment.setSessionId(sessionId);
-        messageFragment.requestTeamInfo();
 
         inputPanel.setOnInputShowListener(new InputPanel.OnInputShowListener() {
             @Override
@@ -481,7 +492,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 Logger.e("join channel failed, code:" + i);
                 LogCatHelper.getInstance(null).log("join channel failed, code:" + i);
                 hd.removeCallbacks(loopStatus);
-                hd.postDelayed(loopStatus,15000);
+                hd.postDelayed(loopStatus, 15000);
             }
 
             @Override
@@ -602,9 +613,8 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     private void zoom() {
         if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            zoom.setImageResource(R.mipmap.narrow);
+
         } else {
-            zoom.setImageResource(R.mipmap.enlarge);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
     }
@@ -991,6 +1001,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 //        int screenWidth = ScreenUtils.getScreenWidth(InteractiveLiveActivity.this);
 //        int screenHeight = ScreenUtils.getScreenHeight(InteractiveLiveActivity.this);
         if (newConfig.orientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+            zoom.setImageResource(R.mipmap.enlarge);
             WindowManager.LayoutParams attrs = getWindow().getAttributes();
             attrs.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
             getWindow().setAttributes(attrs);
@@ -1010,6 +1021,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 }
             }
         } else {
+            zoom.setImageResource(R.mipmap.narrow);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
             ViewGroup.LayoutParams params = viewLayout.getLayoutParams();
             params.height = -1;
@@ -1173,6 +1185,14 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     @Override
     protected void onResume() {
         super.onResume();
+        if (isShowTime) {
+            for (String s : userJoinedList) {
+                if (!s.equals(BaseApplication.getInstance().getAccount())) {
+                    AVChatManager.getInstance().muteRemoteAudio(s, false);
+                    AVChatManager.getInstance().muteRemoteVideo(s, false);
+                }
+            }
+        }
         MobclickAgent.onResume(this);
         NIMClient.getService(MsgService.class).setChattingAccount(sessionId, SessionTypeEnum.Team);
     }
@@ -1180,6 +1200,14 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     @Override
     protected void onPause() {
         super.onPause();
+        if (isShowTime) {
+            for (String s : userJoinedList) {
+                if (!s.equals(BaseApplication.getInstance().getAccount())) {
+                    AVChatManager.getInstance().muteRemoteAudio(s, true);
+                    AVChatManager.getInstance().muteRemoteVideo(s, true);
+                }
+            }
+        }
         inputPanel.onPause();
         MobclickAgent.onPause(this);
         NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);

@@ -411,10 +411,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                         Toast.makeText(this, getString(R.string.published_course_unable_enter) + getString(R.string.audition), Toast.LENGTH_SHORT).show();
                     } else {
                         intent = new Intent(RemedialClassDetailActivity.this, NEVideoPlayerActivity.class);
-//                    intent.putExtra("camera", data.getData().getCamera());
-//                    intent.putExtra("board", data.getData().getBoard());
                         intent.putExtra("id", data.getData().getId());
-                        intent.putExtra("sessionId", data.getData().getCourse().getChat_team_id());
                         startActivity(intent);
                     }
                 } else {
@@ -442,10 +439,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                         Toast.makeText(this, getString(R.string.published_course_unable_enter) + getString(R.string.study), Toast.LENGTH_SHORT).show();
                     } else {
                         intent = new Intent(RemedialClassDetailActivity.this, NEVideoPlayerActivity.class);
-//                    intent.putExtra("camera", data.getData().getCamera());
-//                    intent.putExtra("board", data.getData().getBoard());
                         intent.putExtra("id", data.getData().getId());
-                        intent.putExtra("sessionId", data.getData().getChat_team_id());
                         startActivity(intent);
                     }
                 } else {

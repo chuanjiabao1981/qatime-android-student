@@ -63,10 +63,10 @@
                     android:layout_weight="1" />
 
                 <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
                     android:layout_margin="2dp"
-                    android:src="@mipmap/buy_count" />
+                    android:src="@mipmap/eyes_play_back" />
 
                 <TextView
                     android:id="@+id/buy_count"
