@@ -37,6 +37,7 @@ import cn.qatime.player.bean.MessageListPanel;
 import cn.qatime.player.bean.ModuleProxy;
 import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.TeamDataCache;
+import libraryextra.utils.StringUtils;
 
 public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
     private TextView tipText;
@@ -67,22 +68,26 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
         }
     };
     private MessageListPanel messageListPanel;
+    private View view;
+    private String owner;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = View.inflate(getActivity(), R.layout.fragment_player_message, null);
+        view = View.inflate(getActivity(), R.layout.fragment_player_message, null);
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         initView(view);
         hasLoad = true;
         registerTeamUpdateObserver(true);
-        return view;
     }
 
     private void initView(View view) {
         tipText = (TextView) view.findViewById(R.id.tip);
-
-        Container container = new Container(getActivity(), sessionId, this);
-        messageListPanel = new MessageListPanel(container, view);
     }
 
     @Override
@@ -138,7 +143,9 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
                 if (chatCallback != null) {
                     chatCallback.back(addedListItems);
                 }
-                messageListPanel.onIncomingMessage(addedListItems);
+                if (messageListPanel != null) {
+                    messageListPanel.onIncomingMessage(addedListItems);
+                }
             }
         }
     };
@@ -147,7 +154,7 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
      * 请求群基本信息
      */
 
-    public void requestTeamInfo() {
+    private void requestTeamInfo() {
         Team team = TeamDataCache.getInstance().getTeamById(sessionId);
         if (team != null) {
             updateTeamInfo(team);
@@ -233,7 +240,9 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
 
         @Override
         public void onUpdateTeamMember(List<TeamMember> members) {
-            messageListPanel.refreshMessageList();
+            if (messageListPanel != null) {
+                messageListPanel.refreshMessageList();
+            }
         }
 
         @Override
@@ -244,6 +253,12 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+        requestTeamInfo();
+        Container container = new Container(getActivity(), sessionId, this);
+        messageListPanel = new MessageListPanel(container, view);
+        if (!StringUtils.isNullOrBlanK(owner)) {
+            messageListPanel.setOwner(owner);
+        }
     }
 
     public void setChatCallBack(Callback c) {
@@ -253,15 +268,20 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
     public void setOwner(String owner) {
         if (messageListPanel != null) {
             messageListPanel.setOwner(owner);
-        }
+        } else
+            this.owner = owner;
     }
 
     public void onMsgSend(IMMessage message) {
-        messageListPanel.onMsgSend(message);
+        if (messageListPanel != null) {
+            messageListPanel.onMsgSend(message);
+        }
     }
 
     public void scrollToBottom() {
-        messageListPanel.scrollToBottom();
+        if (messageListPanel != null) {
+            messageListPanel.scrollToBottom();
+        }
     }
 
     public interface Callback {

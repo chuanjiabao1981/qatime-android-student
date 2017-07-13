@@ -90,8 +90,6 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
     private void initView() {
         tipText = (TextView) findViewById(R.id.tip);
 
-        Container container = new Container(getActivity(), sessionId, this);
-        messageListPanel = new MessageListPanel(container, view);
     }
 
     @Override
@@ -131,7 +129,7 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
                         break;
                     }
                 }
-                if (messageListPanel.isMyMessage(message)) {
+                if (messageListPanel != null && messageListPanel.isMyMessage(message)) {
                     if (message.getMsgType() == MsgTypeEnum.notification) {//收到公告更新通知消息,通知公告页面刷新公告
                         if (((NotificationAttachment) message.getAttachment()).getType() == NotificationType.UpdateTeam) {
                             UpdateTeamAttachment a = (UpdateTeamAttachment) message.getAttachment();
@@ -163,7 +161,9 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
                 if (chatCallback != null) {
                     chatCallback.back(addedListItems);
                 }
-                messageListPanel.onIncomingMessage(addedListItems);
+                if (messageListPanel != null) {
+                    messageListPanel.onIncomingMessage(addedListItems);
+                }
             }
         }
     };
@@ -172,7 +172,7 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
      * 请求群基本信息
      */
 
-    public void requestTeamInfo() {
+    private void requestTeamInfo() {
         Team team = TeamDataCache.getInstance().getTeamById(sessionId);
         if (team != null) {
             updateTeamInfo(team);
@@ -258,7 +258,9 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
 
         @Override
         public void onUpdateTeamMember(List<TeamMember> members) {
-            messageListPanel.refreshMessageList();
+            if (messageListPanel != null) {
+                messageListPanel.refreshMessageList();
+            }
         }
 
         @Override
@@ -268,24 +270,25 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+        Container container = new Container(getActivity(), sessionId, this);
+        messageListPanel = new MessageListPanel(container, view);
+        requestTeamInfo();
     }
 
     public void setChatCallBack(Callback c) {
         this.chatCallback = c;
     }
 
-    public void setOwner(String owner) {
+    public void onMsgSend(IMMessage message) {
         if (messageListPanel != null) {
-            messageListPanel.setOwner(owner);
+            messageListPanel.onMsgSend(message);
         }
     }
 
-    public void onMsgSend(IMMessage message) {
-        messageListPanel.onMsgSend(message);
-    }
-
     public void scrollToBottom() {
-        messageListPanel.scrollToBottom();
+        if (messageListPanel != null) {
+            messageListPanel.scrollToBottom();
+        }
     }
 
     public interface Callback {
