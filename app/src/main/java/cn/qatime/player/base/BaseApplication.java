@@ -176,17 +176,15 @@ public class BaseApplication extends MultiDexApplication {
                     mPushAgent.addAlias(String.valueOf(getUserId()), "student", new UTrack.ICallBack() {
                         @Override
                         public void onMessage(boolean b, String s) {
-                            Logger.e("添加别名" + b);
                         }
                     });
                 }
                 mPushAgent.getTagManager().add(new TagManager.TCallBack() {
                     @Override
                     public void onMessage(boolean b, ITagManager.Result result) {
-                        Logger.e("添加tag" + b);
                     }
                 }, "student");
-                Logger.e("device" + deviceToken);
+//                Logger.e("device" + deviceToken);
             }
 
             @Override

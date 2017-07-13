@@ -80,7 +80,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     private int id;
     private FragmentPlayerMessage fragment2;
-    private String sessionId="";
+    private String sessionId = "";
     private SessionTypeEnum sessionType = SessionTypeEnum.Team;
     private boolean isMute = false;//当前用户 是否被禁言
 
@@ -332,10 +332,12 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff999999);
                 ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xffff5842);
                 if (position == 0) {
-                    inputPanel.visibilityInput();
+                    if (inputPanel != null)
+                        inputPanel.visibilityInput();
                     ((FragmentPlayerMessage) fragBaseFragments.get(0)).scrollToBottom();
                 } else {
-                    inputPanel.goneInput();
+                    if (inputPanel != null)
+                        inputPanel.goneInput();
                 }
                 if (isSubBig) {
                     floatFragment.setSubOpen(true);
@@ -347,12 +349,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         });
         fragmentLayout.setAdapter(fragBaseFragments, R.layout.tablayout_nevideo_player, 0x0102);
         fragmentLayout.getViewPager().setOffscreenPageLimit(3);
-
-
-
     }
 
     private void initSessionId() {
+        floatFragment.setSessionId(sessionId);
         if (!StringUtils.isNullOrBlanK(sessionId)) {
             TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getInstance().getAccount());
             if (team != null) {
@@ -394,7 +394,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         });
 
         fragment2.setSessionId(sessionId);
-        fragment2.requestTeamInfo();
 
 
         inputPanel.setOnInputShowListener(new InputPanel.OnInputShowListener() {
@@ -489,7 +488,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 }
             });
             addToRequestQueue(request);
-        }else{
+        } else {
             initSessionId();
         }
     }

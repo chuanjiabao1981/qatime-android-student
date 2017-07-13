@@ -361,20 +361,6 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
     }
 
-//    @Subscribe
-//    public void onEvent(ChatVideoBean event) {
-//        if (event != null) {
-//            this.courseId = event.getCourseId();
-//            if (messageListPanel != null) {
-//                messageListPanel.setOwner(event.getChat_team_owner());
-//            }
-//            if (!StringUtils.isNullOrBlanK(event.getName())) {
-//                setTitles(event.getName());
-//            } else {
-//                setTitles(getResources().getString(R.string.team_group));
-//            }
-//        }
-//    }
 
     @Override
     protected void onDestroy() {
@@ -382,7 +368,6 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         registerObservers(false);
         registerTeamUpdateObserver(false);
         messageListPanel.onDestroy();
-//        EventBus.getDefault().unregister(this);
     }
 
 }

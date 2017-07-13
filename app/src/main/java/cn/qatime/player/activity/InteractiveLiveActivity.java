@@ -301,7 +301,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 }
             });
             addToRequestQueue(request);
-        }else{
+        } else {
             initSessionId();
         }
     }
@@ -339,10 +339,14 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 ((TextView) lastTabView.findViewById(tab_text[lastPosition])).setTextColor(0xff999999);
                 ((TextView) currentTabView.findViewById(tab_text[position])).setTextColor(0xff333333);
                 if (position == 1) {
-                    inputPanel.visibilityInput();
+                    if (inputPanel != null) {
+                        inputPanel.visibilityInput();
+                    }
                     messageFragment.scrollToBottom();
                 } else {
-                    inputPanel.goneInput();
+                    if (inputPanel != null) {
+                        inputPanel.goneInput();
+                    }
                     if (position == 0) {
                         hd.postDelayed(new Runnable() {
                             @Override
@@ -409,7 +413,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             }
         });
         messageFragment.setSessionId(sessionId);
-        messageFragment.requestTeamInfo();
 
         inputPanel.setOnInputShowListener(new InputPanel.OnInputShowListener() {
             @Override
