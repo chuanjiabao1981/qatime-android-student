@@ -43,7 +43,6 @@ import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
-import cn.qatime.player.utils.SPUtils;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.OrderPayBean;
 import libraryextra.bean.PersonalInformationBean;
@@ -296,15 +295,15 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 transferPrice.setVisibility(View.VISIBLE);
                 layoutView.setVisibility(View.GONE);
                 price.setVisibility(View.GONE);
-                if (data.getData().getTicket() == null) {//没有加入,需要加入
+                if (data.getData().getTicket() != null) {//已购买
                     if (!Constant.CourseStatus.completed.equals(data.getData().getCourse().getStatus())) {
                         startStudyView.setVisibility(View.VISIBLE);
-                        startStudy.setText("立即报名");
                     } else {
                         handleLayout.setVisibility(View.GONE);
                     }
                 } else {
                     startStudyView.setVisibility(View.VISIBLE);
+                    startStudy.setText("立即报名");
                     if (data.getData().getCourse().isOff_shelve()) {
                         startStudy.setText("已下架");
                         startStudy.setEnabled(false);

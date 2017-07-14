@@ -15,6 +15,7 @@
  */
 package io.vov.vitamio.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 
@@ -29,6 +30,7 @@ public class ContextUtils {
 		return version;
 	}
 
+	@SuppressLint("SdCardPath")
 	public static String getDataDir(Context ctx) {
 		ApplicationInfo ai = ctx.getApplicationInfo();
 		if (ai.dataDir != null)

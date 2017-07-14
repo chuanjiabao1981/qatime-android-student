@@ -130,8 +130,8 @@ public class MediaScanner {
   }
 
   private boolean inScanDirectory(String path, String[] directories) {
-    for (int i = 0; i < directories.length; i++) {
-      if (path.startsWith(directories[i]))
+    for (String directory : directories) {
+      if (path.startsWith(directory))
         return true;
     }
     return false;

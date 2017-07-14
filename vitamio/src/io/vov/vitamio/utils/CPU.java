@@ -140,7 +140,7 @@ public class CPU {
 
 	private static int getCachedFeature() {
 		if (cachedFeatureString == null) {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			if ((cachedFeature & FEATURE_ARM_V5TE) > 0)
 				sb.append("V5TE ");
 			if ((cachedFeature & FEATURE_ARM_V6) > 0)

@@ -158,13 +158,9 @@ class ExternalStorage {
     }
 
     public boolean isSdkStorageReady() {
-        String externalRoot = Environment.getExternalStorageDirectory().getAbsolutePath();
-        if (this.sdkStorageRoot.startsWith(externalRoot)) {
-            return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
-        } else {
-            return true;
-        }
-    }
+		String externalRoot = Environment.getExternalStorageDirectory().getAbsolutePath();
+		return !this.sdkStorageRoot.startsWith(externalRoot) || Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+	}
 
 	/**
 	 * 获取外置存储卡剩余空间

@@ -4,6 +4,5 @@
 .idea/
 .DS_Store
 /captures
-.idea/
 *.apk
 build/

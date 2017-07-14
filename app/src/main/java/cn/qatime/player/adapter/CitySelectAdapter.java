@@ -139,7 +139,7 @@ public abstract class CitySelectAdapter extends BaseAdapter {
         if (StringUtils.isNullOrBlanK(value)) {
             return -1;
         } else {
-            return value.intValue();
+            return value;
         }
     }
 

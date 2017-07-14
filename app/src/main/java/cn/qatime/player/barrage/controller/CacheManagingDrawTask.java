@@ -592,7 +592,7 @@ public class CacheManagingDrawTask extends DrawTask {
                     case SEEK:
                         Long seekMills = (Long) msg.obj;
                         if (seekMills != null) {
-                            long seekCacheTime = seekMills.longValue();
+                            long seekCacheTime = seekMills;
                             long oldCacheTime = mCacheTimer.currMillisecond;
                             mCacheTimer.update(seekCacheTime);
                             mSeekedFlag = true;
@@ -1014,7 +1014,7 @@ public class CacheManagingDrawTask extends DrawTask {
             requestClear();
         } else if (tag.isVisibilityRelatedTag()) {
             if (values != null && values.length > 0) {
-                if (values[0] != null && ((values[0] instanceof Boolean) == false || ((Boolean) values[0]).booleanValue())) {
+                if (values[0] != null && (!(values[0] instanceof Boolean) || (Boolean) values[0])) {
                     if (mCacheManager != null) {
                         mCacheManager.requestBuild(0l);
                     }

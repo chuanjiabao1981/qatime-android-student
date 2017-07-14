@@ -1,13 +1,8 @@
 package cn.qatime.player.utils;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.style.ImageSpan;
 
 import com.orhanobut.logger.Logger;
 
@@ -19,7 +14,6 @@ import java.util.regex.Pattern;
 import cn.qatime.player.R;
 import cn.qatime.player.view.AnimatedImageSpan;
 import cn.qatime.player.view.GifDrawable;
-import cn.qatime.player.view.VerticalImageSpan;
 
 public class ExpressionUtil {
     public static String emoji = "\\[em_\\d{1,2}\\]";

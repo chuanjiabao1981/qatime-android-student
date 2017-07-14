@@ -52,10 +52,7 @@ public class TransactionCenter {
      * 网络变化
      */
     public boolean onNetWorkChange(String sessionId, boolean isCreator) {
-        if (onlineStatusObservers.containsKey(sessionId)) {
-            return onlineStatusObservers.get(sessionId).onNetWorkChange(isCreator);
-        }
-        return false;
+        return onlineStatusObservers.containsKey(sessionId) && onlineStatusObservers.get(sessionId).onNetWorkChange(isCreator);
     }
 
     /**

@@ -3,15 +3,10 @@ package cn.qatime.player.view;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
-
-import com.orhanobut.logger.Logger;
 
 import libraryextra.utils.ScreenUtils;
 

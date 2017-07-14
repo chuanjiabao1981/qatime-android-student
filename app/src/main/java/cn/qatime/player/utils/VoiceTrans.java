@@ -13,20 +13,13 @@ import android.widget.TextView;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.google.gson.JsonObject;
 import com.netease.nimlib.sdk.AbortableFuture;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.RequestCallback;
-import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.attachment.AudioAttachment;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.orhanobut.logger.Logger;
 
-import org.apache.http.client.methods.HttpPost;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +27,6 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import libraryextra.utils.FileUtil;
 import libraryextra.utils.VolleyErrorListener;
-import libraryextra.utils.VolleyListener;
 
 /**
  */

@@ -82,9 +82,11 @@ public class FragmentClassTableUnclosed extends BaseFragment {
                         totalList.clear();
                         try {
                             ClassTimeTableBean data = JsonUtils.objectFromJson(response.toString(), ClassTimeTableBean.class);
-                            totalList.addAll(data.getData());
-                            filterList();
-                            listView.onRefreshComplete();
+                            if (data != null) {
+                                totalList.addAll(data.getData());
+                                filterList();
+                                listView.onRefreshComplete();
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
