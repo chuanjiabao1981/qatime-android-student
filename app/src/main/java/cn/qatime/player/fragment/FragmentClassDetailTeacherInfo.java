@@ -17,7 +17,7 @@ import com.bumptech.glide.Glide;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.base.BaseFragment;
-import libraryextra.bean.RemedialClassDetailBean;
+import cn.qatime.player.bean.LiveLessonDetailBean;
 import libraryextra.bean.SchoolBean;
 import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.FileUtil;
@@ -69,18 +69,18 @@ public class FragmentClassDetailTeacherInfo extends BaseFragment {
         }
     }
 
-    public void setData(final RemedialClassDetailBean data) {
-        if (data.getData() != null && data.getData().getTeacher() != null) {
+    public void setData(final LiveLessonDetailBean data) {
+        if (data.getData() != null && data.getData().getCourse() != null && data.getData().getCourse().getTeacher() != null) {
 //            sex.setText(getSex(data.getData().getTeacher().getGender()));
 //            sex.setTextColor(getSexColor(data.getData().getTeacher().getGender()));
-            sex.setImageResource("male".equals(data.getData().getTeacher().getGender()) ? R.mipmap.male : R.mipmap.female);
-            name.setText(data.getData().getTeacher().getName());
-            if (!StringUtils.isNullOrBlanK(data.getData().getTeacher().getTeaching_years())) {
-                if (data.getData().getTeacher().getTeaching_years().equals("within_three_years")) {
+            sex.setImageResource("male".equals(data.getData().getCourse().getTeacher().getGender()) ? R.mipmap.male : R.mipmap.female);
+            name.setText(data.getData().getCourse().getTeacher().getName());
+            if (!StringUtils.isNullOrBlanK(data.getData().getCourse().getTeacher().getTeaching_years())) {
+                if (data.getData().getCourse().getTeacher().getTeaching_years().equals("within_three_years")) {
                     teachingyears.setText(getResourceString(R.string.within_three_years));
-                } else if (data.getData().getTeacher().getTeaching_years().equals("within_ten_years")) {
+                } else if (data.getData().getCourse().getTeacher().getTeaching_years().equals("within_ten_years")) {
                     teachingyears.setText(getResourceString(R.string.within_ten_years));
-                } else if (data.getData().getTeacher().getTeaching_years().equals("within_twenty_years")) {
+                } else if (data.getData().getCourse().getTeacher().getTeaching_years().equals("within_twenty_years")) {
                     teachingyears.setText(getResourceString(R.string.within_twenty_years));
                 } else {
                     teachingyears.setText(getResourceString(R.string.more_than_ten_years));
@@ -90,7 +90,7 @@ public class FragmentClassDetailTeacherInfo extends BaseFragment {
             SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getFilesDir() + "/school.txt"), SchoolBean.class);
             if (schoolBean != null && schoolBean.getData() != null) {
                 for (int i = 0; i < schoolBean.getData().size(); i++) {
-                    if (data.getData().getTeacher().getSchool() == schoolBean.getData().get(i).getId()) {
+                    if (data.getData().getCourse().getTeacher().getSchool() == schoolBean.getData().get(i).getId()) {
                         school.setText(schoolBean.getData().get(i).getName());
                         break;
                     }
@@ -99,16 +99,16 @@ public class FragmentClassDetailTeacherInfo extends BaseFragment {
                 school.setText(R.string.not_available);
             }
 
-            Glide.with(this).load(data.getData().getTeacher().getAvatar_url()).bitmapTransform(new GlideCircleTransform(getActivity())).placeholder(R.mipmap.error_header).crossFade().into(image);
+            Glide.with(this).load(data.getData().getCourse().getTeacher().getAvatar_url()).bitmapTransform(new GlideCircleTransform(getActivity())).placeholder(R.mipmap.error_header).crossFade().into(image);
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), TeacherDataActivity.class);
-                    intent.putExtra("teacherId", data.getData().getTeacher().getId());
+                    intent.putExtra("teacherId", data.getData().getCourse().getTeacher().getId());
                     startActivity(intent);
                 }
             });
-            String body = StringUtils.isNullOrBlanK(data.getData().getTeacher().getDesc()) ? getString(R.string.no_desc) : data.getData().getTeacher().getDesc();
+            String body = StringUtils.isNullOrBlanK(data.getData().getCourse().getTeacher().getDesc()) ? getString(R.string.no_desc) : data.getData().getCourse().getTeacher().getDesc();
             body = body.replace("\r\n", "<br>");
             String css = "<style>* {color:#666666;margin:0;padding:0}</style>";//默认color（android标签下以及所有未设置颜色的标签）
             describe.loadDataWithBaseURL(null, css + body, "text/html", "UTF-8", null);

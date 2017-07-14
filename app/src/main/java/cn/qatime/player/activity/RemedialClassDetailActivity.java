@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
+import cn.qatime.player.bean.LiveLessonDetailBean;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.config.UserPreferences;
 import cn.qatime.player.fragment.FragmentClassDetailClassInfo;
@@ -46,7 +48,6 @@ import cn.qatime.player.utils.UrlUtils;
 import libraryextra.bean.OrderPayBean;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
-import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.DateUtils;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
@@ -62,7 +63,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     private Button audition;
     private TextView name;
     //    private TextView title;
-    private RemedialClassDetailBean data;
+    private LiveLessonDetailBean data;
     private ViewPager mViewPager;
     private int pager = 0;
     TextView price;
@@ -183,92 +184,8 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 new VolleyListener(RemedialClassDetailActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
+                        data = JsonUtils.objectFromJson(response.toString(), LiveLessonDetailBean.class);
                         setData();
-//                        if (data != null && data.getData() != null && data.getData().getLive_start_time() != null) {
-//                            handleLayout.setVisibility(View.VISIBLE);
-//                            status.setText(getStatus(data.getData().getStatus()));
-//                            name.setText(data.getData().getName());
-//                            title.setText(data.getData().getName());
-//                            studentnumber.setText(getString(R.string.student_number, data.getData().getBuy_tickets_count()));
-//                            String price;
-//                            if (Constant.CourseStatus.completed.equals(data.getData().getStatus())) {
-//                                price = df.format(data.getData().getPrice());
-//                            } else {
-//                                price = df.format(data.getData().getCurrent_price());
-//                            }
-//                            if (price.startsWith(".")) {
-//                                price = "0" + price;
-//                            }
-//                            RemedialClassDetailActivity.this.price.setText("￥" + price);
-//                            if (Constant.CourseStatus.teaching.equals(data.getData().getStatus())) {
-//                                transferPrice.setVisibility(View.VISIBLE);
-//                            } else {
-//                                transferPrice.setVisibility(View.GONE);
-//                            }
-//                            try {
-//                                if (Constant.CourseStatus.published.equals(data.getData().getStatus())) {
-//                                    int value = libraryextra.utils.DateUtils.daysBetween(data.getData().getLive_start_time(), System.currentTimeMillis());
-//                                    progress.setVisibility(View.GONE);
-//                                    if (value > 0) {
-//                                        timeToStart.setVisibility(View.VISIBLE);
-//                                        timeToStart.setText("[" + getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day) + "]");
-//                                    } else {
-//                                        timeToStart.setVisibility(View.GONE);
-////                                        timeToStart.setText(R.string.ready_to_start);
-//                                    }
-//                                    layoutView.setBackgroundColor(0xff00d564);
-//                                } else if (Constant.CourseStatus.teaching.equals(data.getData().getStatus())) {
-//                                    progress.setVisibility(View.VISIBLE);
-//                                    timeToStart.setVisibility(View.GONE);
-//                                    layoutView.setBackgroundColor(0xff00a0e9);
-//                                    progress.setText(getString(R.string.progress_live, data.getData().getClosed_lessons_count(), data.getData().getPreset_lesson_count()));
-//                                } else if (Constant.CourseStatus.completed.equals(data.getData().getStatus())) {
-//                                    timeToStart.setVisibility(View.GONE);
-//                                    progress.setVisibility(View.VISIBLE);
-//                                    layoutView.setBackgroundColor(0xff999999);
-//                                    progress.setText(getString(R.string.progress_live, data.getData().getClosed_lessons_count(), data.getData().getPreset_lesson_count()));
-//                                } else {
-//                                    layoutView.setVisibility(View.INVISIBLE);
-//                                }
-//                            } catch (ParseException e) {
-//                                e.printStackTrace();
-//                            }
-//
-//                            ((FragmentClassDetailClassInfo) fragBaseFragments.get(0)).setData(data);
-//                            ((FragmentClassDetailTeacherInfo) fragBaseFragments.get(1)).setData(data);
-//                            ((FragmentClassDetailClassList) fragBaseFragments.get(2)).setData(data);
-//                            if (data.getData().getIs_bought()) {
-//                                startStudyView.setVisibility(View.VISIBLE);
-//                                if (Constant.CourseStatus.completed.equals(data.getStatus())) {
-//                                    startStudy.setText("已结束");
-//                                    startStudy.setEnabled(false);
-//                                    handleLayout.setVisibility(View.GONE);//已结束的课程隐藏操作按钮
-//                                }
-//
-//                            } else {
-//                                if (data.getData().isOff_shelve()) {//未购买&&已结束：显示已下架
-//                                    startStudyView.setVisibility(View.VISIBLE);
-//                                    startStudy.setText("已下架");
-//                                    startStudy.setEnabled(false);
-//                                } else {
-//                                    if (data.getData().getTaste_count() == 0) {//试听数目为0则该课不支持试听
-//                                        auditionLayout.setVisibility(View.GONE);
-//                                    } else {
-//                                        if (data.getData().getIs_tasting() || data.getData().isTasted()) {//显示进入试听按钮
-//                                            auditionStart.setVisibility(View.VISIBLE);
-//                                            audition.setVisibility(View.GONE);
-//                                            if (data.getData().isTasted()) {
-//                                                auditionStart.setText(getResourceString(R.string.audition_over));
-//                                                auditionStart.setEnabled(false);
-//                                            }
-//                                        } else {//显示加入试听按钮
-//                                            auditionStart.setVisibility(View.GONE);
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        }
                     }
 
                     @Override
@@ -338,38 +255,47 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                         layoutView.setBackgroundColor(0xff999999);
                         progress.setText(getString(R.string.progress_live, data.getData().getCourse().getClosed_lessons_count(), data.getData().getCourse().getPreset_lesson_count()));
                     } else {
-                        layoutView.setVisibility(View.INVISIBLE);
+                        layoutView.setVisibility(View.GONE);
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
 
-                if (data.getData().getCourse().getTaste_count() > 0) {//显示进入试听按钮
-                    auditionStart.setVisibility(View.VISIBLE);
-                } else {
-                    auditionStart.setVisibility(View.GONE);
-                }
-
-                if (data.getData().getTicket() != null && data.getData().getTicket().getStatus().equals("active")) {
-                    startStudyView.setVisibility(View.VISIBLE);
-                    startStudy.setText("观看");
-                } else {
-                    if (data.getData().getCourse().isOff_shelve()) {
-                        startStudyView.setVisibility(View.VISIBLE);
-                        startStudy.setText("已下架");
-                        startStudy.setEnabled(false);
+                if (data.getData().getTicket() != null) {//已试听或已购买
+                    if (!StringUtils.isNullOrBlanK(data.getData().getTicket().getType())) {
+                        if (data.getData().getTicket().getType().equals("LiveStudio::BuyTicket")) {//已购买
+                            startStudyView.setVisibility(View.VISIBLE);//开始学习
+                        } else {//进入试听按钮显示
+                            audition.setVisibility(View.GONE);
+                            auditionStart.setVisibility(View.VISIBLE);
+                            if (data.getData().getTicket().getUsed_count() >= data.getData().getTicket().getBuy_count()) {
+                                auditionStart.setText("试听结束");
+                                auditionStart.setEnabled(false);
+                            }
+                        }
                     }
+                } else {//需加入试听或购买
+                    if (data.getData().getCourse().isTastable()) {//可以加入试听
+                        audition.setVisibility(View.VISIBLE);
+                        auditionStart.setVisibility(View.GONE);
+                    } else {//不可试听  只能购买
+                        auditionLayout.setVisibility(View.GONE);
+                    }
+                }
+                if (data.getData().getCourse().isOff_shelve()) {
+                    startStudyView.setVisibility(View.VISIBLE);
+                    startStudy.setText("已下架");
+                    startStudy.setEnabled(false);
                 }
             } else if (data.getData().getCourse().getSell_type().equals("free")) {
                 transferPrice.setText("免费");
                 transferPrice.setVisibility(View.VISIBLE);
-                layoutView.setVisibility(View.INVISIBLE);
+                layoutView.setVisibility(View.GONE);
                 price.setVisibility(View.GONE);
                 startStudyView.setVisibility(View.VISIBLE);
-                if (data.getData().getTicket() != null && data.getData().getTicket().getStatus().equals("active")) {
-                    startStudy.setText("观看");
+                if (data.getData().getTicket() == null) {//没有加入,需要加入
+                    startStudy.setText("立即报名");
                 } else {
-                    startStudy.setText("立即学习");
                     if (data.getData().getCourse().isOff_shelve()) {
                         startStudy.setText("已下架");
                         startStudy.setEnabled(false);
@@ -405,13 +331,13 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         }
         Intent intent;
         switch (v.getId()) {
-            case R.id.audition_start:
+            case R.id.audition_start://进入试听
                 if (BaseApplication.getInstance().isLogined()) {
-                    if (Constant.CourseStatus.published.equals(data.getData().getStatus())) {
+                    if (Constant.CourseStatus.published.equals(data.getData().getCourse().getStatus())) {
                         Toast.makeText(this, getString(R.string.published_course_unable_enter) + getString(R.string.audition), Toast.LENGTH_SHORT).show();
                     } else {
                         intent = new Intent(RemedialClassDetailActivity.this, NEVideoPlayerActivity.class);
-                        intent.putExtra("id", data.getData().getId());
+                        intent.putExtra("id", data.getData().getCourse().getId());
                         startActivity(intent);
                     }
                 } else {
@@ -420,9 +346,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     startActivity(intent);
                 }
                 break;
-            case R.id.audition:
+            case R.id.audition://加入试听
                 if (BaseApplication.getInstance().isLogined()) {
-                    if (data.getData().isTaste_overflow()) {
+                    if (data.getData().getCourse().isTaste_overflow()) {
                         Toast.makeText(this, "该试听已失效,请直接购买", Toast.LENGTH_SHORT).show();
                     } else {
                         joinAudition();
@@ -435,12 +361,19 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 break;
             case R.id.start_study:
                 if (BaseApplication.getInstance().isLogined()) {
-                    if (Constant.CourseStatus.published.equals(data.getData().getStatus())) {
-                        Toast.makeText(this, getString(R.string.published_course_unable_enter) + getString(R.string.study), Toast.LENGTH_SHORT).show();
-                    } else {
-                        intent = new Intent(RemedialClassDetailActivity.this, NEVideoPlayerActivity.class);
-                        intent.putExtra("id", data.getData().getId());
-                        startActivity(intent);
+                    if (data.getData().getCourse() != null) {
+                        if (data.getData().getCourse().getSell_type().equals("charge") //收费已购买
+                                || (data.getData().getCourse().getSell_type().equals("free") && data.getData().getTicket() != null)) {//免费已加入
+                            if (Constant.CourseStatus.published.equals(data.getData().getCourse().getStatus())) {
+                                Toast.makeText(this, getString(R.string.published_course_unable_enter) + getString(R.string.study), Toast.LENGTH_SHORT).show();
+                            } else {
+                                intent = new Intent(RemedialClassDetailActivity.this, NEVideoPlayerActivity.class);
+                                intent.putExtra("id", data.getData().getCourse().getId());
+                                startActivity(intent);
+                            }
+                        } else {//免费,加入我的直播课
+                            free2deliver();
+                        }
                     }
                 } else {
                     intent = new Intent(RemedialClassDetailActivity.this, LoginActivity2.class);
@@ -450,7 +383,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 break;
             case R.id.pay:
                 if (BaseApplication.getInstance().isLogined()) {
-                    if (Constant.CourseStatus.teaching.equals(data.getData().getStatus())) {
+                    if (Constant.CourseStatus.teaching.equals(data.getData().getCourse().getStatus())) {
                         if (alertDialog == null) {
                             View view = View.inflate(RemedialClassDetailActivity.this, R.layout.dialog_cancel_or_confirm, null);
                             Button cancel = (Button) view.findViewById(R.id.cancel);
@@ -490,6 +423,35 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         }
     }
 
+    //免费,加入
+    private void free2deliver() {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.urlRemedialClass + "/" + id + "/deliver_free", null,
+                new VolleyListener(RemedialClassDetailActivity.this) {
+
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        data.getData().setTicket(new LiveLessonDetailBean.DataBean.TicketBean("LiveStudio::BuyTicket"));
+                        startStudy.setText("开始学习");
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
+    }
+
     private void payRemedial() {
         Intent intent = new Intent(RemedialClassDetailActivity.this, OrderConfirmActivity.class);
         intent.putExtra("courseType", "live");
@@ -514,78 +476,9 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     @Override
                     protected void onSuccess(JSONObject response) {
                         //已加入试听
-                        data.getData().setIs_tasting(true);
+//                        data.getData().getCourse().setTastable(true);
                         auditionStart.setVisibility(View.VISIBLE);
-                        if (StringUtils.isNullOrBlanK(BaseApplication.getInstance().getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getInstance().getAccountToken())) {
-                            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getInstance().getUserId() + "/info", null,
-                                    new VolleyListener(RemedialClassDetailActivity.this) {
-                                        @Override
-                                        protected void onSuccess(JSONObject response) {
-                                            PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
-                                            if (bean != null && bean.getData() != null && bean.getData().getChat_account() != null) {
-                                                Profile profile = BaseApplication.getInstance().getProfile();
-                                                profile.getData().getUser().setChat_account(bean.getData().getChat_account());
-                                                BaseApplication.getInstance().setProfile(profile);
-
-                                                String account = BaseApplication.getInstance().getAccount();
-                                                String token = BaseApplication.getInstance().getAccountToken();
-
-                                                if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
-                                                    AbortableFuture<LoginInfo> loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, token));
-                                                    loginRequest.setCallback(new RequestCallback<LoginInfo>() {
-                                                        @Override
-                                                        public void onSuccess(LoginInfo o) {
-                                                            Logger.e("云信登录成功" + o.getAccount());
-                                                            // 初始化消息提醒
-                                                            NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
-
-                                                            NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
-                                                            //缓存
-                                                            UserInfoCache.getInstance().clear();
-                                                            TeamDataCache.getInstance().clear();
-
-                                                            UserInfoCache.getInstance().buildCache();
-                                                            TeamDataCache.getInstance().buildCache();
-
-                                                            UserInfoCache.getInstance().registerObservers(true);
-                                                            TeamDataCache.getInstance().registerObservers(true);
-                                                        }
-
-                                                        @Override
-                                                        public void onFailed(int code) {
-//                                                            BaseApplication.clearToken();
-                                                            Profile profile = BaseApplication.getInstance().getProfile();
-                                                            profile.getData().setRemember_token("");
-                                                            SPUtils.putObject(RemedialClassDetailActivity.this, "profile", profile);
-                                                        }
-
-                                                        @Override
-                                                        public void onException(Throwable throwable) {
-                                                            Logger.e(throwable.getMessage());
-                                                            BaseApplication.getInstance().clearToken();
-                                                        }
-                                                    });
-                                                }
-                                            }
-                                        }
-
-                                        @Override
-                                        protected void onError(JSONObject response) {
-
-                                        }
-
-                                        @Override
-                                        protected void onTokenOut() {
-                                            tokenOut();
-                                        }
-                                    }, new VolleyErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError volleyError) {
-                                    super.onErrorResponse(volleyError);
-                                }
-                            });
-                            addToRequestQueue(request);
-                        }
+                        loginYunXin();
                     }
 
                     @Override
@@ -607,6 +500,79 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
             }
         });
         addToRequestQueue(request);
+    }
+
+    private void loginYunXin() {
+        if (StringUtils.isNullOrBlanK(BaseApplication.getInstance().getAccount()) || StringUtils.isNullOrBlanK(BaseApplication.getInstance().getAccountToken())) {
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlPersonalInformation + BaseApplication.getInstance().getUserId() + "/info", null,
+                    new VolleyListener(RemedialClassDetailActivity.this) {
+                        @Override
+                        protected void onSuccess(JSONObject response) {
+                            PersonalInformationBean bean = JsonUtils.objectFromJson(response.toString(), PersonalInformationBean.class);
+                            if (bean != null && bean.getData() != null && bean.getData().getChat_account() != null) {
+                                Profile profile = BaseApplication.getInstance().getProfile();
+                                profile.getData().getUser().setChat_account(bean.getData().getChat_account());
+                                BaseApplication.getInstance().setProfile(profile);
+
+                                String account = BaseApplication.getInstance().getAccount();
+                                String token = BaseApplication.getInstance().getAccountToken();
+
+                                if (!StringUtils.isNullOrBlanK(account) && !StringUtils.isNullOrBlanK(token)) {
+                                    AbortableFuture<LoginInfo> loginRequest = NIMClient.getService(AuthService.class).login(new LoginInfo(account, token));
+                                    loginRequest.setCallback(new RequestCallback<LoginInfo>() {
+                                        @Override
+                                        public void onSuccess(LoginInfo o) {
+                                            Logger.e("云信登录成功" + o.getAccount());
+                                            // 初始化消息提醒
+                                            NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
+
+                                            NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
+                                            //缓存
+                                            UserInfoCache.getInstance().clear();
+                                            TeamDataCache.getInstance().clear();
+
+                                            UserInfoCache.getInstance().buildCache();
+                                            TeamDataCache.getInstance().buildCache();
+
+                                            UserInfoCache.getInstance().registerObservers(true);
+                                            TeamDataCache.getInstance().registerObservers(true);
+                                        }
+
+                                        @Override
+                                        public void onFailed(int code) {
+//                                                            BaseApplication.clearToken();
+                                            Profile profile = BaseApplication.getInstance().getProfile();
+                                            profile.getData().setRemember_token("");
+                                            BaseApplication.getInstance().setProfile(profile);
+                                        }
+
+                                        @Override
+                                        public void onException(Throwable throwable) {
+                                            Logger.e(throwable.getMessage());
+                                            BaseApplication.getInstance().clearToken();
+                                        }
+                                    });
+                                }
+                            }
+                        }
+
+                        @Override
+                        protected void onError(JSONObject response) {
+
+                        }
+
+                        @Override
+                        protected void onTokenOut() {
+                            tokenOut();
+                        }
+                    }, new VolleyErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    super.onErrorResponse(volleyError);
+                }
+            });
+            addToRequestQueue(request);
+        }
     }
 
     private String getStatus(String status) {
