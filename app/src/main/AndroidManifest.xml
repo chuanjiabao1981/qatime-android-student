@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="cn.qatime.player"
-    android:versionCode="22"
-    android:versionName="1.2.49">
+    android:versionCode="23"
+    android:versionName="1.2.5">
 
     <!--<uses-sdk-->
     <!--android:minSdkVersion="17"-->
