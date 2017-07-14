@@ -175,7 +175,8 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
                 startActivityForResult(regionIntent, Constant.REQUEST_REGION_SELECT);
                 break;
             case R.id.agreement:
-                //// TODO: 2016/8/24 点击协议查看
+                Intent intent= new Intent(this,AgreementActivity.class);
+                startActivity(intent);
                 break;
         }
     }
