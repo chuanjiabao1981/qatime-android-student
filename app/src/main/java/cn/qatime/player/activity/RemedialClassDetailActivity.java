@@ -262,17 +262,21 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 }
 
                 if (data.getData().getTicket() != null) {//已试听或已购买
-                    if (!StringUtils.isNullOrBlanK(data.getData().getTicket().getType())) {
-                        if (data.getData().getTicket().getType().equals("LiveStudio::BuyTicket")) {//已购买
-                            startStudyView.setVisibility(View.VISIBLE);//开始学习
-                        } else {//进入试听按钮显示
-                            audition.setVisibility(View.GONE);
-                            auditionStart.setVisibility(View.VISIBLE);
-                            if (data.getData().getTicket().getUsed_count() >= data.getData().getTicket().getBuy_count()) {
-                                auditionStart.setText("试听结束");
-                                auditionStart.setEnabled(false);
+                    if (!Constant.CourseStatus.completed.equals(data.getData().getCourse().getStatus())) {
+                        if (!StringUtils.isNullOrBlanK(data.getData().getTicket().getType())) {
+                            if (data.getData().getTicket().getType().equals("LiveStudio::BuyTicket")) {//已购买
+                                startStudyView.setVisibility(View.VISIBLE);//开始学习
+                            } else {//进入试听按钮显示
+                                audition.setVisibility(View.GONE);
+                                auditionStart.setVisibility(View.VISIBLE);
+                                if (data.getData().getTicket().getUsed_count() >= data.getData().getTicket().getBuy_count()) {
+                                    auditionStart.setText("试听结束");
+                                    auditionStart.setEnabled(false);
+                                }
                             }
                         }
+                    } else {
+                        handleLayout.setVisibility(View.GONE);
                     }
                 } else {//需加入试听或购买
                     if (data.getData().getCourse().isTastable()) {//可以加入试听
@@ -281,26 +285,32 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     } else {//不可试听  只能购买
                         auditionLayout.setVisibility(View.GONE);
                     }
-                }
-                if (data.getData().getCourse().isOff_shelve()) {
-                    startStudyView.setVisibility(View.VISIBLE);
-                    startStudy.setText("已下架");
-                    startStudy.setEnabled(false);
+                    if (data.getData().getCourse().isOff_shelve()) {
+                        startStudyView.setVisibility(View.VISIBLE);
+                        startStudy.setText("已下架");
+                        startStudy.setEnabled(false);
+                    }
                 }
             } else if (data.getData().getCourse().getSell_type().equals("free")) {
                 transferPrice.setText("免费");
                 transferPrice.setVisibility(View.VISIBLE);
                 layoutView.setVisibility(View.GONE);
                 price.setVisibility(View.GONE);
-                startStudyView.setVisibility(View.VISIBLE);
                 if (data.getData().getTicket() == null) {//没有加入,需要加入
-                    startStudy.setText("立即报名");
+                    if (!Constant.CourseStatus.completed.equals(data.getData().getCourse().getStatus())) {
+                        startStudyView.setVisibility(View.VISIBLE);
+                        startStudy.setText("立即报名");
+                    } else {
+                        handleLayout.setVisibility(View.GONE);
+                    }
                 } else {
+                    startStudyView.setVisibility(View.VISIBLE);
                     if (data.getData().getCourse().isOff_shelve()) {
                         startStudy.setText("已下架");
                         startStudy.setEnabled(false);
                     }
                 }
+
             }
 
             if (data.getData().getCourse().getIcons() != null) {
@@ -430,6 +440,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
                     @Override
                     protected void onSuccess(JSONObject response) {
+                        Toast.makeText(RemedialClassDetailActivity.this, "已成功添加至我的直播课", Toast.LENGTH_SHORT).show();
                         data.getData().setTicket(new LiveLessonDetailBean.DataBean.TicketBean("LiveStudio::BuyTicket"));
                         startStudy.setText("开始学习");
                     }

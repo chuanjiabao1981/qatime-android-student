@@ -179,7 +179,7 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
                                     startStudy.setEnabled(false);
                                     handleLayout.setVisibility(View.GONE);//已结束的课程隐藏操作按钮
                                 }
-                            }else{
+                            } else {
                                 if (data.getData().isOff_shelve()) {
                                     startStudyView.setVisibility(View.VISIBLE);
                                     startStudy.setText("已下架");
