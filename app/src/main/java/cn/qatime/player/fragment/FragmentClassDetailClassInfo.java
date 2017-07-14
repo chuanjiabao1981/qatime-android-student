@@ -19,8 +19,8 @@ import java.text.SimpleDateFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.bean.LiveLessonDetailBean;
 import cn.qatime.player.view.FlowLayout;
-import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.StringUtils;
 
 import static android.view.ViewGroup.GONE;
@@ -35,7 +35,6 @@ public class FragmentClassDetailClassInfo extends BaseFragment {
     TextView subject;
     TextView grade;
     TextView totalclass;
-    RemedialClassDetailBean data;
     private SimpleDateFormat parse1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private SimpleDateFormat parse2 = new SimpleDateFormat("yyyy-MM-dd");
     private LinearLayout flowLayout;
@@ -99,19 +98,19 @@ public class FragmentClassDetailClassInfo extends BaseFragment {
         }
     }
 
-    public void setData(RemedialClassDetailBean bean) {
-        if (bean != null && bean.getData() != null) {
-            subject.setText((StringUtils.isNullOrBlanK(bean.getData().getSubject()) ? "" : bean.getData().getSubject()));
+    public void setData(LiveLessonDetailBean bean) {
+        if (bean != null && bean.getData() != null && bean.getData().getCourse() != null) {
+            subject.setText((StringUtils.isNullOrBlanK(bean.getData().getCourse().getSubject()) ? "" : bean.getData().getCourse().getSubject()));
             try {
-                classStartTime.setText((bean.getData().getLive_start_time() == null ? "" : parse2.format(parse1.parse(bean.getData().getLive_start_time()))));
-                classEndTime.setText(parse2.format(parse1.parse(bean.getData().getLive_end_time())));
+                classStartTime.setText((bean.getData().getCourse().getLive_start_time() == null ? "" : parse2.format(parse1.parse(bean.getData().getCourse().getLive_start_time()))));
+                classEndTime.setText(parse2.format(parse1.parse(bean.getData().getCourse().getLive_end_time())));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            grade.setText((bean.getData().getGrade() == null ? "" : bean.getData().getGrade()));
-            totalclass.setText(getString(R.string.lesson_count, bean.getData().getPreset_lesson_count()));
-            if (!StringUtils.isNullOrBlanK(bean.getData().getTag_list())) {
-                for (int va = 0; va < bean.getData().getTag_list().size(); va++) {
+            grade.setText((bean.getData().getCourse().getGrade() == null ? "" : bean.getData().getCourse().getGrade()));
+            totalclass.setText(getString(R.string.lesson_count, bean.getData().getCourse().getPreset_lesson_count()));
+            if (!StringUtils.isNullOrBlanK(bean.getData().getCourse().getTag_list())) {
+                for (int va = 0; va < bean.getData().getCourse().getTag_list().size(); va++) {
                     TextView textView = new TextView(getActivity());
                     textView.setGravity(Gravity.CENTER);
                     textView.setTextColor(0xff999999);
@@ -123,20 +122,20 @@ public class FragmentClassDetailClassInfo extends BaseFragment {
                     params.topMargin = 2;
                     params.bottomMargin = 2;
                     textView.setLayoutParams(params);
-                    textView.setText(bean.getData().getTag_list().get(va));
+                    textView.setText(bean.getData().getCourse().getTag_list().get(va));
                     flow.addView(textView);
                 }
             } else {
                 flowLayout.setVisibility(GONE);
             }
-            if (!StringUtils.isNullOrBlanK(bean.getData().getObjective())) {
-                target.setText(bean.getData().getObjective());
+            if (!StringUtils.isNullOrBlanK(bean.getData().getCourse().getObjective())) {
+                target.setText(bean.getData().getCourse().getObjective());
             }
-            if (!StringUtils.isNullOrBlanK(bean.getData().getSuit_crowd())) {
-                suitable.setText(bean.getData().getSuit_crowd());
+            if (!StringUtils.isNullOrBlanK(bean.getData().getCourse().getSuit_crowd())) {
+                suitable.setText(bean.getData().getCourse().getSuit_crowd());
             }
             String header = "<style>* {color:#666666;margin:0;padding:0;}.one {float: left;width:50%;height:auto;position: relative;text-align: center;}.two {width:100%;height:100%;top: 0;left:0;position: absolute;text-align: center;}</style>";//默认color段落间距
-            String body = StringUtils.isNullOrBlanK(bean.getData().getDescription()) ? getString(R.string.no_desc) : bean.getData().getDescription();
+            String body = StringUtils.isNullOrBlanK(bean.getData().getCourse().getDescription()) ? getString(R.string.no_desc) : bean.getData().getCourse().getDescription();
             body = body.replace("\r\n", "<br>");
             //......
             String footer =
@@ -171,7 +170,7 @@ public class FragmentClassDetailClassInfo extends BaseFragment {
                             "2.准备好相关的学习工具（如：纸、笔等）并在上课前调试好电脑，使用手机请保持电量充足。<br>" +
                             "3.选择安静的学习环境，并将与学习无关的事物置于远处；选择安静的环境避免影响听课。 <br>" +
                             "4.三年级以下的同学请在家长帮助下学习。<br>" +
-                            "5.遇到网页不能打开或者不能登陆等情况请及时联系客服。</font></p>" +
+                            "5.遇到网页不能打开或者不能登录等情况请及时联系客服。</font></p>" +
                             "<p style='margin-top:5;'><font style='font-size:15;color:#333333'>上课中</font></p>" +
                             "<p><font >1.时刻保持注意力集中，认真听讲才能更好的提升学习；<br>" +
                             "2.课程中遇到听不懂的问题及时通过聊天或互动申请向老师提问，老师收到后会给予解答；<br>" +

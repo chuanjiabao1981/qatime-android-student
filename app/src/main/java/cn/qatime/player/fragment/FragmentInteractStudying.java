@@ -18,7 +18,6 @@ import com.bumptech.glide.Glide;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
 
@@ -32,7 +31,6 @@ import cn.qatime.player.activity.InteractCourseDetailActivity;
 import cn.qatime.player.activity.InteractiveLiveActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.bean.PlayBackBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.MPermission;
 import cn.qatime.player.utils.MPermissionUtil;
@@ -131,7 +129,6 @@ public class FragmentInteractStudying extends BaseFragment {
     private void toNext() {
         Intent intent = new Intent(getActivity(), InteractiveLiveActivity.class);
         intent.putExtra("id", item.getId());
-        intent.putExtra("teamId", item.getChat_team_id());
         startActivity(intent);
     }
 
@@ -188,13 +185,12 @@ public class FragmentInteractStudying extends BaseFragment {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(page));
         map.put("per_page", "10");
-
+        map.put("status", "teaching");
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getInstance().getUserId() + "/interactive_courses", map), null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
                         isLoad = true;
-                        Logger.e(response.toString());
                         if (type == 1) {
                             list.clear();
                         }

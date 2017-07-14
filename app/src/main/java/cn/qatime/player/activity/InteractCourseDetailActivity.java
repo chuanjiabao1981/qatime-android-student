@@ -179,7 +179,7 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
                                     startStudy.setEnabled(false);
                                     handleLayout.setVisibility(View.GONE);//已结束的课程隐藏操作按钮
                                 }
-                            }else{
+                            } else {
                                 if (data.getData().isOff_shelve()) {
                                     startStudyView.setVisibility(View.VISIBLE);
                                     startStudy.setText("已下架");
@@ -291,9 +291,6 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
     private void toNext() {
         Intent intent = new Intent(InteractCourseDetailActivity.this, InteractiveLiveActivity.class);
         intent.putExtra("id", data.getData().getId());
-        if (data.getData().getChat_team() != null) {
-            intent.putExtra("teamId", data.getData().getChat_team().getTeam_id());
-        }
         startActivity(intent);
     }
 

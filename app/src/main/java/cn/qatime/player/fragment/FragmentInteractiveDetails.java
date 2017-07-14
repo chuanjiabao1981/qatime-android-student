@@ -27,8 +27,6 @@ import libraryextra.transformation.GlideRoundTransform;
 import libraryextra.utils.StringUtils;
 import libraryextra.view.ListViewForScrollView;
 
-import static cn.qatime.player.R.id.status;
-
 /**
  * @author lungtify
  * @Time 2017/3/28 11:24
@@ -88,37 +86,40 @@ public class FragmentInteractiveDetails extends BaseFragment {
             @Override
             public void convert(ViewHolder holder, InteractCourseDetailBean.DataBean.InteractiveLessonsBean item, int position) {
                 holder.setText(R.id.name, item.getName());
-                holder.setText(R.id.live_time, item.getEnd_time());
+                holder.setText(R.id.teacher_name, "教师：" + item.getTeacher().getName());
+                holder.setText(R.id.class_date, item.getClass_date());
+                holder.setText(R.id.live_time, item.getStart_time() + "-" + item.getEnd_time());
                 if (item.getStatus().equals("missed")) {
-                    holder.setText(status, getResourceString(R.string.class_missed));
+                    holder.setText(R.id.status, getResourceString(R.string.class_missed));
                 } else if (item.getStatus().equals("init")) {//未开始
-                    holder.setText(status, getResourceString(R.string.class_init));
+                    holder.setText(R.id.status, getResourceString(R.string.class_init));
                 } else if (item.getStatus().equals("ready")) {//待开课
-                    holder.setText(status, getResourceString(R.string.class_ready));
+                    holder.setText(R.id.status, getResourceString(R.string.class_ready));
                 } else if (item.getStatus().equals("teaching")) {//直播中
-                    holder.setText(status, getResourceString(R.string.class_teaching));
+                    holder.setText(R.id.status, getResourceString(R.string.class_teaching));
                 } else if (item.getStatus().equals("closed")) {//已直播
-                    holder.setText(status, getResourceString(R.string.class_closed));
+                    holder.setText(R.id.status, getResourceString(R.string.class_closed));
                 } else if (item.getStatus().equals("paused")) {
-                    holder.setText(status, getResourceString(R.string.class_teaching));
+                    holder.setText(R.id.status, getResourceString(R.string.class_teaching));
                 } else {//closed finished billing completed
-                    holder.setText(status, getResourceString(R.string.class_over));//已结束
+                    holder.setText(R.id.status, getResourceString(R.string.class_over));//已结束
                 }
-                holder.setText(R.id.class_date, item.getClass_date())
-                        .setText(R.id.teacher_name, "老师：" + item.getTeacher().getName());
                 if (isFinished(item)) {
                     ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.live_time)).setTextColor(0xff999999);
-                    ((TextView) holder.getView(status)).setTextColor(0xff999999);
+                    ((TextView) holder.getView(R.id.status)).setTextColor(0xff999999);
+                    ((TextView) holder.getView(R.id.teacher_name)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.class_date)).setTextColor(0xff999999);
                 } else {
                     ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff00a0e9);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xff666666);
                     ((TextView) holder.getView(R.id.live_time)).setTextColor(0xff666666);
-                    ((TextView) holder.getView(status)).setTextColor(0xff666666);
+                    ((TextView) holder.getView(R.id.status)).setTextColor(0xff666666);
+                    ((TextView) holder.getView(R.id.teacher_name)).setTextColor(0xff666666);
                     ((TextView) holder.getView(R.id.class_date)).setTextColor(0xff666666);
                 }
+
 
             }
         };

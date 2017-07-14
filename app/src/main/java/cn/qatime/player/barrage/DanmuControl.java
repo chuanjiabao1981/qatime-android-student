@@ -2,7 +2,6 @@ package cn.qatime.player.barrage;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.text.Spanned;
@@ -214,7 +213,6 @@ public class DanmuControl {
 
     public void addDanmu(IMMessage danmu, int i) {
         String result = ExpressionUtil.getExpressionString(danmu.getContent(), ExpressionUtil.emoji);
-        Logger.e("弹幕收到消息");
         if (!StringUtils.isNullOrBlanK(result)) {
             BaseDanmaku danmaku = mDanmakuContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
 
@@ -228,6 +226,7 @@ public class DanmuControl {
             danmaku.textColor = 0xff999999;
             danmaku.textShadowColor = 0; // 重要：如果有图文混排，最好不要设置描边(设textShadowColor=0)，否则会进行两次复杂的绘制导致运行效率降低
             mDanmakuView.addDanmaku(danmaku);
+             Logger.e("弹幕收到消息");
         }
     }
 

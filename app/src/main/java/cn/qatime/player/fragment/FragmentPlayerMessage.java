@@ -26,7 +26,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseApplication;
@@ -36,8 +35,8 @@ import cn.qatime.player.bean.Container;
 import cn.qatime.player.bean.MessageListPanel;
 import cn.qatime.player.bean.ModuleProxy;
 import cn.qatime.player.im.SimpleCallback;
-import cn.qatime.player.im.cache.FriendDataCache;
 import cn.qatime.player.im.cache.TeamDataCache;
+import libraryextra.utils.StringUtils;
 
 public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
     private TextView tipText;
@@ -68,22 +67,26 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
         }
     };
     private MessageListPanel messageListPanel;
+    private View view;
+    private String owner;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = View.inflate(getActivity(), R.layout.fragment_player_message, null);
+        view = View.inflate(getActivity(), R.layout.fragment_player_message, null);
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         initView(view);
         hasLoad = true;
         registerTeamUpdateObserver(true);
-        return view;
     }
 
     private void initView(View view) {
         tipText = (TextView) view.findViewById(R.id.tip);
-
-        Container container = new Container(getActivity(), sessionId, this);
-        messageListPanel = new MessageListPanel(container, view);
     }
 
     @Override
@@ -123,30 +126,26 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
                         break;
                     }
                 }
-                if (messageListPanel.isMyMessage(message) && (message.getMsgType() == MsgTypeEnum.text || message.getMsgType() == MsgTypeEnum.notification || message.getMsgType() == MsgTypeEnum.image)) {
-                    if (message.getAttachment() instanceof NotificationAttachment) {//收到公告更新通知消息,通知公告页面刷新公告
-                        if (((NotificationAttachment) message.getAttachment()).getType() == NotificationType.UpdateTeam) {
-                            UpdateTeamAttachment a = (UpdateTeamAttachment) message.getAttachment();
-                            for (Map.Entry<TeamFieldEnum, Object> field : a.getUpdatedFields().entrySet()) {
-                                if (field.getKey() == TeamFieldEnum.Announcement) {
-                                    EventBus.getDefault().post(BusEvent.ANNOUNCEMENT);
-                                }
-                            }
+                if (message.getMsgType() == MsgTypeEnum.notification) {//收到公告更新通知消息,通知公告页面刷新公告
+                    if (((NotificationAttachment) message.getAttachment()).getType() == NotificationType.UpdateTeam) {
+                        UpdateTeamAttachment a = (UpdateTeamAttachment) message.getAttachment();
+                        if (a.getUpdatedFields().containsKey(TeamFieldEnum.Announcement)) {
+                            EventBus.getDefault().post(BusEvent.ANNOUNCEMENT);
                         }
                     }
-                    addedListItems.add(message);
-                    needRefresh = true;
                 }
+                addedListItems.add(message);
+                needRefresh = true;
             }
 
             if (needRefresh) {
                 if (chatCallback != null) {
                     chatCallback.back(addedListItems);
                 }
+                if (messageListPanel != null) {
+                    messageListPanel.onIncomingMessage(addedListItems);
+                }
             }
-
-            messageListPanel.onIncomingMessage(messages);
-
         }
     };
 
@@ -154,7 +153,7 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
      * 请求群基本信息
      */
 
-    public void requestTeamInfo() {
+    private void requestTeamInfo() {
         Team team = TeamDataCache.getInstance().getTeamById(sessionId);
         if (team != null) {
             updateTeamInfo(team);
@@ -202,7 +201,6 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
             TeamDataCache.getInstance().unregisterTeamDataChangedObserver(teamDataChangedObserver);
             TeamDataCache.getInstance().unregisterTeamMemberDataChangedObserver(teamMemberDataChangedObserver);
         }
-        FriendDataCache.getInstance().registerFriendDataChangedObserver(friendDataChangedObserver, register);
     }
 
 
@@ -241,7 +239,9 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
 
         @Override
         public void onUpdateTeamMember(List<TeamMember> members) {
-            messageListPanel.refreshMessageList();
+            if (messageListPanel != null) {
+                messageListPanel.refreshMessageList();
+            }
         }
 
         @Override
@@ -249,30 +249,15 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
         }
     };
 
-    FriendDataCache.FriendDataChangedObserver friendDataChangedObserver = new FriendDataCache.FriendDataChangedObserver() {
-        @Override
-        public void onAddedOrUpdatedFriends(List<String> accounts) {
-            messageListPanel.refreshMessageList();
-        }
-
-        @Override
-        public void onDeletedFriends(List<String> accounts) {
-            messageListPanel.refreshMessageList();
-        }
-
-        @Override
-        public void onAddUserToBlackList(List<String> account) {
-            messageListPanel.refreshMessageList();
-        }
-
-        @Override
-        public void onRemoveUserFromBlackList(List<String> account) {
-            messageListPanel.refreshMessageList();
-        }
-    };
 
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+        requestTeamInfo();
+        Container container = new Container(getActivity(), sessionId, this);
+        messageListPanel = new MessageListPanel(container, view);
+        if (!StringUtils.isNullOrBlanK(owner)) {
+            messageListPanel.setOwner(owner);
+        }
     }
 
     public void setChatCallBack(Callback c) {
@@ -282,15 +267,20 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
     public void setOwner(String owner) {
         if (messageListPanel != null) {
             messageListPanel.setOwner(owner);
-        }
+        } else
+            this.owner = owner;
     }
 
     public void onMsgSend(IMMessage message) {
-        messageListPanel.onMsgSend(message);
+        if (messageListPanel != null) {
+            messageListPanel.onMsgSend(message);
+        }
     }
 
     public void scrollToBottom() {
-        messageListPanel.scrollToBottom();
+        if (messageListPanel != null) {
+            messageListPanel.scrollToBottom();
+        }
     }
 
     public interface Callback {

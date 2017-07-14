@@ -231,7 +231,7 @@ public class FragmentFilterClassVideo extends BaseFragment {
             public void convert(ViewHolder holder, FilterVideoCourseBean.DataBean item, int position) {
                 Glide.with(getActivity()).load(item.getPublicize()).crossFade().placeholder(R.mipmap.photo).into((ImageView) holder.getView(R.id.image));
                 holder.setText(R.id.name, item.getName())
-                        .setText(R.id.price, "￥" + item.getPrice())
+                        .setText(R.id.price, "free".equals(item.getSell_type())?"免费":("￥" + item.getPrice()))
                         .setText(R.id.teacher, item.getTeacher_name())
                         .setText(R.id.buy_count,item.getBuy_tickets_count()+"");
             }

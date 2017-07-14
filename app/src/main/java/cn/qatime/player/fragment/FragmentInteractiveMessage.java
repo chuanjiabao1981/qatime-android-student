@@ -26,16 +26,15 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.bean.Container;
 import cn.qatime.player.bean.MessageListPanel;
 import cn.qatime.player.bean.ModuleProxy;
 import cn.qatime.player.im.SimpleCallback;
-import cn.qatime.player.im.cache.FriendDataCache;
 import cn.qatime.player.im.cache.TeamDataCache;
 
 /**
@@ -91,8 +90,6 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
     private void initView() {
         tipText = (TextView) findViewById(R.id.tip);
 
-        Container container = new Container(getActivity(), sessionId, this);
-        messageListPanel = new MessageListPanel(container, view);
     }
 
     @Override
@@ -132,30 +129,42 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
                         break;
                     }
                 }
-                if (messageListPanel.isMyMessage(message) && (message.getMsgType() == MsgTypeEnum.text || message.getMsgType() == MsgTypeEnum.notification || message.getMsgType() == MsgTypeEnum.image)) {
-                    if (message.getAttachment() instanceof NotificationAttachment) {//收到公告更新通知消息,通知公告页面刷新公告
+                if (messageListPanel != null && messageListPanel.isMyMessage(message)) {
+                    if (message.getMsgType() == MsgTypeEnum.notification) {//收到公告更新通知消息,通知公告页面刷新公告
                         if (((NotificationAttachment) message.getAttachment()).getType() == NotificationType.UpdateTeam) {
                             UpdateTeamAttachment a = (UpdateTeamAttachment) message.getAttachment();
-                            for (Map.Entry<TeamFieldEnum, Object> field : a.getUpdatedFields().entrySet()) {
-                                if (field.getKey() == TeamFieldEnum.Announcement) {
-                                    EventBus.getDefault().post(BusEvent.ANNOUNCEMENT);
-                                }
+                            if (a.getUpdatedFields().containsKey(TeamFieldEnum.Announcement)) {
+                                EventBus.getDefault().post(BusEvent.ANNOUNCEMENT);
                             }
                         }
                     }
-                    addedListItems.add(message);
-                    needRefresh = true;
+//                    else if (message.getMsgType() == MsgTypeEnum.custom) {
+//                        message.setStatus(MsgStatusEnum.read);
+//                        if (!StringUtils.isNullOrBlanK(message.getContent())) {
+//                            if (message.getContent().equals(InteractiveDeskShareStatus.desktop))//desktop board
+//                                EventBus.getDefault().post(BusEvent.desktop);
+//                            else if (message.getContent().equals(InteractiveDeskShareStatus.board))
+//                                EventBus.getDefault().post(BusEvent.board);
+//                            else if (message.getContent().equals(InteractiveDeskShareStatus.request)) {
+//                                if (message.getFromAccount().equals(BaseApplication.getInstance().getAccount())) {
+//                                    EventBus.getDefault().post(BusEvent.request);
+//                                }
+//                            }
+//                        }
+//                    }
                 }
+                addedListItems.add(message);
+                needRefresh = true;
             }
 
             if (needRefresh) {
                 if (chatCallback != null) {
                     chatCallback.back(addedListItems);
                 }
+                if (messageListPanel != null) {
+                    messageListPanel.onIncomingMessage(addedListItems);
+                }
             }
-
-            messageListPanel.onIncomingMessage(messages);
-
         }
     };
 
@@ -163,7 +172,7 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
      * 请求群基本信息
      */
 
-    public void requestTeamInfo() {
+    private void requestTeamInfo() {
         Team team = TeamDataCache.getInstance().getTeamById(sessionId);
         if (team != null) {
             updateTeamInfo(team);
@@ -174,8 +183,7 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
                     if (success && result != null) {
                         updateTeamInfo(result);
                     } else {
-                        Toast.makeText(getActivity(), getResourceString(R.string.failed_to_obtain_group_information), Toast.LENGTH_SHORT).show();
-                        getActivity().finish();
+                        Toast.makeText(BaseApplication.getInstance(), getResourceString(R.string.failed_to_obtain_group_information), Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -212,7 +220,6 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
             TeamDataCache.getInstance().unregisterTeamDataChangedObserver(teamDataChangedObserver);
             TeamDataCache.getInstance().unregisterTeamMemberDataChangedObserver(teamMemberDataChangedObserver);
         }
-        FriendDataCache.getInstance().registerFriendDataChangedObserver(friendDataChangedObserver, register);
     }
 
 
@@ -251,7 +258,9 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
 
         @Override
         public void onUpdateTeamMember(List<TeamMember> members) {
-            messageListPanel.refreshMessageList();
+            if (messageListPanel != null) {
+                messageListPanel.refreshMessageList();
+            }
         }
 
         @Override
@@ -259,48 +268,27 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
         }
     };
 
-    FriendDataCache.FriendDataChangedObserver friendDataChangedObserver = new FriendDataCache.FriendDataChangedObserver() {
-        @Override
-        public void onAddedOrUpdatedFriends(List<String> accounts) {
-            messageListPanel.refreshMessageList();
-        }
-
-        @Override
-        public void onDeletedFriends(List<String> accounts) {
-            messageListPanel.refreshMessageList();
-        }
-
-        @Override
-        public void onAddUserToBlackList(List<String> account) {
-            messageListPanel.refreshMessageList();
-        }
-
-        @Override
-        public void onRemoveUserFromBlackList(List<String> account) {
-            messageListPanel.refreshMessageList();
-        }
-    };
-
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+        Container container = new Container(getActivity(), sessionId, this);
+        messageListPanel = new MessageListPanel(container, view);
+        requestTeamInfo();
     }
 
     public void setChatCallBack(Callback c) {
         this.chatCallback = c;
     }
 
-    public void setOwner(String owner) {
+    public void onMsgSend(IMMessage message) {
         if (messageListPanel != null) {
-            messageListPanel.setOwner(owner);
+            messageListPanel.onMsgSend(message);
         }
     }
 
-    public void onMsgSend(IMMessage message) {
-        messageListPanel.onMsgSend(message);
-    }
-
     public void scrollToBottom() {
-        messageListPanel.scrollToBottom();
+        if (messageListPanel != null) {
+            messageListPanel.scrollToBottom();
+        }
     }
 
     public interface Callback {

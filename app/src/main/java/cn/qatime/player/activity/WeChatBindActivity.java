@@ -340,7 +340,7 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
                     Logger.e("登录", response.toString());
                     //登录成功且有个人信息  设置profile
                     BaseApplication.getInstance().setProfile(profile);
-                    loginAccount();//登陆云信
+                    loginAccount();//登录云信
                 } else {
                     finish();
                 }
@@ -434,7 +434,7 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
     }
 
     /**
-     * 登陆云信
+     * 登录云信
      */
     private void loginAccount() {
         progress = DialogUtils.startProgressDialog(progress, this, "登录中...");

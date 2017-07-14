@@ -39,6 +39,7 @@ public class ScreeningConditionActivity extends BaseActivity {
     private Button next;
     private int timeChecked = 0;
     private int courseChecked = 0;
+    private int typeChecked=0;
     //    private int tasteChecked = 0;
 //    private CommonAdapter<String> tasteAdapter;
     private CommonAdapter<String> timeAdapter;
@@ -47,10 +48,14 @@ public class ScreeningConditionActivity extends BaseActivity {
     private String endSelect = null;//选择结束时间
     private List<String> timeData;
     private List<String> courseData;
+    private List<String> courseType;
+    private CommonAdapter<String> typeAdapter;
+
 
     private void assignViews() {
         GridView timeGrid = (GridView) findViewById(R.id.time_grid);
         GridView courseGrid = (GridView) findViewById(R.id.course_grid);
+        GridView courseTypeGrid = (GridView) findViewById(R.id.course_type);
 //        GridView tasteGrid = (GridView) findViewById(R.id.taste_grid);
         start = (TextView) findViewById(R.id.start);
         end = (TextView) findViewById(R.id.end);
@@ -106,6 +111,31 @@ public class ScreeningConditionActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 courseChecked = position;
                 courseAdapter.notifyDataSetChanged();
+            }
+        });
+        courseType = new ArrayList<>();
+        courseType.add("不限");
+        courseType.add("收费课程");
+        courseType.add("免费课程");
+        typeAdapter = new CommonAdapter<String>(this, courseType, R.layout.item_screening_condition) {
+            @Override
+            public void convert(ViewHolder holder, String item, int position) {
+                holder.setText(R.id.text, item);
+                if (typeChecked == position) {
+                    ((TextView) holder.getView(R.id.text)).setBackgroundResource(R.drawable.text_background_red);
+                    ((TextView) holder.getView(R.id.text)).setTextColor(getResources().getColor(R.color.colorPrimary));
+                } else {
+                    ((TextView) holder.getView(R.id.text)).setBackgroundResource(R.drawable.text_background);
+                    ((TextView) holder.getView(R.id.text)).setTextColor(0xff999999);
+                }
+            }
+        };
+        courseTypeGrid.setAdapter(typeAdapter);
+        courseTypeGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                typeChecked = position;
+                typeAdapter.notifyDataSetChanged();
             }
         });
 //        List<String> tasteData = new ArrayList<>();
@@ -201,6 +231,10 @@ public class ScreeningConditionActivity extends BaseActivity {
         if (courseChecked != 0) {
             courseAdapter.notifyDataSetChanged();
         }
+       typeChecked = getTypesValue(getIntent().getStringExtra("sellType"));
+        if (typeChecked != 0) {
+            typeAdapter.notifyDataSetChanged();
+        }
         if (!StringUtils.isNullOrBlanK(getIntent().getStringExtra("startTime"))) {
             startSelect = getIntent().getStringExtra("startTime");
             try {
@@ -260,6 +294,23 @@ public class ScreeningConditionActivity extends BaseActivity {
         return result;
     }
 
+    private int getTypesValue(String sellType) {
+        if (StringUtils.isNullOrBlanK(sellType)) return 0;
+        int result = 0;
+        switch (sellType) {
+            case "":
+                result = 0;
+                break;
+            case "charge":
+                result = 1;
+                break;
+            case "free":
+                result = 2;
+                break;
+        }
+        return result;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -274,6 +325,8 @@ public class ScreeningConditionActivity extends BaseActivity {
                 timeAdapter.notifyDataSetChanged();
                 courseChecked = 0;
                 courseAdapter.notifyDataSetChanged();
+                typeChecked = 0;
+                typeAdapter.notifyDataSetChanged();
 //                tasteChecked = 0;
 //                tasteAdapter.notifyDataSetChanged();
                 start.setText("选择开始时间");
@@ -289,6 +342,7 @@ public class ScreeningConditionActivity extends BaseActivity {
                 Intent intent = new Intent();
                 intent.putExtra("range", getRange());
                 intent.putExtra("courseStatus", getStatus());
+                intent.putExtra("sellType", getTypeStatus());
                 intent.putExtra("startTime", startSelect);
                 intent.putExtra("endTime", endSelect);
                 setResult(Constant.RESPONSE, intent);
@@ -333,6 +387,22 @@ public class ScreeningConditionActivity extends BaseActivity {
                 break;
             case "开课中":
                 result = "teaching";
+                break;
+        }
+        return result;
+    }
+
+    private String getTypeStatus() {
+        String result = null;
+        switch (courseType.get(typeChecked)) {
+            case "不限":
+                result = "";
+                break;
+            case "免费课程":
+                result = "free";
+                break;
+            case "收费课程":
+                result = "charge";
                 break;
         }
         return result;

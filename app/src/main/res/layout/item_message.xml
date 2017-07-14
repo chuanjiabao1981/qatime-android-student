@@ -26,8 +26,7 @@
         android:layout_height="30dp"
         android:layout_alignParentLeft="true"
         android:layout_marginRight="8dp"
-        android:src="@mipmap/head_default"
-        android:visibility="visible" />
+        android:src="@mipmap/head_default"/>
 
     <ImageView
         android:id="@+id/message_item_portrait_right"
@@ -35,8 +34,7 @@
         android:layout_height="30dp"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="8dp"
-        android:src="@mipmap/head_default"
-        android:visibility="visible" />
+        android:src="@mipmap/head_default"/>
 
     <LinearLayout
         android:id="@+id/message_item_name_layout"
@@ -112,8 +110,6 @@
                 android:layout_marginRight="2dp"
                 android:src="@mipmap/ic_failed"
                 android:visibility="gone" />
-
-            <!--<include layout="@layout/nim_read_recipt_layout" />-->
 
             <FrameLayout
                 android:id="@+id/message_item_content"

@@ -1,6 +1,5 @@
 package cn.qatime.player.base;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.support.multidex.MultiDexApplication;
 import android.text.TextUtils;
 
@@ -39,9 +37,6 @@ import com.umeng.message.tag.TagManager;
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
@@ -74,7 +69,8 @@ public class BaseApplication extends MultiDexApplication {
      * 是否进行聊天消息通知栏提醒
      */
     public boolean chatMessageNotifyStatus;
-    public List<Activity> topActivity = new ArrayList<>();
+    private boolean tokenOut = false;//账号已过期
+//    public List<Activity> topActivity = new ArrayList<>();
 
     public boolean isChatMessageNotifyStatus() {
         return chatMessageNotifyStatus;
@@ -92,7 +88,11 @@ public class BaseApplication extends MultiDexApplication {
     }
 
     public CityBean.Data getCurrentCity() {
-        return currentCity == null ? new CityBean.Data("全国") : currentCity;
+        if (currentCity == null) {
+            currentCity = new CityBean.Data("全国");
+            currentCity.setWorkstation_id(-1);
+        }
+        return currentCity;
     }
 
     public void setCurrentCity(CityBean.Data currentCity) {
@@ -128,7 +128,7 @@ public class BaseApplication extends MultiDexApplication {
         initYunxin();
 
         StorageUtil.init(context, null);
-        initGlobeActivity();
+//        initGlobeActivity();
     }
 
     private void initUmengPush() {
@@ -176,17 +176,15 @@ public class BaseApplication extends MultiDexApplication {
                     mPushAgent.addAlias(String.valueOf(getUserId()), "student", new UTrack.ICallBack() {
                         @Override
                         public void onMessage(boolean b, String s) {
-                            Logger.e("添加别名" + b);
                         }
                     });
                 }
                 mPushAgent.getTagManager().add(new TagManager.TCallBack() {
                     @Override
                     public void onMessage(boolean b, ITagManager.Result result) {
-                        Logger.e("添加tag" + b);
                     }
                 }, "student");
-                Logger.e("device" + deviceToken);
+//                Logger.e("device" + deviceToken);
             }
 
             @Override
@@ -322,11 +320,11 @@ public class BaseApplication extends MultiDexApplication {
         public String getDisplayNameForMessageNotifier(String account, String sessionId, SessionTypeEnum sessionType) {
             String nick = null;
             if (sessionType == SessionTypeEnum.P2P) {
-                nick = UserInfoCache.getInstance().getAlias(account);
+                nick = UserInfoCache.getInstance().getUserName(account);
             } else if (sessionType == SessionTypeEnum.Team) {
                 nick = TeamDataCache.getInstance().getTeamNick(sessionId, account);
                 if (TextUtils.isEmpty(nick)) {
-                    nick = UserInfoCache.getInstance().getAlias(account);
+                    nick = UserInfoCache.getInstance().getUserName(account);
                 }
             }
             // 返回null，交给sdk处理。如果对方有设置nick，sdk会显示nick
@@ -365,12 +363,6 @@ public class BaseApplication extends MultiDexApplication {
     }
 
     public void clearToken() {
-//        Throwable ex = new Throwable();
-//
-//        StackTraceElement[] stackElements = ex.getStackTrace();
-//        for (int i = Math.min(4, stackElements.length); i > 0; i--) {
-//            Logger.e("classname:" + stackElements[i].getClassName() + "*********getMethodName:" + stackElements[i].getMethodName() + "*******LineNumber:" + stackElements[i].getLineNumber());
-//        }
         if (profile != null && profile.getData() != null) {
             profile.getData().setRemember_token("");
             if (profile.getData().getUser() != null && profile.getData().getUser().getChat_account() != null) {
@@ -459,54 +451,62 @@ public class BaseApplication extends MultiDexApplication {
         return profile != null && profile.getData() != null && profile.getData().getUser() != null ? profile.getData().getUser().getName() : "";
     }
 
-    private void initGlobeActivity() {
-        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
-            @Override
-            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-                if (!topActivity.contains(activity)) {
-                    topActivity.add(0, activity);
-//                    Logger.e("top" + topActivity.get(0).getLocalClassName());
-                }
-            }
-
-            @Override
-            public void onActivityDestroyed(Activity activity) {
-                if (topActivity.contains(activity)) {
-                    topActivity.remove(activity);
-//                    if (topActivity.size() > 0) {
-//                        Logger.e("top" + topActivity.get(0).getLocalClassName());
-//                    }
-                }
-            }
-
-            /** Unused implementation **/
-            @Override
-            public void onActivityStarted(Activity activity) {
-            }
-
-            @Override
-            public void onActivityResumed(Activity activity) {
-            }
-
-            @Override
-            public void onActivityPaused(Activity activity) {
-            }
-
-            @Override
-            public void onActivityStopped(Activity activity) {
-            }
-
-            @Override
-            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-            }
-        });
-    }
-
-    public Activity getTopActivity() {
-        return topActivity.get(0);
-    }
+//    private void initGlobeActivity() {
+//        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+//            @Override
+//            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+//                if (!topActivity.contains(activity)) {
+//                    topActivity.add(0, activity);
+////                    Logger.e("top" + topActivity.get(0).getLocalClassName());
+//                }
+//            }
+//
+//            @Override
+//            public void onActivityDestroyed(Activity activity) {
+//                if (topActivity.contains(activity)) {
+//                    topActivity.remove(activity);
+////                    if (topActivity.size() > 0) {
+////                        Logger.e("top" + topActivity.get(0).getLocalClassName());
+////                    }
+//                }
+//            }
+//
+//            /** Unused implementation **/
+//            @Override
+//            public void onActivityStarted(Activity activity) {
+//            }
+//
+//            @Override
+//            public void onActivityResumed(Activity activity) {
+//            }
+//
+//            @Override
+//            public void onActivityPaused(Activity activity) {
+//            }
+//
+//            @Override
+//            public void onActivityStopped(Activity activity) {
+//            }
+//
+//            @Override
+//            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+//            }
+//        });
+//    }
+//
+//    public Activity getTopActivity() {
+//        return topActivity.get(0);
+//    }
 
     public static BaseApplication getInstance() {
         return context;
+    }
+
+    public void setTokenOut(boolean tokenOut) {
+        this.tokenOut = tokenOut;
+    }
+
+    public boolean isTokenOut() {
+        return tokenOut;
     }
 }

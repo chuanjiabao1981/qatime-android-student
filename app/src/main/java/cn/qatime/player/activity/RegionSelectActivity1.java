@@ -1,11 +1,13 @@
 package cn.qatime.player.activity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 
@@ -21,7 +23,11 @@ import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.utils.AMapLocationUtils;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.MPermission;
 import cn.qatime.player.utils.UrlUtils;
+import cn.qatime.player.utils.annotation.OnMPermissionDenied;
+import cn.qatime.player.utils.annotation.OnMPermissionGranted;
+import cn.qatime.player.utils.annotation.OnMPermissionNeverAskAgain;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.CityBean;
@@ -113,6 +119,10 @@ public class RegionSelectActivity1 extends BaseActivity {
         addToRequestQueue(request);
 
 
+       requestPermission();
+    }
+
+    private void initLocation() {
         AMapLocationUtils utils = new AMapLocationUtils(this, new AMapLocationUtils.LocationListener() {
             @Override
             public void onLocationBack(String[] result) {
@@ -142,6 +152,28 @@ public class RegionSelectActivity1 extends BaseActivity {
         utils.startLocation();
     }
 
+    public void requestPermission() {
+        MPermission.with(this)
+                .addRequestCode(100)
+                .permissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE})
+                .request();
+    }
+
+    @OnMPermissionGranted(100)
+    public void onPermissionGranted() {
+        Toast.makeText(RegionSelectActivity1.this, R.string.loading_location, Toast.LENGTH_SHORT).show();
+        initLocation();
+    }
+
+    @OnMPermissionDenied(100)
+    public void onPermissionDenied() {
+        Toast.makeText(this, "定位权限被拒绝", Toast.LENGTH_SHORT).show();
+    }
+
+    @OnMPermissionNeverAskAgain(100)
+    public void onPermissionDeniedAsNeverAskAgain() {
+        Toast.makeText(this, "定位权限被拒绝", Toast.LENGTH_SHORT).show();
+    }
     private void initView() {
         list = (ListView) findViewById(R.id.list);
         location = (TextView) findViewById(R.id.location);

@@ -346,8 +346,6 @@
     <string name="app_name">qatime</string>
     <string name="balance">balance</string>
     <string name="bind">bind</string>
-    <string name="call_customer_service_phone"></string>
-    <string name="cancel_order_teacher"></string>
     <string name="other_method_of_login">other method of login</string>
     <string name="enter">direct enter</string>
     <string name="failed_to_obtain_group_information">failed to obtain group information</string>
@@ -359,14 +357,13 @@
     <string name="live_side_open">subvideo has opened</string>
     <string name="login_failed">login failed</string>
     <string name="login_right_now">login right now</string>
-    <string name="make_sure_cancel_order"></string>
     <string name="my_wallet">my wallet</string>
     <string name="change_city">change city</string>
     <string name="current_change">current change</string>
     <string name="landing">logining</string>
     <string name="location">location</string>
     <string name="minute">minute</string>
-    <string name="my_record_fund"></string>
+    <string name="my_record_fund">fund record</string>
     <string name="recent_change">recent change</string>
     <string name="whole_city">whole city</string>
     <string name="class_closed">class closed</string>

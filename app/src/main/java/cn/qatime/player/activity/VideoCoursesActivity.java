@@ -103,7 +103,8 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
 
                                 if (data.getData().getTicket() != null && data.getData().getTicket().getStatus().equals("active")) {
                                     startStudyView.setVisibility(View.VISIBLE);
-                                }else{
+                                    startStudy.setText("观看");
+                                } else {
                                     if (data.getData().getVideo_course().isOff_shelve()) {
                                         startStudyView.setVisibility(View.VISIBLE);
                                         startStudy.setText("已下架");
@@ -115,9 +116,14 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
                                 transferPrice.setVisibility(View.VISIBLE);
                                 price.setVisibility(View.GONE);
                                 startStudyView.setVisibility(View.VISIBLE);
-                                if (data.getData().getVideo_course().isOff_shelve()) {
-                                    startStudy.setText("已下架");
-                                    startStudy.setEnabled(false);
+                                if (data.getData().getTicket() != null && data.getData().getTicket().getStatus().equals("active")) {
+                                    startStudy.setText("观看");
+                                } else {
+                                    startStudy.setText("立即学习");
+                                    if (data.getData().getVideo_course().isOff_shelve()) {
+                                        startStudy.setText("已下架");
+                                        startStudy.setEnabled(false);
+                                    }
                                 }
                             }
 
@@ -336,6 +342,8 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
 
                     @Override
                     protected void onSuccess(JSONObject response) {
+                        Toast.makeText(VideoCoursesActivity.this, "已成功加入我的视频课", Toast.LENGTH_SHORT).show();
+                        startStudy.setText("观看");
                         data.getData().setTicket(new VideoCoursesDetailsBean.DataBean.TicketBean());
                         data.getData().getTicket().setStatus("active");
                         Intent intent = new Intent(VideoCoursesActivity.this, VideoCoursesPlayActivity.class);
@@ -370,13 +378,13 @@ public class VideoCoursesActivity extends BaseFragmentActivity implements View.O
 
                     @Override
                     protected void onSuccess(JSONObject response) {
+                        Toast.makeText(VideoCoursesActivity.this, "已成功加入我的试听视频课", Toast.LENGTH_SHORT).show();
                         data.getData().setTicket(new VideoCoursesDetailsBean.DataBean.TicketBean());
                         data.getData().getTicket().setStatus("inactive");
                         Intent intent = new Intent(VideoCoursesActivity.this, VideoCoursesPlayActivity.class);
                         intent.putExtra("id", data.getData().getVideo_course().getId());
                         intent.putExtra("tasting", true);
                         startActivity(intent);
-//                        }
                     }
 
                     @Override

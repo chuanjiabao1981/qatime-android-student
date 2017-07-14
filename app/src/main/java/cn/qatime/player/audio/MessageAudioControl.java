@@ -3,7 +3,6 @@ package cn.qatime.player.audio;
 import android.content.Context;
 import android.widget.Toast;
 
-import com.netease.neliveplayer.util.NimUIKit;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.attachment.AudioAttachment;

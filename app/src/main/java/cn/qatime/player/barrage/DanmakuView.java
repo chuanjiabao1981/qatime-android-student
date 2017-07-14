@@ -379,10 +379,7 @@ public class DanmakuView extends View implements IDanmakuView, IDanmakuViewContr
 
     @Override
     public boolean isPaused() {
-        if (handler != null) {
-            return handler.isStop();
-        }
-        return false;
+        return handler != null && handler.isStop();
     }
 
     public void restart() {
@@ -508,11 +505,7 @@ public class DanmakuView extends View implements IDanmakuView, IDanmakuViewContr
     @SuppressLint("NewApi")
     public boolean isHardwareAccelerated() {
         // >= 3.0
-        if (Build.VERSION.SDK_INT >= 11) {
-            return super.isHardwareAccelerated();
-        } else {
-            return false;
-        }
+        return Build.VERSION.SDK_INT >= 11 && super.isHardwareAccelerated();
     }
 
     @Override

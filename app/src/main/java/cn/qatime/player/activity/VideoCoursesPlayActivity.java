@@ -1,5 +1,6 @@
 package cn.qatime.player.activity;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.media.AudioManager;
@@ -48,7 +49,7 @@ import libraryextra.view.FragmentLayoutWithLine;
  * @Describe 视频课观看页面
  */
 
-public class VideoCoursesPlayActivity extends BaseFragmentActivity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener {
+public class VideoCoursesPlayActivity extends BaseFragmentActivity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnInfoListener {
 
     private VideoCoursesFloatFragment floatFragment;
     private boolean isCreated = false;
@@ -63,6 +64,8 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
     private SurfaceHolder holder;
     private boolean tasting;//是否试听
     public VideoLessonsBean playingData;
+    private View buffering;
+    private View noData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +80,14 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
         initView();
 
         screenSwitchUtils = ScreenSwitchUtils.init(this.getApplicationContext());
+        initData();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        id = getIntent().getIntExtra("id", 0);
+        tasting = getIntent().getBooleanExtra("tasting", true);
         initData();
     }
 
@@ -116,6 +127,8 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
     private void initView() {
         video = (RelativeLayout) findViewById(R.id.video);
         SurfaceView mPreview = (SurfaceView) findViewById(R.id.surfaceView);
+        buffering = findViewById(R.id.buffering);
+        noData = findViewById(R.id.video_no_data);
         holder = mPreview.getHolder();
         holder.addCallback(this);
         holder.setFormat(PixelFormat.RGBA_8888);
@@ -226,6 +239,7 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
         mMediaPlayer.setDisplay(holder);
         mMediaPlayer.prepareAsync();
         mMediaPlayer.setOnBufferingUpdateListener(this);
+        mMediaPlayer.setOnInfoListener(this);
         mMediaPlayer.setOnCompletionListener(this);
         mMediaPlayer.setOnPreparedListener(this);
         mMediaPlayer.setScreenOnWhilePlaying(true);
@@ -244,9 +258,35 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (mMediaPlayer != null) {
+            resumeMedia();
+        }
+    }
+
+    private void resumeMedia() {
+        if (isCreated) {
+            mMediaPlayer.setDisplay(holder);
+            mMediaPlayer.start();
+            floatFragment.setPlayOrPause(true);
+        } else {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    resumeMedia();
+                }
+            }, 50);
+        }
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
-
+        if (mMediaPlayer != null) {
+            mMediaPlayer.pause();
+            floatFragment.setPlayOrPause(false);
+        }
     }
 
     @Override
@@ -266,6 +306,7 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
     @Override
     public void onPrepared(MediaPlayer mp) {
         isPrepared = true;
+        noData.setVisibility(View.GONE);
         mMediaPlayer.start();
         floatFragment.setPlayOrPause(mp.isPlaying());
     }
@@ -277,7 +318,8 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-
+        buffering.setVisibility(View.GONE);
+        noData.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -374,5 +416,19 @@ public class VideoCoursesPlayActivity extends BaseFragmentActivity implements Su
 
     public boolean isTasting() {
         return tasting;
+    }
+
+    @Override
+    public boolean onInfo(MediaPlayer mp, int what, int extra) {
+        if (mMediaPlayer != null) {
+            if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START) {
+                mMediaPlayer.pause();
+                buffering.setVisibility(View.VISIBLE);
+            } else if (what == MediaPlayer.MEDIA_INFO_BUFFERING_END) {
+                mMediaPlayer.start();
+                buffering.setVisibility(View.GONE);
+            }
+        }
+        return true;
     }
 }

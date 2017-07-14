@@ -79,6 +79,15 @@ public class FilterLiveCourseBean implements Serializable {
         private String preview_time;
         private boolean is_tasting;
         private boolean is_bought;
+        private String sell_type;
+
+        public String getSell_type() {
+            return sell_type;
+        }
+
+        public void setSell_type(String sell_type) {
+            this.sell_type = sell_type;
+        }
 
         public int getId() {
             return id;

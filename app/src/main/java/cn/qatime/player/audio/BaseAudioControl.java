@@ -189,12 +189,7 @@ abstract public class BaseAudioControl<T> {
 	
 	//playing or ready
 	public boolean isPlayingAudio() {
-		if(currentAudioPlayer != null) {
-			return state == AudioControllerState.playing
-                    || state == AudioControllerState.ready;
-		} else {
-			return false;
-		}	
+		return currentAudioPlayer != null && (state == AudioControllerState.playing || state == AudioControllerState.ready);
 	}
 	
 	//stop or cancel

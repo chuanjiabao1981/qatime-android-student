@@ -99,7 +99,7 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
     private long start = 0;
     private long end = 0;
     private ImageView alertImage;
-    private AudioRecordListener audioRecordListener;
+//    private AudioRecordListener audioRecordListener;
 
     public void onPause() {
         // 停止录音
@@ -114,15 +114,15 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
         boolean isShowTime();//是否是正在直播，是就禁用语音聊天
     }
 
-    public interface AudioRecordListener {
-        void audioRecordStart();
+//    public interface AudioRecordListener {
+//        void audioRecordStart();
+//
+//        void audioRecordStop();
+//    }
 
-        void audioRecordStop();
-    }
-
-    public void setOnAudioRecordListener(AudioRecordListener audioRecordListener) {
-        this.audioRecordListener = audioRecordListener;
-    }
+//    public void setOnAudioRecordListener(AudioRecordListener audioRecordListener) {
+//        this.audioRecordListener = audioRecordListener;
+//    }
 
     public interface OnInputShowListener {
         void OnInputShow();
@@ -456,30 +456,34 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (listener.isShowTime()) {
-                    Toast.makeText(context, "正在直播中，禁用语音聊天", Toast.LENGTH_SHORT).show();
-                    return true;
-                }
+
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (listener.isShowTime()) {
+                        Toast.makeText(context, "正在直播中，禁用语音聊天", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(context,new String[]{
-                                    android.Manifest.permission.RECORD_AUDIO},1);
+                            ActivityCompat.requestPermissions(context, new String[]{
+                                    android.Manifest.permission.RECORD_AUDIO}, 1);
                             return true;
                         }
                     }
                     touched = true;
-                    if (audioRecordListener != null) {
-                        audioRecordListener.audioRecordStart();
-                    }
+//                    if (audioRecordListener != null) {
+//                        audioRecordListener.audioRecordStart();
+//                    }
                     initAudioRecord();
                     onStartAudioRecord();
                     start = System.currentTimeMillis();
                 } else if (event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP) {
-                    touched = false;
-                    if (audioRecordListener != null) {
-                        audioRecordListener.audioRecordStop();
+                    if (listener.isShowTime()) {
+                        return true;
                     }
+                    touched = false;
+//                    if (audioRecordListener != null) {
+//                        audioRecordListener.audioRecordStop();
+//                    }
                     end = System.currentTimeMillis();
                     if (end - start < 800) {
                         tooShortAudioRecord();
@@ -489,6 +493,9 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
                     start = 0;
                     end = 0;
                 } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    if (listener.isShowTime()) {
+                        return true;
+                    }
                     touched = false;
                     cancelAudioRecord(isCancelled(v, event));
                 }

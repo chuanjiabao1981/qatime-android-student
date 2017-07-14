@@ -195,26 +195,23 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
      * 设置时间显示
      */
     private void setTimeTextView() {
-//        if (getMsgAdapter().needShowTime(message)) {
-//            timeTextView.setVisibility(View.VISIBLE);
-//        } else {
-//            timeTextView.setVisibility(View.GONE);
-//            return;
-//        }
-//
-        if (isReceivedMessage()) {
-            nameContainer.setGravity(Gravity.LEFT);
+        if (isMiddleItem()) {
+            nameContainer.setVisibility(View.GONE);
         } else {
-            nameContainer.setGravity(Gravity.RIGHT);
+            nameContainer.setVisibility(View.VISIBLE);
+            if (isReceivedMessage()) {
+                nameContainer.setGravity(Gravity.LEFT);
+            } else {
+                nameContainer.setGravity(Gravity.RIGHT);
+            }
+            int index = isReceivedMessage() ? 0 : 1;
+            if (nameContainer.getChildAt(index) != nameTextView) {
+                nameContainer.removeView(nameTextView);
+                nameContainer.addView(nameTextView, index);
+            }
+            String text = DateUtils.getMMddHHmmss(message.getTime());
+            timeTextView.setText(text);
         }
-        int index = isReceivedMessage() ? 0 : 1;
-        if (nameContainer.getChildAt(index) != nameTextView) {
-            nameContainer.removeView(nameTextView);
-            nameContainer.addView(nameTextView, index);
-        }
-        String text = DateUtils.getMMddHHmmss(message.getTime());
-        timeTextView.setText(text);
-        timeTextView.setVisibility(isMiddleItem() ? View.GONE : View.VISIBLE);
     }
 
     /**
@@ -342,11 +339,4 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
         }
     }
 
-//    private void setReadReceipt() {
-//        if (!TextUtils.isEmpty(getMsgAdapter().getUuid()) && message.getUuid().equals(getMsgAdapter().getUuid())) {
-//            readReceiptTextView.setVisibility(View.VISIBLE);
-//        } else {
-//            readReceiptTextView.setVisibility(View.GONE);
-//        }
-//    }
 }

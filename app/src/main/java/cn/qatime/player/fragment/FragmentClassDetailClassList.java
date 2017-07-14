@@ -19,20 +19,19 @@ import java.util.List;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.NEVideoPlaybackActivity;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.bean.LiveLessonDetailBean;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.Lessons;
-import libraryextra.bean.RemedialClassDetailBean;
 
 import static cn.qatime.player.R.id.status;
 
 public class FragmentClassDetailClassList extends BaseFragment {
-    private CommonAdapter<Lessons> adapter;
-    private List<Lessons> list = new ArrayList<>();
+    private CommonAdapter<LiveLessonDetailBean.DataBean.CourseBean.LessonsBean> adapter;
+    private List<LiveLessonDetailBean.DataBean.CourseBean.LessonsBean> list = new ArrayList<>();
 
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-    private RemedialClassDetailBean.Data data;
+    private LiveLessonDetailBean.DataBean data;
 
     @Nullable
     @Override
@@ -46,10 +45,10 @@ public class FragmentClassDetailClassList extends BaseFragment {
     private void initview(View view) {
         ListView listView = (ListView) view.findViewById(R.id.id_stickynavlayout_innerscrollview);
         listView.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
-        adapter = new CommonAdapter<Lessons>(getActivity(), list, R.layout.item_fragment_remedial_class_detail3) {
+        adapter = new CommonAdapter<LiveLessonDetailBean.DataBean.CourseBean.LessonsBean>(getActivity(), list, R.layout.item_fragment_remedial_class_detail3) {
 
             @Override
-            public void convert(ViewHolder holder, Lessons item, int position) {
+            public void convert(ViewHolder holder, LiveLessonDetailBean.DataBean.CourseBean.LessonsBean item, int position) {
                 holder.setText(R.id.name, item.getName());
                 holder.setText(R.id.live_time, item.getLive_time());
                 if (item.getStatus().equals("missed")) {
@@ -79,7 +78,7 @@ public class FragmentClassDetailClassList extends BaseFragment {
                     ((TextView) holder.getView(R.id.live_time)).setTextColor(0xff999999);
                     ((TextView) holder.getView(status)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.class_date)).setTextColor(0xff999999);
-                    holder.getView(R.id.view_playback).setVisibility(data.getIs_bought() && item.isReplayable() ? View.VISIBLE : View.GONE);
+                    holder.getView(R.id.view_playback).setVisibility(data.getTicket() != null && data.getTicket().getType().equals("LiveStudio::BuyTicket") && item.isReplayable() ? View.VISIBLE : View.GONE);
                 } else {
                     ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff00a0e9);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xff666666);
@@ -95,11 +94,10 @@ public class FragmentClassDetailClassList extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Lessons item = list.get(position);
+                LiveLessonDetailBean.DataBean.CourseBean.LessonsBean item = list.get(position);
                 if (isFinished(item)) {
-                    if (data.getIs_bought()) {
+                    if (data.getTicket() != null && data.getTicket().getType().equals("LiveStudio::BuyTicket")) {
                         if (!item.isReplayable()) {
-//                        Toast.makeText(getActivity(), getResourceString(R.string.no_playback_video), Toast.LENGTH_SHORT).show();
                             return;
                         }
                         if (item.getLeft_replay_times() <= 0) {
@@ -115,15 +113,15 @@ public class FragmentClassDetailClassList extends BaseFragment {
         });
     }
 
-    private boolean isFinished(Lessons item) {
+    private boolean isFinished(LiveLessonDetailBean.DataBean.CourseBean.LessonsBean item) {
         return item.getStatus().equals("closed") || item.getStatus().equals("finished") || item.getStatus().equals("billing") || item.getStatus().equals("completed");
     }
 
-    public void setData(RemedialClassDetailBean data) {
+    public void setData(LiveLessonDetailBean data) {
         if (data != null && data.getData() != null) {
             this.data = data.getData();
             list.clear();
-            list.addAll(data.getData().getLessons());
+            list.addAll(data.getData().getCourse().getLessons());
             if (adapter != null) {
                 adapter.notifyDataSetChanged();
             }

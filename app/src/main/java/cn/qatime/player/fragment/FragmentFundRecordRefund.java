@@ -221,7 +221,7 @@ public class FragmentFundRecordRefund extends BaseFragment {
                     @Override
                     protected void onSuccess(JSONObject response) {
                         Toast.makeText(getActivity(), R.string.cancel_refund_success, Toast.LENGTH_SHORT).show();
-                       initData(1);
+                        initData(1);
                     }
 
                     @Override
@@ -264,7 +264,7 @@ public class FragmentFundRecordRefund extends BaseFragment {
             case "alipay":
                 return getString(R.string.refund_to_alipay);
             case "offline":
-                default:
+            default:
                 return getString(R.string.refund_to_account);
         }
     }
@@ -275,10 +275,12 @@ public class FragmentFundRecordRefund extends BaseFragment {
                 return getString(R.string.refunding);
             case "cancel":
                 return getString(R.string.cancelled);
+            case "ignored":
+                return "审核失败";
             case "refunded":
-            default:
                 return getString(R.string.refunded);
         }
+        return "";
     }
 
 }

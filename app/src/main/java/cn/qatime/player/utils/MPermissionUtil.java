@@ -95,11 +95,8 @@ final public class MPermissionUtil {
             return requestCode == m.getAnnotation(OnMPermissionDenied.class).value();
         } else if (clazz.equals(OnMPermissionGranted.class)) {
             return requestCode == m.getAnnotation(OnMPermissionGranted.class).value();
-        } else if (clazz.equals(OnMPermissionNeverAskAgain.class)) {
-            return requestCode == m.getAnnotation(OnMPermissionNeverAskAgain.class).value();
-        } else {
-            return false;
-        }
+        } else
+            return clazz.equals(OnMPermissionNeverAskAgain.class) && requestCode == m.getAnnotation(OnMPermissionNeverAskAgain.class).value();
     }
 
     public static String toString(List<String> permission) {

@@ -11,7 +11,6 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 import cn.qatime.player.R;
@@ -22,7 +21,6 @@ import libraryextra.utils.PinyinUtils;
 import libraryextra.utils.StringUtils;
 
 public class FragmentPlayerMembers extends BaseFragment {
-    private ListView listView;
     private List<Announcements.DataBean.MembersBean> list = new ArrayList<>();
     private FragmentNEVideoPlayerAdapter4 adapter;
     private Handler hd = new Handler();
@@ -42,14 +40,13 @@ public class FragmentPlayerMembers extends BaseFragment {
             }
         }
     };
-    private Announcements.DataBean.MembersBean owner;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = View.inflate(getActivity(), R.layout.fragment_player_members, null);
 
-        listView = (ListView) view.findViewById(R.id.listview);
+        ListView listView = (ListView) view.findViewById(R.id.listview);
         adapter = new FragmentNEVideoPlayerAdapter4(getActivity(), list, R.layout.item_fragment_nevideo_player4);
         listView.setAdapter(adapter);
         hasLoad = true;
@@ -60,18 +57,14 @@ public class FragmentPlayerMembers extends BaseFragment {
      * @param accounts
      */
     public void setData(Announcements.DataBean accounts) {
-        if (accounts != null && accounts.getMembers()!=null) {
+        if (accounts != null && accounts.getMembers() != null) {
             list.clear();
             list.addAll(accounts.getMembers());
-            Iterator<Announcements.DataBean.MembersBean> it = list.iterator();
-            while (it.hasNext()) {
-                Announcements.DataBean.MembersBean item = it.next();
-                if (item == null) return;
+            for (Announcements.DataBean.MembersBean item : list) {
+                if (item == null) continue;
                 if (!StringUtils.isNullOrBlanK(accounts.getOwner())) {
                     if (accounts.getOwner().equals(item.getAccid())) {
                         item.setOwner(true);
-                        owner = item;
-                        it.remove();
                     } else {
                         item.setOwner(false);
                     }
@@ -85,13 +78,27 @@ public class FragmentPlayerMembers extends BaseFragment {
             Collections.sort(list, new Comparator<Announcements.DataBean.MembersBean>() {
                 @Override
                 public int compare(Announcements.DataBean.MembersBean lhs, Announcements.DataBean.MembersBean rhs) {
-                    return lhs.getFirstLetters().compareTo(rhs.getFirstLetters());
+                    int x = 0;
+                    if (lhs.isOwner() && !rhs.isOwner()) {
+                        x = -3;
+                    } else if (!lhs.isOwner() && rhs.isOwner()) {
+                        x = 3;
+                    } else if (lhs.isOwner() && rhs.isOwner()) {
+                        x = -3;
+                    }
+
+                    int y = lhs.getFirstLetters().compareTo(rhs.getFirstLetters());
+                    if (x == 0) {
+                        return y;
+                    }
+                    return x;
                 }
             });
-            if (owner != null) {
-                list.add(0, owner);
-            }
             hd.postDelayed(runnable, 200);
         }
+    }
+
+    public void setOnlineInfo(List<String> online_users) {
+
     }
 }

@@ -251,7 +251,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         map.put("accept", "" + (checkBox.isChecked() ? 1 : 0));
         map.put("type", "Student");
         map.put("client_type", "app");
-        map.put("register_code_value", "564654");//注册码
 
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlRegister, map), null, new VolleyListener(this) {
@@ -294,7 +293,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                                         if (profile != null && !TextUtils.isEmpty(profile.getData().getRemember_token())) {
 
                                             BaseApplication.getInstance().setProfile(profile);
-                                            //登陆云信
+                                            //登录云信
                                             loginAccount();
                                         } else {
                                             //没有数据或token

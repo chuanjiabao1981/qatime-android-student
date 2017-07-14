@@ -16,6 +16,8 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +53,11 @@ public class PlayBackListActivity extends BaseActivity implements View.OnClickLi
 
 
     private void assignViews() {
-        s = "updated_at desc";
+        try {
+            s = URLEncoder.encode("updated_at desc", "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         latest = (TextView) findViewById(R.id.latest);
         most = (TextView) findViewById(R.id.most);
         listView = (PullToRefreshListView) findViewById(R.id.list);
@@ -102,7 +108,7 @@ public class PlayBackListActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(PlayBackListActivity.this, PlayBackActivity.class);
-                intent.putExtra("id", datas.get(position).getId());
+                intent.putExtra("id", datas.get(position - 1).getId());
                 startActivity(intent);
             }
         });
@@ -177,13 +183,25 @@ public class PlayBackListActivity extends BaseActivity implements View.OnClickLi
             case R.id.latest:
                 if (latestResult == -1) {
                     latestResult = 1;
-                    s = "updated_at desc";
+                    try {
+                        s = URLEncoder.encode("updated_at desc", "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                 } else if (latestResult == 0) {
                     latestResult = 1;
-                    s = "updated_at desc";
+                    try {
+                        s = URLEncoder.encode("updated_at desc", "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                 } else if (latestResult == 1) {
                     latestResult = 0;
-                    s = "updated_at asc";
+                    try {
+                        s = URLEncoder.encode("updated_at asc", "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                 }
                 refreshState(latest, latestResult);
                 most.setTextColor(0xff666666);
@@ -191,7 +209,11 @@ public class PlayBackListActivity extends BaseActivity implements View.OnClickLi
                 break;
             case R.id.most:
                 latestResult = -1;
-                s = "replay_times desc";
+                try {
+                    s = URLEncoder.encode("replay_times desc", "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
                 refreshState(latest, latestResult);
                 most.setTextColor(getResources().getColor(R.color.colorPrimary));
                 initData(1);

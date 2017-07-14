@@ -258,7 +258,6 @@ public class WithdrawCashActivity extends BaseActivity implements View.OnClickLi
     @Subscribe
     public void onEvent(String code) {
         HashMap<String, String> map = new HashMap<>();
-        map.put("send_to", BaseApplication.getInstance().getProfile().getData().getUser().getLogin_mobile());
         map.put("amount", amount);
         map.put("pay_type", payType);
         map.put("ticket_token", ticket_tocken);

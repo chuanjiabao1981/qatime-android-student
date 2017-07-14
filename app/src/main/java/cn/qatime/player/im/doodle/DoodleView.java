@@ -14,6 +14,8 @@ import android.view.SurfaceView;
 
 import com.orhanobut.logger.Logger;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.im.doodle.action.Action;
 import cn.qatime.player.im.doodle.action.MyFillCircle;
 import cn.qatime.player.im.doodle.action.MyPath;
@@ -31,7 +34,7 @@ import cn.qatime.player.im.doodle.action.MyPath;
  */
 public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, TransactionObserver {
 
-    private SwitchListener switchListener;
+    private long lastBoardMessage = 0;
 
     public void refreshView() {
         Canvas canvas = surfaceHolder.lockCanvas();
@@ -41,13 +44,9 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
         }
     }
 
-    public interface FlipListener {
-        void onFlipPage(Transaction transaction);
-    }
-
-    public interface SwitchListener {
-        void onSwitch(boolean isOpen);
-    }
+//    public interface FlipListener {
+//        void onFlipPage(Transaction transaction);
+//    }
 
     public enum Mode {
         PAINT,
@@ -120,10 +119,9 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
      * @param mode    设置板书模式
      * @param bgColor 设置板书的背景颜色
      */
-    public void init(String sessionId, String toAccount, Mode mode, int bgColor, int paintColor, Context context, SwitchListener switchListener) {
+    public void init(String sessionId, String toAccount, Mode mode, int bgColor, int paintColor, Context context) {
         TransactionCenter.getInstance().setDoodleViewInited(true);
         this.sessionId = sessionId;
-        this.switchListener = switchListener;
         this.transactionManager = new TransactionManager(sessionId, toAccount, context);
 
         if (mode == Mode.PAINT || mode == Mode.BOTH) {
@@ -371,7 +369,7 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
 
         onActionStart(x, y);
         transactionManager.sendStartTransaction(x / xZoom, y / yZoom, paintChannel.paintColor);
-        saveUserData(BaseApplication.getInstance().getAccount(), new Transaction(Transaction.ActionStep.START, x / xZoom, y / yZoom, paintChannel.paintColor), false, false, false);
+        saveUserData(BaseApplication.getInstance().getAccount(), new Transaction(Transaction.ActionStep.START, x / xZoom, y / yZoom, paintChannel.paintColor), false, false);
     }
 
     private void onPaintActionMove(float x, float y) {
@@ -385,7 +383,7 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
 
         onActionMove(x, y);
         transactionManager.sendMoveTransaction(x / xZoom, y / yZoom, paintChannel.paintColor);
-        saveUserData(BaseApplication.getInstance().getAccount(), new Transaction(Transaction.ActionStep.MOVE, x / xZoom, y / yZoom, paintChannel.paintColor), false, false, false);
+        saveUserData(BaseApplication.getInstance().getAccount(), new Transaction(Transaction.ActionStep.MOVE, x / xZoom, y / yZoom, paintChannel.paintColor), false, false);
     }
 
     private void onPaintActionEnd(float x, float y) {
@@ -395,7 +393,7 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
 
         onActionEnd();
         transactionManager.sendEndTransaction(lastX / xZoom, lastY / yZoom, paintChannel.paintColor);
-        saveUserData(BaseApplication.getInstance().getAccount(), new Transaction(Transaction.ActionStep.END, lastX / xZoom, lastY / yZoom, paintChannel.paintColor), false, false, false);
+        saveUserData(BaseApplication.getInstance().getAccount(), new Transaction(Transaction.ActionStep.END, lastX / xZoom, lastY / yZoom, paintChannel.paintColor), false, false);
     }
 
 
@@ -452,12 +450,19 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
                     // 收到翻页消息。先清空白板，然后做翻页操作。
 //                    Logger.e(TAG, "receive flip msg");
 //                    flipListener.onFlipPage(t);
-                } else if (t.isSwitch()) {//开启桌面共享  x:   1开启  0关闭
-                    if (t.getX() == 1) {
-                        switchListener.onSwitch(true);
-                    } else if (t.getX() == 0) {
-                        switchListener.onSwitch(false);
+                } else if (t.isSwitchTeacher()) {
+                    if (t.getId() <= lastBoardMessage) {
+                        return;
                     }
+                    lastBoardMessage = t.getId();
+                    if (t.getStatus().equals("board")) {
+                        EventBus.getDefault().post(BusEvent.board);
+                    } else if (t.getStatus().equals("desktop")) {
+                        EventBus.getDefault().post(BusEvent.desktop);
+                    }
+                    List<Transaction> response = new ArrayList<>(1);
+                    response.add(new Transaction().makeStudentResponseTransaction(t.getId()));
+                    TransactionCenter.getInstance().sendToRemote(sessionId, null, response);
                 }
             }
         }
@@ -596,7 +601,7 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
                         playbackChannel.actions.add(playbackChannel.action);
                     }
 
-                    saveUserData(account, t, false, false, false);
+                    saveUserData(account, t, false, false);
                     setPlaybackColor(playbackChannel, t.getRgb());
 
                     playbackChannel.action = new MyPath(t.getX() * xZoom, t.getY() * yZoom, playbackChannel
@@ -605,7 +610,7 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
                     playbackChannel.action.onDraw(canvas);
                     break;
                 case Transaction.ActionStep.MOVE:
-                    saveUserData(account, t, false, false, false);
+                    saveUserData(account, t, false, false);
                     if (playbackChannel.action != null) {
                         playbackChannel.action.onMove(t.getX() * xZoom, t.getY() * yZoom);
                         playbackChannel.action.onDraw(canvas);
@@ -617,7 +622,7 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
                         playbackChannel.actions.add(playbackChannel.action);
                         playbackChannel.action = null;
                     }
-                    saveUserData(account, t, false, false, false);
+                    saveUserData(account, t, false, false);
                     break;
                 default:
                     break;
@@ -628,7 +633,7 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
         }
     }
 
-    private void saveUserData(String account, Transaction t, boolean isBack, boolean isClear, boolean isFlip) {
+    private void saveUserData(String account, Transaction t, boolean isBack, boolean isClear) {
         List<Transaction> list = userDataMap.get(account);
         if (isBack) {
             while (list != null && list.size() > 0 && list.get(list.size() - 1).getStep() != Transaction.ActionStep.START) {
@@ -640,20 +645,20 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
             userDataMap.put(account, list);
         } else if (isClear) {
             userDataMap.clear();
-        } else if (isFlip) {
-            if (list == null) {
-                list = new ArrayList<>();
-                list.add(t);
-            } else {
-                for (Transaction transaction : list) {
-                    if (transaction.getStep() == Transaction.ActionStep.Flip) {
-                        list.remove(transaction);
-                        break;
-                    }
-                }
-                list.add(t);
-            }
-            userDataMap.put(account, list);
+//        } else if (isFlip) {
+//            if (list == null) {
+//                list = new ArrayList<>();
+//                list.add(t);
+//            } else {
+//                for (Transaction transaction : list) {
+//                    if (transaction.getStep() == Transaction.ActionStep.Flip) {
+//                        list.remove(transaction);
+//                        break;
+//                    }
+//                }
+//                list.add(t);
+//            }
+//            userDataMap.put(account, list);
         } else {
             if (list == null) {
                 list = new ArrayList<>();
@@ -743,7 +748,7 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
 
         if (channel.actions != null && channel.actions.size() > 0) {
             channel.actions.remove(channel.actions.size() - 1);
-            saveUserData(account, null, true, false, false);
+            saveUserData(account, null, true, false);
             Canvas canvas = surfaceHolder.lockCanvas();
             if (canvas == null) {
                 return false;
@@ -756,7 +761,7 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
     }
 
     public void clearAll() {
-        saveUserData(BaseApplication.getInstance().getAccount(), null, false, true, false);
+        saveUserData(BaseApplication.getInstance().getAccount(), null, false, true);
         // clear 回放的所有频道
         for (Map.Entry<String, DoodleChannel> entry : playbackChannelMap.entrySet()) {
             clear(entry.getValue(), false);
@@ -820,10 +825,10 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
         surfaceHolder.unlockCanvasAndPost(canvas);
     }
 
-    public void sendFlipData(String docId, int currentPageNum, int pageCount, int type) {
-        transactionManager.sendFlipTransaction(docId, currentPageNum, pageCount, type);
-        saveUserData(BaseApplication.getInstance().getAccount(), new Transaction().makeFlipTranscation(docId, currentPageNum, pageCount, type), false, false, true);
-    }
+//    public void sendFlipData(String docId, int currentPageNum, int pageCount, int type) {
+//        transactionManager.sendFlipTransaction(docId, currentPageNum, pageCount, type);
+//        saveUserData(BaseApplication.getInstance().getAccount(), new Transaction().makeFlipTranscation(docId, currentPageNum, pageCount, type), false, false, true);
+//    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

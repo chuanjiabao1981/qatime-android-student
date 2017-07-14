@@ -19,8 +19,6 @@ import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
 
-import java.util.Locale;
-
 import cn.qatime.player.R;
 import cn.qatime.player.activity.PlayBackActivity;
 import cn.qatime.player.base.BaseFragment;
@@ -211,7 +209,6 @@ public class FragmentPlayBack extends BaseFragment implements View.OnClickListen
                     zoom.setImageResource(R.mipmap.narrow);
                 } else {
                     callback.zoomSmall();
-                    zoom.setImageResource(R.mipmap.enlarge);
                 }
                 break;
         }
@@ -322,6 +319,20 @@ public class FragmentPlayBack extends BaseFragment implements View.OnClickListen
             play.setImageResource(R.mipmap.nemediacontroller_play);
         } else {
             play.setImageResource(R.mipmap.nemediacontroller_pause);
+        }
+    }
+
+    /**
+     * 横竖屏改编后改变zoom图标
+     */
+    public void refreshZoom() {
+        if (callback == null) {
+            return;
+        }
+        if (callback.isPortrait()) {
+            zoom.setImageResource(R.mipmap.enlarge);
+        } else {
+            zoom.setImageResource(R.mipmap.narrow);
         }
     }
 

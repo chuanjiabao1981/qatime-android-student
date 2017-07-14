@@ -125,7 +125,6 @@
         android:layout_height="48dp"
         android:visibility="invisible">
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -141,7 +140,6 @@
                 android:layout_marginRight="6dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_bg_selector_red"
-                android:clickable="true"
                 android:gravity="center"
                 android:text="进入试听"
                 android:textColor="#fff"
@@ -177,11 +175,11 @@
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
                 android:layout_weight="1"
-                android:background="@drawable/button_bg_selector_red_with_stork"
+                android:background="@drawable/button_bg_selector_red"
                 android:clickable="true"
                 android:gravity="center"
                 android:text="观看"
-                android:textColor="@drawable/text_selector_white_red"
+                android:textColor="#fff"
                 android:textSize="16sp" />
         </LinearLayout>
 

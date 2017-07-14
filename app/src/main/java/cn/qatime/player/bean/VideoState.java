@@ -8,14 +8,12 @@ package cn.qatime.player.bean;
 
 public enum VideoState {
     /**
-     * 初始化  INIT
      * 未直播  UNPLAY
      * 直播中  PLAYING
      * 已关闭  CLOSED
      */
-    INIT(-1), UNPLAY(0), PLAYING(1), CLOSED(2);
+    UNPLAY(0), PLAYING(1), CLOSED(2);
 
     VideoState(int i) {
-
     }
 }

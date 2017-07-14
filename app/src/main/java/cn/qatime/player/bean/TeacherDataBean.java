@@ -252,7 +252,15 @@ public class TeacherDataBean implements Serializable {
             private int lessons_count;
             private boolean is_finished;
             private boolean off_shelve;
+            private String sell_type;
 
+            public String getSell_type() {
+                return sell_type;
+            }
+
+            public void setSell_type(String sell_type) {
+                this.sell_type = sell_type;
+            }
             public boolean isOff_shelve() {
                 return off_shelve;
             }
@@ -375,6 +383,15 @@ public class TeacherDataBean implements Serializable {
             private String status;
             private int lessons_count;
             private boolean off_shelve;
+            private String sell_type;
+
+            public String getSell_type() {
+                return sell_type;
+            }
+
+            public void setSell_type(String sell_type) {
+                this.sell_type = sell_type;
+            }
 
             public boolean isOff_shelve() {
                 return off_shelve;

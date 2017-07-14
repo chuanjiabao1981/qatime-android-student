@@ -42,7 +42,6 @@ import com.bumptech.glide.Glide;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 
-import libraryextra.adapter.ViewHolder;
 
 public class BaseViewHolder extends RecyclerView.ViewHolder {
 

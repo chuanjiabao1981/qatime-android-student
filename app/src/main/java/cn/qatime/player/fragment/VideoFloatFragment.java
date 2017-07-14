@@ -5,7 +5,6 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -42,7 +41,7 @@ import libraryextra.utils.StringUtils;
  * @Describe 播放器控制框
  */
 public class VideoFloatFragment extends Fragment implements View.OnClickListener {
-    private final String sessionId;
+    private String sessionId;
     private boolean showState = true;//是否是显示状态
     private boolean isDanmuOn = true;//弹幕默认开启
     private boolean isSubBig = true;//副窗口默认大
@@ -89,6 +88,9 @@ public class VideoFloatFragment extends Fragment implements View.OnClickListener
         this.sessionId = sessionId;
     }
 
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
 
     private void assignViews(View view) {
         exit = view.findViewById(R.id.player_exit);

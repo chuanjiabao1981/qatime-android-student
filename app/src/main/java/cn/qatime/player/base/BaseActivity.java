@@ -17,13 +17,14 @@ import com.umeng.message.PushAgent;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.utils.MPermission;
+import cn.qatime.player.utils.UrlUtils;
 import libraryextra.utils.StringUtils;
 
 /**
  * 基础类
  */
 public class BaseActivity extends AppCompatActivity {
-    private RequestQueue Queue= BaseApplication.getInstance().getRequestQueue();
+    private RequestQueue Queue = BaseApplication.getInstance().getRequestQueue();
     private AlertDialog alertDialog;
     protected boolean destroyed = false;
 
@@ -67,9 +68,17 @@ public class BaseActivity extends AppCompatActivity {
 
 
     /**
-     * 设备已在其他地方登陆
+     * 设备已在其他地方登录
      */
     public void tokenOut() {
+        if (BaseApplication.getInstance().isTokenOut()) return;
+        Queue.cancelAll(new RequestQueue.RequestFilter() {
+            @Override
+            public boolean apply(Request<?> request) {
+                return request.getUrl().contains(UrlUtils.getBaseUrl());
+            }
+        });
+        BaseApplication.getInstance().setTokenOut(true);
         View view = View.inflate(this, R.layout.dialog_confirm, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         alertDialog = builder.create();
@@ -97,12 +106,15 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void out() {
+        BaseApplication.getInstance().setTokenOut(false);
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("out", "out");
         startActivity(intent);
 //        this.finish();
     }
+
     public <T> Request<T> addToRequestQueue(Request<T> request) {
+        if (BaseApplication.getInstance().isTokenOut()) return null;
         request.setTag(this);
         return Queue.add(request);
     }
@@ -113,6 +125,7 @@ public class BaseActivity extends AppCompatActivity {
         super.onDestroy();
         destroyed = true;
     }
+
     public void cancelAll(final Object tag) {
         Queue.cancelAll(tag);
     }
