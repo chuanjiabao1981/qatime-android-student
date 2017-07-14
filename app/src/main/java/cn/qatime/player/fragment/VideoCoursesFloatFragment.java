@@ -28,7 +28,6 @@ import java.util.Locale;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.VideoCoursesPlayActivity;
-import cn.qatime.player.bean.VideoPlayBean;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.VideoLessonsBean;

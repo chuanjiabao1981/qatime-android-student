@@ -78,7 +78,7 @@ public class MediaFile {
 
 	static void addFileType(String extension, int fileType, String mimeType) {
 		sFileTypeMap.put(extension, new MediaFileType(fileType, mimeType));
-		sMimeTypeMap.put(mimeType, Integer.valueOf(fileType));
+		sMimeTypeMap.put(mimeType, fileType);
 	}
 
 	static {

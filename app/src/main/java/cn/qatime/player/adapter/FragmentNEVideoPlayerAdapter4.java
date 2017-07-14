@@ -65,7 +65,7 @@ public class FragmentNEVideoPlayerAdapter4 extends CommonAdapter<Announcements.D
         if (StringUtils.isNullOrBlanK(value)) {
             return -1;
         } else {
-            return value.intValue();
+            return value;
         }
     }
 }

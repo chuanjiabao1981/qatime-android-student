@@ -7,10 +7,8 @@ import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import cn.qatime.player.R;
 import cn.qatime.player.holder.BaseViewHolder;
@@ -23,7 +21,7 @@ public class MsgAdapter extends BaseMultiItemFetchLoadAdapter<IMMessage, BaseVie
 
     private ViewHolderEventListener eventListener;
     private Map<String, Float> progresses; // 有文件传输，需要显示进度条的消息ID map
-    private String messageId;
+//    private String messageId;
     private String owner;
 
     public MsgAdapter(RecyclerView recyclerView, List<IMMessage> data) {
@@ -201,17 +199,17 @@ public class MsgAdapter extends BaseMultiItemFetchLoadAdapter<IMMessage, BaseVie
 //        }
 //    }
 
-    private boolean hideTimeAlways(IMMessage message) {
-        if (message.getSessionType() == SessionTypeEnum.ChatRoom) {
-            return true;
-        }
-        switch (message.getMsgType()) {
-            case notification:
-                return true;
-            default:
-                return false;
-        }
-    }
+//    private boolean hideTimeAlways(IMMessage message) {
+//        if (message.getSessionType() == SessionTypeEnum.ChatRoom) {
+//            return true;
+//        }
+//        switch (message.getMsgType()) {
+//            case notification:
+//                return true;
+//            default:
+//                return false;
+//        }
+//    }
 
     public void setOwner(String owner) {
         this.owner = owner;
@@ -229,11 +227,11 @@ public class MsgAdapter extends BaseMultiItemFetchLoadAdapter<IMMessage, BaseVie
         void onFailedBtnClick(IMMessage resendMessage);
     }
 
-    public void setUuid(String messageId) {
-        this.messageId = messageId;
-    }
-
-    public String getUuid() {
-        return messageId;
-    }
+//    public void setUuid(String messageId) {
+//        this.messageId = messageId;
+//    }
+//
+//    public String getUuid() {
+//        return messageId;
+//    }
 }

@@ -44,7 +44,7 @@ public class SearchActivity extends BaseActivity {
         });
         flow = (FlowLayout) findViewById(R.id.flow);
         String[] value = new String[]{"高考", "语文", "初二", "动态电路", "力学", "必修"};
-        for (int i = 0; i < value.length; i++) {
+        for (String aValue : value) {
             TextView textView = new TextView(this);
             textView.setGravity(Gravity.CENTER);
             textView.setTextColor(0xff666666);
@@ -58,7 +58,7 @@ public class SearchActivity extends BaseActivity {
             params.bottomMargin = DensityUtils.dip2px(this, 3);
             textView.setLayoutParams(params);
 
-            final String s = value[i];
+            final String s = aValue;
             textView.setText(s);
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override

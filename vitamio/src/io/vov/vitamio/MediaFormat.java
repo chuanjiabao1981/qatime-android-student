@@ -337,21 +337,21 @@ public final class MediaFormat {
      * Sets the value of an integer key.
      */
     public final void setInteger(String name, int value) {
-        mMap.put(name, Integer.valueOf(value));
+        mMap.put(name, value);
     }
 
     /**
      * Sets the value of a long key.
      */
     public final void setLong(String name, long value) {
-        mMap.put(name, Long.valueOf(value));
+        mMap.put(name, value);
     }
 
     /**
      * Sets the value of a float key.
      */
     public final void setFloat(String name, float value) {
-        mMap.put(name, Float.valueOf(value));
+        mMap.put(name, value);
     }
 
     /**

@@ -1,6 +1,5 @@
 package cn.qatime.player.presenter;
 
-import android.content.pm.ActivityInfo;
 
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 

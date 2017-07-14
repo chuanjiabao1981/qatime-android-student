@@ -1015,9 +1015,9 @@ public class MediaPlayer {
      * @return {@link TrackInfo#getTrackInfoArray()}
      */
     public SparseArray<MediaFormat> findTrackFromTrackInfo(int mediaTrackType, TrackInfo[] trackInfo) {
-        for (int i = 0; i < trackInfo.length; i++) {
-            if (trackInfo[i].getTrackType() == mediaTrackType) {
-                return trackInfo[i].getTrackInfoArray();
+        for (TrackInfo aTrackInfo : trackInfo) {
+            if (aTrackInfo.getTrackType() == mediaTrackType) {
+                return aTrackInfo.getTrackInfoArray();
             }
         }
         return null;

@@ -1,12 +1,8 @@
 package cn.qatime.player.holder;
 
-import android.graphics.Color;
 import android.text.method.LinkMovementMethod;
-import android.text.style.ImageSpan;
 import android.view.View;
 import android.widget.TextView;
-
-import com.netease.neliveplayer.util.NimUIKit;
 
 import java.util.Hashtable;
 

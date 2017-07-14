@@ -188,7 +188,7 @@ public class DanmakuContext {
     private void setDanmakuVisible(boolean visible, int type) {
         if (visible) {
             mFilterTypes.remove(Integer.valueOf(type));
-        } else if (!mFilterTypes.contains(Integer.valueOf(type))) {
+        } else if (!mFilterTypes.contains(type)) {
             mFilterTypes.add(type);
         }
     }

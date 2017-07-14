@@ -114,7 +114,7 @@ public class PersonalMyOrderPaidDetailActivity extends BaseActivity {
             if (StringUtils.isNullOrBlanK(data.getProduct_interactive_course().getTeachers().get(0).getName())) {
                 teacher.setText(getResourceString(R.string.cancel_order_teacher));
             } else {
-                StringBuffer sp = new StringBuffer();
+                StringBuilder sp = new StringBuilder();
                 sp.append(data.getProduct_interactive_course().getTeachers().get(0).getName());
                 if (data.getProduct_interactive_course().getTeachers().size() > 1) {
                     sp.append("...");

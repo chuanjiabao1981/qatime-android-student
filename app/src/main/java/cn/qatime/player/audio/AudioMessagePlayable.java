@@ -27,10 +27,6 @@ public class AudioMessagePlayable implements Playable {
 
 	@Override
 	public boolean isAudioEqual(Playable audio) {
-		if (AudioMessagePlayable.class.isInstance(audio)) {
-			return message.isTheSame(((AudioMessagePlayable) audio).getMessage());
-		} else {
-			return false;
-		}
+		return AudioMessagePlayable.class.isInstance(audio) && message.isTheSame(((AudioMessagePlayable) audio).getMessage());
 	}
 }
