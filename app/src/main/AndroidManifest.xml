@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="cn.qatime.player"
     android:versionCode="23"
-    android:versionName="1.2.5">
+    android:versionName="1.3.0">
 
     <!--<uses-sdk-->
     <!--android:minSdkVersion="17"-->
