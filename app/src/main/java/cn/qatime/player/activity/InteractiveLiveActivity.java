@@ -27,6 +27,7 @@ import com.netease.nimlib.sdk.avchat.AVChatCallback;
 import com.netease.nimlib.sdk.avchat.AVChatManager;
 import com.netease.nimlib.sdk.avchat.AVChatStateObserver;
 import com.netease.nimlib.sdk.avchat.constant.AVChatAudioEffectMode;
+import com.netease.nimlib.sdk.avchat.constant.AVChatResCode;
 import com.netease.nimlib.sdk.avchat.constant.AVChatType;
 import com.netease.nimlib.sdk.avchat.constant.AVChatVideoScalingType;
 import com.netease.nimlib.sdk.avchat.model.AVChatAudioFrame;
@@ -717,7 +718,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void onConnectionTypeChanged(int i) {
-        Logger.e("");
     }
 
     @Override
@@ -748,6 +748,9 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     @Override
     public void onJoinedChannel(int i, String s, String s1) {
         Logger.e("onJoinedChannel, res:" + i);
+        if (i == AVChatResCode.JoinChannelCode.OK) {
+            AVChatManager.getInstance().setSpeaker(true);
+        }
     }
 
     @Override
