@@ -74,7 +74,7 @@ public class MsgViewHolderText extends MsgViewHolderBase {
         return 0;
     }
 
-    protected String getDisplayText() {
-        return message.getContent();
-    }
+//    protected String getDisplayText() {
+//        return message.getContent();
+//    }
 }
