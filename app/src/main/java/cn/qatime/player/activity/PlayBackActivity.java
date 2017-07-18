@@ -94,7 +94,7 @@ public class PlayBackActivity extends BaseFragmentActivity implements SurfaceHol
                     Glide.with(PlayBackActivity.this).load(data.getData().getTeacher().getEx_big_avatar_url()).centerCrop().bitmapTransform(new GlideCircleTransform(PlayBackActivity.this)).placeholder(R.mipmap.error_header).crossFade().dontAnimate().into(image);
                     teacher.setText(data.getData().getTeacher().getName());
                     sex.setImageResource("male".equals(data.getData().getTeacher().getGender()) ? R.mipmap.male : R.mipmap.female);
-                    videoLength.setText(DateUtils.stringForTime(data.getData().getVideo_duration(), true));
+                    videoLength.setText(DateUtils.stringForTime_s(data.getData().getVideo_duration(), true));
                     playBackCount.setText(String.valueOf(data.getData().getReplay_times()));
                     play(data.getData().getVideo_url());
                 }

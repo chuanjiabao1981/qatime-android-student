@@ -15,6 +15,7 @@ import android.widget.TextView;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.VideoCoursesDetailsBean;
+import libraryextra.utils.DateUtils;
 import libraryextra.utils.StringUtils;
 
 /**
@@ -84,6 +85,7 @@ public class FragmentVideoCoursesClassInfo extends BaseFragment {
         subject.setText((StringUtils.isNullOrBlanK(bean.getData().getVideo_course().getSubject()) ? "" : bean.getData().getVideo_course().getSubject()));
         grade.setText((bean.getData().getVideo_course().getGrade() == null ? "" : bean.getData().getVideo_course().getGrade()));
         totalClass.setText(getString(R.string.lesson_count, bean.getData().getVideo_course().getVideo_lessons_count()));
+        timeLength.setText("总时长"+ DateUtils.stringForTime_s(bean.getData().getVideo_course().getTotal_duration()));
         if (!StringUtils.isNullOrBlanK(bean.getData().getVideo_course().getObjective())) {
             target.setText(bean.getData().getVideo_course().getObjective());
         }
