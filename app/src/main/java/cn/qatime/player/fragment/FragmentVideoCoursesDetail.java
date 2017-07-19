@@ -84,7 +84,7 @@ public class FragmentVideoCoursesDetail extends BaseFragment {
         if (!StringUtils.isNullOrBlanK(data.getData().getVideo_course().getSuit_crowd())) {
             suitable.setText(data.getData().getVideo_course().getSuit_crowd());
         }
-        totalTime.setText("总时长" + DateUtils.stringForTime(data.getData().getVideo_course().getTotal_duration()));
+        totalTime.setText("总时长" + DateUtils.stringForTime_s(data.getData().getVideo_course().getTotal_duration()));
         sex.setImageResource("male".equals(data.getData().getVideo_course().getTeacher().getGender()) ? R.mipmap.male : R.mipmap.female);
         name.setText(data.getData().getVideo_course().getTeacher().getName());
         if (!StringUtils.isNullOrBlanK(data.getData().getVideo_course().getTeacher().getTeaching_years())) {
