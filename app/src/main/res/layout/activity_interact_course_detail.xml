@@ -110,7 +110,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <libraryextra.view.SimpleViewPagerIndicator
+        <cn.qatime.player.view.SimpleViewPagerIndicator
             android:id="@+id/id_stickynavlayout_indicator"
             style="@style/tab_item_height"
             android:layout_width="match_parent"
