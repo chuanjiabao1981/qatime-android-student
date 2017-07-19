@@ -44,6 +44,7 @@ import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
+import cn.qatime.player.view.SimpleViewPagerIndicator;
 import libraryextra.bean.OrderPayBean;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
@@ -52,7 +53,6 @@ import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
-import libraryextra.view.SimpleViewPagerIndicator;
 
 public class RemedialClassDetailActivity extends BaseFragmentActivity implements View.OnClickListener {
     private int id;

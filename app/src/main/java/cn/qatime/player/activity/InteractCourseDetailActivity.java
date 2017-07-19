@@ -38,6 +38,7 @@ import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.annotation.OnMPermissionDenied;
 import cn.qatime.player.utils.annotation.OnMPermissionGranted;
 import cn.qatime.player.utils.annotation.OnMPermissionNeverAskAgain;
+import cn.qatime.player.view.SimpleViewPagerIndicator;
 import libraryextra.bean.InteractCourseDetailBean;
 import libraryextra.bean.OrderPayBean;
 import libraryextra.bean.TeacherBean;
@@ -45,7 +46,6 @@ import libraryextra.utils.JsonUtils;
 import libraryextra.utils.NetUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
-import libraryextra.view.SimpleViewPagerIndicator;
 
 public class InteractCourseDetailActivity extends BaseFragmentActivity implements View.OnClickListener {
     private int id;
