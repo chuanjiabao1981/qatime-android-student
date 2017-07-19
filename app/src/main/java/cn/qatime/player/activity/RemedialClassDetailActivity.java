@@ -247,12 +247,12 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                         progress.setVisibility(View.VISIBLE);
                         timeToStart.setVisibility(View.GONE);
                         layoutView.setBackgroundColor(0xff00a0e9);
-                        progress.setText(getString(R.string.progress_live, data.getData().getCourse().getClosed_lessons_count(), data.getData().getCourse().getPreset_lesson_count()));
+                        progress.setText(getString(R.string.progress_live, data.getData().getCourse().getClosed_lessons_count(), data.getData().getCourse().getLessons_count()));
                     } else if (Constant.CourseStatus.completed.equals(data.getData().getCourse().getStatus())) {
                         timeToStart.setVisibility(View.GONE);
                         progress.setVisibility(View.VISIBLE);
                         layoutView.setBackgroundColor(0xff999999);
-                        progress.setText(getString(R.string.progress_live, data.getData().getCourse().getClosed_lessons_count(), data.getData().getCourse().getPreset_lesson_count()));
+                        progress.setText(getString(R.string.progress_live, data.getData().getCourse().getClosed_lessons_count(), data.getData().getCourse().getLessons_count()));
                     } else {
                         layoutView.setVisibility(View.GONE);
                     }

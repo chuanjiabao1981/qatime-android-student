@@ -104,10 +104,10 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
         return true;
     }
 
-    // 是否显示气泡背景，默认为显示
-    private boolean isShowBubble() {
-        return true;
-    }
+//    // 是否显示气泡背景，默认为显示
+//    private boolean isShowBubble() {
+//        return true;
+//    }
 
     /// -- 以下接口可由子类调用
     final MsgAdapter getMsgAdapter() {
@@ -299,20 +299,21 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
 
     private void setNameTextView() {
         if (message.getSessionType() == SessionTypeEnum.Team && !isMiddleItem()) {
-            String name = TeamDataCache.getInstance().getTeamMemberDisplayName(message.getSessionId(), message.getFromAccount());
-            String owner = getMsgAdapter().getOwner();
-            if (!StringUtils.isNullOrBlanK(owner)) {
-                if (owner.equals(name)) {
-                    nameTextView.setText(name + "(" + context.getString(R.string.teacher_translate) + ")");
-                    nameTextView.setTextColor(0xffff5842);
-                } else {
-                    nameTextView.setText(name);
-                    nameTextView.setTextColor(0xff333333);
+            if (isReceivedMessage()) {
+                nameTextView.setVisibility(View.VISIBLE);
+                String name = TeamDataCache.getInstance().getTeamMemberDisplayName(message.getSessionId(), message.getFromAccount());
+                String owner = getMsgAdapter().getOwner();
+                nameTextView.setTextColor(0xff333333);
+                if (!StringUtils.isNullOrBlanK(owner)) {
+                    if (owner.equals(message.getFromAccount())) {
+                        name = name + "(" + context.getString(R.string.teacher_translate) + ")";
+                        nameTextView.setTextColor(0xffff5842);
+                    }
                 }
-            } else {
                 nameTextView.setText(name);
+            } else {
+                nameTextView.setVisibility(View.GONE);
             }
-            nameTextView.setVisibility(isReceivedMessage() ? View.VISIBLE : View.GONE);
         }
     }
 

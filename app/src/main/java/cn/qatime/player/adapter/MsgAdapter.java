@@ -3,7 +3,6 @@ package cn.qatime.player.adapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 
 import java.util.HashMap;

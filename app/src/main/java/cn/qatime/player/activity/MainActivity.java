@@ -115,8 +115,7 @@ public class MainActivity extends BaseFragmentActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == 1) {
-        } else if (requestCode == 2) {
+        if (requestCode == 2) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this, "未取得相机权限", Toast.LENGTH_SHORT).show();
             } else {

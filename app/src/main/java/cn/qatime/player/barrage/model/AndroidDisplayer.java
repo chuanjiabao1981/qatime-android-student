@@ -23,7 +23,6 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.text.TextPaint;
 
 import cn.qatime.player.barrage.renderer.IRenderer;
