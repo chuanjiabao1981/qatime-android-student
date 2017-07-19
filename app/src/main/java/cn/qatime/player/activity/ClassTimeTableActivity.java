@@ -41,6 +41,7 @@ import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.annotation.OnMPermissionDenied;
 import cn.qatime.player.utils.annotation.OnMPermissionGranted;
 import cn.qatime.player.utils.annotation.OnMPermissionNeverAskAgain;
+import cn.qatime.player.view.MonthDateView;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.utils.DensityUtils;
@@ -49,14 +50,13 @@ import libraryextra.utils.NetUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
-import libraryextra.view.MonthDateView;
 
 public class ClassTimeTableActivity extends BaseActivity implements View.OnClickListener {
     private PullToRefreshListView listView;
     private List<ClassTimeTableBean.DataBean> totalList = new ArrayList<>();
     private CommonAdapter<ClassTimeTableBean.DataBean.LessonsBean> adapter;
     private List<Integer> alertList = new ArrayList<>();
-    private MonthDateView monthDateView;
+    private   MonthDateView monthDateView;
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
     private String date = parse.format(new Date());
     private List<ClassTimeTableBean.DataBean.LessonsBean> itemList = new ArrayList<>();
