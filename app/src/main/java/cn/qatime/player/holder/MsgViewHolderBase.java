@@ -104,10 +104,10 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
         return true;
     }
 
-    // 是否显示气泡背景，默认为显示
-    private boolean isShowBubble() {
-        return true;
-    }
+//    // 是否显示气泡背景，默认为显示
+//    private boolean isShowBubble() {
+//        return true;
+//    }
 
     /// -- 以下接口可由子类调用
     final MsgAdapter getMsgAdapter() {

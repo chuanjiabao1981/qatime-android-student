@@ -480,6 +480,11 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
                     if (listener.isShowTime()) {
                         return true;
                     }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                            return true;
+                        }
+                    }
                     touched = false;
 //                    if (audioRecordListener != null) {
 //                        audioRecordListener.audioRecordStop();
@@ -495,6 +500,11 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
                 } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
                     if (listener.isShowTime()) {
                         return true;
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                            return true;
+                        }
                     }
                     touched = false;
                     cancelAudioRecord(isCancelled(v, event));
