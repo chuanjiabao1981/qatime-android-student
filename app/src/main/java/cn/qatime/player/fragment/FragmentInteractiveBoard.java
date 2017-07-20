@@ -226,7 +226,7 @@ public class FragmentInteractiveBoard extends BaseFragment implements View.OnCli
             playBack.setEnabled(false);
             if (isClearDoodle) {
                 doodleView.clearAll();
-                joinTipText.setText(getString(R.string.join_tip));
+                joinTipText.setText("加入互动后可在上方涂鸦");
             }
             doodleView.setEnableView(false);
         }

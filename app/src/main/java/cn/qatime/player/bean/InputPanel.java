@@ -425,7 +425,7 @@ public class InputPanel implements View.OnClickListener, IAudioRecordCallback {
      *
      * @return true 被禁言
      */
-    public boolean checkMute() {
+    private boolean checkMute() {
         if (isMute) {
             Toast.makeText(context, context.getResources().getString(R.string.have_muted), Toast.LENGTH_SHORT).show();
             clearInputValue();

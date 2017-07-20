@@ -70,7 +70,7 @@ import libraryextra.view.FragmentLayoutWithLine;
 public class NEVideoPlayerActivity extends BaseFragmentActivity implements VideoActivityInterface, VideoLayout.OnDoubleClickListener, InputPanel.InputPanelListener {
 
     private boolean isSubBig = true;//副窗口是否是大的
-    private boolean ismain = true;//video1 是否在主显示view上
+    private boolean isMain = true;//video1 是否在主显示view上
     //    private int orientation = Configuration.ORIENTATION_PORTRAIT;//当前屏幕横竖屏状态
     private boolean isSubOpen = true;//副窗口开关
     public List<IMMessage> limitMessage = new ArrayList<>();//用于限制2s内发送消息
@@ -190,7 +190,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         subVideo = (RelativeLayout) findViewById(R.id.sub_video);
         //控制框
         VideoControlPresenter controlPresenter = new VideoControlPresenter(this);
-        floatFragment = new VideoFloatFragment(sessionId);
+        floatFragment = new VideoFloatFragment();
         floatFragment.setCallback(controlPresenter);
         getSupportFragmentManager().beginTransaction().replace(R.id.control, floatFragment).commit();
 
@@ -532,7 +532,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             param.height = ViewGroup.LayoutParams.MATCH_PARENT;
             mainVideo.setLayoutParams(param);
             mainView.setLayoutParams(param);
-            if (ismain) {
+            if (isMain) {
                 whole.removeView(danmuView);
                 mainVideo.addView(danmuView, 1);
             } else {
@@ -571,7 +571,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             param.height = ScreenUtils.getScreenWidth(NEVideoPlayerActivity.this) * 9 / 16;
             mainView.setLayoutParams(param);
             mainVideo.setLayoutParams(param);
-            if (ismain) {
+            if (isMain) {
                 RelativeLayout.LayoutParams danmuParam = null;
                 mainVideo.removeView(danmuView);
                 whole.addView(danmuView);
@@ -851,7 +851,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         } else {
             danmuView.setVisibility(View.VISIBLE);
         }
-        if (ismain) {
+        if (isMain) {
             subVideo.removeView(window2);
             video2.setZOrderOnTop(true);
             floatingWindow.addView(window2);
@@ -873,7 +873,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     public void changeSubBig() {
         inputPanel.closeEmojiAndInput();
         isSubBig = true;
-        if (ismain) {
+        if (isMain) {
             floatingWindow.removeView(window2);
             video2.setZOrderOnTop(false);
             subVideo.addView(window2);
@@ -890,7 +890,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     @Override
     public void changeFloating2Main() {
-        ismain = true;
+        isMain = true;
         mainView.removeView(window2);
         floatingWindow.removeView(window1);
         video1.setZOrderOnTop(false);
@@ -915,7 +915,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     @Override
     public void changeMain2Sub() {
-        ismain = false;
+        isMain = false;
         mainView.removeView(window1);
         subVideo.removeView(window2);
         video1.setZOrderOnTop(false);
@@ -929,7 +929,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     @Override
     public void changeMain2Floating() {
-        ismain = false;
+        isMain = false;
         mainView.removeView(window1);
         floatingWindow.removeView(window2);
         video2.setZOrderOnTop(false);
@@ -947,7 +947,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     @Override
     public void changeSub2Main() {
-        ismain = true;
+        isMain = true;
         mainView.removeView(window2);
         subVideo.removeView(window1);
         video1.setZOrderOnTop(false);
@@ -976,7 +976,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 danmuView.setVisibility(View.VISIBLE);
                 subVideo.setVisibility(View.VISIBLE);
             } else {
-                if (ismain) {
+                if (isMain) {
                     video2.setVisibility(View.VISIBLE);
                     window2.setVisibility(View.VISIBLE);
                 } else {
@@ -990,7 +990,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 danmuView.setVisibility(View.GONE);
                 subVideo.setVisibility(View.GONE);
             } else {
-                if (ismain) {
+                if (isMain) {
                     video2.setVisibility(View.GONE);
                     window2.setVisibility(View.GONE);
                 } else {

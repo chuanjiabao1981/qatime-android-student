@@ -327,6 +327,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         fragBaseFragments.add(new FragmentInteractiveAnnouncements());
         fragBaseFragments.add(new FragmentInteractiveDetails());
         fragBaseFragments.add(new FragmentInteractiveMembers());
+        messageFragment = (FragmentInteractiveMessage) fragBaseFragments.get(1);
 
         FragmentLayoutWithLine fragmentlayout = (FragmentLayoutWithLine) findViewById(R.id.fragmentlayout);
 
@@ -343,7 +344,9 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                     if (inputPanel != null) {
                         inputPanel.visibilityInput();
                     }
-                    messageFragment.scrollToBottom();
+                    if (messageFragment != null) {
+                        messageFragment.scrollToBottom();
+                    }
                 } else {
                     if (inputPanel != null) {
                         inputPanel.goneInput();
@@ -391,7 +394,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         }
         inputPanel = new InputPanel(this, this, rootView, false, sessionId);
         inputPanel.setMute(isMute);
-        messageFragment = (FragmentInteractiveMessage) fragBaseFragments.get(1);
 
         messageFragment.setChatCallBack(new FragmentInteractiveMessage.Callback() {
             @Override
