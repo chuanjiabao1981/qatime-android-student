@@ -114,7 +114,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     private InputPanel inputPanel;
     private String camera;
     private String board;
-    private boolean isResume = false;
+    private boolean canLoop = false;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -395,7 +395,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
         fragment2.setSessionId(sessionId);
 
-
         inputPanel.setOnInputShowListener(new InputPanel.OnInputShowListener() {
             @Override
             public void OnInputShow() {
@@ -462,6 +461,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                                     camera = data.getData().getCamera();
                                     board = data.getData().getBoard();
 //                                    setVideoState(VideoState.INIT);
+                                    canLoop = true;
                                     hd.post(runnable);
                                 }
                                 sessionId = data.getData().getChat_team_id();
@@ -496,7 +496,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     @Override
     protected void onResume() {
         super.onResume();
-        isResume = true;
+        if (canLoop) {
+            hd.removeCallbacks(runnable);
+            hd.post(runnable);
+        }
         video1.start();
         video2.start();
         hd.postDelayed(new Runnable() {
@@ -610,7 +613,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     @Override
     protected void onPause() {
-        isResume = false;
+        hd.removeCallbacks(runnable);//停止查询播放状态
         video1.pause();
         video2.pause();
         floatFragment.setPlaying(false);
@@ -623,7 +626,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     @Override
     protected void onDestroy() {
-        hd.removeCallbacks(runnable);//停止查询播放状态
 //        Logger.e("退出轮询");
         video1.release_resource();
         video2.release_resource();
@@ -749,7 +751,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
             @Override
             protected void onSuccess(JSONObject response) {
-                if (!isResume) return;
 //              JSONObject data = response.getJSONObject("data");
                 LiveStatusBean data = JsonUtils.objectFromJson(response.toString(), LiveStatusBean.class);
                 if (data != null && data.getData() != null && data.getData().getLive_info() != null) {

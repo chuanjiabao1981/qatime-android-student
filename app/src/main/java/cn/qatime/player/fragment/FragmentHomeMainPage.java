@@ -48,6 +48,7 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.CitySelectActivity;
+import cn.qatime.player.activity.ExclusiveLessonDetailActivity;
 import cn.qatime.player.activity.InteractCourseDetailActivity;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.PayPSWForgetActivity;
@@ -743,7 +744,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     intent.putExtra("teacherId", listRecommendTeacher.get(position).getTeacher().getId());
                     startActivity(intent);
                 }
-
             }
         });
     }
@@ -853,7 +853,10 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                         ActivityCompat.requestPermissions(getActivity(), new String[]{
                                 android.Manifest.permission.CAMERA}, 2);
                     } else {
-                        intent = new Intent(getActivity(), CaptureActivity.class);
+//                        intent = new Intent(getActivity(), CaptureActivity.class);
+//                        mainActivity.startActivityForResult(intent, Constant.REQUEST);
+                        intent = new Intent(getActivity(), ExclusiveLessonDetailActivity.class);
+                        intent.putExtra("id", 1);
                         mainActivity.startActivityForResult(intent, Constant.REQUEST);
                     }
                 } else {

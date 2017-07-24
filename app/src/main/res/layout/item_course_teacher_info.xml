@@ -60,7 +60,7 @@
         android:id="@+id/school"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="所在学校"
+        android:text="暂无"
         android:textColor="#666" />
 
     <TextView
@@ -77,7 +77,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/text_background_flowlayout"
-        android:text="执教年数"
+        android:text="无"
         android:textColor="#666" />
 
     <TextView
