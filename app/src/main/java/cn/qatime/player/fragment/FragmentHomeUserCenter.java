@@ -19,6 +19,7 @@ import org.greenrobot.eventbus.Subscribe;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.AboutUsActivity;
 import cn.qatime.player.activity.PersonalInformationActivity;
+import cn.qatime.player.activity.PersonalMyExclusiveActivity;
 import cn.qatime.player.activity.PersonalMyInteractActivity;
 import cn.qatime.player.activity.PersonalMyOrderActivity;
 import cn.qatime.player.activity.PersonalMyTasteActivity;
@@ -121,6 +122,10 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
                 intent = new Intent(getActivity(), PersonalMyTasteActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.my_exclusive:
+                intent = new Intent(getActivity(), PersonalMyExclusiveActivity.class);
+                startActivity(intent);
+                break;
             case R.id.security:// 安全管理
                 intent = new Intent(getActivity(), SecurityManagerActivity.class);
                 startActivity(intent);
@@ -161,6 +166,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
         course = (LinearLayout) view.findViewById(R.id.my_course);
         myInteract = (LinearLayout) view.findViewById(R.id.my_interact);
         myVideo = (LinearLayout) view.findViewById(R.id.my_video);
+        view.findViewById(R.id.my_exclusive).setOnClickListener(this);
         myTaste = (LinearLayout) view.findViewById(R.id.my_taste);
         security = (LinearLayout) view.findViewById(R.id.security);
         setting = (LinearLayout) view.findViewById(R.id.setting);
