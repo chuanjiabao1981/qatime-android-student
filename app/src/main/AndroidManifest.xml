@@ -191,6 +191,11 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
+            android:name=".activity.ExclusiveVideoPlayerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
             android:name=".activity.NEVideoPlaybackActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape"
@@ -429,8 +434,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.VideoCoursesPlayActivity"
-            android:launchMode="singleTask"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.InteractiveLiveActivity"
