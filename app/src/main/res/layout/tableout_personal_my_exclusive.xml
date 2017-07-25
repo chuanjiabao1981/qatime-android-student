@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ccc"
+    android:paddingBottom="1px">
+
+    <LinearLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="#fff"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            style="@style/tab_item_height"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tab_text1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="@string/to_start"
+                android:textColor="#999999"
+                android:textSize="14.0sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/tab_item_height"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <!-- android:id="@+id/tab_text" -->
+            <TextView
+                android:id="@+id/tab_text2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="@string/started"
+                android:textColor="#999999"
+                android:textSize="14.0sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/tab_item_height"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tab_text3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="@string/done"
+                android:textColor="#999999"
+                android:textSize="14.0sp" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>
