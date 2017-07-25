@@ -116,20 +116,6 @@
                         android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/enter"
-                android:layout_width="60dp"
-                android:layout_height="25dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/shape_text_enter_background_selector"
-                android:gravity="center"
-                android:text="进入"
-                android:textColor="@drawable/enter_text_selector"
-                android:textSize="12sp" />
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>
