@@ -69,16 +69,6 @@ public class FragmentMyVideoFree extends BaseFragment {
         adapter = new CommonAdapter<MyVideoClassBean.DataBean>(getActivity(), list, R.layout.item_fragment_my_video_free) {
             @Override
             public void convert(ViewHolder helper, final MyVideoClassBean.DataBean item, int position) {
-
-                helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), VideoCoursesPlayActivity.class);
-                        intent.putExtra("id", item.getVideo_course().getId());
-                        intent.putExtra("tasting", false);
-                        startActivity(intent);
-                    }
-                });
                 Glide.with(getActivity()).load(item.getVideo_course().getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getVideo_course().getName());
                 helper.setText(R.id.subject, item.getVideo_course().getSubject());

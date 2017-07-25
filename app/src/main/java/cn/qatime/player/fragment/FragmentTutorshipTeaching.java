@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
-import cn.qatime.player.activity.NEVideoPlayerActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
@@ -68,16 +67,6 @@ public class FragmentTutorshipTeaching extends BaseFragment {
         adapter = new CommonAdapter<MyTutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_tutorship3) {
             @Override
             public void convert(ViewHolder helper, final MyTutorialClassBean.Data item, int position) {
-
-                helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), NEVideoPlayerActivity.class);
-                        intent.putExtra("id", item.getId());
-                        startActivity(intent);
-                    }
-                });
-
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.subject, item.getSubject());
