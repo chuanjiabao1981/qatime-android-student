@@ -408,6 +408,10 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.ExclusiveScreeningConditionActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.VideoCoursesActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
@@ -429,8 +433,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.VideoCoursesPlayActivity"
-            android:launchMode="singleTask"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.InteractiveLiveActivity"
