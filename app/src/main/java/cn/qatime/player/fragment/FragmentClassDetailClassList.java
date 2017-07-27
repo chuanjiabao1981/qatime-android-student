@@ -99,6 +99,7 @@ public class FragmentClassDetailClassList extends BaseFragment {
                 if (isFinished(item)) {
                     if (data != null && data.getTicket() != null && !StringUtils.isNullOrBlanK(data.getTicket().getType()) && data.getTicket().getType().equals("LiveStudio::BuyTicket")) {
                         if (!item.isReplayable()) {
+                            Toast.makeText(getActivity(), "该课程不可回放", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         if (item.getLeft_replay_times() <= 0) {

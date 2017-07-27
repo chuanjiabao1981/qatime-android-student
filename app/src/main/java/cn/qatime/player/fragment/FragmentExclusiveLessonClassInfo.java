@@ -19,7 +19,7 @@ import java.text.SimpleDateFormat;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.bean.LiveLessonDetailBean;
+import cn.qatime.player.bean.ExclusiveLessonDetailBean;
 import cn.qatime.player.view.FlowLayout;
 import libraryextra.utils.StringUtils;
 
@@ -27,7 +27,7 @@ import static android.view.ViewGroup.GONE;
 import static android.view.ViewGroup.LayoutParams;
 import static android.view.ViewGroup.MarginLayoutParams;
 
-public class FragmentClassDetailClassInfo extends BaseFragment {
+public class FragmentExclusiveLessonClassInfo extends BaseFragment {
 
     WebView describe;
     TextView classStartTime;
@@ -37,8 +37,6 @@ public class FragmentClassDetailClassInfo extends BaseFragment {
     TextView totalclass;
     private SimpleDateFormat parse1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private SimpleDateFormat parse2 = new SimpleDateFormat("yyyy-MM-dd");
-    private LinearLayout flowLayout;
-    private FlowLayout flow;
     private TextView suitable;
     private TextView target;
     private WebView learningTips;
@@ -47,7 +45,7 @@ public class FragmentClassDetailClassInfo extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_class_detail_class_info, container, false);
+        View view = inflater.inflate(R.layout.fragment_exclusive_lesson_class_info, container, false);
         initview(view);
 
         return view;
@@ -64,12 +62,9 @@ public class FragmentClassDetailClassInfo extends BaseFragment {
         totalclass = (TextView) view.findViewById(R.id.total_class);
         describe = (WebView) view.findViewById(R.id.describe);
         learningTips = (WebView) view.findViewById(R.id.learning_tips);
-        flowLayout = (LinearLayout) view.findViewById(R.id.flow_layout);
-        flow = (FlowLayout) view.findViewById(R.id.flow);
 
         initWebView(describe);
         initWebView(learningTips);
-
     }
 
     private void initWebView(WebView webView) {
@@ -96,49 +91,27 @@ public class FragmentClassDetailClassInfo extends BaseFragment {
         }
     }
 
-    public void setData(LiveLessonDetailBean bean) {
-        if (bean != null && bean.getData() != null && bean.getData().getCourse() != null) {
-            subject.setText((StringUtils.isNullOrBlanK(bean.getData().getCourse().getSubject()) ? "" : bean.getData().getCourse().getSubject()));
+    public void setData(ExclusiveLessonDetailBean bean) {
+        if (bean != null && bean.getData() != null && bean.getData().getCustomized_group() != null) {
+            subject.setText((StringUtils.isNullOrBlanK(bean.getData().getCustomized_group().getSubject()) ? "" : bean.getData().getCustomized_group().getSubject()));
             try {
-                classStartTime.setText((bean.getData().getCourse().getLive_start_time() == null ? "" : parse2.format(parse1.parse(bean.getData().getCourse().getLive_start_time()))));
-                classEndTime.setText(parse2.format(parse1.parse(bean.getData().getCourse().getLive_end_time())));
+                classStartTime.setText((StringUtils.isNullOrBlanK(bean.getData().getCustomized_group().getStart_at()) ? "" : parse2.format(parse1.parse(bean.getData().getCustomized_group().getStart_at()))));
+                classEndTime.setText(StringUtils.isNullOrBlanK(bean.getData().getCustomized_group().getEnd_at()) ? "" : parse2.format(parse1.parse(bean.getData().getCustomized_group().getEnd_at())));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            grade.setText((bean.getData().getCourse().getGrade() == null ? "" : bean.getData().getCourse().getGrade()));
-            totalclass.setText(getString(R.string.lesson_count, bean.getData().getCourse().getPreset_lesson_count()));
-            if (!StringUtils.isNullOrBlanK(bean.getData().getCourse().getTag_list())) {
-                if (flow.getChildCount() > 0) {
-                    flow.removeAllViews();
-                }
-                for (int va = 0; va < bean.getData().getCourse().getTag_list().size(); va++) {
-                    TextView textView = new TextView(getActivity());
-                    textView.setGravity(Gravity.CENTER);
-                    textView.setTextColor(0xff999999);
-                    textView.setTextSize(13);
-                    textView.setBackgroundResource(R.drawable.text_background_flowlayout);
-                    MarginLayoutParams params = new MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-                    params.leftMargin = 2;
-                    params.rightMargin = 2;
-                    params.topMargin = 2;
-                    params.bottomMargin = 2;
-                    textView.setLayoutParams(params);
-                    textView.setText(bean.getData().getCourse().getTag_list().get(va));
-                    flow.addView(textView);
-                }
-            } else {
-                flowLayout.setVisibility(GONE);
+            grade.setText((bean.getData().getCustomized_group().getGrade() == null ? "" : bean.getData().getCustomized_group().getGrade()));
+            totalclass.setText(getString(R.string.lesson_count, bean.getData().getCustomized_group().getView_tickets_count()));
+
+            if (!StringUtils.isNullOrBlanK(bean.getData().getCustomized_group().getObjective())) {
+                target.setText(bean.getData().getCustomized_group().getObjective());
             }
-            if (!StringUtils.isNullOrBlanK(bean.getData().getCourse().getObjective())) {
-                target.setText(bean.getData().getCourse().getObjective());
-            }
-            if (!StringUtils.isNullOrBlanK(bean.getData().getCourse().getSuit_crowd())) {
-                suitable.setText(bean.getData().getCourse().getSuit_crowd());
+            if (!StringUtils.isNullOrBlanK(bean.getData().getCustomized_group().getSuit_crowd())) {
+                suitable.setText(bean.getData().getCustomized_group().getSuit_crowd());
             }
             String header = "<style>* {color:#666666;margin:0;padding:0;}.one {float: left;width:50%;height:auto;position: relative;text-align: center;}.two {width:100%;height:100%;top: 0;left:0;position: absolute;text-align: center;}</style>";//默认color段落间距
-            String body = StringUtils.isNullOrBlanK(bean.getData().getCourse().getDescription()) ? getString(R.string.no_desc) : bean.getData().getCourse().getDescription();
+            String body = StringUtils.isNullOrBlanK(bean.getData().getCustomized_group().getDescription()) ? getString(R.string.no_desc) : bean.getData().getCustomized_group().getDescription();
             body = body.replace("\r\n", "<br>");
-            //......
             String footer =
                     "<p style='margin-top:20'><font style='font-size:15;color:#333333'}>学习须知</font></p>" +
                             "<p style='margin-top:5;'><font style='font-size:15;color:#333333'}>上课前</font></p>" +

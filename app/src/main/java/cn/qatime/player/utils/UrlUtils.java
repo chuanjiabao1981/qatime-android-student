@@ -27,6 +27,8 @@ public class UrlUtils {
     public static String urlLiveStudio = baseUrl + "api/v1/live_studio/";
     //辅导班
     public static String urlRemedialClass = baseUrl + "api/v1/live_studio/courses";
+    //专属课
+    public static String urlExclusiveLesson = baseUrl + "/api/v1/live_studio/customized_groups";
     //我的辅导班列表
     public static String urlMyRemedialClass = baseUrl + "api/v1/live_studio/students/";
     //个人信息
@@ -54,7 +56,8 @@ public class UrlUtils {
     //辅导班排行all
     public static String urlRecentPublishedAll = baseUrl + "api/v1/live_studio/courses/rank_all/all_published_rank";
     //辅导班排行all
-    public static String urlLiveStudioFree= baseUrl +"api/v1/live_studio/free_courses";;
+    public static String urlLiveStudioFree = baseUrl + "api/v1/live_studio/free_courses";
+    ;
     //獲取支付结果
     public static String urlPayResult = baseUrl + "api/v1/payment/orders/";
     //订单列表
