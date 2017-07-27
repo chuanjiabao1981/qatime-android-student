@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,34 +28,39 @@ import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
-import cn.qatime.player.activity.VideoCoursesActivity;
+import cn.qatime.player.activity.ExclusiveScreeningConditionActivity;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.bean.FilterVideoCourseBean;
+import cn.qatime.player.bean.FilterExclusiveCourseBean;
+import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
 /**
  * @author Tianhaoranly
- * @date 2017/4/10 18:16
+ * @date 2017/4/10 18:15
  * @Description:
  */
-public class FragmentFilterClassVideo extends BaseFragment {
+public class FragmentFilterClassExclusive extends BaseFragment {
 
     private String grade;
     private String subject;
     private PullToRefreshListView listview;
-    private CommonAdapter<FilterVideoCourseBean.DataBean> adapter;
-    private List<FilterVideoCourseBean.DataBean> datas = new ArrayList<>();
+    private CommonAdapter<FilterExclusiveCourseBean.DataBean> adapter;
+    private List<FilterExclusiveCourseBean.DataBean> datas = new ArrayList<>();
     private int latestResult = 1;//0上1下-1未选
     private int popularityResult = -1;
     private int priceResult = -1;
     private int page = 1;
-    private boolean free;
+    private String courseStatus = null;//课程状态
+    private String sellType = null;//课程类型
+    private String endTime = null;
+    private String startTime = null;
 
     public BaseFragment setArguments(String grade, String subject) {
         this.grade = grade;
@@ -69,12 +72,21 @@ public class FragmentFilterClassVideo extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_filter_video_course, container, false);
+        View view = inflater.inflate(R.layout.fragment_filter_exclusive_course, container, false);
         initView(view);
         getData(0);
         return view;
     }
 
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_filter_course);
+//        grade = getIntent().getStringExtra("grade");
+//        subject = getIntent().getStringExtra("subject");
+//        setTitles(grade + subject+"直播课");
+//        initView();
+//    }
 
     /**
      * @param type 0下拉1上啦
@@ -119,9 +131,16 @@ public class FragmentFilterClassVideo extends BaseFragment {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        map.put("q[sell_type_eq]", free ? "free" : "");
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlVideoCourses + "/search", map), null, new VolleyListener(getActivity()) {
+        if (!StringUtils.isNullOrBlanK(courseStatus)) {
+            map.put("q[status_eq]", courseStatus);
+        }
+        if (!StringUtils.isNullOrBlanK(startTime) && !StringUtils.isNullOrBlanK(endTime)) {
+            map.put("q[class_date_gteq]", startTime);
+            map.put("q[class_date_lt]", endTime);
+        }
+        map.put("q[sell_type_eq]", sellType);
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlLiveStudio+"customized_groups/search", map), null, new VolleyListener(getActivity()) {
             @Override
             protected void onTokenOut() {
                 listview.onRefreshComplete();
@@ -135,7 +154,7 @@ public class FragmentFilterClassVideo extends BaseFragment {
                 String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
                 listview.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
                 listview.onRefreshComplete();
-                FilterVideoCourseBean data = JsonUtils.objectFromJson(response.toString(), FilterVideoCourseBean.class);
+                FilterExclusiveCourseBean data = JsonUtils.objectFromJson(response.toString(), FilterExclusiveCourseBean.class);
                 assert data != null;
                 datas.addAll(data.getData());
                 adapter.notifyDataSetChanged();
@@ -159,15 +178,6 @@ public class FragmentFilterClassVideo extends BaseFragment {
         final TextView latest = (TextView) view.findViewById(R.id.latest);
         final TextView price = (TextView) view.findViewById(R.id.price);
         final TextView popularity = (TextView) view.findViewById(R.id.popularity);
-        final CheckBox freeC = (CheckBox) view.findViewById(R.id.free);
-
-        freeC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                free = freeC.isChecked();
-                getData(0);
-            }
-        });
 
         latest.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -223,6 +233,7 @@ public class FragmentFilterClassVideo extends BaseFragment {
                 getData(0);
             }
         });
+        View screen = view.findViewById(R.id.screen);
 
         listview = (PullToRefreshListView) view.findViewById(R.id.listview);
         listview.setMode(PullToRefreshBase.Mode.BOTH);
@@ -233,23 +244,23 @@ public class FragmentFilterClassVideo extends BaseFragment {
         listview.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         listview.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
         listview.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
-        adapter = new CommonAdapter<FilterVideoCourseBean.DataBean>(getActivity(), datas, R.layout.item_filter_course_video) {
+        adapter = new CommonAdapter<FilterExclusiveCourseBean.DataBean>(getActivity(), datas, R.layout.item_filter_course_exclusive) {
             @Override
-            public void convert(ViewHolder holder, FilterVideoCourseBean.DataBean item, int position) {
-                Glide.with(getActivity()).load(item.getPublicize()).crossFade().placeholder(R.mipmap.photo).into((ImageView) holder.getView(R.id.image));
+            public void convert(ViewHolder holder, FilterExclusiveCourseBean.DataBean item, int position) {
+                Glide.with(getActivity()).load(item.getPublicizes_url().getList()).crossFade().placeholder(R.mipmap.photo).into((ImageView) holder.getView(R.id.image));
                 holder.setText(R.id.name, item.getName())
-                        .setText(R.id.price, "free".equals(item.getSell_type())?"免费":("￥" + item.getPrice()))
+                        .setText(R.id.price, "free".equals(item.getSell_type()) ? "免费" : ("￥" + item.getCurrent_price()))
                         .setText(R.id.teacher, item.getTeacher_name())
-                        .setText(R.id.buy_count,item.getBuy_tickets_count()+"");
+                        .setText(R.id.buy_count, item.getView_tickets_count() + "");
             }
         };
         listview.setAdapter(adapter);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), VideoCoursesActivity.class);
-                intent.putExtra("id", datas.get(position - 1).getId());
-                startActivity(intent);
+//                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
+//                intent.putExtra("id", datas.get(position - 1).getId());
+//                startActivity(intent);
             }
         });
         listview.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
@@ -263,6 +274,18 @@ public class FragmentFilterClassVideo extends BaseFragment {
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page += 1;
                 getData(1);
+            }
+        });
+
+        screen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ExclusiveScreeningConditionActivity.class);
+                intent.putExtra("courseStatus", courseStatus);
+                intent.putExtra("startTime", startTime);
+                intent.putExtra("sellType", sellType);
+                intent.putExtra("endTime", endTime);
+                startActivityForResult(intent, Constant.REQUEST);
             }
         });
     }
@@ -285,4 +308,17 @@ public class FragmentFilterClassVideo extends BaseFragment {
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constant.REQUEST && resultCode == Constant.RESPONSE) {
+            if (data != null) {
+                courseStatus = data.getStringExtra("courseStatus");
+                sellType = data.getStringExtra("sellType");
+                startTime = data.getStringExtra("startTime");
+                endTime = data.getStringExtra("endTime");
+                getData(0);
+            }
+        }
+    }
 }

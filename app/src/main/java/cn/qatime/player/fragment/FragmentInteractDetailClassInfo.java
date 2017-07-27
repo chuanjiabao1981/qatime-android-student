@@ -88,7 +88,7 @@ public class FragmentInteractDetailClassInfo extends BaseFragment {
             grade.setText((bean.getData().getGrade() == null ? "" : bean.getData().getGrade()));
             totalCount.setText(getString(R.string.lesson_count, bean.getData().getLessons_count()));
             //时长，平均时长
-            totalTime.setText(bean.getData().getLessons_count() * 45 + "分钟");
+            totalTime.setText(bean.getData().getLessons_count() * 45 + "分钟");     
 //            averageTime.setText();
             if (!StringUtils.isNullOrBlanK(bean.getData().getObjective())) {
                 target.setText(bean.getData().getObjective());

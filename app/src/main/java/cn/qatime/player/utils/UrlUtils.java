@@ -23,6 +23,8 @@ public class UrlUtils {
     public static String urlHomeSearch = baseUrl + "api/v1/home/search";
     //回放
     public static String urlHomeReplays = baseUrl + "api/v1/home/replays";
+    //课程base
+    public static String urlLiveStudio = baseUrl + "api/v1/live_studio/";
     //辅导班
     public static String urlRemedialClass = baseUrl + "api/v1/live_studio/courses";
     //专属课
