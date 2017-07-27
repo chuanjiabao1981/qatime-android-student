@@ -199,7 +199,7 @@ public class ExclusiveScreeningConditionActivity extends BaseActivity {
         if (StringUtils.isNullOrBlanK(courseStatus)) return 0;
         int result = 0;
         switch (courseStatus) {
-            case "all":
+            case "":
                 result = 0;
                 break;
             case "published":
@@ -270,7 +270,7 @@ public class ExclusiveScreeningConditionActivity extends BaseActivity {
         String result = null;
         switch (courseData.get(courseChecked)) {
             case "不限":
-                result = "all";
+                result = "";
                 break;
             case "招生中":
                 result = "published";

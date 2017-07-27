@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -29,7 +30,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.ExclusiveScreeningConditionActivity;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.bean.FilterLiveCourseBean;
+import cn.qatime.player.bean.FilterExclusiveCourseBean;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -50,13 +51,12 @@ public class FragmentFilterClassExclusive extends BaseFragment {
     private String grade;
     private String subject;
     private PullToRefreshListView listview;
-    private CommonAdapter<FilterLiveCourseBean.DataBean> adapter;
-    private List<FilterLiveCourseBean.DataBean> datas = new ArrayList<>();
+    private CommonAdapter<FilterExclusiveCourseBean.DataBean> adapter;
+    private List<FilterExclusiveCourseBean.DataBean> datas = new ArrayList<>();
     private int latestResult = 1;//0上1下-1未选
     private int popularityResult = -1;
     private int priceResult = -1;
     private int page = 1;
-    private String range = null;//查询范围
     private String courseStatus = null;//课程状态
     private String sellType = null;//课程类型
     private String endTime = null;
@@ -108,9 +108,9 @@ public class FragmentFilterClassExclusive extends BaseFragment {
             }
         } else if (priceResult != -1) {
             if (priceResult == 0) {
-                map.put("sort_by", "left_price");
+                map.put("sort_by", "price");
             } else {
-                map.put("sort_by", "left_price.asc");
+                map.put("sort_by", "price.asc");
             }
         } else if (popularityResult != -1) {
             if (popularityResult == 0) {
@@ -132,9 +132,6 @@ public class FragmentFilterClassExclusive extends BaseFragment {
             e.printStackTrace();
         }
 
-        if (!StringUtils.isNullOrBlanK(range)) {
-            map.put("range", range);
-        }
         if (!StringUtils.isNullOrBlanK(courseStatus)) {
             map.put("q[status_eq]", courseStatus);
         }
@@ -143,10 +140,10 @@ public class FragmentFilterClassExclusive extends BaseFragment {
             map.put("q[class_date_lt]", endTime);
         }
         map.put("q[sell_type_eq]", sellType);
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlSearch, map), null, new VolleyListener(getActivity()) {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlLiveStudio+"customized_groups/search", map), null, new VolleyListener(getActivity()) {
             @Override
             protected void onTokenOut() {
-
+                listview.onRefreshComplete();
             }
 
             @Override
@@ -157,7 +154,7 @@ public class FragmentFilterClassExclusive extends BaseFragment {
                 String label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
                 listview.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
                 listview.onRefreshComplete();
-                FilterLiveCourseBean data = JsonUtils.objectFromJson(response.toString(), FilterLiveCourseBean.class);
+                FilterExclusiveCourseBean data = JsonUtils.objectFromJson(response.toString(), FilterExclusiveCourseBean.class);
                 assert data != null;
                 datas.addAll(data.getData());
                 adapter.notifyDataSetChanged();
@@ -165,9 +162,15 @@ public class FragmentFilterClassExclusive extends BaseFragment {
 
             @Override
             protected void onError(JSONObject response) {
-
+                listview.onRefreshComplete();
             }
-        }, new VolleyErrorListener());
+        }, new VolleyErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+                listview.onRefreshComplete();
+            }
+        });
         addToRequestQueue(request);
     }
 
@@ -241,14 +244,14 @@ public class FragmentFilterClassExclusive extends BaseFragment {
         listview.getLoadingLayoutProxy(true, false).setReleaseLabel(getResources().getString(R.string.release_to_refresh));
         listview.getLoadingLayoutProxy(false, true).setReleaseLabel(getResources().getString(R.string.release_to_load));
         listview.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
-        adapter = new CommonAdapter<FilterLiveCourseBean.DataBean>(getActivity(), datas, R.layout.item_filter_course_exclusive) {
+        adapter = new CommonAdapter<FilterExclusiveCourseBean.DataBean>(getActivity(), datas, R.layout.item_filter_course_exclusive) {
             @Override
-            public void convert(ViewHolder holder, FilterLiveCourseBean.DataBean item, int position) {
-                Glide.with(getActivity()).load(item.getPublicize()).crossFade().placeholder(R.mipmap.photo).into((ImageView) holder.getView(R.id.image));
+            public void convert(ViewHolder holder, FilterExclusiveCourseBean.DataBean item, int position) {
+                Glide.with(getActivity()).load(item.getPublicizes_url().getList()).crossFade().placeholder(R.mipmap.photo).into((ImageView) holder.getView(R.id.image));
                 holder.setText(R.id.name, item.getName())
-                        .setText(R.id.price, "free".equals(item.getSell_type()) ? "免费" : ("￥" + item.getPrice()))
+                        .setText(R.id.price, "free".equals(item.getSell_type()) ? "免费" : ("￥" + item.getCurrent_price()))
                         .setText(R.id.teacher, item.getTeacher_name())
-                        .setText(R.id.buy_count, item.getBuy_tickets_count() + "");
+                        .setText(R.id.buy_count, item.getView_tickets_count() + "");
             }
         };
         listview.setAdapter(adapter);
