@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -59,11 +60,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     private AlertDialog alertDialog;
     private ImageView aliPay;
     private ImageView account;
-    private View alipayLayout;
-    private View wechatLayout;
-    private View accountLayout;
     private View couponLayout;
-    private View confirmCoupon;
     private EditText couponCode;
     private String coupon;
     private LinearLayout couponPriceLayout;
@@ -71,7 +68,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
     private TextView balance;
     private TextView textCourseType;
     private String courseType;
-    private View tip;
+    private ViewStub tip;
     private OrderPayBean data;
 
     @Override
@@ -104,7 +101,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                 textCourseType.setText(R.string.interact_courses);
             } else if ("video".equals(courseType)) {
                 textCourseType.setText(R.string.video_courses);
-                tip.setVisibility(View.VISIBLE);
+                tip.inflate();
             }
         }
 
@@ -168,7 +165,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
             } else if ("video".equals(courseType)) {
                 url = UrlUtils.getUrl(UrlUtils.urlVideoCourses + id + "/orders", map);
             }
-        }
+        } else return;
 
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, url, null,
                 new VolleyListener(OrderConfirmActivity.this) {
@@ -206,13 +203,17 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                         } else if (payType.equals("account")) {
                             //余额支付成功  status---failed交易失败  shipped交易成功
 //                            try {
-                            Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
-                            intent.putExtra("price", confirmBean.getData().getAmount());
-                            intent.putExtra("id", confirmBean.getData().getId());
-                            intent.putExtra("time", confirmBean.getData().getCreated_at());
-                            intent.putExtra("data", name.getText().toString());
-                            intent.putExtra("type", payType);
-                            startActivity(intent);
+                            if (confirmBean != null) {
+                                Intent intent = new Intent(OrderConfirmActivity.this, OrderPayActivity.class);
+                                intent.putExtra("price", confirmBean.getData().getAmount());
+                                intent.putExtra("id", confirmBean.getData().getId());
+                                intent.putExtra("time", confirmBean.getData().getCreated_at());
+                                intent.putExtra("data", name.getText().toString());
+                                intent.putExtra("type", payType);
+                                startActivity(intent);
+                            } else {
+                                dialog();
+                            }
                         }
                         pay.setEnabled(true);
                     }
@@ -268,10 +269,10 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
         teacher = (TextView) findViewById(R.id.teacher);
         textCourseType = (TextView) findViewById(R.id.course_type);
         classnumber = (TextView) findViewById(R.id.class_number);
-        wechatLayout = findViewById(R.id.wechat_layout);
-        alipayLayout = findViewById(R.id.alipay_layout);
-        accountLayout = findViewById(R.id.account_layout);
-        tip = findViewById(R.id.tip);
+        View wechatLayout = findViewById(R.id.wechat_layout);
+        View alipayLayout = findViewById(R.id.alipay_layout);
+        View accountLayout = findViewById(R.id.account_layout);
+        tip = (ViewStub) findViewById(R.id.tip);
         balance = (TextView) findViewById(R.id.balance);
 
         couponLayout = findViewById(R.id.coupon_layout);
@@ -282,7 +283,7 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
             }
         });
         couponCode = (EditText) findViewById(R.id.coupon_code);
-        confirmCoupon = findViewById(R.id.confirm_coupon);
+        View confirmCoupon = findViewById(R.id.confirm_coupon);
         confirmCoupon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

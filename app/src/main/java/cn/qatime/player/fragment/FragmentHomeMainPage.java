@@ -853,10 +853,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                         ActivityCompat.requestPermissions(getActivity(), new String[]{
                                 android.Manifest.permission.CAMERA}, 2);
                     } else {
-//                        intent = new Intent(getActivity(), CaptureActivity.class);
-//                        mainActivity.startActivityForResult(intent, Constant.REQUEST);
-                        intent = new Intent(getActivity(), ExclusiveLessonDetailActivity.class);
-                        intent.putExtra("id", 1);
+                        intent = new Intent(getActivity(), CaptureActivity.class);
                         mainActivity.startActivityForResult(intent, Constant.REQUEST);
                     }
                 } else {
