@@ -279,7 +279,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     private void getAnnouncementsData() {
         if (id != 0) {
-            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass + "/" + id + "/realtime", null,
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlCourses + id + "/realtime", null,
                     new VolleyListener(NEVideoPlayerActivity.this) {
                         @Override
                         protected void onSuccess(JSONObject response) {
@@ -450,7 +450,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     private void initData() {
         if (id != 0) {
-            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass + "/" + id + "/play_info", null,
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlCourses + id + "/play_info", null,
                     new VolleyListener(NEVideoPlayerActivity.this) {
                         @Override
                         protected void onSuccess(JSONObject response) {

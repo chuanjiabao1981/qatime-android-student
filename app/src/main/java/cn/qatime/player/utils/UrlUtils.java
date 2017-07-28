@@ -25,8 +25,6 @@ public class UrlUtils {
     public static String urlHomeReplays = baseUrl + "api/v1/home/replays";
     //课程base
     public static String urlLiveStudio = baseUrl + "api/v1/live_studio/";
-    //辅导班
-    public static String urlRemedialClass = baseUrl + "api/v1/live_studio/courses";
     //专属课
     public static String urlExclusiveLesson = baseUrl + "/api/v1/live_studio/customized_groups";
     //我的辅导班列表

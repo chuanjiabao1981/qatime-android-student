@@ -102,6 +102,8 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
             } else if ("video".equals(courseType)) {
                 textCourseType.setText(R.string.video_courses);
                 tip.inflate();
+            } else if ("exclusive".equals(courseType)) {
+                textCourseType.setText("专属课");
             }
         }
 
@@ -164,6 +166,8 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
                 url = UrlUtils.getUrl(UrlUtils.urlInteractCourses + id + "/orders", map);
             } else if ("video".equals(courseType)) {
                 url = UrlUtils.getUrl(UrlUtils.urlVideoCourses + id + "/orders", map);
+            } else if ("exclusive".equals(courseType)) {
+                url = UrlUtils.getUrl(UrlUtils.urlExclusiveLesson + "/" + id + "/orders", map);
             }
         } else return;
 
@@ -335,7 +339,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
      * 验证优惠吗
      */
     private void verifyCoupon() {
-//        "http://192.168.1.107:3000/api/v1/payment/coupons/"
         Map<String, String> map = new HashMap<>();
         map.put("amount", String.valueOf(data.current_price));
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlCoupon + coupon + "/verify", map), null,
@@ -350,7 +353,6 @@ public class OrderConfirmActivity extends BaseActivity implements View.OnClickLi
 
                             payprice.setText(" " + df.format(couponprice) + " ");
                         }
-
                     }
 
                     @Override
