@@ -3,7 +3,6 @@ package cn.qatime.player.fragment;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.ParseException;
@@ -20,12 +18,7 @@ import java.text.SimpleDateFormat;
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.ExclusiveLessonDetailBean;
-import cn.qatime.player.view.FlowLayout;
 import libraryextra.utils.StringUtils;
-
-import static android.view.ViewGroup.GONE;
-import static android.view.ViewGroup.LayoutParams;
-import static android.view.ViewGroup.MarginLayoutParams;
 
 public class FragmentExclusiveLessonClassInfo extends BaseFragment {
 
@@ -101,7 +94,7 @@ public class FragmentExclusiveLessonClassInfo extends BaseFragment {
                 e.printStackTrace();
             }
             grade.setText((bean.getData().getCustomized_group().getGrade() == null ? "" : bean.getData().getCustomized_group().getGrade()));
-            totalclass.setText(getString(R.string.lesson_count, bean.getData().getCustomized_group().getView_tickets_count()));
+            totalclass.setText(getString(R.string.lesson_count, bean.getData().getCustomized_group().getEvents_count()));
 
             if (!StringUtils.isNullOrBlanK(bean.getData().getCustomized_group().getObjective())) {
                 target.setText(bean.getData().getCustomized_group().getObjective());

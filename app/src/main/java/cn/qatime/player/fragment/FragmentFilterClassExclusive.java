@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.ExclusiveLessonDetailActivity;
 import cn.qatime.player.activity.ExclusiveScreeningConditionActivity;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.FilterExclusiveCourseBean;
@@ -140,7 +141,7 @@ public class FragmentFilterClassExclusive extends BaseFragment {
             map.put("q[class_date_lt]", endTime);
         }
         map.put("q[sell_type_eq]", sellType);
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlLiveStudio+"customized_groups/search", map), null, new VolleyListener(getActivity()) {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlLiveStudio + "customized_groups/search", map), null, new VolleyListener(getActivity()) {
             @Override
             protected void onTokenOut() {
                 listview.onRefreshComplete();
@@ -164,7 +165,7 @@ public class FragmentFilterClassExclusive extends BaseFragment {
             protected void onError(JSONObject response) {
                 listview.onRefreshComplete();
             }
-        }, new VolleyErrorListener(){
+        }, new VolleyErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 super.onErrorResponse(volleyError);
@@ -258,9 +259,9 @@ public class FragmentFilterClassExclusive extends BaseFragment {
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-//                intent.putExtra("id", datas.get(position - 1).getId());
-//                startActivity(intent);
+                Intent intent = new Intent(getActivity(), ExclusiveLessonDetailActivity.class);
+                intent.putExtra("id", datas.get(position - 1).getId());
+                startActivity(intent);
             }
         });
         listview.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
