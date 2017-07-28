@@ -95,8 +95,8 @@ public class FragmentExclusiveLessonClassInfo extends BaseFragment {
         if (bean != null && bean.getData() != null && bean.getData().getCustomized_group() != null) {
             subject.setText((StringUtils.isNullOrBlanK(bean.getData().getCustomized_group().getSubject()) ? "" : bean.getData().getCustomized_group().getSubject()));
             try {
-                classStartTime.setText((StringUtils.isNullOrBlanK(bean.getData().getCustomized_group().getStart_at()) ? "" : parse2.format(parse1.parse(bean.getData().getCustomized_group().getStart_at()))));
-                classEndTime.setText(StringUtils.isNullOrBlanK(bean.getData().getCustomized_group().getEnd_at()) ? "" : parse2.format(parse1.parse(bean.getData().getCustomized_group().getEnd_at())));
+                classStartTime.setText((StringUtils.isNullOrBlanK(bean.getData().getCustomized_group().getStart_at()) ? "0000-00-00" : parse2.format(parse1.parse(bean.getData().getCustomized_group().getStart_at()))));
+                classEndTime.setText(StringUtils.isNullOrBlanK(bean.getData().getCustomized_group().getEnd_at()) ? "0000-00-00" : parse2.format(parse1.parse(bean.getData().getCustomized_group().getEnd_at())));
             } catch (ParseException e) {
                 e.printStackTrace();
             }

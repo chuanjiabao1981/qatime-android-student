@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
@@ -23,6 +25,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.ExclusiveLessonDetailBean;
+import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.fragment.FragmentExclusiveLessonClassInfo;
 import cn.qatime.player.fragment.FragmentExclusiveLessonClassList;
 import cn.qatime.player.fragment.FragmentExclusiveLessonTeacherInfo;
@@ -75,6 +78,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
             Toast.makeText(this, "id不可用", Toast.LENGTH_SHORT).show();
             return;
         }
+        EventBus.getDefault().register(this);
         initData();
     }
 
@@ -349,6 +353,15 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
         startActivity(intent);
     }
 
+    @Subscribe
+    public void onEvent(PayResultState code) {
+//        if (!StringUtils.isNullOrBlanK(event) && event.equals("pay_success")) {
+//
+//            finish();
+//        }
+        finish();
+    }
+
     private String getStatus(String status) {
         if (Constant.CourseStatus.published.equals(status)) {
             return getString(R.string.recruiting);
@@ -358,5 +371,11 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
             return getString(R.string.completed);
         }
         return getString(R.string.recruiting);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }
