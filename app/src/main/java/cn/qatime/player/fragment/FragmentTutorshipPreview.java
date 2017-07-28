@@ -16,7 +16,6 @@ import com.bumptech.glide.Glide;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.orhanobut.logger.Logger;
 
 import org.json.JSONObject;
@@ -28,7 +27,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
-import cn.qatime.player.activity.MessageActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
@@ -71,20 +69,6 @@ public class FragmentTutorshipPreview extends BaseFragment {
 
             @Override
             public void convert(ViewHolder helper, final MyTutorialClassBean.Data item, int position) {
-
-                helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(getActivity(), MessageActivity.class);
-                        intent.putExtra("sessionId", item.getChat_team_id());
-                        intent.putExtra("sessionType", SessionTypeEnum.Team);
-                        intent.putExtra("courseId", item.getId());
-                        intent.putExtra("name", item.getName());
-                        intent.putExtra("type", "custom");
-                        intent.putExtra("owner", item.getChat_team_owner());
-                        startActivity(intent);
-                    }
-                });
                 Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.subject, item.getSubject());

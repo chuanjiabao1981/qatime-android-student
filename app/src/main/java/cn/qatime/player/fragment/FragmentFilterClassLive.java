@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -161,7 +162,7 @@ public class FragmentFilterClassLive extends BaseFragment {
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlSearch, map), null, new VolleyListener(getActivity()) {
             @Override
             protected void onTokenOut() {
-
+                listview.onRefreshComplete();
             }
 
             @Override
@@ -180,9 +181,15 @@ public class FragmentFilterClassLive extends BaseFragment {
 
             @Override
             protected void onError(JSONObject response) {
-
+                listview.onRefreshComplete();
             }
-        }, new VolleyErrorListener());
+        }, new VolleyErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+                listview.onRefreshComplete();
+            }
+        });
         addToRequestQueue(request);
     }
 
@@ -263,7 +270,7 @@ public class FragmentFilterClassLive extends BaseFragment {
             public void convert(ViewHolder holder, FilterLiveCourseBean.DataBean item, int position) {
                 Glide.with(getActivity()).load(item.getPublicize()).crossFade().placeholder(R.mipmap.photo).into((ImageView) holder.getView(R.id.image));
                 holder.setText(R.id.name, item.getName())
-                        .setText(R.id.price, "free".equals(item.getSell_type()) ? "免费" : ("￥" + item.getPrice()))
+                        .setText(R.id.price, "free".equals(item.getSell_type()) ? "免费" : ("￥" + item.getCurrent_price()))
                         .setText(R.id.teacher, item.getTeacher_name())
                         .setText(R.id.buy_count, item.getBuy_tickets_count() + "");
             }

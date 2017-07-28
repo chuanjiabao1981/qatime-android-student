@@ -19,21 +19,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:gravity="center"
         android:background="@drawable/shape_bg_course_filter"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tab_text1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/shape_bg_course_filter_item_left"
             android:gravity="center"
+            android:paddingBottom="5dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="5dp"
-            android:paddingBottom="5dp"
             android:text="直播课"
-            android:background="@drawable/shape_bg_course_filter_item_left"
             android:textColor="@drawable/text_course_filter_color_selector"
             android:textSize="14.0sp" />
 
@@ -42,13 +42,13 @@
             android:id="@+id/tab_text2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/shape_bg_course_filter_item_center"
             android:gravity="center"
+            android:paddingBottom="5dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="5dp"
-            android:paddingBottom="5dp"
             android:text="一对一"
-            android:background="@drawable/shape_bg_course_filter_item_center"
             android:textColor="@drawable/text_course_filter_color_selector"
             android:textSize="14.0sp" />
 
@@ -57,13 +57,27 @@
             android:id="@+id/tab_text3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/shape_bg_course_filter_item_center"
             android:gravity="center"
+            android:paddingBottom="5dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="5dp"
-            android:paddingBottom="5dp"
             android:text="视频课"
+            android:textColor="@drawable/text_course_filter_color_selector"
+            android:textSize="14.0sp" />
+
+        <TextView
+            android:id="@+id/tab_text4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@drawable/shape_bg_course_filter_item_right"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:text="专属课"
             android:textColor="@drawable/text_course_filter_color_selector"
             android:textSize="14.0sp" />
     </LinearLayout>

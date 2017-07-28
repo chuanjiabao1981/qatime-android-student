@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -103,9 +104,9 @@ public class FragmentFilterClassInteract extends BaseFragment {
             }
         } else if (priceResult != -1) {
             if (priceResult == 0) {
-                map.put("sort_by", "left_price");
+                map.put("sort_by", "price");
             } else {
-                map.put("sort_by", "left_price.asc");
+                map.put("sort_by", "price.asc");
             }
         }
         try {
@@ -125,7 +126,7 @@ public class FragmentFilterClassInteract extends BaseFragment {
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlInteractCourses + "search", map), null, new VolleyListener(getActivity()) {
             @Override
             protected void onTokenOut() {
-
+                listview.onRefreshComplete();
             }
 
             @Override
@@ -144,9 +145,15 @@ public class FragmentFilterClassInteract extends BaseFragment {
 
             @Override
             protected void onError(JSONObject response) {
-
+                listview.onRefreshComplete();
             }
-        }, new VolleyErrorListener());
+        }, new VolleyErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+                listview.onRefreshComplete();
+            }
+        });
         addToRequestQueue(request);
     }
 

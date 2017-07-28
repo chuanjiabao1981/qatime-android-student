@@ -177,6 +177,10 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activity.ExclusiveLessonDetailActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.OrderConfirmActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
@@ -410,6 +414,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ScreeningConditionActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ExclusiveScreeningConditionActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity

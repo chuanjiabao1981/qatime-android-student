@@ -21,6 +21,7 @@ import com.netease.nimlib.sdk.team.constant.TeamTypeEnum;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.netease.nimlib.sdk.team.model.UpdateTeamAttachment;
+import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 
