@@ -56,7 +56,7 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
     private List<ClassTimeTableBean.DataBean> totalList = new ArrayList<>();
     private CommonAdapter<ClassTimeTableBean.DataBean.LessonsBean> adapter;
     private List<Integer> alertList = new ArrayList<>();
-    private   MonthDateView monthDateView;
+    private MonthDateView monthDateView;
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
     private String date = parse.format(new Date());
     private List<ClassTimeTableBean.DataBean.LessonsBean> itemList = new ArrayList<>();
@@ -151,13 +151,18 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if ("LiveStudio::Lesson".equals(itemList.get(position - 1).getModel_type())) {
+                if ("LiveStudio::Course".equals(itemList.get(position - 1).getProduct_type())) {
                     Intent intent = new Intent(ClassTimeTableActivity.this, RemedialClassDetailActivity.class);
                     intent.putExtra("id", Integer.valueOf(itemList.get(position - 1).getProduct_id()));
                     intent.putExtra("pager", 2);
                     startActivity(intent);
-                } else if ("LiveStudio::InteractiveLesson".equals(itemList.get(position - 1).getModel_type())) {
+                } else if ("LiveStudio::InteractiveCourse".equals(itemList.get(position - 1).getProduct_type())) {
                     Intent intent = new Intent(ClassTimeTableActivity.this, InteractCourseDetailActivity.class);
+                    intent.putExtra("id", Integer.valueOf(itemList.get(position - 1).getProduct_id()));
+                    intent.putExtra("pager", 2);
+                    startActivity(intent);
+                } else if ("LiveStudio::CustomizedGroup".equals(itemList.get(position - 1).getProduct_type())) {
+                    Intent intent = new Intent(ClassTimeTableActivity.this, ExclusiveLessonDetailActivity.class);
                     intent.putExtra("id", Integer.valueOf(itemList.get(position - 1).getProduct_id()));
                     intent.putExtra("pager", 2);
                     startActivity(intent);
@@ -186,12 +191,15 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                 helper.setText(R.id.grade, item.getGrade());
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
-                if ("LiveStudio::Lesson".equals(itemList.get(position).getModel_type())) {
-                    helper.getView(R.id.modal_type).setBackgroundColor(0xffff4856);
+                if ("LiveStudio::Course".equals(item.getProduct_type())) {
+                    helper.getView(R.id.modal_type).setBackgroundColor(0xffb8860b);
                     helper.setText(R.id.modal_type, "直播课");
-                } else if ("LiveStudio::InteractiveLesson".equals(itemList.get(position).getModel_type())) {
-                    helper.getView(R.id.modal_type).setBackgroundColor(0xff4856ff);
+                } else if ("LiveStudio::InteractiveCourse".equals(item.getProduct_type())) {
+                    helper.getView(R.id.modal_type).setBackgroundColor(0xffffb6c1);
                     helper.setText(R.id.modal_type, "一对一");
+                } else if ("LiveStudio::CustomizedGroup".equals(item.getProduct_type())) {
+                    helper.getView(R.id.modal_type).setBackgroundColor(0xff00ccff);
+                    helper.setText(R.id.modal_type, "专属课");
                 }
 
 
@@ -202,11 +210,11 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if ("LiveStudio::Lesson".equals(item.getModel_type())) {
+                        if ("LiveStudio::Course".equals(item.getProduct_type())) {
                             Intent intent = new Intent(ClassTimeTableActivity.this, NEVideoPlayerActivity.class);
                             intent.putExtra("id", Integer.valueOf(item.getProduct_id()));
                             startActivity(intent);
-                        } else if ("LiveStudio::InteractiveLesson".equals(item.getModel_type())) {
+                        } else if ("LiveStudio::InteractiveCourse".equals(item.getProduct_type())) {
                             ClassTimeTableActivity.this.item = item;
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                 if (NetUtils.checkPermission(ClassTimeTableActivity.this).size() > 0) {
@@ -217,8 +225,13 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                             } else {
                                 toNext();
                             }
+                        } else if ("LiveStudio::CustomizedGroup".equals(item.getProduct_type())) {
+//                            // TODO: 2017/7/31 跳转播放页
+//                            Intent intent = new Intent(getActivity(), ExclusiveLessonDetailActivity.class);
+//                            intent.putExtra("id", Integer.valueOf(item.getProduct_id()));
+//                            intent.putExtra("pager", 2);
+//                            startActivity(intent);
                         }
-
                     }
                 });
             }

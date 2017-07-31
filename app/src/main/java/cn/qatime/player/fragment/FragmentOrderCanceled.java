@@ -92,6 +92,15 @@ public class FragmentOrderCanceled extends BaseFragment {
                             .append("/").append(item.getProduct_video_course().getTeacher().getName());
                     helper.setText(R.id.classname, item.getProduct_video_course().getName())
                             .setText(R.id.describe, sp.toString());
+                }else if("LiveStudio::CustomizedGroup".equals(item.getProduct_type())){
+                    // TODO: 2017/7/31 订单专属课
+//                    sp.append("专属课/");
+//                    sp.append(item.getProduct_video_course().getGrade())
+//                            .append(item.getProduct_video_course().getSubject())
+//                            .append("/共").append(item.getProduct_video_course().getPreset_lesson_count()).append("课")
+//                            .append("/").append(item.getProduct_video_course().getTeacher().getName());
+//                    helper.setText(R.id.classname, item.getProduct_video_course().getName())
+//                            .setText(R.id.describe, sp.toString());
                 }
 
 
