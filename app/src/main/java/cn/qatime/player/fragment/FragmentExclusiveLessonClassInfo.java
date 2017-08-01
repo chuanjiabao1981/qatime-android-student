@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragment;
@@ -94,12 +95,8 @@ public class FragmentExclusiveLessonClassInfo extends BaseFragment {
     public void setData(ExclusiveLessonDetailBean bean) {
         if (bean != null && bean.getData() != null && bean.getData().getCustomized_group() != null) {
             subject.setText((StringUtils.isNullOrBlanK(bean.getData().getCustomized_group().getSubject()) ? "" : bean.getData().getCustomized_group().getSubject()));
-            try {
-                classStartTime.setText((StringUtils.isNullOrBlanK(bean.getData().getCustomized_group().getStart_at()) ? "0000-00-00" : parse2.format(parse1.parse(bean.getData().getCustomized_group().getStart_at()))));
-                classEndTime.setText(StringUtils.isNullOrBlanK(bean.getData().getCustomized_group().getEnd_at()) ? "0000-00-00" : parse2.format(parse1.parse(bean.getData().getCustomized_group().getEnd_at())));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            classStartTime.setText(bean.getData().getCustomized_group().getStart_at() == 0 ? "0000-00-00" : parse2.format(new Date(bean.getData().getCustomized_group().getStart_at() * 1000)));
+            classEndTime.setText(bean.getData().getCustomized_group().getEnd_at() == 0 ? "0000-00-00" : parse2.format(new Date(bean.getData().getCustomized_group().getEnd_at() * 1000)));
             grade.setText((bean.getData().getCustomized_group().getGrade() == null ? "" : bean.getData().getCustomized_group().getGrade()));
             totalclass.setText(getString(R.string.lesson_count, bean.getData().getCustomized_group().getView_tickets_count()));
 

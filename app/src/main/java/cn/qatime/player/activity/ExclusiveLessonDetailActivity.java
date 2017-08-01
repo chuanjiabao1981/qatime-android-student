@@ -20,6 +20,7 @@ import org.json.JSONObject;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
@@ -185,12 +186,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
             ExclusiveLessonDetailActivity.this.price.setText("￥" + price);
             if (data.getData().getCustomized_group().getSell_type().equals("charge")) {
                 if (Constant.CourseStatus.published.equals(data.getData().getCustomized_group().getStatus())) {
-                    int value = 0;
-                    try {
-                        value = DateUtils.daysBetween(data.getData().getCustomized_group().getStart_at(), System.currentTimeMillis());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                    int value = DateUtils.daysBetween(new Date(data.getData().getCustomized_group().getStart_at() * 1000), System.currentTimeMillis());
                     progress.setVisibility(View.GONE);
                     if (value > 0) {
                         timeToStart.setVisibility(View.VISIBLE);
@@ -286,7 +282,9 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
             case R.id.start_study:
                 if (BaseApplication.getInstance().isLogined()) {
                     if (data.getData().getTicket() != null) {
-                        // TODO: 2017/7/27 转到专属课观看页面
+                        Intent intent = new Intent(this, ExclusiveVideoPlayerActivity.class);
+                        intent.putExtra("id", id);
+                        startActivity(intent);
                     } else {
                         if (data.getData().getCustomized_group().getSell_type().equals("charge")) {
                             if (Constant.CourseStatus.teaching.equals(data.getData().getCustomized_group().getStatus())) {

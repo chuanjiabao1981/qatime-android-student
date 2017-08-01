@@ -196,12 +196,6 @@ public class FragmentMessageChatNews extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         initMessageList();
         requestMessages(true);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                getCourses();
-            }
-        }, 2000);
         registerObservers(true);
     }
 
@@ -376,6 +370,7 @@ public class FragmentMessageChatNews extends BaseFragment {
             return;
         }
         if (listSize != list.size()) {
+            Logger.e("从后台获取聊天数据");
             getCourses();
         }
         Collections.sort(list, comp);

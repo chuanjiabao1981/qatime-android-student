@@ -93,8 +93,8 @@ public class ExclusiveLessonDetailBean implements Serializable {
             private int view_tickets_count;
             private int events_count;
             private int closed_events_count;
-            private String start_at;
-            private String end_at;
+            private long start_at;
+            private long end_at;
             private String objective;
             private String suit_crowd;
             private IconsBean icons;
@@ -188,11 +188,11 @@ public class ExclusiveLessonDetailBean implements Serializable {
                 this.events_count = events_count;
             }
 
-            public String getStart_at() {
+            public long getStart_at() {
                 return start_at;
             }
 
-            public void setStart_at(String start_at) {
+            public void setStart_at(long start_at) {
                 this.start_at = start_at;
             }
 
@@ -204,11 +204,11 @@ public class ExclusiveLessonDetailBean implements Serializable {
                 this.closed_events_count = closed_events_count;
             }
 
-            public String getEnd_at() {
+            public long getEnd_at() {
                 return end_at;
             }
 
-            public void setEnd_at(String end_at) {
+            public void setEnd_at(long end_at) {
                 this.end_at = end_at;
             }
 
@@ -321,7 +321,6 @@ public class ExclusiveLessonDetailBean implements Serializable {
                 private String name;
                 private String avatar_url;
                 private String ex_big_avatar_url;
-                private boolean is_guest;
                 private String teaching_years;
                 private String category;
                 private String subject;
@@ -329,10 +328,7 @@ public class ExclusiveLessonDetailBean implements Serializable {
                 private int province;
                 private int city;
                 private int school;
-                private String school_name;
-                private int school_id;
                 private String desc;
-                private List<String> grade_range;
 
                 public int getId() {
                     return id;
@@ -364,14 +360,6 @@ public class ExclusiveLessonDetailBean implements Serializable {
 
                 public void setEx_big_avatar_url(String ex_big_avatar_url) {
                     this.ex_big_avatar_url = ex_big_avatar_url;
-                }
-
-                public boolean isIs_guest() {
-                    return is_guest;
-                }
-
-                public void setIs_guest(boolean is_guest) {
-                    this.is_guest = is_guest;
                 }
 
                 public String getTeaching_years() {
@@ -430,22 +418,6 @@ public class ExclusiveLessonDetailBean implements Serializable {
                     this.school = school;
                 }
 
-                public String getSchool_name() {
-                    return school_name;
-                }
-
-                public void setSchool_name(String school_name) {
-                    this.school_name = school_name;
-                }
-
-                public int getSchool_id() {
-                    return school_id;
-                }
-
-                public void setSchool_id(int school_id) {
-                    this.school_id = school_id;
-                }
-
                 public String getDesc() {
                     return desc;
                 }
@@ -454,13 +426,6 @@ public class ExclusiveLessonDetailBean implements Serializable {
                     this.desc = desc;
                 }
 
-                public List<String> getGrade_range() {
-                    return grade_range;
-                }
-
-                public void setGrade_range(List<String> grade_range) {
-                    this.grade_range = grade_range;
-                }
             }
 
             public static class OfflineLessonsBean {

@@ -42,6 +42,7 @@ import cn.qatime.player.barrage.model.Status;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.bean.BusEvent;
+import cn.qatime.player.bean.ExclusiveLessonPlayBean;
 import cn.qatime.player.bean.InputPanel;
 import cn.qatime.player.bean.LiveStatusBean;
 import cn.qatime.player.bean.VideoState;
@@ -58,7 +59,6 @@ import cn.qatime.player.utils.VideoActivityInterface;
 import cn.qatime.player.view.NEVideoView;
 import cn.qatime.player.view.VideoLayout;
 import libraryextra.bean.Announcements;
-import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.NetUtils;
 import libraryextra.utils.ScreenUtils;
@@ -226,7 +226,7 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
         assignViews();
         initView();
 //        getAnnouncementsData();
-//        initData();
+        initData();
 
     }
 
@@ -278,7 +278,7 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
 
     private void getAnnouncementsData() {
         if (id != 0) {
-            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass + "/" + id + "/realtime", null,
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlExclusiveLesson + "/" + id + "/realtime", null,
                     new VolleyListener(ExclusiveVideoPlayerActivity.this) {
                         @Override
                         protected void onSuccess(JSONObject response) {
@@ -350,6 +350,10 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
     }
 
     private void initSessionId() {
+        if (StringUtils.isNullOrBlanK(sessionId)) {
+            Toast.makeText(this, "聊天id不可用", Toast.LENGTH_SHORT).show();
+            return;
+        }
         floatFragment.setSessionId(sessionId);
         if (!StringUtils.isNullOrBlanK(sessionId)) {
             TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getInstance().getAccount());
@@ -428,20 +432,19 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
 
     private void initData() {
         if (id != 0) {
-            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass + "/" + id + "/play_info", null,
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlExclusiveLesson + "/" + id + "/play", null,
                     new VolleyListener(ExclusiveVideoPlayerActivity.this) {
                         @Override
                         protected void onSuccess(JSONObject response) {
-                            RemedialClassDetailBean data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
+                            ExclusiveLessonPlayBean data = JsonUtils.objectFromJson(response.toString(), ExclusiveLessonPlayBean.class);
                             if (data != null) {
                                 ((FragmentExclusiveLiveDetails) fragBaseFragments.get(2)).setData(data);
                                 if (data.getData() != null) {
-                                    camera = data.getData().getCamera();
-                                    board = data.getData().getBoard();
-//                                    setVideoState(VideoState.INIT);
-                                    hd.post(runnable);
+                                    camera = data.getData().getCamera_pull_stream();
+                                    board = data.getData().getBoard_pull_stream();
+//                                    hd.post(runnable);
                                 }
-                                sessionId = data.getData().getChat_team_id();
+                                sessionId = data.getData().getChat_team().getTeam_id();
                             }
                             initSessionId();
                         }
@@ -638,20 +641,8 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
      */
     private void setVideoState(VideoState videoState) {
         Logger.e("videoState" + videoState.toString());
-//        if (videoState == VideoState.INIT) {//初始化状态下查询状态
-//            hd.removeCallbacks(runnable);
-//            if (this.videoState == videoState) {
-//                return;
-//            }
-//            playingReQuery = 0;//异常退出重新查询用
-//            this.videoState = videoState;
-//            queryVideoState();
-//        } else
         if (videoState == VideoState.UNPLAY) {//未直播状态下 开始轮询
             this.videoState = videoState;
-//            playingReQuery = 0;//异常退出重新查询用
-//            hd.removeCallbacks(runnable);
-//            hd.postDelayed(runnable, 30000);
             if (videoNoData1.getVisibility() == View.GONE) {
                 videoNoData1.setVisibility(View.VISIBLE);
                 if (buffering1.getVisibility() == View.VISIBLE) {
@@ -667,15 +658,6 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
             }
         } else if (videoState == VideoState.PLAYING) {//直播状态下 停止轮询等待完成
             this.videoState = videoState;
-//            if (playingReQuery < 1) {
-////                Logger.e("重新查询");
-//                hd.postDelayed(runnable, 15000);
-//            } else {
-////                Logger.e("不再查询");
-//                hd.removeCallbacks(runnable);
-//                playingReQuery = 0;
-//            }
-//            playingReQuery++;
             if (NetUtils.isConnected(ExclusiveVideoPlayerActivity.this)) {
                 if (NetUtils.isMobile(ExclusiveVideoPlayerActivity.this)) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(ExclusiveVideoPlayerActivity.this);

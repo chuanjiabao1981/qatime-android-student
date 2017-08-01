@@ -28,6 +28,7 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import cn.qatime.player.R;
@@ -85,6 +86,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     private TextView timeToStart;
     private View layoutView;
     private RelativeLayout auditionLayout;
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -233,7 +235,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
                 try {
                     if (Constant.CourseStatus.published.equals(data.getData().getCourse().getStatus())) {
-                        int value = DateUtils.daysBetween(data.getData().getCourse().getLive_start_time(), System.currentTimeMillis());
+                        int value = DateUtils.daysBetween(sdf.parse(data.getData().getCourse().getLive_start_time()), System.currentTimeMillis());
                         progress.setVisibility(View.GONE);
                         if (value > 0) {
                             timeToStart.setVisibility(View.VISIBLE);
