@@ -27,8 +27,8 @@ public class UrlUtils {
     public static String urlLiveStudio = baseUrl + "api/v1/live_studio/";
     //专属课
     public static String urlExclusiveLesson = baseUrl + "/api/v1/live_studio/customized_groups";
-    //我的辅导班列表
-    public static String urlMyRemedialClass = baseUrl + "api/v1/live_studio/students/";
+    //我的
+    public static String urlStudent = baseUrl + "api/v1/live_studio/students/";
     //个人信息
     public static String urlPersonalInformation = baseUrl + "api/v1/students/";
     //教师信息

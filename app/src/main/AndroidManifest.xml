@@ -206,12 +206,14 @@
         <activity
             android:name=".activity.PersonalMyOrderActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PersonalMyTutorshipActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PersonalMyExclusiveActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PersonalInformationActivity"

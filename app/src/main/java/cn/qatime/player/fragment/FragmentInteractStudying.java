@@ -1,7 +1,6 @@
 package cn.qatime.player.fragment;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
@@ -171,7 +170,7 @@ public class FragmentInteractStudying extends BaseFragment {
         map.put("page", String.valueOf(page));
         map.put("per_page", "10");
         map.put("status", "teaching");
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getInstance().getUserId() + "/interactive_courses", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlStudent + BaseApplication.getInstance().getUserId() + "/interactive_courses", map), null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
