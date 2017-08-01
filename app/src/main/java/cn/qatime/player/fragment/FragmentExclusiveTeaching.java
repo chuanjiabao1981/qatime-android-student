@@ -22,24 +22,26 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.ExclusiveLessonDetailActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
+import cn.qatime.player.bean.MyExclusiveBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.bean.MyTutorialClassBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
 public class FragmentExclusiveTeaching extends BaseFragment {
     private PullToRefreshListView listView;
-    private java.util.List<MyTutorialClassBean.Data> list = new ArrayList<>();
-    private CommonAdapter<MyTutorialClassBean.Data> adapter;
+    private List<MyExclusiveBean.DataBean> list = new ArrayList<>();
+    private CommonAdapter<MyExclusiveBean.DataBean> adapter;
     private int page = 1;
 
 
@@ -63,15 +65,15 @@ public class FragmentExclusiveTeaching extends BaseFragment {
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
 
-        adapter = new CommonAdapter<MyTutorialClassBean.Data>(getActivity(), list, R.layout.item_fragment_personal_my_exclusive) {
+        adapter = new CommonAdapter<MyExclusiveBean.DataBean>(getActivity(), list, R.layout.item_fragment_personal_my_exclusive) {
             @Override
-            public void convert(ViewHolder helper, final MyTutorialClassBean.Data item, int position) {
+            public void convert(ViewHolder helper, final MyExclusiveBean.DataBean item, int position) {
 
-                Glide.with(getActivity()).load(item.getPublicize()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
-                helper.setText(R.id.name, item.getName());
-                helper.setText(R.id.subject, item.getSubject());
-                helper.setText(R.id.teacher, "/" + item.getTeacher_name());
-                helper.setText(R.id.grade, item.getGrade());
+                Glide.with(getActivity()).load(item.getCustomized_group().getPublicizes_url().getApp_info()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
+                helper.setText(R.id.name, item.getCustomized_group().getName());
+                helper.setText(R.id.subject, item.getCustomized_group().getSubject());
+                helper.setText(R.id.teacher, "/" + item.getCustomized_group().getTeacher_name());
+                helper.setText(R.id.grade, item.getCustomized_group().getGrade());
             }
         };
         listView.setAdapter(adapter);
@@ -92,9 +94,9 @@ public class FragmentExclusiveTeaching extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Intent intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-//                intent.putExtra("id", list.get(position - 1).getId());
-//                startActivity(intent);
+                Intent intent = new Intent(getActivity(), ExclusiveLessonDetailActivity.class);
+                intent.putExtra("id", list.get(position - 1).getCustomized_group().getId());
+                startActivity(intent);
             }
         });
     }
@@ -119,7 +121,7 @@ public class FragmentExclusiveTeaching extends BaseFragment {
         map.put("per_page", "10");
         map.put("status", "teaching");
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getInstance().getUserId() + "/courses", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlStudent + BaseApplication.getInstance().getUserId() + "/customized_groups", map), null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -133,13 +135,10 @@ public class FragmentExclusiveTeaching extends BaseFragment {
                         listView.onRefreshComplete();
 
                         try {
-                            MyTutorialClassBean data = JsonUtils.objectFromJson(response.toString(), MyTutorialClassBean.class);
+                            MyExclusiveBean data = JsonUtils.objectFromJson(response.toString(), MyExclusiveBean.class);
                             if (data != null) {
-                                for (MyTutorialClassBean.Data item : data.getData()) {
-                                    if (item.isIs_bought() || item.isIs_tasting()) {//只显示试听未过期或已购买
-                                        list.add(item);
-                                    }
-                                }
+                                list.addAll(data.getData());
+                                adapter.notifyDataSetChanged();
                             }
                             adapter.notifyDataSetChanged();
                         } catch (JsonSyntaxException e) {

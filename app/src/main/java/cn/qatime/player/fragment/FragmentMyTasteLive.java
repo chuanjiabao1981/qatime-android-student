@@ -116,7 +116,7 @@ public class FragmentMyTasteLive extends BaseFragment {
         map.put("page", String.valueOf(page));
         map.put("per_page", "10");
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlMyRemedialClass + BaseApplication.getInstance().getUserId() + "/courses/tasting_list", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlStudent + BaseApplication.getInstance().getUserId() + "/courses/tasting_list", map), null,
                 new VolleyListener(getActivity()) {
 
                     @Override
