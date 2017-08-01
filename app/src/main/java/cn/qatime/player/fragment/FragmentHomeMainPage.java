@@ -48,6 +48,7 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.CitySelectActivity;
+import cn.qatime.player.activity.ExclusiveLessonDetailActivity;
 import cn.qatime.player.activity.InteractCourseDetailActivity;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.PayPSWForgetActivity;
@@ -743,7 +744,6 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                     intent.putExtra("teacherId", listRecommendTeacher.get(position).getTeacher().getId());
                     startActivity(intent);
                 }
-
             }
         });
     }

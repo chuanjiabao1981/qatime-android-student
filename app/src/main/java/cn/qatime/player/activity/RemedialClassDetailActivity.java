@@ -126,7 +126,6 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
         Button pay = (Button) findViewById(R.id.pay);
         startStudy = (Button) findViewById(R.id.start_study);
         startStudyView = findViewById(R.id.start_study_view);
-//        title = (TextView) findViewById(R.id.title);
         price = (TextView) findViewById(R.id.price);
         transferPrice = (TextView) findViewById(R.id.transfer_price);
         studentnumber = (TextView) findViewById(R.id.student_number);
@@ -179,7 +178,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     }
 
     private void initData() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass + "/" + id + "/detail", null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlCourses + id + "/detail", null,
                 new VolleyListener(RemedialClassDetailActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -264,6 +263,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     if (!Constant.CourseStatus.completed.equals(data.getData().getCourse().getStatus())) {
                         if (!StringUtils.isNullOrBlanK(data.getData().getTicket().getType())) {
                             if (data.getData().getTicket().getType().equals("LiveStudio::BuyTicket")) {//已购买
+                                startStudy.setText("开始学习");
                                 startStudyView.setVisibility(View.VISIBLE);//开始学习
                             } else {//进入试听按钮显示
                                 audition.setVisibility(View.GONE);
@@ -297,6 +297,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 price.setVisibility(View.GONE);
                 if (data.getData().getTicket() != null) {//已购买
                     if (!Constant.CourseStatus.completed.equals(data.getData().getCourse().getStatus())) {
+                        startStudy.setText("开始学习");
                         startStudyView.setVisibility(View.VISIBLE);
                     } else {
                         handleLayout.setVisibility(View.GONE);
@@ -434,14 +435,15 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
 
     //免费,加入
     private void free2deliver() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.urlRemedialClass + "/" + id + "/deliver_free", null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.urlCourses + id + "/deliver_free", null,
                 new VolleyListener(RemedialClassDetailActivity.this) {
 
                     @Override
                     protected void onSuccess(JSONObject response) {
                         Toast.makeText(RemedialClassDetailActivity.this, "已成功添加至我的直播课", Toast.LENGTH_SHORT).show();
-                        data.getData().setTicket(new LiveLessonDetailBean.DataBean.TicketBean("LiveStudio::BuyTicket"));
-                        startStudy.setText("开始学习");
+//                        data.getData().setTicket(new LiveLessonDetailBean.DataBean.TicketBean("LiveStudio::BuyTicket"));
+//                        startStudy.setText("开始学习");
+                        initData();
                     }
 
                     @Override
@@ -480,7 +482,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     }
 
     private void joinAudition() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlRemedialClass + "/" + id + "/taste", null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlCourses + id + "/taste", null,
                 new VolleyListener(RemedialClassDetailActivity.this) {
 
                     @Override

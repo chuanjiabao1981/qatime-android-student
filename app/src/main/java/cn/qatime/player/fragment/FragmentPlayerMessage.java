@@ -21,6 +21,7 @@ import com.netease.nimlib.sdk.team.constant.TeamTypeEnum;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.netease.nimlib.sdk.team.model.UpdateTeamAttachment;
+import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -55,7 +56,7 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
         public void run() {
             if (hasLoad) {
                 if (tipText != null) {
-                    tipText.setText(team.getType() == TeamTypeEnum.Normal ? R.string.you_have_quit_the_group : R.string.you_have_quit_the_group);
+                    tipText.setText(R.string.you_have_quit_the_group);
                     tipText.setVisibility(team.isMyTeam() ? View.GONE : View.VISIBLE);
                     hd.removeCallbacks(this);
                 } else {

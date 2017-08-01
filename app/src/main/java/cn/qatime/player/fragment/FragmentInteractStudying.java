@@ -77,21 +77,6 @@ public class FragmentInteractStudying extends BaseFragment {
         adapter = new CommonAdapter<MyInteractClassBean.DataBean>(getActivity(), list, R.layout.item_fragment_my_interact_teaching) {
             @Override
             public void convert(ViewHolder helper, final MyInteractClassBean.DataBean item, int position) {
-                helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        FragmentInteractStudying.this.item = item;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            if (NetUtils.checkPermission(getActivity()).size() > 0) {
-                                requestLivePermission();
-                            } else {
-                                toNext();
-                            }
-                        } else {
-                            toNext();
-                        }
-                    }
-                });
                 Glide.with(getActivity()).load(item.getPublicize_url()).placeholder(R.mipmap.photo).centerCrop().crossFade().into((ImageView) helper.getView(R.id.image));
                 helper.setText(R.id.name, item.getName());
                 helper.setText(R.id.subject, item.getSubject());
