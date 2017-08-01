@@ -45,11 +45,12 @@ import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.bean.InputPanel;
 import cn.qatime.player.bean.LiveStatusBean;
 import cn.qatime.player.bean.VideoState;
-import cn.qatime.player.fragment.FragmentPlayerAnnouncements;
+import cn.qatime.player.fragment.FragmentAnnouncements;
 import cn.qatime.player.fragment.FragmentPlayerLiveDetails;
 import cn.qatime.player.fragment.FragmentPlayerMembers;
 import cn.qatime.player.fragment.FragmentPlayerMessage;
 import cn.qatime.player.fragment.VideoFloatFragment;
+import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.presenter.VideoControlPresenter;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
@@ -57,7 +58,6 @@ import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VideoActivityInterface;
 import cn.qatime.player.view.NEVideoView;
 import cn.qatime.player.view.VideoLayout;
-import libraryextra.bean.Announcements;
 import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.NetUtils;
@@ -226,7 +226,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         EventBus.getDefault().register(this);
         assignViews();
         initView();
-        getAnnouncementsData();
         initData();
 
     }
@@ -278,45 +277,32 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
 
     private void getAnnouncementsData() {
-        if (id != 0) {
-            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlCourses + id + "/realtime", null,
-                    new VolleyListener(NEVideoPlayerActivity.this) {
-                        @Override
-                        protected void onSuccess(JSONObject response) {
-                            Announcements data = JsonUtils.objectFromJson(response.toString(), Announcements.class);
-                            if (data != null) {
-                                if (data.getData() != null) {
-                                    ((FragmentPlayerMembers) fragBaseFragments.get(3)).setData(data.getData());
-                                    ((FragmentPlayerMessage) fragBaseFragments.get(0)).setOwner(data.getData().getOwner());
-                                    if (data.getData().getAnnouncements() != null) {
-                                        ((FragmentPlayerAnnouncements) fragBaseFragments.get(1)).setData(data.getData().getAnnouncements());
-                                    }
-                                }
-                            }
-                        }
-
-                        @Override
-                        protected void onError(JSONObject response) {
-                        }
-
-                        @Override
-                        protected void onTokenOut() {
-                            tokenOut();
-                        }
-                    }, new VolleyErrorListener() {
+        Team team = TeamDataCache.getInstance().getTeamById(sessionId);
+        if (team != null) {
+            updateTeamInfo(team);
+        } else {
+            TeamDataCache.getInstance().fetchTeamById(sessionId, new SimpleCallback<Team>() {
                 @Override
-                public void onErrorResponse(VolleyError volleyError) {
-                    super.onErrorResponse(volleyError);
+                public void onResult(boolean success, Team result) {
+                    if (success && result != null) {
+                        updateTeamInfo(result);
+                    } else {
+                        Toast.makeText(BaseApplication.getInstance(), getResourceString(R.string.failed_to_obtain_group_information), Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
-            addToRequestQueue(request);
         }
+    }
+
+    private void updateTeamInfo(Team result) {
+        String announcement = result.getAnnouncement();
+        ((FragmentAnnouncements) fragBaseFragments.get(1)).setAnnouncements(announcement);
     }
 
     private void initView() {
 
         fragBaseFragments.add(new FragmentPlayerMessage());
-        fragBaseFragments.add(new FragmentPlayerAnnouncements());
+        fragBaseFragments.add(new FragmentAnnouncements());
         fragBaseFragments.add(new FragmentPlayerLiveDetails());
         fragBaseFragments.add(new FragmentPlayerMembers());
 
@@ -352,6 +338,12 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     }
 
     private void initSessionId() {
+        if (StringUtils.isNullOrBlanK(sessionId)) {
+            Toast.makeText(this, "聊天id不可用", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        getAnnouncementsData();
         floatFragment.setSessionId(sessionId);
         if (!StringUtils.isNullOrBlanK(sessionId)) {
             TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getInstance().getAccount());
@@ -408,18 +400,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             }
         });
 
-//        inputPanel.setOnAudioRecordListener(new InputPanel.AudioRecordListener() {
-//            @Override
-//            public void audioRecordStart() {
-//                screenSwitchUtils.stop();
-//            }
-//
-//            @Override
-//            public void audioRecordStop() {
-//                screenSwitchUtils.start(NEVideoPlayerActivity.this);
-//            }
-//        });
-
     }
 
     /**
@@ -460,7 +440,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                                 if (data.getData() != null) {
                                     camera = data.getData().getCamera();
                                     board = data.getData().getBoard();
-//                                    setVideoState(VideoState.INIT);
                                     canLoop = true;
                                     hd.post(runnable);
                                 }
@@ -471,7 +450,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
                         @Override
                         protected void onError(JSONObject response) {
-
                             initSessionId();
                         }
 
@@ -789,6 +767,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     @Subscribe
     public void onEvent(BusEvent event) {
         if (event == BusEvent.ANNOUNCEMENT) {
+            if (StringUtils.isNullOrBlanK(sessionId)) return;
             getAnnouncementsData();
         }
     }

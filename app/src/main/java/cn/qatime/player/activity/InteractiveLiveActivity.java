@@ -67,11 +67,12 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.bean.InputPanel;
 import cn.qatime.player.bean.InteractiveLiveStatusBean;
-import cn.qatime.player.fragment.FragmentInteractiveAnnouncements;
+import cn.qatime.player.fragment.FragmentAnnouncements;
 import cn.qatime.player.fragment.FragmentInteractiveBoard;
 import cn.qatime.player.fragment.FragmentInteractiveDetails;
 import cn.qatime.player.fragment.FragmentInteractiveMembers;
 import cn.qatime.player.fragment.FragmentInteractiveMessage;
+import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.ChatRoomMemberCache;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.doodle.Transaction;
@@ -221,7 +222,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                     Toast.makeText(this, getResourceString(R.string.no_course_information), Toast.LENGTH_SHORT).show();
                 }
                 initData();
-                getAnnouncementsData();
                 hd.postDelayed(loopStatus, 500);
             }
         } else {
@@ -230,44 +230,31 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 Toast.makeText(this, getResourceString(R.string.no_course_information), Toast.LENGTH_SHORT).show();
             }
             initData();
-            getAnnouncementsData();
             hd.postDelayed(loopStatus, 500);
         }
     }
 
     private void getAnnouncementsData() {
-        if (id != 0) {
-            DaYiJsonObjectRequest announcementsRequest = new DaYiJsonObjectRequest(UrlUtils.urlInteractCourses + "/" + id + "/realtime", null,
-                    new VolleyListener(InteractiveLiveActivity.this) {
-                        @Override
-                        protected void onSuccess(JSONObject response) {
-                            Announcements data = JsonUtils.objectFromJson(response.toString(), Announcements.class);
-                            if (data != null) {
-                                if (data.getData() != null) {
-                                    ((FragmentInteractiveMembers) fragBaseFragments.get(4)).setData(data.getData());
-                                    if (data.getData().getAnnouncements() != null) {
-                                        ((FragmentInteractiveAnnouncements) fragBaseFragments.get(2)).setData(data.getData().getAnnouncements());
-                                    }
-                                }
-                            }
-                        }
-
-                        @Override
-                        protected void onError(JSONObject response) {
-                        }
-
-                        @Override
-                        protected void onTokenOut() {
-                            tokenOut();
-                        }
-                    }, new VolleyErrorListener() {
+        Team team = TeamDataCache.getInstance().getTeamById(sessionId);
+        if (team != null) {
+            updateTeamInfo(team);
+        } else {
+            TeamDataCache.getInstance().fetchTeamById(sessionId, new SimpleCallback<Team>() {
                 @Override
-                public void onErrorResponse(VolleyError volleyError) {
-                    super.onErrorResponse(volleyError);
+                public void onResult(boolean success, Team result) {
+                    if (success && result != null) {
+                        updateTeamInfo(result);
+                    } else {
+                        Toast.makeText(BaseApplication.getInstance(), getResourceString(R.string.failed_to_obtain_group_information), Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
-            addToRequestQueue(announcementsRequest);
         }
+    }
+
+    private void updateTeamInfo(Team result) {
+        String announcement = result.getAnnouncement();
+        ((FragmentAnnouncements) fragBaseFragments.get(1)).setAnnouncements(announcement);
     }
 
     private void initData() {
@@ -280,6 +267,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                             if (data != null && data.getData() != null) {
                                 ((FragmentInteractiveDetails) fragBaseFragments.get(3)).setData(data.getData());
                                 sessionId = data.getData().getChat_team().getTeam_id();
+                                ((FragmentInteractiveMembers) fragBaseFragments.get(4)).setData(data.getData().getChat_team().getAccounts());
                             }
                             initSessionId();
                         }
@@ -324,7 +312,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
         fragBaseFragments.add(new FragmentInteractiveBoard());
         fragBaseFragments.add(new FragmentInteractiveMessage());
-        fragBaseFragments.add(new FragmentInteractiveAnnouncements());
+        fragBaseFragments.add(new FragmentAnnouncements());
         fragBaseFragments.add(new FragmentInteractiveDetails());
         fragBaseFragments.add(new FragmentInteractiveMembers());
         messageFragment = (FragmentInteractiveMessage) fragBaseFragments.get(1);
@@ -386,6 +374,12 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     }
 
     private void initSessionId() {
+        if (StringUtils.isNullOrBlanK(sessionId)) {
+            Toast.makeText(this, "聊天id不可用", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        getAnnouncementsData();
         if (!StringUtils.isNullOrBlanK(sessionId)) {
             TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getInstance().getAccount());
             if (team != null) {
@@ -1080,6 +1074,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     @Subscribe
     public void onEvent(BusEvent event) {
         if (event == BusEvent.ANNOUNCEMENT) {
+            if (StringUtils.isNullOrBlanK(sessionId)) return;
             getAnnouncementsData();
 //        } else if (event == BusEvent.request) {
 //            masterVideoLayout.removeAllViews();

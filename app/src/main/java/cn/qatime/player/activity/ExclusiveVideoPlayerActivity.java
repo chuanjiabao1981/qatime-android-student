@@ -46,11 +46,12 @@ import cn.qatime.player.bean.ExclusiveLessonPlayBean;
 import cn.qatime.player.bean.InputPanel;
 import cn.qatime.player.bean.LiveStatusBean;
 import cn.qatime.player.bean.VideoState;
-import cn.qatime.player.fragment.FragmentExclusiveAnnouncements;
+import cn.qatime.player.fragment.FragmentAnnouncements;
 import cn.qatime.player.fragment.FragmentExclusiveLiveDetails;
 import cn.qatime.player.fragment.FragmentExclusiveMembers;
 import cn.qatime.player.fragment.FragmentExclusiveMessage;
 import cn.qatime.player.fragment.VideoFloatFragment;
+import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.presenter.VideoControlPresenter;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
@@ -58,7 +59,6 @@ import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VideoActivityInterface;
 import cn.qatime.player.view.NEVideoView;
 import cn.qatime.player.view.VideoLayout;
-import libraryextra.bean.Announcements;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.NetUtils;
 import libraryextra.utils.ScreenUtils;
@@ -113,7 +113,7 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
     private InputPanel inputPanel;
     private String camera;
     private String board;
-    private boolean isResume = false;
+    private boolean canLoop = false;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -225,7 +225,6 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
         EventBus.getDefault().register(this);
         assignViews();
         initView();
-//        getAnnouncementsData();
         initData();
 
     }
@@ -277,44 +276,31 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
 
 
     private void getAnnouncementsData() {
-        if (id != 0) {
-            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlExclusiveLesson + "/" + id + "/realtime", null,
-                    new VolleyListener(ExclusiveVideoPlayerActivity.this) {
-                        @Override
-                        protected void onSuccess(JSONObject response) {
-                            Announcements data = JsonUtils.objectFromJson(response.toString(), Announcements.class);
-                            if (data != null) {
-                                if (data.getData() != null) {
-                                    ((FragmentExclusiveMembers) fragBaseFragments.get(3)).setData(data.getData());
-                                    ((FragmentExclusiveMessage) fragBaseFragments.get(0)).setOwner(data.getData().getOwner());
-                                    if (data.getData().getAnnouncements() != null) {
-                                        ((FragmentExclusiveAnnouncements) fragBaseFragments.get(1)).setData(data.getData().getAnnouncements());
-                                    }
-                                }
-                            }
-                        }
-
-                        @Override
-                        protected void onError(JSONObject response) {
-                        }
-
-                        @Override
-                        protected void onTokenOut() {
-                            tokenOut();
-                        }
-                    }, new VolleyErrorListener() {
+        Team team = TeamDataCache.getInstance().getTeamById(sessionId);
+        if (team != null) {
+            updateTeamInfo(team);
+        } else {
+            TeamDataCache.getInstance().fetchTeamById(sessionId, new SimpleCallback<Team>() {
                 @Override
-                public void onErrorResponse(VolleyError volleyError) {
-                    super.onErrorResponse(volleyError);
+                public void onResult(boolean success, Team result) {
+                    if (success && result != null) {
+                        updateTeamInfo(result);
+                    } else {
+                        Toast.makeText(BaseApplication.getInstance(), getResourceString(R.string.failed_to_obtain_group_information), Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
-            addToRequestQueue(request);
         }
+    }
+
+    private void updateTeamInfo(Team result) {
+        String announcement = result.getAnnouncement();
+        ((FragmentAnnouncements) fragBaseFragments.get(1)).setAnnouncements(announcement);
     }
 
     private void initView() {
         fragBaseFragments.add(new FragmentExclusiveMessage());
-        fragBaseFragments.add(new FragmentExclusiveAnnouncements());
+        fragBaseFragments.add(new FragmentAnnouncements());
         fragBaseFragments.add(new FragmentExclusiveLiveDetails());
         fragBaseFragments.add(new FragmentExclusiveMembers());
 
@@ -354,6 +340,7 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
             Toast.makeText(this, "聊天id不可用", Toast.LENGTH_SHORT).show();
             return;
         }
+        getAnnouncementsData();
         floatFragment.setSessionId(sessionId);
         if (!StringUtils.isNullOrBlanK(sessionId)) {
             TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getInstance().getAccount());
@@ -442,9 +429,11 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
                                 if (data.getData() != null) {
                                     camera = data.getData().getCamera_pull_stream();
                                     board = data.getData().getBoard_pull_stream();
-//                                    hd.post(runnable);
+                                    canLoop = true;
+                                    hd.post(runnable);
                                 }
                                 sessionId = data.getData().getChat_team().getTeam_id();
+                                ((FragmentExclusiveMembers) fragBaseFragments.get(3)).setData(data.getData().getChat_team().getAccounts());
                             }
                             initSessionId();
                         }
@@ -475,7 +464,10 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
     @Override
     protected void onResume() {
         super.onResume();
-        isResume = true;
+        if (canLoop) {
+            hd.removeCallbacks(runnable);
+            hd.post(runnable);
+        }
         video1.start();
         video2.start();
         hd.postDelayed(new Runnable() {
@@ -589,7 +581,7 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
 
     @Override
     protected void onPause() {
-        isResume = false;
+        hd.removeCallbacks(runnable);//停止查询播放状态
         video1.pause();
         video2.pause();
         floatFragment.setPlaying(false);
@@ -602,7 +594,6 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
 
     @Override
     protected void onDestroy() {
-        hd.removeCallbacks(runnable);//停止查询播放状态
 //        Logger.e("退出轮询");
         video1.release_resource();
         video2.release_resource();
@@ -698,7 +689,7 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
     }
 
     private void queryVideoState() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlCourses + id + "/status",
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlExclusiveLesson + "/" + id + "/realtime",
                 null, new VolleyListener(ExclusiveVideoPlayerActivity.this) {
             @Override
             protected void onTokenOut() {
@@ -707,7 +698,6 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
 
             @Override
             protected void onSuccess(JSONObject response) {
-                if (!isResume) return;
 //              JSONObject data = response.getJSONObject("data");
                 LiveStatusBean data = JsonUtils.objectFromJson(response.toString(), LiveStatusBean.class);
                 if (data != null && data.getData() != null && data.getData().getLive_info() != null) {
@@ -726,7 +716,6 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
                         ((FragmentExclusiveMembers) fragBaseFragments.get(3)).setOnlineInfo(data.getData().getOnline_users());
                         floatFragment.setNameAndCount(data.getData().getLive_info().getName(), data.getData().getOnline_users().size());
                     }
-
                 }
             }
 
@@ -746,6 +735,7 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
     @Subscribe
     public void onEvent(BusEvent event) {
         if (event == BusEvent.ANNOUNCEMENT) {
+            if (StringUtils.isNullOrBlanK(sessionId)) return;
             getAnnouncementsData();
         }
     }
