@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import libraryextra.utils.StringUtils;
+
 /**
  * @author Tianhaoranly
  * @date 2017/6/8 18:08
@@ -95,25 +97,7 @@ public class FreeCourseBean {
             private String publicize;
             private String grade;
             private String teacher_name;
-//                private String price;
-//                private String current_price;
-//                private String chat_team_id;
-//                private String chat_team_owner;
-//                private int buy_tickets_count;
-//                private String status;
-//                private int preset_lesson_count;
-//                private int completed_lesson_count;
-//                private int taste_count;
-//                private int completed_lessons_count;
-//                private int closed_lessons_count;
-//                private int started_lessons_count;
-//                private String live_start_time;
-//                private String live_end_time;
-//                private String objective;
-//                private String suit_crowd;
-//                private int teacher_percentage;
-//                private IconsBean icons;
-//                private boolean off_shelve;
+            private PublicizesUrlBean publicizes_url;
 
 
             public int getId() {
@@ -157,11 +141,45 @@ public class FreeCourseBean {
             }
 
             public String getPublicize() {
-                return publicize;
+                if (!StringUtils.isNullOrBlanK(publicize)) {
+                    return publicize;
+                } else {
+                    return publicizes_url.getList();
+                }
             }
 
             public void setPublicize(String publicize) {
                 this.publicize = publicize;
+            }
+
+            private class PublicizesUrlBean {
+                private String app_info;
+                private String list;
+                private String info;
+
+                public String getApp_info() {
+                    return app_info;
+                }
+
+                public void setApp_info(String app_info) {
+                    this.app_info = app_info;
+                }
+
+                public String getList() {
+                    return list;
+                }
+
+                public void setList(String list) {
+                    this.list = list;
+                }
+
+                public String getInfo() {
+                    return info;
+                }
+
+                public void setInfo(String info) {
+                    this.info = info;
+                }
             }
         }
     }
