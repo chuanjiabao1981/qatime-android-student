@@ -306,7 +306,7 @@
     <string name="over">Over</string>
     <string name="parent_phone_number">Parent phone</string>
     <string name="password_6_16">Password length must be 6-16</string>
-    <string name="public_course">Public course</string>
+    <string name="public_course">Public essenceCourse</string>
     <string name="remind_me">Alert me</string>
     <string name="repassword_can_not_be_empty">Confirm  password</string>
     <string name="shake">Shake</string>
@@ -339,7 +339,7 @@
     <string name="class_n">Lesson N</string>
     <string name="class_range">Course range</string>
     <string name="clean_cache">Clear cache</string>
-    <string name="course_arrangement">course arrangement</string>
+    <string name="course_arrangement">essenceCourse arrangement</string>
     <string name="input_login_password">Input login password</string>
     <string name="Remedial_class">remedial class</string>
     <string name="alert">alert</string>
