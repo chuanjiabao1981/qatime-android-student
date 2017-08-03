@@ -129,6 +129,29 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
                 teacher.setText(data.getProduct_video_course().getTeacher().getName());
             }
             progress.setText(String.format(getString(R.string.lesson_count), data.getProduct_video_course().getPreset_lesson_count()));
+        }else if ("LiveStudio::Group".equals(data.getProduct_type())) {
+            classid = data.getProduct_customized_group().getId();
+            if (StringUtils.isNullOrBlanK(data.getProduct_customized_group().getName())) {
+                name.setText(getResourceString(R.string.cancel_order_name));
+            } else {
+                name.setText(data.getProduct_customized_group().getName());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct_customized_group().getGrade())) {
+                grade.setText("专属课/" + getResourceString(R.string.grade));
+            } else {
+                grade.setText("专属课/" + data.getProduct_customized_group().getGrade());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct_customized_group().getSubject())) {
+                subject.setText(getResourceString(R.string.subject));
+            } else {
+                subject.setText(data.getProduct_customized_group().getSubject());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct_customized_group().getTeacher_name())) {
+                teacher.setText(getResourceString(R.string.cancel_order_teacher));
+            } else {
+                teacher.setText(data.getProduct_customized_group().getTeacher_name());
+            }
+            progress.setText(String.format(getString(R.string.lesson_count), data.getProduct_customized_group().getEvents_count()));
         }
         ordernumber.setText(data.getId());
         try {
@@ -177,6 +200,8 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
                     intent.setClass(PersonalMyOrderCanceledDetailActivity.this, InteractCourseDetailActivity.class);
                 } else if ("LiveStudio::VideoCourse".equals(data.getProduct_type())) {
                     intent.setClass(PersonalMyOrderCanceledDetailActivity.this, VideoCoursesActivity.class);
+                }else if ("LiveStudio::Group".equals(data.getProduct_type())) {
+                    intent.setClass(PersonalMyOrderCanceledDetailActivity.this, ExclusiveLessonDetailActivity.class);
                 }
                 intent.putExtra("id", classid);
                 intent.putExtra("page", 0);
@@ -193,6 +218,8 @@ public class PersonalMyOrderCanceledDetailActivity extends BaseActivity {
                     intent.setClass(PersonalMyOrderCanceledDetailActivity.this, InteractCourseDetailActivity.class);
                 } else if ("LiveStudio::VideoCourse".equals(data.getProduct_type())) {
                     intent.setClass(PersonalMyOrderCanceledDetailActivity.this, VideoCoursesActivity.class);
+                }else if ("LiveStudio::Group".equals(data.getProduct_type())) {
+                    intent.setClass(PersonalMyOrderCanceledDetailActivity.this, ExclusiveLessonDetailActivity.class);
                 }
                 intent.putExtra("id", classid);
                 intent.putExtra("page", 0);

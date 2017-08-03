@@ -257,7 +257,7 @@
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:layout_marginLeft="10dp"
-                    android:src="@mipmap/center_my_video" />
+                    android:src="@mipmap/center_my_exclusive" />
 
                 <TextView
                     style="@style/setting_text_style"

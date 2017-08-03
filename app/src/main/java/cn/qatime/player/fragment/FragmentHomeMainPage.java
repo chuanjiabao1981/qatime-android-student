@@ -402,7 +402,7 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                             int courseId = todayList.get(position).getCourse().getId();
                             Intent intent;
                             //今日直播只有直播课和专属课
-                            if ("LiveStudio::Course".equals(todayList.get(position).getLesson_type())) {
+                            if ("LiveStudio::Lesson".equals(todayList.get(position).getModal_type())) {
                                 intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
                             } else {
                                 intent = new Intent(getActivity(), ExclusiveLessonDetailActivity.class);

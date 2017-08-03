@@ -1,6 +1,7 @@
 package cn.qatime.player.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.TextView;
@@ -56,5 +57,11 @@ public class PersonalMyExclusiveActivity extends BaseFragmentActivity {
         });
         fragmentlayout.setAdapter(fragBaseFragments, R.layout.tableout_personal_my_exclusive, 0x0312);
         fragmentlayout.getViewPager().setOffscreenPageLimit(2);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                fragmentlayout.setCurrenItem(0);
+            }
+        }, 200);
     }
 }
