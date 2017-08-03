@@ -106,6 +106,14 @@ public class FragmentOrderUnpaid extends BaseFragment {
                             .append("/").append(item.getProduct_video_course().getTeacher().getName());
                     helper.setText(R.id.classname, item.getProduct_video_course().getName())
                             .setText(R.id.describe, sp.toString());
+                }else if("LiveStudio::Group".equals(item.getProduct_type())){
+                    sp.append("专属课/");
+                    sp.append(item.getProduct_customized_group().getGrade())
+                            .append(item.getProduct_customized_group().getSubject())
+                            .append("/共").append(item.getProduct_customized_group().getEvents_count()).append("课")
+                            .append("/").append(item.getProduct_customized_group().getTeacher_name());
+                    helper.setText(R.id.classname, item.getProduct_customized_group().getName())
+                            .setText(R.id.describe, sp.toString());
                 }
 
 
@@ -138,6 +146,11 @@ public class FragmentOrderUnpaid extends BaseFragment {
                                     }
                                 } else if ("LiveStudio::VideoCourse".equals(item.getProduct_type())) {
                                     if(item.getProduct_video_course().isOff_shelve()){
+                                        Toast.makeText(mContext, "该课程已失效或已下架", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
+                                } else if ("LiveStudio::Group".equals(item.getProduct_type())) {
+                                    if(item.getProduct_customized_group().isOff_shelve()){
                                         Toast.makeText(mContext, "该课程已失效或已下架", Toast.LENGTH_SHORT).show();
                                         return;
                                     }

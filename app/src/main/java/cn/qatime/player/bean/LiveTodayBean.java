@@ -50,8 +50,17 @@ public class LiveTodayBean implements Serializable {
         private String start_time;
         private String end_time;
         private String lesson_type;
+        private String modal_type;
         private CourseBean course;
         private CourseBean customized_group;
+
+        public String getModal_type() {
+            return modal_type;
+        }
+
+        public void setModal_type(String modal_type) {
+            this.modal_type = modal_type;
+        }
 
         public String getLesson_type() {
             return lesson_type;
