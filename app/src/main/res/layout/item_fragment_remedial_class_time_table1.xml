@@ -28,9 +28,7 @@
                 android:layout_width="110dp"
                 android:layout_height="20dp"
                 android:layout_alignBottom="@id/image"
-                android:background="#ff4856"
                 android:gravity="center"
-                android:text="直播课"
                 android:textColor="#fff" />
         </RelativeLayout>
 
@@ -146,6 +144,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="时间"
+                        android:textColor="#666"
+                        android:textSize="12sp" />
+                    <TextView
+                        android:id="@+id/offline_flag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="  (线下课时)"
+                        android:visibility="gone"
                         android:textColor="#666"
                         android:textSize="12sp" />
                 </LinearLayout>

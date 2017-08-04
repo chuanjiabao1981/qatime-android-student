@@ -202,9 +202,13 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                     helper.setText(R.id.modal_type, "专属课");
                 }
 
-
+                if("LiveStudio::OfflineLesson".equals(item.getModel_type())){
+                    helper.getView(R.id.offline_flag).setVisibility(View.VISIBLE);
+                }else{
+                    helper.getView(R.id.offline_flag).setVisibility(View.GONE);
+                }
                 String status = item.getStatus();
-                boolean showEnter = "ready".equals(status) || "paused".equals(status) || "closed".equals(status) || "teaching".equals(status);//是否是待上课、已直播、直播中
+                boolean showEnter = (!"LiveStudio::OfflineLesson".equals(item.getModel_type())) && ("ready".equals(status) || "paused".equals(status) || "closed".equals(status) || "teaching".equals(status));//是否是待上课、已直播、直播中
                 //进入状态
                 helper.getView(R.id.enter).setVisibility(showEnter ? View.VISIBLE : View.GONE);//进入播放器按钮显示或隐藏
                 helper.getView(R.id.enter).setOnClickListener(new View.OnClickListener() {
