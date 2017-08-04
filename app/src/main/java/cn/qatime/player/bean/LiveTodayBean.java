@@ -3,6 +3,8 @@ package cn.qatime.player.bean;
 import java.io.Serializable;
 import java.util.List;
 
+import libraryextra.utils.StringUtils;
+
 /**
  * @author lungtify
  * @Time 2017/3/21 10:56
@@ -44,13 +46,29 @@ public class LiveTodayBean implements Serializable {
         private int id;
         private String name;
         private String status;
-        private String class_date;
         private String live_time;
-        private String board_pull_stream;
-        private String camera_pull_stream;
-        private boolean replayable;
-        private int left_replay_times;
+        private String start_time;
+        private String end_time;
+        private String lesson_type;
+        private String modal_type;
         private CourseBean course;
+        private CourseBean customized_group;
+
+        public String getModal_type() {
+            return modal_type;
+        }
+
+        public void setModal_type(String modal_type) {
+            this.modal_type = modal_type;
+        }
+
+        public String getLesson_type() {
+            return lesson_type;
+        }
+
+        public void setLesson_type(String lesson_type) {
+            this.lesson_type = lesson_type;
+        }
 
         public int getId() {
             return id;
@@ -76,56 +94,26 @@ public class LiveTodayBean implements Serializable {
             this.status = status;
         }
 
-        public String getClass_date() {
-            return class_date;
-        }
-
-        public void setClass_date(String class_date) {
-            this.class_date = class_date;
-        }
 
         public String getLive_time() {
-            return live_time;
+            if (!StringUtils.isNullOrBlanK(live_time)) {
+                return live_time;
+            } else {
+                return start_time + "-" + end_time;
+            }
         }
 
         public void setLive_time(String live_time) {
             this.live_time = live_time;
         }
 
-        public String getBoard_pull_stream() {
-            return board_pull_stream;
-        }
-
-        public void setBoard_pull_stream(String board_pull_stream) {
-            this.board_pull_stream = board_pull_stream;
-        }
-
-        public String getCamera_pull_stream() {
-            return camera_pull_stream;
-        }
-
-        public void setCamera_pull_stream(String camera_pull_stream) {
-            this.camera_pull_stream = camera_pull_stream;
-        }
-
-        public boolean isReplayable() {
-            return replayable;
-        }
-
-        public void setReplayable(boolean replayable) {
-            this.replayable = replayable;
-        }
-
-        public int getLeft_replay_times() {
-            return left_replay_times;
-        }
-
-        public void setLeft_replay_times(int left_replay_times) {
-            this.left_replay_times = left_replay_times;
-        }
 
         public CourseBean getCourse() {
-            return course;
+            if ("LiveStudio::Lesson".equals(modal_type)) {
+                return course;
+            } else {
+                return customized_group;
+            }
         }
 
         public void setCourse(CourseBean course) {
@@ -133,43 +121,9 @@ public class LiveTodayBean implements Serializable {
         }
 
         public static class CourseBean {
-            /**
-             * id : 100
-             * name : 测试一下价格
-             * subject : 化学
-             * grade : 高三
-             * teacher_name : 王志成
-             * price : 100
-             * current_price : 50
-             * chat_team_id :
-             * chat_team_owner : 07b7c43a854ed44d36c2941f1fc5ad00
-             * buy_tickets_count : 1
-             * status : teaching
-             * preset_lesson_count : 2
-             * completed_lesson_count : 0
-             * taste_count : 0
-             * completed_lessons_count : 0
-             * live_start_time : 2017-03-20 19:11
-             * live_end_time : 2017-03-23 21:00
-             * publicize : http://testing.qatime.cn/imgs/course_default.png
-             */
-
             private int id;
-            private String name;
-            private String subject;
-            private String grade;
-            private String teacher_name;
-            private float price;
-            private float current_price;
-            private String chat_team_id;
-            private String chat_team_owner;
-            private int buy_tickets_count;
-            private String status;
-            private int preset_lesson_count;
-            private int taste_count;
-            private String live_start_time;
-            private String live_end_time;
             private String publicize;
+            private PublicizesUrlBean publicizes_url;
 
             public int getId() {
                 return id;
@@ -179,127 +133,46 @@ public class LiveTodayBean implements Serializable {
                 this.id = id;
             }
 
-            public String getName() {
-                return name;
-            }
-
-            public void setName(String name) {
-                this.name = name;
-            }
-
-            public String getSubject() {
-                return subject;
-            }
-
-            public void setSubject(String subject) {
-                this.subject = subject;
-            }
-
-            public String getGrade() {
-                return grade;
-            }
-
-            public void setGrade(String grade) {
-                this.grade = grade;
-            }
-
-            public String getTeacher_name() {
-                return teacher_name;
-            }
-
-            public void setTeacher_name(String teacher_name) {
-                this.teacher_name = teacher_name;
-            }
-
-            public float getPrice() {
-                return price;
-            }
-
-            public void setPrice(float price) {
-                this.price = price;
-            }
-
-            public float getCurrent_price() {
-                return current_price;
-            }
-
-            public void setCurrent_price(float current_price) {
-                this.current_price = current_price;
-            }
-
-            public String getChat_team_id() {
-                return chat_team_id;
-            }
-
-            public void setChat_team_id(String chat_team_id) {
-                this.chat_team_id = chat_team_id;
-            }
-
-            public String getChat_team_owner() {
-                return chat_team_owner;
-            }
-
-            public void setChat_team_owner(String chat_team_owner) {
-                this.chat_team_owner = chat_team_owner;
-            }
-
-            public int getBuy_tickets_count() {
-                return buy_tickets_count;
-            }
-
-            public void setBuy_tickets_count(int buy_tickets_count) {
-                this.buy_tickets_count = buy_tickets_count;
-            }
-
-            public String getStatus() {
-                return status;
-            }
-
-            public void setStatus(String status) {
-                this.status = status;
-            }
-
-            public int getPreset_lesson_count() {
-                return preset_lesson_count;
-            }
-
-            public void setPreset_lesson_count(int preset_lesson_count) {
-                this.preset_lesson_count = preset_lesson_count;
-            }
-
-
-
-            public int getTaste_count() {
-                return taste_count;
-            }
-
-            public void setTaste_count(int taste_count) {
-                this.taste_count = taste_count;
-            }
-
-
-            public String getLive_start_time() {
-                return live_start_time;
-            }
-
-            public void setLive_start_time(String live_start_time) {
-                this.live_start_time = live_start_time;
-            }
-
-            public String getLive_end_time() {
-                return live_end_time;
-            }
-
-            public void setLive_end_time(String live_end_time) {
-                this.live_end_time = live_end_time;
-            }
-
             public String getPublicize() {
-                return publicize;
+                if (!StringUtils.isNullOrBlanK(publicize)) {
+                    return publicize;
+                } else {
+                    return publicizes_url != null ? publicizes_url.getList() : "";
+                }
             }
 
             public void setPublicize(String publicize) {
                 this.publicize = publicize;
+            }
+
+            private class PublicizesUrlBean {
+                private String app_info;
+                private String list;
+                private String info;
+
+                public String getApp_info() {
+                    return app_info;
+                }
+
+                public void setApp_info(String app_info) {
+                    this.app_info = app_info;
+                }
+
+                public String getList() {
+                    return list;
+                }
+
+                public void setList(String list) {
+                    this.list = list;
+                }
+
+                public String getInfo() {
+                    return info;
+                }
+
+                public void setInfo(String info) {
+                    this.info = info;
+                }
             }
         }
     }

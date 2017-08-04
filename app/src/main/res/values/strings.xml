@@ -628,6 +628,7 @@
     <string name="video_courses">视频课</string>
     <string name="live_courses">直播课</string>
     <string name="my_video">我的视频课</string>
+    <string name="my_exclusive">我的专属课</string>
     <string name="all_class_has_over">全部课程已完成</string>
     <string name="my_taste">我的试听</string>
     <string name="hint_choose_region">请选择您所在的区域</string>

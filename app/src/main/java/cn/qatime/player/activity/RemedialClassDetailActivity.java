@@ -490,7 +490,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                     @Override
                     protected void onSuccess(JSONObject response) {
                         //已加入试听
-//                        data.getData().getCourse().setTastable(true);
+//                        data.getData().getEssenceCourse().setTastable(true);
                         auditionStart.setVisibility(View.VISIBLE);
                         loginYunXin();
                     }

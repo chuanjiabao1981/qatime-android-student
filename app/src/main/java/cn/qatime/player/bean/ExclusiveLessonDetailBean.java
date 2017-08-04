@@ -89,7 +89,7 @@ public class ExclusiveLessonDetailBean implements Serializable {
             private String grade;
             private String status;
             private String teacher_name;
-            private int price;
+            private float price;
             private int view_tickets_count;
             private int events_count;
             private int closed_events_count;
@@ -164,11 +164,11 @@ public class ExclusiveLessonDetailBean implements Serializable {
                 this.teacher_name = teacher_name;
             }
 
-            public int getPrice() {
+            public float getPrice() {
                 return price;
             }
 
-            public void setPrice(int price) {
+            public void setPrice(float price) {
                 this.price = price;
             }
 

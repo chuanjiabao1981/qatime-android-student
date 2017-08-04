@@ -18,7 +18,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -186,7 +185,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
             ExclusiveLessonDetailActivity.this.price.setText("￥" + price);
             if (data.getData().getCustomized_group().getSell_type().equals("charge")) {
                 if (Constant.CourseStatus.published.equals(data.getData().getCustomized_group().getStatus())) {
-                    int value = DateUtils.daysBetween(new Date(data.getData().getCustomized_group().getStart_at() * 1000), System.currentTimeMillis());
+                    int value = DateUtils.daysBetween(data.getData().getCustomized_group().getStart_at() * 1000, System.currentTimeMillis());
                     progress.setVisibility(View.GONE);
                     if (value > 0) {
                         timeToStart.setVisibility(View.VISIBLE);
