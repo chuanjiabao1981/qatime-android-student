@@ -60,7 +60,7 @@ public class PersonalMyExclusiveActivity extends BaseFragmentActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                fragmentlayout.setCurrenItem(0);
+                ((BaseFragment) fragBaseFragments.get(0)).onShow();
             }
         }, 200);
     }

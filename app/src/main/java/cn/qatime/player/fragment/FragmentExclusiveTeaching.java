@@ -13,7 +13,6 @@ import android.widget.ListView;
 
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
-import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.orhanobut.logger.Logger;
@@ -74,6 +73,7 @@ public class FragmentExclusiveTeaching extends BaseFragment {
                 helper.setText(R.id.subject, item.getCustomized_group().getSubject());
                 helper.setText(R.id.teacher, "/" + item.getCustomized_group().getTeacher_name());
                 helper.setText(R.id.grade, item.getCustomized_group().getGrade());
+                helper.setText(R.id.status, "进度" + item.getCustomized_group().getClosed_events_count() + "/" + item.getCustomized_group().getEvents_count());
             }
         };
         listView.setAdapter(adapter);
@@ -134,15 +134,10 @@ public class FragmentExclusiveTeaching extends BaseFragment {
                         listView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
                         listView.onRefreshComplete();
 
-                        try {
-                            MyExclusiveBean data = JsonUtils.objectFromJson(response.toString(), MyExclusiveBean.class);
-                            if (data != null) {
-                                list.addAll(data.getData());
-                                adapter.notifyDataSetChanged();
-                            }
+                        MyExclusiveBean data = JsonUtils.objectFromJson(response.toString(), MyExclusiveBean.class);
+                        if (data != null) {
+                            list.addAll(data.getData());
                             adapter.notifyDataSetChanged();
-                        } catch (JsonSyntaxException e) {
-                            e.printStackTrace();
                         }
                     }
 
