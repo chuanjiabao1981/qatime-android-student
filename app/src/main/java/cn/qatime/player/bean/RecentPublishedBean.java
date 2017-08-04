@@ -150,7 +150,7 @@ public class RecentPublishedBean implements Serializable {
                     if (!StringUtils.isNullOrBlanK(publicize)) {
                         return publicize;
                     } else {
-                        return publicizes_url.getList();
+                        return publicizes_url != null ? publicizes_url.getList() : "";
                     }
                 }
 
