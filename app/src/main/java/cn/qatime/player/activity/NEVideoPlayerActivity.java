@@ -628,7 +628,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 //            }
             return;
         }
-        if (inputPanel.isEmojiShow()) {
+        if (inputPanel != null && inputPanel.isEmojiShow()) {
             inputPanel.closeEmojiAndInput();
             return;
         }
