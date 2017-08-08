@@ -71,7 +71,6 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
 
     private boolean isSubBig = true;//副窗口是否是大的
     private boolean isMain = true;//video1 是否在主显示view上
-    //    private int orientation = Configuration.ORIENTATION_PORTRAIT;//当前屏幕横竖屏状态
     private boolean isSubOpen = true;//副窗口开关
 
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3, R.id.tab_text4};
@@ -585,7 +584,9 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
         video1.pause();
         video2.pause();
         floatFragment.setPlaying(false);
-        inputPanel.onPause();
+        if (inputPanel != null) {
+            inputPanel.onPause();
+        }
         super.onPause();
         MobclickAgent.onPause(this);
         NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.getInstance().isChatMessageNotifyStatus() ? MsgService.MSG_CHATTING_ACCOUNT_NONE : MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
