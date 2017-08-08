@@ -84,20 +84,20 @@ public class FragmentInteractDetailClassInfo extends BaseFragment {
 
     public void setData(InteractCourseDetailBean bean) {
         if (bean != null && bean.getData() != null) {
-            subject.setText((StringUtils.isNullOrBlanK(bean.getData().getSubject()) ? "" : bean.getData().getSubject()));
-            grade.setText((bean.getData().getGrade() == null ? "" : bean.getData().getGrade()));
-            totalCount.setText(getString(R.string.lesson_count, bean.getData().getLessons_count()));
+            subject.setText((StringUtils.isNullOrBlanK(bean.getData().getInteractive_course().getSubject()) ? "" : bean.getData().getInteractive_course().getSubject()));
+            grade.setText((bean.getData().getInteractive_course().getGrade() == null ? "" : bean.getData().getInteractive_course().getGrade()));
+            totalCount.setText(getString(R.string.lesson_count, bean.getData().getInteractive_course().getLessons_count()));
             //时长，平均时长
-            totalTime.setText(bean.getData().getLessons_count() * 45 + "分钟");     
+            totalTime.setText(bean.getData().getInteractive_course().getLessons_count() * 45 + "分钟");
 //            averageTime.setText();
-            if (!StringUtils.isNullOrBlanK(bean.getData().getObjective())) {
-                target.setText(bean.getData().getObjective());
+            if (!StringUtils.isNullOrBlanK(bean.getData().getInteractive_course().getObjective())) {
+                target.setText(bean.getData().getInteractive_course().getObjective());
             }
-            if (!StringUtils.isNullOrBlanK(bean.getData().getSuit_crowd())) {
-                suitable.setText(bean.getData().getSuit_crowd());
+            if (!StringUtils.isNullOrBlanK(bean.getData().getInteractive_course().getSuit_crowd())) {
+                suitable.setText(bean.getData().getInteractive_course().getSuit_crowd());
             }
             String header = "<style>* {color:#666666;margin:0;padding:0;}.one {float: left;width:50%;height:auto;position: relative;text-align: center;}.two {width:100%;height:100%;top: 0;left:0;position: absolute;text-align: center;}</style>";//默认color段落间距
-            String body = StringUtils.isNullOrBlanK(bean.getData().getDescription()) ? getString(R.string.no_desc) : bean.getData().getDescription();
+            String body = StringUtils.isNullOrBlanK(bean.getData().getInteractive_course().getDescription()) ? getString(R.string.no_desc) : bean.getData().getInteractive_course().getDescription();
             body = body.replace("\r\n", "<br>");
             //......
             String footer =
