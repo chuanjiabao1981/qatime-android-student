@@ -2,6 +2,9 @@ package cn.qatime.player.holder;
 
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import cn.qatime.player.R;
 import cn.qatime.player.adapter.BaseMultiItemFetchLoadAdapter;
 
@@ -30,7 +33,21 @@ public class MsgViewHolderCustom extends MsgViewHolderBase {
 
     @Override
     protected void bindContentView() {
-        customContentTextView.setText(message.getContent());
+        if (!message.getContent().contains("/")) return;
+        String[] content = message.getContent().split("/");
+        String result = "";
+        String action = content[1];
+        String type = content[0];
+        if (action.equals("close") && type.equals("Scheduled")) {
+            result = "直播关闭";
+        } else if (action.equals("start") && type.equals("Scheduled")) {
+            result = "直播开启";
+        } else if (action.equals("close") && type.equals("Instant")) {
+            result = "老师关闭了互动答疑";
+        } else if (action.equals("start") && type.equals("Instant")) {
+            result = "老师开启了互动答疑";
+        }
+        customContentTextView.setText(result);
     }
 
     @Override
