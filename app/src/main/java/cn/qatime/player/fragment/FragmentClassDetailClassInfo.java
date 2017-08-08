@@ -66,12 +66,10 @@ public class FragmentClassDetailClassInfo extends BaseFragment {
         learningTips = (WebView) view.findViewById(R.id.learning_tips);
         flowLayout = (LinearLayout) view.findViewById(R.id.flow_layout);
         flow = (FlowLayout) view.findViewById(R.id.flow);
-//        String[] value = new String[]{"高考", "小學考試", "期中考試", "期末", "模擬考", "高高考", "小學考試", "期中考試", "期末", "模擬考"};
 
         initWebView(describe);
         initWebView(learningTips);
 
-//        ((TextView) view.findViewById(R.id.notice)).setText(Html.fromHtml());
     }
 
     private void initWebView(WebView webView) {
@@ -110,6 +108,9 @@ public class FragmentClassDetailClassInfo extends BaseFragment {
             grade.setText((bean.getData().getCourse().getGrade() == null ? "" : bean.getData().getCourse().getGrade()));
             totalclass.setText(getString(R.string.lesson_count, bean.getData().getCourse().getPreset_lesson_count()));
             if (!StringUtils.isNullOrBlanK(bean.getData().getCourse().getTag_list())) {
+                if (flow.getChildCount() > 0) {
+                    flow.removeAllViews();
+                }
                 for (int va = 0; va < bean.getData().getCourse().getTag_list().size(); va++) {
                     TextView textView = new TextView(getActivity());
                     textView.setGravity(Gravity.CENTER);
@@ -139,31 +140,6 @@ public class FragmentClassDetailClassInfo extends BaseFragment {
             body = body.replace("\r\n", "<br>");
             //......
             String footer =
-//                    "<p></p><p style='margin-top:20;margin-bottom:10'><font style='font-size:15;color:#333333'}>上课流程</font></p>" +
-//                    "<div class='one'><img style='width:98%;height:auto;margin-right:2%' src='file:///android_res/mipmap/process_111.png' />" +
-//                    "<div class='two'>" +
-//                    "<p style='margin-top:5;margin-left:27%;margin-right:2%;color:#fff;font-size:14;'>购买课程</p>" +
-//                    "<p style='margin-top:5;margin-left:27%;margin-right:2%;color:#fff;font-size:12;'>支持购买,放心退款</p>" +
-//                    "</div>" +
-//                    "</div>" +
-//                    "<div class='one'><img style='width:98%;height:auto;margin-left:2%' src='file:///android_res/mipmap/process_22.png' />" +
-//                    "<div class='two'>" +
-//                    "<p style='margin-top:5;margin-left:29%;color:#fff;font-size:14;'>准时上课</p>" +
-//                    "<p style='margin-top:5;margin-left:29%;color:#fff;font-size:12;'>提前预习,准时上课</p>" +
-//                    "</div>" +
-//                    "</div>" +
-//                    "<div class='one' style='margin-top:10;margin-bottom:20;'><img style='width:98%;height:auto;margin-right:2%' src='file:///android_res/mipmap/process_33.png' />" +
-//                    "<div class='two'>" +
-//                    "<p style='margin-top:5;margin-left:27%;margin-right:2%;color:#fff;font-size:14;'>在线授课</p>" +
-//                    "<p style='margin-top:5;margin-left:27%;margin-right:2%;color:#fff;font-size:12;'>多人交流,生动直播</p>" +
-//                    "</div>" +
-//                    "</div>" +
-//                    "<div class='one' style='margin-top:10;margin-bottom:20;'><img style='width:98%;height:auto;margin-left:2%' src='file:///android_res/mipmap/process_44.png' />" +
-//                    "<div class='two'>" +
-//                    "<p style='margin-top:5;margin-left:29%;color:#fff;font-size:14;'>上课结束</p>" +
-//                    "<p style='margin-top:5;margin-left:29%;color:#fff;font-size:12;'>视频回放,想看就看</p>" +
-//                    "</div>" +
-//                    "</div>" +
                     "<p style='margin-top:20'><font style='font-size:15;color:#333333'}>学习须知</font></p>" +
                             "<p style='margin-top:5;'><font style='font-size:15;color:#333333'}>上课前</font></p>" +
                             "<p><font>1.做好课程预习，预先了解本课所讲内容，更好的吸收课程精华；<br>" +

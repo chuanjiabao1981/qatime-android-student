@@ -149,6 +149,29 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
                 teacher.setText(data.getProduct_video_course().getTeacher().getName());
             }
             progress.setText(String.format(getResourceString(R.string.lesson_count), data.getProduct_video_course().getPreset_lesson_count()));
+        }else if ("LiveStudio::Group".equals(data.getProduct_type())) {
+            classid = data.getProduct_customized_group().getId();
+            if (StringUtils.isNullOrBlanK(data.getProduct_customized_group().getName())) {
+                name.setText(getResourceString(R.string.cancel_order_name));
+            } else {
+                name.setText(data.getProduct_customized_group().getName());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct_customized_group().getGrade())) {
+                grade.setText("专属课/" + getResourceString(R.string.grade));
+            } else {
+                grade.setText("专属课/" + data.getProduct_customized_group().getGrade());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct_customized_group().getSubject())) {
+                subject.setText(getResourceString(R.string.subject));
+            } else {
+                subject.setText(data.getProduct_customized_group().getSubject());
+            }
+            if (StringUtils.isNullOrBlanK(data.getProduct_customized_group().getTeacher_name())) {
+                teacher.setText(getResourceString(R.string.cancel_order_teacher));
+            } else {
+                teacher.setText(data.getProduct_customized_group().getTeacher_name());
+            }
+            progress.setText(String.format(getString(R.string.lesson_count), data.getProduct_customized_group().getEvents_count()));
         }
 
 
@@ -200,6 +223,8 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
                     intent.setClass(PersonalMyOrderUnpaidDetailActivity.this, InteractCourseDetailActivity.class);
                 } else if ("LiveStudio::VideoCourse".equals(data.getProduct_type())) {
                     intent.setClass(PersonalMyOrderUnpaidDetailActivity.this, VideoCoursesActivity.class);
+                }else if ("LiveStudio::Group".equals(data.getProduct_type())) {
+                    intent.setClass(PersonalMyOrderUnpaidDetailActivity.this, ExclusiveLessonDetailActivity.class);
                 }
                 intent.putExtra("id", classid);
                 intent.putExtra("page", 0);
@@ -221,6 +246,11 @@ public class PersonalMyOrderUnpaidDetailActivity extends BaseActivity {
                     }
                 } else if ("LiveStudio::VideoCourse".equals(data.getProduct_type())) {
                     if(data.getProduct_video_course().isOff_shelve()){
+                        Toast.makeText(PersonalMyOrderUnpaidDetailActivity.this, "该课程已失效或已下架", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }else if ("LiveStudio::Group".equals(data.getProduct_type())) {
+                    if(data.getProduct_customized_group().isOff_shelve()){
                         Toast.makeText(PersonalMyOrderUnpaidDetailActivity.this, "该课程已失效或已下架", Toast.LENGTH_SHORT).show();
                         return;
                     }

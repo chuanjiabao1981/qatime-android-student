@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.ExclusiveLessonDetailActivity;
 import cn.qatime.player.activity.InteractCourseDetailActivity;
 import cn.qatime.player.activity.RemedialClassDetailActivity;
 import cn.qatime.player.activity.SearchResultActivity;
@@ -135,6 +136,8 @@ public class FragmentSearchCourse extends BaseFragment {
                     intent = new Intent(getActivity(), InteractCourseDetailActivity.class);
                 } else if ("LiveStudio::VideoCourse".equals(datas.get(position-1).getProduct_type())) {
                     intent = new Intent(getActivity(), VideoCoursesActivity.class);
+                }else if ("LiveStudio::CustomizedGroup".equals(datas.get(position-1).getProduct_type())) {
+                    intent = new Intent(getActivity(), ExclusiveLessonDetailActivity.class);
                 }
                 intent.putExtra("id", courseId);
                 startActivity(intent);

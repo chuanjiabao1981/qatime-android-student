@@ -68,6 +68,15 @@ public class TeacherDataBean implements Serializable {
         private List<Course> courses;
         private List<InteractiveCourses> interactive_courses;
         private List<VideoCoursesBean> video_courses;
+        private List<CustomizedGroupsBean> customized_groups;
+
+        public List<CustomizedGroupsBean> getCustomized_groups() {
+            return customized_groups;
+        }
+
+        public void setCustomized_groups(List<CustomizedGroupsBean> customized_groups) {
+            this.customized_groups = customized_groups;
+        }
 
         public String getName() {
             return name;
@@ -603,6 +612,126 @@ public class TeacherDataBean implements Serializable {
 
             public void setIs_finished(boolean is_finished) {
                 this.is_finished = is_finished;
+            }
+        }
+        public static class CustomizedGroupsBean {
+
+            private int buy_tickets_count;
+            private String current_price;
+            private int events_count;
+            private String grade;
+            private int id;
+            private boolean is_finished;
+            private String name;
+            private boolean off_shelve;
+            private String price;
+            private String publicize;
+            private String sell_type;
+            private String status;
+            private String subject;
+
+            public int getBuy_tickets_count() {
+                return buy_tickets_count;
+            }
+
+            public void setBuy_tickets_count(int buy_tickets_count) {
+                this.buy_tickets_count = buy_tickets_count;
+            }
+
+            public String getCurrent_price() {
+                return current_price;
+            }
+
+            public void setCurrent_price(String current_price) {
+                this.current_price = current_price;
+            }
+
+            public int getEvents_count() {
+                return events_count;
+            }
+
+            public void setEvents_count(int events_count) {
+                this.events_count = events_count;
+            }
+
+            public String getGrade() {
+                return grade;
+            }
+
+            public void setGrade(String grade) {
+                this.grade = grade;
+            }
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
+
+            public boolean isIs_finished() {
+                return is_finished;
+            }
+
+            public void setIs_finished(boolean is_finished) {
+                this.is_finished = is_finished;
+            }
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public boolean isOff_shelve() {
+                return off_shelve;
+            }
+
+            public void setOff_shelve(boolean off_shelve) {
+                this.off_shelve = off_shelve;
+            }
+
+            public String getPrice() {
+                return price;
+            }
+
+            public void setPrice(String price) {
+                this.price = price;
+            }
+
+            public String getPublicize() {
+                return publicize;
+            }
+
+            public void setPublicize(String publicize) {
+                this.publicize = publicize;
+            }
+
+            public String getSell_type() {
+                return sell_type;
+            }
+
+            public void setSell_type(String sell_type) {
+                this.sell_type = sell_type;
+            }
+
+            public String getStatus() {
+                return status;
+            }
+
+            public void setStatus(String status) {
+                this.status = status;
+            }
+
+            public String getSubject() {
+                return subject;
+            }
+
+            public void setSubject(String subject) {
+                this.subject = subject;
             }
         }
     }

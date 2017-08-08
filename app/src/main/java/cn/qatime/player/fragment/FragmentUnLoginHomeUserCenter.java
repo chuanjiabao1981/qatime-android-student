@@ -35,12 +35,14 @@ public class FragmentUnLoginHomeUserCenter extends BaseFragment implements View.
         LinearLayout myInteract = (LinearLayout) v.findViewById(R.id.my_interact);
         LinearLayout myVideo = (LinearLayout) v.findViewById(R.id.my_video);
         LinearLayout myTaste = (LinearLayout) v.findViewById(R.id.my_taste);
+        LinearLayout myExclusive = (LinearLayout) v.findViewById(R.id.my_exclusive);
         about.setOnClickListener(this);
         myInteract.setOnClickListener(this);
         myVideo.setOnClickListener(this);
         information.setOnClickListener(this);
         name.setOnClickListener(this);
         myTaste.setOnClickListener(this);
+        myExclusive.setOnClickListener(this);
 
         myWallet.setOnClickListener(this);
         myOrder.setOnClickListener(this);
@@ -63,7 +65,7 @@ public class FragmentUnLoginHomeUserCenter extends BaseFragment implements View.
 
     @Override
     public void onClick(View v) {
-          switch (v.getId()) {
+        switch (v.getId()) {
             case R.id.about:
                 Intent intent = new Intent(getActivity(), AboutUsActivity.class);
                 startActivity(intent);
@@ -75,9 +77,8 @@ public class FragmentUnLoginHomeUserCenter extends BaseFragment implements View.
             case R.id.my_course:
             case R.id.my_interact:
             case R.id.my_video:
-
-
             case R.id.my_taste:
+            case R.id.my_exclusive:
             case R.id.security:
             case R.id.setting:
                 intent = new Intent(getActivity(), LoginActivity2.class);

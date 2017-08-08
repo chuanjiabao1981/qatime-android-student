@@ -350,6 +350,39 @@
                     android:scrollbars="none"
                     android:verticalSpacing="20dp" />
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/exclusive_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#f7f7f7" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="专属课"
+                    android:textColor="#333"
+                    android:textSize="16sp" />
+
+                <libraryextra.view.GridViewForScrollView
+                    android:id="@+id/exclusive_grid"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#fff"
+                    android:cacheColorHint="@null"
+                    android:horizontalSpacing="10dp"
+                    android:numColumns="2"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:scrollbars="none"
+                    android:verticalSpacing="20dp" />
+            </LinearLayout>
 
         </com.zhy.android.percent.support.PercentLinearLayout>
     </com.handmark.pulltorefresh.library.PullToRefreshScrollView>

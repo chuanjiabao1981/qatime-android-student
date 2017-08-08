@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseFragmentActivity;
+import cn.qatime.player.fragment.FragmentFilterClassExclusive;
 import cn.qatime.player.fragment.FragmentFilterClassInteract;
 import cn.qatime.player.fragment.FragmentFilterClassLive;
 import cn.qatime.player.fragment.FragmentFilterClassVideo;
@@ -47,12 +48,15 @@ public class FilterCourseActivity extends BaseFragmentActivity implements View.O
         View tab1 = findViewById(R.id.tab_text1);
         View tab2 = findViewById(R.id.tab_text2);
         View tab3 = findViewById(R.id.tab_text3);
+        View tab4 = findViewById(R.id.tab_text4);
         tab1.setOnClickListener(this);
         tab2.setOnClickListener(this);
         tab3.setOnClickListener(this);
+        tab4.setOnClickListener(this);
         views.add(tab1);
         views.add(tab2);
         views.add(tab3);
+        views.add(tab4);
         views.get(0).setSelected(true);
 
         grade = getIntent().getStringExtra("grade");
@@ -60,6 +64,7 @@ public class FilterCourseActivity extends BaseFragmentActivity implements View.O
         fragBaseFragments.add(new FragmentFilterClassLive().setArguments(grade, subject));
         fragBaseFragments.add(new FragmentFilterClassInteract().setArguments(grade, subject));
         fragBaseFragments.add(new FragmentFilterClassVideo().setArguments(grade, subject));
+        fragBaseFragments.add(new FragmentFilterClassExclusive().setArguments(grade, subject));
 
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
@@ -120,6 +125,9 @@ public class FilterCourseActivity extends BaseFragmentActivity implements View.O
                 break;
             case R.id.tab_text3:
                 pager.setCurrentItem(2);
+                break;
+            case R.id.tab_text4:
+                pager.setCurrentItem(3);
                 break;
         }
     }

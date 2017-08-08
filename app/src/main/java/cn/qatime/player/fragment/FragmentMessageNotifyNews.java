@@ -195,7 +195,8 @@ public class FragmentMessageNotifyNews extends BaseFragment {
                     case "live_studio/lesson":
                         if ("start_for_student".equals(item.getAction_name())) {
                             intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
-                              startActivity(intent);
+                            intent.putExtra("id", Integer.valueOf(courseId));
+                            startActivity(intent);
                         } else if ("change_time".equals(item.getAction_name())) {
                             intent = new Intent(getActivity(), RemedialClassDetailActivity.class);
                             intent.putExtra("id", Integer.valueOf(courseId));
