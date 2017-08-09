@@ -133,6 +133,22 @@ public class EssenceContentBean implements Serializable {
             private String teacher_name;
             private List<TeacherBean> teachers;
 
+            public String getTeacher_name() {
+                if (!StringUtils.isNullOrBlanK(teacher_name)) {
+                    return teacher_name;
+                } else {
+                    if (teachers != null && teachers.size() > 0) {
+                        return teachers.get(0).getName();
+                    } else {
+                        return "";
+                    }
+                }
+            }
+
+            public void setTeacher_name(String teacher_name) {
+                this.teacher_name = teacher_name;
+            }
+
             public String getGrade() {
                 return grade;
             }
@@ -166,21 +182,7 @@ public class EssenceContentBean implements Serializable {
                 this.subject = subject;
             }
 
-            public String getTeacher_name() {
-                if (!StringUtils.isNullOrBlanK(teacher_name)) {
-                    return teacher_name;
-                } else {
-                    if (teachers != null && teachers.size() > 0) {
-                        return teachers.get(0).getName();
-                    } else {
-                        return "";
-                    }
-                }
-            }
 
-            public void setTeacher_name(String teacher_name) {
-                this.teacher_name = teacher_name;
-            }
 
         }
     }

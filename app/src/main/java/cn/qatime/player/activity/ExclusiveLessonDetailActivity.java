@@ -35,7 +35,6 @@ import cn.qatime.player.view.SimpleViewPagerIndicator;
 import libraryextra.bean.OrderPayBean;
 import libraryextra.utils.DateUtils;
 import libraryextra.utils.JsonUtils;
-import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -52,7 +51,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
     private DecimalFormat df = new DecimalFormat("#.00");
     private TextView refundAnyTime;
-    private TextView joinCheap;
+    private TextView couponFree;
     private TextView progress;
     private TextView timeToStart;
     private TextView status;
@@ -89,7 +88,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
         fragBaseFragments.add(new FragmentExclusiveLessonClassList());
 
         refundAnyTime = (TextView) findViewById(R.id.refund_any_time);
-        joinCheap = (TextView) findViewById(R.id.join_cheap);
+        couponFree = (TextView) findViewById(R.id.coupon_free);
         progress = (TextView) findViewById(R.id.progress);
         timeToStart = (TextView) findViewById(R.id.time_to_start);
         status = (TextView) findViewById(R.id.status);
@@ -177,86 +176,72 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
             name.setText(data.getData().getCustomized_group().getName());
             setTitles(data.getData().getCustomized_group().getName());
             studentNumber.setText(getString(R.string.student_number, data.getData().getCustomized_group().getView_tickets_count()));
-            String price = df.format(data.getData().getCustomized_group().getPrice());
-            if (price.startsWith(".")) {
-                price = "0" + price;
-            }
-            ExclusiveLessonDetailActivity.this.price.setText("￥" + price);
-            if (data.getData().getCustomized_group().getSell_type().equals("charge")) {
-                if (Constant.CourseStatus.published.equals(data.getData().getCustomized_group().getStatus())) {
-                    int value = DateUtils.daysBetween(Long.valueOf(data.getData().getCustomized_group().getStart_at())*1000, System.currentTimeMillis());
-                    progress.setVisibility(View.GONE);
-                    if (value > 0) {
-                        timeToStart.setVisibility(View.VISIBLE);
-                        timeToStart.setText("[" + getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day) + "]");
-                    } else {
-                        timeToStart.setVisibility(View.GONE);
-                    }
-                    layoutView.setBackgroundColor(0xff00d564);
-                } else if (Constant.CourseStatus.teaching.equals(data.getData().getCustomized_group().getStatus())) {
-                    progress.setVisibility(View.VISIBLE);
-                    timeToStart.setVisibility(View.GONE);
-                    layoutView.setBackgroundColor(0xff00a0e9);
-                    progress.setText(getString(R.string.progress_live, data.getData().getCustomized_group().getClosed_events_count(), data.getData().getCustomized_group().getEvents_count()));
-                } else if (Constant.CourseStatus.completed.equals(data.getData().getCustomized_group().getStatus())) {
-                    timeToStart.setVisibility(View.GONE);
-                    progress.setVisibility(View.VISIBLE);
-                    layoutView.setBackgroundColor(0xff999999);
-                    progress.setText(getString(R.string.progress_live, data.getData().getCustomized_group().getClosed_events_count(), data.getData().getCustomized_group().getEvents_count()));
-                } else {
-                    layoutView.setVisibility(View.GONE);
-                }
 
-                if (data.getData().getTicket() != null) {//已试听或已购买
-                    if (!Constant.CourseStatus.completed.equals(data.getData().getCustomized_group().getStatus())) {
-                        if (!StringUtils.isNullOrBlanK(data.getData().getTicket().getType())) {
-                            if (data.getData().getTicket().getType().equals("LiveStudio::BuyTicket")) {//已购买
-                                startStudy.setText("开始学习");
-//                                startStudyView.setVisibility(View.VISIBLE);//开始学习
-//                            } else {//进入试听按钮显示
-//                                audition.setVisibility(View.GONE);
-//                                auditionStart.setVisibility(View.VISIBLE);
-//                                if (data.getData().getTicket().getUsed_count() >= data.getData().getTicket().getBuy_count()) {
-//                                    auditionStart.setText("试听结束");
-//                                    auditionStart.setEnabled(false);
-//                                }
-                            }
-                        }
-                    } else {
+            if (Constant.CourseStatus.published.equals(data.getData().getCustomized_group().getStatus())) {
+                int value = DateUtils.daysBetween(Long.valueOf(data.getData().getCustomized_group().getStart_at()) * 1000, System.currentTimeMillis());
+                progress.setVisibility(View.GONE);
+                if (value > 0) {
+                    timeToStart.setVisibility(View.VISIBLE);
+                    timeToStart.setText("[" + getResources().getString(R.string.item_to_start_main) + value + getResources().getString(R.string.item_day) + "]");
+                } else {
+                    timeToStart.setVisibility(View.GONE);
+                }
+                layoutView.setBackgroundColor(0xff00d564);
+            } else if (Constant.CourseStatus.teaching.equals(data.getData().getCustomized_group().getStatus())) {
+                progress.setVisibility(View.VISIBLE);
+                timeToStart.setVisibility(View.GONE);
+                layoutView.setBackgroundColor(0xff00a0e9);
+                progress.setText(getString(R.string.progress_live, data.getData().getCustomized_group().getClosed_events_count(), data.getData().getCustomized_group().getEvents_count()));
+            } else if (Constant.CourseStatus.completed.equals(data.getData().getCustomized_group().getStatus())) {
+                timeToStart.setVisibility(View.GONE);
+                progress.setVisibility(View.VISIBLE);
+                layoutView.setBackgroundColor(0xff999999);
+                progress.setText(getString(R.string.progress_live, data.getData().getCustomized_group().getClosed_events_count(), data.getData().getCustomized_group().getEvents_count()));
+            } else {
+                layoutView.setVisibility(View.GONE);
+            }
+
+
+            if (data.getData().getCustomized_group().getSell_type().equals("charge")) {
+
+                String priceStr = df.format(data.getData().getCustomized_group().getPrice());
+                if (priceStr.startsWith(".")) {
+                    priceStr = "0" + priceStr;
+                }
+                price.setText("￥" + priceStr);
+                if (data.getData().getTicket() != null && "LiveStudio::BuyTicket".equals(data.getData().getTicket().getType())) {//已购买
+                    if (Constant.CourseStatus.completed.equals(data.getData().getCustomized_group().getStatus())) {
                         handleLayout.setVisibility(View.GONE);
+                    } else {
+                        startStudy.setText("开始学习");
                     }
-                } else {//需加入试听或购买
-//                    startStudyView.setVisibility(View.VISIBLE);
-                    startStudy.setText("立即报名");
-//                    if (data.getData().getCustomized_group().isTastable()) {//可以加入试听
-//                        audition.setVisibility(View.VISIBLE);
-//                        auditionStart.setVisibility(View.GONE);
-//                    } else {//不可试听  只能购买
-//                        auditionLayout.setVisibility(View.GONE);
-//                    }
-//                    if (data.getData().getCustomized_group().isOff_shelve()) {
-//                        startStudyView.setVisibility(View.VISIBLE);
-//                        startStudy.setText("已下架");
-//                        startStudy.setEnabled(false);
-//                    }
+                } else {//需购买
+                    if (data.getData().getCustomized_group().isOff_shelve() || Constant.CourseStatus.completed.equals(data.getData().getCustomized_group().getStatus())) {//已下架或未购买已结束显示已下架
+                        handleLayout.setVisibility(View.GONE);
+                        price.setText("已下架");
+                    } else {
+                        startStudy.setBackgroundResource(R.drawable.button_bg_selector_red_with_stork);
+                        startStudy.setTextColor(getResources().getColor(R.color.colorPrimary));
+                        startStudy.setText("立即报名");
+                    }
                 }
             } else if (data.getData().getCustomized_group().getSell_type().equals("free")) {
-                layoutView.setVisibility(View.GONE);
-                ExclusiveLessonDetailActivity.this.price.setText("免费");
+                price.setText("免费");
                 if (data.getData().getTicket() != null) {//已购买
-                    if (!Constant.CourseStatus.completed.equals(data.getData().getCustomized_group().getStatus())) {
-                        startStudy.setText("开始学习");
-//                        startStudyView.setVisibility(View.VISIBLE);
-                    } else {
+                    if (Constant.CourseStatus.completed.equals(data.getData().getCustomized_group().getStatus())) {
                         handleLayout.setVisibility(View.GONE);
+                    } else {
+                        startStudy.setText("开始学习");
                     }
                 } else {
-//                    startStudyView.setVisibility(View.VISIBLE);
-                    startStudy.setText("立即报名");
-//                    if (data.getData().getCustomized_group().isOff_shelve()) {
-//                        startStudy.setText("已下架");
-//                        startStudy.setEnabled(false);
-//                    }
+                    if (data.getData().getCustomized_group().isOff_shelve() || Constant.CourseStatus.completed.equals(data.getData().getCustomized_group().getStatus())) {
+                        price.setText("已下架");
+                        handleLayout.setVisibility(View.GONE);
+                    } else {
+                        startStudy.setBackgroundResource(R.drawable.button_bg_selector_red_with_stork);
+                        startStudy.setTextColor(getResources().getColor(R.color.colorPrimary));
+                        startStudy.setText("立即报名");
+                    }
                 }
             }
 
@@ -264,8 +249,8 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                 if (!data.getData().getCustomized_group().getIcons().isRefund_any_time()) {
                     refundAnyTime.setVisibility(View.GONE);
                 }
-                if (!data.getData().getCustomized_group().getIcons().isJoin_cheap()) {
-                    joinCheap.setVisibility(View.GONE);
+                if (!data.getData().getCustomized_group().getIcons().isCoupon_free()) {
+                    couponFree.setVisibility(View.GONE);
                 }
             }
             ((FragmentExclusiveLessonClassInfo) fragBaseFragments.get(0)).setData(data);
@@ -327,6 +312,9 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
     }
 
     private void free2deliver() {
+        // TODO: 2017/8/8 记得改按钮样式 ↓
+        //startStudy.setBackgroundResource(R.drawable.button_bg_selector_red);
+        //startStudy.setTextColor(Color.WHITE);
         Toast.makeText(this, "暂不支持专属课免费", Toast.LENGTH_SHORT).show();
     }
 

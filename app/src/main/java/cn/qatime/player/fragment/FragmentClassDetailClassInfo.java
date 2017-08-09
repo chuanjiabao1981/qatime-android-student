@@ -106,7 +106,7 @@ public class FragmentClassDetailClassInfo extends BaseFragment {
                 e.printStackTrace();
             }
             grade.setText((bean.getData().getCourse().getGrade() == null ? "" : bean.getData().getCourse().getGrade()));
-            totalclass.setText(getString(R.string.lesson_count, bean.getData().getCourse().getPreset_lesson_count()));
+            totalclass.setText(getString(R.string.lesson_count, bean.getData().getCourse().getLessons_count()));
             if (!StringUtils.isNullOrBlanK(bean.getData().getCourse().getTag_list())) {
                 if (flow.getChildCount() > 0) {
                     flow.removeAllViews();
