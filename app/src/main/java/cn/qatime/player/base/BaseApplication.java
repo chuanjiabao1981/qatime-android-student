@@ -19,6 +19,7 @@ import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
 import com.orhanobut.logger.LogLevel;
@@ -42,6 +43,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.config.UserPreferences;
+import cn.qatime.player.holder.CustomAttachParser;
 import cn.qatime.player.im.LoginSyncDataStatusObserver;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
@@ -235,6 +237,7 @@ public class BaseApplication extends MultiDexApplication {
                 TeamDataCache.getInstance().registerObservers(true);
 //                FriendDataCache.getInstance().registerObservers(true);
             }
+            NIMClient.getService(MsgService.class).registerCustomAttachmentParser(new CustomAttachParser());
             // 注册语言变化监听
             registerLocaleReceiver(true);
         }

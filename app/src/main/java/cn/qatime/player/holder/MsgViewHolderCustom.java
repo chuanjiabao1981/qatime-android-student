@@ -33,18 +33,17 @@ public class MsgViewHolderCustom extends MsgViewHolderBase {
 
     @Override
     protected void bindContentView() {
-        if (!message.getContent().contains("/")) return;
-        String[] content = message.getContent().split("/");
+        CustomAttachment attachment = (CustomAttachment) message.getAttachment();
         String result = "";
-        String action = content[1];
-        String type = content[0];
-        if (action.equals("close") && type.equals("Scheduled")) {
+        String event = attachment.getEvent();
+        String type = attachment.getType();
+        if (event.equals("close") && type.equals("LiveStudio::ScheduledLesson")) {
             result = "直播关闭";
-        } else if (action.equals("start") && type.equals("Scheduled")) {
+        } else if (event.equals("start") && type.equals("LiveStudio::ScheduledLesson")) {
             result = "直播开启";
-        } else if (action.equals("close") && type.equals("Instant")) {
+        } else if (event.equals("close") && type.equals("LiveStudio::InstantLesson")) {
             result = "老师关闭了互动答疑";
-        } else if (action.equals("start") && type.equals("Instant")) {
+        } else if (event.equals("start") && type.equals("LiveStudio::InstantLesson")) {
             result = "老师开启了互动答疑";
         }
         customContentTextView.setText(result);
