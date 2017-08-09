@@ -96,8 +96,8 @@ public class ExclusiveLessonDetailBean implements Serializable {
             private int view_tickets_count;
             private int events_count;
             private int closed_events_count;
-            private String start_at;
-            private String end_at;
+            private long start_at;
+            private long end_at;
             private String objective;
             private String suit_crowd;
             private IconsBean icons;
@@ -200,11 +200,11 @@ public class ExclusiveLessonDetailBean implements Serializable {
                 this.events_count = events_count;
             }
 
-            public String getStart_at() {
+            public long getStart_at() {
                 return start_at;
             }
 
-            public void setStart_at(String start_at) {
+            public void setStart_at(long start_at) {
                 this.start_at = start_at;
             }
 
@@ -216,11 +216,11 @@ public class ExclusiveLessonDetailBean implements Serializable {
                 this.closed_events_count = closed_events_count;
             }
 
-            public String getEnd_at() {
+            public long getEnd_at() {
                 return end_at;
             }
 
-            public void setEnd_at(String end_at) {
+            public void setEnd_at(long end_at) {
                 this.end_at = end_at;
             }
 
@@ -275,7 +275,6 @@ public class ExclusiveLessonDetailBean implements Serializable {
             public String getSell_type() {
                 return sell_type;
             }
-
 
             public static class OfflineLessonsBean {
                 /**

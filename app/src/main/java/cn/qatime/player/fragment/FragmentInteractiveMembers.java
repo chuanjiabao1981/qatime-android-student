@@ -18,6 +18,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.adapter.FragmentNEVideoPlayerAdapter4;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.bean.Announcements;
+import libraryextra.bean.ChatTeamBean;
 import libraryextra.utils.PinyinUtils;
 import libraryextra.utils.StringUtils;
 
@@ -27,7 +28,7 @@ import libraryextra.utils.StringUtils;
  * @Describe
  */
 public class FragmentInteractiveMembers extends BaseFragment {
-    private List<Announcements.DataBean.MembersBean> list = new ArrayList<>();
+    private List<ChatTeamBean.Accounts> list = new ArrayList<>();
     private FragmentNEVideoPlayerAdapter4 adapter;
     private Handler hd = new Handler();
     private boolean hasLoad = false;
@@ -46,7 +47,6 @@ public class FragmentInteractiveMembers extends BaseFragment {
             }
         }
     };
-    private Announcements.DataBean.MembersBean owner;
 
     @Nullable
     @Override
@@ -63,38 +63,35 @@ public class FragmentInteractiveMembers extends BaseFragment {
         hasLoad = true;
     }
 
-    public void setData(Announcements.DataBean accounts) {
-        if (accounts != null && accounts.getMembers() != null) {
+    public void setData(List<ChatTeamBean.Accounts> accounts) {
+        if (accounts != null) {
             list.clear();
-            list.addAll(accounts.getMembers());
-            Iterator<Announcements.DataBean.MembersBean> it = list.iterator();
+            list.addAll(accounts);
+            Iterator<ChatTeamBean.Accounts> it = list.iterator();
             while (it.hasNext()) {
-                Announcements.DataBean.MembersBean item = it.next();
+                ChatTeamBean.Accounts item = it.next();
                 if (item == null) return;
-                if (!StringUtils.isNullOrBlanK(accounts.getOwner())) {
-                    if (accounts.getOwner().equals(item.getAccid())) {
-                        item.setOwner(true);
-                        owner = item;
-                        it.remove();
-                    } else {
-                        item.setOwner(false);
-                    }
-                }
+//                if (!StringUtils.isNullOrBlanK(accounts.getOwner())) {
+//                    if (accounts.getOwner().equals(item.getAccid())) {
+//                        item.setOwner(true);
+//                        owner = item;
+//                        it.remove();
+//                    } else {
+//                        item.setOwner(false);
+//                    }
+//                }
                 if (StringUtils.isNullOrBlanK(item.getName())) {
                     item.setFirstLetters("");
                 } else {
                     item.setFirstLetters(PinyinUtils.getPinyinFirstLetters(item.getName()));
                 }
             }
-            Collections.sort(list, new Comparator<Announcements.DataBean.MembersBean>() {
+            Collections.sort(list, new Comparator<ChatTeamBean.Accounts>() {
                 @Override
-                public int compare(Announcements.DataBean.MembersBean lhs, Announcements.DataBean.MembersBean rhs) {
+                public int compare(ChatTeamBean.Accounts lhs, ChatTeamBean.Accounts rhs) {
                     return lhs.getFirstLetters().compareTo(rhs.getFirstLetters());
                 }
             });
-            if (owner != null) {
-                list.add(0, owner);
-            }
             hd.postDelayed(runnable, 200);
         }
     }

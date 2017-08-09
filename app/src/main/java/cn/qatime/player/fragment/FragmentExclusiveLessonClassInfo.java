@@ -20,6 +20,8 @@ import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.ExclusiveLessonDetailBean;
 import libraryextra.utils.StringUtils;
 
+import static com.android.volley.Request.Method.HEAD;
+
 public class FragmentExclusiveLessonClassInfo extends BaseFragment {
 
     WebView describe;
@@ -87,9 +89,9 @@ public class FragmentExclusiveLessonClassInfo extends BaseFragment {
     public void setData(ExclusiveLessonDetailBean bean) {
         if (bean != null && bean.getData() != null && bean.getData().getCustomized_group() != null) {
             subject.setText((StringUtils.isNullOrBlanK(bean.getData().getCustomized_group().getSubject()) ? "" : bean.getData().getCustomized_group().getSubject()));
-            Date start = new Date(Long.valueOf(bean.getData().getCustomized_group().getStart_at())*1000);
+            Date start = new Date(bean.getData().getCustomized_group().getStart_at() * 1000);
             classStartTime.setText(parse2.format(start));
-            Date end = new Date(Long.valueOf(bean.getData().getCustomized_group().getEnd_at())*1000);
+            Date end = new Date(bean.getData().getCustomized_group().getEnd_at() * 1000);
             classEndTime.setText(parse2.format(end));
             grade.setText((bean.getData().getCustomized_group().getGrade() == null ? "" : bean.getData().getCustomized_group().getGrade()));
             totalclass.setText(getString(R.string.lesson_count, bean.getData().getCustomized_group().getEvents_count()));

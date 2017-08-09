@@ -21,7 +21,7 @@ import libraryextra.bean.ChatTeamBean;
 import libraryextra.utils.PinyinUtils;
 import libraryextra.utils.StringUtils;
 
-public class FragmentPlayerMembers extends BaseFragment {
+public class FragmentExclusiveMembers extends BaseFragment {
     private List<ChatTeamBean.Accounts> list = new ArrayList<>();
     private FragmentNEVideoPlayerAdapter4 adapter;
     private Handler hd = new Handler();
@@ -57,12 +57,19 @@ public class FragmentPlayerMembers extends BaseFragment {
     /**
      * @param accounts
      */
-    public void setData(ChatTeamBean.Accounts accounts) {
+    public void setData(List<ChatTeamBean.Accounts> accounts) {
         if (accounts != null) {
             list.clear();
-            list.add(accounts);
+            list.addAll(accounts);
             for (ChatTeamBean.Accounts item : list) {
                 if (item == null) continue;
+//                if (!StringUtils.isNullOrBlanK(accounts.getOwner())) {
+//                    if (accounts.getOwner().equals(item.getAccid())) {
+//                        item.setOwner(true);
+//                    } else {
+//                        item.setOwner(false);
+//                    }
+//                }
                 if (StringUtils.isNullOrBlanK(item.getName())) {
                     item.setFirstLetters("");
                 } else {
@@ -80,7 +87,7 @@ public class FragmentPlayerMembers extends BaseFragment {
 //                    } else if (lhs.isOwner() && rhs.isOwner()) {
 //                        x = -3;
 //                    }
-//
+
 //                    int y = lhs.getFirstLetters().compareTo(rhs.getFirstLetters());
 //                    if (x == 0) {
 //                        return y;

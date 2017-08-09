@@ -58,7 +58,7 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
         public void run() {
             if (hasLoad) {
                 if (tipText != null) {
-                    tipText.setText(team.getType() == TeamTypeEnum.Normal ? R.string.you_have_quit_the_group : R.string.you_have_quit_the_group);
+                    tipText.setText(getResourceString(R.string.you_have_quit_the_group));
                     tipText.setVisibility(team.isMyTeam() ? View.GONE : View.VISIBLE);
                     hd.removeCallbacks(this);
                 } else {

@@ -108,6 +108,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         intent.putExtra("id", courseId);
         startActivity(intent);
     }
+
     private void requestLivePermission() {
         MPermission.with(this)
                 .addRequestCode(100)
@@ -161,6 +162,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
             }
         });
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
@@ -173,6 +175,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
+
     /**
      * 收起输入法等
      */
@@ -268,7 +271,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         }
         team = d;
         inputpanel.setTeam(team);
-        tipText.setText(team.getType() == TeamTypeEnum.Normal ? getResourceString(R.string.you_have_quit_the_group) : getResourceString(R.string.you_have_quit_the_group));
+        tipText.setText(getResourceString(R.string.you_have_quit_the_group));
         tipText.setVisibility(team.isMyTeam() ? View.GONE : View.VISIBLE);
     }
 

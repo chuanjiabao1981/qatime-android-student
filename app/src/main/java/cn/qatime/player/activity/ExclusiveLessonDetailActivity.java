@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
@@ -265,7 +266,9 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
             case R.id.start_study:
                 if (BaseApplication.getInstance().isLogined()) {
                     if (data.getData().getTicket() != null) {
-                        // TODO: 2017/7/27 转到专属课观看页面
+                        Intent intent = new Intent(this, ExclusiveVideoPlayerActivity.class);
+                        intent.putExtra("id", id);
+                        startActivity(intent);
                     } else {
                         if (data.getData().getCustomized_group().getSell_type().equals("charge")) {
                             if (Constant.CourseStatus.teaching.equals(data.getData().getCustomized_group().getStatus())) {

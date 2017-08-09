@@ -29,6 +29,7 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import cn.qatime.player.R;
@@ -86,6 +87,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
     private TextView timeToStart;
     private View layoutView;
     private RelativeLayout auditionLayout;
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,6 +216,7 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
             name.setText(data.getData().getCourse().getName());
             setTitles(data.getData().getCourse().getName());
             studentnumber.setText(getString(R.string.student_number, data.getData().getCourse().getBuy_tickets_count()));
+
             if (Constant.CourseStatus.published.equals(data.getData().getCourse().getStatus())) {
                 layoutView.setBackgroundColor(0xff00d564);
                 int value = 0;
@@ -243,7 +246,6 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 layoutView.setVisibility(View.GONE);
             }
 
-
             if (data.getData().getCourse().getSell_type().equals("charge")) {
                 String priceStr;
                 if (Constant.CourseStatus.completed.equals(data.getData().getCourse().getStatus())) {
@@ -260,7 +262,6 @@ public class RemedialClassDetailActivity extends BaseFragmentActivity implements
                 } else {
                     transferPrice.setVisibility(View.GONE);
                 }
-
 
                 if (data.getData().getTicket() != null && "LiveStudio::BuyTicket".equals(data.getData().getTicket().getType())) {//已购买
                     if (Constant.CourseStatus.completed.equals(data.getData().getCourse().getStatus())) {

@@ -1,0 +1,164 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/whole"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff0f0f0">
+
+    <RelativeLayout
+        android:id="@+id/main_video"
+        android:layout_width="match_parent"
+        android:layout_height="260dip">
+
+        <RelativeLayout
+            android:id="@+id/main_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/window1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#000"
+                android:gravity="center">
+
+                <cn.qatime.player.view.NEVideoView
+                    android:id="@+id/video1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <ImageView
+                    android:id="@+id/video_no_data1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/video_no_data"
+                    android:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/buffering1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/video_loading"
+                    android:visibility="gone" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/control"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#00000000" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/sub_video"
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+        android:layout_below="@id/main_video"
+        android:background="#00000000"
+        android:visibility="visible">
+
+        <RelativeLayout
+            android:id="@+id/window2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#000"
+            android:gravity="center">
+
+            <cn.qatime.player.view.NEVideoView
+                android:id="@+id/video2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/video_no_data2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@mipmap/video_no_data"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/buffering2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@mipmap/video_loading"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <cn.qatime.player.barrage.DanmakuView
+        android:id="@+id/danmuView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignBottom="@id/sub_video"
+        android:layout_alignTop="@id/sub_video" />
+
+    <LinearLayout
+        android:id="@+id/bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/sub_video"
+        android:orientation="vertical">
+
+        <libraryextra.view.FragmentLayoutWithLine
+            android:id="@+id/fragmentlayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <include layout="@layout/message_input_layout" />
+    </LinearLayout>
+
+    <cn.qatime.player.view.VideoLayout
+        android:id="@+id/floating_window"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="#000000"
+        android:gravity="center"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/layoutPlayAudio"
+        android:layout_width="188dp"
+        android:layout_height="188dp"
+        android:layout_centerInParent="true"
+        android:background="@mipmap/dialog_toast_bg"
+        android:visibility="gone">
+
+        <Chronometer
+            android:id="@+id/timer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:gravity="center_horizontal"
+            android:text="@string/timer_default"
+            android:textColor="@color/white" />
+
+        <ImageView
+            android:id="@+id/alert_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/timer_tip"
+            android:layout_below="@id/timer"
+            android:src="@mipmap/record1" />
+
+        <TextView
+            android:id="@id/timer_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="3dp"
+            android:gravity="center_horizontal"
+            android:paddingBottom="3dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="3dp"
+            android:text="@string/recording_cancel"
+            android:textColor="@color/white" />
+    </RelativeLayout>
+</RelativeLayout>
