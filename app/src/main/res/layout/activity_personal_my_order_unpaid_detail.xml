@@ -193,21 +193,33 @@
 
         <TextView
             android:id="@+id/cancel_order"
-            style="@style/button_style"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             android:layout_marginTop="12dp"
             android:background="@drawable/button_background_light"
             android:text="@string/cancel_order"
-            android:textColor="#aaaaaa" />
+            android:textColor="#aaaaaa"
+            android:clickable="true"
+            android:textSize="16sp"
+            android:layout_height="40dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center" />
 
         <TextView
             android:id="@+id/pay"
-            style="@style/button_style"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             android:layout_marginTop="12dp"
-            android:text="@string/pay" />
+            android:text="@string/pay"
+            android:clickable="true"
+            android:textSize="16sp"
+            android:layout_height="40dp"
+            android:background="@drawable/button_bg_selector_red"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:textColor="#fff"
+            android:gravity="center" />
     </LinearLayout>
 
 </LinearLayout>

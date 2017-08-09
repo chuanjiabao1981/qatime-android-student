@@ -27,6 +27,7 @@ public class MsgViewHolderFactory {
 //        register(VideoAttachment.class, MsgViewHolderVideo.class);
 //        register(LocationAttachment.class, MsgViewHolderLocation.class);
         register(NotificationAttachment.class, MsgViewHolderNotification.class);
+        register(CustomAttachment.class, MsgViewHolderCustom.class);
     }
 
     public static void register(Class<? extends MsgAttachment> attach, Class<? extends MsgViewHolderBase> viewHolder) {

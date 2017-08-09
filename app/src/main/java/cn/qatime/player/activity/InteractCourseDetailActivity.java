@@ -64,7 +64,7 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
     private View startStudyView;
     private View handleLayout;
     private TextView refundAnyTime;
-    private TextView joinCheap;
+    private TextView couponFree;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +92,7 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
         fragBaseFragments.add(new FragmentInteractDetailClassList());
 
         refundAnyTime = (TextView) findViewById(R.id.refund_any_time);
-        joinCheap = (TextView) findViewById(R.id.join_cheap);
+        couponFree = (TextView) findViewById(R.id.coupon_free);
 
         title = (TextView) findViewById(R.id.title);
         price = (TextView) findViewById(R.id.price);
@@ -150,49 +150,47 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
     }
 
     private void initData() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlInteractCourses + "/" + id, null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlInteractCourses + id + "/detail", null,
                 new VolleyListener(InteractCourseDetailActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
                         data = JsonUtils.objectFromJson(response.toString(), InteractCourseDetailBean.class);
 
-                        if (data != null && data.getData() != null && data.getData().getLive_start_time() != null) {
+                        if (data != null && data.getData() != null && data.getData().getInteractive_course() != null && data.getData().getInteractive_course().getLive_start_time() != null) {
                             handleLayout.setVisibility(View.VISIBLE);
-                            name.setText(data.getData().getName());
-                            title.setText(data.getData().getName());
-                            String price;
-                            price = df.format(Double.valueOf(data.getData().getPrice()));
-                            if (price.startsWith(".")) {
-                                price = "0" + price;
+                            name.setText(data.getData().getInteractive_course().getName());
+                            title.setText(data.getData().getInteractive_course().getName());
+                            String priceStr;
+                            priceStr = df.format(Double.valueOf(data.getData().getInteractive_course().getPrice()));
+                            if (priceStr.startsWith(".")) {
+                                priceStr = "0" + priceStr;
                             }
-                            InteractCourseDetailActivity.this.price.setText("￥" + price);
+                            price.setText("￥" + priceStr);
+
+                            if (data.getData().getInteractive_course().getIcons() != null) {
+                                if (!data.getData().getInteractive_course().getIcons().isRefund_any_time()) {
+                                    refundAnyTime.setVisibility(View.GONE);
+                                }
+
+                                if (!data.getData().getInteractive_course().getIcons().isCoupon_free()) {
+                                    couponFree.setVisibility(View.GONE);
+                                }
+                            }
 
                             ((FragmentInteractDetailClassInfo) fragBaseFragments.get(0)).setData(data);
                             ((FragmentInteractDetailTeachersInfo) fragBaseFragments.get(1)).setData(data);
                             ((FragmentInteractDetailClassList) fragBaseFragments.get(2)).setData(data);
 
 
-                            if (data.getData().isIs_bought()) {
+                            if (data.getData().getTicket() != null && "LiveStudio::BuyTicket".equals(data.getData().getTicket().getType())) {//已购买
                                 startStudyView.setVisibility(View.VISIBLE);
-                                if (Constant.CourseStatus.completed.equals(data.getData().getStatus())) {
-                                    startStudy.setText("已结束");
-                                    startStudy.setEnabled(false);
+                                if (Constant.CourseStatus.completed.equals(data.getData().getInteractive_course().getStatus())) {
                                     handleLayout.setVisibility(View.GONE);//已结束的课程隐藏操作按钮
                                 }
-                            } else {
-                                if (data.getData().isOff_shelve()) {
-                                    startStudyView.setVisibility(View.VISIBLE);
-                                    startStudy.setText("已下架");
-                                    startStudy.setEnabled(false);
-                                }
-                            }
-
-                            if (data.getData().getIcons() != null) {
-                                if (!data.getData().getIcons().isRefund_any_time()) {
-                                    refundAnyTime.setVisibility(View.GONE);
-                                }
-                                if (!data.getData().getIcons().isJoin_cheap()) {
-                                    joinCheap.setVisibility(View.GONE);
+                            } else {//未购买
+                                if (data.getData().getInteractive_course().isOff_shelve() || Constant.CourseStatus.completed.equals(data.getData().getInteractive_course().getStatus())) {//已下架或未购买已结束显示已下架
+                                    handleLayout.setVisibility(View.GONE);
+                                    price.setText("已下架");
                                 }
                             }
                         }
@@ -227,7 +225,7 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
         switch (v.getId()) {
             case R.id.start_study:
                 if (BaseApplication.getInstance().isLogined()) {
-                    if ("init".equals(data.getData().getStatus()) || "published".equals(data.getData().getStatus())) {
+                    if ("init".equals(data.getData().getInteractive_course().getStatus()) || "published".equals(data.getData().getInteractive_course().getStatus())) {
                         Toast.makeText(this, getString(R.string.published_course_unable_enter) + getString(R.string.study), Toast.LENGTH_SHORT).show();
                     } else {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -248,7 +246,7 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
                 break;
             case R.id.pay:
                 if (BaseApplication.getInstance().isLogined()) {
-                    if ("teaching".equals(data.getData().getStatus())) {
+                    if ("teaching".equals(data.getData().getInteractive_course().getStatus())) {
                         if (alertDialog == null) {
                             View view = View.inflate(InteractCourseDetailActivity.this, R.layout.dialog_cancel_or_confirm, null);
                             Button cancel = (Button) view.findViewById(R.id.cancel);
@@ -290,7 +288,7 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
 
     private void toNext() {
         Intent intent = new Intent(InteractCourseDetailActivity.this, InteractiveLiveActivity.class);
-        intent.putExtra("id", data.getData().getId());
+        intent.putExtra("id", data.getData().getInteractive_course().getId());
         startActivity(intent);
     }
 
@@ -335,11 +333,11 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
         intent.putExtra("id", id);
         intent.putExtra("coupon", getIntent().getStringExtra("coupon"));
         OrderPayBean bean = new OrderPayBean();
-        bean.name = data.getData().getName();
-        bean.subject = data.getData().getSubject();
-        bean.grade = data.getData().getGrade();
-        bean.classnumber = data.getData().getLessons_count();
-        List<TeacherBean> teachers = data.getData().getTeachers();
+        bean.name = data.getData().getInteractive_course().getName();
+        bean.subject = data.getData().getInteractive_course().getSubject();
+        bean.grade = data.getData().getInteractive_course().getGrade();
+        bean.classnumber = data.getData().getInteractive_course().getLessons_count();
+        List<TeacherBean> teachers = data.getData().getInteractive_course().getTeachers();
 //        StringBuffer teacherNames = new StringBuffer();
 //        for (int i = 0; i < teachers.size(); i++) {
 //            teacherNames.append(teachers.get(0).getName());
@@ -349,7 +347,7 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
 //        }
 //        bean.teacher = teacherNames.toString();
         bean.teacher = teachers.get(0).getName() + "...";
-        bean.current_price = Float.valueOf(data.getData().getPrice());
+        bean.current_price = Float.valueOf(data.getData().getInteractive_course().getPrice());
 
         intent.putExtra("data", bean);
         startActivity(intent);

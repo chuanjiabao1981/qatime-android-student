@@ -18,8 +18,8 @@ import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.InteractCourseDetailBean;
 
 public class FragmentInteractDetailClassList extends BaseFragment {
-    private CommonAdapter<InteractCourseDetailBean.DataBean.InteractiveLessonsBean> adapter;
-    private List<InteractCourseDetailBean.DataBean.InteractiveLessonsBean> list = new ArrayList<>();
+    private CommonAdapter<InteractCourseDetailBean.DataBean.InteractiveCourseBean.InteractiveLessonsBean> adapter;
+    private List<InteractCourseDetailBean.DataBean.InteractiveCourseBean.InteractiveLessonsBean> list = new ArrayList<>();
 
     @Nullable
     @Override
@@ -33,10 +33,10 @@ public class FragmentInteractDetailClassList extends BaseFragment {
     private void initview(View view) {
         ListView listView = (ListView) view.findViewById(R.id.id_stickynavlayout_innerscrollview);
         listView.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
-        adapter = new CommonAdapter<InteractCourseDetailBean.DataBean.InteractiveLessonsBean>(getActivity(), list, R.layout.item_interact_course_detail3) {
+        adapter = new CommonAdapter<InteractCourseDetailBean.DataBean.InteractiveCourseBean.InteractiveLessonsBean>(getActivity(), list, R.layout.item_interact_course_detail3) {
 
             @Override
-            public void convert(ViewHolder holder, InteractCourseDetailBean.DataBean.InteractiveLessonsBean item, int position) {
+            public void convert(ViewHolder holder, InteractCourseDetailBean.DataBean.InteractiveCourseBean.InteractiveLessonsBean item, int position) {
                 holder.setText(R.id.name, item.getName());
                 holder.setText(R.id.teacher_name, "教师：" + item.getTeacher().getName());
                 holder.setText(R.id.class_date, item.getClass_date());
@@ -76,13 +76,13 @@ public class FragmentInteractDetailClassList extends BaseFragment {
         };
         listView.setAdapter(adapter);
     }
-    private boolean isFinished(InteractCourseDetailBean.DataBean.InteractiveLessonsBean item) {
+    private boolean isFinished(InteractCourseDetailBean.DataBean.InteractiveCourseBean.InteractiveLessonsBean item) {
         return item.getStatus().equals("closed") || item.getStatus().equals("finished") || item.getStatus().equals("billing") || item.getStatus().equals("completed");
     }
     public void setData(InteractCourseDetailBean data) {
         if (data != null && data.getData() != null) {
             list.clear();
-            list.addAll(data.getData().getInteractive_lessons());
+            list.addAll(data.getData().getInteractive_course().getInteractive_lessons());
             if (adapter != null) {
                 adapter.notifyDataSetChanged();
             }

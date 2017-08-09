@@ -37,9 +37,9 @@ public class FragmentInteractiveDetails extends BaseFragment {
     private TextView grade;
     private ListViewForScrollView list;
     private InteractCourseDetailBean.DataBean data;
-    private CommonAdapter<InteractCourseDetailBean.DataBean.InteractiveLessonsBean> adapter;
+    private CommonAdapter<InteractCourseDetailBean.DataBean.InteractiveCourseBean.InteractiveLessonsBean> adapter;
 
-    private List<InteractCourseDetailBean.DataBean.InteractiveLessonsBean> classList = new ArrayList<>();
+    private List<InteractCourseDetailBean.DataBean.InteractiveCourseBean.InteractiveLessonsBean> classList = new ArrayList<>();
     //    private SimpleDateFormat parse1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 //    private SimpleDateFormat parse2 = new SimpleDateFormat("yyyy-MM-dd");
     private Handler hd = new Handler();
@@ -81,10 +81,10 @@ public class FragmentInteractiveDetails extends BaseFragment {
 
     private void initList() {
         list.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
-        adapter = new CommonAdapter<InteractCourseDetailBean.DataBean.InteractiveLessonsBean>(getActivity(), classList, R.layout.item_fragment_interactive_details_courses) {
+        adapter = new CommonAdapter<InteractCourseDetailBean.DataBean.InteractiveCourseBean.InteractiveLessonsBean>(getActivity(), classList, R.layout.item_fragment_interactive_details_courses) {
 
             @Override
-            public void convert(ViewHolder holder, InteractCourseDetailBean.DataBean.InteractiveLessonsBean item, int position) {
+            public void convert(ViewHolder holder, InteractCourseDetailBean.DataBean.InteractiveCourseBean.InteractiveLessonsBean item, int position) {
                 holder.setText(R.id.name, item.getName());
                 holder.setText(R.id.teacher_name, "教师：" + item.getTeacher().getName());
                 holder.setText(R.id.class_date, item.getClass_date());
@@ -157,7 +157,7 @@ public class FragmentInteractiveDetails extends BaseFragment {
         });
     }
 
-    private boolean isFinished(InteractCourseDetailBean.DataBean.InteractiveLessonsBean item) {
+    private boolean isFinished(InteractCourseDetailBean.DataBean.InteractiveCourseBean.InteractiveLessonsBean item) {
         return item.getStatus().equals("closed") || item.getStatus().equals("finished") || item.getStatus().equals("billing") || item.getStatus().equals("completed");
     }
 
@@ -169,7 +169,7 @@ public class FragmentInteractiveDetails extends BaseFragment {
     }
 
     private void setDataTeacherDetails() {
-        teacherTotalList.addAll(data.getTeachers());
+        teacherTotalList.addAll(data.getInteractive_course().getTeachers());
         if (teacherTotalList.size() > 2) {
             teacherList.add(teacherTotalList.get(0));
             teacherList.add(teacherTotalList.get(1));
@@ -183,7 +183,7 @@ public class FragmentInteractiveDetails extends BaseFragment {
 
     private void setDataListDetails() {
         classList.clear();
-        classList.addAll(data.getInteractive_lessons());
+        classList.addAll(data.getInteractive_course().getInteractive_lessons());
         if (classList.size() == 0) {
             viewEmptyGone.setVisibility(View.GONE);
         } else {
@@ -203,14 +203,14 @@ public class FragmentInteractiveDetails extends BaseFragment {
         @Override
         public void run() {
             if (getActivity() != null && getActivity().getResources() != null) {
-                className.setText(data.getName());
-                subject.setText((data.getSubject() == null ? "" : data.getSubject()));
-                grade.setText((data.getGrade() == null ? "" : data.getGrade()));
-                if (!StringUtils.isNullOrBlanK(data.getObjective())) {
-                    target.setText(data.getObjective());
+                className.setText(data.getInteractive_course().getName());
+                subject.setText((data.getInteractive_course().getSubject() == null ? "" : data.getInteractive_course().getSubject()));
+                grade.setText((data.getInteractive_course().getGrade() == null ? "" : data.getInteractive_course().getGrade()));
+                if (!StringUtils.isNullOrBlanK(data.getInteractive_course().getObjective())) {
+                    target.setText(data.getInteractive_course().getObjective());
                 }
-                if (!StringUtils.isNullOrBlanK(data.getSuit_crowd())) {
-                    suitable.setText(data.getSuit_crowd());
+                if (!StringUtils.isNullOrBlanK(data.getInteractive_course().getSuit_crowd())) {
+                    suitable.setText(data.getInteractive_course().getSuit_crowd());
                 }
             }
         }

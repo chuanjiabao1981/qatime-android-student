@@ -3,6 +3,9 @@ package cn.qatime.player.bean;
 import java.io.Serializable;
 import java.util.List;
 
+import libraryextra.bean.IconsBean;
+import libraryextra.bean.TeacherBean;
+
 /**
  * @author lungtify
  * @Time 2017/7/27 13:40
@@ -103,6 +106,15 @@ public class ExclusiveLessonDetailBean implements Serializable {
             private List<OfflineLessonsBean> offline_lessons;
             private List<ScheduledLessonsBean> scheduled_lessons;
             private String sell_type;
+            private boolean off_shelve;
+
+            public boolean isOff_shelve() {
+                return off_shelve;
+            }
+
+            public void setOff_shelve(boolean off_shelve) {
+                this.off_shelve = off_shelve;
+            }
 
             public IconsBean getIcons() {
                 return icons;
@@ -262,170 +274,6 @@ public class ExclusiveLessonDetailBean implements Serializable {
 
             public String getSell_type() {
                 return sell_type;
-            }
-
-            public static class IconsBean {
-                /**
-                 * refund_any_time : true
-                 * coupon_free : true
-                 * cheap_moment : false
-                 * join_cheap : true
-                 * free_taste : false
-                 */
-
-                private boolean refund_any_time;
-                private boolean join_cheap;
-
-                public boolean isRefund_any_time() {
-                    return refund_any_time;
-                }
-
-                public void setRefund_any_time(boolean refund_any_time) {
-                    this.refund_any_time = refund_any_time;
-                }
-
-                public boolean isJoin_cheap() {
-                    return join_cheap;
-                }
-
-                public void setJoin_cheap(boolean join_cheap) {
-                    this.join_cheap = join_cheap;
-                }
-            }
-
-            public static class TeacherBean {
-                /**
-                 * id : 2489
-                 * name : 王志成
-                 * nick_name : luke测试
-                 * avatar_url : http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/a9df861997945a0086ad8483d7039f2c.jpg
-                 * ex_big_avatar_url : http://qatime-testing.oss-cn-beijing.aliyuncs.com/avatars/ex_big_a9df861997945a0086ad8483d7039f2c.jpg
-                 * login_mobile : 13121249326
-                 * email : wchtest001@163.com
-                 * is_guest : false
-                 * teaching_years : within_three_years
-                 * category : 初中
-                 * subject : 政治
-                 * grade_range : ["二年级","三年级","四年级","五年级","六年级",""]
-                 * gender : male
-                 * birthday : 1991-06-18
-                 * province : 1
-                 * city : 1
-                 * school : 17
-                 * school_name : 阳泉实验中学
-                 * school_id : 17
-                 * desc : 注意啦
-                 */
-
-                private int id;
-                private String name;
-                private String avatar_url;
-                private String ex_big_avatar_url;
-                private String teaching_years;
-                private String category;
-                private String subject;
-                private String gender;
-                private int province;
-                private int city;
-                private int school;
-                private String desc;
-
-                public int getId() {
-                    return id;
-                }
-
-                public void setId(int id) {
-                    this.id = id;
-                }
-
-                public String getName() {
-                    return name;
-                }
-
-                public void setName(String name) {
-                    this.name = name;
-                }
-
-                public String getAvatar_url() {
-                    return avatar_url;
-                }
-
-                public void setAvatar_url(String avatar_url) {
-                    this.avatar_url = avatar_url;
-                }
-
-                public String getEx_big_avatar_url() {
-                    return ex_big_avatar_url;
-                }
-
-                public void setEx_big_avatar_url(String ex_big_avatar_url) {
-                    this.ex_big_avatar_url = ex_big_avatar_url;
-                }
-
-                public String getTeaching_years() {
-                    return teaching_years;
-                }
-
-                public void setTeaching_years(String teaching_years) {
-                    this.teaching_years = teaching_years;
-                }
-
-                public String getCategory() {
-                    return category;
-                }
-
-                public void setCategory(String category) {
-                    this.category = category;
-                }
-
-                public String getSubject() {
-                    return subject;
-                }
-
-                public void setSubject(String subject) {
-                    this.subject = subject;
-                }
-
-                public String getGender() {
-                    return gender;
-                }
-
-                public void setGender(String gender) {
-                    this.gender = gender;
-                }
-
-                public int getProvince() {
-                    return province;
-                }
-
-                public void setProvince(int province) {
-                    this.province = province;
-                }
-
-                public int getCity() {
-                    return city;
-                }
-
-                public void setCity(int city) {
-                    this.city = city;
-                }
-
-                public int getSchool() {
-                    return school;
-                }
-
-                public void setSchool(int school) {
-                    this.school = school;
-                }
-
-                public String getDesc() {
-                    return desc;
-                }
-
-                public void setDesc(String desc) {
-                    this.desc = desc;
-                }
-
             }
 
             public static class OfflineLessonsBean {

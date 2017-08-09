@@ -129,8 +129,8 @@ public class FragmentInteractDetailTeachersInfo extends BaseFragment {
     }
 
     public void setData(InteractCourseDetailBean data) {
-        if(data.getData()!=null&&data.getData().getTeachers()!=null){
-            list.addAll(data.getData().getTeachers());
+        if(data.getData()!=null&&data.getData().getInteractive_course().getTeachers()!=null){
+            list.addAll(data.getData().getInteractive_course().getTeachers());
             adapter.notifyDataSetChanged();
         }
     }

@@ -259,15 +259,15 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
     private void initData() {
         if (id != 0) {
-            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlInteractCourses + id, null,
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlInteractCourses + id + "/detail", null,
                     new VolleyListener(InteractiveLiveActivity.this) {
                         @Override
                         protected void onSuccess(JSONObject response) {
                             InteractCourseDetailBean data = JsonUtils.objectFromJson(response.toString(), InteractCourseDetailBean.class);
                             if (data != null && data.getData() != null) {
                                 ((FragmentInteractiveDetails) fragBaseFragments.get(3)).setData(data.getData());
-                                sessionId = data.getData().getChat_team().getTeam_id();
-                                ((FragmentInteractiveMembers) fragBaseFragments.get(4)).setData(data.getData().getChat_team().getAccounts());
+                                ((FragmentInteractiveMembers) fragBaseFragments.get(4)).setData(data.getData().getInteractive_course().getChat_team().getAccounts());
+                                sessionId = data.getData().getInteractive_course().getChat_team().getTeam_id();
                             }
                             initSessionId();
                         }

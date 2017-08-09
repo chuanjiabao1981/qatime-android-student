@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
+import libraryextra.bean.TeacherBean;
 import libraryextra.utils.StringUtils;
 
 /**
@@ -105,6 +106,19 @@ public class RecentPublishedBean implements Serializable {
                 private String grade;
                 private String teacher_name;
                 private PublicizesUrlBean publicizes_url;
+                private List<TeacherBean> teachers;
+
+                public String getTeacher_name() {
+                    if (!StringUtils.isNullOrBlanK(teacher_name)) {
+                        return teacher_name;
+                    } else {
+                        if (teachers != null && teachers.size() > 0) {
+                            return teachers.get(0).getName();
+                        } else {
+                            return "";
+                        }
+                    }
+                }
 
                 public int getId() {
                     return id;
@@ -138,9 +152,6 @@ public class RecentPublishedBean implements Serializable {
                     this.grade = grade;
                 }
 
-                public String getTeacher_name() {
-                    return teacher_name;
-                }
 
                 public void setTeacher_name(String teacher_name) {
                     this.teacher_name = teacher_name;
