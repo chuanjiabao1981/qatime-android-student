@@ -23,25 +23,17 @@ import libraryextra.utils.StringUtils;
  * @date 2016/8/9 17:15
  * @Description 直播-成员列表
  */
-public class FragmentNEVideoPlayerAdapter4 extends CommonAdapter<ChatTeamBean.Accounts> {
-    private Map<String, Integer> letterMap = new HashMap<String, Integer>();
+public class FragmentNEVideoPlayerAdapter extends CommonAdapter<ChatTeamBean.Accounts> {
     private Context context;
 
-    public FragmentNEVideoPlayerAdapter4(Context context, List<ChatTeamBean.Accounts> mDatas, int itemLayoutId) {
+    public FragmentNEVideoPlayerAdapter(Context context, List<ChatTeamBean.Accounts> mDatas, int itemLayoutId) {
         super(context, mDatas, itemLayoutId);
         this.context = context;
-    }
-
-    public void clearLetterMap() {
-        letterMap.clear();
     }
 
     @Override
     public void convert(ViewHolder holder, ChatTeamBean.Accounts item, int position) {
         if (item == null) return;
-        if (!letterMap.containsKey(item.getFirstLetters())) {
-            letterMap.put(item.getFirstLetters(), position);
-        }
 //        if (item.isOwner()) {
 //            ((TextView) holder.getView(R.id.name)).setTextColor(0xffff5842);
 //            ((TextView) holder.getView(R.id.role)).setTextColor(0xffff5842);

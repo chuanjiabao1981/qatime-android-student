@@ -14,16 +14,15 @@ import java.util.Comparator;
 import java.util.List;
 
 import cn.qatime.player.R;
-import cn.qatime.player.adapter.FragmentNEVideoPlayerAdapter4;
+import cn.qatime.player.adapter.FragmentNEVideoPlayerAdapter;
 import cn.qatime.player.base.BaseFragment;
-import libraryextra.bean.Announcements;
 import libraryextra.bean.ChatTeamBean;
 import libraryextra.utils.PinyinUtils;
 import libraryextra.utils.StringUtils;
 
 public class FragmentPlayerMembers extends BaseFragment {
     private List<ChatTeamBean.Accounts> list = new ArrayList<>();
-    private FragmentNEVideoPlayerAdapter4 adapter;
+    private FragmentNEVideoPlayerAdapter adapter;
     private Handler hd = new Handler();
     private boolean hasLoad = false;
     Runnable runnable = new Runnable() {
@@ -48,7 +47,7 @@ public class FragmentPlayerMembers extends BaseFragment {
         View view = View.inflate(getActivity(), R.layout.fragment_player_members, null);
 
         ListView listView = (ListView) view.findViewById(R.id.listview);
-        adapter = new FragmentNEVideoPlayerAdapter4(getActivity(), list, R.layout.item_fragment_nevideo_player4);
+        adapter = new FragmentNEVideoPlayerAdapter(getActivity(), list, R.layout.item_fragment_nevideo_player);
         listView.setAdapter(adapter);
         hasLoad = true;
         return view;
@@ -57,10 +56,10 @@ public class FragmentPlayerMembers extends BaseFragment {
     /**
      * @param accounts
      */
-    public void setData(ChatTeamBean.Accounts accounts) {
+    public void setData(List<ChatTeamBean.Accounts> accounts) {
         if (accounts != null) {
             list.clear();
-            list.add(accounts);
+            list.addAll(accounts);
             for (ChatTeamBean.Accounts item : list) {
                 if (item == null) continue;
                 if (StringUtils.isNullOrBlanK(item.getName())) {
@@ -93,7 +92,7 @@ public class FragmentPlayerMembers extends BaseFragment {
         }
     }
 
-    public void setOnlineInfo(List<String> online_users) {
-
-    }
+//    public void setOnlineInfo(List<String> online_users) {
+//
+//    }
 }

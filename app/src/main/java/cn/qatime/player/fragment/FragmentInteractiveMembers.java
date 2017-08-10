@@ -11,13 +11,11 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 import cn.qatime.player.R;
-import cn.qatime.player.adapter.FragmentNEVideoPlayerAdapter4;
+import cn.qatime.player.adapter.FragmentNEVideoPlayerAdapter;
 import cn.qatime.player.base.BaseFragment;
-import libraryextra.bean.Announcements;
 import libraryextra.bean.ChatTeamBean;
 import libraryextra.utils.PinyinUtils;
 import libraryextra.utils.StringUtils;
@@ -29,7 +27,7 @@ import libraryextra.utils.StringUtils;
  */
 public class FragmentInteractiveMembers extends BaseFragment {
     private List<ChatTeamBean.Accounts> list = new ArrayList<>();
-    private FragmentNEVideoPlayerAdapter4 adapter;
+    private FragmentNEVideoPlayerAdapter adapter;
     private Handler hd = new Handler();
     private boolean hasLoad = false;
     Runnable runnable = new Runnable() {
@@ -58,7 +56,7 @@ public class FragmentInteractiveMembers extends BaseFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         ListView listView = (ListView) findViewById(R.id.listview);
-        adapter = new FragmentNEVideoPlayerAdapter4(getActivity(), list, R.layout.item_fragment_nevideo_player4);
+        adapter = new FragmentNEVideoPlayerAdapter(getActivity(), list, R.layout.item_fragment_nevideo_player);
         listView.setAdapter(adapter);
         hasLoad = true;
     }
@@ -67,19 +65,8 @@ public class FragmentInteractiveMembers extends BaseFragment {
         if (accounts != null) {
             list.clear();
             list.addAll(accounts);
-            Iterator<ChatTeamBean.Accounts> it = list.iterator();
-            while (it.hasNext()) {
-                ChatTeamBean.Accounts item = it.next();
-                if (item == null) return;
-//                if (!StringUtils.isNullOrBlanK(accounts.getOwner())) {
-//                    if (accounts.getOwner().equals(item.getAccid())) {
-//                        item.setOwner(true);
-//                        owner = item;
-//                        it.remove();
-//                    } else {
-//                        item.setOwner(false);
-//                    }
-//                }
+            for (ChatTeamBean.Accounts item : list) {
+                if (item == null) continue;
                 if (StringUtils.isNullOrBlanK(item.getName())) {
                     item.setFirstLetters("");
                 } else {

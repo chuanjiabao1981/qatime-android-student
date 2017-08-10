@@ -426,13 +426,15 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
                             if (data != null) {
                                 ((FragmentExclusiveLiveDetails) fragBaseFragments.get(2)).setData(data);
                                 if (data.getData() != null) {
+                                    if (data.getData().getChat_team() != null) {
+                                        ((FragmentExclusiveMembers) fragBaseFragments.get(3)).setData(data.getData().getChat_team().getAccounts());
+                                    }
                                     camera = data.getData().getCamera_pull_stream();
                                     board = data.getData().getBoard_pull_stream();
                                     canLoop = true;
                                     hd.post(runnable);
                                 }
                                 sessionId = data.getData().getChat_team().getTeam_id();
-                                ((FragmentExclusiveMembers) fragBaseFragments.get(3)).setData(data.getData().getChat_team().getAccounts());
                             }
                             initSessionId();
                         }
