@@ -27,6 +27,7 @@ public class MsgViewHolderFactory {
 //        register(VideoAttachment.class, MsgViewHolderVideo.class);
 //        register(LocationAttachment.class, MsgViewHolderLocation.class);
         register(NotificationAttachment.class, MsgViewHolderNotification.class);
+        register(CustomAttachment.class, MsgViewHolderCustom.class);
     }
 
     public static void register(Class<? extends MsgAttachment> attach, Class<? extends MsgViewHolderBase> viewHolder) {
@@ -42,8 +43,8 @@ public class MsgViewHolderFactory {
             return MsgViewHolderText.class;
 //        } else if (message.getMsgType() == MsgTypeEnum.tip) {
 //            return tipMsgViewHolder == null ? MsgViewHolderUnknown.class : tipMsgViewHolder;
-        } else if (message.getMsgType() == MsgTypeEnum.custom) {
-            return MsgViewHolderCustom.class;
+//        } else if (message.getMsgType() == MsgTypeEnum.custom) {
+//            return MsgViewHolderCustom.class;
         } else {
             Class<? extends MsgViewHolderBase> viewHolder = null;
             if (message.getAttachment() != null) {
@@ -81,7 +82,7 @@ public class MsgViewHolderFactory {
 //        }
         list.add(MsgViewHolderUnknown.class);
         list.add(MsgViewHolderText.class);
-        list.add(MsgViewHolderCustom.class);
+//        list.add(MsgViewHolderCustom.class);
 
         return list;
     }

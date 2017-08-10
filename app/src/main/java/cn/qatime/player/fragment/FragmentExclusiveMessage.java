@@ -21,7 +21,6 @@ import com.netease.nimlib.sdk.team.constant.TeamTypeEnum;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.netease.nimlib.sdk.team.model.UpdateTeamAttachment;
-import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -39,7 +38,7 @@ import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.TeamDataCache;
 import libraryextra.utils.StringUtils;
 
-public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
+public class FragmentExclusiveMessage extends BaseFragment implements ModuleProxy {
     private TextView tipText;
     public List<IMMessage> items = new ArrayList<>();
 
@@ -225,7 +224,7 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
             if (team == null) {
                 return;
             }
-            if (team.getId().equals(FragmentPlayerMessage.this.team.getId())) {
+            if (team.getId().equals(FragmentExclusiveMessage.this.team.getId())) {
                 updateTeamInfo(team);
             }
         }

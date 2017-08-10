@@ -229,7 +229,7 @@ public class MediaPlayer {
             return load;
         }
 
-        if (path == "") {
+        if (Objects.equals(path, "")) {
             load = loadOMX_native(name);
         } else {
             load = loadOMX_native(path + name);

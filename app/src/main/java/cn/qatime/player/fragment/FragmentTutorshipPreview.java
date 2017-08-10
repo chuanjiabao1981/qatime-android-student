@@ -44,7 +44,7 @@ public class FragmentTutorshipPreview extends BaseFragment {
     private java.util.List<MyTutorialClassBean.Data> list = new ArrayList<>();
     private CommonAdapter<MyTutorialClassBean.Data> adapter;
     private int page = 1;
-    SimpleDateFormat parseISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZZ");
+    SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     @Nullable
     @Override
@@ -74,7 +74,7 @@ public class FragmentTutorshipPreview extends BaseFragment {
                 helper.setText(R.id.subject, item.getSubject());
                 helper.setText(R.id.teacher, "/" + item.getTeacher_name());
                 try {
-                    int day = libraryextra.utils.DateUtils.daysBetween(item.getLive_start_time(), System.currentTimeMillis());
+                    int day = libraryextra.utils.DateUtils.daysBetween(parse.parse(item.getLive_start_time()), System.currentTimeMillis());
                     if (day > 0) {
                         helper.getView(R.id.teaching_time).setVisibility(View.VISIBLE);
                         helper.setText(R.id.teaching_time, "距开课" + day + "天");

@@ -42,13 +42,14 @@ import cn.qatime.player.barrage.model.Status;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragmentActivity;
 import cn.qatime.player.bean.BusEvent;
+import cn.qatime.player.bean.ExclusiveLessonPlayBean;
 import cn.qatime.player.bean.InputPanel;
 import cn.qatime.player.bean.LiveStatusBean;
 import cn.qatime.player.bean.VideoState;
 import cn.qatime.player.fragment.FragmentAnnouncements;
-import cn.qatime.player.fragment.FragmentPlayerLiveDetails;
-import cn.qatime.player.fragment.FragmentPlayerMembers;
-import cn.qatime.player.fragment.FragmentPlayerMessage;
+import cn.qatime.player.fragment.FragmentExclusiveLiveDetails;
+import cn.qatime.player.fragment.FragmentExclusiveMembers;
+import cn.qatime.player.fragment.FragmentExclusiveMessage;
 import cn.qatime.player.fragment.VideoFloatFragment;
 import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.TeamDataCache;
@@ -58,7 +59,6 @@ import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.utils.VideoActivityInterface;
 import cn.qatime.player.view.NEVideoView;
 import cn.qatime.player.view.VideoLayout;
-import libraryextra.bean.RemedialClassDetailBean;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.NetUtils;
 import libraryextra.utils.ScreenUtils;
@@ -67,19 +67,17 @@ import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 import libraryextra.view.FragmentLayoutWithLine;
 
-public class NEVideoPlayerActivity extends BaseFragmentActivity implements VideoActivityInterface, VideoLayout.OnDoubleClickListener, InputPanel.InputPanelListener {
+public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implements VideoActivityInterface, VideoLayout.OnDoubleClickListener, InputPanel.InputPanelListener {
 
     private boolean isSubBig = true;//副窗口是否是大的
     private boolean isMain = true;//video1 是否在主显示view上
-    //    private int orientation = Configuration.ORIENTATION_PORTRAIT;//当前屏幕横竖屏状态
     private boolean isSubOpen = true;//副窗口开关
-    public List<IMMessage> limitMessage = new ArrayList<>();//用于限制2s内发送消息
 
     private int[] tab_text = {R.id.tab_text1, R.id.tab_text2, R.id.tab_text3, R.id.tab_text4};
     private ArrayList<Fragment> fragBaseFragments = new ArrayList<>();
 
     private int id;
-    private FragmentPlayerMessage fragment2;
+    private FragmentExclusiveMessage fragment2;
     private String sessionId = "";
     private SessionTypeEnum sessionType = SessionTypeEnum.Team;
     private boolean isMute = false;//当前用户 是否被禁言
@@ -131,7 +129,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     }
 
     private void assignViews() {
-        int screenW = ScreenUtils.getScreenWidth(NEVideoPlayerActivity.this);
+        int screenW = ScreenUtils.getScreenWidth(ExclusiveVideoPlayerActivity.this);
 
         window1 = (RelativeLayout) findViewById(R.id.window1);
         window2 = (RelativeLayout) findViewById(R.id.window2);
@@ -216,7 +214,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        rootView = View.inflate(this, R.layout.activity_player, null);
+        rootView = View.inflate(this, R.layout.activity_exclusive_player, null);
         setContentView(rootView);
 
         id = getIntent().getIntExtra("id", 0);//从前一页进来的id 获取详情用
@@ -300,11 +298,10 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     }
 
     private void initView() {
-
-        fragBaseFragments.add(new FragmentPlayerMessage());
+        fragBaseFragments.add(new FragmentExclusiveMessage());
         fragBaseFragments.add(new FragmentAnnouncements());
-        fragBaseFragments.add(new FragmentPlayerLiveDetails());
-        fragBaseFragments.add(new FragmentPlayerMembers());
+        fragBaseFragments.add(new FragmentExclusiveLiveDetails());
+        fragBaseFragments.add(new FragmentExclusiveMembers());
 
         FragmentLayoutWithLine fragmentLayout = (FragmentLayoutWithLine) findViewById(R.id.fragmentlayout);
 
@@ -320,7 +317,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 if (position == 0) {
                     if (inputPanel != null)
                         inputPanel.visibilityInput();
-                    ((FragmentPlayerMessage) fragBaseFragments.get(0)).scrollToBottom();
+                    ((FragmentExclusiveMessage) fragBaseFragments.get(0)).scrollToBottom();
                 } else {
                     if (inputPanel != null)
                         inputPanel.goneInput();
@@ -342,7 +339,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             Toast.makeText(this, "聊天id不可用", Toast.LENGTH_SHORT).show();
             return;
         }
-
         getAnnouncementsData();
         floatFragment.setSessionId(sessionId);
         if (!StringUtils.isNullOrBlanK(sessionId)) {
@@ -356,9 +352,9 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         inputPanel = new InputPanel(this, this, rootView, true, sessionId);
         inputPanel.setMute(isMute);
 
-        fragment2 = (FragmentPlayerMessage) fragBaseFragments.get(0);
+        fragment2 = (FragmentExclusiveMessage) fragBaseFragments.get(0);
 
-        fragment2.setChatCallBack(new FragmentPlayerMessage.Callback() {
+        fragment2.setChatCallBack(new FragmentExclusiveMessage.Callback() {
             @Override
             public void back(List<IMMessage> result) {
                 TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getInstance().getAccount());
@@ -368,7 +364,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                     inputPanel.setMute(isMute);
                 }
                 if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT || isSubBig) {
-//                    Logger.e("弹幕显示" + danmuView.getVisibility());
                     danMuController.addDanmuList(result);
                 }
             }
@@ -399,7 +394,6 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 fragment2.scrollToBottom();
             }
         });
-
     }
 
     /**
@@ -410,15 +404,9 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
      */
     private void sendMessages(IMMessage message, boolean isSendToDanmu) {
         if (StringUtils.isNullOrBlanK(sessionId)) {
-            Toast.makeText(NEVideoPlayerActivity.this, getResourceString(R.string.team_not_exist), Toast.LENGTH_SHORT).show();
+            Toast.makeText(ExclusiveVideoPlayerActivity.this, getResourceString(R.string.team_not_exist), Toast.LENGTH_SHORT).show();
             return;
         }
-//        // 创建文本消息
-//        IMMessage message = MessageBuilder.createTextMessage(
-//                sessionId, // 聊天对象的 ID，如果是单聊，为用户帐号，如果是群聊，为群组 ID
-//                sessionType, // 聊天类型，单聊或群组
-//                comment // 文本内容
-//        );
         // 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
         NIMClient.getService(MsgService.class).sendMessage(message, true);
         //横屏状态下,将发送的消息展示到弹幕去
@@ -430,20 +418,21 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     private void initData() {
         if (id != 0) {
-            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlCourses + id + "/play_info", null,
-                    new VolleyListener(NEVideoPlayerActivity.this) {
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlExclusiveLesson + "/" + id + "/play", null,
+                    new VolleyListener(ExclusiveVideoPlayerActivity.this) {
                         @Override
                         protected void onSuccess(JSONObject response) {
-                            RemedialClassDetailBean data = JsonUtils.objectFromJson(response.toString(), RemedialClassDetailBean.class);
+                            ExclusiveLessonPlayBean data = JsonUtils.objectFromJson(response.toString(), ExclusiveLessonPlayBean.class);
                             if (data != null) {
-                                ((FragmentPlayerLiveDetails) fragBaseFragments.get(2)).setData(data);
+                                ((FragmentExclusiveLiveDetails) fragBaseFragments.get(2)).setData(data);
                                 if (data.getData() != null) {
-                                    camera = data.getData().getCamera();
-                                    board = data.getData().getBoard();
+                                    camera = data.getData().getCamera_pull_stream();
+                                    board = data.getData().getBoard_pull_stream();
                                     canLoop = true;
                                     hd.post(runnable);
                                 }
-                                sessionId = data.getData().getChat_team_id();
+                                sessionId = data.getData().getChat_team().getTeam_id();
+                                ((FragmentExclusiveMembers) fragBaseFragments.get(3)).setData(data.getData().getChat_team().getAccounts());
                             }
                             initSessionId();
                         }
@@ -499,8 +488,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        int screenWidth = ScreenUtils.getScreenWidth(NEVideoPlayerActivity.this);
-        int screenHeight = ScreenUtils.getScreenHeight(NEVideoPlayerActivity.this);
+        int screenWidth = ScreenUtils.getScreenWidth(ExclusiveVideoPlayerActivity.this);
+        int screenHeight = ScreenUtils.getScreenHeight(ExclusiveVideoPlayerActivity.this);
 
         if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) { // 横屏
             floatFragment.setPortrait(false);
@@ -549,7 +538,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
             ViewGroup.LayoutParams param = mainVideo.getLayoutParams();
             param.width = -1;
-            param.height = ScreenUtils.getScreenWidth(NEVideoPlayerActivity.this) * 9 / 16;
+            param.height = ScreenUtils.getScreenWidth(ExclusiveVideoPlayerActivity.this) * 9 / 16;
             mainView.setLayoutParams(param);
             mainVideo.setLayoutParams(param);
             if (isMain) {
@@ -595,7 +584,9 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         video1.pause();
         video2.pause();
         floatFragment.setPlaying(false);
-        inputPanel.onPause();
+        if (inputPanel != null) {
+            inputPanel.onPause();
+        }
         super.onPause();
         MobclickAgent.onPause(this);
         NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.getInstance().isChatMessageNotifyStatus() ? MsgService.MSG_CHATTING_ACCOUNT_NONE : MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
@@ -628,7 +619,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 //            }
             return;
         }
-        if (inputPanel != null && inputPanel.isEmojiShow()) {
+        if (inputPanel.isEmojiShow()) {
             inputPanel.closeEmojiAndInput();
             return;
         }
@@ -642,20 +633,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
      */
     private void setVideoState(VideoState videoState) {
         Logger.e("videoState" + videoState.toString());
-//        if (videoState == VideoState.INIT) {//初始化状态下查询状态
-//            hd.removeCallbacks(runnable);
-//            if (this.videoState == videoState) {
-//                return;
-//            }
-//            playingReQuery = 0;//异常退出重新查询用
-//            this.videoState = videoState;
-//            queryVideoState();
-//        } else
         if (videoState == VideoState.UNPLAY) {//未直播状态下 开始轮询
             this.videoState = videoState;
-//            playingReQuery = 0;//异常退出重新查询用
-//            hd.removeCallbacks(runnable);
-//            hd.postDelayed(runnable, 30000);
             if (videoNoData1.getVisibility() == View.GONE) {
                 videoNoData1.setVisibility(View.VISIBLE);
                 if (buffering1.getVisibility() == View.VISIBLE) {
@@ -671,20 +650,11 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             }
         } else if (videoState == VideoState.PLAYING) {//直播状态下 停止轮询等待完成
             this.videoState = videoState;
-//            if (playingReQuery < 1) {
-////                Logger.e("重新查询");
-//                hd.postDelayed(runnable, 15000);
-//            } else {
-////                Logger.e("不再查询");
-//                hd.removeCallbacks(runnable);
-//                playingReQuery = 0;
-//            }
-//            playingReQuery++;
-            if (NetUtils.isConnected(NEVideoPlayerActivity.this)) {
-                if (NetUtils.isMobile(NEVideoPlayerActivity.this)) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(NEVideoPlayerActivity.this);
+            if (NetUtils.isConnected(ExclusiveVideoPlayerActivity.this)) {
+                if (NetUtils.isMobile(ExclusiveVideoPlayerActivity.this)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ExclusiveVideoPlayerActivity.this);
                     final AlertDialog alertDialog = builder.create();
-                    View view = View.inflate(NEVideoPlayerActivity.this, R.layout.dialog_cancel_or_confirm, null);
+                    View view = View.inflate(ExclusiveVideoPlayerActivity.this, R.layout.dialog_cancel_or_confirm, null);
                     TextView text = (TextView) view.findViewById(R.id.text);
                     text.setText("您当前正在使用移动网络，继续播放将消耗流量");
                     Button cancel = (Button) view.findViewById(R.id.cancel);
@@ -706,11 +676,11 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                     });
                     alertDialog.show();
                     alertDialog.setContentView(view);
-                } else if (NetUtils.isWifi(NEVideoPlayerActivity.this)) {
+                } else if (NetUtils.isWifi(ExclusiveVideoPlayerActivity.this)) {
                     refreshState();
                 }
             } else {
-                Toast.makeText(NEVideoPlayerActivity.this, "网络不可用", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ExclusiveVideoPlayerActivity.this, "网络不可用", Toast.LENGTH_SHORT).show();
             }
 
         } else if (videoState == VideoState.CLOSED) {//关闭状态   摄像头关闭
@@ -720,8 +690,8 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     }
 
     private void queryVideoState() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlCourses + id + "/status",
-                null, new VolleyListener(NEVideoPlayerActivity.this) {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlExclusiveLesson + "/" + id + "/realtime",
+                null, new VolleyListener(ExclusiveVideoPlayerActivity.this) {
             @Override
             protected void onTokenOut() {
                 tokenOut();
@@ -740,14 +710,13 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                         floatFragment.setNameAndCount("", 1);
                     } else if (camera == 2 && board == 1) {
                         setVideoState(VideoState.CLOSED);
-                        ((FragmentPlayerMembers) fragBaseFragments.get(3)).setOnlineInfo(data.getData().getOnline_users());
+                        ((FragmentExclusiveMembers) fragBaseFragments.get(3)).setOnlineInfo(data.getData().getOnline_users());
                         floatFragment.setNameAndCount(data.getData().getLive_info().getName(), data.getData().getOnline_users().size());
                     } else if (camera == 1 && board == 1) {
                         setVideoState(VideoState.PLAYING);
-                        ((FragmentPlayerMembers) fragBaseFragments.get(3)).setOnlineInfo(data.getData().getOnline_users());
+                        ((FragmentExclusiveMembers) fragBaseFragments.get(3)).setOnlineInfo(data.getData().getOnline_users());
                         floatFragment.setNameAndCount(data.getData().getLive_info().getName(), data.getData().getOnline_users().size());
                     }
-
                 }
             }
 
@@ -882,7 +851,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
         if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             mainVideo.removeView(danmuView);
             whole.addView(danmuView);
-            RelativeLayout.LayoutParams danmuParam = new RelativeLayout.LayoutParams(-1, ScreenUtils.getScreenWidth(NEVideoPlayerActivity.this) * 9 / 16);
+            RelativeLayout.LayoutParams danmuParam = new RelativeLayout.LayoutParams(-1, ScreenUtils.getScreenWidth(ExclusiveVideoPlayerActivity.this) * 9 / 16);
             danmuParam.addRule(RelativeLayout.BELOW, R.id.main_video);
             danmuView.setLayoutParams(danmuParam);
             danmuView.setVisibility(View.GONE);
@@ -935,7 +904,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
         mainVideo.removeView(danmuView);
         whole.addView(danmuView);
-        RelativeLayout.LayoutParams danmuParam = new RelativeLayout.LayoutParams(-1, ScreenUtils.getScreenWidth(NEVideoPlayerActivity.this) * 9 / 16);
+        RelativeLayout.LayoutParams danmuParam = new RelativeLayout.LayoutParams(-1, ScreenUtils.getScreenWidth(ExclusiveVideoPlayerActivity.this) * 9 / 16);
         danmuParam.addRule(RelativeLayout.BELOW, R.id.main_video);
         danmuView.setLayoutParams(danmuParam);
         danmuView.setVisibility(View.VISIBLE);
@@ -990,11 +959,11 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
     @Override
     public void play() {
-        if (NetUtils.isConnected(NEVideoPlayerActivity.this)) {
-            if (NetUtils.isMobile(NEVideoPlayerActivity.this)) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(NEVideoPlayerActivity.this);
+        if (NetUtils.isConnected(ExclusiveVideoPlayerActivity.this)) {
+            if (NetUtils.isMobile(ExclusiveVideoPlayerActivity.this)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ExclusiveVideoPlayerActivity.this);
                 final AlertDialog alertDialog = builder.create();
-                View view = View.inflate(NEVideoPlayerActivity.this, R.layout.dialog_cancel_or_confirm, null);
+                View view = View.inflate(ExclusiveVideoPlayerActivity.this, R.layout.dialog_cancel_or_confirm, null);
                 TextView text = (TextView) view.findViewById(R.id.text);
                 text.setText("您当前正在使用移动网络，继续播放将消耗流量");
                 Button cancel = (Button) view.findViewById(R.id.cancel);
@@ -1017,12 +986,12 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
                 });
                 alertDialog.show();
                 alertDialog.setContentView(view);
-            } else if (NetUtils.isWifi(NEVideoPlayerActivity.this)) {
+            } else if (NetUtils.isWifi(ExclusiveVideoPlayerActivity.this)) {
                 video1.start();
                 video2.start();
             }
         } else {
-            Toast.makeText(NEVideoPlayerActivity.this, "网络不可用", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ExclusiveVideoPlayerActivity.this, "网络不可用", Toast.LENGTH_SHORT).show();
         }
     }
 

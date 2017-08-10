@@ -19,6 +19,7 @@ import cn.qatime.player.bean.ExclusiveLessonDetailBean;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.utils.StringUtils;
+import libraryextra.view.ListViewForScrollView;
 
 public class FragmentExclusiveLessonClassList extends BaseFragment {
     private CommonAdapter<ExclusiveLessonDetailBean.DataBean.CustomizedGroupBean.ScheduledLessonsBean> scheduleAdapter;
@@ -39,9 +40,9 @@ public class FragmentExclusiveLessonClassList extends BaseFragment {
 
 
     private void initview(View view) {
-        ListView scheduleListView = (ListView) view.findViewById(R.id.schedule_list);
+        ListViewForScrollView scheduleListView = (ListViewForScrollView) view.findViewById(R.id.schedule_list);
         scheduleListView.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
-        ListView offlineListView = (ListView) view.findViewById(R.id.offline_list);
+        ListViewForScrollView offlineListView = (ListViewForScrollView) view.findViewById(R.id.offline_list);
         offlineListView.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
         scheduleAdapter = new CommonAdapter<ExclusiveLessonDetailBean.DataBean.CustomizedGroupBean.ScheduledLessonsBean>(getActivity(), scheduleList, R.layout.item_fragment_exclusive_class_list_schedule) {
 
@@ -103,27 +104,6 @@ public class FragmentExclusiveLessonClassList extends BaseFragment {
             }
         };
         offlineListView.setAdapter(offlineAdapter);
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                LiveLessonDetailBean.DataBean.CourseBean.LessonsBean item = list.get(position);
-//                if (isFinished(item)) {
-//                    if (data != null && data.getTicket() != null && !StringUtils.isNullOrBlanK(data.getTicket().getType()) && data.getTicket().getType().equals("LiveStudio::BuyTicket")) {
-//                        if (!item.isReplayable()) {
-//                            Toast.makeText(getActivity(), "该课程不可回放", Toast.LENGTH_SHORT).show();
-//                            return;
-//                        }
-//                        if (item.getLeft_replay_times() <= 0) {
-//                            Toast.makeText(getActivity(), getResourceString(R.string.have_no_left_playback_count), Toast.LENGTH_SHORT).show();
-//                            return;
-//                        }
-//                        Intent intent = new Intent(getActivity(), NEVideoPlaybackActivity.class);
-//                        intent.putExtra("id", item.getId());
-//                        startActivity(intent);
-//                    }
-//                }
-//            }
-//        });
     }
 
     private String getStatus(String status) {
