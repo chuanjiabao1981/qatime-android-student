@@ -31,6 +31,7 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.activity.ExclusiveLessonDetailActivity;
+import cn.qatime.player.activity.ExclusiveVideoPlayerActivity;
 import cn.qatime.player.activity.InteractCourseDetailActivity;
 import cn.qatime.player.activity.InteractiveLiveActivity;
 import cn.qatime.player.activity.NEVideoPlayerActivity;
@@ -144,11 +145,9 @@ public class FragmentClassTableClosed extends BaseFragment {
                                 toNext();
                             }
                         }else if ("LiveStudio::CustomizedGroup".equals(item.getProduct_type())) {
-//                            // TODO: 2017/7/31 跳转播放页
-//                            Intent intent = new Intent(getActivity(), ExclusiveLessonDetailActivity.class);
-//                            intent.putExtra("id", Integer.valueOf(item.getProduct_id()));
-//                            intent.putExtra("pager", 2);
-//                            startActivity(intent);
+                            Intent intent = new Intent(getActivity(), ExclusiveVideoPlayerActivity.class);
+                            intent.putExtra("id", item.getProduct_id());
+                            startActivity(intent);
                         }
                     }
                 });

@@ -230,11 +230,9 @@ public class ClassTimeTableActivity extends BaseActivity implements View.OnClick
                                 toNext();
                             }
                         } else if ("LiveStudio::CustomizedGroup".equals(item.getProduct_type())) {
-//                            // TODO: 2017/7/31 跳转播放页
-//                            Intent intent = new Intent(getActivity(), ExclusiveLessonDetailActivity.class);
-//                            intent.putExtra("id", Integer.valueOf(item.getProduct_id()));
-//                            intent.putExtra("pager", 2);
-//                            startActivity(intent);
+                            Intent intent = new Intent(ClassTimeTableActivity.this, ExclusiveVideoPlayerActivity.class);
+                            intent.putExtra("id", item.getProduct_id());
+                            startActivity(intent);
                         }
                     }
                 });
