@@ -567,8 +567,8 @@
     <string name="try_again">重试</string>
     <string name="recharge_result">充值结果</string>
     <string name="wechat_bind_error_alerady_used"><![CDATA[该手机号已注册,请登录进入\n个人中心>安全设置绑定]]></string>
-    <string name="new_phone_to_regist"><新号码></新号码>注册</string>
-    <string name="user_withdraw">用户提现</string>
+    <string name="new_phone_to_regist">新号码注册</string>
+    <string name="user_withdraw">账户提现</string>
     <string name="withdraw_server_error">提现系统繁忙，请稍后再试</string>
     <string name="be">被</string>
     <string name="mute">禁言</string>
