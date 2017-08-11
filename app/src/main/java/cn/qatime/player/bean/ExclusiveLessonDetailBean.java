@@ -368,6 +368,15 @@ public class ExclusiveLessonDetailBean implements Serializable {
                 private String start_time;
                 private String end_time;
                 private String status;
+                private boolean replayable;
+
+                public boolean isReplayable() {
+                    return replayable;
+                }
+
+                public void setReplayable(boolean replayable) {
+                    this.replayable = replayable;
+                }
 
                 public int getId() {
                     return id;

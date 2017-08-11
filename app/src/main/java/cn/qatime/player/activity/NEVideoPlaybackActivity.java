@@ -49,18 +49,26 @@ public class NEVideoPlaybackActivity extends BaseActivity implements PlayBackVid
 
         lessonId = getIntent().getIntExtra("id", 0);
         String name = getIntent().getStringExtra("name");
+        String type = getIntent().getStringExtra("type");
 
         initView();
         if (!StringUtils.isNullOrBlanK(name)) {
             playBackFloatFragment.setName(name);
         }
         if (lessonId != 0) {
-            initData();
+            initData(type);
         }
     }
 
-    private void initData() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.lessons + "/" + lessonId + "/replay", null,
+    private void initData(String type) {
+        if (StringUtils.isNullOrBlanK(type)) return;
+        String url = "";
+        if (type.equals("live")) {
+            url = UrlUtils.lessons;//直播
+        } else if (type.equals("exclusive")) {
+            url = UrlUtils.getBaseUrl() + "api/v1/live_studio/scheduled_lessons/";
+        }
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(url + lessonId + "/replay", null,
                 new VolleyListener(NEVideoPlaybackActivity.this) {
                     @Override
                     protected void onSuccess(JSONObject response) {

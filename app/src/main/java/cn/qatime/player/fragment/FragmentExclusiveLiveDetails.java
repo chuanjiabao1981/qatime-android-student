@@ -10,8 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -22,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.NEVideoPlaybackActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.ExclusiveLessonPlayBean;
@@ -57,10 +60,10 @@ public class FragmentExclusiveLiveDetails extends BaseFragment {
     private ExclusiveLessonPlayBean.DataBean data;
     private ListViewForScrollView scheduleListView;
     private ListViewForScrollView offlineListView;
-    private CommonAdapter<ExclusiveLessonPlayBean.DataBean.ScheduledLessonsBean> scheduleAdapter;
-    private CommonAdapter<ExclusiveLessonPlayBean.DataBean.OfflineLessonsBean> offlineAdapter;
-    private List<ExclusiveLessonPlayBean.DataBean.ScheduledLessonsBean> scheduleList = new ArrayList<>();
-    private List<ExclusiveLessonPlayBean.DataBean.OfflineLessonsBean> offlineList = new ArrayList<>();
+    private CommonAdapter<ExclusiveLessonPlayBean.DataBean.CustomizedGroupBean.ScheduledLessonsBean> scheduleAdapter;
+    private CommonAdapter<ExclusiveLessonPlayBean.DataBean.CustomizedGroupBean.OfflineLessonsBean> offlineAdapter;
+    private List<ExclusiveLessonPlayBean.DataBean.CustomizedGroupBean.ScheduledLessonsBean> scheduleList = new ArrayList<>();
+    private List<ExclusiveLessonPlayBean.DataBean.CustomizedGroupBean.OfflineLessonsBean> offlineList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -104,10 +107,10 @@ public class FragmentExclusiveLiveDetails extends BaseFragment {
     private void initList() {
         scheduleListView.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
         offlineListView.setEmptyView(View.inflate(getActivity(), R.layout.empty_view, null));
-        scheduleAdapter = new CommonAdapter<ExclusiveLessonPlayBean.DataBean.ScheduledLessonsBean>(getActivity(), scheduleList, R.layout.item_fragment_exclusive_class_list_schedule) {
+        scheduleAdapter = new CommonAdapter<ExclusiveLessonPlayBean.DataBean.CustomizedGroupBean.ScheduledLessonsBean>(getActivity(), scheduleList, R.layout.item_fragment_exclusive_class_list_schedule) {
 
             @Override
-            public void convert(ViewHolder holder, ExclusiveLessonPlayBean.DataBean.ScheduledLessonsBean item, int position) {
+            public void convert(ViewHolder holder, ExclusiveLessonPlayBean.DataBean.CustomizedGroupBean.ScheduledLessonsBean item, int position) {
                 holder.setText(R.id.name, item.getName());
                 holder.setText(R.id.live_time, item.getStart_time());
                 holder.setText(R.id.status, getStatus(item.getStatus()));
@@ -120,8 +123,13 @@ public class FragmentExclusiveLiveDetails extends BaseFragment {
                     ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.live_time)).setTextColor(0xff999999);
-                    ((TextView) holder.getView(R.id.status)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.class_date)).setTextColor(0xff999999);
+                    if (data != null && data.getTicket() != null && !StringUtils.isNullOrBlanK(data.getTicket().getType()) && data.getTicket().getType().equals("LiveStudio::BuyTicket") && item.isReplayable()) {
+                        ((TextView) holder.getView(R.id.status)).setTextColor(0xffff5842);
+                        holder.setText(R.id.status, "观看回放");
+                    } else {
+                        ((TextView) holder.getView(R.id.status)).setTextColor(0xff999999);
+                    }
                 } else {
                     ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff00a0e9);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xff666666);
@@ -133,10 +141,10 @@ public class FragmentExclusiveLiveDetails extends BaseFragment {
             }
         };
         scheduleListView.setAdapter(scheduleAdapter);
-        offlineAdapter = new CommonAdapter<ExclusiveLessonPlayBean.DataBean.OfflineLessonsBean>(getActivity(), offlineList, R.layout.item_fragment_exclusive_class_list_offline) {
+        offlineAdapter = new CommonAdapter<ExclusiveLessonPlayBean.DataBean.CustomizedGroupBean.OfflineLessonsBean>(getActivity(), offlineList, R.layout.item_fragment_exclusive_class_list_offline) {
 
             @Override
-            public void convert(ViewHolder holder, ExclusiveLessonPlayBean.DataBean.OfflineLessonsBean item, int position) {
+            public void convert(ViewHolder holder, ExclusiveLessonPlayBean.DataBean.CustomizedGroupBean.OfflineLessonsBean item, int position) {
                 holder.setText(R.id.name, item.getName());
                 holder.setText(R.id.live_time, item.getStart_time());
                 holder.setText(R.id.address, "上课地点:" + item.getClass_address());
@@ -164,6 +172,24 @@ public class FragmentExclusiveLiveDetails extends BaseFragment {
             }
         };
         offlineListView.setAdapter(offlineAdapter);
+        scheduleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (isFinished(scheduleList.get(position).getStatus())) {
+                    if (data != null && data.getTicket() != null && !StringUtils.isNullOrBlanK(data.getTicket().getType()) && data.getTicket().getType().equals("LiveStudio::BuyTicket")) {
+                        if (!scheduleList.get(position).isReplayable()) {
+                            Toast.makeText(getActivity(), "该课程不可回放", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        Intent intent = new Intent(getActivity(), NEVideoPlaybackActivity.class);
+                        intent.putExtra("id", scheduleList.get(position).getId());
+                        intent.putExtra("name", scheduleList.get(position).getName());
+                        intent.putExtra("type", "exclusive");
+                        startActivity(intent);
+                    }
+                }
+            }
+        });
     }
 
     private boolean isFinished(String item) {
@@ -199,8 +225,8 @@ public class FragmentExclusiveLiveDetails extends BaseFragment {
     private void setDataListDetails() {
         scheduleList.clear();
         offlineList.clear();
-        scheduleList.addAll(data.getScheduled_lessons());
-        offlineList.addAll(data.getOffline_lessons());
+        scheduleList.addAll(data.getCustomized_group().getScheduled_lessons());
+        offlineList.addAll(data.getCustomized_group().getOffline_lessons());
         if (scheduleAdapter != null) {
             scheduleAdapter.notifyDataSetChanged();
         }
@@ -226,17 +252,17 @@ public class FragmentExclusiveLiveDetails extends BaseFragment {
         @Override
         public void run() {
             if (getActivity() != null && getActivity().getResources() != null) {
-                className.setText(data.getName());
-                subject.setText((data.getSubject() == null ? "" : data.getSubject()));
-                classStartTime.setText((data.getStart_at() == 0 ? "" : format.format(new Date(data.getStart_at() * 1000))));
-                classEndTime.setText(data.getEnd_at() == 0 ? "" : format.format(new Date(data.getEnd_at() * 1000)));
-                grade.setText((data.getGrade() == null ? "" : data.getGrade()));
-                totalClass.setText(getString(R.string.lesson_count, data.getView_tickets_count()));
-                if (!StringUtils.isNullOrBlanK(data.getObjective())) {
-                    target.setText(data.getObjective());
+                className.setText(data.getCustomized_group().getName());
+                subject.setText((data.getCustomized_group().getSubject() == null ? "" : data.getCustomized_group().getSubject()));
+                classStartTime.setText((data.getCustomized_group().getStart_at() == 0 ? "" : format.format(new Date(data.getCustomized_group().getStart_at() * 1000))));
+                classEndTime.setText(data.getCustomized_group().getEnd_at() == 0 ? "" : format.format(new Date(data.getCustomized_group().getEnd_at() * 1000)));
+                grade.setText((data.getCustomized_group().getGrade() == null ? "" : data.getCustomized_group().getGrade()));
+                totalClass.setText(getString(R.string.lesson_count, data.getCustomized_group().getView_tickets_count()));
+                if (!StringUtils.isNullOrBlanK(data.getCustomized_group().getObjective())) {
+                    target.setText(data.getCustomized_group().getObjective());
                 }
-                if (!StringUtils.isNullOrBlanK(data.getSuit_crowd())) {
-                    suitable.setText(data.getSuit_crowd());
+                if (!StringUtils.isNullOrBlanK(data.getCustomized_group().getSuit_crowd())) {
+                    suitable.setText(data.getCustomized_group().getSuit_crowd());
                 }
             }
         }
@@ -245,27 +271,27 @@ public class FragmentExclusiveLiveDetails extends BaseFragment {
         @Override
         public void run() {
             if (getActivity() != null && getActivity().getResources() != null) {
-                sex.setImageResource("male".equals(data.getTeacher().getGender()) ? R.mipmap.male : R.mipmap.female);
-                name.setText(data.getTeacher().getName());
-                if (!StringUtils.isNullOrBlanK(data.getTeacher().getTeaching_years())) {
-                    if (data.getTeacher().getTeaching_years().equals("within_three_years")) {
+                sex.setImageResource("male".equals(data.getCustomized_group().getTeacher().getGender()) ? R.mipmap.male : R.mipmap.female);
+                name.setText(data.getCustomized_group().getTeacher().getName());
+                if (!StringUtils.isNullOrBlanK(data.getCustomized_group().getTeacher().getTeaching_years())) {
+                    if (data.getCustomized_group().getTeacher().getTeaching_years().equals("within_three_years")) {
                         teachingYears.setText(getResourceString(R.string.within_three_years));
-                    } else if (data.getTeacher().getTeaching_years().equals("within_ten_years")) {
+                    } else if (data.getCustomized_group().getTeacher().getTeaching_years().equals("within_ten_years")) {
                         teachingYears.setText(getResourceString(R.string.within_ten_years));
-                    } else if (data.getTeacher().getTeaching_years().equals("within_twenty_years")) {
+                    } else if (data.getCustomized_group().getTeacher().getTeaching_years().equals("within_twenty_years")) {
                         teachingYears.setText(getResourceString(R.string.within_twenty_years));
                     } else {
                         teachingYears.setText(getResourceString(R.string.more_than_ten_years));
                     }
                 }
-                String body = StringUtils.isNullOrBlanK(data.getTeacher().getDesc()) ? getString(R.string.no_desc) : data.getTeacher().getDesc();
+                String body = StringUtils.isNullOrBlanK(data.getCustomized_group().getTeacher().getDesc()) ? getString(R.string.no_desc) : data.getCustomized_group().getTeacher().getDesc();
                 body = body.replace("\r\n", "<br>");
                 String css = "<style>* {color:#666666;margin:0;padding:0;}</style>";//默认color
                 teacherDescribe.loadDataWithBaseURL(null, css + body, "text/html", "UTF-8", null);
                 SchoolBean schoolBean = JsonUtils.objectFromJson(FileUtil.readFile(getActivity().getFilesDir() + "/school.txt").toString(), SchoolBean.class);
                 if (schoolBean != null && schoolBean.getData() != null) {
                     for (int i = 0; i < schoolBean.getData().size(); i++) {
-                        if (data.getTeacher().getSchool() == schoolBean.getData().get(i).getId()) {
+                        if (data.getCustomized_group().getTeacher().getSchool() == schoolBean.getData().get(i).getId()) {
                             school.setText(schoolBean.getData().get(i).getName());
                             break;
                         }
@@ -274,12 +300,12 @@ public class FragmentExclusiveLiveDetails extends BaseFragment {
                     school.setText(getString(R.string.not_available));
                 }
 
-                Glide.with(getActivity()).load(data.getTeacher().getAvatar_url()).placeholder(R.mipmap.error_header).crossFade().into(image);
+                Glide.with(getActivity()).load(data.getCustomized_group().getTeacher().getAvatar_url()).placeholder(R.mipmap.error_header).crossFade().into(image);
                 image.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(getActivity(), TeacherDataActivity.class);
-                        intent.putExtra("teacherId", data.getTeacher().getId());
+                        intent.putExtra("teacherId", data.getCustomized_group().getTeacher().getId());
                         startActivity(intent);
                     }
                 });

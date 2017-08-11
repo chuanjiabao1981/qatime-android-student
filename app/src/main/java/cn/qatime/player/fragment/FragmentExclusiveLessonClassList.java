@@ -1,12 +1,15 @@
 package cn.qatime.player.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.NEVideoPlaybackActivity;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.ExclusiveLessonDetailBean;
 import libraryextra.adapter.CommonAdapter;
@@ -29,6 +33,7 @@ public class FragmentExclusiveLessonClassList extends BaseFragment {
 
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd");
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    private ExclusiveLessonDetailBean.DataBean data;
 
     @Nullable
     @Override
@@ -60,8 +65,13 @@ public class FragmentExclusiveLessonClassList extends BaseFragment {
                     ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.live_time)).setTextColor(0xff999999);
-                    ((TextView) holder.getView(R.id.status)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.class_date)).setTextColor(0xff999999);
+                    if (data != null && data.getTicket() != null && !StringUtils.isNullOrBlanK(data.getTicket().getType()) && data.getTicket().getType().equals("LiveStudio::BuyTicket") && item.isReplayable()) {
+                        ((TextView) holder.getView(R.id.status)).setTextColor(0xffff5842);
+                        holder.setText(R.id.status, "观看回放");
+                    } else {
+                        ((TextView) holder.getView(R.id.status)).setTextColor(0xff999999);
+                    }
                 } else {
                     ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff00a0e9);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xff666666);
@@ -104,6 +114,24 @@ public class FragmentExclusiveLessonClassList extends BaseFragment {
             }
         };
         offlineListView.setAdapter(offlineAdapter);
+        scheduleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (isFinished(scheduleList.get(position).getStatus())) {
+                    if (data != null && data.getTicket() != null && !StringUtils.isNullOrBlanK(data.getTicket().getType()) && data.getTicket().getType().equals("LiveStudio::BuyTicket")) {
+                        if (!scheduleList.get(position).isReplayable()) {
+                            Toast.makeText(getActivity(), "该课程不可回放", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        Intent intent = new Intent(getActivity(), NEVideoPlaybackActivity.class);
+                        intent.putExtra("id", scheduleList.get(position).getId());
+                        intent.putExtra("name", scheduleList.get(position).getName());
+                        intent.putExtra("type", "exclusive");
+                        startActivity(intent);
+                    }
+                }
+            }
+        });
     }
 
     private String getStatus(String status) {
@@ -129,18 +157,17 @@ public class FragmentExclusiveLessonClassList extends BaseFragment {
     }
 
     //
-    public void setData(ExclusiveLessonDetailBean data) {
-        if (data.getData().getCustomized_group() != null) {
-            scheduleList.clear();
-            offlineList.clear();
-            scheduleList.addAll(data.getData().getCustomized_group().getScheduled_lessons());
-            offlineList.addAll(data.getData().getCustomized_group().getOffline_lessons());
-            if (scheduleAdapter != null) {
-                scheduleAdapter.notifyDataSetChanged();
-            }
-            if (offlineAdapter != null) {
-                offlineAdapter.notifyDataSetChanged();
-            }
+    public void setData(ExclusiveLessonDetailBean.DataBean data) {
+        this.data = data;
+        scheduleList.clear();
+        offlineList.clear();
+        scheduleList.addAll(data.getCustomized_group().getScheduled_lessons());
+        offlineList.addAll(data.getCustomized_group().getOffline_lessons());
+        if (scheduleAdapter != null) {
+            scheduleAdapter.notifyDataSetChanged();
+        }
+        if (offlineAdapter != null) {
+            offlineAdapter.notifyDataSetChanged();
         }
     }
 }

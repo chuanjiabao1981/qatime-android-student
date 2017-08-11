@@ -256,7 +256,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
             }
             ((FragmentExclusiveLessonClassInfo) fragBaseFragments.get(0)).setData(data);
             ((FragmentExclusiveLessonTeacherInfo) fragBaseFragments.get(1)).setData(data);
-            ((FragmentExclusiveLessonClassList) fragBaseFragments.get(2)).setData(data);
+            ((FragmentExclusiveLessonClassList) fragBaseFragments.get(2)).setData(data.getData());
         }
     }
 
