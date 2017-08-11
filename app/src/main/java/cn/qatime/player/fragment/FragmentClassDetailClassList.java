@@ -108,6 +108,8 @@ public class FragmentClassDetailClassList extends BaseFragment {
                         }
                         Intent intent = new Intent(getActivity(), NEVideoPlaybackActivity.class);
                         intent.putExtra("id", item.getId());
+                        intent.putExtra("name", item.getName());
+                        intent.putExtra("type","live");
                         startActivity(intent);
                     }
                 }

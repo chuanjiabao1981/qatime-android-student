@@ -93,26 +93,6 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
         target = (TextView) view.findViewById(R.id.target);
         suitable = (TextView) view.findViewById(R.id.suitable);
 
-//        courseDescribe = (WebView) view.findViewById(R.id.course_describe);
-//        courseDescribe.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View v) {
-//                return true;
-//            }
-//        });
-
-//        courseDescribe.setBackgroundColor(0); // 设置背景色
-//        courseDescribe.getBackground().setAlpha(0); // 设置填充透明度 范围：0-255
-//        courseDescribe.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY); //取消滚动条白边效果
-//        WebSettings settingsC = courseDescribe.getSettings();
-//        settingsC.setDefaultTextEncodingName("UTF-8") ;
-//        settingsC.setBlockNetworkImage(false);
-//        settingsC.setDefaultFontSize(13);
-//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-//            settingsC.setMixedContentMode(settingsC.MIXED_CONTENT_ALWAYS_ALLOW);  //注意安卓5.0以上的权限
-//        }
-
-
         teacherDescribe = (WebView) view.findViewById(R.id.teacher_describe);
         teacherDescribe.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -131,7 +111,6 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             settingsT.setMixedContentMode(settingsT.MIXED_CONTENT_ALWAYS_ALLOW);  //注意安卓5.0以上的权限
         }
-
 
         initList();
         return view;
@@ -199,6 +178,7 @@ public class FragmentPlayerLiveDetails extends BaseFragment {
                         Intent intent = new Intent(getActivity(), NEVideoPlaybackActivity.class);
                         intent.putExtra("id", item.getId());
                         intent.putExtra("name", item.getName());
+                        intent.putExtra("type","live");
                         startActivity(intent);
                     }
                 }

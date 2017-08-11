@@ -424,17 +424,17 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
                         protected void onSuccess(JSONObject response) {
                             ExclusiveLessonPlayBean data = JsonUtils.objectFromJson(response.toString(), ExclusiveLessonPlayBean.class);
                             if (data != null) {
-                                ((FragmentExclusiveLiveDetails) fragBaseFragments.get(2)).setData(data);
-                                if (data.getData() != null) {
-                                    if (data.getData().getChat_team() != null) {
-                                        ((FragmentExclusiveMembers) fragBaseFragments.get(3)).setData(data.getData().getChat_team().getAccounts());
+                                if (data.getData() != null && data.getData().getCustomized_group() != null) {
+                                    ((FragmentExclusiveLiveDetails) fragBaseFragments.get(2)).setData(data);
+                                    if (data.getData().getCustomized_group().getChat_team() != null) {
+                                        ((FragmentExclusiveMembers) fragBaseFragments.get(3)).setData(data.getData().getCustomized_group().getChat_team().getAccounts());
                                     }
-                                    camera = data.getData().getCamera_pull_stream();
-                                    board = data.getData().getBoard_pull_stream();
+                                    camera = data.getData().getCustomized_group().getCamera_pull_stream();
+                                    board = data.getData().getCustomized_group().getBoard_pull_stream();
                                     canLoop = true;
                                     hd.post(runnable);
+                                    sessionId = data.getData().getCustomized_group().getChat_team().getTeam_id();
                                 }
-                                sessionId = data.getData().getChat_team().getTeam_id();
                             }
                             initSessionId();
                         }
