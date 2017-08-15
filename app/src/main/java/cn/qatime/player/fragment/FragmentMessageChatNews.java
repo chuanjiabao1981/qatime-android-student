@@ -47,6 +47,7 @@ import cn.qatime.player.activity.MessageActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.MessageListBean;
+import cn.qatime.player.bean.MyExclusiveBean;
 import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.observer.UserInfoObservable;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
@@ -145,6 +146,45 @@ public class FragmentMessageChatNews extends BaseFragment {
                                             item.setIcon(bean.getPublicize_url());
                                             item.setName(bean.getName());
                                         }
+                                    }
+                                }
+                            }
+                            listSize = items.size();
+                            refreshMessages();
+                        }
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        DaYiJsonObjectRequest request3 = new DaYiJsonObjectRequest(UrlUtils.urlStudent + BaseApplication.getInstance().getUserId() + "/customized_groups", null,
+                new VolleyListener(getActivity()) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        MyExclusiveBean data = JsonUtils.objectFromJson(response.toString(), MyExclusiveBean.class);
+                        if (data != null && data.getData() != null) {
+                            synchronized (items) {
+                                for (MessageListBean item : items) {
+                                    for (MyExclusiveBean.DataBean bean : data.getData()) {
+                                        // TODO: 2017/8/15 team_id
+//                                        if (item.getContactId().equals(bean.getCustomized_group().getChat_team_id())) {
+//                                            item.setCourseId(bean.getId());
+//                                            item.setCourseType("exclusive");
+//                                            item.setIcon(bean.getPublicize_url());
+//                                            item.setName(bean.getName());
+//                                        }
                                     }
                                 }
                             }
@@ -579,8 +619,6 @@ public class FragmentMessageChatNews extends BaseFragment {
                     intent.putExtra("sessionId", items.get(position).getContactId());
                     intent.putExtra("sessionType", items.get(position).getSessionType());
                     intent.putExtra("courseId", items.get(position).getCourseId());
-//            intent.putExtra("camera", items.get(position).getCamera());
-//            intent.putExtra("board", items.get(position).getBoard());
                     intent.putExtra("name", items.get(position).getName());
                     intent.putExtra("type", items.get(position).getCourseType());
                     intent.putExtra("owner", items.get(position).getOwner());

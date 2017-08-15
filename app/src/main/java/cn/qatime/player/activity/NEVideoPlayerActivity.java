@@ -342,7 +342,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
             Toast.makeText(this, "聊天id不可用", Toast.LENGTH_SHORT).show();
             return;
         }
-
+// TODO: 2017/8/15 初始化
         getAnnouncementsData();
         floatFragment.setSessionId(sessionId);
         if (!StringUtils.isNullOrBlanK(sessionId)) {
