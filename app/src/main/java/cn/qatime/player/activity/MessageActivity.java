@@ -7,6 +7,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,7 +48,7 @@ import libraryextra.utils.StringUtils;
  * @date 2016/8/30 12:25
  * @Description 聊天
  */
-public class MessageActivity extends BaseActivity implements InputPanel.InputPanelListener, ModuleProxy {
+public class MessageActivity extends BaseActivity implements InputPanel.InputPanelListener, ModuleProxy, View.OnClickListener {
     private String sessionId;//聊天对象id
     private SessionTypeEnum sessionType;
     private Team team;
@@ -56,6 +59,7 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
     private View rootView;
     private InputPanel inputpanel;
     private MessageListPanel messageListPanel;
+    private PopupWindow pop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +105,49 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         registerTeamUpdateObserver(true);
         initView();
     }
+
+    private void initMenu(String status) {
+        if (pop == null) {
+            setRightImage(R.mipmap.exclusive_menu, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    pop.showAsDropDown(v);
+                    backgroundAlpha(0.9f);
+                }
+            });
+            View popView = View.inflate(this, R.layout.exclusive_pop_menu, null);
+            View menu1 = popView.findViewById(R.id.menu_1);
+            View menu2 = popView.findViewById(R.id.menu_2);
+            View menu3 = popView.findViewById(R.id.menu_3);
+            View menu4 = popView.findViewById(R.id.menu_4);
+            View menu5 = popView.findViewById(R.id.menu_5);
+            if (Constant.CourseStatus.completed.equals(status)) {
+                menu1.setVisibility(View.GONE);
+            }
+            menu1.setOnClickListener(this);
+            menu2.setOnClickListener(this);
+            menu3.setOnClickListener(this);
+            menu4.setOnClickListener(this);
+            menu5.setOnClickListener(this);
+            pop = new PopupWindow(popView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+            pop.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    WindowManager.LayoutParams lp = getWindow().getAttributes();
+                    lp.alpha = 1f;
+                    getWindow().setAttributes(lp);
+                }
+            });
+        }
+    }
+
+
+    public void backgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        getWindow().setAttributes(lp);
+    }
+
 
     private void toNext() {
         Intent intent = new Intent(MessageActivity.this, InteractiveLiveActivity.class);
@@ -372,4 +419,29 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         messageListPanel.onDestroy();
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.menu_1:
+                Toast.makeText(this, "menu1", Toast.LENGTH_SHORT).show();
+                pop.dismiss();
+                break;
+            case R.id.menu_2:
+                pop.dismiss();
+                Toast.makeText(this, "menu2", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.menu_3:
+                pop.dismiss();
+                Toast.makeText(this, "menu3", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.menu_4:
+                pop.dismiss();
+                Toast.makeText(this, "menu4", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.menu_5:
+                pop.dismiss();
+                Toast.makeText(this, "menu5", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
 }

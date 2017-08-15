@@ -7,7 +7,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,7 +22,6 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
@@ -66,6 +68,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
     private ViewPager mViewPager;
     private ExclusiveLessonDetailBean data;
     private AlertDialog alertDialog;
+    private PopupWindow pop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +82,48 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
         }
         EventBus.getDefault().register(this);
         initData();
+    }
+
+    private void initMenu(String status) {
+        if (pop == null) {
+            setRightImage(R.mipmap.exclusive_menu, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    pop.showAsDropDown(v);
+                    backgroundAlpha(0.9f);
+                }
+            });
+            View popView = View.inflate(this, R.layout.exclusive_pop_menu, null);
+            View menu1 = popView.findViewById(R.id.menu_1);
+            View menu2 = popView.findViewById(R.id.menu_2);
+            View menu3 = popView.findViewById(R.id.menu_3);
+            View menu4 = popView.findViewById(R.id.menu_4);
+            View menu5 = popView.findViewById(R.id.menu_5);
+            if (Constant.CourseStatus.completed.equals(status)) {
+                menu1.setVisibility(View.GONE);
+            }
+            menu1.setOnClickListener(this);
+            menu2.setOnClickListener(this);
+            menu3.setOnClickListener(this);
+            menu4.setOnClickListener(this);
+            menu5.setOnClickListener(this);
+            pop = new PopupWindow(popView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+            pop.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    WindowManager.LayoutParams lp = getWindow().getAttributes();
+                    lp.alpha = 1f;
+                    getWindow().setAttributes(lp);
+                }
+            });
+        }
+    }
+
+
+    public void backgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        getWindow().setAttributes(lp);
     }
 
     private void initView() {
@@ -211,6 +256,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                 }
                 price.setText("￥" + priceStr);
                 if (data.getData().getTicket() != null && "LiveStudio::BuyTicket".equals(data.getData().getTicket().getType())) {//已购买
+                    initMenu(data.getData().getCustomized_group().getStatus());
                     if (Constant.CourseStatus.completed.equals(data.getData().getCustomized_group().getStatus())) {
                         handleLayout.setVisibility(View.GONE);
                     } else {
@@ -229,6 +275,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
             } else if (data.getData().getCustomized_group().getSell_type().equals("free")) {
                 price.setText("免费");
                 if (data.getData().getTicket() != null) {//已购买
+                    initMenu(data.getData().getCustomized_group().getStatus());
                     if (Constant.CourseStatus.completed.equals(data.getData().getCustomized_group().getStatus())) {
                         handleLayout.setVisibility(View.GONE);
                     } else {
@@ -263,6 +310,26 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.menu_1:
+                Toast.makeText(this, "menu1", Toast.LENGTH_SHORT).show();
+                pop.dismiss();
+                break;
+            case R.id.menu_2:
+                pop.dismiss();
+                Toast.makeText(this, "menu2", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.menu_3:
+                pop.dismiss();
+                Toast.makeText(this, "menu3", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.menu_4:
+                pop.dismiss();
+                Toast.makeText(this, "menu4", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.menu_5:
+                pop.dismiss();
+                Toast.makeText(this, "menu5", Toast.LENGTH_SHORT).show();
+                break;
             case R.id.start_study:
                 if (BaseApplication.getInstance().isLogined()) {
                     if (data.getData().getTicket() != null) {
