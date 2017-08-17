@@ -35,6 +35,7 @@ import libraryextra.transformation.GlideCircleTransform;
 import libraryextra.utils.DateUtils;
 import libraryextra.utils.DensityUtils;
 import libraryextra.utils.JsonUtils;
+import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
@@ -89,7 +90,13 @@ public class PlayBackActivity extends BaseFragmentActivity implements SurfaceHol
             protected void onSuccess(JSONObject response) {
                 data = JsonUtils.objectFromJson(response.toString(), PlayBackInfoBean.class);
                 if (data != null) {
-                    name.setText(data.getData().getLive_studio_lesson().getName());
+                    if ("LiveStudio::InteractiveLesson".equals(data.getData().getTarget_type())) {
+                        name.setText(data.getData().getLive_studio_interactive_lesson().getName());
+                    } else if ("LiveStudio::ScheduledLesson".equals(data.getData().getTarget_type())) {
+                        name.setText(data.getData().getLive_studio_scheduled_lesson().getName());
+                    } else if ("LiveStudio::Lesson".equals(data.getData().getTarget_type())) {
+                        name.setText(data.getData().getLive_studio_lesson().getName());
+                    }
                     gradeSubject.setText(data.getData().getTeacher().getCategory() + data.getData().getTeacher().getSubject());
                     Glide.with(PlayBackActivity.this).load(data.getData().getTeacher().getEx_big_avatar_url()).centerCrop().bitmapTransform(new GlideCircleTransform(PlayBackActivity.this)).placeholder(R.mipmap.error_header).crossFade().dontAnimate().into(image);
                     teacher.setText(data.getData().getTeacher().getName());
@@ -253,6 +260,10 @@ public class PlayBackActivity extends BaseFragmentActivity implements SurfaceHol
     }
 
     private void play(String nameUrl) {
+        if(StringUtils.isNullOrBlanK(nameUrl)){
+            Toast.makeText(this, "url失效", Toast.LENGTH_SHORT).show();
+            return;
+        }
         releaseMediaPlayer();
         if (isCreated) {
             try {
