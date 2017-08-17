@@ -49,10 +49,14 @@ import cn.qatime.player.im.cache.TeamDataCache;
 import cn.qatime.player.im.cache.UserInfoCache;
 import cn.qatime.player.utils.SPUtils;
 import cn.qatime.player.utils.StorageUtil;
+import cn.qatime.player.utils.UrlUtils;
 import custom.Configure;
 import libraryextra.bean.CashAccountBean;
 import libraryextra.bean.CityBean;
 import libraryextra.bean.Profile;
+import libraryextra.rx.HttpManager;
+import libraryextra.rx.model.HttpHeaders;
+import libraryextra.rx.model.HttpParams;
 import libraryextra.utils.AppUtils;
 import libraryextra.utils.StringUtils;
 
@@ -130,7 +134,25 @@ public class BaseApplication extends MultiDexApplication {
         initYunxin();
 
         StorageUtil.init(context, null);
+        initRx();
 //        initGlobeActivity();
+    }
+
+    private void initRx() {
+        HttpManager.init(this);
+
+        //设置请求头
+        HttpHeaders headers = new HttpHeaders();
+        if (!StringUtils.isNullOrBlanK(getProfile().getToken())) {
+            headers.put("Remember-Token", getProfile().getToken());
+        }
+        HttpManager.getInstance()
+                .setReadTimeOut(60 * 1000)
+                .setWriteTimeOut(60 * 1000)
+                .setConnectTimeout(60 * 1000)
+                .setBaseUrl(UrlUtils.getBaseUrl())
+                //.addConverterFactory(GsonConverterFactory.create(gson))//本框架没有采用Retrofit的Gson转化，所以不用配置
+                .addCommonHeaders(headers);//设置全局公共头//设置全局公共参数
     }
 
     private void initUmengPush() {
@@ -362,6 +384,9 @@ public class BaseApplication extends MultiDexApplication {
 
     public void setProfile(Profile profile) {
         this.profile = profile;
+        HttpHeaders header = new HttpHeaders();
+        header.put("Remember-Token", profile.getToken());
+        HttpManager.getInstance().addCommonHeaders(header);
         SPUtils.putObject(context, "profile", profile);
     }
 

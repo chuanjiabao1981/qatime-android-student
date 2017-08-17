@@ -148,7 +148,7 @@ public class MainActivity extends BaseFragmentActivity {
         refreshUnreadNum();
         refreshMedia();
 
-        File file = new File(Constant.CACHEPATH);
+        File file = new File(Constant.CACHEIMAGEPATH);
         FileUtils.deleteDir(file);
 
         parseIntent();

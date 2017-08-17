@@ -79,7 +79,6 @@ public class PictureSelectActivity extends BaseActivity {
     private View bottomLyout;
     private TextView chooseDir;
     private TextView totalCount;
-    private GridView gridView;
     private boolean mIsFolderViewInit;
     private boolean mIsFolderViewShow;
     private ListView mFolderListView;
@@ -128,7 +127,7 @@ public class PictureSelectActivity extends BaseActivity {
         chooseDir = (TextView) findViewById(R.id.id_choose_dir);
         totalCount = (TextView) findViewById(R.id.id_total_count);
 
-        gridView = (GridView) findViewById(R.id.gridView);
+        GridView gridView = (GridView) findViewById(R.id.gridView);
         adapter = new PictureSelectAdapter(this, detailList, cameraGone);
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -166,7 +165,7 @@ public class PictureSelectActivity extends BaseActivity {
     private void openCamera() {
         // ##########拍照##########
         Intent getImageByCamera = new Intent("android.media.action.IMAGE_CAPTURE");
-        String out_file_path = Constant.CACHEPATH;
+        String out_file_path = Constant.CACHEIMAGEPATH;
         File dir = new File(out_file_path);
         if (!dir.exists()) {
             dir.mkdirs();
@@ -232,9 +231,7 @@ public class PictureSelectActivity extends BaseActivity {
                 firstBucket.imageList = new ArrayList<>();
                 for (int i = 0; i < imagesBucketList.size(); i++) {
                     imagesBucketList.get(i).setIsSelected(false);
-                    for (int j = 0; j < imagesBucketList.get(i).imageList.size(); j++) {
-                        firstBucket.imageList.add(imagesBucketList.get(i).imageList.get(j));
-                    }
+                    firstBucket.imageList.addAll(imagesBucketList.get(i).imageList);
                 }
                 firstBucket.bucketName = "所有图片";
                 firstBucket.count = firstBucket.imageList.size();
@@ -248,10 +245,8 @@ public class PictureSelectActivity extends BaseActivity {
 
     private void getImages(ImageBucket folder) {
         detailList.clear();
-        for (int j = 0; j < folder.imageList.size(); j++) {
-            detailList.add(folder.imageList.get(j));
-        }
-        Logger.e(detailList.size() + "张图");
+        detailList.addAll(folder.imageList);
+//        Logger.e(detailList.size() + "张图");
         adapter.notifyDataSetChanged();
     }
 

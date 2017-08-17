@@ -94,7 +94,7 @@ public class CropImageActivity extends BaseActivity {
                 progress = DialogUtils.startProgressDialog(progress, CropImageActivity.this);
                 progress.setCanceledOnTouchOutside(false);
                 progress.setCancelable(false);
-                cropper.startCrop(Uri.fromFile(new File(Constant.CACHEPATH + "/" + UUID.randomUUID().toString().replace("-", "") + ".jpg")), null, new SaveCallback() {
+                cropper.startCrop(Uri.fromFile(new File(Constant.CACHEIMAGEPATH + "/" + UUID.randomUUID().toString().replace("-", "") + ".jpg")), null, new SaveCallback() {
                     @Override
                     public void onSuccess(Uri outputUri) {
                         Intent intent = new Intent();
