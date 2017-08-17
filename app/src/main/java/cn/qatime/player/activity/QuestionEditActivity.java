@@ -1,7 +1,6 @@
 package cn.qatime.player.activity;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -15,7 +14,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.orhanobut.logger.Logger;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.io.File;

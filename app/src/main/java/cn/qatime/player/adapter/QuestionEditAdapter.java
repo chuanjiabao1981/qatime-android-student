@@ -52,27 +52,27 @@ public class QuestionEditAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        if (convertView == null) {
+//        if (convertView == null) {
             convertView = View.inflate(context, R.layout.item_question_edit, null);
             holder = new ViewHolder(convertView);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
+//            convertView.setTag(holder);
+//        } else {
+//            holder = (ViewHolder) convertView.getTag();
+//        }
         int width = ScreenUtils.getScreenWidth(context) - DensityUtils.dp2px(context, 30);
         RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(width / 5, width / 5 - 10);
         holder.rootView.setLayoutParams(param);
 
-        ImageItem item = getItem(position);
-        if (StringUtils.isNullOrBlanK(item.thumbnailPath)) {
-            item.thumbnailPath = item.imagePath;
-        } else {
-            File file = new File(item.thumbnailPath);
-            if (!file.exists()) {
-                item.thumbnailPath = item.imagePath;
-            }
-        }
         if (position > 4) {
+            ImageItem item = getItem(position);
+            if (StringUtils.isNullOrBlanK(item.thumbnailPath)) {
+                item.thumbnailPath = item.imagePath;
+            } else {
+                File file = new File(item.thumbnailPath);
+                if (!file.exists()) {
+                    item.thumbnailPath = item.imagePath;
+                }
+            }
             holder.delete.setVisibility(View.VISIBLE);
             Glide.with(context).load("file://" + item.thumbnailPath).placeholder(R.mipmap.default_image).crossFade().centerCrop().into(holder.image);
         } else {
@@ -82,6 +82,15 @@ public class QuestionEditAdapter extends BaseAdapter {
                 Glide.with(context).load("").placeholder(R.mipmap.question_add_image).crossFade().centerCrop().into(holder.image);
 
             } else {
+                ImageItem item = getItem(position);
+                if (StringUtils.isNullOrBlanK(item.thumbnailPath)) {
+                    item.thumbnailPath = item.imagePath;
+                } else {
+                    File file = new File(item.thumbnailPath);
+                    if (!file.exists()) {
+                        item.thumbnailPath = item.imagePath;
+                    }
+                }
                 holder.delete.setVisibility(View.VISIBLE);
                 Glide.with(context).load("file://" + item.thumbnailPath).placeholder(R.mipmap.default_image).crossFade().centerCrop().into(holder.image);
             }
@@ -89,7 +98,8 @@ public class QuestionEditAdapter extends BaseAdapter {
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (listener != null) listener.onDelete(position);
+                if (listener != null)
+                    listener.onDelete(position);
             }
         });
         return convertView;
