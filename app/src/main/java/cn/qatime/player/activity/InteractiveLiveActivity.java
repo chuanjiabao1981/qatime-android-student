@@ -86,7 +86,6 @@ import cn.qatime.player.utils.annotation.OnMPermissionDenied;
 import cn.qatime.player.utils.annotation.OnMPermissionGranted;
 import cn.qatime.player.utils.annotation.OnMPermissionNeverAskAgain;
 import cn.qatime.player.view.VideoFrameLayout;
-import libraryextra.bean.Announcements;
 import libraryextra.bean.InteractCourseDetailBean;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
@@ -254,7 +253,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 
     private void updateTeamInfo(Team result) {
         String announcement = result.getAnnouncement();
-        ((FragmentAnnouncements) fragBaseFragments.get(1)).setAnnouncements(announcement);
+        ((FragmentAnnouncements) fragBaseFragments.get(2)).setAnnouncements(announcement);
     }
 
     private void initData() {
@@ -374,11 +373,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     }
 
     private void initSessionId() {
-        if (StringUtils.isNullOrBlanK(sessionId)) {
-            Toast.makeText(this, "聊天id不可用", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         getAnnouncementsData();
         if (!StringUtils.isNullOrBlanK(sessionId)) {
             TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getInstance().getAccount());

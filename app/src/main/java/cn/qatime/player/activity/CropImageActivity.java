@@ -91,6 +91,11 @@ public class CropImageActivity extends BaseActivity {
             @Override
             public void onClick(final View v) {
                 v.setClickable(false);
+                String out_file_path = Constant.CACHEPATH;
+                File dir = new File(out_file_path);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
                 progress = DialogUtils.startProgressDialog(progress, CropImageActivity.this);
                 progress.setCanceledOnTouchOutside(false);
                 progress.setCancelable(false);

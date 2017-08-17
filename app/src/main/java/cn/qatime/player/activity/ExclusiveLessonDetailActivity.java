@@ -309,12 +309,15 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()) {
             case R.id.menu_1:
                 Toast.makeText(this, "menu1", Toast.LENGTH_SHORT).show();
                 pop.dismiss();
                 break;
             case R.id.menu_2:
+                intent = new Intent(this,ExclusiveFilesActivity.class);
+                startActivity(intent);
                 pop.dismiss();
                 Toast.makeText(this, "menu2", Toast.LENGTH_SHORT).show();
                 break;
@@ -333,7 +336,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
             case R.id.start_study:
                 if (BaseApplication.getInstance().isLogined()) {
                     if (data.getData().getTicket() != null) {
-                        Intent intent = new Intent(this, ExclusiveVideoPlayerActivity.class);
+                         intent = new Intent(this, ExclusiveVideoPlayerActivity.class);
                         intent.putExtra("id", id);
                         startActivity(intent);
                     } else {
@@ -373,7 +376,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                         }
                     }
                 } else {
-                    Intent intent = new Intent(ExclusiveLessonDetailActivity.this, LoginActivity2.class);
+                    intent = new Intent(ExclusiveLessonDetailActivity.this, LoginActivity2.class);
                     intent.putExtra("activity_action", Constant.LoginAction.toRemedialClassDetail);
                     startActivity(intent);
                 }
