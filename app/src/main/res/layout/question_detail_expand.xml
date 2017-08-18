@@ -1,61 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:scrollbars="none"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="10dp"
         android:orientation="vertical">
 
-        <include layout="@layout/layout_backbar" />
-
-        <EditText
-            android:id="@+id/head"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/shape_input_radius"
-            android:hint="输入提问标题（最多20字）"
-            android:paddingLeft="5dp"
-            android:textSize="13sp" />
-
-        <EditText
+        <TextView
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/shape_input_radius"
-            android:gravity="top"
-            android:hint="输入提问标题（最多100字）"
-            android:minLines="5"
-            android:padding="5dp"
+            android:textColor="#666"
             android:textSize="13sp" />
 
         <libraryextra.view.GridViewForScrollView
             android:id="@+id/grid"
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="10dp"
             android:listSelector="@color/transparent"
-            android:background="#fff"
+            android:verticalSpacing="4dp"
+            android:horizontalSpacing="4dp"
             android:cacheColorHint="@null"
             android:scrollbars="none"
-            android:numColumns="5" />
+            android:numColumns="2" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="10dp"
-            android:background="#fff"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -63,9 +39,7 @@
                 android:id="@+id/play"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:src="@mipmap/question_play"
-                android:visibility="gone" />
+                android:src="@mipmap/question_play" />
 
             <ProgressBar
                 android:id="@+id/progress"
@@ -80,16 +54,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
                 android:text="60"
                 android:textColor="#999" />
-
-            <ImageView
-                android:id="@+id/control"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:src="@mipmap/question_record" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

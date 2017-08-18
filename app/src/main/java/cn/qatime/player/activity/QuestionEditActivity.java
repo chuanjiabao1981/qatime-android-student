@@ -18,6 +18,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +66,21 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
         setContentView(R.layout.activity_question_edit);
         setTitles("提问");
         initView();
+        setRightImage(R.mipmap.calendar, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadQuestion();
+            }
+        });
+    }
+
+    private void uploadQuestion() {
+        Intent intent = new Intent(this, QuestionDetailsActivity.class);
+        intent.putExtra("audioUrl", audioFileName);
+        intent.putExtra("image", (Serializable) list);
+        intent.putExtra("head", head.getText().toString().trim());
+        intent.putExtra("content", content.getText().toString().trim());
+        startActivity(intent);
     }
 
     private void initView() {
@@ -96,19 +112,16 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
 //                intent.putExtra("gonecamera", true);
                     startActivityForResult(intent, Constant.REQUEST);
                 } else {
-                    ImageItem item = adapter.getItem(position);
-                    showImage(item.imagePath);
                     Toast.makeText(QuestionEditActivity.this, "看大图", Toast.LENGTH_SHORT).show();
+                    ImageItem item = adapter.getItem(position);
+                    Intent intent = new Intent(QuestionEditActivity.this, WatchPictureActivity.class);
+                    intent.putExtra("src", item.imagePath);
+                    startActivity(intent);
                 }
             }
         });
     }
 
-    private void showImage(String tag) {
-        Intent intent = new Intent(this, WatchPictureActivity.class);
-        intent.putExtra("src", tag);
-        startActivity(intent);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -135,7 +148,7 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
                     ImageItem imageItem = new ImageItem();
                     imageItem.imagePath = url;
                     imageItem.thumbnailPath = url;
-                    imageItem.imageId="";
+                    imageItem.imageId = "";
                     list.add(imageItem);
                     adapter.notifyDataSetChanged();
                 }
