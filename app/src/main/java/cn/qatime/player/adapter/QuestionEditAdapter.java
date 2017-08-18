@@ -53,8 +53,8 @@ public class QuestionEditAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 //        if (convertView == null) {
-            convertView = View.inflate(context, R.layout.item_question_edit, null);
-            holder = new ViewHolder(convertView);
+        convertView = View.inflate(context, R.layout.item_question_edit, null);
+        holder = new ViewHolder(convertView);
 //            convertView.setTag(holder);
 //        } else {
 //            holder = (ViewHolder) convertView.getTag();

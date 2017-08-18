@@ -147,6 +147,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.GuideActivity" />
+        <activity android:name=".activity.WatchPictureActivity" />
         <activity
             android:name=".activity.LoginActivity"
             android:screenOrientation="portrait"

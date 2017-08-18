@@ -96,10 +96,18 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
 //                intent.putExtra("gonecamera", true);
                     startActivityForResult(intent, Constant.REQUEST);
                 } else {
+                    ImageItem item = adapter.getItem(position);
+                    showImage(item.imagePath);
                     Toast.makeText(QuestionEditActivity.this, "看大图", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    private void showImage(String tag) {
+        Intent intent = new Intent(this, WatchPictureActivity.class);
+        intent.putExtra("src", tag);
+        startActivity(intent);
     }
 
     @Override
@@ -110,6 +118,27 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
                 ImageItem image = (ImageItem) data.getSerializableExtra("data");
                 list.add(image);
                 adapter.notifyDataSetChanged();
+            }
+        } else if (resultCode == Constant.RESPONSE_CAMERA) {//拍照返回的照片
+            if (data != null) {
+                String url = data.getStringExtra("url");
+                if (!StringUtils.isNullOrBlanK(url)) {
+//                    Uri uri = null;
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//                        uri = FileProvider.getUriForFile(this, "com.qatime.player.fileprovider", new File(url));
+////                            Bitmap bitmap = BitmapFactory.decodeFile(url);
+////                            uri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
+////                            bitmap.recycle();
+//                    } else {
+//                        uri = Uri.fromFile(new File(url));
+//                    }
+                    ImageItem imageItem = new ImageItem();
+                    imageItem.imagePath = url;
+                    imageItem.thumbnailPath = url;
+                    imageItem.imageId="";
+                    list.add(imageItem);
+                    adapter.notifyDataSetChanged();
+                }
             }
         }
     }

@@ -43,7 +43,11 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="10dp"
-            android:listSelector="@android:color/transparent"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:background="#fff"
+            android:cacheColorHint="@null"
+            android:scrollbars="none"
             android:numColumns="5" />
 
         <LinearLayout

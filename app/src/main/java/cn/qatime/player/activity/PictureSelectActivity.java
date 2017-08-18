@@ -27,7 +27,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
@@ -173,6 +172,11 @@ public class PictureSelectActivity extends BaseActivity {
         capturePath = out_file_path + "/" + System.currentTimeMillis() + ".jpg";
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
+//            ContentValues contentValues = new ContentValues(1);
+//            contentValues.put(MediaStore.Images.Media.DATA, capturePath);
+//
+//            imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+//            getImageByCamera.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
             imageUri = FileProvider.getUriForFile(this, "com.qatime.player.fileprovider", new File(capturePath));//通过FileProvider创建一个content类型的Uri，进行封装
             getImageByCamera.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             getImageByCamera.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
