@@ -22,7 +22,6 @@ import com.bumptech.glide.Glide;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -50,7 +49,7 @@ public class ExpandView extends FrameLayout implements View.OnClickListener {
     private String audioFileName;
     private Disposable d;
     private MediaPlayer mediaPlayer;
-    private List<ImageItem> list = new ArrayList<>();
+    private List<ImageItem> list;
     private int initHeight;
     private CommonAdapter<ImageItem> adapter;
 
@@ -116,16 +115,17 @@ public class ExpandView extends FrameLayout implements View.OnClickListener {
         mIsExpand = true;
     }
 
-    public void initExpandView(String content, String audioUrl, List<ImageItem> list) {
+    public void initExpandView(String content, String audioUrl, List<ImageItem> list,final boolean show) {
         getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
                     public void onGlobalLayout() {
 
                         initHeight = getHeight();
-                        //一开始就隐藏
-//                        doAnim(0,initHeight,0);
-//                        mIsExpand=false;
+                        if (!show) {
+                            doAnim(0, initHeight, 0);
+                            mIsExpand = false;
+                        }
                         getViewTreeObserver()
                                 .removeGlobalOnLayoutListener(this);
                     }

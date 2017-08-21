@@ -25,6 +25,7 @@ public class QuestionDetailsActivity extends BaseActivity implements View.OnClic
     private TextView vector;
     private TextView createTime;
     private TextView questionName;
+    private ExpandView replyView;
 
 
     @Override
@@ -37,7 +38,8 @@ public class QuestionDetailsActivity extends BaseActivity implements View.OnClic
     }
 
     private void initView() {
-        expandView = (ExpandView) findViewById(R.id.expandView);
+        expandView = (ExpandView) findViewById(R.id.question_view);
+        replyView = (ExpandView) findViewById(R.id.reply_view);
         questionName = (TextView) findViewById(R.id.question_name);
         createTime = (TextView) findViewById(R.id.create_time);
         vector = (TextView) findViewById(R.id.vector);
@@ -52,7 +54,8 @@ public class QuestionDetailsActivity extends BaseActivity implements View.OnClic
 
         questionName.setText(head);
 
-        expandView.initExpandView(content,audioUrl,list);
+        expandView.initExpandView(content,audioUrl,list,true);
+        replyView.initExpandView(content,audioUrl,list,true);
     }
 
     @Override
