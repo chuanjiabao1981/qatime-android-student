@@ -87,6 +87,7 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
     private List<String> grades;
     private CityBean.Data city;
     private ProvincesBean.DataBean province;
+    private String captchaPhone;
 
     private void assignViews() {
         phone = (EditText) findViewById(R.id.phone);
@@ -210,8 +211,9 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
     }
 
     private void getCode() {
+        captchaPhone = phone.getText().toString().trim();
         Map<String, String> map = new HashMap<>();
-        map.put("send_to", phone.getText().toString().trim());
+        map.put("send_to", captchaPhone);
         map.put("key", "register_captcha");
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlGetCode, map), null, new VolleyListener(this) {
             @Override
@@ -251,6 +253,10 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
             Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
             return;
         }
+        if (!phone.getText().toString().trim().equals(captchaPhone)) { //验证手机是否一致
+            Toast.makeText(this, getResources().getString(R.string.captcha_phone_has_changed), Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (StringUtils.isNullOrBlanK(code.getText().toString().trim())) { //验证码
             Toast.makeText(this, getResources().getString(R.string.enter_the_verification_code), Toast.LENGTH_SHORT).show();
             return;
@@ -265,7 +271,7 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
         }
 
         Map<String, String> map = new HashMap<>();
-        map.put("login_mobile", phone.getText().toString().trim());
+        map.put("login_mobile",captchaPhone);
         map.put("captcha_confirmation", code.getText().toString().trim());
         map.put("password", password.getText().toString().trim());
         map.put("accept", "" + (checkBox.isChecked() ? 1 : 0));
@@ -299,7 +305,8 @@ public class WeChatBindActivity extends BaseActivity implements View.OnClickList
 
                         }
                     });
-                    String deviceToken = PushAgent.getInstance(WeChatBindActivity.this).getRegistrationId();
+                    String deviceToken = PushAgent.getInstance(WeChatBindActivity.this)
+                            .getRegistrationId();
                     if (!StringUtils.isNullOrBlanK(deviceToken)) {
                         Map<String, String> m = new HashMap<>();
                         m.put("user_id", String.valueOf(profile.getData().getUser().getId()));
