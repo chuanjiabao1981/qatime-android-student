@@ -69,7 +69,7 @@ public class FragmentInteractDetailClassList extends BaseFragment {
                     ((TextView) holder.getView(R.id.status)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.teacher_name)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.class_date)).setTextColor(0xff999999);
-                    if (data != null && data.getData().getTicket() != null && !StringUtils.isNullOrBlanK(data.getData().getTicket().getType()) && data.getData().getTicket().getType().equals("LiveStudio::BuyTicket") && item.isReplayable()) {
+                    if (data != null && data.getData().getTicket() != null && !StringUtils.isNullOrBlanK(data.getData().getTicket().getStatus()) && data.getData().getTicket().getStatus().equals("active") && item.isReplayable()) {
                         ((TextView) holder.getView(R.id.status)).setTextColor(0xffff5842);
                         holder.setText(R.id.status, "观看回放");
                     } else {
@@ -91,7 +91,7 @@ public class FragmentInteractDetailClassList extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (isFinished(list.get(position))) {
-                    if (data != null && data.getData().getTicket() != null && !StringUtils.isNullOrBlanK(data.getData().getTicket().getType()) && data.getData().getTicket().getType().equals("LiveStudio::BuyTicket")) {
+                    if (data != null && data.getData().getTicket() != null && !StringUtils.isNullOrBlanK(data.getData().getTicket().getStatus()) && data.getData().getTicket().getStatus().equals("active") &&list.get(position).isReplayable()) {
                         if (!list.get(position).isReplayable()) {
                             Toast.makeText(getActivity(), "该课程不可回放", Toast.LENGTH_SHORT).show();
                             return;

@@ -263,7 +263,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                     //登录成功且有个人信息  设置profile
                                     BaseApplication.getInstance().setProfile(profile);
                                     SPUtils.put(LoginActivity.this, "username", username.getText().toString());
-                                    loginAccount();//登录云信
+//                                    loginAccount();//登录云信
                                 } else {
                                     //没有数据或token
                                 }
