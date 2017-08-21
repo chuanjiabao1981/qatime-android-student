@@ -41,7 +41,7 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
     private EditText code;
     private TimeCount time;
     private TextView currentParentPhone;
-    private String phone;
+    private String captchaPhone;
     private View currentParentPhoneLayout;
 
     @Override
@@ -52,6 +52,7 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
         initView();
         time = new TimeCount(60000, 1000);
     }
+
     private void assignViews() {
         currentParentPhone = (TextView) findViewById(R.id.current_parent_phone);
         currentParentPhoneLayout = findViewById(R.id.current_parent_phone_layout);
@@ -74,16 +75,14 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void afterTextChanged(Editable s) {
                 if (StringUtils.isPhone(newParentPhone.getText().toString().trim())) {
-                    textGetcode.setEnabled(true);
+                    if (!time.ticking)
+                        textGetcode.setEnabled(true);
                 } else {
                     textGetcode.setEnabled(false);
-                    Toast.makeText(ParentPhoneActivity.this, R.string.phone_number_is_incorrect, Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
-
-
 
 
     private void initView() {
@@ -95,7 +94,7 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
 
         String phoneP = getIntent().getStringExtra("phoneP");
         currentParentPhone.setText(phoneP);
-        if (!StringUtils.isNullOrBlanK(phoneP)&&StringUtils.isPhone(phoneP)) {
+        if (!StringUtils.isNullOrBlanK(phoneP) && StringUtils.isPhone(phoneP)) {
             currentParentPhoneLayout.setVisibility(View.VISIBLE);
         } else {
             currentParentPhoneLayout.setVisibility(View.GONE);
@@ -110,13 +109,13 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
         switch (v.getId()) {
 
             case R.id.text_getcode:
-                phone = newParentPhone.getText().toString().trim();
-                if (!StringUtils.isPhone(phone)) {//手机号不正确
+                captchaPhone = newParentPhone.getText().toString().trim();
+                if (!StringUtils.isPhone(captchaPhone)) {//手机号不正确
                     Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 Map<String, String> map = new HashMap<>();
-                map.put("send_to", phone);
+                map.put("send_to", captchaPhone);
                 map.put("key", "send_captcha");
 
                 addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlGetCode, map), null, new VolleyListener(this) {
@@ -127,7 +126,7 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
 
                     @Override
                     protected void onSuccess(JSONObject response) {
-                        Logger.e("验证码发送成功" + phone + "---" + response.toString());
+                        Logger.e("验证码发送成功" + captchaPhone + "---" + response.toString());
                         Toast.makeText(getApplicationContext(), getResourceString(R.string.code_send_success), Toast.LENGTH_LONG).show();
                     }
 
@@ -146,9 +145,13 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
                 time.start();
                 break;
             case R.id.button_over:
-                phone = newParentPhone.getText().toString().trim();
+                String phone = newParentPhone.getText().toString().trim();
                 if (!StringUtils.isPhone(phone)) {//手机号不正确
                     Toast.makeText(this, getResources().getString(R.string.phone_number_is_incorrect), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!phone.equals(captchaPhone)) { //验证手机是否一致
+                    Toast.makeText(this, getResources().getString(R.string.captcha_phone_has_changed), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (StringUtils.isNullOrBlanK(code.getText().toString().trim())) { //验证码
@@ -159,7 +162,7 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
                 map = new HashMap<>();
                 map.put("id", "" + BaseApplication.getInstance().getUserId());
                 map.put("ticket_token", getIntent().getStringExtra("ticket_token"));
-                map.put("parent_phone", phone);
+                map.put("parent_phone", captchaPhone);
                 map.put("captcha_confirmation", code.getText().toString().trim());
 
                 addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.PUT, UrlUtils.getUrl(UrlUtils.urlPersonalInformation + BaseApplication.getInstance().getUserId() + "/parent_phone_ticket_token", map), null, new VolleyListener(this) {
@@ -212,18 +215,22 @@ public class ParentPhoneActivity extends BaseActivity implements View.OnClickLis
     }
 
     class TimeCount extends CountDownTimer {
+        public boolean ticking;
+
         public TimeCount(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
         }
 
         @Override
         public void onFinish() {// 计时完毕
+            ticking = false;
             textGetcode.setText(getResourceString(R.string.getcode));
             textGetcode.setEnabled(true);
         }
 
         @Override
         public void onTick(long millisUntilFinished) {// 计时过程
+            ticking = true;
             textGetcode.setEnabled(false);//防止重复点击
             textGetcode.setText(millisUntilFinished / 1000 + getResourceString(R.string.time_after_acquisition));
         }
