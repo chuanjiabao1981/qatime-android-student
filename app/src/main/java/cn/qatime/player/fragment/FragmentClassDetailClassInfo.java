@@ -156,7 +156,13 @@ public class FragmentClassDetailClassInfo extends BaseFragment {
                             "</font></p>" +
                             "<p style='margin-top:5;'><font style='font-size:15;color:#333333'>上课后</font></p>" +
                             "<p><font>1.直播结束后请大家仍可以在直播教室内进行聊天和讨论，老师也会适时解答；<br>" +
-                            "2.请同学按时完成老师布置的作业任务。</font></p>";
+                            "2.请同学按时完成老师布置的作业任务。</font></p>" +
+                            "<p style='margin-top:5;'><font style='font-size:15;color:#333333'>回放说明</font></p>" +
+                            "<p><font>1.购买课程后方可观看回放；<br>" +
+                            "2.直播课回放学生可以免费观看最多10天，同一天不限定观看次数；<br>" +
+                            "3.直播结束后最晚于24小时内上传回放；<br>" +
+                            "4.回放内容不完全等于直播内容，请尽量观看直播进行学习；<br>" +
+                            "5.回放内容仅供学生学习使用，未经允许不得进行录制。\n</font></p>";
             describe.loadDataWithBaseURL(null, header + body, "text/html", "UTF-8", null);
             learningTips.loadDataWithBaseURL(null, header + footer, "text/html", "UTF-8", null);
         }
