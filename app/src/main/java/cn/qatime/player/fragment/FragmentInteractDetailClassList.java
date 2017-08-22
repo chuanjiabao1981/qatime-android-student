@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
-import cn.qatime.player.activity.NEVideoPlaybackActivity;
+import cn.qatime.player.activity.InteractPlaybackActivity;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
@@ -96,7 +96,7 @@ public class FragmentInteractDetailClassList extends BaseFragment {
                             Toast.makeText(getActivity(), "该课程不可回放", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        Intent intent = new Intent(getActivity(), NEVideoPlaybackActivity.class);
+                        Intent intent = new Intent(getActivity(), InteractPlaybackActivity.class);
                         intent.putExtra("id", list.get(position).getId());
                         intent.putExtra("name", list.get(position).getName());
                         intent.putExtra("type", "interact");
