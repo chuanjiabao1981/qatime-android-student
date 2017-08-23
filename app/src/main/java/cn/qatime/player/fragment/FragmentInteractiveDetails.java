@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
-import cn.qatime.player.activity.NEVideoPlaybackActivity;
+import cn.qatime.player.activity.InteractPlaybackActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.adapter.CommonAdapter;
@@ -114,7 +114,7 @@ public class FragmentInteractiveDetails extends BaseFragment {
                     ((TextView) holder.getView(R.id.teacher_name)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.class_date)).setTextColor(0xff999999);
 
-                    if (data != null && data.getTicket() != null && !StringUtils.isNullOrBlanK(data.getTicket().getType()) && data.getTicket().getType().equals("LiveStudio::BuyTicket") && item.isReplayable()) {
+                    if (data != null && data.getTicket() != null && !StringUtils.isNullOrBlanK(data.getTicket().getStatus()) && data.getTicket().getStatus().equals("active") && item.isReplayable()) {
                         ((TextView) holder.getView(R.id.status)).setTextColor(0xffff5842);
                         holder.setText(R.id.status, "观看回放");
                     } else {
@@ -137,12 +137,12 @@ public class FragmentInteractiveDetails extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (isFinished(classList.get(position))) {
-                    if (data != null && data.getTicket() != null && !StringUtils.isNullOrBlanK(data.getTicket().getType()) && data.getTicket().getType().equals("LiveStudio::BuyTicket")) {
+                    if (data != null && data.getTicket() != null && !StringUtils.isNullOrBlanK(data.getTicket().getStatus()) && data.getTicket().getStatus().equals("active") &&classList.get(position).isReplayable()) {
                         if (!classList.get(position).isReplayable()) {
                             Toast.makeText(getActivity(), "该课程不可回放", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        Intent intent = new Intent(getActivity(), NEVideoPlaybackActivity.class);
+                        Intent intent = new Intent(getActivity(), InteractPlaybackActivity.class);
                         intent.putExtra("id", classList.get(position).getId());
                         intent.putExtra("name", classList.get(position).getName());
                         intent.putExtra("type", "interact");

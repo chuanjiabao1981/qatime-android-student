@@ -182,7 +182,7 @@ public class InteractCourseDetailActivity extends BaseFragmentActivity implement
                             ((FragmentInteractDetailClassList) fragBaseFragments.get(2)).setData(data);
 
 
-                            if (data.getData().getTicket() != null && "LiveStudio::BuyTicket".equals(data.getData().getTicket().getType())) {//已购买
+                            if (data.getData().getTicket() != null && "active".equals(data.getData().getTicket().getStatus())) {//已购买
                                 startStudyView.setVisibility(View.VISIBLE);
                                 if (Constant.CourseStatus.completed.equals(data.getData().getInteractive_course().getStatus())) {
                                     handleLayout.setVisibility(View.GONE);//已结束的课程隐藏操作按钮
