@@ -5,22 +5,10 @@
     android:orientation="horizontal"
     android:padding="8dp">
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:text="第"
-        android:textColor="#fff" />
-    <TextView
         android:id="@+id/number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxLines="1"
         android:text="0"
-        android:textColor="#fff" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:text="段回放"
         android:textColor="#fff" />
 </LinearLayout>
