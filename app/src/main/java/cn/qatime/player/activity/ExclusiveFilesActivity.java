@@ -26,12 +26,14 @@ public class ExclusiveFilesActivity extends BaseActivity {
     private PullToRefreshListView list;
     private CommonAdapter<ExclusiveFilesBean> adapter;
     private List<ExclusiveFilesBean> fileList = new ArrayList<>();
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exclusive_files);
         setTitles("课件管理");
+        id = getIntent().getIntExtra("id", 0);
         initView();
         initData();
     }
@@ -88,6 +90,7 @@ public class ExclusiveFilesActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(ExclusiveFilesActivity.this, ExclusiveFileDetailActivity.class);
                 intent.putExtra("file", fileList.get(position - 1));
+                intent.putExtra("id",id);
                 startActivity(intent);
             }
         });

@@ -317,6 +317,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                 break;
             case R.id.menu_2:
                 intent = new Intent(this,ExclusiveFilesActivity.class);
+                intent.putExtra("id",id);
                 startActivity(intent);
                 pop.dismiss();
                 Toast.makeText(this, "menu2", Toast.LENGTH_SHORT).show();

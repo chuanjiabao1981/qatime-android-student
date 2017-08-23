@@ -634,4 +634,5 @@
     <string name="hint_choose_region">请选择您所在的区域</string>
     <string name="hint_choose_school">请选择您所在的学校</string>
     <string name="withdraw_paid">提现成功</string>
+    <string name="download_manager">下载管理</string>
 </resources>
