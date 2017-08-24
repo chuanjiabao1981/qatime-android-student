@@ -22,7 +22,7 @@ public class QuestionDetailsActivity extends BaseActivity implements View.OnClic
     private String content;
     private String head;
     private ExpandView expandView;
-    private TextView vector;
+    private TextView author;
     private TextView createTime;
     private TextView questionName;
     private ExpandView replyView;
@@ -42,7 +42,7 @@ public class QuestionDetailsActivity extends BaseActivity implements View.OnClic
         replyView = (ExpandView) findViewById(R.id.reply_view);
         questionName = (TextView) findViewById(R.id.question_name);
         createTime = (TextView) findViewById(R.id.create_time);
-        vector = (TextView) findViewById(R.id.vector);
+        author = (TextView) findViewById(R.id.author);
         findViewById(R.id.expand).setOnClickListener(this);
     }
 
