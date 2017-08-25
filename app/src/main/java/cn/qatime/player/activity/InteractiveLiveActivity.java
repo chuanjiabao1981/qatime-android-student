@@ -86,7 +86,6 @@ import cn.qatime.player.utils.annotation.OnMPermissionDenied;
 import cn.qatime.player.utils.annotation.OnMPermissionGranted;
 import cn.qatime.player.utils.annotation.OnMPermissionNeverAskAgain;
 import cn.qatime.player.view.VideoFrameLayout;
-import libraryextra.bean.Announcements;
 import libraryextra.bean.InteractCourseDetailBean;
 import libraryextra.bean.PersonalInformationBean;
 import libraryextra.bean.Profile;
@@ -1058,7 +1057,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             return;
         }
-        if (inputPanel.isEmojiShow()) {
+        if (inputPanel != null && inputPanel.isEmojiShow()) {
             inputPanel.closeEmojiAndInput();
             return;
         }
@@ -1208,6 +1207,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 }
             }
         }
+        if (inputPanel != null)
         inputPanel.onPause();
         MobclickAgent.onPause(this);
         NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
