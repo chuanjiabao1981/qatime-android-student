@@ -7,7 +7,7 @@ package cn.qatime.player.bean;
  */
 
 public class InteractiveDeskShareStatus {
-    public static String board = "PublishPlayStatus:board";
-    public static String desktop = "PublishPlayStatus:desktop";
+    public static String board = "SwitchVedioObject:Board";
+    public static String desktop = "SwitchVedioObject:Desktop";
     public static String request = "{\"event\":\"FetchPlayStatus\"}";
 }

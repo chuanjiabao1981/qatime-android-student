@@ -15,6 +15,7 @@ import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.attachment.NotificationAttachment;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.NotificationType;
+import com.netease.nimlib.sdk.msg.model.CustomNotification;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.team.constant.TeamFieldEnum;
 import com.netease.nimlib.sdk.team.model.Team;
@@ -31,10 +32,12 @@ import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
 import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.bean.Container;
+import cn.qatime.player.bean.InteractiveDeskShareStatus;
 import cn.qatime.player.bean.MessageListPanel;
 import cn.qatime.player.bean.ModuleProxy;
 import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.TeamDataCache;
+import libraryextra.utils.StringUtils;
 
 /**
  * @author lungtify
@@ -70,6 +73,7 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
     };
     private MessageListPanel messageListPanel;
     private View view;
+
 
     @Nullable
     @Override
@@ -109,8 +113,21 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
     private void registerObservers(boolean register) {
         MsgServiceObserve service = NIMClient.getService(MsgServiceObserve.class);
         service.observeReceiveMessage(receiveMessageObserver, register);
+        service.observeCustomNotification(customNotificationObserver, register);
     }
 
+    Observer<CustomNotification> customNotificationObserver = new Observer<CustomNotification>() {
+        @Override
+        public void onEvent(CustomNotification customNotification) {
+            String content = customNotification.getContent();
+            if (!StringUtils.isNullOrBlanK(content)) {
+                if (content.equals(InteractiveDeskShareStatus.desktop))//desktop board
+                    EventBus.getDefault().post(BusEvent.desktop);
+                else if (content.equals(InteractiveDeskShareStatus.board))
+                    EventBus.getDefault().post(BusEvent.board);
+            }
+        }
+    };
 
     Observer<List<IMMessage>> receiveMessageObserver = new Observer<List<IMMessage>>() {
         @Override
@@ -137,20 +154,6 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
                             }
                         }
                     }
-//                    else if (message.getMsgType() == MsgTypeEnum.custom) {
-//                        message.setStatus(MsgStatusEnum.read);
-//                        if (!StringUtils.isNullOrBlanK(message.getContent())) {
-//                            if (message.getContent().equals(InteractiveDeskShareStatus.desktop))//desktop board
-//                                EventBus.getDefault().post(BusEvent.desktop);
-//                            else if (message.getContent().equals(InteractiveDeskShareStatus.board))
-//                                EventBus.getDefault().post(BusEvent.board);
-//                            else if (message.getContent().equals(InteractiveDeskShareStatus.request)) {
-//                                if (message.getFromAccount().equals(BaseApplication.getInstance().getAccount())) {
-//                                    EventBus.getDefault().post(BusEvent.request);
-//                                }
-//                            }
-//                        }
-//                    }
                 }
                 addedListItems.add(message);
                 needRefresh = true;
@@ -304,7 +307,7 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
     public void onDestroyView() {
         super.onDestroyView();
         if (messageListPanel != null)
-        messageListPanel.onDestroy();
+            messageListPanel.onDestroy();
         registerTeamUpdateObserver(false);
     }
 }
