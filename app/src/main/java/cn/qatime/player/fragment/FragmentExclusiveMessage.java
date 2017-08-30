@@ -17,7 +17,6 @@ import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.NotificationType;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.team.constant.TeamFieldEnum;
-import com.netease.nimlib.sdk.team.constant.TeamTypeEnum;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.netease.nimlib.sdk.team.model.UpdateTeamAttachment;
@@ -294,6 +293,7 @@ public class FragmentExclusiveMessage extends BaseFragment implements ModuleProx
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (messageListPanel != null)
         messageListPanel.onDestroy();
         registerTeamUpdateObserver(false);
     }
