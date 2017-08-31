@@ -12,13 +12,17 @@ import android.widget.TextView;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import cn.qatime.player.R;
-import cn.qatime.player.adapter.DownloadManagerFileAdapter;
+import cn.qatime.player.adapter.ListViewSelectAdapter;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.utils.Constant;
+import libraryextra.adapter.ViewHolder;
+import libraryextra.utils.DataCleanUtils;
 
 /**
  * Created by lenovo on 2017/8/22.
@@ -26,13 +30,15 @@ import cn.qatime.player.utils.Constant;
 
 public class DownloadManagerActivity extends BaseActivity implements View.OnClickListener {
     private PullToRefreshListView listView;
-    private DownloadManagerFileAdapter adapter;
+    private ListViewSelectAdapter<File> adapter;
     private List<File> list = new ArrayList<>();
     private TextView rightText;
     private ImageView rightImage;
     private View bottomLayout;
     private Button selectAll;
     private Button deleteAll;
+    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private final boolean singleMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,10 +90,18 @@ public class DownloadManagerActivity extends BaseActivity implements View.OnClic
         File File = new File(Constant.FILEPATH);
         getFilesList(File);
         listView = (PullToRefreshListView) findViewById(R.id.list);
-        adapter = new DownloadManagerFileAdapter(this, list, R.layout.item_file_download_manager);
-        adapter.setSelectListener(new DownloadManagerFileAdapter.SelectChangeListener() {
+        adapter = new ListViewSelectAdapter<File>(this, list, R.layout.item_file_download_manager,singleMode){
             @Override
-            public void update(int count) {
+            public void convert(ViewHolder holder, File item, int position) {
+                holder.setText(R.id.name, getItem(position).getName());
+                holder.setText(R.id.size, DataCleanUtils.getFormatSize(getItem(position).length()));
+                holder.setText(R.id.time, "下载时间:" + parse.format(new Date(getItem(position).lastModified())));
+            }
+        };
+        adapter.setSelectListener(new ListViewSelectAdapter.SelectChangeListener<File>() {
+            @Override
+            public void update(File item, boolean isChecked) {
+                int count = adapter.getSelectedList().size();
                 deleteAll.setText("删除(" + (count==0?"":count) + ")");
             }
         });
@@ -141,6 +155,7 @@ public class DownloadManagerActivity extends BaseActivity implements View.OnClic
         switch (v.getId()) {
             case R.id.select_all:
                 adapter.selectAll(!adapter.isSelectAll());
+                adapter.notifyDataSetChanged();
                 if (adapter.isSelectAll()) {
                     selectAll.setText("取消全选");
                 } else {
@@ -148,7 +163,12 @@ public class DownloadManagerActivity extends BaseActivity implements View.OnClic
                 }
                 break;
             case R.id.delete_all:
-                adapter.removeFile();
+                for (File file :  adapter.getSelectedList()) {
+                    file.delete();
+                    list.remove(file);
+                }
+                adapter.selectAll(false);
+                adapter.notifyDataSetChanged();
                 break;
         }
     }

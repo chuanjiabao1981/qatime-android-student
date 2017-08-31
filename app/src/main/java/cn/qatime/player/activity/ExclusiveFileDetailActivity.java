@@ -11,6 +11,9 @@ import android.widget.Toast;
 
 import com.netease.neliveplayer.util.file.FileUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -18,14 +21,19 @@ import java.util.Date;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
-import cn.qatime.player.bean.ExclusiveFilesBean;
+import cn.qatime.player.bean.MyFilesBean;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import io.reactivex.disposables.Disposable;
 import libraryextra.rx.HttpManager;
 import libraryextra.rx.callback.DownloadProgressCallBack;
 import libraryextra.rx.exception.ApiException;
 import libraryextra.utils.DataCleanUtils;
+import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 
 /**
  * Created by lenovo on 2017/8/15.
@@ -39,18 +47,18 @@ public class ExclusiveFileDetailActivity extends BaseActivity {
     private TextView download;
     private TextView progress;
     private File saveFile;
-    private ExclusiveFilesBean file;
+    private MyFilesBean.DataBean file;
     private Disposable disposable;
     private boolean complete;
     private NumberFormat nt;
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private int id;
+    private int fileId;
+    private int courseId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exclusive_file_detail);
-        id = getIntent().getIntExtra("id", 0);
         initView();
         initData();
     }
@@ -58,11 +66,10 @@ public class ExclusiveFileDetailActivity extends BaseActivity {
     private void initData() {
         String path = getIntent().getStringExtra("path");
         if (StringUtils.isNullOrBlanK(path)) {
-            file = (ExclusiveFilesBean) getIntent().getSerializableExtra("file");
-            name.setText(file.getName());
-            size.setText(file.getSize());
-            time.setText(file.getTime());
-            File dir = new File(Constant.FILEPATH + "/" + id);
+            courseId = getIntent().getIntExtra("courseId",0);
+            fileId = getIntent().getIntExtra("id",0);
+            initFileData();
+            File dir = new File(Constant.FILEPATH + "/" + courseId);
             saveFile = new File(dir, file.getName());
             if (!dir.exists()) {
                 dir.mkdirs();
@@ -87,6 +94,34 @@ public class ExclusiveFileDetailActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    private void initFileData() {
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlFiles + "files/" + fileId
+                , null, new VolleyListener(ExclusiveFileDetailActivity.this) {
+            @Override
+            protected void onTokenOut() {
+                tokenOut();
+            }
+
+            @Override
+            protected void onSuccess(JSONObject response) {
+                try {
+                    file = JsonUtils.objectFromJson(response.getJSONObject("data").toString(), MyFilesBean.DataBean.class);
+                    name.setText(file.getName());
+                    size.setText(DataCleanUtils.getFormatSize(Double.valueOf(file.getFile_size())));
+//                    time.setText(file.getTime());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            protected void onError(JSONObject response) {
+
+            }
+        }, new VolleyErrorListener());
+        addToRequestQueue(request);
     }
 
     public void openFile(File file) {
@@ -123,13 +158,13 @@ public class ExclusiveFileDetailActivity extends BaseActivity {
     }
 
     private void downFile() {
-        if (file == null || StringUtils.isNullOrBlanK(file.getUrl())) {
+        if (file == null || StringUtils.isNullOrBlanK(file.getFile_url())) {
             return;
         }
         nt = NumberFormat.getPercentInstance();
         nt.setMinimumFractionDigits(2);
 
-        disposable = HttpManager.downLoad(file.getUrl()).savePath(Constant.FILEPATH).
+        disposable = HttpManager.downLoad(file.getFile_url()).savePath(Constant.FILEPATH).
                 saveName(file.getName())
                 .execute(new DownloadProgressCallBack<String>() {
                     @Override

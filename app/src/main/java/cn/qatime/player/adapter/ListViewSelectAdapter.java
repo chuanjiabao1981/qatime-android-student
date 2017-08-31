@@ -7,36 +7,33 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import cn.qatime.player.R;
 import libraryextra.adapter.ViewHolder;
-import libraryextra.utils.DataCleanUtils;
 
 /**
  * Created by lenovo on 2017/8/22.
  */
 
-public class DownloadManagerFileAdapter extends BaseAdapter implements CompoundButton.OnCheckedChangeListener {
+public abstract class ListViewSelectAdapter<T> extends BaseAdapter implements CompoundButton.OnCheckedChangeListener {
     private Context context;
     private int itemLayoutId;
-    private List<File> list;
+    private List<T> list;
     private boolean show;
     private boolean selectAll;
-    private Set<Integer> selectedSet = new HashSet<>();
-    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private Set<T> selectedSet = new HashSet<>();
     private SelectChangeListener mListener;
+    private final boolean singleMode;
 
-    public DownloadManagerFileAdapter(Context context, List<File> list, int itemLayoutId) {
+    public ListViewSelectAdapter(Context context, List<T> list, int itemLayoutId, boolean singleMode) {
         this.context = context;
         this.list = list;
         this.itemLayoutId = itemLayoutId;
+        this.singleMode = singleMode;
     }
 
     @Override
@@ -45,7 +42,7 @@ public class DownloadManagerFileAdapter extends BaseAdapter implements CompoundB
     }
 
     @Override
-    public File getItem(int position) {
+    public T getItem(int position) {
         return list.get(position);
     }
 
@@ -58,12 +55,13 @@ public class DownloadManagerFileAdapter extends BaseAdapter implements CompoundB
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = getViewHolder(position, convertView,
                 parent);
-        holder.setText(R.id.name, getItem(position).getName());
-        holder.setText(R.id.size, DataCleanUtils.getFormatSize(getItem(position).length()));
-        holder.setText(R.id.time, "下载时间:" + parse.format(new Date(getItem(position).lastModified())));
+        convert(holder, getItem(position), position);
+
+
+        holder.getView(R.id.checkedView).setTag(getItem(position));
         if (show) {
             holder.getView(R.id.checkedView).setVisibility(View.VISIBLE);
-            if (selectedSet.contains(position)) {
+            if (selectedSet.contains(getItem(position))) {
                 ((CheckBox) holder.getView(R.id.checkedView)).setChecked(true);
             } else {
                 ((CheckBox) holder.getView(R.id.checkedView)).setChecked(false);
@@ -71,11 +69,12 @@ public class DownloadManagerFileAdapter extends BaseAdapter implements CompoundB
         } else {
             holder.getView(R.id.checkedView).setVisibility(View.GONE);
         }
-        holder.getView(R.id.checkedView).setTag(position);
         ((CheckBox) holder.getView(R.id.checkedView)).setOnCheckedChangeListener(this);
         return holder.getConvertView();
 
     }
+
+    public abstract void convert(ViewHolder holder, T item, int position);
 
     private ViewHolder getViewHolder(int position, View convertView, ViewGroup parent) {
         return ViewHolder.get(context, convertView, parent, itemLayoutId, position);
@@ -94,36 +93,45 @@ public class DownloadManagerFileAdapter extends BaseAdapter implements CompoundB
         this.selectAll = b;
         selectedSet.clear();
         if (b) {
-            for (int i = 0; i < list.size(); i++) {
-                selectedSet.add(i);
-            }
+            selectedSet.addAll(list);
         }
-        notifyDataSetChanged();
     }
 
     public boolean isSelectAll() {
         return selectAll;
     }
 
-    public List<File> getSelectedList() {
-        List<File> list = new ArrayList<>();
-        for (Integer integer : selectedSet) {
-            list.add(this.list.get(integer));
+    public List<T> getSelectedList() {
+        List<T> list = new ArrayList<>();
+        for (T t : selectedSet) {
+            list.add(t);
         }
         return list;
     }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        Integer position = (Integer) buttonView.getTag();
-        if (isChecked) {
-            selectedSet.add(position);
-        } else {
-            selectedSet.remove((position));
+        T tag = (T) buttonView.getTag();
+
+        if (isChecked && !selectedSet.contains(tag)) {
+            if (singleMode) {
+                for (T t : selectedSet) {
+                    if (mListener != null) {
+                        mListener.update(t, false);
+                    }
+                }
+            }
+            selectedSet.add(tag);
+            if (mListener != null) {
+                mListener.update(tag, isChecked);
+            }
+        } else if (!isChecked && selectedSet.contains(tag)) {
+            selectedSet.remove((tag));
+            if (mListener != null) {
+                mListener.update(tag, isChecked);
+            }
         }
-        if (mListener != null) {
-            mListener.update(selectedSet.size());
-        }
+
     }
 
     public SelectChangeListener getSelectListener() {
@@ -134,16 +142,21 @@ public class DownloadManagerFileAdapter extends BaseAdapter implements CompoundB
         this.mListener = Listener;
     }
 
-    public void removeFile() {
-        for (File file : getSelectedList()) {
-            file.delete();
-            list.remove(file);
+    public void updateItem(T item, boolean isChecked) {
+        if (isChecked) {
+            if (singleMode) {
+                selectedSet.clear();
+            }
+            if (list.indexOf(item) != -1) {
+                selectedSet.add(item);
+            }
+        } else {
+            selectedSet.remove(item);
         }
-        selectedSet.clear();
         notifyDataSetChanged();
     }
 
-    public interface SelectChangeListener {
-        void update(int count);
+    public interface SelectChangeListener<T> {
+        void update(T item, boolean isChecked);
     }
 }
