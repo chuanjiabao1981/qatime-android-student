@@ -1,12 +1,13 @@
 package cn.qatime.player.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by lenovo on 2017/8/29.
  */
 
-public class MyFilesBean {
+public class MyFilesBean implements Serializable {
 
 
     private int status;
@@ -28,7 +29,7 @@ public class MyFilesBean {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean  implements Serializable {
         /**
          * id : 2
          * name : null
@@ -43,6 +44,15 @@ public class MyFilesBean {
         private String file_size;
         private String ext_name;
         private String file_url;
+        private long created_at;
+
+        public long getCreated_at() {
+            return created_at;
+        }
+
+        public void setCreated_at(long created_at) {
+            this.created_at = created_at;
+        }
 
         public String getFile_url() {
             return file_url;

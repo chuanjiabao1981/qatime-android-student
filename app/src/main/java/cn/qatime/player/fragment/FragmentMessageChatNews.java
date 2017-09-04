@@ -67,7 +67,7 @@ import libraryextra.utils.VolleyListener;
  * @date 2016/8/15 20:05
  * @Description 直播课消息
  */
-public class FragmentMessageChatNews extends BaseFragment {
+public class   FragmentMessageChatNews extends BaseFragment {
 
     private ArrayList<MessageListBean> items;
     private CommonAdapter<MessageListBean> adapter;
@@ -109,7 +109,6 @@ public class FragmentMessageChatNews extends BaseFragment {
                                     }
                                 }
                                 listSize = items.size();
-                                refreshMessages();
                             }
                         } catch (JsonSyntaxException e) {
                             e.printStackTrace();
@@ -150,7 +149,6 @@ public class FragmentMessageChatNews extends BaseFragment {
                                 }
                             }
                             listSize = items.size();
-                            refreshMessages();
                         }
                     }
 
@@ -189,7 +187,6 @@ public class FragmentMessageChatNews extends BaseFragment {
                                 }
                             }
                             listSize = items.size();
-                            refreshMessages();
                         }
                     }
 
@@ -365,10 +362,6 @@ public class FragmentMessageChatNews extends BaseFragment {
     }
 
     private void onRecentContactsLoaded() {
-        if (loadedRecents == null) {
-            //当有任意一个为空都不加载...
-            return;
-        }
         items.clear();
         for (RecentContact item : loadedRecents) {
             MessageListBean bean = new MessageListBean();

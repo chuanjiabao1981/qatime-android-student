@@ -6,9 +6,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.FileProvider;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.netease.neliveplayer.util.file.FileUtil;
 
 import org.json.JSONException;
@@ -24,6 +27,7 @@ import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.bean.MyFilesBean;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.MyVideoThumbLoader;
 import cn.qatime.player.utils.UrlUtils;
 import io.reactivex.disposables.Disposable;
 import libraryextra.rx.HttpManager;
@@ -54,11 +58,15 @@ public class ExclusiveFileDetailActivity extends BaseActivity {
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private int fileId;
     private int courseId;
+    private ImageView image;
+    private View downloadLayout;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exclusive_file_detail);
+
         initView();
         initData();
     }
@@ -66,23 +74,58 @@ public class ExclusiveFileDetailActivity extends BaseActivity {
     private void initData() {
         String path = getIntent().getStringExtra("path");
         if (StringUtils.isNullOrBlanK(path)) {
-            courseId = getIntent().getIntExtra("courseId",0);
-            fileId = getIntent().getIntExtra("id",0);
-            initFileData();
+            courseId = getIntent().getIntExtra("courseId", 0);
+            fileId = getIntent().getIntExtra("id", 0);
+            file = (MyFilesBean.DataBean) getIntent().getSerializableExtra("file");
+            name.setText(file.getName());
+            size.setText(DataCleanUtils.getFormatSize(Double.valueOf(file.getFile_size())));
+            time.setText("上传时间:" + parse.format(new Date(file.getCreated_at()*1000)));
+
+
             File dir = new File(Constant.FILEPATH + "/" + courseId);
-            saveFile = new File(dir, file.getName());
             if (!dir.exists()) {
                 dir.mkdirs();
             }
+
+            saveFile = new File(dir, file.getName().replace("." + file.getExt_name(), "_" + fileId + "." + file.getExt_name()));
         } else {
             saveFile = new File(path);
             name.setText(saveFile.getName());
             size.setText(DataCleanUtils.getFormatSize(saveFile.length()));
             time.setText("下载时间:" + parse.format(new Date(saveFile.lastModified())));
         }
+
+        setTitles(saveFile.getName());
+
+        String extName = saveFile.getName().substring(saveFile.getName().lastIndexOf(".") + 1, saveFile.getName().length());
+        if (extName.equals("doc") || extName.equals("docx")) {
+            image.setImageResource(R.mipmap.word);
+        } else if (extName.equals("xls") || extName.equals("xlsx")) {
+            image.setImageResource(R.mipmap.excel);
+        } else if (extName.equals("pdf")) {
+            image.setImageResource(R.mipmap.pdf);
+        } else if (extName.equals("mp4")) {
+            MyVideoThumbLoader mVideoThumbLoader = new MyVideoThumbLoader();
+            if (saveFile.exists()) {
+                mVideoThumbLoader.showThumbByAsyncTask(saveFile, image);
+            } else {
+                mVideoThumbLoader.showThumbByAsyncTask(file.getFile_url(), image);
+            }
+        } else if (extName.equals("jpg") || extName.equals("png")) {
+            if (saveFile.exists()) {
+                Glide.with(this).load(saveFile.getAbsolutePath()).placeholder(R.mipmap.unknown).centerCrop().crossFade().dontAnimate().into(image);
+            } else {
+                Glide.with(this).load(file.getFile_url()).placeholder(R.mipmap.unknown).centerCrop().crossFade().dontAnimate().into(image);
+            }
+        } else {
+            image.setImageResource(R.mipmap.unknown);
+        }
+
         if (saveFile.exists()) {
             download.setText("打开文件");
         }
+
+
         download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,6 +154,16 @@ public class ExclusiveFileDetailActivity extends BaseActivity {
                     name.setText(file.getName());
                     size.setText(DataCleanUtils.getFormatSize(Double.valueOf(file.getFile_size())));
 //                    time.setText(file.getTime());
+
+                    File dir = new File(Constant.FILEPATH + "/" + courseId);
+                    if (!dir.exists()) {
+                        dir.mkdirs();
+                    }
+
+                    saveFile = new File(dir, file.getName());
+                    if (saveFile.exists()) {
+                        download.setText("打开文件");
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -161,23 +214,22 @@ public class ExclusiveFileDetailActivity extends BaseActivity {
         if (file == null || StringUtils.isNullOrBlanK(file.getFile_url())) {
             return;
         }
-        nt = NumberFormat.getPercentInstance();
-        nt.setMinimumFractionDigits(2);
-
-        disposable = HttpManager.downLoad(file.getFile_url()).savePath(Constant.FILEPATH).
-                saveName(file.getName())
+        disposable = HttpManager.downLoad(file.getFile_url()).savePath(saveFile.getParent()).
+                saveName(saveFile.getName())
                 .execute(new DownloadProgressCallBack<String>() {
                     @Override
                     public void update(long bytesRead, long contentLength, boolean done) {
-                        progress.setText("下载中:" + DataCleanUtils.getFormatSize(bytesRead)
-                                + "/" + DataCleanUtils.getFormatSize(contentLength) + "(" + nt.format((double) bytesRead / contentLength) + ")");
+                        progress.setText("下载中...(" + DataCleanUtils.getFormatSize(bytesRead)
+                                + "/" + DataCleanUtils.getFormatSize(contentLength) + ")");
+                        int pro = (int) (bytesRead / contentLength * 100);
+                        progressBar.setProgress(pro);
                     }
 
                     @Override
                     public void onComplete(String path) {
                         download.setText("打开文件");
                         download.setVisibility(View.VISIBLE);
-                        progress.setVisibility(View.GONE);
+                        downloadLayout.setVisibility(View.GONE);
                         complete = true;
                         Toast.makeText(ExclusiveFileDetailActivity.this, path, Toast.LENGTH_LONG).show();
                     }
@@ -185,7 +237,7 @@ public class ExclusiveFileDetailActivity extends BaseActivity {
                     @Override
                     public void onStart() {
                         download.setVisibility(View.GONE);
-                        progress.setVisibility(View.VISIBLE);
+                        downloadLayout.setVisibility(View.VISIBLE);
                     }
 
                     @Override
@@ -204,7 +256,10 @@ public class ExclusiveFileDetailActivity extends BaseActivity {
         name = (TextView) findViewById(R.id.name);
         size = (TextView) findViewById(R.id.size);
         time = (TextView) findViewById(R.id.time);
+        image = (ImageView) findViewById(R.id.image);
         download = (TextView) findViewById(R.id.download);
         progress = (TextView) findViewById(R.id.progress);
+        downloadLayout = findViewById(R.id.download_layout);
+        progressBar = (ProgressBar) findViewById(R.id.progress_horizontal);
     }
 }

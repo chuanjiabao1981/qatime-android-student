@@ -9,6 +9,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.io.File;
@@ -21,6 +22,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.adapter.ListViewSelectAdapter;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.MyVideoThumbLoader;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.utils.DataCleanUtils;
 
@@ -55,7 +57,7 @@ public class DownloadManagerActivity extends BaseActivity implements View.OnClic
                 updateRight();
             }
         });
-        rightImage.setImageResource(R.mipmap.calendar);
+        rightImage.setImageResource(R.mipmap.trash);
         rightImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,19 +92,37 @@ public class DownloadManagerActivity extends BaseActivity implements View.OnClic
         File File = new File(Constant.FILEPATH);
         getFilesList(File);
         listView = (PullToRefreshListView) findViewById(R.id.list);
+        listView.setEmptyView(View.inflate(this,R.layout.empty_view,null));
         adapter = new ListViewSelectAdapter<File>(this, list, R.layout.item_file_download_manager,singleMode){
+            MyVideoThumbLoader mVideoThumbLoader = new MyVideoThumbLoader();
             @Override
-            public void convert(ViewHolder holder, File item, int position) {
-                holder.setText(R.id.name, getItem(position).getName());
-                holder.setText(R.id.size, DataCleanUtils.getFormatSize(getItem(position).length()));
-                holder.setText(R.id.time, "下载时间:" + parse.format(new Date(getItem(position).lastModified())));
+            public void convert(ViewHolder helper, File item, int position) {
+                helper.setText(R.id.name, getItem(position).getName());
+                helper.setText(R.id.size, DataCleanUtils.getFormatSize(getItem(position).length()));
+                helper.setText(R.id.time, "下载时间:" + parse.format(new Date(getItem(position).lastModified())));
+                String extName =item.getName().substring(item.getName().lastIndexOf(".")+1,item.getName().length());
+
+                if (extName.equals("doc") || extName.equals("docx")) {
+                    helper.setImageResource(R.id.image, R.mipmap.word);
+                } else if (extName.equals("xls") || extName.equals("xlsx")) {
+                    helper.setImageResource(R.id.image, R.mipmap.excel);
+                }else if (extName.equals("pdf")) {
+                    helper.setImageResource(R.id.image, R.mipmap.pdf);
+                } else if (extName.equals("mp4")) {
+                    mVideoThumbLoader.showThumbByAsyncTask(item, (ImageView) helper.getView(R.id.image));
+//                    holder.setImageBitmap(R.id.image, ImageUtil.getVideoThumbnail(item.getFile_url()));
+                } else if (extName.equals("jpg") || extName.equals("png")) {
+                    Glide.with(DownloadManagerActivity.this).load(item).placeholder(R.mipmap.unknown).centerCrop().crossFade().dontAnimate().into(((ImageView) helper.getView(R.id.image)));
+                } else {
+                    helper.setImageResource(R.id.image, R.mipmap.unknown);
+                }
             }
         };
         adapter.setSelectListener(new ListViewSelectAdapter.SelectChangeListener<File>() {
             @Override
             public void update(File item, boolean isChecked) {
                 int count = adapter.getSelectedList().size();
-                deleteAll.setText("删除(" + (count==0?"":count) + ")");
+                deleteAll.setText(count==0?"删除":("删除("+ count + ")"));
             }
         });
         listView.setAdapter(adapter);

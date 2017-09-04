@@ -4,15 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 
 import com.android.volley.VolleyError;
+import com.bumptech.glide.Glide;
 import com.google.gson.JsonSyntaxException;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +25,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.bean.MyFilesBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.MyVideoThumbLoader;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
@@ -39,6 +44,7 @@ public class ExclusiveFilesActivity extends BaseActivity {
     private CommonAdapter<MyFilesBean.DataBean> adapter;
     private List<MyFilesBean.DataBean> fileList = new ArrayList<>();
     private int courseId;
+    private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,11 +98,27 @@ public class ExclusiveFilesActivity extends BaseActivity {
         list.setMode(PullToRefreshBase.Mode.BOTH);
         list.setEmptyView(View.inflate(this, R.layout.empty_view, null));
         adapter = new CommonAdapter<MyFilesBean.DataBean>(this, fileList, R.layout.item_exclusive_files) {
+            public MyVideoThumbLoader mVideoThumbLoader = new MyVideoThumbLoader();
+
             @Override
-            public void convert(ViewHolder helper, MyFilesBean.DataBean item, int position) {
-                helper.setText(R.id.name, item.getName());
-                helper.setText(R.id.size, DataCleanUtils.getFormatSize(Double.valueOf(item.getFile_size())));
-//                helper.setText(R.id.time, item.getTime());
+            public void convert(ViewHolder holder, MyFilesBean.DataBean item, int position) {
+                holder.setText(R.id.name, item.getName());
+                holder.setText(R.id.size, DataCleanUtils.getFormatSize(Double.valueOf(item.getFile_size())));
+                holder.setText(R.id.time, "上传时间:" + parse.format(new Date(item.getCreated_at()*1000)));
+                if (item.getExt_name().equals("doc") || item.getExt_name().equals("docx")) {
+                    holder.setImageResource(R.id.image, R.mipmap.word);
+                } else if (item.getExt_name().equals("xls") || item.getExt_name().equals("xlsx")) {
+                    holder.setImageResource(R.id.image, R.mipmap.excel);
+                }else if (item.getExt_name().equals("pdf")) {
+                    holder.setImageResource(R.id.image, R.mipmap.pdf);
+                } else if (item.getExt_name().equals("mp4")) {
+                    mVideoThumbLoader.showThumbByAsyncTask(item.getFile_url(), (ImageView) holder.getView(R.id.image));
+//                    holder.setImageBitmap(R.id.image, ImageUtil.getVideoThumbnail(item.getFile_url()));
+                } else if (item.getExt_name().equals("jpg") || item.getExt_name().equals("png")) {
+                    Glide.with(ExclusiveFilesActivity.this).load(item.getFile_url()).placeholder(R.mipmap.unknown).centerCrop().crossFade().dontAnimate().into(((ImageView) holder.getView(R.id.image)));
+                } else {
+                    holder.setImageResource(R.id.image, R.mipmap.unknown);
+                }
             }
         };
         list.setAdapter(adapter);
@@ -106,6 +128,7 @@ public class ExclusiveFilesActivity extends BaseActivity {
                 Intent intent = new Intent(ExclusiveFilesActivity.this, ExclusiveFileDetailActivity.class);
                 intent.putExtra("id", fileList.get(position - 1).getId());
                 intent.putExtra("courseId", courseId);
+                intent.putExtra("file", fileList.get(position-1));
                 startActivity(intent);
             }
         });
