@@ -348,7 +348,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                 intent.putExtra("sessionId", playInfo.getData().getCustomized_group().getChat_team().getTeam_id());
                 intent.putExtra("sessionType", SessionTypeEnum.None);
                 intent.putExtra("courseId", id);
-                intent.putExtra("name", playInfo.getData().getCustomized_group().getName());
+                intent.putExtra("name", data.getData().getCustomized_group().getName());
                 intent.putExtra("type", "exclusive");
                 intent.putExtra("owner", 0);
                 startActivity(intent);
