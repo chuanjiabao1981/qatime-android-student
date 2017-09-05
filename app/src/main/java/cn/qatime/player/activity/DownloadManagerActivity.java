@@ -189,6 +189,7 @@ public class DownloadManagerActivity extends BaseActivity implements View.OnClic
                 }
                 adapter.selectAll(false);
                 adapter.notifyDataSetChanged();
+                deleteAll.setText("删除");
                 break;
         }
     }
