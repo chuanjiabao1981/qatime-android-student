@@ -95,11 +95,6 @@ public class CropImageActivity extends BaseActivity {
                     dir.mkdirs();
                 }
                 v.setClickable(false);
-                String out_file_path = Constant.CACHEPATH;
-                File dir = new File(out_file_path);
-                if (!dir.exists()) {
-                    dir.mkdirs();
-                }
                 progress = DialogUtils.startProgressDialog(progress, CropImageActivity.this);
                 progress.setCanceledOnTouchOutside(false);
                 progress.setCancelable(false);
