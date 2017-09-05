@@ -74,7 +74,13 @@ public class PlayBackListActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void convert(ViewHolder holder, PlayBackListBean.DataBean item, int position) {
                 Glide.with(PlayBackListActivity.this).load(item.getLogo_url()).placeholder(R.mipmap.photo).into((ImageView) holder.getView(R.id.image));
-                holder.setText(R.id.name, item.getLive_studio_lesson().getName());
+                if ("LiveStudio::InteractiveLesson".equals(item.getTarget_type())) {
+                    holder.setText(R.id.name, item.getLive_studio_interactive_lesson().getName());
+                } else if ("LiveStudio::ScheduledLesson".equals(item.getTarget_type())) {
+                    holder.setText(R.id.name, item.getLive_studio_scheduled_lesson().getName());
+                } else if ("LiveStudio::Lesson".equals(item.getTarget_type())) {
+                    holder.setText(R.id.name, item.getLive_studio_lesson().getName());
+                }
                 StringBuilder text = new StringBuilder();
                 if (!StringUtils.isNullOrBlanK(item.getGrade())) {
                     text.append(item.getGrade());

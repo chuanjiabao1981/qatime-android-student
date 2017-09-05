@@ -48,7 +48,7 @@ import libraryextra.utils.ScreenUtils;
 /**
  * @author luntify
  * @date 2016/8/10 20:36
- * @Description 图片选择页面
+ * @Description 图片选   择页面
  */
 public class PictureSelectActivity extends BaseActivity {
 

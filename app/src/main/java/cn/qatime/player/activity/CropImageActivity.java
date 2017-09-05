@@ -90,6 +90,10 @@ public class CropImageActivity extends BaseActivity {
         setRightText(getResources().getString(R.string.use), new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
+                File dir = new File(Constant.CACHEPATH);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
                 v.setClickable(false);
                 String out_file_path = Constant.CACHEPATH;
                 File dir = new File(out_file_path);

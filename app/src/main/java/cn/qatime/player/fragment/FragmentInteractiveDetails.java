@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.qatime.player.R;
+import cn.qatime.player.activity.InteractPlaybackActivity;
 import cn.qatime.player.activity.TeacherDataActivity;
 import cn.qatime.player.base.BaseFragment;
 import libraryextra.adapter.CommonAdapter;
@@ -111,6 +113,13 @@ public class FragmentInteractiveDetails extends BaseFragment {
                     ((TextView) holder.getView(R.id.status)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.teacher_name)).setTextColor(0xff999999);
                     ((TextView) holder.getView(R.id.class_date)).setTextColor(0xff999999);
+
+                    if (data != null && data.getTicket() != null && !StringUtils.isNullOrBlanK(data.getTicket().getStatus()) && data.getTicket().getStatus().equals("active") && item.isReplayable()) {
+                        ((TextView) holder.getView(R.id.status)).setTextColor(0xffff5842);
+                        holder.setText(R.id.status, "观看回放");
+                    } else {
+                        ((TextView) holder.getView(R.id.status)).setTextColor(0xff999999);
+                    }
                 } else {
                     ((TextView) holder.getView(R.id.status_color)).setTextColor(0xff00a0e9);
                     ((TextView) holder.getView(R.id.name)).setTextColor(0xff666666);
@@ -124,6 +133,24 @@ public class FragmentInteractiveDetails extends BaseFragment {
             }
         };
         list.setAdapter(adapter);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (isFinished(classList.get(position))) {
+                    if (data != null && data.getTicket() != null && !StringUtils.isNullOrBlanK(data.getTicket().getStatus()) && data.getTicket().getStatus().equals("active") &&classList.get(position).isReplayable()) {
+                        if (!classList.get(position).isReplayable()) {
+                            Toast.makeText(getActivity(), "该课程不可回放", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        Intent intent = new Intent(getActivity(), InteractPlaybackActivity.class);
+                        intent.putExtra("id", classList.get(position).getId());
+                        intent.putExtra("name", classList.get(position).getName());
+                        intent.putExtra("type", "interact");
+                        startActivity(intent);
+                    }
+                }
+            }
+        });
         adapter.notifyDataSetChanged();
         teacherAdapter = new CommonAdapter<TeacherBean>(getActivity(), teacherList, R.layout.item_interactive_details) {
             @Override

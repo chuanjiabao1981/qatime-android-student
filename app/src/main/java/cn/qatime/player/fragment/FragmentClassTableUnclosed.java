@@ -202,6 +202,7 @@ public class FragmentClassTableUnclosed extends BaseFragment {
                             intent.putExtra("id", Integer.valueOf(item.getProduct_id()));
                             startActivity(intent);
                         } else if ("LiveStudio::InteractiveCourse".equals(item.getProduct_type())) {
+                            FragmentClassTableUnclosed.this.item=item;
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                 if (NetUtils.checkPermission(getActivity()).size() > 0) {
                                     requestLivePermission();

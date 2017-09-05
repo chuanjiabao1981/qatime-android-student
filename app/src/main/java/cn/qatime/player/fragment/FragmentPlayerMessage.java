@@ -296,7 +296,8 @@ public class FragmentPlayerMessage extends BaseFragment implements ModuleProxy {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        messageListPanel.onDestroy();
+        if (messageListPanel != null)
+            messageListPanel.onDestroy();
         registerTeamUpdateObserver(false);
     }
 }

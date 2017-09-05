@@ -296,6 +296,7 @@ public class FragmentExclusiveMessage extends BaseFragment implements ModuleProx
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (messageListPanel != null)
         messageListPanel.onDestroy();
         registerTeamUpdateObserver(false);
     }

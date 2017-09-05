@@ -120,7 +120,7 @@
     <string name="apply_refund">申请退款</string>
     <string name="pay">付款</string>
     <string name="deal_done">交易完成</string>//
-    <string name="dealing">正在交易</string>//
+    <string name="dealing">交易完成</string>//
     <string name="deal_closed">交易关闭</string>//
     <string name="order_confirm">订单确认</string>
     <string name="pay_confirm">支付确认</string>
@@ -635,4 +635,6 @@
     <string name="hint_choose_school">请选择您所在的学校</string>
     <string name="withdraw_paid">提现成功</string>
     <string name="download_manager">下载管理</string>
+    <string name="captcha_phone_has_changed">手机号已变更,请重新验证</string>
+    <string name="captcha_email_has_changed">邮箱已变更,请重新验证</string>
 </resources>

@@ -1055,7 +1055,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             return;
         }
-        if (inputPanel.isEmojiShow()) {
+        if (inputPanel != null && inputPanel.isEmojiShow()) {
             inputPanel.closeEmojiAndInput();
             return;
         }
@@ -1073,7 +1073,8 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
         if (event == BusEvent.ANNOUNCEMENT) {
             if (StringUtils.isNullOrBlanK(sessionId)) return;
             getAnnouncementsData();
-//        } else if (event == BusEvent.request) {
+        }
+//         else if (event == BusEvent.request) {
 //            masterVideoLayout.removeAllViews();
 //            if (videoLayout.getChildCount() == 1) {
 //                videoLayout.removeViewAt(0);
@@ -1085,7 +1086,7 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
 //            audioPermission.setVisibility(View.GONE);
 //
 //            checkToken();
-        }
+//        }
     }
 
     private void checkToken() {
@@ -1176,6 +1177,11 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 zoom.setImageResource(R.mipmap.enlarge);
             }
+        }else{
+            if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                zoom.setImageResource(R.mipmap.narrow);
+            }
         }
     }
 
@@ -1205,7 +1211,8 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
                 }
             }
         }
-        inputPanel.onPause();
+        if (inputPanel != null)
+            inputPanel.onPause();
         MobclickAgent.onPause(this);
         NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
     }

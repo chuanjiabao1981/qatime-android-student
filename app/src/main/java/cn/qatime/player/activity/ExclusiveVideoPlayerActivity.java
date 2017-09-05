@@ -583,8 +583,11 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
     @Override
     protected void onPause() {
         hd.removeCallbacks(runnable);//停止查询播放状态
+        if (video1 != null)
         video1.pause();
+        if (video2 != null)
         video2.pause();
+        if (floatFragment != null)
         floatFragment.setPlaying(false);
         if (inputPanel != null) {
             inputPanel.onPause();
@@ -598,15 +601,18 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
     @Override
     protected void onDestroy() {
 //        Logger.e("退出轮询");
-        video1.release_resource();
-        video2.release_resource();
+        if (video1 != null)
+            video1.release_resource();
         video1 = null;
+        if (video2 != null)
+            video2.release_resource();
         video2 = null;
 
         if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
-        danMuController.destroy();
+        if (danMuController != null)
+            danMuController.destroy();
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
