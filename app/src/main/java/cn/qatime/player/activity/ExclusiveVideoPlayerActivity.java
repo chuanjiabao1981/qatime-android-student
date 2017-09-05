@@ -275,6 +275,9 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
 
 
     private void getAnnouncementsData() {
+        if(StringUtils.isNullOrBlanK(sessionId)){
+            return;
+        }
         Team team = TeamDataCache.getInstance().getTeamById(sessionId);
         if (team != null) {
             updateTeamInfo(team);
@@ -335,10 +338,7 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
     }
 
     private void initSessionId() {
-        if (StringUtils.isNullOrBlanK(sessionId)) {
-            Toast.makeText(this, "聊天id不可用", Toast.LENGTH_SHORT).show();
-            return;
-        }
+
         getAnnouncementsData();
         floatFragment.setSessionId(sessionId);
         if (!StringUtils.isNullOrBlanK(sessionId)) {

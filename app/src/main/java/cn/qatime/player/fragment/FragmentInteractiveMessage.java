@@ -175,6 +175,9 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
      */
 
     private void requestTeamInfo() {
+        if(StringUtils.isNullOrBlanK(sessionId)){
+            return;
+        }
         Team team = TeamDataCache.getInstance().getTeamById(sessionId);
         if (team != null) {
             updateTeamInfo(team);

@@ -234,6 +234,9 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     }
 
     private void getAnnouncementsData() {
+        if(StringUtils.isNullOrBlanK(sessionId)){
+            return;
+        }
         Team team = TeamDataCache.getInstance().getTeamById(sessionId);
         if (team != null) {
             updateTeamInfo(team);
@@ -373,11 +376,6 @@ public class InteractiveLiveActivity extends BaseActivity implements View.OnClic
     }
 
     private void initSessionId() {
-        if (StringUtils.isNullOrBlanK(sessionId)) {
-            Toast.makeText(this, "聊天id不可用", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         getAnnouncementsData();
         if (!StringUtils.isNullOrBlanK(sessionId)) {
             TeamMember team = TeamDataCache.getInstance().getTeamMember(sessionId, BaseApplication.getInstance().getAccount());

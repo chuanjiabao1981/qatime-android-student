@@ -25,4 +25,14 @@
         style="@style/backbar_icon_style"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true" />
+    <TextView
+        android:id="@+id/right_text"
+        android:text="@string/use"
+        style="@style/backbar_text_style"
+        android:textSize="14sp"
+        android:visibility="gone"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"/>
 </RelativeLayout>
