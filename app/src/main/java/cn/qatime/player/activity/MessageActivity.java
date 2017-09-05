@@ -81,32 +81,36 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
         if (StringUtils.isNullOrBlanK(type)) {
             findViewById(R.id.right).setVisibility(View.GONE);
         }
-        setRightImage(R.mipmap.online_room, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if ("custom".equals(type)) {
-                    Intent intent = new Intent(MessageActivity.this, NEVideoPlayerActivity.class);
-                    intent.putExtra("id", courseId);
-                    startActivityForResult(intent, Constant.REQUEST);
-                } else if ("interactive".equals(type)) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if (NetUtils.checkPermission(MessageActivity.this).size() > 0) {
-                            requestLivePermission();
+        if ("exclusive".equals(type)) {
+            initMenu();
+        } else {
+            setRightImage(R.mipmap.online_room, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if ("custom".equals(type)) {
+                        Intent intent = new Intent(MessageActivity.this, NEVideoPlayerActivity.class);
+                        intent.putExtra("id", courseId);
+                        startActivityForResult(intent, Constant.REQUEST);
+                    } else if ("interactive".equals(type)) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            if (NetUtils.checkPermission(MessageActivity.this).size() > 0) {
+                                requestLivePermission();
+                            } else {
+                                toNext();
+                            }
                         } else {
                             toNext();
                         }
-                    } else {
-                        toNext();
                     }
                 }
-            }
-        });
+            });
+        }
         registerObservers(true);
         registerTeamUpdateObserver(true);
         initView();
     }
 
-    private void initMenu(String status) {
+    private void initMenu() {
         if (pop == null) {
             setRightImage(R.mipmap.exclusive_menu, new View.OnClickListener() {
                 @Override
@@ -121,9 +125,10 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
             View menu3 = popView.findViewById(R.id.menu_3);
             View menu4 = popView.findViewById(R.id.menu_4);
             View menu5 = popView.findViewById(R.id.menu_5);
-            if (Constant.CourseStatus.completed.equals(status)) {
-                menu1.setVisibility(View.GONE);
-            }
+
+            menu1.setVisibility(View.GONE);
+            menu3.setVisibility(View.GONE);
+            menu4.setVisibility(View.GONE);
             menu1.setOnClickListener(this);
             menu2.setOnClickListener(this);
             menu3.setOnClickListener(this);
@@ -290,6 +295,9 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
      */
 
     private void requestTeamInfo() {
+        if(StringUtils.isNullOrBlanK(sessionId)){
+            return;
+        }
         Team team = TeamDataCache.getInstance().getTeamById(sessionId);
         if (team != null) {
             updateTeamInfo(team);
@@ -421,26 +429,26 @@ public class MessageActivity extends BaseActivity implements InputPanel.InputPan
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()) {
             case R.id.menu_1:
                 Toast.makeText(this, "menu1", Toast.LENGTH_SHORT).show();
                 pop.dismiss();
                 break;
             case R.id.menu_2:
+                intent = new Intent(this, ExclusiveFilesActivity.class);
+                intent.putExtra("id", courseId);
+                startActivity(intent);
                 pop.dismiss();
-                Toast.makeText(this, "menu2", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.menu_3:
                 pop.dismiss();
-                Toast.makeText(this, "menu3", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.menu_4:
                 pop.dismiss();
-                Toast.makeText(this, "menu4", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.menu_5:
                 pop.dismiss();
-                Toast.makeText(this, "menu5", Toast.LENGTH_SHORT).show();
                 break;
         }
     }

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -27,6 +28,7 @@ import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.bean.ExclusiveLessonDetailBean;
+import cn.qatime.player.bean.ExclusiveLessonPlayInfoBean;
 import cn.qatime.player.bean.PayResultState;
 import cn.qatime.player.fragment.FragmentExclusiveLessonClassInfo;
 import cn.qatime.player.fragment.FragmentExclusiveLessonClassList;
@@ -69,6 +71,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
     private ExclusiveLessonDetailBean data;
     private AlertDialog alertDialog;
     private PopupWindow pop;
+    private ExclusiveLessonPlayInfoBean playInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +105,8 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
             if (Constant.CourseStatus.completed.equals(status)) {
                 menu1.setVisibility(View.GONE);
             }
+            menu3.setVisibility(View.GONE);
+            menu4.setVisibility(View.GONE);
             menu1.setOnClickListener(this);
             menu2.setOnClickListener(this);
             menu3.setOnClickListener(this);
@@ -213,6 +218,29 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
             }
         });
         addToRequestQueue(request);
+        DaYiJsonObjectRequest requestMember = new DaYiJsonObjectRequest(UrlUtils.urlExclusiveLesson + "/" + id + "/play", null,
+                new VolleyListener(ExclusiveLessonDetailActivity.this) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                        playInfo = JsonUtils.objectFromJson(response.toString(), ExclusiveLessonPlayInfoBean.class);
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(requestMember);
     }
 
     private void setData() {
@@ -312,32 +340,46 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
         Intent intent;
         switch (v.getId()) {
             case R.id.menu_1:
-                Toast.makeText(this, "menu1", Toast.LENGTH_SHORT).show();
+                if(playInfo==null){
+                    Toast.makeText(this, "未获取到聊天群组", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                intent = new Intent(this, MessageActivity.class);
+                intent.putExtra("sessionId", playInfo.getData().getCustomized_group().getChat_team().getTeam_id());
+                intent.putExtra("sessionType", SessionTypeEnum.None);
+                intent.putExtra("courseId", id);
+                intent.putExtra("name", playInfo.getData().getCustomized_group().getName());
+                intent.putExtra("type", "exclusive");
+                intent.putExtra("owner", 0);
+                startActivity(intent);
                 pop.dismiss();
                 break;
             case R.id.menu_2:
-                intent = new Intent(this,ExclusiveFilesActivity.class);
-                intent.putExtra("id",id);
+                intent = new Intent(this, ExclusiveFilesActivity.class);
+                intent.putExtra("id", id);
                 startActivity(intent);
                 pop.dismiss();
-                Toast.makeText(this, "menu2", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.menu_3:
                 pop.dismiss();
-                Toast.makeText(this, "menu3", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.menu_4:
                 pop.dismiss();
-                Toast.makeText(this, "menu4", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.menu_5:
+                if(playInfo==null){
+                    Toast.makeText(this, "未获取到聊天群组", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                intent = new Intent(this,MembersActivity.class);
+                intent.putExtra("courseId", id);
+                startActivity(intent);
                 pop.dismiss();
-                Toast.makeText(this, "menu5", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.start_study:
                 if (BaseApplication.getInstance().isLogined()) {
                     if (data.getData().getTicket() != null) {
-                         intent = new Intent(this, ExclusiveVideoPlayerActivity.class);
+                        intent = new Intent(this, ExclusiveVideoPlayerActivity.class);
                         intent.putExtra("id", id);
                         startActivity(intent);
                     } else {

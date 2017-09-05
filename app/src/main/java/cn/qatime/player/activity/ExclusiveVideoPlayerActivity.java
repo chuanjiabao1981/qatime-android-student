@@ -275,6 +275,9 @@ public class ExclusiveVideoPlayerActivity extends BaseFragmentActivity implement
 
 
     private void getAnnouncementsData() {
+        if(StringUtils.isNullOrBlanK(sessionId)){
+            return;
+        }
         Team team = TeamDataCache.getInstance().getTeamById(sessionId);
         if (team != null) {
             updateTeamInfo(team);

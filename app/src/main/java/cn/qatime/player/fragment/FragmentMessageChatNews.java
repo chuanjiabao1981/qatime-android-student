@@ -293,6 +293,9 @@ public class   FragmentMessageChatNews extends BaseFragment {
                             NIMClient.getService(TeamService.class).muteTeam(items.get(position - 1).getContactId(), !items.get(position - 1).isMute()).setCallback(new RequestCallback<Void>() {
                                 @Override
                                 public void onSuccess(Void param) {
+                                    if(StringUtils.isNullOrBlanK(items.get(position-1).getContactId())){
+                                        return;
+                                    }
                                     Team team = TeamDataCache.getInstance().getTeamById(items.get(position - 1).getContactId());
                                     items.get(position - 1).setMute(team.mute());
 //                                notificationConfigText.setText(team.mute() ? getString(R.string.close) : getString(R.string.open));

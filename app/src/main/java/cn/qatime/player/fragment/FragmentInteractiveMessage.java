@@ -17,7 +17,6 @@ import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.NotificationType;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.netease.nimlib.sdk.team.constant.TeamFieldEnum;
-import com.netease.nimlib.sdk.team.constant.TeamTypeEnum;
 import com.netease.nimlib.sdk.team.model.Team;
 import com.netease.nimlib.sdk.team.model.TeamMember;
 import com.netease.nimlib.sdk.team.model.UpdateTeamAttachment;
@@ -36,6 +35,7 @@ import cn.qatime.player.bean.MessageListPanel;
 import cn.qatime.player.bean.ModuleProxy;
 import cn.qatime.player.im.SimpleCallback;
 import cn.qatime.player.im.cache.TeamDataCache;
+import libraryextra.utils.StringUtils;
 
 /**
  * @author lungtify
@@ -173,6 +173,9 @@ public class FragmentInteractiveMessage extends BaseFragment implements ModulePr
      */
 
     private void requestTeamInfo() {
+        if(StringUtils.isNullOrBlanK(sessionId)){
+            return;
+        }
         Team team = TeamDataCache.getInstance().getTeamById(sessionId);
         if (team != null) {
             updateTeamInfo(team);
