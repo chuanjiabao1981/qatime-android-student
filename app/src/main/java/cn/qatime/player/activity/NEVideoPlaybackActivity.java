@@ -68,6 +68,9 @@ public class NEVideoPlaybackActivity extends BaseActivity implements PlayBackVid
         } else if (type.equals("exclusive")) {
             url = UrlUtils.getBaseUrl() + "api/v1/live_studio/scheduled_lessons/";
         }
+//        else if (type.equals("interact")) {
+//            url = UrlUtils.getBaseUrl() + "api/v1/live_studio/interactive_lessons/";
+//        }
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(url + lessonId + "/replay", null,
                 new VolleyListener(NEVideoPlaybackActivity.this) {
                     @Override

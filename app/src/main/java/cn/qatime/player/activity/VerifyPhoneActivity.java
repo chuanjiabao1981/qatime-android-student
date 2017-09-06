@@ -59,7 +59,7 @@ public class VerifyPhoneActivity extends BaseActivity implements View.OnClickLis
         setTitles(getResources().getString(R.string.verify_phone_number));
         assignViews();
 
-        currentPhone.setText(BaseApplication.getInstance().getProfile().getData().getUser().getLogin_mobile() + "");
+        currentPhone.setText(BaseApplication.getInstance().getProfile().getData().getUser().getLogin_mobile());
         code.setHint(StringUtils.getSpannedString(this, R.string.hint_input_verification_code));
 
         textGetcode.setOnClickListener(this);
@@ -72,7 +72,7 @@ public class VerifyPhoneActivity extends BaseActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.text_getcode:
                 Map<String, String> map = new HashMap<>();
-                map.put("send_to", currentPhone.getText().toString().trim());
+                map.put("send_to", BaseApplication.getInstance().getProfile().getData().getUser().getLogin_mobile());
                 map.put("key", "send_captcha");
 
                 addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlGetCode, map), null, new VolleyListener(this) {
@@ -108,7 +108,7 @@ public class VerifyPhoneActivity extends BaseActivity implements View.OnClickLis
                     return;
                 }
                 map = new HashMap<>();
-                map.put("send_to", currentPhone.getText().toString().trim());
+                map.put("send_to", BaseApplication.getInstance().getProfile().getData().getUser().getLogin_mobile());
                 map.put("captcha", code.getText().toString().trim());
 
                 addToRequestQueue(new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.getUrl(UrlUtils.urlGetCode + "/verify", map), null, new VolleyListener(this) {

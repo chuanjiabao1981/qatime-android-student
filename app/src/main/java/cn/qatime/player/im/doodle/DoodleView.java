@@ -14,8 +14,6 @@ import android.view.SurfaceView;
 
 import com.orhanobut.logger.Logger;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +21,6 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import cn.qatime.player.base.BaseApplication;
-import cn.qatime.player.bean.BusEvent;
 import cn.qatime.player.im.doodle.action.Action;
 import cn.qatime.player.im.doodle.action.MyFillCircle;
 import cn.qatime.player.im.doodle.action.MyPath;
@@ -450,20 +447,21 @@ public class DoodleView extends SurfaceView implements SurfaceHolder.Callback, T
                     // 收到翻页消息。先清空白板，然后做翻页操作。
 //                    Logger.e(TAG, "receive flip msg");
 //                    flipListener.onFlipPage(t);
-                } else if (t.isSwitchTeacher()) {
-                    if (t.getId() <= lastBoardMessage) {
-                        return;
-                    }
-                    lastBoardMessage = t.getId();
-                    if (t.getStatus().equals("board")) {
-                        EventBus.getDefault().post(BusEvent.board);
-                    } else if (t.getStatus().equals("desktop")) {
-                        EventBus.getDefault().post(BusEvent.desktop);
-                    }
-                    List<Transaction> response = new ArrayList<>(1);
-                    response.add(new Transaction().makeStudentResponseTransaction(t.getId()));
-                    TransactionCenter.getInstance().sendToRemote(sessionId, null, response);
                 }
+//                else if (t.isSwitchTeacher()) {
+//                    if (t.getId() <= lastBoardMessage) {
+//                        return;
+//                    }
+//                    lastBoardMessage = t.getId();
+//                    if (t.getStatus().equals("board")) {
+//                        EventBus.getDefault().post(BusEvent.board);
+//                    } else if (t.getStatus().equals("desktop")) {
+//                        EventBus.getDefault().post(BusEvent.desktop);
+//                    }
+//                    List<Transaction> response = new ArrayList<>(1);
+//                    response.add(new Transaction().makeStudentResponseTransaction(t.getId()));
+//                    TransactionCenter.getInstance().sendToRemote(sessionId, null, response);
+//                }
             }
         }
 

@@ -44,10 +44,13 @@ public class PlayBackInfoBean implements Serializable {
          */
 
         private int replay_times;
-        private LiveStudioLessonBean live_studio_lesson;
+        private LessonBean live_studio_lesson;
+        private LessonBean live_studio_interactive_lesson;
+        private LessonBean live_studio_scheduled_lesson;
         private TeacherBean teacher;
         private int video_duration;
         private String video_url;
+        private String target_type;
 
         public int getReplay_times() {
             return replay_times;
@@ -57,12 +60,36 @@ public class PlayBackInfoBean implements Serializable {
             this.replay_times = replay_times;
         }
 
-        public LiveStudioLessonBean getLive_studio_lesson() {
+        public LessonBean getLive_studio_lesson() {
             return live_studio_lesson;
         }
 
-        public void setLive_studio_lesson(LiveStudioLessonBean live_studio_lesson) {
+        public void setLive_studio_lesson(LessonBean live_studio_lesson) {
             this.live_studio_lesson = live_studio_lesson;
+        }
+
+        public LessonBean getLive_studio_interactive_lesson() {
+            return live_studio_interactive_lesson;
+        }
+
+        public void setLive_studio_interactive_lesson(LessonBean live_studio_interactive_lesson) {
+            this.live_studio_interactive_lesson = live_studio_interactive_lesson;
+        }
+
+        public LessonBean getLive_studio_scheduled_lesson() {
+            return live_studio_scheduled_lesson;
+        }
+
+        public void setLive_studio_scheduled_lesson(LessonBean live_studio_scheduled_lesson) {
+            this.live_studio_scheduled_lesson = live_studio_scheduled_lesson;
+        }
+
+        public String getTarget_type() {
+            return target_type;
+        }
+
+        public void setTarget_type(String target_type) {
+            this.target_type = target_type;
         }
 
         public TeacherBean getTeacher() {
@@ -89,7 +116,7 @@ public class PlayBackInfoBean implements Serializable {
             this.video_url = video_url;
         }
 
-        public static class LiveStudioLessonBean {
+        public static class LessonBean {
             /**
              * name :  test 04辛老师回放功能测试 BB
              */

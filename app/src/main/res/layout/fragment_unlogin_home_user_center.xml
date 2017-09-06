@@ -130,8 +130,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#dfdddd" />
+                android:layout_height="10dp" />
 
             <LinearLayout
                 android:id="@+id/my_course"
@@ -266,11 +265,9 @@
                     android:layout_height="12dp"
                     android:src="@mipmap/personal_enter" />
             </LinearLayout>
-
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#dfdddd" />
+                android:layout_height="10dp" />
             <LinearLayout
                 android:id="@+id/my_taste"
                 android:layout_width="match_parent"
@@ -305,15 +302,39 @@
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:background="#dfdddd" />
+            <LinearLayout
+                android:id="@+id/download_manager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@mipmap/center_download_manager" />
+
+                <TextView
+                    style="@style/setting_text_style"
+                    android:text="@string/download_manager" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    style="@style/setting_icon_margin_right"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@mipmap/personal_enter" />
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="10dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:background="#dfdddd" />
 
             <LinearLayout
                 android:id="@+id/security"

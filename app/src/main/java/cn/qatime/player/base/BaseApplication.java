@@ -57,6 +57,7 @@ import libraryextra.bean.Profile;
 import libraryextra.rx.HttpManager;
 import libraryextra.rx.model.HttpHeaders;
 import libraryextra.rx.model.HttpParams;
+import libraryextra.rx.HttpManager;
 import libraryextra.utils.AppUtils;
 import libraryextra.utils.StringUtils;
 
@@ -122,6 +123,9 @@ public class BaseApplication extends MultiDexApplication {
                 .setMethodCount(3)            // default 2
                 .hideThreadInfo()             // default it is shown
                 .setLogLevel(Configure.isDebug ? LogLevel.FULL : LogLevel.NONE);  // default : LogLevel.FULL
+        HttpManager.init(this);
+        HttpManager.getInstance().setBaseUrl(UrlUtils.getBaseUrl());
+
         profile = SPUtils.getObject(this, "profile", Profile.class);
         currentCity = SPUtils.getObject(this, "current_city", CityBean.Data.class);
         shakeStatus = (boolean) SPUtils.get(this, "shake_status", true);

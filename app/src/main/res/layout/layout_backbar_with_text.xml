@@ -23,5 +23,5 @@
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:paddingLeft="10dp"
-        android:paddingRight="15dp"/>
+        android:paddingRight="10dp"/>
 </RelativeLayout>

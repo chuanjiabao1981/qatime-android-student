@@ -125,9 +125,9 @@ public class FragmentOrderPaid extends BaseFragment {
                     refund.setText(R.string.apply_refund);
                     refund.setTextColor(0xffff5842);
                     refund.setBackgroundResource(R.drawable.button_background_normal);
-                    if (item.getStatus().equals("shipped")) {//正在交易
+                    if (item.getStatus().equals("shipped")) {//交易完成
                         helper.setText(R.id.status, getResourceString(R.string.dealing));
-                    } else if (item.getStatus().equals("paid")) {//正在交易
+                    } else if (item.getStatus().equals("paid")) {//交易完成
                         helper.setText(R.id.status, getResourceString(R.string.dealing));
                     } else if (item.getStatus().equals("completed")) {//交易完成
                         helper.setText(R.id.status, getResourceString(R.string.deal_done));

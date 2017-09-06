@@ -277,6 +277,9 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
 
 
     private void getAnnouncementsData() {
+        if(StringUtils.isNullOrBlanK(sessionId)){
+            return;
+        }
         Team team = TeamDataCache.getInstance().getTeamById(sessionId);
         if (team != null) {
             updateTeamInfo(team);
@@ -338,10 +341,7 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     }
 
     private void initSessionId() {
-        if (StringUtils.isNullOrBlanK(sessionId)) {
-            Toast.makeText(this, "聊天id不可用", Toast.LENGTH_SHORT).show();
-            return;
-        }
+
 // TODO: 2017/8/15 初始化
         getAnnouncementsData();
         floatFragment.setSessionId(sessionId);
@@ -595,10 +595,14 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     @Override
     protected void onPause() {
         hd.removeCallbacks(runnable);//停止查询播放状态
-        video1.pause();
-        video2.pause();
-        floatFragment.setPlaying(false);
-        inputPanel.onPause();
+        if (video1 != null)
+            video1.pause();
+        if (video2 != null)
+            video2.pause();
+        if (floatFragment != null)
+            floatFragment.setPlaying(false);
+        if (inputPanel != null)
+            inputPanel.onPause();
         super.onPause();
         MobclickAgent.onPause(this);
         NIMClient.getService(MsgService.class).setChattingAccount(BaseApplication.getInstance().isChatMessageNotifyStatus() ? MsgService.MSG_CHATTING_ACCOUNT_NONE : MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.None);
@@ -608,15 +612,18 @@ public class NEVideoPlayerActivity extends BaseFragmentActivity implements Video
     @Override
     protected void onDestroy() {
 //        Logger.e("退出轮询");
-        video1.release_resource();
-        video2.release_resource();
+        if (video1 != null)
+            video1.release_resource();
+        if (video2 != null)
+            video2.release_resource();
         video1 = null;
         video2 = null;
 
         if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
-        danMuController.destroy();
+        if (danMuController != null)
+            danMuController.destroy();
         EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
