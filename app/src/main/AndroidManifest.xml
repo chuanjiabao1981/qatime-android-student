@@ -201,7 +201,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".activity.ExclusiveLessonQuestionsActivity"
+            android:name=".activity.ExclusiveQuestionsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />

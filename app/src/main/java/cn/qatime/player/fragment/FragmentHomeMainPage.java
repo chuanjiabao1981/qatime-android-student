@@ -49,7 +49,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.CitySelectActivity;
 import cn.qatime.player.activity.ExclusiveLessonDetailActivity;
-import cn.qatime.player.activity.ExclusiveLessonQuestionsActivity;
+import cn.qatime.player.activity.ExclusiveQuestionsActivity;
 import cn.qatime.player.activity.InteractCourseDetailActivity;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.PayPSWForgetActivity;
@@ -848,12 +848,12 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                                 android.Manifest.permission.CAMERA}, 2);
                     } else {
 //                        intent = new Intent(getActivity(), CaptureActivity.class);
-                        intent = new Intent(getActivity(), ExclusiveLessonQuestionsActivity.class);
+                        intent = new Intent(getActivity(), ExclusiveQuestionsActivity.class);
                         mainActivity.startActivityForResult(intent, Constant.REQUEST);
                     }
                 } else {
 //                    intent = new Intent(getActivity(), CaptureActivity.class);
-                    intent = new Intent(getActivity(), ExclusiveLessonQuestionsActivity.class);
+                    intent = new Intent(getActivity(), ExclusiveQuestionsActivity.class);
                     mainActivity.startActivityForResult(intent, Constant.REQUEST);
                 }
                 break;

@@ -21,7 +21,7 @@ import libraryextra.adapter.ViewHolder;
  * Created by lenovo on 2017/8/24.
  */
 
-public class ExclusiveLessonQuestionsActivity extends BaseActivity implements View.OnClickListener {
+public class ExclusiveQuestionsActivity extends BaseActivity implements View.OnClickListener {
     private PullToRefreshListView listview;
     private List<Object> datas = new ArrayList<>();
     private CommonAdapter<Object> adapter;
@@ -32,8 +32,15 @@ public class ExclusiveLessonQuestionsActivity extends BaseActivity implements Vi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exclusive_lesson_questions);
         setTitles("课程提问");
+        setRightImage(R.mipmap.add, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ExclusiveQuestionsActivity.this, QuestionEditActivity.class);
+                startActivity(intent);
+            }
+        });
         initView();
-       getData(0);
+        getData(0);
     }
 
 
@@ -42,7 +49,7 @@ public class ExclusiveLessonQuestionsActivity extends BaseActivity implements Vi
         findViewById(R.id.me).setOnClickListener(this);
         listview = (PullToRefreshListView) findViewById(R.id.listview);
         listview.setMode(PullToRefreshBase.Mode.BOTH);
-        listview.getLoadingLayoutProxy(true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
+        listview.getLoadingLayoutProxy( true, false).setPullLabel(getResources().getString(R.string.pull_to_refresh));
         listview.getLoadingLayoutProxy(false, true).setPullLabel(getResources().getString(R.string.pull_to_load));
         listview.getLoadingLayoutProxy(true, false).setRefreshingLabel(getResources().getString(R.string.refreshing));
         listview.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResources().getString(R.string.loading));
@@ -60,8 +67,8 @@ public class ExclusiveLessonQuestionsActivity extends BaseActivity implements Vi
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(ExclusiveLessonQuestionsActivity.this, QuestionDetailsActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(ExclusiveQuestionsActivity.this, QuestionDetailsActivity.class);
+//                startActivity(intent);
             }
         });
         listview.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
@@ -90,6 +97,7 @@ public class ExclusiveLessonQuestionsActivity extends BaseActivity implements Vi
         datas.add(null);
         datas.add(null);
         adapter.notifyDataSetChanged();
+        listview.onRefreshComplete();
     }
 
     @Override

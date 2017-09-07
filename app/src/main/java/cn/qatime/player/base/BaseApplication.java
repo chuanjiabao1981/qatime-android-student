@@ -56,8 +56,6 @@ import libraryextra.bean.CityBean;
 import libraryextra.bean.Profile;
 import libraryextra.rx.HttpManager;
 import libraryextra.rx.model.HttpHeaders;
-import libraryextra.rx.model.HttpParams;
-import libraryextra.rx.HttpManager;
 import libraryextra.utils.AppUtils;
 import libraryextra.utils.StringUtils;
 

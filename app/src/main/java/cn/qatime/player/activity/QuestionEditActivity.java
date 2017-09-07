@@ -61,7 +61,7 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
     private QuestionEditAdapter adapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question_edit);
         setTitles("提问");
