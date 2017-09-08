@@ -1,13 +1,15 @@
 package cn.qatime.player.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
- * @author Tianhaoranly
- * @date 2017/6/8 18:08
- * @Description:
+ * @author lungtify
+ * @Time 2017/3/20 19:15
+ * @Describe
  */
-public class FreeCourseBean {
+
+public class LatestCourseBean implements Serializable {
     private int status;
     private List<DataBean> data;
 
@@ -107,7 +109,6 @@ public class FreeCourseBean {
         }
 
         public static class PublicizesBean {
-
             private InfoBean info;
             private ListBean list;
             private SmallBean small;
