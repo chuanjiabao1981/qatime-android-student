@@ -49,6 +49,7 @@ import java.util.Map;
 import cn.qatime.player.R;
 import cn.qatime.player.activity.CitySelectActivity;
 import cn.qatime.player.activity.ExclusiveLessonDetailActivity;
+import cn.qatime.player.activity.ExclusiveQuestionsActivity;
 import cn.qatime.player.activity.InteractCourseDetailActivity;
 import cn.qatime.player.activity.MainActivity;
 import cn.qatime.player.activity.PayPSWForgetActivity;
@@ -68,7 +69,6 @@ import cn.qatime.player.bean.LatestCourseBean;
 import cn.qatime.player.bean.LiveTodayBean;
 import cn.qatime.player.bean.TeacherRecommendBean;
 import cn.qatime.player.holder.BaseViewHolder;
-import cn.qatime.player.qrcore.core.CaptureActivity;
 import cn.qatime.player.utils.AMapLocationUtils;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.MPermission;
@@ -849,11 +849,13 @@ public class FragmentHomeMainPage extends BaseFragment implements View.OnClickLi
                         ActivityCompat.requestPermissions(getActivity(), new String[]{
                                 android.Manifest.permission.CAMERA}, 2);
                     } else {
-                        intent = new Intent(getActivity(), CaptureActivity.class);
+//                        intent = new Intent(getActivity(), CaptureActivity.class);
+                        intent = new Intent(getActivity(), ExclusiveQuestionsActivity.class);
                         mainActivity.startActivityForResult(intent, Constant.REQUEST);
                     }
                 } else {
-                    intent = new Intent(getActivity(), CaptureActivity.class);
+//                    intent = new Intent(getActivity(), CaptureActivity.class);
+                    intent = new Intent(getActivity(), ExclusiveQuestionsActivity.class);
                     mainActivity.startActivityForResult(intent, Constant.REQUEST);
                 }
                 break;
