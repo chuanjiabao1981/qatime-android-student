@@ -55,7 +55,7 @@ public class PersonalMyExclusiveActivity extends BaseFragmentActivity {
                 ((BaseFragment) fragBaseFragments.get(position)).onShow();
             }
         });
-        fragmentlayout.setAdapter(fragBaseFragments, R.layout.tableout_personal_my_exclusive, 0x0312);
+        fragmentlayout.setAdapter(fragBaseFragments, R.layout.tablayout_personal_my_exclusive, 0x0312);
         fragmentlayout.getViewPager().setOffscreenPageLimit(2);
         new Handler().postDelayed(new Runnable() {
             @Override

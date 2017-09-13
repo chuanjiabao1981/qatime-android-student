@@ -534,5 +534,11 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".activity.ExclusiveStudentHomeWorksActivity" />
+        <activity android:name=".activity.HomeWorkDetailActivity" />
+        <activity android:name=".activity.HomeWorkItemEditActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.PersonalMyHomeworkActivity" />
     </application>
 </manifest>

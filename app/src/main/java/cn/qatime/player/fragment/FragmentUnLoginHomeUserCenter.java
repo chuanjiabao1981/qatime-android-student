@@ -38,6 +38,7 @@ public class FragmentUnLoginHomeUserCenter extends BaseFragment implements View.
         LinearLayout myExclusive = (LinearLayout) v.findViewById(R.id.my_exclusive);
         LinearLayout downloadManager = (LinearLayout) v.findViewById(R.id.download_manager);
         about.setOnClickListener(this);
+        findViewById(R.id.my_homework).setOnClickListener(this);
         myInteract.setOnClickListener(this);
         myVideo.setOnClickListener(this);
         information.setOnClickListener(this);
@@ -81,6 +82,7 @@ public class FragmentUnLoginHomeUserCenter extends BaseFragment implements View.
             case R.id.my_video:
             case R.id.my_taste:
             case R.id.my_exclusive:
+            case R.id.my_homework:
             case R.id.security:
             case R.id.setting:
             case R.id.download_manager:
