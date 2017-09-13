@@ -106,7 +106,6 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                 menu1.setVisibility(View.GONE);
             }
             menu3.setVisibility(View.GONE);
-            menu4.setVisibility(View.GONE);
             menu1.setOnClickListener(this);
             menu2.setOnClickListener(this);
             menu3.setOnClickListener(this);
@@ -348,7 +347,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                 intent.putExtra("sessionId", playInfo.getData().getCustomized_group().getChat_team().getTeam_id());
                 intent.putExtra("sessionType", SessionTypeEnum.None);
                 intent.putExtra("courseId", id);
-                intent.putExtra("name", playInfo.getData().getCustomized_group().getName());
+                intent.putExtra("name", data.getData().getCustomized_group().getName());
                 intent.putExtra("type", "exclusive");
                 intent.putExtra("owner", 0);
                 startActivity(intent);
@@ -361,9 +360,15 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                 pop.dismiss();
                 break;
             case R.id.menu_3:
+                intent = new Intent(this,ExclusiveQuestionsActivity.class);
+                intent.putExtra("id",id);
+                startActivity(intent);
                 pop.dismiss();
                 break;
             case R.id.menu_4:
+                intent = new Intent(this, ExclusiveStudentHomeWorksActivity.class);
+                intent.putExtra("courseId", id);
+                startActivity(intent);
                 pop.dismiss();
                 break;
             case R.id.menu_5:

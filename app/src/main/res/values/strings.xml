@@ -637,4 +637,5 @@
     <string name="download_manager">下载管理</string>
     <string name="captcha_phone_has_changed">手机号已变更,请重新验证</string>
     <string name="captcha_email_has_changed">邮箱已变更,请重新验证</string>
+    <string name="my_homework">我的作业</string>
 </resources>

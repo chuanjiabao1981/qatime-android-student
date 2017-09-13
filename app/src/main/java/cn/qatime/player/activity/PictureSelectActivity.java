@@ -27,7 +27,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
@@ -79,7 +78,6 @@ public class PictureSelectActivity extends BaseActivity {
     private View bottomLyout;
     private TextView chooseDir;
     private TextView totalCount;
-    private GridView gridView;
     private boolean mIsFolderViewInit;
     private boolean mIsFolderViewShow;
     private ListView mFolderListView;
@@ -128,7 +126,7 @@ public class PictureSelectActivity extends BaseActivity {
         chooseDir = (TextView) findViewById(R.id.id_choose_dir);
         totalCount = (TextView) findViewById(R.id.id_total_count);
 
-        gridView = (GridView) findViewById(R.id.gridView);
+        GridView gridView = (GridView) findViewById(R.id.gridView);
         adapter = new PictureSelectAdapter(this, detailList, cameraGone);
         gridView.setAdapter(adapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -166,7 +164,7 @@ public class PictureSelectActivity extends BaseActivity {
     private void openCamera() {
         // ##########拍照##########
         Intent getImageByCamera = new Intent("android.media.action.IMAGE_CAPTURE");
-        String out_file_path = Constant.CACHEPATH;
+        String out_file_path = Constant.CACHEIMAGEPATH;
         File dir = new File(out_file_path);
         if (!dir.exists()) {
             dir.mkdirs();
@@ -174,6 +172,11 @@ public class PictureSelectActivity extends BaseActivity {
         capturePath = out_file_path + "/" + System.currentTimeMillis() + ".jpg";
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {  //针对Android7.0，需要通过FileProvider封装过的路径，提供给外部调用
+//            ContentValues contentValues = new ContentValues(1);
+//            contentValues.put(MediaStore.Images.Media.DATA, capturePath);
+//
+//            imageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+//            getImageByCamera.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
             imageUri = FileProvider.getUriForFile(this, "com.qatime.player.fileprovider", new File(capturePath));//通过FileProvider创建一个content类型的Uri，进行封装
             getImageByCamera.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             getImageByCamera.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
@@ -232,9 +235,7 @@ public class PictureSelectActivity extends BaseActivity {
                 firstBucket.imageList = new ArrayList<>();
                 for (int i = 0; i < imagesBucketList.size(); i++) {
                     imagesBucketList.get(i).setIsSelected(false);
-                    for (int j = 0; j < imagesBucketList.get(i).imageList.size(); j++) {
-                        firstBucket.imageList.add(imagesBucketList.get(i).imageList.get(j));
-                    }
+                    firstBucket.imageList.addAll(imagesBucketList.get(i).imageList);
                 }
                 firstBucket.bucketName = "所有图片";
                 firstBucket.count = firstBucket.imageList.size();
@@ -248,10 +249,8 @@ public class PictureSelectActivity extends BaseActivity {
 
     private void getImages(ImageBucket folder) {
         detailList.clear();
-        for (int j = 0; j < folder.imageList.size(); j++) {
-            detailList.add(folder.imageList.get(j));
-        }
-        Logger.e(detailList.size() + "张图");
+        detailList.addAll(folder.imageList);
+//        Logger.e(detailList.size() + "张图");
         adapter.notifyDataSetChanged();
     }
 

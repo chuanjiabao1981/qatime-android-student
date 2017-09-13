@@ -15,34 +15,18 @@ import libraryextra.utils.StringUtils;
 public class UrlUtils {
 
     private static String baseUrl = Configure.isDebug ? "http://testing.qatime.cn/" : "https://qatime.cn/";
-    //云信key
-//    public static String appKey = isDebug ? "2a24ca70e580cab2bef58b1e62478f9f" : "4fe3a3fba0a40a00daf011049a29d995";
     //登录
     public static String urlLogin = baseUrl + "api/v1/sessions";
     //搜索
     public static String urlHomeSearch = baseUrl + "api/v1/home/search";
     //回放
     public static String urlHomeReplays = baseUrl + "api/v1/home/replays";
+    //搜索老师
+    public static String teachers = baseUrl + "api/v1/home/teachers";
     //课程base
     public static String urlLiveStudio = baseUrl + "api/v1/live_studio/";
     //专属课
     public static String urlExclusiveLesson = baseUrl + "/api/v1/live_studio/customized_groups";
-    //我的
-    public static String urlStudent = baseUrl + "api/v1/live_studio/students/";
-    //专属课资源
-    public static String urlGroups = baseUrl + "api/v1/live_studio/groups/";
-    //文件资源
-    public static String urlFiles = baseUrl + "api/v1/resource/";
-    //个人信息
-    public static String urlPersonalInformation = baseUrl + "api/v1/students/";
-    //教师信息
-    public static String urlTeacherInformation = baseUrl + "api/v1/teachers/";
-    //基础信息
-    public static String urlAppconstantInformation = baseUrl + "api/v1/app_constant";
-    //注册
-    public static String urlRegister = baseUrl + "api/v1/user/register";
-    //微信注册
-    public static String urlWeChatRegister = baseUrl + "api/v1/user/wechat_register";
     //课程
     public static String urlCourses = baseUrl + "api/v1/live_studio/courses/";
     //一对一
@@ -51,27 +35,42 @@ public class UrlUtils {
     public static String urlVideoCourses = baseUrl + "api/v1/live_studio/video_courses/";
     //视频课
     public static String urlVideoLessons = baseUrl + "api/v1/live_studio/video_lessons/";
+    //我的
+    public static String urlStudent = baseUrl + "api/v1/live_studio/students/";
+    //专属课资源
+    public static String urlGroups = baseUrl + "api/v1/live_studio/groups/";
+    //
+    public static String lessons = baseUrl + "api/v1/live_studio/lessons/";
+    //文件资源
+    public static String urlFiles = baseUrl + "api/v1/resource/";
+    //个人信息
+    public static String urlPersonalInformation = baseUrl + "api/v1/students/";
+    //教师信息
+    public static String urlTeacherInformation = baseUrl + "api/v1/teachers/";
+    //用户信息
+    public static String urlUser = baseUrl + "api/v1/users/";
+    //注册
+    public static String urlRegister = baseUrl + "api/v1/user/register";
+    //微信注册
+    public static String urlWeChatRegister = baseUrl + "api/v1/user/wechat_register";
     //直播课搜索
     public static String urlSearch = baseUrl + "api/v1/live_studio/courses/search";
-    //辅导班排行
-    public static String urlRecentPublished = baseUrl + "/api/v1/live_studio/courses/rank/published_rank,start_rank";
-    //辅导班排行all
-    public static String urlRecentPublishedAll = baseUrl + "api/v1/live_studio/courses/rank_all/all_published_rank";
-    //辅导班排行all
-    public static String urlLiveStudioFree = baseUrl + "api/v1/live_studio/free_courses";
-    ;
+    //最新课程
+    public static String urlLiveStudioLatest = baseUrl + "api/v2/live_studio/courses/latest";
+    //免费课程
+    public static String urlLiveStudioFree = baseUrl + "api/v2/live_studio/free_courses";
+    //今日直播
+    public static String urlToady = baseUrl + "api/v2/live_studio/lessons/today";
     //獲取支付结果
     public static String urlPayResult = baseUrl + "api/v1/payment/orders/";
     //订单列表
     public static String urlPaylist = baseUrl + "api/v1/payment/orders";
     //优惠券
     public static String urlCoupon = baseUrl + "api/v1/payment/coupons/";
-    //获取验证码
-    public static String urlGetCode = baseUrl + "api/v1/captcha";
-    //用户信息
-    public static String urlUser = baseUrl + "api/v1/users/";
-    //首页推荐
-    public static String urlRecommend = baseUrl + "api/v1/recommend/positions/";
+    //账户充值
+    public static String urlpayment = baseUrl + "api/v1/payment/users/";
+    //资产账户
+    public static String cashAccounts = baseUrl + "/api/v1/payment/cash_accounts/";
     //检查更新
     public static String urlcheckUpdate = baseUrl + "api/v1/system/check_update";
     //上传用户设备信息
@@ -80,16 +79,14 @@ public class UrlUtils {
     public static String urlfindPassword = baseUrl + "api/v1/password";
     //标记通知已读
     public static String urlNotifications = baseUrl + "api/v1/notifications/";
-    //账户充值
-    public static String urlpayment = baseUrl + "api/v1/payment/users/";
-    //资产账户
-    public static String cashAccounts = baseUrl + "/api/v1/payment/cash_accounts/";
-    //
-    public static String lessons = baseUrl + "api/v1/live_studio/lessons/";
-    //搜索老师
-    public static String teachers = baseUrl + "api/v1/home/teachers";
-
-
+    //首页推荐
+    public static String urlRecommend = baseUrl + "api/v1/recommend/positions/";
+    //获取验证码
+    public static String urlGetCode = baseUrl + "api/v1/captcha";
+    //基础信息
+    public static String urlAppconstantInformation = baseUrl + "api/v1/app_constant";
+    //课程表
+    public static String urlScheduleData = baseUrl + "api/v2/live_studio/students/";
 
     public static String getUrl(String function, Map<String, String> params) {
         String url = function + "?" + Map2String(params);

@@ -99,7 +99,6 @@ public class FragmentExclusiveLiveDetails extends BaseFragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             settingsT.setMixedContentMode(settingsT.MIXED_CONTENT_ALWAYS_ALLOW);  //注意安卓5.0以上的权限
         }
-
         initList();
         return view;
     }

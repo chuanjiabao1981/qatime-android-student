@@ -77,7 +77,7 @@ public class FragmentClassTableUnclosed extends BaseFragment {
         map.put("date", date);
         map.put("date_type", "week");
         map.put("state", "unclosed");
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlStudent + BaseApplication.getInstance().getUserId() + "/schedule_data", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlScheduleData + BaseApplication.getInstance().getUserId() + "/schedule_data", map), null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
