@@ -43,6 +43,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import libraryextra.bean.ImageItem;
+import libraryextra.utils.KeyBoardUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -86,6 +87,7 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void uploadQuestion() {
+        KeyBoardUtils.closeKeybord(this);
         String title = head.getText().toString().trim();
         String body = content.getText().toString().trim();
         if(StringUtils.isNullOrBlanK(title)){

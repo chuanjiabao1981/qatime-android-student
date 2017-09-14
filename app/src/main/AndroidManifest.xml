@@ -146,8 +146,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.GuideActivity" />
-        <activity android:name=".activity.WatchPictureActivity" />
+        <activity
+            android:name=".activity.GuideActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.WatchPictureActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.LoginActivity"
             android:screenOrientation="portrait"
@@ -534,12 +540,25 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".activity.ExclusiveStudentHomeWorksActivity" />
-        <activity android:name=".activity.HomeWorkDetailActivity" />
-        <activity android:name=".activity.HomeWorkItemEditActivity"
+        <activity
+            android:name=".activity.ExclusiveStudentHomeWorksActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activity.PersonalMyHomeworkActivity" />
-        <activity android:name=".activity.PersonalMyQuestionActivity" />
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.HomeWorkDetailActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.HomeWorkItemEditActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PersonalMyHomeworkActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PersonalMyQuestionActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
     </application>
 </manifest>
