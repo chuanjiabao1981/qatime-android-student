@@ -24,6 +24,7 @@ import cn.qatime.player.activity.PersonalMyExclusiveActivity;
 import cn.qatime.player.activity.PersonalMyHomeworkActivity;
 import cn.qatime.player.activity.PersonalMyInteractActivity;
 import cn.qatime.player.activity.PersonalMyOrderActivity;
+import cn.qatime.player.activity.PersonalMyQuestionActivity;
 import cn.qatime.player.activity.PersonalMyTasteActivity;
 import cn.qatime.player.activity.PersonalMyTutorshipActivity;
 import cn.qatime.player.activity.PersonalMyVideoActivity;
@@ -132,6 +133,10 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
                 intent = new Intent(getActivity(), PersonalMyHomeworkActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.my_question:
+                intent = new Intent(getActivity(), PersonalMyQuestionActivity.class);
+                startActivity(intent);
+                break;
             case R.id.download_manager:
                 intent = new Intent(getActivity(), DownloadManagerActivity.class);
                 startActivity(intent);
@@ -179,6 +184,7 @@ public class FragmentHomeUserCenter extends BaseFragment implements View.OnClick
         view.findViewById(R.id.my_exclusive).setOnClickListener(this);
         view.findViewById(R.id.download_manager).setOnClickListener(this);
         view.findViewById(R.id.my_homework).setOnClickListener(this);
+        view.findViewById(R.id.my_question).setOnClickListener(this);
         myTaste = (LinearLayout) view.findViewById(R.id.my_taste);
         security = (LinearLayout) view.findViewById(R.id.security);
         setting = (LinearLayout) view.findViewById(R.id.setting);

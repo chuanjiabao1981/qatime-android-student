@@ -21,12 +21,12 @@ import java.util.List;
 import java.util.Set;
 
 import cn.qatime.player.R;
-import cn.qatime.player.adapter.ListViewSelectAdapter;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.bean.StudentHomeWorksBean;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
+import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -39,12 +39,11 @@ import libraryextra.utils.VolleyListener;
 
 public class ExclusiveStudentHomeWorksActivity extends BaseActivity implements View.OnClickListener {
     private PullToRefreshListView listView;
-    public ListViewSelectAdapter<StudentHomeWorksBean.DataBean> adapter;
+    public CommonAdapter<StudentHomeWorksBean.DataBean> adapter;
     private List<StudentHomeWorksBean.DataBean> list = new ArrayList();
     private Set<StudentHomeWorksBean.DataBean> selectSet = new HashSet<>();
     private TextView rightText;
     private Button bottom;
-    public final boolean singleMode = true;
     private int courseId;
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -67,7 +66,7 @@ public class ExclusiveStudentHomeWorksActivity extends BaseActivity implements V
 
         listView = (PullToRefreshListView) findViewById(R.id.list);
         listView.setEmptyView(View.inflate(this, R.layout.empty_view, null));
-        adapter = new ListViewSelectAdapter<StudentHomeWorksBean.DataBean>(this, list, R.layout.item_exclusive_homeworks, singleMode) {
+        adapter = new CommonAdapter<StudentHomeWorksBean.DataBean>(this, list, R.layout.item_exclusive_homeworks) {
             @Override
             public void convert(ViewHolder holder, StudentHomeWorksBean.DataBean item, int position) {
                 long time = item.getHomework().getCreated_at() * 1000L;
