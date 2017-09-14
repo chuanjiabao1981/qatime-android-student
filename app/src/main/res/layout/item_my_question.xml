@@ -21,44 +21,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="如何长高"
-            android:textColor="#333"
-            android:textSize="13sp" />
+            android:textColor="#333" />
 
         <TextView
-            android:id="@+id/author"
+            android:id="@+id/create_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            android:text="荣思杰"
+            android:text="创建时间：2016-12-12 11:22:11"
             android:textColor="#666"
             android:textSize="12sp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/course_name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:text="相关课程"
+            android:textColor="#666"
+            android:textSize="12sp" />
 
-            <TextView
-                android:id="@+id/create_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="创建时间：2016-12-12 11:22:11"
-                android:textColor="#999"
-                android:textSize="12sp" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="已回复"
-                android:textColor="@color/colorPrimary"
-                android:textSize="12sp" />
-        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

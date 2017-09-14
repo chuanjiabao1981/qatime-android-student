@@ -24,6 +24,7 @@
                 android:layout_marginTop="20dp"
                 android:background="@drawable/shape_input_radius"
                 android:hint="输入提问标题（最多20字）"
+                android:maxEms="20"
                 android:paddingLeft="5dp"
                 android:textSize="13sp" />
 
@@ -36,7 +37,8 @@
                 android:layout_marginTop="20dp"
                 android:background="@drawable/shape_input_radius"
                 android:gravity="top"
-                android:hint="输入提问标题（最多100字）"
+                android:hint="输入提问内容（最多100字）"
+                android:maxEms="100"
                 android:minLines="5"
                 android:padding="5dp"
                 android:textSize="13sp" />
@@ -49,17 +51,20 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="10dp"
                 android:background="#fff"
+                android:visibility="gone"
                 android:cacheColorHint="@null"
                 android:listSelector="@color/transparent"
                 android:numColumns="5"
                 android:scrollbars="none" />
 
             <LinearLayout
+                android:id="@+id/audio_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="10dp"
+                android:visibility="gone"
                 android:background="#fff"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">

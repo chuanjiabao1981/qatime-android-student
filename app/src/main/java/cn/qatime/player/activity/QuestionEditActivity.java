@@ -14,20 +14,27 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.tbruyelle.rxpermissions2.RxPermissions;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import cn.qatime.player.R;
 import cn.qatime.player.adapter.QuestionEditAdapter;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.UrlUtils;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -37,6 +44,8 @@ import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import libraryextra.bean.ImageItem;
 import libraryextra.utils.StringUtils;
+import libraryextra.utils.VolleyErrorListener;
+import libraryextra.utils.VolleyListener;
 import libraryextra.view.GridViewForScrollView;
 
 /**
@@ -59,14 +68,16 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
     private MediaPlayer mediaPlayer;
     private List<ImageItem> list = new ArrayList<>();
     private QuestionEditAdapter adapter;
+    private int courseId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question_edit);
         setTitles("提问");
+        courseId = getIntent().getIntExtra("courseId", 0);
         initView();
-        setRightImage(R.mipmap.calendar, new View.OnClickListener() {
+        setRightImage(R.mipmap.send, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 uploadQuestion();
@@ -75,12 +86,44 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void uploadQuestion() {
-        Intent intent = new Intent(this, QuestionDetailsActivity.class);
-        intent.putExtra("audioUrl", audioFileName);
-        intent.putExtra("image", (Serializable) list);
-        intent.putExtra("head", head.getText().toString().trim());
-        intent.putExtra("content", content.getText().toString().trim());
-        startActivity(intent);
+        String title = head.getText().toString().trim();
+        String body = content.getText().toString().trim();
+        if(StringUtils.isNullOrBlanK(title)){
+            Toast.makeText(this, "请输入提问标题", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(StringUtils.isNullOrBlanK(body)){
+            Toast.makeText(this, "请输入提问内容", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Map<String, String> map = new HashMap<>();
+        map.put("title", title);
+        map.put("body", content.getText().toString().trim());
+        JSONObject obj = new JSONObject(map);
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST,UrlUtils.urlGroups + courseId + "/questions", obj,
+                new VolleyListener(this) {
+                    @Override
+                    protected void onSuccess(JSONObject response) {
+                       setResult(Constant.RESPONSE);
+                       finish();
+                    }
+
+                    @Override
+                    protected void onError(JSONObject response) {
+
+                    }
+
+                    @Override
+                    protected void onTokenOut() {
+                        tokenOut();
+                    }
+                }, new VolleyErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                super.onErrorResponse(volleyError);
+            }
+        });
+        addToRequestQueue(request);
     }
 
     private void initView() {

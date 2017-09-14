@@ -25,10 +25,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.qatime.player.R;
-import cn.qatime.player.activity.HomeWorkDetailActivity;
+import cn.qatime.player.activity.QuestionDetailsActivity;
 import cn.qatime.player.base.BaseApplication;
 import cn.qatime.player.base.BaseFragment;
-import cn.qatime.player.bean.StudentHomeWorksBean;
+import cn.qatime.player.bean.QuestionsBean;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
@@ -38,17 +38,17 @@ import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
 
-public class FragmentHomeworkPending extends BaseFragment {
+public class FragmentQuestionResolved extends BaseFragment {
     private PullToRefreshListView listView;
-    private java.util.List<StudentHomeWorksBean.DataBean> list = new ArrayList<>();
-    private CommonAdapter<StudentHomeWorksBean.DataBean> adapter;
+    private java.util.List<QuestionsBean.DataBean> list = new ArrayList<>();
+    private CommonAdapter<QuestionsBean.DataBean> adapter;
     private int page = 1;
     SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_my_homework, container, false);
+        View view = inflater.inflate(R.layout.fragment_my_question, container, false);
         initview(view);
         initOver = true;
         return view;
@@ -64,13 +64,13 @@ public class FragmentHomeworkPending extends BaseFragment {
         listView.getLoadingLayoutProxy(false, true).setRefreshingLabel(getResourceString(R.string.loading));
         listView.getLoadingLayoutProxy(true, false).setReleaseLabel(getResourceString(R.string.release_to_refresh));
         listView.getLoadingLayoutProxy(false, true).setReleaseLabel(getResourceString(R.string.release_to_load));
-        adapter = new CommonAdapter<StudentHomeWorksBean.DataBean>(getActivity(), list, R.layout.item_my_homeworks) {
+        adapter = new CommonAdapter<QuestionsBean.DataBean>(getActivity(), list, R.layout.item_my_question) {
             @Override
-            public void convert(ViewHolder holder, StudentHomeWorksBean.DataBean item, int position) {
-                long time = item.getHomework().getCreated_at() * 1000L;
-                holder.setText(R.id.name, item.getTitle())
+            public void convert(ViewHolder holder, QuestionsBean.DataBean item, int position) {
+                long time = item.getCreated_at() * 1000L;
+                holder.setText(R.id.question_name, item.getTitle())
                         .setText(R.id.course_name,"相关课程 "+ item.getCourse_name())
-                        .setText(R.id.time,"创建时间 "+ parse.format(new Date(time)));
+                        .setText(R.id.create_time,"创建时间 "+ parse.format(new Date(time)));
             }
         };
         listView.setAdapter(adapter);
@@ -91,12 +91,13 @@ public class FragmentHomeworkPending extends BaseFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), HomeWorkDetailActivity.class);
-                intent.putExtra("item", list.get(position - 1));
+                Intent intent = new Intent(getActivity(), QuestionDetailsActivity.class);
+                intent.putExtra("detail", list.get(position - 1));
                 getActivity().startActivityForResult(intent, Constant.REQUEST);
             }
         });
     }
+
     public void onShow() {
             if (initOver) {
                 initData(1);
@@ -113,9 +114,9 @@ public class FragmentHomeworkPending extends BaseFragment {
         Map<String, String> map = new HashMap<>();
         map.put("page", String.valueOf(page));
         map.put("per_page", "10");
-        map.put("status", "pending");
+        map.put("status", "resolved");
 
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlStudent + BaseApplication.getInstance().getUserId() + "/student_homeworks", map), null,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.getUrl(UrlUtils.urlStudent + BaseApplication.getInstance().getUserId() + "/questions", map), null,
                 new VolleyListener(getActivity()) {
                     @Override
                     protected void onSuccess(JSONObject response) {
@@ -124,10 +125,15 @@ public class FragmentHomeworkPending extends BaseFragment {
                         if (type == 1) {
                             list.clear();
                         }
-
+                        String label = null;
+                        if (getActivity() != null) {
+                            label = DateUtils.formatDateTime(getActivity(), System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL);
+                        }
+                        listView.getLoadingLayoutProxy(true, false).setLastUpdatedLabel(label);
+                        listView.onRefreshComplete();
 
                         try {
-                            StudentHomeWorksBean data = JsonUtils.objectFromJson(response.toString(), StudentHomeWorksBean.class);
+                            QuestionsBean data = JsonUtils.objectFromJson(response.toString(), QuestionsBean.class);
                             if (data != null && data.getData() != null) {
                                 list.addAll(data.getData());
                             }

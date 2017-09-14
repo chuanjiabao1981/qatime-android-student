@@ -45,7 +45,6 @@
         android:layout_height="match_parent"
         android:background="#f7f7f7"
         android:cacheColorHint="@null"
-
         android:divider="#00000000"
         android:dividerHeight="10dp"
         android:scrollbars="none" />

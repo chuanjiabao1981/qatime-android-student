@@ -6,19 +6,6 @@
     android:gravity="center"
     android:orientation="horizontal"
     android:paddingLeft="10dp">
-
-    <CheckBox
-        android:id="@+id/checkedView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
-        android:button="@null"
-        android:checked="false"
-        android:drawableLeft="@drawable/checkbox_selector"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:visibility="visible" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,7 +24,6 @@
             android:text="哈哈哈"
             android:textColor="#333"
             android:textSize="13sp" />
-
 
 
         <LinearLayout

@@ -105,7 +105,6 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
             if (Constant.CourseStatus.completed.equals(status)) {
                 menu1.setVisibility(View.GONE);
             }
-            menu3.setVisibility(View.GONE);
             menu1.setOnClickListener(this);
             menu2.setOnClickListener(this);
             menu3.setOnClickListener(this);
@@ -361,7 +360,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                 break;
             case R.id.menu_3:
                 intent = new Intent(this,ExclusiveQuestionsActivity.class);
-                intent.putExtra("id",id);
+                intent.putExtra("courseId",id);
                 startActivity(intent);
                 pop.dismiss();
                 break;

@@ -540,5 +540,6 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.PersonalMyHomeworkActivity" />
+        <activity android:name=".activity.PersonalMyQuestionActivity" />
     </application>
 </manifest>
