@@ -149,6 +149,7 @@ public class HomeWorkItemEditActivity extends BaseActivity implements View.OnCli
                 String trim = content.getText().toString().trim();
                 if(StringUtils.isNullOrBlanK(trim)) {
                     Toast.makeText(this, "回答不能为空", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 HomeWorkItemBean homeWorkItemBean = new HomeWorkItemBean();
                 homeWorkItemBean.parent_id= parent_id;

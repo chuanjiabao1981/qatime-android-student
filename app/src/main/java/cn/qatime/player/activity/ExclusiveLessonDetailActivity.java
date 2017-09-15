@@ -371,10 +371,6 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                 pop.dismiss();
                 break;
             case R.id.menu_5:
-                if(playInfo==null){
-                    Toast.makeText(this, "未获取到聊天群组", Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 intent = new Intent(this,MembersActivity.class);
                 intent.putExtra("courseId", id);
                 startActivity(intent);

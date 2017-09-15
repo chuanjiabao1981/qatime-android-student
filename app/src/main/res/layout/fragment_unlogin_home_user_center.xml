@@ -346,7 +346,7 @@
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:layout_marginLeft="10dp"
-                    android:src="@mipmap/center_my_homework" />
+                    android:src="@mipmap/center_my_question" />
 
                 <TextView
                     style="@style/setting_text_style"
