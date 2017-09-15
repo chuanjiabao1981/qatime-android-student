@@ -157,42 +157,42 @@ public class HomeWorkDetailActivity extends BaseActivity {
         if (item.getCorrection() != null) {
             corrections = item.getCorrection().getItems();
         }
-        //答案结果以及批改一一对应的写法
-//        for (MyHomeWorksBean.DataBean.ItemsBean homework : homeworks) {
-//            HomeworkDetailBean homeworkDetailBean = new HomeworkDetailBean();
-//            homeworkDetailBean.homework = homework;
-//            if (items != null) {
-//                for (StudentHomeWorksBean.DataBean.ItemsBean itemsBean : items) {
-//                    if (itemsBean.getParent_id() == homework.getId()) {
-//                        homeworkDetailBean.answer = itemsBean;
-//                        if (corrections != null) {
-//                            for (StudentHomeWorksBean.DataBean.CorrectionBean.ItemsBean correction : corrections) {
-//                                if (correction.getParent_id() == itemsBean.getId()) {
-//                                    homeworkDetailBean.correction = correction;
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//            list.add(homeworkDetailBean);
-//        }
-
-
-        //答案结果以及批改按顺序取值
+//        答案结果以及批改一一对应的写法
         for (MyHomeWorksBean.DataBean.ItemsBean homework : homeworks) {
             HomeworkDetailBean homeworkDetailBean = new HomeworkDetailBean();
             homeworkDetailBean.homework = homework;
+            if (items != null) {
+                for (StudentHomeWorksBean.DataBean.ItemsBean itemsBean : items) {
+                    if (itemsBean.getParent_id() == homework.getId()) {
+                        homeworkDetailBean.answer = itemsBean;
+                        if (corrections != null) {
+                            for (StudentHomeWorksBean.DataBean.CorrectionBean.ItemsBean correction : corrections) {
+                                if (correction.getParent_id() == itemsBean.getId()) {
+                                    homeworkDetailBean.correction = correction;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             list.add(homeworkDetailBean);
         }
-        for (int i = 0; i < homeworks.size(); i++) {
-            if (items != null && i < items.size()) {
-                list.get(i).answer = items.get(i);
-            }
-            if (corrections != null && i < corrections.size()) {
-                list.get(i).correction = corrections.get(i);
-            }
-        }
+
+
+//        //答案结果以及批改按顺序取值
+//        for (MyHomeWorksBean.DataBean.ItemsBean homework : homeworks) {
+//            HomeworkDetailBean homeworkDetailBean = new HomeworkDetailBean();
+//            homeworkDetailBean.homework = homework;
+//            list.add(homeworkDetailBean);
+//        }
+//        for (int i = 0; i < homeworks.size(); i++) {
+//            if (items != null && i < items.size()) {
+//                list.get(i).answer = items.get(i);
+//            }
+//            if (corrections != null && i < corrections.size()) {
+//                list.get(i).correction = corrections.get(i);
+//            }
+//        }
         adapter.notifyDataSetChanged();
     }
 

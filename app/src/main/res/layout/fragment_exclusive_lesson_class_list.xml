@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="20dp"
-            android:text="线下直播"
+            android:text="线下讲课"
             android:textColor="#333" />
 
 

@@ -67,10 +67,10 @@ public class FragmentQuestionResolved extends BaseFragment {
         adapter = new CommonAdapter<QuestionsBean.DataBean>(getActivity(), list, R.layout.item_my_question) {
             @Override
             public void convert(ViewHolder holder, QuestionsBean.DataBean item, int position) {
-                long time = item.getCreated_at() * 1000L;
+                long time = item.getAnswer().getCreated_at() * 1000L;
                 holder.setText(R.id.question_name, item.getTitle())
                         .setText(R.id.course_name,"相关课程 "+ item.getCourse_name())
-                        .setText(R.id.create_time,"创建时间 "+ parse.format(new Date(time)));
+                        .setText(R.id.create_time,"回复时间 "+ parse.format(new Date(time)));
             }
         };
         listView.setAdapter(adapter);

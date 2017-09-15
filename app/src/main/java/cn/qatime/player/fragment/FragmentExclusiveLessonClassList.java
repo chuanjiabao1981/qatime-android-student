@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -90,7 +89,7 @@ public class FragmentExclusiveLessonClassList extends BaseFragment {
                 holder.setText(R.id.name, item.getName());
                 holder.setText(R.id.live_time, item.getStart_time());
                 holder.setText(R.id.address, "上课地点:" + item.getClass_address());
-                holder.setText(R.id.status, getStatus(item.getStatus()));
+                holder.setText(R.id.status, getStatus2(item.getStatus()));
                 try {
                     holder.setText(R.id.class_date, format.format(parse.parse(item.getClass_date())));
                 } catch (ParseException e) {
@@ -132,6 +131,18 @@ public class FragmentExclusiveLessonClassList extends BaseFragment {
                 }
             }
         });
+    }
+
+    private String getStatus2(String status) {
+       if (status.equals("init")) {//未开始
+            return getResourceString(R.string.class_init);
+        } else if (status.equals("ready")) {//待上课
+            return getResourceString(R.string.class_ready);
+        } else if (status.equals("teaching")) {//直播中
+            return "上课中";
+        } else {//closed finished billing completed
+            return getResourceString(R.string.class_over);//已结束
+        }
     }
 
     private String getStatus(String status) {
