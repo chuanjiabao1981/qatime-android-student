@@ -115,9 +115,9 @@ public class FragmentFilterClassExclusive extends BaseFragment {
             }
         } else if (popularityResult != -1) {
             if (popularityResult == 0) {
-                map.put("sort_by", "buy_tickets_count");
+                map.put("sort_by", "users_count");
             } else {
-                map.put("sort_by", "buy_tickets_count.asc");
+                map.put("sort_by", "users_count.asc");
             }
         }
         try {

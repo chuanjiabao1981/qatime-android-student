@@ -37,7 +37,7 @@
                 android:layout_marginTop="20dp"
                 android:background="@drawable/shape_input_radius"
                 android:gravity="top"
-                android:hint="输入提问内容（最多100字）"
+                android:hint="输入提问内容"
                 android:maxEms="100"
                 android:minLines="5"
                 android:padding="5dp"

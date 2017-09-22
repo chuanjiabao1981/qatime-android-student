@@ -50,7 +50,7 @@ public class ExclusiveFilesActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exclusive_files);
-        setTitles("课件管理");
+        setTitles("课件文件");
         courseId = getIntent().getIntExtra("id", 0);
         initView();
         initData();
@@ -127,7 +127,7 @@ public class ExclusiveFilesActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(ExclusiveFilesActivity.this, ExclusiveFileDetailActivity.class);
                 intent.putExtra("id", fileList.get(position - 1).getId());
-                intent.putExtra("courseId", courseId);
+                intent.putExtra("courseId", courseId+"");
                 startActivity(intent);
             }
         });
