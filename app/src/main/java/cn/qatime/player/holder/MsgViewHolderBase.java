@@ -235,24 +235,6 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
         }
     }
 
-    private void setHeadImageView() {
-        ImageView show = isReceivedMessage() ? avatarLeft : avatarRight;
-        ImageView hide = isReceivedMessage() ? avatarRight : avatarLeft;
-        hide.setVisibility(View.GONE);
-        if (!isShowHeadImage()) {
-            show.setVisibility(View.GONE);
-            return;
-        }
-        if (isMiddleItem()) {
-            show.setVisibility(View.GONE);
-        } else {
-            show.setVisibility(View.VISIBLE);
-            UserInfoProvider.UserInfo userinfo = BaseApplication.getInstance().getUserInfoProvide().getUserInfo(message.getFromAccount());
-            if (userinfo != null)
-                Glide.with(context).load(userinfo.getAvatar()).placeholder(R.mipmap.head_default).crossFade().dontAnimate().into(show);
-        }
-
-    }
 
     private void setOnClickListener() {
         // 重发/重收按钮响应事件
@@ -340,4 +322,29 @@ public abstract class MsgViewHolderBase extends RecyclerViewHolder<BaseMultiItem
         }
     }
 
+    protected void setCustomMatchParent() {
+        LinearLayout bodyContainer = (LinearLayout) view.findViewById(R.id.message_item_body);
+        ViewGroup.LayoutParams layoutParams1 = contentContainer.getLayoutParams();
+        layoutParams1.width=ViewGroup.LayoutParams.MATCH_PARENT;
+        ViewGroup.LayoutParams layoutParams2 = bodyContainer.getLayoutParams();
+        layoutParams2.width=ViewGroup.LayoutParams.MATCH_PARENT;
+    }
+    private void setHeadImageView() {
+        ImageView show = isReceivedMessage() ? avatarLeft : avatarRight;
+        ImageView hide = isReceivedMessage() ? avatarRight : avatarLeft;
+        hide.setVisibility(View.INVISIBLE);
+        if (!isShowHeadImage()) {
+            show.setVisibility(View.INVISIBLE);
+            return;
+        }
+        if (isMiddleItem()) {
+            show.setVisibility(View.INVISIBLE);
+        } else {
+            show.setVisibility(View.VISIBLE);
+            UserInfoProvider.UserInfo userinfo = BaseApplication.getInstance().getUserInfoProvide().getUserInfo(message.getFromAccount());
+            if (userinfo != null)
+                Glide.with(context).load(userinfo.getAvatar()).placeholder(R.mipmap.head_default).crossFade().dontAnimate().into(show);
+        }
+
+    }
 }

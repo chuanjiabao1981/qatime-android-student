@@ -128,7 +128,6 @@ public class ExclusiveFilesActivity extends BaseActivity {
                 Intent intent = new Intent(ExclusiveFilesActivity.this, ExclusiveFileDetailActivity.class);
                 intent.putExtra("id", fileList.get(position - 1).getId());
                 intent.putExtra("courseId", courseId);
-                intent.putExtra("file", fileList.get(position-1));
                 startActivity(intent);
             }
         });

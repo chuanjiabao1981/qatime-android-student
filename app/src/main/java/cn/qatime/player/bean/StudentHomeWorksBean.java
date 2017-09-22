@@ -32,7 +32,7 @@ public class StudentHomeWorksBean implements Serializable {
 
         private int id;
         private String title;
-        private int parent_id;
+        private String parent_id;
         private String status;
         private int user_id;
         private String user_name;
@@ -94,11 +94,11 @@ public class StudentHomeWorksBean implements Serializable {
             this.title = title;
         }
 
-        public int getParent_id() {
+        public String getParent_id() {
             return parent_id;
         }
 
-        public void setParent_id(int parent_id) {
+        public void setParent_id(String parent_id) {
             this.parent_id = parent_id;
         }
 

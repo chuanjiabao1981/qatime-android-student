@@ -104,7 +104,7 @@ public class ExclusiveQuestionsActivity extends BaseActivity implements View.OnC
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(ExclusiveQuestionsActivity.this, QuestionDetailsActivity.class);
-                intent.putExtra("detail", list.get(position - 1));
+                intent.putExtra("id", list.get(position - 1).getId());
                 startActivity(intent);
             }
         });

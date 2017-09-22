@@ -56,8 +56,8 @@ public class ExclusiveFileDetailActivity extends BaseActivity {
     private boolean complete;
     private NumberFormat nt;
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private int fileId;
-    private int courseId;
+    private String fileId;
+    private String courseId;
     private ImageView image;
     private View downloadLayout;
     private ProgressBar progressBar;
@@ -68,33 +68,10 @@ public class ExclusiveFileDetailActivity extends BaseActivity {
         setContentView(R.layout.activity_exclusive_file_detail);
 
         initView();
-        initData();
+        initFileData();
     }
 
     private void initData() {
-        String path = getIntent().getStringExtra("path");
-        if (StringUtils.isNullOrBlanK(path)) {
-            courseId = getIntent().getIntExtra("courseId", 0);
-            fileId = getIntent().getIntExtra("id", 0);
-            file = (MyFilesBean.DataBean) getIntent().getSerializableExtra("file");
-            name.setText(file.getName());
-            size.setText(DataCleanUtils.getFormatSize(Double.valueOf(file.getFile_size())));
-            time.setText("上传时间:" + parse.format(new Date(file.getCreated_at()*1000)));
-
-
-            File dir = new File(Constant.FILEPATH + "/" + courseId);
-            if (!dir.exists()) {
-                dir.mkdirs();
-            }
-
-            saveFile = new File(dir, file.getName().replace("." + file.getExt_name(), "_" + fileId + "." + file.getExt_name()));
-        } else {
-            saveFile = new File(path);
-            name.setText(saveFile.getName());
-            size.setText(DataCleanUtils.getFormatSize(saveFile.length()));
-            time.setText("下载时间:" + parse.format(new Date(saveFile.lastModified())));
-        }
-
         setTitles(saveFile.getName());
 
         String extName = saveFile.getName().substring(saveFile.getName().lastIndexOf(".") + 1, saveFile.getName().length());
@@ -140,41 +117,49 @@ public class ExclusiveFileDetailActivity extends BaseActivity {
     }
 
     private void initFileData() {
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlFiles + "files/" + fileId
-                , null, new VolleyListener(ExclusiveFileDetailActivity.this) {
-            @Override
-            protected void onTokenOut() {
-                tokenOut();
-            }
-
-            @Override
-            protected void onSuccess(JSONObject response) {
-                try {
-                    file = JsonUtils.objectFromJson(response.getJSONObject("data").toString(), MyFilesBean.DataBean.class);
-                    name.setText(file.getName());
-                    size.setText(DataCleanUtils.getFormatSize(Double.valueOf(file.getFile_size())));
-//                    time.setText(file.getTime());
-
-                    File dir = new File(Constant.FILEPATH + "/" + courseId);
-                    if (!dir.exists()) {
-                        dir.mkdirs();
-                    }
-
-                    saveFile = new File(dir, file.getName());
-                    if (saveFile.exists()) {
-                        download.setText("打开文件");
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+        String path = getIntent().getStringExtra("path");
+        if (StringUtils.isNullOrBlanK(path)) {
+            courseId = getIntent().getStringExtra("courseId");
+            fileId = getIntent().getStringExtra("id");
+            DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(UrlUtils.urlGroups+courseId + "/files/" + fileId
+                    , null, new VolleyListener(ExclusiveFileDetailActivity.this) {
+                @Override
+                protected void onTokenOut() {
+                    tokenOut();
                 }
-            }
 
-            @Override
-            protected void onError(JSONObject response) {
+                @Override
+                protected void onSuccess(JSONObject response) {
+                    try {
+                        file = JsonUtils.objectFromJson(response.getJSONObject("data").toString(), MyFilesBean.DataBean.class);
+                        name.setText(file.getName());
+                        size.setText(DataCleanUtils.getFormatSize(Double.valueOf(file.getFile_size())));
+                        time.setText("上传时间:" + parse.format(new Date(file.getCreated_at()*1000)));
+                        File dir = new File(Constant.FILEPATH + "/" + courseId);
+                        if (!dir.exists()) {
+                            dir.mkdirs();
+                        }
 
-            }
-        }, new VolleyErrorListener());
-        addToRequestQueue(request);
+                        saveFile = new File(dir, file.getName().replace("." + file.getExt_name(), "_" + fileId + "." + file.getExt_name()));
+                        initData();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                protected void onError(JSONObject response) {
+
+                }
+            }, new VolleyErrorListener());
+            addToRequestQueue(request);
+        } else {
+            saveFile = new File(path);
+            name.setText(saveFile.getName());
+            size.setText(DataCleanUtils.getFormatSize(saveFile.length()));
+            time.setText("下载时间:" + parse.format(new Date(saveFile.lastModified())));
+            initData();
+        }
     }
 
     public void openFile(File file) {

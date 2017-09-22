@@ -216,29 +216,31 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
             }
         });
         addToRequestQueue(request);
-        DaYiJsonObjectRequest requestMember = new DaYiJsonObjectRequest(UrlUtils.urlExclusiveLesson + "/" + id + "/play", null,
-                new VolleyListener(ExclusiveLessonDetailActivity.this) {
-                    @Override
-                    protected void onSuccess(JSONObject response) {
-                        playInfo = JsonUtils.objectFromJson(response.toString(), ExclusiveLessonPlayInfoBean.class);
-                    }
+        if (BaseApplication.getInstance().isLogined()) {
+            DaYiJsonObjectRequest requestMember = new DaYiJsonObjectRequest(UrlUtils.urlExclusiveLesson + "/" + id + "/play", null,
+                    new VolleyListener(ExclusiveLessonDetailActivity.this) {
+                        @Override
+                        protected void onSuccess(JSONObject response) {
+                            playInfo = JsonUtils.objectFromJson(response.toString(), ExclusiveLessonPlayInfoBean.class);
+                        }
 
-                    @Override
-                    protected void onError(JSONObject response) {
+                        @Override
+                        protected void onError(JSONObject response) {
 
-                    }
+                        }
 
-                    @Override
-                    protected void onTokenOut() {
-                        tokenOut();
-                    }
-                }, new VolleyErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                super.onErrorResponse(volleyError);
-            }
-        });
-        addToRequestQueue(requestMember);
+                        @Override
+                        protected void onTokenOut() {
+                            tokenOut();
+                        }
+                    }, new VolleyErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    super.onErrorResponse(volleyError);
+                }
+            });
+            addToRequestQueue(requestMember);
+        }
     }
 
     private void setData() {
@@ -338,7 +340,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
         Intent intent;
         switch (v.getId()) {
             case R.id.menu_1:
-                if(playInfo==null){
+                if (playInfo == null) {
                     Toast.makeText(this, "未获取到聊天群组", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -359,8 +361,8 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                 pop.dismiss();
                 break;
             case R.id.menu_3:
-                intent = new Intent(this,ExclusiveQuestionsActivity.class);
-                intent.putExtra("courseId",id);
+                intent = new Intent(this, ExclusiveQuestionsActivity.class);
+                intent.putExtra("courseId", id);
                 startActivity(intent);
                 pop.dismiss();
                 break;
@@ -371,7 +373,7 @@ public class ExclusiveLessonDetailActivity extends BaseActivity implements View.
                 pop.dismiss();
                 break;
             case R.id.menu_5:
-                intent = new Intent(this,MembersActivity.class);
+                intent = new Intent(this, MembersActivity.class);
                 intent.putExtra("courseId", id);
                 startActivity(intent);
                 pop.dismiss();

@@ -87,7 +87,7 @@ public class ExclusiveStudentHomeWorksActivity extends BaseActivity implements V
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(ExclusiveStudentHomeWorksActivity.this, HomeWorkDetailActivity.class);
-                intent.putExtra("item", list.get(position - 1));
+                intent.putExtra("id", list.get(position - 1).getParent_id());
                 startActivityForResult(intent, Constant.REQUEST);
             }
         });

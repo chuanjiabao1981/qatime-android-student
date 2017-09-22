@@ -29,7 +29,7 @@ public class QuestionsBean implements Serializable {
 
     public static class DataBean implements Serializable {
 
-        private int id;
+        private String id;
         private String title;
         private int parent_id;
         private String status;
@@ -43,11 +43,11 @@ public class QuestionsBean implements Serializable {
         private String body;
         private AnswerBean answer;
 
-        public int getId() {
+        public String getId() {
             return id;
         }
 
-        public void setId(int id) {
+        public void setId(String id) {
             this.id = id;
         }
 

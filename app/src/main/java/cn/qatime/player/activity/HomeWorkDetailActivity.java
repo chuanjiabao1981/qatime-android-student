@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
@@ -29,6 +30,7 @@ import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
+import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -113,8 +115,8 @@ public class HomeWorkDetailActivity extends BaseActivity {
             for (MyHomeWorksBean.DataBean.ItemsBean itemsBean : items) {
                 HomeWorkItemBean itemBean = new HomeWorkItemBean();
                 itemBean.parent_id = itemsBean.getId();
-                if(!answerList.contains(itemBean)){
-                    itemBean.content="未做";
+                if (!answerList.contains(itemBean)) {
+                    itemBean.content = "未做";
                     answerList.add(itemBean);
                 }
 
@@ -136,47 +138,65 @@ public class HomeWorkDetailActivity extends BaseActivity {
     }
 
     private void initData() {
-        item = (StudentHomeWorksBean.DataBean) getIntent().getSerializableExtra("item");
-        if (item.getStatus().equals("pending")) {
-            setRightText("提交", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    doHomework();
+        String id = getIntent().getStringExtra("id");
+        addToRequestQueue(new DaYiJsonObjectRequest(UrlUtils.urlHomeworks + id, null, new VolleyListener(HomeWorkDetailActivity.this) {
+            @Override
+            protected void onTokenOut() {
+                tokenOut();
+            }
+
+            @Override
+            protected void onSuccess(JSONObject response) {
+                try {
+                    item = JsonUtils.objectFromJson(response.getJSONObject("data").getString("student_homework"), StudentHomeWorksBean.DataBean.class);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-            });
-            findViewById(R.id.right_text).setVisibility(View.VISIBLE);
-        }
-        homeworkTitle.setText(item.getTitle());
-        setTitles(item.getTitle());
-        long time = item.getHomework().getCreated_at() * 1000L;
-        createTime.setText("创建时间"+parse.format(new Date(time)));
-        //融合
-        List<MyHomeWorksBean.DataBean.ItemsBean> homeworks = item.getHomework().getItems();
-        List<StudentHomeWorksBean.DataBean.ItemsBean> items = item.getItems();
-        List<StudentHomeWorksBean.DataBean.CorrectionBean.ItemsBean> corrections = null;
-        if (item.getCorrection() != null) {
-            corrections = item.getCorrection().getItems();
-        }
+
+                if (item == null) {
+                    Toast.makeText(HomeWorkDetailActivity.this, "作业获取失败", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (item.getStatus().equals("pending")) {
+                    setRightText("提交", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            doHomework();
+                        }
+                    });
+                    findViewById(R.id.right_text).setVisibility(View.VISIBLE);
+                }
+                homeworkTitle.setText(item.getTitle());
+                setTitles(item.getTitle());
+                long time = item.getHomework().getCreated_at() * 1000L;
+                createTime.setText("创建时间" + parse.format(new Date(time)));
+                //融合
+                List<MyHomeWorksBean.DataBean.ItemsBean> homeworks = item.getHomework().getItems();
+                List<StudentHomeWorksBean.DataBean.ItemsBean> items = item.getItems();
+                List<StudentHomeWorksBean.DataBean.CorrectionBean.ItemsBean> corrections = null;
+                if (item.getCorrection() != null) {
+                    corrections = item.getCorrection().getItems();
+                }
 //        答案结果以及批改一一对应的写法
-        for (MyHomeWorksBean.DataBean.ItemsBean homework : homeworks) {
-            HomeworkDetailBean homeworkDetailBean = new HomeworkDetailBean();
-            homeworkDetailBean.homework = homework;
-            if (items != null) {
-                for (StudentHomeWorksBean.DataBean.ItemsBean itemsBean : items) {
-                    if (itemsBean.getParent_id() == homework.getId()) {
-                        homeworkDetailBean.answer = itemsBean;
-                        if (corrections != null) {
-                            for (StudentHomeWorksBean.DataBean.CorrectionBean.ItemsBean correction : corrections) {
-                                if (correction.getParent_id() == itemsBean.getId()) {
-                                    homeworkDetailBean.correction = correction;
+                for (MyHomeWorksBean.DataBean.ItemsBean homework : homeworks) {
+                    HomeworkDetailBean homeworkDetailBean = new HomeworkDetailBean();
+                    homeworkDetailBean.homework = homework;
+                    if (items != null) {
+                        for (StudentHomeWorksBean.DataBean.ItemsBean itemsBean : items) {
+                            if (itemsBean.getParent_id() == homework.getId()) {
+                                homeworkDetailBean.answer = itemsBean;
+                                if (corrections != null) {
+                                    for (StudentHomeWorksBean.DataBean.CorrectionBean.ItemsBean correction : corrections) {
+                                        if (correction.getParent_id() == itemsBean.getId()) {
+                                            homeworkDetailBean.correction = correction;
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
+                    list.add(homeworkDetailBean);
                 }
-            }
-            list.add(homeworkDetailBean);
-        }
 
 
 //        //答案结果以及批改按顺序取值
@@ -193,7 +213,15 @@ public class HomeWorkDetailActivity extends BaseActivity {
 //                list.get(i).correction = corrections.get(i);
 //            }
 //        }
-        adapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            protected void onError(JSONObject response) {
+                Toast.makeText(HomeWorkDetailActivity.this, "作业获取失败", Toast.LENGTH_SHORT).show();
+
+            }
+        }, new VolleyErrorListener()));
     }
 
     @Override

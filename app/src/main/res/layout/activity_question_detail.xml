@@ -27,7 +27,6 @@
                     android:id="@+id/question_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="名字名字名字名字名字名字名字名字名字名字名字名字名字名字名字名字名字名字名字名字名字名字"
                     android:textColor="#333"
                     android:textSize="15sp" />
 
@@ -41,7 +40,6 @@
                         android:id="@+id/create_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="创建时间 2011:11:11 23:32"
                         android:textColor="#999"
                         android:textSize="10sp" />
 
@@ -54,7 +52,6 @@
                         android:id="@+id/author"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="田浩然"
                         android:textColor="#999"
                         android:textSize="10sp" />
                 </LinearLayout>

@@ -92,7 +92,7 @@ public class FragmentHomeworkSubmitted extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), HomeWorkDetailActivity.class);
-                intent.putExtra("item", list.get(position - 1));
+                intent.putExtra("id", list.get(position - 1).getParent_id());
                 getActivity().startActivityForResult(intent, Constant.REQUEST);
             }
         });
