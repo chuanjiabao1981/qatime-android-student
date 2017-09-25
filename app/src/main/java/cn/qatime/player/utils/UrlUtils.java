@@ -58,7 +58,7 @@ public class UrlUtils {
     //最新课程
     public static String urlLiveStudioLatest = baseUrl + "api/v2/live_studio/courses/latest";
     //免费课程
-    public static String urlLiveStudioFree = baseUrl + "api/v2/live_studio/free_courses";
+    public static String urlLiveStudioFree = baseUrl + "api/v2/live_studio/courses/free";
     //今日直播
     public static String urlToady = baseUrl + "api/v2/live_studio/lessons/today";
     //獲取支付结果
