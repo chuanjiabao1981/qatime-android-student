@@ -92,7 +92,7 @@ public class FragmentQuestionPending extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), QuestionDetailsActivity.class);
-                intent.putExtra("detail", list.get(position - 1));
+                intent.putExtra("id", list.get(position - 1).getId());
                 getActivity().startActivityForResult(intent, Constant.REQUEST);
             }
         });

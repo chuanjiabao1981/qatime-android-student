@@ -3,7 +3,6 @@ package cn.qatime.player.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -34,6 +33,7 @@ import cn.qatime.player.adapter.QuestionEditAdapter;
 import cn.qatime.player.base.BaseActivity;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
+import cn.qatime.player.utils.RecorderUtil;
 import cn.qatime.player.utils.UrlUtils;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -63,16 +63,17 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
     private EditText content;
     private EditText head;
     private String audioFileName;
-    private MediaRecorder mRecorder;
+//    private MediaRecorder mRecorder;
     private boolean isRecording = false;
     private Disposable d;
     private MediaPlayer mediaPlayer;
     private List<ImageItem> list = new ArrayList<>();
     private QuestionEditAdapter adapter;
     private int courseId;
+    private RecorderUtil recorderUtil;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)  {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question_edit);
         setTitles("提问");
@@ -90,11 +91,11 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
         KeyBoardUtils.closeKeybord(this);
         String title = head.getText().toString().trim();
         String body = content.getText().toString().trim();
-        if(StringUtils.isNullOrBlanK(title)){
+        if (StringUtils.isNullOrBlanK(title)) {
             Toast.makeText(this, "请输入提问标题", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(StringUtils.isNullOrBlanK(body)){
+        if (StringUtils.isNullOrBlanK(body)) {
             Toast.makeText(this, "请输入提问内容", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -102,12 +103,12 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
         map.put("title", title);
         map.put("body", content.getText().toString().trim());
         JSONObject obj = new JSONObject(map);
-        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST,UrlUtils.urlGroups + courseId + "/questions", obj,
+        DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.urlGroups + courseId + "/questions", obj,
                 new VolleyListener(this) {
                     @Override
                     protected void onSuccess(JSONObject response) {
-                       setResult(Constant.RESPONSE);
-                       finish();
+                        setResult(Constant.RESPONSE);
+                        finish();
                     }
 
                     @Override
@@ -220,7 +221,7 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
                                 }
                             });
                 } else {
-                    if (mRecorder != null && isRecording) {//录音中    停止录音
+                    if (recorderUtil != null && isRecording) {//录音中    停止录音
                         d.dispose();
                         stopRecord();
                     } else {//已录制,删除
@@ -328,9 +329,10 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
         d = null;
         isRecording = false;
         Toast.makeText(this, "停止录音", Toast.LENGTH_SHORT).show();
-        mRecorder.stop();
-        mRecorder.release();
-        mRecorder = null;
+        recorderUtil.stopRawRecording();
+//        mRecorder.stop();
+//        mRecorder.release();
+//        mRecorder = null;
         progress.setMax(60);
         progress.setProgress(0);
         control.setImageResource(R.mipmap.question_delete);
@@ -349,24 +351,25 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
                 f.delete();
             }
         }
-        audioFileName = audioFileName + "/" + new SimpleDateFormat("yyyyMMddHHmmss").format(System.currentTimeMillis()) + ".aac";
+        audioFileName = audioFileName + "/" + new SimpleDateFormat("yyyyMMddHHmmss").format(System.currentTimeMillis()) + ".mp3";
         try {
             new File(audioFileName).createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        mRecorder = new MediaRecorder();
-        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS);
-        mRecorder.setOutputFile(audioFileName);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-        try {
-            mRecorder.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        mRecorder.start();
-        isRecording = true;
+//        mRecorder = new MediaRecorder();
+//        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+//        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.CHANNEL_IN_MONO);
+//        mRecorder.setOutputFile(audioFileName);
+//        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.ENCODING_PCM_16BIT);
+//        try {
+//            mRecorder.prepare();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        mRecorder.start();
+        recorderUtil = new RecorderUtil(Constant.CACHEPATH + "/audio", null);
+        isRecording = recorderUtil.startMp3Recording(audioFileName);
 
         Observer<Long> observer = new Observer<Long>() {
             @Override
@@ -410,10 +413,13 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
         if (d != null) {
             d.dispose();
         }
-        if (mRecorder != null) {
-            mRecorder.stop();
-            mRecorder.release();
-            mRecorder = null;
+//        if (mRecorder != null) {
+//            mRecorder.stop();
+//            mRecorder.release();
+//            mRecorder = null;
+//        }
+         if (recorderUtil != null) {
+             recorderUtil.stopRawRecording();
         }
         if (mediaPlayer != null) {
             mediaPlayer.stop();

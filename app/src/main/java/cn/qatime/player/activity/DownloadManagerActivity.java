@@ -90,23 +90,27 @@ public class DownloadManagerActivity extends BaseActivity implements View.OnClic
 
     private void initView() {
         File File = new File(Constant.FILEPATH);
+        if(!File.exists()){
+            File.mkdirs();
+        }
         getFilesList(File);
         listView = (PullToRefreshListView) findViewById(R.id.list);
-        listView.setEmptyView(View.inflate(this,R.layout.empty_view,null));
-        adapter = new ListViewSelectAdapter<File>(this, list, R.layout.item_file_download_manager,singleMode){
+        listView.setEmptyView(View.inflate(this, R.layout.empty_view, null));
+        adapter = new ListViewSelectAdapter<File>(this, list, R.layout.item_file_download_manager, singleMode) {
             MyVideoThumbLoader mVideoThumbLoader = new MyVideoThumbLoader();
+
             @Override
             public void convert(ViewHolder helper, File item, int position) {
                 helper.setText(R.id.name, getItem(position).getName());
                 helper.setText(R.id.size, DataCleanUtils.getFormatSize(getItem(position).length()));
                 helper.setText(R.id.time, "下载时间:" + parse.format(new Date(getItem(position).lastModified())));
-                String extName =item.getName().substring(item.getName().lastIndexOf(".")+1,item.getName().length());
+                String extName = item.getName().substring(item.getName().lastIndexOf(".") + 1, item.getName().length());
 
                 if (extName.equals("doc") || extName.equals("docx")) {
                     helper.setImageResource(R.id.image, R.mipmap.word);
                 } else if (extName.equals("xls") || extName.equals("xlsx")) {
                     helper.setImageResource(R.id.image, R.mipmap.excel);
-                }else if (extName.equals("pdf")) {
+                } else if (extName.equals("pdf")) {
                     helper.setImageResource(R.id.image, R.mipmap.pdf);
                 } else if (extName.equals("mp4")) {
                     mVideoThumbLoader.showThumbByAsyncTask(item, (ImageView) helper.getView(R.id.image));
@@ -122,7 +126,7 @@ public class DownloadManagerActivity extends BaseActivity implements View.OnClic
             @Override
             public void update(File item, boolean isChecked) {
                 int count = adapter.getSelectedList().size();
-                deleteAll.setText(count==0?"删除":("删除("+ count + ")"));
+                deleteAll.setText(count == 0 ? "删除" : ("删除(" + count + ")"));
             }
         });
         listView.setAdapter(adapter);
@@ -183,7 +187,7 @@ public class DownloadManagerActivity extends BaseActivity implements View.OnClic
                 }
                 break;
             case R.id.delete_all:
-                for (File file :  adapter.getSelectedList()) {
+                for (File file : adapter.getSelectedList()) {
                     file.delete();
                     list.remove(file);
                 }
