@@ -3,9 +3,10 @@ package cn.qatime.player.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -17,6 +18,9 @@ import android.widget.Toast;
 
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -27,8 +31,12 @@ import java.util.concurrent.TimeUnit;
 import cn.qatime.player.R;
 import cn.qatime.player.adapter.QuestionEditAdapter;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.bean.AttachmentsBean;
 import cn.qatime.player.bean.HomeWorkItemBean;
 import cn.qatime.player.utils.Constant;
+import cn.qatime.player.utils.RecorderUtil;
+import cn.qatime.player.utils.UrlUtils;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -37,6 +45,10 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import libraryextra.bean.ImageItem;
+import libraryextra.rx.HttpManager;
+import libraryextra.rx.body.ProgressResponseCallBack;
+import libraryextra.rx.callback.SimpleCallBack;
+import libraryextra.rx.exception.ApiException;
 import libraryextra.utils.StringUtils;
 import libraryextra.view.GridViewForScrollView;
 
@@ -51,14 +63,33 @@ public class HomeWorkItemEditActivity extends BaseActivity implements View.OnCli
     private ImageView play;
     private EditText content;
     private String audioFileName;
-    private MediaRecorder mRecorder;
     private boolean isRecording = false;
     private Disposable d;
     private MediaPlayer mediaPlayer;
     private List<ImageItem> list = new ArrayList<>();
+    private List<AttachmentsBean> imageAttachmentList = new ArrayList<>();
     private QuestionEditAdapter adapter;
     private Button bottom;
     private int parent_id;
+    private Handler mp3Handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what) {
+                case RecorderUtil.RECORDER_OK:
+                    audioAttachment.file_url = audioFileName;
+                    audioAttachment.file_type = "mp3";
+                    play.setImageResource(R.mipmap.refresh);
+                    addAttachments(audioAttachment);
+                    break;
+                case RecorderUtil.RECORDER_NG://error
+                    Toast.makeText(HomeWorkItemEditActivity.this, "录音失败", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+            return true;
+        }
+    });
+    private RecorderUtil recorderUtil;
+    private AttachmentsBean audioAttachment = new AttachmentsBean();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
@@ -86,8 +117,16 @@ public class HomeWorkItemEditActivity extends BaseActivity implements View.OnCli
         adapter.setOnEventListener(new QuestionEditAdapter.OnEventListener() {
             @Override
             public void onDelete(int position) {
-                list.remove(position);
-                adapter.notifyDataSetChanged();
+                if (list.get(position).status == ImageItem.Status.SUCCESS||list.get(position).status == ImageItem.Status.ERROR) {
+                    ImageItem remove = list.remove(position);
+                    adapter.notifyDataSetChanged();
+                    AttachmentsBean removeItem = new AttachmentsBean();
+                    removeItem.file_url=remove.imagePath;
+                    removeItem.id="";
+                    imageAttachmentList.remove(removeItem);
+                }else {
+                    Toast.makeText(HomeWorkItemEditActivity.this, "正在上传，请稍候", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -114,9 +153,18 @@ public class HomeWorkItemEditActivity extends BaseActivity implements View.OnCli
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Constant.RESPONSE_PICTURE_SELECT) {//选择照片返回的照片
             if (data != null) {
-                ImageItem image = (ImageItem) data.getSerializableExtra("data");
-                list.add(image);
-                adapter.notifyDataSetChanged();
+                ImageItem imageItem = (ImageItem) data.getSerializableExtra("data");
+                if (!StringUtils.isNullOrBlanK(imageItem.imagePath)) {
+                    list.add(imageItem);
+                    AttachmentsBean attachment = new AttachmentsBean();
+                    attachment.file_url = imageItem.imagePath;
+                    attachment.file_type = "image";
+                    addAttachments(attachment);
+                    adapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(this, "无效的路径", Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
         } else if (resultCode == Constant.RESPONSE_CAMERA) {//拍照返回的照片
             if (data != null) {
@@ -135,9 +183,97 @@ public class HomeWorkItemEditActivity extends BaseActivity implements View.OnCli
                     imageItem.imagePath = url;
                     imageItem.thumbnailPath = url;
                     imageItem.imageId = "";
+                    AttachmentsBean attachment = new AttachmentsBean();
+                    attachment.file_url = imageItem.imagePath;
+                    attachment.file_type = "image";
+                    addAttachments(attachment);
                     list.add(imageItem);
                     adapter.notifyDataSetChanged();
                 }
+            }
+        }
+    }
+    private void addAttachments(final AttachmentsBean attachment) {
+        final String path = attachment.file_url;
+        File file = new File(path);
+        if (file.exists()) {
+            HttpManager.post(UrlUtils.urlLiveStudio + "attachments")
+                    .headers("Remember-Token", BaseApplication.getInstance().getProfile().getToken())
+                    .params("file", file, new ProgressResponseCallBack() {
+                        @Override
+                        public void onResponseProgress(long bytesWritten, long contentLength, boolean done) {
+                        }
+                    })
+                    .execute(new SimpleCallBack<String>() {
+                        @Override
+                        public void onStart() {
+                            if ("image".equals(attachment.file_type)) {
+                                ImageItem item = new ImageItem();
+                                item.imagePath = path;
+                                int position = list.lastIndexOf(item);
+                                if (position != -1) {
+                                    list.get(position).status = ImageItem.Status.UPLOADING;
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onError(ApiException e) {
+                            if ("image".equals(attachment.file_type)) {
+                                ImageItem item = new ImageItem();
+                                item.imagePath = path;
+                                int position = list.lastIndexOf(item);
+                                if (position != -1) {
+                                    list.get(position).status = ImageItem.Status.ERROR;
+                                    adapter.notifyDataSetChanged();
+                                }
+                            } else {
+                                Toast.makeText(HomeWorkItemEditActivity.this, "语音上传失败，点击重试", Toast.LENGTH_SHORT).show();
+                                audioAttachment.id = null;
+                            }
+                            super.onError(e);
+                        }
+
+                        @Override
+                        public void onSuccess(String o) {
+                            play.setImageResource(R.mipmap.question_play);
+                            try {
+                                JSONObject response = new JSONObject(o);
+                                String id = response.getJSONObject("data").getString("id");
+                                if ("image".equals(attachment.file_type)) {
+                                    ImageItem item = new ImageItem();
+                                    item.imagePath = path;
+                                    int position = list.lastIndexOf(item);
+                                    if (position != -1) {
+                                        list.get(position).status = ImageItem.Status.SUCCESS;
+                                    }
+                                    attachment.id = id;
+                                    imageAttachmentList.add(attachment);
+                                } else {
+                                    audioAttachment.id = id;
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onTokenOut() {
+                        }
+                    });
+        } else {
+            Toast.makeText(this, "文件不存在", Toast.LENGTH_SHORT).show();
+            if ("image".equals(attachment.file_type)) {
+                ImageItem item = new ImageItem();
+                item.imagePath = path;
+                int position = list.indexOf(item);
+                if (position != -1) {
+                    list.get(position).status = ImageItem.Status.ERROR;
+                    adapter.notifyDataSetChanged();
+                }
+            } else {
+                audioAttachment.id = null;
+                audioAttachment.file_url=null;
             }
         }
     }
@@ -151,19 +287,37 @@ public class HomeWorkItemEditActivity extends BaseActivity implements View.OnCli
                     Toast.makeText(this, "回答不能为空", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (list.size() != imageAttachmentList.size()) {//判断图片有没有全部上传成功
+                    Toast.makeText(this, "图片上传未完成", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!StringUtils.isNullOrBlanK(audioFileName) && audioAttachment.id == null) {//有语音但是上传失败或没上传完成
+                    Toast.makeText(this, "语音暂未上传", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 HomeWorkItemBean homeWorkItemBean = new HomeWorkItemBean();
                 homeWorkItemBean.parent_id= parent_id;
+                if(!StringUtils.isNullOrBlanK(audioAttachment.file_url)){//有语音附件
+                    homeWorkItemBean.audioAttachment=audioAttachment;
+                }
                 homeWorkItemBean.content= trim;
                 homeWorkItemBean.imageItems = new ArrayList<>();
-                homeWorkItemBean.imageItems.addAll(list);
-                homeWorkItemBean.videoPath=audioFileName;
+                homeWorkItemBean.imageItems.addAll(imageAttachmentList);
                 Intent intent = new Intent();
-                intent.putExtra("item",homeWorkItemBean);
-                setResult(Constant.RESPONSE,intent);
+                intent.putExtra("item", homeWorkItemBean);
+                setResult(Constant.RESPONSE, intent);
                 finish();
                 break;
             case R.id.play:
-                playOrPause();
+                if (!StringUtils.isNullOrBlanK(audioFileName) && audioAttachment.id != null) {//有语音 上传完成
+                    playOrPause();
+                } else {
+                    if (!StringUtils.isNullOrBlanK(audioFileName)) {
+                        audioAttachment.file_url = audioFileName;
+                        audioAttachment.file_type = "mp3";
+                        addAttachments(audioAttachment);
+                    }
+                }
                 break;
             case R.id.control:
                 if (StringUtils.isNullOrBlanK(audioFileName)) {
@@ -178,7 +332,7 @@ public class HomeWorkItemEditActivity extends BaseActivity implements View.OnCli
                                 }
                             });
                 } else {
-                    if (mRecorder != null && isRecording) {//录音中    停止录音
+                    if (recorderUtil != null && isRecording) {//录音中    停止录音
                         d.dispose();
                         stopRecord();
                     } else {//已录制,删除
@@ -188,9 +342,10 @@ public class HomeWorkItemEditActivity extends BaseActivity implements View.OnCli
                         }
                         File file = new File(audioFileName);
                         if (file.exists()) {
-                            Toast.makeText(this, "删除", Toast.LENGTH_SHORT).show();
                             file.delete();
                         }
+                        audioAttachment.id = null;
+                        audioAttachment.file_url = null;//置空
                         audioFileName = null;
                         control.setImageResource(R.mipmap.question_record);
                         play.setVisibility(View.GONE);
@@ -286,9 +441,10 @@ public class HomeWorkItemEditActivity extends BaseActivity implements View.OnCli
         d = null;
         isRecording = false;
         Toast.makeText(this, "停止录音", Toast.LENGTH_SHORT).show();
-        mRecorder.stop();
-        mRecorder.release();
-        mRecorder = null;
+        recorderUtil.stopRawRecording();
+//        mRecorder.stop();
+//        mRecorder.release();
+//        mRecorder = null;
         progress.setMax(60);
         progress.setProgress(0);
         control.setImageResource(R.mipmap.question_delete);
@@ -307,24 +463,26 @@ public class HomeWorkItemEditActivity extends BaseActivity implements View.OnCli
                 f.delete();
             }
         }
-        audioFileName = audioFileName + "/" + new SimpleDateFormat("yyyyMMddHHmmss").format(System.currentTimeMillis()) + ".aac";
+        audioFileName = audioFileName + "/" + new SimpleDateFormat("yyyyMMddHHmmss").format(System.currentTimeMillis()) + ".mp3";
         try {
             new File(audioFileName).createNewFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        mRecorder = new MediaRecorder();
-        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS);
-        mRecorder.setOutputFile(audioFileName);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-        try {
-            mRecorder.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        mRecorder.start();
-        isRecording = true;
+//        mRecorder = new MediaRecorder();
+//        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+//        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS);
+//        mRecorder.setOutputFile(audioFileName);
+//        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+//        try {
+//            mRecorder.prepare();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        mRecorder.start();
+        recorderUtil = new RecorderUtil(Constant.CACHEPATH + "/audio", mp3Handler);
+        isRecording = recorderUtil.startMp3Recording(audioFileName);
+
 
         Observer<Long> observer = new Observer<Long>() {
             @Override
@@ -368,11 +526,14 @@ public class HomeWorkItemEditActivity extends BaseActivity implements View.OnCli
         if (d != null) {
             d.dispose();
         }
-        if (mRecorder != null) {
-            mRecorder.stop();
-            mRecorder.release();
-            mRecorder = null;
-        }
+//        if (mRecorder != null) {
+//            mRecorder.stop();
+//            mRecorder.release();
+//            mRecorder = null;
+//        }
+            if (recorderUtil != null) {
+                recorderUtil.stopRawRecording();
+            }
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();

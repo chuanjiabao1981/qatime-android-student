@@ -129,6 +129,15 @@ public class MyHomeWorksBean implements Serializable {
             private int id;
             private String body;
             private int parent_id;
+            private List<AttachmentsBean> attachments;
+
+            public List<AttachmentsBean> getAttachments() {
+                return attachments;
+            }
+
+            public void setAttachments(List<AttachmentsBean> attachments) {
+                this.attachments = attachments;
+            }
 
             public int getId() {
                 return id;

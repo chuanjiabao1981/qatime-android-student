@@ -42,6 +42,15 @@ public class QuestionsBean implements Serializable {
         private String model_name;
         private String body;
         private AnswerBean answer;
+        private List<AttachmentsBean> attachments;
+
+        public List<AttachmentsBean> getAttachments() {
+            return attachments;
+        }
+
+        public void setAttachments(List<AttachmentsBean> attachments) {
+            this.attachments = attachments;
+        }
 
         public String getId() {
             return id;
@@ -160,6 +169,15 @@ public class QuestionsBean implements Serializable {
             private int created_at;
             private String model_name;
             private String body;
+            private List<AttachmentsBean> attachments;
+
+            public List<AttachmentsBean> getAttachments() {
+                return attachments;
+            }
+
+            public void setAttachments(List<AttachmentsBean> attachments) {
+                this.attachments = attachments;
+            }
 
             public int getId() {
                 return id;

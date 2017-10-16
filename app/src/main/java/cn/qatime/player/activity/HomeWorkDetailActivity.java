@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.orhanobut.logger.Logger;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,6 +22,7 @@ import java.util.Map;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.bean.AttachmentsBean;
 import cn.qatime.player.bean.HomeWorkItemBean;
 import cn.qatime.player.bean.HomeworkDetailBean;
 import cn.qatime.player.bean.MyHomeWorksBean;
@@ -28,8 +30,10 @@ import cn.qatime.player.bean.StudentHomeWorksBean;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
+import cn.qatime.player.view.ExpandView;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
+import libraryextra.bean.ImageItem;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -131,9 +135,26 @@ public class HomeWorkDetailActivity extends BaseActivity {
                     .append(homeWorkItemBean.parent_id)
                     .append(",\"body\":\"")
                     .append(homeWorkItemBean.content)
-                    .append("\"},");
+                    .append("\"");
+            if (homeWorkItemBean.audioAttachment != null || homeWorkItemBean.imageItems.size() > 0) {
+                sb.append(",")
+                        .append("\"quotes_attributes\":[");
+                for (AttachmentsBean attachment : homeWorkItemBean.imageItems) {
+                    sb.append("{\"attachment_id\":\"")
+                            .append(attachment.id)
+                            .append("\"},");
+                }
+                if (homeWorkItemBean.audioAttachment != null) {
+                    sb.append("{\"attachment_id\":\"")
+                            .append(homeWorkItemBean.audioAttachment.id)
+                            .append("\"},");
+                }
+                sb.setCharAt(sb.length() - 1, ']');
+            }
+            sb.append("},");
         }
         sb.setCharAt(sb.length() - 1, ']');
+        Logger.e(sb.toString());
         return sb.toString();
     }
 
@@ -253,8 +274,22 @@ public class HomeWorkDetailActivity extends BaseActivity {
                 if (position < 10) {
                     num = 0 + num;
                 }
-                holder.setText(R.id.num, num)
-                        .setText(R.id.title, item.homework.getBody());
+                List<AttachmentsBean> homeworkAttachments = item.homework.getAttachments();
+                AttachmentsBean audioAttachments = new AttachmentsBean();
+                List<ImageItem> imageAttachments = new ArrayList<>();
+                if (homeworkAttachments!=null&&homeworkAttachments.size() > 0) {
+                    for (AttachmentsBean homeworkAttachment : homeworkAttachments) {
+                        if ("mp3".equals(homeworkAttachment.file_type)) {
+                            audioAttachments = homeworkAttachment;
+                        } else {
+                            ImageItem imageItem = new ImageItem();
+                            imageItem.imagePath = homeworkAttachment.file_url;
+                            imageAttachments.add(imageItem);
+                        }
+                    }
+                }
+                ExpandView homeworkView = holder.getView(R.id.homework_view);
+                homeworkView.initExpandView(num + " " + item.homework.getBody(), audioAttachments.file_url, imageAttachments, true);
 
                 TextView doHomeWork = holder.getView(R.id.do_homework);
                 if (HomeWorkDetailActivity.this.item.getStatus().equals("submitted") || HomeWorkDetailActivity.this.item.getStatus().equals("resolved")) {
@@ -262,25 +297,59 @@ public class HomeWorkDetailActivity extends BaseActivity {
                     View answerLayout = holder.getView(R.id.answer_layout);
                     answerLayout.setVisibility(View.VISIBLE);
                     if (item.answer != null) {//已做并且答案不为空    有id
-                        if (!StringUtils.isNullOrBlanK(item.answer.getBody())) {//内容不为空
-                            holder.setText(R.id.answer_content, item.answer.getBody());
+                        if (!StringUtils.isNullOrBlanK(item.answer.getBody()) || item.answer.getAttachments().size() > 0) {//内容不为空
+                            List<AttachmentsBean> answerAttachments = item.answer.getAttachments();
+                            AttachmentsBean answerAudioAttachments = new AttachmentsBean();
+                            List<ImageItem> answerImageAttachments = new ArrayList<>();
+                            if (answerAttachments!=null&&answerAttachments.size() > 0) {
+                                for (AttachmentsBean answerAttachment : answerAttachments) {
+                                    if ("mp3".equals(answerAttachment.file_type)) {
+                                        answerAudioAttachments = answerAttachment;
+                                    } else {
+                                        ImageItem imageItem = new ImageItem();
+                                        imageItem.imagePath = answerAttachment.file_url;
+                                        answerImageAttachments.add(imageItem);
+                                    }
+                                }
+                            }
+                            ExpandView answerView = holder.getView(R.id.answer_view);
+                            answerView.initExpandView(item.answer.getBody(), answerAudioAttachments.file_url, answerImageAttachments, true);
                         } else {
-                            holder.setText(R.id.answer_content, "无");
+                            ExpandView answerView = holder.getView(R.id.answer_view);
+                            answerView.initExpandView("无", null, null, true);
                         }
                     } else {//已做但是答案为空  理论上不会出现   answer为空id为空
-                        holder.setText(R.id.answer_content, "无");
+                        ExpandView answerView = holder.getView(R.id.answer_view);
+                        answerView.initExpandView("无", null, null, true);
                     }
                     if (HomeWorkDetailActivity.this.item.getStatus().equals("resolved")) {
                         View correctionLayout = holder.getView(R.id.correction_layout);
                         correctionLayout.setVisibility(View.VISIBLE);
                         if (item.correction != null) {//已批改并且结果不为空    有id
-                            if (!StringUtils.isNullOrBlanK(item.correction.getBody())) {//内容不为空
-                                holder.setText(R.id.correction_content, item.correction.getBody());
+                            if (!StringUtils.isNullOrBlanK(item.correction.getBody()) || item.correction.getAttachments().size() > 0) {//内容不为空
+                                List<AttachmentsBean> correctionAttachments = item.correction.getAttachments();
+                                AttachmentsBean correctionAudioAttachments = new AttachmentsBean();
+                                List<ImageItem> correctionImageAttachments = new ArrayList<>();
+                                if (correctionAttachments!=null&&correctionAttachments.size() > 0) {
+                                    for (AttachmentsBean correctionAttachment : correctionAttachments) {
+                                        if ("mp3".equals(correctionAttachment.file_type)) {
+                                            correctionAudioAttachments = correctionAttachment;
+                                        } else {
+                                            ImageItem imageItem = new ImageItem();
+                                            imageItem.imagePath = correctionAttachment.file_url;
+                                            correctionImageAttachments.add(imageItem);
+                                        }
+                                    }
+                                }
+                                ExpandView correctView = holder.getView(R.id.correction_view);
+                                correctView.initExpandView(item.correction.getBody(), correctionAudioAttachments.file_url, correctionImageAttachments, true);
                             } else {
-                                holder.setText(R.id.correction_content, "无");
+                                ExpandView correctView = holder.getView(R.id.correction_view);
+                                correctView.initExpandView("无", null, null, true);
                             }
                         } else {//已批改的状态但是没有批改结果  理论上不会出现   correction为空id为空
-                            holder.setText(R.id.correction_content, "无");
+                            ExpandView correctView = holder.getView(R.id.correction_view);
+                            correctView.initExpandView("无", null, null, true);
                         }
                     }
                 } else {
@@ -288,10 +357,26 @@ public class HomeWorkDetailActivity extends BaseActivity {
                         doHomeWork.setText("重做");
                         View answerLayout = holder.getView(R.id.answer_layout);
                         answerLayout.setVisibility(View.VISIBLE);
-                        if (!StringUtils.isNullOrBlanK(item.answer.getBody())) {//内容不为空
-                            holder.setText(R.id.answer_content, item.answer.getBody());
+                        if (!StringUtils.isNullOrBlanK(item.answer.getBody()) || item.answer.getAttachments().size() > 0) {//内容不为空
+                            List<AttachmentsBean> answerAttachments = item.answer.getAttachments();
+                            AttachmentsBean answerAudioAttachments = new AttachmentsBean();
+                            List<ImageItem> answerImageAttachments = new ArrayList<>();
+                            if (answerAttachments!=null&&answerAttachments.size() > 0) {
+                                for (AttachmentsBean answerAttachment : answerAttachments) {
+                                    if ("mp3".equals(answerAttachment.file_type)) {
+                                        answerAudioAttachments = answerAttachment;
+                                    } else {
+                                        ImageItem imageItem = new ImageItem();
+                                        imageItem.imagePath = answerAttachment.file_url;
+                                        answerImageAttachments.add(imageItem);
+                                    }
+                                }
+                            }
+                            ExpandView answerView = holder.getView(R.id.answer_view);
+                            answerView.initExpandView(item.answer.getBody(), answerAudioAttachments.file_url, answerImageAttachments, true);
                         } else {
-                            holder.setText(R.id.answer_content, "无");
+                            ExpandView answerView = holder.getView(R.id.answer_view);
+                            answerView.initExpandView("无", null, null, true);
                         }
                     }
                     doHomeWork.setOnClickListener(new View.OnClickListener() {

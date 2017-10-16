@@ -11,22 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="01"
-            android:textColor="#333" />
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
-            android:maxLines="1"
-            android:text="哈哈哈"
-            android:textColor="#333" />
+        <cn.qatime.player.view.ExpandView
+            android:id="@+id/homework_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <LinearLayout
@@ -43,12 +31,10 @@
             android:text="我的答案:"
             android:textColor="#333" />
 
-        <TextView
-            android:id="@+id/answer_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="我的答案我的答案我的答案我的答案"
-            android:textColor="#666" />
+        <cn.qatime.player.view.ExpandView
+            android:id="@+id/answer_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
     <TextView
         android:id="@+id/do_homework"
@@ -72,12 +58,9 @@
             android:text="批改结果:"
             android:textColor="#333" />
 
-        <TextView
-            android:id="@+id/correction_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="未批改"
-            android:textColor="#666" />
+        <cn.qatime.player.view.ExpandView
+            android:id="@+id/correction_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
-
 </LinearLayout>
