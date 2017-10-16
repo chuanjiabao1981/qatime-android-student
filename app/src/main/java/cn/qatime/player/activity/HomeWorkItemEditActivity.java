@@ -92,7 +92,7 @@ public class HomeWorkItemEditActivity extends BaseActivity implements View.OnCli
     private AttachmentsBean audioAttachment = new AttachmentsBean();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)  {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homework_item_edit);
         setTitles("做作业");
@@ -117,14 +117,14 @@ public class HomeWorkItemEditActivity extends BaseActivity implements View.OnCli
         adapter.setOnEventListener(new QuestionEditAdapter.OnEventListener() {
             @Override
             public void onDelete(int position) {
-                if (list.get(position).status == ImageItem.Status.SUCCESS||list.get(position).status == ImageItem.Status.ERROR) {
+                if (list.get(position).status == ImageItem.Status.SUCCESS || list.get(position).status == ImageItem.Status.ERROR) {
                     ImageItem remove = list.remove(position);
                     adapter.notifyDataSetChanged();
                     AttachmentsBean removeItem = new AttachmentsBean();
-                    removeItem.file_url=remove.imagePath;
-                    removeItem.id="";
+                    removeItem.file_url = remove.imagePath;
+                    removeItem.id = "";
                     imageAttachmentList.remove(removeItem);
-                }else {
+                } else {
                     Toast.makeText(HomeWorkItemEditActivity.this, "正在上传，请稍候", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -193,6 +193,7 @@ public class HomeWorkItemEditActivity extends BaseActivity implements View.OnCli
             }
         }
     }
+
     private void addAttachments(final AttachmentsBean attachment) {
         final String path = attachment.file_url;
         File file = new File(path);
@@ -273,7 +274,7 @@ public class HomeWorkItemEditActivity extends BaseActivity implements View.OnCli
                 }
             } else {
                 audioAttachment.id = null;
-                audioAttachment.file_url=null;
+                audioAttachment.file_url = null;
             }
         }
     }
@@ -283,7 +284,7 @@ public class HomeWorkItemEditActivity extends BaseActivity implements View.OnCli
         switch (v.getId()) {
             case R.id.bottom_button:
                 String trim = content.getText().toString().trim();
-                if(StringUtils.isNullOrBlanK(trim)) {
+                if (StringUtils.isNullOrBlanK(trim)) {
                     Toast.makeText(this, "回答不能为空", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -296,11 +297,11 @@ public class HomeWorkItemEditActivity extends BaseActivity implements View.OnCli
                     return;
                 }
                 HomeWorkItemBean homeWorkItemBean = new HomeWorkItemBean();
-                homeWorkItemBean.parent_id= parent_id;
-                if(!StringUtils.isNullOrBlanK(audioAttachment.file_url)){//有语音附件
-                    homeWorkItemBean.audioAttachment=audioAttachment;
+                homeWorkItemBean.parent_id = parent_id;
+                if (!StringUtils.isNullOrBlanK(audioAttachment.file_url)) {//有语音附件
+                    homeWorkItemBean.audioAttachment = audioAttachment;
                 }
-                homeWorkItemBean.content= trim;
+                homeWorkItemBean.content = trim;
                 homeWorkItemBean.imageItems = new ArrayList<>();
                 homeWorkItemBean.imageItems.addAll(imageAttachmentList);
                 Intent intent = new Intent();
@@ -531,9 +532,9 @@ public class HomeWorkItemEditActivity extends BaseActivity implements View.OnCli
 //            mRecorder.release();
 //            mRecorder = null;
 //        }
-            if (recorderUtil != null) {
-                recorderUtil.stopRawRecording();
-            }
+        if (recorderUtil != null) {
+            recorderUtil.stopRawRecording();
+        }
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();

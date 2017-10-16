@@ -81,7 +81,14 @@ public class HomeWorkDetailActivity extends BaseActivity {
 
                     @Override
                     protected void onError(JSONObject response) {
-
+                        try {
+                            JSONObject error = response.getJSONObject("error");
+                            if(error.getInt("code")==3002){
+                                Toast.makeText(HomeWorkDetailActivity.this, error.getString("msg"), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
@@ -136,7 +143,7 @@ public class HomeWorkDetailActivity extends BaseActivity {
                     .append(",\"body\":\"")
                     .append(homeWorkItemBean.content)
                     .append("\"");
-            if (homeWorkItemBean.audioAttachment != null || homeWorkItemBean.imageItems.size() > 0) {
+            if (homeWorkItemBean.audioAttachment != null || (homeWorkItemBean.imageItems!=null&&homeWorkItemBean.imageItems.size() > 0)) {
                 sb.append(",")
                         .append("\"quotes_attributes\":[");
                 for (AttachmentsBean attachment : homeWorkItemBean.imageItems) {
@@ -253,7 +260,7 @@ public class HomeWorkDetailActivity extends BaseActivity {
                 doingItem.answer = new StudentHomeWorksBean.DataBean.ItemsBean();
                 doingItem.answer.setBody(item.content);
                 List<AttachmentsBean> attachments = new ArrayList<>();
-                if (item.imageItems.size() > 0) {
+                if (item.imageItems!=null&&item.imageItems.size() > 0) {
                     attachments.addAll(item.imageItems);
                 }
                 if (!StringUtils.isNullOrBlanK(item.audioAttachment)) {
