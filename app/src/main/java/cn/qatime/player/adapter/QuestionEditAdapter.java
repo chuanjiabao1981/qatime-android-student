@@ -75,7 +75,7 @@ public class QuestionEditAdapter extends BaseAdapter {
             }
             holder.delete.setVisibility(View.VISIBLE);
             Glide.with(context).load("file://" + item.thumbnailPath).placeholder(R.mipmap.default_image).crossFade().centerCrop().into(holder.image);
-            if (item.error) {
+            if (item.status == ImageItem.Status.ERROR) {
                 holder.error.setVisibility(View.VISIBLE);
             } else {
                 holder.error.setVisibility(View.GONE);
@@ -98,7 +98,7 @@ public class QuestionEditAdapter extends BaseAdapter {
                 }
                 holder.delete.setVisibility(View.VISIBLE);
                 Glide.with(context).load("file://" + item.thumbnailPath).placeholder(R.mipmap.default_image).crossFade().centerCrop().into(holder.image);
-                if (item.error) {
+                if (item.status == ImageItem.Status.ERROR) {
                     holder.error.setVisibility(View.VISIBLE);
                 } else {
                     holder.error.setVisibility(View.GONE);

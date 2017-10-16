@@ -252,6 +252,14 @@ public class HomeWorkDetailActivity extends BaseActivity {
             if (item != null) {
                 doingItem.answer = new StudentHomeWorksBean.DataBean.ItemsBean();
                 doingItem.answer.setBody(item.content);
+                List<AttachmentsBean> attachments = new ArrayList<>();
+                if (item.imageItems.size() > 0) {
+                    attachments.addAll(item.imageItems);
+                }
+                if (!StringUtils.isNullOrBlanK(item.audioAttachment)) {
+                    attachments.add(item.audioAttachment);
+                }
+                doingItem.answer.setAttachments(attachments);
                 answerList.remove(item);
                 answerList.add(item);
                 adapter.notifyDataSetChanged();
