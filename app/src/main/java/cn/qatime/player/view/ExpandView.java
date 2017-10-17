@@ -16,12 +16,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
-import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -36,7 +35,6 @@ import io.reactivex.functions.Predicate;
 import libraryextra.adapter.CommonAdapter;
 import libraryextra.adapter.ViewHolder;
 import libraryextra.bean.ImageItem;
-import libraryextra.utils.StringUtils;
 import libraryextra.view.GridViewForScrollView;
 
 public class ExpandView extends FrameLayout implements View.OnClickListener {
@@ -115,7 +113,7 @@ public class ExpandView extends FrameLayout implements View.OnClickListener {
         mIsExpand = true;
     }
 
-    public void initExpandView(String content, String audioUrl, List<ImageItem> list, final boolean show) {
+    public void initExpandView(String content, String audioUrl, List<ImageItem> imageList, final boolean show) {
         getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
@@ -133,37 +131,39 @@ public class ExpandView extends FrameLayout implements View.OnClickListener {
         this.content = (TextView) findViewById(R.id.content);
         this.content.setText(content);
         this.audioFileName = audioUrl;
-        this.list = list;
+        this.list = imageList;
 
-        if (list != null) {
-            GridViewForScrollView grid = (GridViewForScrollView) findViewById(R.id.grid);
-            grid.setVisibility(VISIBLE);
-            adapter = new CommonAdapter<ImageItem>(getContext(), list, R.layout.item_question_image) {
-                @Override
-                public void convert(ViewHolder holder, ImageItem item, int position) {
-                    ImageView view = (ImageView) holder.getView(R.id.image);
-                    Glide.with(getContext()).load("file://" + item.imagePath).placeholder(R.mipmap.default_image).crossFade().centerCrop().into(view);
-                    ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-                    layoutParams.height = view.getWidth();
-                    view.setLayoutParams(layoutParams);
-                }
-            };
-            grid.setAdapter(adapter);
-            grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    ImageItem item = adapter.getItem(position);
-                    Intent intent = new Intent(getContext(), WatchPictureActivity.class);
-                    intent.putExtra("src", item.imagePath);
-                    getContext().startActivity(intent);
-                }
-            });
+        if (this.list == null) {
+            this.list = new ArrayList<>();
         }
-        if(audioUrl!=null){
+        GridViewForScrollView grid = (GridViewForScrollView) findViewById(R.id.grid);
+        grid.setVisibility(VISIBLE);
+        adapter = new CommonAdapter<ImageItem>(getContext(), list, R.layout.item_question_image) {
+            @Override
+            public void convert(ViewHolder holder, ImageItem item, int position) {
+                ImageView view = (ImageView) holder.getView(R.id.image);
+                Glide.with(getContext()).load(item.imagePath).placeholder(R.mipmap.default_image).crossFade().centerCrop().into(view);
+                ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+                layoutParams.height = view.getWidth();
+                view.setLayoutParams(layoutParams);
+            }
+        };
+        grid.setAdapter(adapter);
+        grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ImageItem item = adapter.getItem(position);
+                Intent intent = new Intent(getContext(), WatchPictureActivity.class);
+                intent.putExtra("src", item.imagePath);
+                getContext().startActivity(intent);
+            }
+        });
+        if (audioUrl != null) {
             findViewById(R.id.audio_layout).setVisibility(VISIBLE);
+        } else {
+            findViewById(R.id.audio_layout).setVisibility(GONE);
         }
         time = (TextView) findViewById(R.id.time);
-        time.setText("0\"");
         progress = (ProgressBar) findViewById(R.id.progress);
         play = (ImageView) findViewById(R.id.play);
         play.setOnClickListener(this);
@@ -180,15 +180,6 @@ public class ExpandView extends FrameLayout implements View.OnClickListener {
     }
 
     private void playOrPause() {
-        if (StringUtils.isNullOrBlanK(audioFileName)) {
-            play.setVisibility(View.GONE);
-            return;
-        }
-        if (!new File(audioFileName).exists()) {
-            Toast.makeText(getContext(), "语音文件不存在", Toast.LENGTH_SHORT).show();
-            play.setVisibility(View.GONE);
-            return;
-        }
         if (mediaPlayer == null) {
             mediaPlayer = new MediaPlayer();
             try {
@@ -259,7 +250,9 @@ public class ExpandView extends FrameLayout implements View.OnClickListener {
         mediaPlayer = null;
     }
 
-    public void onDestroy() {
+    @Override
+    protected void onDetachedFromWindow() {//view销毁
+        super.onDetachedFromWindow();
         if (d != null) {
             d.dispose();
         }

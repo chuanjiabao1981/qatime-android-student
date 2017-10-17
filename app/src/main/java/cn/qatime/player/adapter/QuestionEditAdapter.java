@@ -75,12 +75,17 @@ public class QuestionEditAdapter extends BaseAdapter {
             }
             holder.delete.setVisibility(View.VISIBLE);
             Glide.with(context).load("file://" + item.thumbnailPath).placeholder(R.mipmap.default_image).crossFade().centerCrop().into(holder.image);
+            if (item.status == ImageItem.Status.ERROR) {
+                holder.error.setVisibility(View.VISIBLE);
+            } else {
+                holder.error.setVisibility(View.GONE);
+            }
         } else {
             if (position == list.size()) {
                 holder.delete.setVisibility(View.GONE);
 //                holder.image.setImageResource(R.mipmap.question_add_image);
                 Glide.with(context).load("").placeholder(R.mipmap.question_add_image).crossFade().centerCrop().into(holder.image);
-
+                holder.error.setVisibility(View.GONE);
             } else {
                 ImageItem item = getItem(position);
                 if (StringUtils.isNullOrBlanK(item.thumbnailPath)) {
@@ -93,6 +98,11 @@ public class QuestionEditAdapter extends BaseAdapter {
                 }
                 holder.delete.setVisibility(View.VISIBLE);
                 Glide.with(context).load("file://" + item.thumbnailPath).placeholder(R.mipmap.default_image).crossFade().centerCrop().into(holder.image);
+                if (item.status == ImageItem.Status.ERROR) {
+                    holder.error.setVisibility(View.VISIBLE);
+                } else {
+                    holder.error.setVisibility(View.GONE);
+                }
             }
         }
         holder.delete.setOnClickListener(new View.OnClickListener() {
@@ -109,10 +119,12 @@ public class QuestionEditAdapter extends BaseAdapter {
         private final ImageView image;
         private final ImageView delete;
         private final View rootView;
+        private final View error;
 
         public ViewHolder(View rootView) {
             this.image = (ImageView) rootView.findViewById(R.id.image);
             this.delete = (ImageView) rootView.findViewById(R.id.delete);
+            this.error = rootView.findViewById(R.id.error);
             this.rootView = rootView;
         }
     }

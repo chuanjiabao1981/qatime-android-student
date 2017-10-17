@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -15,8 +17,10 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
+import com.orhanobut.logger.Logger;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -31,6 +35,9 @@ import java.util.concurrent.TimeUnit;
 import cn.qatime.player.R;
 import cn.qatime.player.adapter.QuestionEditAdapter;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.base.BaseApplication;
+import cn.qatime.player.bean.AttachmentsBean;
+import cn.qatime.player.bean.QuestionsBean;
 import cn.qatime.player.utils.Constant;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.RecorderUtil;
@@ -43,6 +50,10 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import libraryextra.bean.ImageItem;
+import libraryextra.rx.HttpManager;
+import libraryextra.rx.body.ProgressResponseCallBack;
+import libraryextra.rx.callback.SimpleCallBack;
+import libraryextra.rx.exception.ApiException;
 import libraryextra.utils.KeyBoardUtils;
 import libraryextra.utils.StringUtils;
 import libraryextra.utils.VolleyErrorListener;
@@ -63,14 +74,32 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
     private EditText content;
     private EditText head;
     private String audioFileName;
-//    private MediaRecorder mRecorder;
     private boolean isRecording = false;
     private Disposable d;
     private MediaPlayer mediaPlayer;
     private List<ImageItem> list = new ArrayList<>();
+    private List<AttachmentsBean> imageAttachmentList = new ArrayList<>();
     private QuestionEditAdapter adapter;
     private int courseId;
+    private Handler mp3Handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what) {
+                case RecorderUtil.RECORDER_OK:
+                    audioAttachment.file_url = audioFileName;
+                    audioAttachment.file_type = "mp3";
+                    play.setImageResource(R.mipmap.refresh);
+                    addAttachments(audioAttachment);
+                    break;
+                case RecorderUtil.RECORDER_NG://error
+                    Toast.makeText(QuestionEditActivity.this, "录音失败", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+            return true;
+        }
+    });
     private RecorderUtil recorderUtil;
+    private AttachmentsBean audioAttachment = new AttachmentsBean();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,9 +128,26 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
             Toast.makeText(this, "请输入提问内容", Toast.LENGTH_SHORT).show();
             return;
         }
+        if (list.size() != imageAttachmentList.size()) {//判断图片有没有全部上传成功
+            Toast.makeText(this, "图片上传未完成", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!StringUtils.isNullOrBlanK(audioFileName) && audioAttachment.id == null) {//有语音但是上传失败或没上传完成
+            Toast.makeText(this, "语音暂未上传", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        QuestionsBean.DataBean.AnswerBean answerBean = new QuestionsBean.DataBean.AnswerBean();
+        answerBean.setBody(body);
+        List<AttachmentsBean> attachments = new ArrayList<>();
+        attachments.addAll(imageAttachmentList);
+        if (!StringUtils.isNullOrBlanK(audioAttachment.file_url)) {
+            attachments.add(audioAttachment);
+        }
+        answerBean.setAttachments(attachments);
         Map<String, String> map = new HashMap<>();
         map.put("title", title);
         map.put("body", content.getText().toString().trim());
+        map.put("quotes_attributes", getContentString(answerBean));
         JSONObject obj = new JSONObject(map);
         DaYiJsonObjectRequest request = new DaYiJsonObjectRequest(Request.Method.POST, UrlUtils.urlGroups + courseId + "/questions", obj,
                 new VolleyListener(this) {
@@ -113,7 +159,14 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
 
                     @Override
                     protected void onError(JSONObject response) {
-
+                        try {
+                            JSONObject error = response.getJSONObject("error");
+                            if (error.getInt("code") == 3002) {
+                                Toast.makeText(QuestionEditActivity.this, error.getString("msg"), Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                              e.printStackTrace();
+                        }
                     }
 
                     @Override
@@ -127,6 +180,22 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
             }
         });
         addToRequestQueue(request);
+    }
+
+    private String getContentString(QuestionsBean.DataBean.AnswerBean answerBean) {
+        StringBuilder sb = new StringBuilder("[");
+        for (AttachmentsBean attachment : answerBean.getAttachments()) {
+            sb.append("{\"attachment_id\":\"")
+                    .append(attachment.id)
+                    .append("\"},");
+        }
+        if (sb.length() > 1) {
+            sb.setCharAt(sb.length() - 1, ']');
+            Logger.e(sb.toString());
+            return sb.toString();
+        } else {
+            return "";
+        }
     }
 
     private void initView() {
@@ -146,8 +215,16 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
         adapter.setOnEventListener(new QuestionEditAdapter.OnEventListener() {
             @Override
             public void onDelete(int position) {
-                list.remove(position);
-                adapter.notifyDataSetChanged();
+                if (list.get(position).status != ImageItem.Status.UPLOADING) {
+                    ImageItem remove = list.remove(position);
+                    adapter.notifyDataSetChanged();
+                    AttachmentsBean removeItem = new AttachmentsBean();
+                    removeItem.file_url = remove.imagePath;
+                    removeItem.id = "";
+                    imageAttachmentList.remove(removeItem);
+                } else {
+                    Toast.makeText(QuestionEditActivity.this, "正在上传，请稍候", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -174,9 +251,18 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Constant.RESPONSE_PICTURE_SELECT) {//选择照片返回的照片
             if (data != null) {
-                ImageItem image = (ImageItem) data.getSerializableExtra("data");
-                list.add(image);
-                adapter.notifyDataSetChanged();
+                ImageItem imageItem = (ImageItem) data.getSerializableExtra("data");
+                if (!StringUtils.isNullOrBlanK(imageItem.imagePath)) {
+                    list.add(imageItem);
+                    AttachmentsBean attachment = new AttachmentsBean();
+                    attachment.file_url = imageItem.imagePath;
+                    attachment.file_type = "image";
+                    addAttachments(attachment);
+                    adapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(this, "无效的路径", Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
         } else if (resultCode == Constant.RESPONSE_CAMERA) {//拍照返回的照片
             if (data != null) {
@@ -195,9 +281,98 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
                     imageItem.imagePath = url;
                     imageItem.thumbnailPath = url;
                     imageItem.imageId = "";
+                    AttachmentsBean attachment = new AttachmentsBean();
+                    attachment.file_url = imageItem.imagePath;
+                    attachment.file_type = "image";
+                    addAttachments(attachment);
                     list.add(imageItem);
                     adapter.notifyDataSetChanged();
                 }
+            }
+        }
+    }
+
+    private void addAttachments(final AttachmentsBean attachment) {
+        final String path = attachment.file_url;
+        File file = new File(path);
+        if (file.exists()) {
+            HttpManager.post(UrlUtils.urlLiveStudio + "attachments")
+                    .headers("Remember-Token", BaseApplication.getInstance().getProfile().getToken())
+                    .params("file", file, new ProgressResponseCallBack() {
+                        @Override
+                        public void onResponseProgress(long bytesWritten, long contentLength, boolean done) {
+                        }
+                    })
+                    .execute(new SimpleCallBack<String>() {
+                        @Override
+                        public void onStart() {
+                            if ("image".equals(attachment.file_type)) {
+                                ImageItem item = new ImageItem();
+                                item.imagePath = path;
+                                int position = list.lastIndexOf(item);
+                                if (position != -1) {
+                                    list.get(position).status = ImageItem.Status.UPLOADING;
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onError(ApiException e) {
+                            if ("image".equals(attachment.file_type)) {
+                                ImageItem item = new ImageItem();
+                                item.imagePath = path;
+                                int position = list.lastIndexOf(item);
+                                if (position != -1) {
+                                    list.get(position).status = ImageItem.Status.ERROR;
+                                    adapter.notifyDataSetChanged();
+                                }
+                            } else {
+                                Toast.makeText(QuestionEditActivity.this, "语音上传失败，点击重试", Toast.LENGTH_SHORT).show();
+                                audioAttachment.id = null;
+                            }
+                            super.onError(e);
+                        }
+
+                        @Override
+                        public void onSuccess(String o) {
+                            try {
+                                JSONObject response = new JSONObject(o);
+                                String id = response.getJSONObject("data").getString("id");
+                                if ("image".equals(attachment.file_type)) {
+                                    ImageItem item = new ImageItem();
+                                    item.imagePath = path;
+                                    int position = list.lastIndexOf(item);
+                                    if (position != -1) {
+                                        list.get(position).status = ImageItem.Status.SUCCESS;
+                                    }
+                                    attachment.id = id;
+                                    imageAttachmentList.add(attachment);
+                                } else {
+                                    audioAttachment.id = id;
+                                    play.setImageResource(R.mipmap.question_play);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onTokenOut() {
+                        }
+                    });
+        } else {
+            Toast.makeText(this, "文件不存在", Toast.LENGTH_SHORT).show();
+            if ("image".equals(attachment.file_type)) {
+                ImageItem item = new ImageItem();
+                item.imagePath = path;
+                int position = list.indexOf(item);
+                if (position != -1) {
+                    list.get(position).status = ImageItem.Status.ERROR;
+                    adapter.notifyDataSetChanged();
+                }
+            } else {
+                audioAttachment.id = null;
+                audioAttachment.file_url = null;
             }
         }
     }
@@ -206,7 +381,15 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.play:
-                playOrPause();
+                if (!StringUtils.isNullOrBlanK(audioFileName) && audioAttachment.id != null) {//有语音 上传完成
+                    playOrPause();
+                } else {
+                    if (!StringUtils.isNullOrBlanK(audioFileName)) {
+                        audioAttachment.file_url = audioFileName;
+                        audioAttachment.file_type = "mp3";
+                        addAttachments(audioAttachment);
+                    }
+                }
                 break;
             case R.id.control:
                 if (StringUtils.isNullOrBlanK(audioFileName)) {
@@ -231,9 +414,10 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
                         }
                         File file = new File(audioFileName);
                         if (file.exists()) {
-                            Toast.makeText(this, "删除", Toast.LENGTH_SHORT).show();
                             file.delete();
                         }
+                        audioAttachment.id = null;
+                        audioAttachment.file_url = null;//置空
                         audioFileName = null;
                         control.setImageResource(R.mipmap.question_record);
                         play.setVisibility(View.GONE);
@@ -368,7 +552,7 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
 //            e.printStackTrace();
 //        }
 //        mRecorder.start();
-        recorderUtil = new RecorderUtil(Constant.CACHEPATH + "/audio", null);
+        recorderUtil = new RecorderUtil(Constant.CACHEPATH + "/audio", mp3Handler);
         isRecording = recorderUtil.startMp3Recording(audioFileName);
 
         Observer<Long> observer = new Observer<Long>() {
@@ -418,8 +602,8 @@ public class QuestionEditActivity extends BaseActivity implements View.OnClickLi
 //            mRecorder.release();
 //            mRecorder = null;
 //        }
-         if (recorderUtil != null) {
-             recorderUtil.stopRawRecording();
+        if (recorderUtil != null) {
+            recorderUtil.stopRawRecording();
         }
         if (mediaPlayer != null) {
             mediaPlayer.stop();

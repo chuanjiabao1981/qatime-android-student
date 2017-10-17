@@ -3,8 +3,6 @@ package cn.qatime.player.bean;
 import java.io.Serializable;
 import java.util.List;
 
-import libraryextra.bean.ImageItem;
-
 /**
  * Created by lenovo on 2017/9/8.
  */
@@ -12,8 +10,8 @@ import libraryextra.bean.ImageItem;
 public class HomeWorkItemBean implements Serializable{
    public int parent_id;
    public String content;
-   public List<ImageItem> imageItems;
-   public String videoPath;
+   public List<AttachmentsBean> imageItems;
+   public AttachmentsBean audioAttachment;
 
 
    @Override

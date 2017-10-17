@@ -14,6 +14,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
@@ -63,7 +65,8 @@
             <libraryextra.view.ListViewForScrollView
                 android:id="@+id/list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:cacheColorHint="#00000000"
                 android:divider="#f7f7f7"
                 android:dividerHeight="1dp"

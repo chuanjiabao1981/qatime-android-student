@@ -9,14 +9,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import cn.qatime.player.R;
 import cn.qatime.player.base.BaseActivity;
+import cn.qatime.player.bean.AttachmentsBean;
 import cn.qatime.player.bean.QuestionsBean;
 import cn.qatime.player.utils.DaYiJsonObjectRequest;
 import cn.qatime.player.utils.UrlUtils;
 import cn.qatime.player.view.ExpandView;
+import libraryextra.bean.ImageItem;
 import libraryextra.utils.JsonUtils;
 import libraryextra.utils.VolleyErrorListener;
 import libraryextra.utils.VolleyListener;
@@ -35,6 +39,7 @@ public class QuestionDetailsActivity extends BaseActivity implements View.OnClic
     private QuestionsBean.DataBean question;
     private SimpleDateFormat parse = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private TextView replyTime;
+    private QuestionsBean.DataBean.AnswerBean answerBean;
 
 
     @Override
@@ -81,13 +86,44 @@ public class QuestionDetailsActivity extends BaseActivity implements View.OnClic
                 long time = question.getCreated_at() * 1000L;
                 createTime.setText("创建时间 "+parse.format(new Date(time)));
                 author.setText(question.getUser_name());
-
-                expandView.initExpandView(question.getBody(),null,null,true);
+                List<AttachmentsBean> questionAttachments = question.getAttachments();
+                AttachmentsBean audioAttachments = new AttachmentsBean();
+                List<ImageItem> imageAttachments = new ArrayList<>();
+                if (questionAttachments != null && questionAttachments.size() > 0) {
+                    for (AttachmentsBean answerAttachment : questionAttachments) {
+                        if ("mp3".equals(answerAttachment.file_type)) {
+                            audioAttachments = answerAttachment;
+                        } else {
+                            ImageItem imageItem = new ImageItem();
+                            imageItem.imagePath = answerAttachment.file_url;
+                            imageAttachments.add(imageItem);
+                        }
+                    }
+                }
+                expandView.initExpandView(question.getBody(), audioAttachments.file_url, imageAttachments, true);
                 if("resolved".equals(question.getStatus())){//已回复
                     findViewById(R.id.reply_layout).setVisibility(View.VISIBLE);
                     long replyT = question.getAnswer().getCreated_at() * 1000L;
                     replyTime.setText("回复时间 "+parse.format(new Date(replyT)));
-                    replyView.initExpandView(question.getAnswer().getBody(),null,null,true);
+                    if (question.getAnswer() != null) {
+                        List<AttachmentsBean> answerAttachments = question.getAnswer().getAttachments();
+                        AttachmentsBean answerAudioAttachments = new AttachmentsBean();
+                        List<ImageItem> answerImageAttachments = new ArrayList<>();
+                        if (answerAttachments != null && answerAttachments.size() > 0) {
+                            for (AttachmentsBean answerAttachment : answerAttachments) {
+                                if ("mp3".equals(answerAttachment.file_type)) {
+                                    answerAudioAttachments = answerAttachment;
+                                } else {
+                                    ImageItem imageItem = new ImageItem();
+                                    imageItem.imagePath = answerAttachment.file_url;
+                                    answerImageAttachments.add(imageItem);
+                                }
+                            }
+                        }
+                        replyView.initExpandView(question.getAnswer().getBody(), answerAudioAttachments.file_url, answerImageAttachments, true);
+                    } else {
+                        replyView.initExpandView("无", null, null, true);
+                    }
                 }
             }
 
@@ -108,14 +144,6 @@ public class QuestionDetailsActivity extends BaseActivity implements View.OnClic
                     expandView.expand();
                 }
                 break;
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if(expandView!=null){
-            expandView.onDestroy();
         }
     }
 }
